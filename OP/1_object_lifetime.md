@@ -1,3 +1,10 @@
+# Obsah
+- Životní cyklus objektu a správa paměti. 
+- Statické atributy a metody. 
+- Manuální a automatická správa paměti. 
+- Deterministická a nedeterministická destrukce objektu, Garbage Collector. 
+- Dispose Pattern.
+
 A2OPN Příprava k testu 8 - statické prvky
 ---
 Pro zvládnutí testu potřebujete vědět co jsou to statické členské prvky - fieldy, metody a property a jak se s takovými prvky pracuje. Ke statickým prvkům se přistupuje pomocí jména třídy ne pomocí instance třídy. Statické metody a property mohou přistupovat jen ke statickým prvkům. V následujících příkladech si probereme příklad na statickou metodu.
