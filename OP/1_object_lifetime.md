@@ -6,6 +6,7 @@
 - Dispose Pattern.
 
 Životní cyklus objektu a správa paměti
+---
 
 Životní cyklus objektu (lifetime) představuje čas mezi vytvoření a zničením objektu. 
 
