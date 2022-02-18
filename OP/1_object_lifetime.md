@@ -6,12 +6,11 @@
 - Dispose Pattern.
 
 ## Životní cyklus objektu a správa paměti
----
 
-Životní cyklus objektu (lifetime) představuje čas mezi vytvoření a zničením objektu. 
+Životní cyklus objektu (lifetime) představuje čas mezi vytvoření a zničením objektu. Lokální proměnnná je vytvořená od své definice do konce bloku definovaného složenými závorkami. V následujím
 
-Statické prvky
---
+## Statické prvky
+
 Pro zvládnutí testu potřebujete vědět co jsou to statické členské prvky - fieldy, metody a property a jak se s takovými prvky pracuje. Ke statickým prvkům se přistupuje pomocí jména třídy ne pomocí instance třídy. Statické metody a property mohou přistupovat jen ke statickým prvkům. V následujících příkladech si probereme příklad na statickou metodu.
 
 * Nejprve si definujeme třídu `Vypocet` a v ní statickou metodu `Soucet`:
