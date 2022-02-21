@@ -5,6 +5,8 @@
 - Statické atributy a metody. 
 - Dispose Pattern.
 
+TODO: rozhodit na Staticke, Dispose pattern a zbytek.
+
 ## Životní cyklus objektu a správa paměti
 
 Životní cyklus objektu (lifetime) představuje čas mezi vytvoření a zničením objektu. 
