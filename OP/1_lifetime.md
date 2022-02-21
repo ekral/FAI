@@ -91,6 +91,7 @@ int main()
     free(cisla);
 }
 ```
+---
 Více se o Garbage Collectoru v jazyce C# dozvíte zde:
 
 [Fundamentals of garbage collection, 2022](https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/fundamentals)
