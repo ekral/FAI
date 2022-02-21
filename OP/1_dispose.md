@@ -1,9 +1,4 @@
-
-# Dispose pattern
-
-Životní cyklus objektu (lifetime) představuje čas mezi vytvoření a zničením objektu. 
-
-## Dispose Pattern
+# Dispose Pattern
 
 Dispose Pattern slouží k bezpečnému uvolnění zdrojů (paměti, připojení k serveru, k databázi atd.) i v případě výjimky.
 V jazyce C++ ke stejnému účelu používáme destruktor, který se zavolá automaticky předtím, než se uvolní objekt z paměti.
