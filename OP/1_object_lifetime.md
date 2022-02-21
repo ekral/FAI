@@ -1,8 +1,8 @@
 # Obsah
 - Životní cyklus objektu a správa paměti. 
+- Manuální a automatická správa paměti. Garbage Collector. 
+- Deterministická a nedeterministická destrukce objektu, 
 - Statické atributy a metody. 
-- Manuální a automatická správa paměti. 
-- Deterministická a nedeterministická destrukce objektu, Garbage Collector. 
 - Dispose Pattern.
 
 ## Životní cyklus objektu a správa paměti
