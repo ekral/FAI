@@ -12,9 +12,6 @@
 ## Statické prvky
 
 Pro zvládnutí testu potřebujete vědět co jsou to statické členské prvky - fieldy, metody a property a jak se s takovými prvky pracuje. Ke statickým prvkům se přistupuje pomocí jména třídy ne pomocí instance třídy. Statické metody a property mohou přistupovat jen ke statickým prvkům. V následujících příkladech si probereme příklad na statickou metodu.
-Více se o statických prvcích v jazyce C# dozvíte zde:
-
-[Static Classes and Static Class Members - C# Programming Guide, 2022](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/static-classes-and-static-class-members)
 
 * Nejprve si definujeme třídu `Vypocet` a v ní statickou metodu `Soucet`:
 ```cs 
@@ -77,4 +74,6 @@ static void Main(string[] args)
 }
 ```
 ---
-Následuje kompletní příklad.
+Více se o statických prvcích v jazyce C# dozvíte zde:
+
+[Static Classes and Static Class Members - C# Programming Guide, 2022](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/static-classes-and-static-class-members)
