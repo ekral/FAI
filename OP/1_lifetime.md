@@ -70,6 +70,25 @@ static void Main(string[] args)
     int[] cisla = VratCisla();
 }
 ```
-Naproti tomu, v **jazyce** C bychom museli paměť uvolnit manuálne pomocí funkce `free`. V následujícím příkladu alokujeme pole čísel na haldě pomocí funkce `malloc` a potom jej uvolňujeme pomocí funkce `free`.
+Naproti tomu, v **jazyce** C bychom museli paměť uvolnit manuálně pomocí funkce `free`. V následujícím příkladu alokujeme pole čísel na haldě pomocí funkce `malloc` a potom jej uvolňujeme pomocí funkce `free`.
 
+```c
+static int* vrat_cisla()
+{
+    int* cisla = malloc(3 * sizeof(int));
+
+    cisla[0] = 1;
+    cisla[1] = 1;
+    cisla[2] = 1;
+
+    return cisla;
+}
+
+int main()
+{
+    int* cisla = vrat_cisla();
+
+    free(cisla);
+}
+```
 TODO: reference na přednášku o referenčních typech
