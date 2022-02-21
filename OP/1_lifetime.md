@@ -70,7 +70,7 @@ static void Main(string[] args)
     int[] cisla = VratCisla();
 }
 ```
-Naproti tomu, v **jazyce** C bychom museli paměť uvolnit manuálně pomocí funkce `free`. V následujícím příkladu alokujeme pole čísel na haldě pomocí funkce `malloc` a potom jej uvolňujeme pomocí funkce `free`.
+Naproti tomu, v **jazyce C** bychom museli paměť uvolnit manuálně pomocí funkce `free`. V následujícím příkladu alokujeme pole čísel na haldě pomocí funkce `malloc` a potom jej uvolňujeme pomocí funkce `free`.
 
 ```c
 static int* vrat_cisla()
