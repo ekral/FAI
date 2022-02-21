@@ -17,6 +17,20 @@ static void Main(string[] args)
 }
 ```
 
+V dalším příkladu je proměnná x definovaná uvnitř metody `Main` a proto přestane existovat a bude zničena na konci bloku podmíněného příkazu `if`.
+
+```cs 
+static void Main(string[] args)
+{
+    int x = 1;
+            
+    if(x > 0)
+    {
+        Console.WriteLine("ano");
+    }
+}
+```
+
 * Statická promnná (field) existuje po celou dobu běhu programu.
 * Objekt na haldě alokovaný pomocí operátoru `new` existuje od své alokace po uvolnění paměti. V jazyce C# uvolňuje tuto paměť automaticky Garbagge Collecor potom co zjistí, že na objekt na haldě už není žádná reference. Naproti tomu, například v jazyce C nebo C++ musíme paměť uvolňovat manuálně pomocí příkazu `free` respektive `delete`
 
