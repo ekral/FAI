@@ -59,16 +59,17 @@ Objekt na haldě alokovaný pomocí operátoru `new` existuje od své alokace po
 V následujícím příkladu alokujeme dynamické pole čísel na haldě pomocí operátoru `new` a referenci si uložíme do lokální proměnné `list`. Lokální proměnná `list` sice přestane existovat na konci metody `VratCisla`, ale vrátí svoji hodnotu, tedy referenci na pole čísel a přiřadí ji proměnné `cisla` v metodě `Main`. Teprve až přestane existovat proměnná `cisla` v metodě `Main`, tak už nebude existovat žádná reference na pole na haldě a Garbage Collector automaticky uvolní alokovanou paměť.
 
 ```cs 
-static List<int> VratCisla()
+static int[] VratCisla()
 {
-    List<int> cisla = new List<int> { 1, 2, 3, 4, 5, 6, 7 };
+    int[] cisla = new int[] { 1, 2, 3, 4, 5, 6, 7 };
     return cisla;
 }
 
 static void Main(string[] args)
 {
-    List<int> cisla = VratCisla();
+    int[] cisla = VratCisla();
 }
 ```
+Naproti tomu, v **jazyce** C bychom museli paměť uvolnit manuálne pomocí funkce `free`. V následujícím příkladu alokujeme pole čísel na haldě pomocí funkce `malloc` a potom jej uvolňujeme pomocí funkce `free`.
 
 TODO: reference na přednášku o referenčních typech
