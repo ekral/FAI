@@ -20,6 +20,27 @@ static void Main(string[] args)
 }
 ```
 
+A nyní použijeme klíčové slovo `using`, jehož syntaxe je jednoduší a zajistí, že i v případě výjimky bude zavolaná metoda Dispose a bude řádně ukončeno připojení k serveru. 
+
+```cs 
+static async Task Main(string[] args)
+{
+    string url = "https://geek-jokes.sameerkumar.website/api?format=json";
+
+    using (HttpClient client = new HttpClient())
+    {
+        try
+        {
+            string jsonString = await client.GetStringAsync(url);
+            Console.WriteLine(jsonString);
+        }
+        catch (HttpRequestException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+}
+```
 ---
 Více o problematice programovacích jazyků se můžete dozvědět napřílad v této knize:
 
