@@ -9,10 +9,10 @@
 static void Main(string[] args)
 {
     int x = 1;
-            
-    if(x > 0)
+
+    if (x > 0)
     {
-        Console.WriteLine("ano");
+        Console.WriteLine(x);
     }
 }
 ```
@@ -22,11 +22,10 @@ V dalším příkladu je proměnná x definovaná uvnitř metody `Main` a proto 
 ```cs 
 static void Main(string[] args)
 {
-    int x = 1;
-            
-    if(x > 0)
+    if (true)
     {
-        Console.WriteLine("ano");
+        int x = 1;
+        Console.WriteLine(x);
     }
 }
 ```
