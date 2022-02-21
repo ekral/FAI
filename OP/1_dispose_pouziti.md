@@ -1,4 +1,4 @@
-# Použití Dispose Patternu
+# Použití metody Dispose
 
 Dispose Pattern slouží k bezpečnému uvolnění zdrojů (paměti, připojení k serveru, k databázi atd.) i v případě výjimky.
 V jazyce C++ ke stejnému účelu používáme destruktor, který se zavolá automaticky předtím, než se uvolní objekt z paměti.
@@ -6,16 +6,27 @@ V jazyce C# sice máme destruktor také, ale nevíme kdy přesně se zavolá, pr
 
 Uvolnění zdrojů se provádí voláním metody `Dispose` z rozhraní `IDisposable`. A ke správnému volání této metody slouží příkaz `using`.
 
-Nejprve si ukážeme příklad použití bez příkazu `using`. 
+Nejprve si ukážeme příklad volání metody Dispose bez příkazu `using`. V následujícím příkazu pomocí třídy `HttpClient` zavoláme webovou službu a zobrazíme získaný řetězec. Blok finally se zavolá vždy, i když dojde nebo nedojde k výjimce při volání metody `GetStringAsync`. 
 
 ```cs 
-static void Main(string[] args)
+static async Task Main(string[] args)
 {
-    int x = 1;
+    string url = "https://geek-jokes.sameerkumar.website/api?format=json";
 
-    if (x > 0)
+    HttpClient client = new HttpClient();
+
+    try
     {
-        Console.WriteLine(x);
+        string jsonString = await client.GetStringAsync(url);
+        Console.WriteLine(jsonString);
+    }
+    catch (HttpRequestException ex)
+    {
+        Console.WriteLine(ex.Message);
+    }
+    finally
+    {
+        client.Dispose();
     }
 }
 ```
@@ -42,12 +53,8 @@ static async Task Main(string[] args)
 }
 ```
 ---
-Více o problematice programovacích jazyků se můžete dozvědět napřílad v této knize:
+Více o metodě dispose najdete například zde:
 
-[Michael L. Scott. 2009. Programming Language Pragmatics](https://www.cs.rochester.edu/~scott/pragmatics/)
-
-Více se o Garbage Collectoru v jazyce C# dozvíte zde:
-
-[Fundamentals of garbage collection, 2022](https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/fundamentals)
+[IDisposable.Dispose Method, 2022](https://docs.microsoft.com/en-us/dotnet/api/system.idisposable.dispose?view=net-6.0)
 
 
