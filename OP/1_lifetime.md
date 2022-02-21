@@ -93,5 +93,5 @@ int main()
 ```
 Více se o Garbage Collectoru v jazyce C# dozvíte zde:
 
-[.NET Garbage collection, 2022](https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/)
+[Fundamentals of garbage collection, 2022](https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/fundamentals)
 
