@@ -19,7 +19,7 @@ static void Main(string[] args)
 }
 ```
 
-V dalším příkladu je proměnná x definovaná uvnitř metody `Main` a proto přestane existovat a bude zničena na konci bloku podmíněného příkazu `if`.
+V dalším příkladu je proměnná `x` definovaná uvnitř metody `if` a proto přestane existovat a bude zničena na konci bloku podmíněného příkazu `if`.
 
 ```cs 
 static void Main(string[] args)
