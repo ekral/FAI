@@ -11,7 +11,7 @@
 
 - Lokální proměnnná je alokovaná na zásobníku a existuje od své definice do konce bloku definovaného složenými závorkami.
 - Statická promnná (field) existuje po celou dobu běhu programu.
-- Objekt na haldě alokovaný pomocí operátoru `new` existuje od své alokace po uvolnění paměti. V jazyce C# uvolňuje tuto paměť automaticky Garbagge Collecor potom co zjistí, že na objekt na haldě už není žádná reference. V jazyce C nebo C++ musíme paměť uvolňovat ručně pomocí příkazu free respektive delete.
+- Objekt na haldě alokovaný pomocí operátoru `new` existuje od své alokace po uvolnění paměti. V jazyce C# uvolňuje tuto paměť automaticky Garbagge Collecor potom co zjistí, že na objekt na haldě už není žádná reference. V jazyce C nebo C++ musíme paměť uvolňovat ručně pomocí příkazu `free` respektive `delete`
 
 ## Statické prvky
 
