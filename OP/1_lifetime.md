@@ -54,6 +54,21 @@ class Program
 
 ## Objekt alokovaný na haldě
 
-Objekt na haldě alokovaný pomocí operátoru `new` existuje od své alokace po uvolnění paměti. V jazyce C# uvolňuje tuto paměť automaticky Garbagge Collecor potom co zjistí, že na objekt na haldě už není žádná reference. Naproti tomu, například v jazyce C nebo C++ musíme paměť uvolňovat manuálně pomocí příkazu `free` respektive `delete`
+Objekt na haldě alokovaný pomocí operátoru `new` existuje od své alokace po uvolnění paměti. V jazyce C# uvolňuje tuto paměť automaticky Garbage Collector potom co zjistí, že na objekt na haldě už není žádná reference. Naproti tomu, například v jazyce C nebo C++ musíme paměť uvolňovat manuálně pomocí příkazu `free` respektive `delete`.
+
+V následujícím příkladu alokujeme dynamické pole čísel na haldě pomocí operátoru `new` a referenci si uložíme do lokální proměnné `list`. Lokální proměnná `list` sice přestane existovat na konci metody `VratCisla`, ale vrátí svoji hodnotu, tedy referenci na pole čísel a přiřadí ji proměnné `cisla` v metodě `Main`. Teprve až přestane existovat proměnná `cisla` v metodě `Main`, tak už nebude existovat žádná reference na pole na haldě a Garbage Collector automaticky uvolní alokovanou paměť.
+
+```cs 
+static List<int> VratCisla()
+{
+    List<int> cisla = new List<int> { 1, 2, 3, 4, 5, 6, 7 };
+    return cisla;
+}
+
+static void Main(string[] args)
+{
+    List<int> cisla = VratCisla();
+}
+```
 
 TODO: reference na přednášku o referenčních typech
