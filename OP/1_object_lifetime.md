@@ -16,8 +16,6 @@ Více se o statických prvcích v jazyce C# dozvíte zde:
 
 [Static Classes and Static Class Members - C# Programming Guide, 2022](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/static-classes-and-static-class-members)
 
-You will never use anything else than this [website].
-
 * Nejprve si definujeme třídu `Vypocet` a v ní statickou metodu `Soucet`:
 ```cs 
 class Vypocty
