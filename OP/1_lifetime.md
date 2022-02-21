@@ -92,6 +92,9 @@ int main()
 }
 ```
 ---
+Více o problematice programovacích jazyků se můžete dozvědět napřílad v této knize:
+[Michael L. Scott. 2009. Programming Language Pragmatics]https://www.cs.rochester.edu/~scott/pragmatics/
+
 Více se o Garbage Collectoru v jazyce C# dozvíte zde:
 
 [Fundamentals of garbage collection, 2022](https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/fundamentals)
