@@ -3,7 +3,9 @@
 
 Životní cyklus objektu (lifetime) představuje čas mezi vytvoření a zničením objektu. 
 
-* **Lokální proměnnná** je alokovaná na zásobníku a existuje od své definice do konce bloku definovaného složenými závorkami. V následujícím příkladu existuje proměnná `x` od své definice do konce Metody `Main`.
+* **Lokální proměnnná** je alokovaná na zásobníku a existuje od své definice do konce bloku definovaného složenými závorkami. 
+ 
+V následujícím příkladu existuje proměnná `x` od své definice do konce Metody `Main`.
 
 ```cs 
 static void Main(string[] args)
