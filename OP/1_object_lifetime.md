@@ -15,6 +15,10 @@ Pro zvládnutí testu potřebujete vědět co jsou to statické členské prvky 
 Více se o statických prvcích v jazyce C# dozvíte zde:
 [Static Classes and Static Class Members - C# Programming Guide, 2022]: https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/static-classes-and-static-class-members
 
+[website (https://stackoverflow.com)][website] is awesome.
+
+You will never use anything else than this [website].
+
 * Nejprve si definujeme třídu `Vypocet` a v ní statickou metodu `Soucet`:
 ```cs 
 class Vypocty
