@@ -1,46 +1,50 @@
 using System;
-using System.IO;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Web;
 
-namespace ConsoleApp5
+namespace ConsoleApp7
 {
     class Program
     {
-        static async Task Main(string[] args)
+        static async System.Threading.Tasks.Task Main(string[] args)
         {
             string text = "ahoj";
 
             // Do aplikace s vypoctem splatky pridejte ukladani do souboru, 
             // ukladejte datum a cas, dluh, urok, pocet let a vysi splatky
 
-            // Vytvorte dve varianty
-            
-            // Jednoducha:
-            File.AppendAllText("hypoteky.txt", text);
-
-            // S pouzitim using, kdy muzete nechat soubor otevreny pro zapis a pridavat radky
-
-            using (StreamWriter writer = new StreamWriter("c:\\hypoteky.txt", append: true))
-            {
-                writer.WriteLine(text);
-            }
-
             string url = "https://geek-jokes.sameerkumar.website/api?format=json";
 
-            using (HttpClient client = new HttpClient())
+            using (System.Net.Http.HttpClient client = new System.Net.Http.HttpClient())
             {
-                try
-                {
-                    string jsonString = await client.GetStringAsync(url);
-                    Console.WriteLine(HttpUtility.HtmlDecode(jsonString));
-                }
-                catch (HttpRequestException ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
+                //System.Net.Http.HttpResponseMessage response = await client.GetAsync(url);
+
+                //if(response.IsSuccessStatusCode)
+                //{
+                //    string joke = await response.Content.ReadAsStringAsync();
+                //    Console.WriteLine(joke);
+                //}
+
+                string jsonString = await client.GetStringAsync(url);
+                Console.WriteLine(jsonString);
             }
+
+            // ve slozenych zavorkach
+            using (System.IO.StreamWriter writer = new System.IO.StreamWriter("text.txt", append: true))
+            {
+                writer.WriteLine(text);
+                writer.WriteLine("jak se mas");
+            }
+
+            if (true)
+            {
+                // do konce metody
+                using System.IO.StreamWriter writer = new System.IO.StreamWriter("text.txt", append: true);
+
+                writer.WriteLine(text);
+                writer.WriteLine("jak se mas");
+            }
+
+            // jednoduche, otevre, zapise a zavre
+            System.IO.File.AppendAllText("text2.txt", text + System.Environment.NewLine + "jak se mas");
         }
     }
 }
