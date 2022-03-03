@@ -2,7 +2,7 @@
 
 Dědičnost kódu
 ---
-Pro zvládnutí testu potřebujete znát jakým způsobem zapsat dědičnost kódu. Dědičnost kódu popisuje vztah specializace mezi třídami, například počítačová myš je (anglicky *IS A*) produkt, nebo tlačítko v aplikaci je ovládací prvek. 
+Dědičnost kódu popisuje vztah specializace mezi třídami, například počítačová myš je (anglicky *IS A*) produkt, nebo tlačítko v aplikaci je ovládací prvek. 
 
 Na následujím příkladu probereme co je to dědičnost kódu a jak ji zapsat. 
 
