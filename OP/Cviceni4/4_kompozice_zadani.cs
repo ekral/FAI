@@ -25,7 +25,7 @@ namespace ConsoleApp3
     }
 
     // Jde o agregaci nebo kompozici?
-    // Vymyslete vlastni ukazku na dedicnost pro vztah HAS-A
+    // Vymyslete vlastni ukazku na vztah HAS-A
     
     class Program
     {
