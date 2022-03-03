@@ -1,7 +1,7 @@
 # Vztahy mezi objekty (asociace, agregace a kompozice), skládání objektů. Dědičnost kódu, výhody a nevýhody ve srovnání se skládáním objektů.
 
-1. Dědičnost kódu
----
+## 1. Dědičnost kódu
+
 Dědičnost kódu popisuje vztah specializace mezi třídami, například počítačová myš je (anglicky *IS A*) produkt, nebo tlačítko v aplikaci je ovládací prvek. 
 
 Na následujím příkladu probereme co je to dědičnost kódu a jak ji zapsat. 
