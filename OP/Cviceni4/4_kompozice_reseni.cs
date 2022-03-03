@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
 
-namespace ConsoleApp3
+namespace Ukol4
 {
+    // Kompozice - motorka kola "nesdili" s jinym objektem, kola zaniknou s motorkou
+
     class Kolo
     {
         public int Prumer { get; set; }
@@ -24,12 +27,33 @@ namespace ConsoleApp3
         }
     }
 
-    // Jde o agregaci nebo kompozici?
+    // Agregace - autobusove nadrazi sdili autobusy s jinymi objekty, kdyz prestane existovat nadrazi, autobusy nezaniknout
 
-    // Jde o kompozici, protoze kdyz prestane existovat objekt Motorka, tak prestanou existovat i objekty Kola
-    // protoze jen motorka ma referenci na objekty kola a s nikym je nesdili.
+    class Autobus
+    {
+        public string Linka { get; set; }
 
-    // Vymyslete vlastni ukazku na dedicnost pro vztah HAS-A
+        public Autobus(string linka)
+        {
+            Linka = linka;
+        }
+    }
+
+    class Nadrazi
+    {
+        public List<Autobus> Autobusy { get; set; }
+
+        public void PridejAutobus(Autobus autobus)
+        {
+            Autobusy.Add(autobus);
+        }
+    }
+
+    // Vymyslete dve ukazky na vztah HAS-A
+    // Vytvorte jednu pro agregaci
+    // Vytvorte jednu pro kompozici
+
+    // Kompozice
     class Noha
     {
         public int Delka { get; set; }
@@ -50,12 +74,51 @@ namespace ConsoleApp3
         }
     }
 
+    // Agregace
+    class Ridic
+    {
+        public string Jmeno { get; set; }
+
+        public Ridic(string jmeno)
+        {
+            Jmeno = jmeno;
+        }
+    }
+
+    class Automobil
+    {
+        public string Typ { get; set; }
+        public Ridic Ridic { get; set; }
+
+        public Automobil(string typ)
+        {
+            Typ = typ;
+        }
+    }
+
     class Program
     {
         static void Main(string[] args)
         {
             Motorka motorka = new Motorka();
             Zidle zidle = new Zidle();
+
+            Autobus autobus1 = new Autobus("Zlin-Brno");
+            Autobus autobus2 = new Autobus("Zlin-Uh");
+            List<Autobus> seznamLinek = new List<Autobus>{ autobus1, autobus2 };
+
+            Nadrazi nadrazi = new Nadrazi();
+
+            nadrazi.Autobusy.Add(autobus1);
+            nadrazi.Autobusy.Add(autobus2);
+
+            Ridic ridic = new Ridic("Karel");
+
+            Automobil automobil1 = new Automobil("Oktavia");
+            automobil1.Ridic = ridic;
+
+            Automobil automobil2 = new Automobil("Mustang");
+            automobil2.Ridic = ridic;
         }
     }
 }
