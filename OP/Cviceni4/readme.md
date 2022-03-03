@@ -72,18 +72,18 @@ static void Main(string[] args)
 * Poznámka: dědičnost kódu se samotná nepoužívá tak často jak by se zdálo, většinou se používá v kombinaci s polymorfismem.
 
 ## 3. Klíčové slovo protected
----
+
 Klíčové slovo protected představuje modifikátor přístupu používaný pouze v dědičnosti. Tímto modifikátorem označujeme metody a atributy, které očekáváme, že využije jeho potomek v rámci dědění, ale v klientském kodů mají být skryté. V následujícím příkladu je proměnná `cisloUctu` přístupná v rodičovské třídě `Student`, ale není přístupná v klientském kódu v metodě `Main`.
 
 TODO: priklad
 
 ## 4. Kompozice
----
+
 TODO
 
 
 ## 5. Dědičnost vs kompozice
----
+
 
 TODO
 
