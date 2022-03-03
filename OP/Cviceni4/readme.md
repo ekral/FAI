@@ -12,6 +12,28 @@ class Produkt
 {
     public double Cena { get; set; }
     public int Hodnoceni { get; set; }
+}
+```
+* Jiná třída potom může zdědit kód této třídy. V následujícím příkladu máme třídu `Mys` jejíž součástí se díky dedičnosti stane kód třídy `Produkt`. Říkáme, že třída `Mys` je potomkem třídy `Produkt`. 
+
+```cs 
+class Mys : Produkt
+{
+    public int Dpi { get; set; }
+
+    public Mys(double cena, double hodnoceni, int dpi) : base(cena, hodnoceni)
+    {
+        Dpi = dpi;
+    }
+}
+```
+
+* Nyní si přidáme do třídy `Produkt` parametrický konstruktor:
+```cs 
+class Produkt
+{
+    public double Cena { get; set; }
+    public int Hodnoceni { get; set; }
 
     public Produkt(double cena, int hodnoceni)
     {
@@ -20,7 +42,7 @@ class Produkt
     }
 }
 ```
-* Jiná třída potom může zdědit kód této třídy. V následujícím příkladu máme třídu `Mys` jejíž součástí se díky dedičnosti stane kód třídy `Produkt`. Říkáme, že třída `Mys` je potomkem třídy `Produkt`. Pomocí klíčového slova `base` voláme parametrický konstruktor rodiče. Například zápis `base(cena, hodnoceni)` v předchozím kódu zavolá parametrický konstruktor třídy `Produkt`. Pokud má rodičovská tříd konstruktor bez parametrů nebo nemá žádný konstruktor, tak klíčové slovo `base` nemusíme použít.
+* Pomocí klíčového slova `base` potom zavoláme parametrický konstruktor rodiče. Konrétně zápis `base(cena, hodnoceni)` v následujícím kódu zavolá parametrický konstruktor třídy `Produkt`. Pokud má rodičovská tříd konstruktor bez parametrů nebo nemá žádný konstruktor, tak klíčové slovo `base` nemusíme použít.
 
 ```cs 
 class Mys : Produkt
