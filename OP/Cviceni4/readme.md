@@ -1,6 +1,6 @@
 # Vztahy mezi objekty (asociace, agregace a kompozice), skládání objektů. Dědičnost kódu, výhody a nevýhody ve srovnání se skládáním objektů.
 
-dědičnost kódu
+Dědičnost kódu
 ---
 Pro zvládnutí testu potřebujete znát jakým způsobem zapsat dědičnost kódu. Dědičnost kódu popisuje vztah specializace mezi třídami, například počítačová myš je (anglicky *IS A*) produkt, nebo tlačítko v aplikaci je ovládací prvek. 
 
@@ -27,6 +27,9 @@ class Mys : Produkt
     }
 }
 ```
+
+Dědičnost a konstruktor
+---
 
 * Nyní si přidáme do třídy `Produkt` parametrický konstruktor:
 ```cs 
