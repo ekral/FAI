@@ -56,7 +56,7 @@ class Mys : Produkt
 }
 ```
 
-* Nakonec vytvoříme instanci třídy `Mys`. Všimněte si, že proměnná `Mys` má property Cena a Hodnocení, které zdědila od třídy `Produkt`.
+* Nakonec vytvoříme instanci třídy `Mys`. Všimněte si, že proměnná `Mys` má property `Cena` a `Hodnocení`, které zdědila od třídy `Produkt`.
 ```cs 
 static void Main(string[] args)
 {
