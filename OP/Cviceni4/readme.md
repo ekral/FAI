@@ -1,6 +1,6 @@
 # Vztahy mezi objekty (asociace, agregace a kompozice), skládání objektů. Dědičnost kódu, výhody a nevýhody ve srovnání se skládáním objektů.
 
-Dědičnost kódu
+1. Dědičnost kódu
 ---
 Dědičnost kódu popisuje vztah specializace mezi třídami, například počítačová myš je (anglicky *IS A*) produkt, nebo tlačítko v aplikaci je ovládací prvek. 
 
@@ -28,7 +28,7 @@ class Mys : Produkt
 }
 ```
 
-Dědičnost a konstruktor
+2. Dědičnost a konstruktor
 ---
 
 * Nyní si přidáme do třídy `Produkt` parametrický konstruktor:
@@ -74,8 +74,24 @@ static void Main(string[] args)
 ```
 * Poznámka: dědičnost kódu se samotná nepoužívá tak často jak by se zdálo, většinou se používá v kombinaci s polymorfismem.
 
+3. Klíčové slovo protected
 ---
-Příklady k procvičování:
+Klíčové slovo protected představuje modifikátor přístupu používaný pouze v dědičnosti. Tímto modifikátorem označujeme metody a atributy, které očekáváme, že využije jeho potomek v rámci dědění, ale v klientském kodů mají být skryté. V následujícím příkladu je proměnná `cisloUctu` přístupná v rodičovské třídě `Student`, ale není přístupná v klientském kódu v metodě `Main`.
+
+TODO: priklad
+
+4. Kompozice
+---
+TODO
+
+
+5. Dědičnost vs kompozice
+---
+
+TODO
+
+---
+TODO: Příklady k procvičování:
 
 
 Kompozice a agregace
