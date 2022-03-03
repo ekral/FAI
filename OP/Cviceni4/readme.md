@@ -1,5 +1,4 @@
 # Vztahy mezi objekty (asociace, agregace a kompozice), skládání objektů. Dědičnost kódu, výhody a nevýhody ve srovnání se skládáním objektů.
-A2OPN Příprava k testu 1 - 
 
 dědičnost kódu
 ---
@@ -49,5 +48,11 @@ static void Main(string[] args)
 }
 ```
 * Poznámka: dědičnost kódu se samotná nepoužívá tak často jak by se zdálo, většinou se používá v kombinaci s polymorfismem.
+
 ---
-Následuje kompletní příklad.
+Příklady k procvičování:
+
+
+Kompozice a agregace
+---
+
