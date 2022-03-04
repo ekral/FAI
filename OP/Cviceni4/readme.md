@@ -110,9 +110,31 @@ class Student : Osoba
 ```
 ## 4. Kompozice
 
-TODO
+Pokud jeden objekt zahrnuje druhý objekt, tak můžeme mluvit o vztahu HAS-A, tedy že jeden objekt má druhý objekt. V následujícím příkladu bude mít instance třídy `Motorka` reference na dvě instance třídy `Kola`. Protože motorka tyto kola nesdílí s jinými objekty, někdy říkáme že je vlastní, tak mluvíme o kompozici. Vlastnictví objektu (ownership) v tomto kontextu znamená, že když zanikne objekt, tak zanikou i objekty které vlastní.
 
+```cs 
+class Kolo
+{
+    public int Prumer { get; set; }
 
+    public Kolo(int prumer)
+    {
+        Prumer = prumer;
+    }
+}
+
+class Motorka
+{
+    private Kolo predni;
+    private Kolo zadni;
+
+    public Motorka()
+    {
+        predni = new Kolo(20);
+        zadni = new Kolo(19);
+    }
+}
+```
 ## 5. Dědičnost vs kompozice
 
 
