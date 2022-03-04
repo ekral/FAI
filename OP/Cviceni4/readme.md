@@ -110,7 +110,7 @@ class Student : Osoba
 ```
 ## 4. Kompozice
 
-Pokud jeden objekt zahrnuje druhý objekt, tak můžeme mluvit o vztahu HAS-A, tedy že jeden objekt má druhý objekt. V následujícím příkladu bude mít instance třídy `Motorka` reference na dvě instance třídy `Kola`. Protože motorka tyto kola nesdílí s jinými objekty, někdy říkáme že je vlastní, tak mluvíme o kompozici. Vlastnictví objektu (ownership) v tomto kontextu znamená, že když zanikne objekt, tak zanikou i objekty které vlastní.
+Pokud jeden objekt zahrnuje druhý objekt, tak můžeme mluvit o vztahu HAS-A, tedy že jeden objekt má druhý objekt. V následujícím příkladu bude mít instance třídy `Motorka` reference na dvě instance třídy `Kola`. Protože objekt motorka objekty kola nesdílí s jinými objekty jd o kompozici. V tomto případě také mluvíme o vlastnictví objektu, kdy vlastnictví objektu (ownership) v tomto kontextu znamená, že když zanikne objekt, tak zanikne i objekt který vlastní.
 
 ```cs 
 class Kolo
@@ -135,6 +135,44 @@ class Motorka
     }
 }
 ```
+Pokud by objekt sdílel zahrnutý objekt s jinými objekty, tak by šlo o **agregaci**. U agregace mluvíme o tom, že objekt používá jiný objekt ale nevlastního. Pojmy agregace a kompozice se používají také v jazyce UML. V následujícím příkladu
+
+```cs 
+// klientsky kod
+SmsSender smsSender = new SmsSender();
+
+Objednavka objednavka1 = new Objednavka(1, smsSender);
+Objednavka objednavka2 = new Objednavka(2, smsSender);
+
+objednavka1.Odeslat();
+objednavka2.Odeslat();
+
+class SmsSender
+{
+    public void PosliSms(string text)
+    {
+        Console.WriteLine($"Posilam sms: {text}");
+    }
+}
+
+class Objednavka
+{
+    public int Id { get; set; }
+    private SmsSender sender;
+
+    public Objednavka(int id, SmsSender sender)
+    {
+        Id = id;
+        this.sender = sender;
+    }
+
+    public void Odeslat()
+    {
+        sender.PosliSms($"Objednavka {Id} odeslana");
+    }
+}
+```
+
 ## 5. Dědičnost vs kompozice
 
 
