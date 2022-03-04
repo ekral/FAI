@@ -73,10 +73,41 @@ static void Main(string[] args)
 
 ## 3. Klíčové slovo protected
 
-Klíčové slovo protected představuje modifikátor přístupu používaný pouze v dědičnosti. Tímto modifikátorem označujeme metody a atributy, které očekáváme, že využije jeho potomek v rámci dědění, ale v klientském kodů mají být skryté. V následujícím příkladu je proměnná `cisloUctu` přístupná v rodičovské třídě `Student`, ale není přístupná v klientském kódu v metodě `Main`.
+Klíčové slovo protected představuje modifikátor přístupu používaný pouze v dědičnosti. Tímto modifikátorem označujeme metody a atributy, které očekáváme, že využije jeho potomek v rámci dědění, ale v klientském kodů mají být skryté. V následujícím příkladu je proměnná `cisloUctu` přístupná v rodičovské třídě `Osoba` a v třídě potomka `Student`, ale není přístupná v klientském kódu v metodě `Main`.
 
-TODO: priklad
+```cs 
+// klientsky kod
+Student student = new Student(123, "Alena", "AXP1");
+student.Vypis();
+student.cisloUctu = 0; // nejde prelozit
 
+class Osoba
+{
+    protected int cisloUctu;
+    public string Jmeno { get; set; }
+
+    public Osoba(int cisloUctu, string jmeno)
+    {
+        this.cisloUctu = cisloUctu;
+        Jmeno = jmeno;
+    }
+}
+
+class Student : Osoba
+{
+    public string Skupina { get; set; }
+
+    public Student(int cisloUctu, string jmeno, string skupina) : base(cisloUctu, jmeno)
+    {
+        Skupina = skupina;
+    }
+
+    public void Vypis()
+    {
+        Console.WriteLine($"{cisloUctu} {Jmeno} {Skupina}"); // jde prelozit
+    }
+}
+```
 ## 4. Kompozice
 
 TODO
