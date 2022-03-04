@@ -209,4 +209,10 @@ class Student
 }
 ```
 ---
-TODO: Příklady k procvičování:
+Příklady k procvičování:
+1. Dědičnost [zadání](1_dedicnost_zadani.cs) [řešení](1_dedicnost_reseni.cs)
+2. Konstruktor u dědičnosti zadání řešení
+3. Klíčové slovo protected:
+4. Kompozice:
+5. Dědičnost vs kompozice:
+
