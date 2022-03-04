@@ -73,7 +73,7 @@ static void Main(string[] args)
 
 ## 3. Klíčové slovo protected
 
-Klíčové slovo protected představuje modifikátor přístupu používaný pouze v dědičnosti. Tímto modifikátorem označujeme metody a atributy, které očekáváme, že využije jeho potomek v rámci dědění, ale v klientském kodů mají být skryté. V následujícím příkladu je proměnná `cisloUctu` přístupná v rodičovské třídě `Osoba` a v třídě potomka `Student`, ale není přístupná v klientském kódu v metodě `Main`.
+Klíčové slovo `protected` představuje modifikátor přístupu používaný pouze v dědičnosti. Tímto modifikátorem označujeme metody a atributy, které očekáváme, že využije jeho potomek v rámci dědění, ale v klientském kodů mají být skryté. V následujícím příkladu je proměnná `cisloUctu` přístupná v rodičovské třídě `Osoba` a v třídě potomka `Student`, ale není přístupná v klientském kódu v metodě `Main`.
 
 ```cs 
 // klientsky kod
