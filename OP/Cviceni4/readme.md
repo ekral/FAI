@@ -68,7 +68,7 @@ static void Main(string[] args)
 
 ## 3. Klíčové slovo protected
 
-Klíčové slovo `protected` představuje modifikátor přístupu používaný pouze v dědičnosti. Tímto modifikátorem označujeme metody a atributy, které očekáváme, že využije jeho potomek v rámci dědění, ale v klientském kodů mají být skryté. V následujícím příkladu je proměnná `cisloUctu` přístupná v rodičovské třídě `Osoba` a v třídě potomka `Student`, ale není přístupná v klientském kódu v metodě `Main`. Modifikátor příštupu není běžně používaný a dáváme přednost private a public, pokud je to možné.
+Klíčové slovo `protected` představuje modifikátor přístupu používaný pouze v dědičnosti. Tímto modifikátorem označujeme metody a atributy, které očekáváme, že využije jeho potomek v rámci dědění, ale v klientském kodů mají být skryté. V následujícím příkladu je proměnná `cisloUctu` přístupná v rodičovské třídě `Osoba` a v třídě potomka `Student`, ale není přístupná v klientském kódu v metodě `Main`. Modifikátor příštupu `protected` není běžně používaný a dáváme přednost `private` a `public`, pokud je to možné.
 
 ```cs 
 // klientsky kod
@@ -171,7 +171,7 @@ Pojmy agregace a kompozice se používají také v jazyce UML.
 
 ## 5. Dědičnost vs kompozice
 
-Dědičnost kódu můžeme nahradit do určité míry kompozicí. V následujícím příkladu nepoužíváme dědičnost, ale třída `Student` si vytváří vlastní instanci třídy `Osoba`.
+Dědičnost kódu můžeme nahradit do určité míry kompozicí. V následujícím příkladu nepoužíváme dědičnost, ale třída `Student` si vytváří vlastní instanci třídy `Osoba`. Všimněte si, že mezdi třídami Osoba a Student pořád platí vztah, že Student je Osoba, což je možné u kompozice kde také platí vztah HAS-A. Ale u dědičnsoti musí jít vždy jen o vztah IS-A.
 
 ```cs 
 // klientsky kod
