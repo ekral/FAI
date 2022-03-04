@@ -135,7 +135,7 @@ class Motorka
     }
 }
 ```
-Pokud by objekt sdílel zahrnutý objekt s jinými objekty, tak by šlo o **agregaci**. U agregace mluvíme o tom, že objekt používá jiný objekt ale nevlastní ho. Pojmy agregace a kompozice se používají také v jazyce UML. V následujícím příkladu sdílí `smsSender` více objednávek.
+Pokud by objekt sdílel zahrnutý objekt s jinými objekty, tak by šlo o **agregaci**. U agregace mluvíme o tom, že objekt používá jiný objekt ale nevlastní ho. V následujícím příkladu sdílí `smsSender` více objednávek.
 
 ```cs 
 // klientsky kod
@@ -172,6 +172,7 @@ class Objednavka
     }
 }
 ```
+Pojmy agregace a kompozice se používají také v jazyce UML.
 
 ## 5. Dědičnost vs kompozice
 
