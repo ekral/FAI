@@ -171,7 +171,8 @@ Pojmy agregace a kompozice se používají také v jazyce UML.
 
 ## 5. Dědičnost vs kompozice
 
-Dědičnost kódu můžeme nahradit do určité míry kompozicí. V následujícím příkladu nepoužíváme dědičnost, ale třída `Student` si vytváří vlastní instanci třídy `Osoba`. 
+Dědičnost kódu můžeme nahradit do určité míry kompozicí. V následujícím příkladu nepoužíváme dědičnost, ale třída `Student` si vytváří vlastní instanci třídy `Osoba`.
+
 ```cs 
 // klientsky kod
 Student student = new Student(123, "Alena", "AXP1");
