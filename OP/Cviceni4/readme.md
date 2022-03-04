@@ -18,11 +18,6 @@ class Produkt
 class Mys : Produkt
 {
     public int Dpi { get; set; }
-
-    public Mys(double cena, double hodnoceni, int dpi) : base(cena, hodnoceni)
-    {
-        Dpi = dpi;
-    }
 }
 ```
 
@@ -176,8 +171,41 @@ Pojmy agregace a kompozice se používají také v jazyce UML.
 
 ## 5. Dědičnost vs kompozice
 
+Dědičnost kódu můžeme nahradit do určité míry kompozicí. V následujícím příkladu nepoužíváme dědičnost, ale třída `Student` si vytváří vlastní instanci třídy `Osoba`. 
+```cs 
+// klientsky kod
+Student student = new Student(123, "Alena", "AXP1");
+student.Osoba.Jmeno = "Tereza";
+student.Vypis();
 
-TODO
+class Osoba
+{
+    public int cisloUctu { get; private set; }
+    public string Jmeno { get; set; }
 
+    public Osoba(int cisloUctu, string jmeno)
+    {
+        this.cisloUctu = cisloUctu;
+        Jmeno = jmeno;
+    }
+}
+
+class Student 
+{
+    public Osoba Osoba { get; private set; }
+    public string Skupina { get; set; }
+
+    public Student(int cisloUctu, string jmeno, string skupina)
+    {
+        Osoba = new Osoba(cisloUctu, skupina);
+        Skupina = skupina;
+    }
+
+    public void Vypis()
+    {
+        Console.WriteLine($"{Osoba.cisloUctu} {Osoba.Jmeno} {Skupina}"); 
+    }
+}
+```
 ---
 TODO: Příklady k procvičování:
