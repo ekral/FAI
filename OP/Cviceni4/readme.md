@@ -110,7 +110,7 @@ class Student : Osoba
 ```
 ## 4. Kompozice
 
-Pokud jeden objekt zahrnuje druhý objekt, tak můžeme mluvit o vztahu HAS-A, tedy že jeden objekt má druhý objekt. V následujícím příkladu bude mít instance třídy `Motorka` reference na dvě instance třídy `Kola`. Protože objekt motorka objekty kola nesdílí s jinými objekty jd o kompozici. V tomto případě také mluvíme o vlastnictví objektu, kdy vlastnictví objektu (ownership) v tomto kontextu znamená, že když zanikne objekt, tak zanikne i objekt který vlastní. 
+Pokud jeden objekt zahrnuje druhý objekt, tak můžeme mluvit o vztahu HAS-A, tedy že jeden objekt má druhý objekt. V následujícím příkladu bude mít instance třídy `Motorka` reference na dvě instance třídy `Kola`. Protože objekt motorka objekty kola nesdílí s jinými objekty jde o kompozici. V tomto případě také mluvíme o vlastnictví objektu, kdy vlastnictví objektu (ownership) v tomto kontextu znamená, že když zanikne objekt, tak zanikne i objekt který vlastní. 
 
 ```cs 
 class Kolo
