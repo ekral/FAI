@@ -1,34 +1,32 @@
+using Spectre.Console;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleApp11
 {
     class Zoo
     {
-        public Zoo(string jmeno)
+        public string Nazev { get; set; }
+        private List<Zviratko> zviratka;
+
+        public Zoo(string nazev)
         {
-            Jmeno = jmeno;
-            Zviratka = new List<Zviratko>();
+            Nazev = nazev;
+            zviratka = new List<Zviratko>();
         }
-
-
-        public string Jmeno { get; set; }
-        public List<Zviratko> Zviratka { get; set; }
 
         public void Pridej(Zviratko zviratko)
         {
-            Zviratka.Add(zviratko);
+            zviratka.Add(zviratko);
         }
-       
-        public void Zvuky()
+
+        public IEnumerable<string> VratZvuky()
         {
-            foreach (Zviratko zviratko in Zviratka)
-            {
-                Console.WriteLine($"{zviratko.Jmeno}:");
-                zviratko.Zvuk();
-            }
+            return zviratka.Select(z => $"{z.Jmeno} dela {z.Zvuk()}");
         }
     }
+
     class Zviratko
     {
         public string Jmeno { get; set; }
@@ -37,12 +35,11 @@ namespace ConsoleApp11
         {
             Jmeno = jmeno;
         }
-
-        // u normalni metody se rozhoduje v dobe prekladu dle typu reference
-        // o virtualni metode se rozhoduje az za behu podle typu objektu
-        virtual public void Zvuk()
+        // u prekrytych metod se rozhoduje az za behu programu, volani je o neco pomalejsi
+        virtual public string Zvuk()
         {
-            Console.WriteLine("jsem abstraktni zviratko, nedelam konkretni zvuk");
+            // zjistuji zvuk
+            return "nemam konkretni zvuk, jsem abstraktni zviratko";
         }
     }
 
@@ -52,52 +49,62 @@ namespace ConsoleApp11
         {
         }
 
-        override public void Zvuk()
+        override public string Zvuk()
         {
-            Console.WriteLine("haf haf");
+            // zjistuji zvuk
+            return "haf haf";
+        }
+
+        public override string ToString()
+        {
+            return $"Pejsek {Jmeno}";
         }
     }
 
-    class Tucnak : Zviratko
+    class Kocicka : Zviratko
     {
-        public Tucnak(string jmeno) : base(jmeno)
+        public Kocicka(string jmeno) : base(jmeno)
         {
         }
 
-        public override void Zvuk()
+        override public string Zvuk()
         {
-            Console.WriteLine("NOOT NOOT");
+            return "Mnau mnau";
+        }
+
+        public override string ToString()
+        {
+            return $"Kocicka {Jmeno}";
         }
     }
+
     class Program
     {
+        static void VypisZvuky(Zoo zoo)
+        {
+            Console.WriteLine(zoo.Nazev);
+
+            IEnumerable<string> zvuky = zoo.VratZvuky();
+            foreach (string zvuk in zvuky)
+            {
+                Console.WriteLine(zvuk);
+            }
+        }
+
         static void Main(string[] args)
         {
-            Zoo zooA = new Zoo("Lesna");
-            zooA.Pridej(new Tucnak("Jiri"));
+            Dictionary<string, Zoo> seznamZoo = new Dictionary<string, Zoo>();
 
-            // Vytvorte manazer Zoo s rozhranim v Specter Console
-            // V manazeru budete moct vytvaret nova zoo a pridavat do nich zviratka a 
-            // a vypisovat jmena a zvuky vsech zviratek v danem zoo
-            // Vytvorte minimalne jeden unit test na to, kdyz pridate zviratko, tak ze je opravdu v zoo
-            // Ukazka: https://gist.github.com/ekral/ed05585728a4c032ec404c27971dc435#file-unittest1-cs
-
-            Zviratko zviratko1 = new Pejsek("Maxipes"); // upcasting - mame referenci zviratka na pejska
-            zviratko1.Zvuk(); // rozhoduje typ reference
-
-            List<Zviratko> zviratka = new List<Zviratko>();
-            zviratka.Add(new Pejsek("Rex"));
-            zviratka.Add(new Tucnak("Kowalski"));
-
-            foreach (Zviratko zviratko in zviratka)
+            Zoo lesna = new Zoo("Lesna");
+            lesna.Pridej(new Pejsek("Fik"));
+            lesna.Pridej(new Kocicka("Zavelina"));
+            
+            seznamZoo["lesna"] = lesna;
+    
+            foreach (KeyValuePair<string,Zoo> zoo in seznamZoo)
             {
-                Console.WriteLine($"{zviratko.Jmeno}:");
-                zviratko.Zvuk();
+                VypisZvuky(zoo.Value);
             }
-
-            // Chceme v programu nahrazovat objekty jinymi kompatibilnimi objekty
-            // tak abychom nemuseli menit existujici kodu
-            // V C# mame statickou typovou kontrolou
         }
     }
 }
