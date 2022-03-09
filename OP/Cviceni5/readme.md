@@ -29,3 +29,7 @@ class Kocicka
 ```
 
 Nyní bychom chtěli mít třídu Zoo, do které bychom mohli dávat jak pejsky tak kočičky. Následující řádek ale není platný. V **jazyce C#**, ale i například jazyce C++ nebo Java **není možné změnit objekt typu `Pejsek` na objekt typu `Kocicka`**, protože  Naproti tomu v jazyce javasript by to bylo možné, protože v javascriptu nemají proměnné pevně přiřazený typ a typová kontrola je dynamická (Dynamic type checking nebo Dynamic typinc). To znamená, že teprve až za běhu programu se v jazyce javascript ověří, že jak kočička, tak pejsek mají metodu `Zvuk`, někdy se tomuto postupu říká **duck typing** - tedy pokud to kváká a chodí jako kachna, tak je to kachna.
+
+Více se pojmech statically a dynamicaly typed můžete dočíst například zde:
+[What is the difference between a strongly typed language and a statically typed language? StackOverlow, 2022](https://stackoverflow.com/a/2696369)
+
