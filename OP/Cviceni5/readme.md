@@ -29,9 +29,16 @@ class Kocicka
 }
 ```
 
-Nyní bychom chtěli mít třídu Zoo, do které bychom mohli dávat jak pejsky tak kočičky. Následující řádek ale není platný. V **jazyce C#**, ale i například jazyce C++ nebo Java **není možné změnit objekt typu `Pejsek` na objekt typu `Kocicka`**, protože  Naproti tomu v jazyce javasript by to bylo možné, protože v javascriptu nemají proměnné pevně přiřazený typ a typová kontrola je dynamická (Dynamic type checking nebo Dynamic typing). To znamená, že teprve až za běhu programu se v jazyce javascript ověří, že jak kočička, tak pejsek mají metodu `Zvuk`, někdy se tomuto postupu říká **duck typing** - tedy pokud to kváká a chodí jako kachna, tak je to kachna.
+Nyní bychom chtěli mít třídu Zoo, do které bychom mohli dávat jak pejsky tak kočičky. Následující řádek ale není platný:
+```cs
+Pejsek x = new Pejsek();
+x = Kocicka(); // nejde prelozit
+```
+
+V **jazyce C#**, ale i například jazyce C++ nebo Java **není možné změnit objekt typu `Pejsek` na objekt typu `Kocicka`**, protože kompilátor neumí v době překladu ověřit, že jsou vzájemně vyměnitelné. Tedy mají například stejné metody nebo property. Naproti tomu v jazyce javasript by to bylo možné, protože v javascriptu nemají proměnné pevně přiřazený typ a typová kontrola je dynamická (Dynamic type checking nebo Dynamic typing). To znamená, že teprve až za běhu programu se v jazyce javascript ověří, že jak kočička, tak pejsek mají metodu `Zvuk`, někdy se tomuto postupu říká **duck typing** - tedy pokud to kváká a chodí jako kachna, tak je to kachna.
 
 TODO: dokončit příklad
+TODO: vysvětlit early a late binding
 
 Více se pojmech statically a dynamicaly typed můžete dočíst například zde:
 
