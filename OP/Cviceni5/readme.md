@@ -35,6 +35,6 @@ Více se pojmech statically a dynamicaly typed můžete dočíst například zde
 
 [What is the difference between a strongly typed language and a statically typed language? StackOverlow, 2022](https://stackoverflow.com/a/2696369)
 
-O pojmech early a late binding se můžete dočíst v této knize na straně 66:
+O pojmech early a late binding se můžete dočíst v této knize na straně 66 a straně 103:
 [Booch, G., 2007. Object-oriented analysis and design with applications](https://www.amazon.com/Object-Oriented-Analysis-Design-Applications-3rd/dp/020189551X/ref=sr_1_1?crid=3J6T6XIHYPCP8&keywords=Object-Oriented+Analysis+and+Design+with+Application&qid=1646832764&s=books&sprefix=object-oriented+analysis+and+design+with+application%2Cstripbooks-intl-ship%2C128&sr=1-1)
 
