@@ -29,7 +29,7 @@ class Kocicka
 }
 ```
 
-Nyní bychom chtěli mít třídu Zoo, do které bychom mohli dávat jak pejsky tak kočičky. Následující řádek ale není platný:
+Nyní bychom chtěli mít třídu Zoo, do které bychom mohli dávat jak pejsky tak kočičky. Následující řádek ale není platný, to znamená, že bychom do našeho Zoo mohli dávat jen pejsky nebo kočičky, ale ne obě zvířátka zároveň.
 ```cs
 Pejsek x = new Pejsek();
 x = Kocicka(); // nejde prelozit
