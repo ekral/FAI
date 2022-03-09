@@ -27,3 +27,5 @@ class Kocicka
     }
 }
 ```
+
+Nyní bychom chtěli mít třídu Zoo, do které bychom mohli dávat jak pejsky tak kočičky. Následující řádek ale není platný. V **jazyce C#**, ale i například jazyce C++ nebo Java **není možné změnit objekt typu `Pejsek` na objekt typu `Kocicka`**. Naproti tomu v jazyce javasript by to bylo možné, protože v jazyku javascript nemají proměnné pevně přiřazený typ a typová kontrola je dynamická. To znamená, že teprve až za běhu programu se v jazyce javascript ověří, že jak kočička, tak pejsek mají metodu `Zvuk`, někdy se tomuto postupu říká **duck typing** - tedy pokud to kváká a chodí jako kachna, tak je to kachna.
