@@ -1,3 +1,11 @@
+Příklady k procvičování:
+1. Dědičnost: [zadání](1_dedicnost_zadani.cs) [řešení](1_dedicnost_reseni.cs)
+2. Konstruktor u dědičnosti: [zadání](2_konstruktor_zadani.cs) [řešení](2_konstruktor_reseni.cs)
+3. Klíčové slovo protected: [zadání](3_protected_zadani.cs) [řešení](3_protected_reseni.cs)
+4. Kompozice: [zadání](4_kompozice_zadani.cs) [řešení](4_kompozice_reseni.cs)
+5. Dědičnost vs kompozice: [zadání](5_dedicnost_vs_kompozice_zadani.cs) [řešení](5_dedicnost_vs_kompozice_reseni.cs)
+---
+
 ## 1. Dědičnost kódu
 
 Dědičnost kódu popisuje vztah specializace mezi třídami, například počítačová myš je (anglicky *IS A*) produkt, nebo tlačítko v aplikaci je ovládací prvek. 
@@ -208,11 +216,4 @@ class Student
     }
 }
 ```
----
-Příklady k procvičování:
-1. Dědičnost: [zadání](1_dedicnost_zadani.cs) [řešení](1_dedicnost_reseni.cs)
-2. Konstruktor u dědičnosti: [zadání](2_konstruktor_zadani.cs) [řešení](2_konstruktor_reseni.cs)
-3. Klíčové slovo protected: [zadání](3_protected_zadani.cs) [řešení](3_protected_reseni.cs)
-4. Kompozice: [zadání](4_kompozice_zadani.cs) [řešení](4_kompozice_reseni.cs)
-5. Dědičnost vs kompozice: [zadání](5_dedicnost_vs_kompozice_zadani.cs) [řešení](5_dedicnost_vs_kompozice_reseni.cs)
 
