@@ -60,6 +60,11 @@ namespace ConsoleApp12
 
                 zviratka.Add(nove);
 
+                if (!AnsiConsole.Confirm("Pridat nove zviratko?"))
+                {
+                    
+                }
+
             } while (!konec);
 
 
