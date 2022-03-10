@@ -28,6 +28,8 @@ namespace ConsoleApp12
 
     class Kacenka : Zviratko
     {
+        internal const string Druh = "Kacenka";
+
         override public string Zvuk()
         {
             return "mek mek";
@@ -35,6 +37,8 @@ namespace ConsoleApp12
     }
     class Kravicka : Zviratko
     {
+        internal const string Druh = "Kravicka";
+
         override public string Zvuk()
         {
             return "buu buu";
@@ -50,7 +54,7 @@ namespace ConsoleApp12
         // TODO pouzit konstanty pro druhy
 
         static void Main(string[] args)
-        {
+        {            
             List<Zviratko> zviratka = new List<Zviratko>();
             bool konec = false;
 
@@ -59,7 +63,7 @@ namespace ConsoleApp12
                 string druh = AnsiConsole.Prompt(
                     new SelectionPrompt<string>()
                     .Title("Zvol [green]zviratko[/]:")
-                    .AddChoices(new[] { Pejsek.Druh, "Kacenka", "Kravicka" })
+                    .AddChoices(new[] { Pejsek.Druh, Kacenka.Druh, Kravicka.Druh })
                 );
 
                 string name = AnsiConsole.Ask<string>("Zadej [green]jmeno[/]:");
@@ -67,8 +71,8 @@ namespace ConsoleApp12
                 Zviratko nove = druh switch
                 {
                     Pejsek.Druh => new Pejsek() { Jmeno = name },
-                    "Kacenka" => new Kacenka() { Jmeno = name },
-                    "Kravicka" => new Kravicka() { Jmeno = name },
+                    Kacenka.Druh => new Kacenka() { Jmeno = name },
+                    Kravicka.Druh => new Kravicka() { Jmeno = name },
                     _ => throw new ArgumentException("Neplatny druh zviratka")
                 };
 
