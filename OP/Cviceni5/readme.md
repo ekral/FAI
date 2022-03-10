@@ -47,7 +47,7 @@ Více se pojmech statically a dynamicaly typed můžete dočíst například zde
 
 [What is the difference between a strongly typed language and a statically typed language? StackOverlow, 2022](https://stackoverflow.com/a/2696369)
 
-V jazyce C#, protože má statickou typovou kontrolu vyjádříme, že jsou objekty kompatibilní buď pomocí rodičovské třídy nebo pomocí rozhraní. V následujícím kódu si nadefinujeme rodičovskou třídu `Zviratko` od ktere bude dedit jak `Pejsek`, tak Kocicka:
+V jazyce C#, protože má statickou typovou kontrolu, vyjádříme že jsou objekty kompatibilní buď pomocí rodičovské třídy nebo pomocí rozhraní. V následujícím kódu si nadefinujeme rodičovskou třídu `Zviratko` od ktere bude dedit jak `Pejsek`, tak Kocicka:
 
 ```cs
 class Zviratko
