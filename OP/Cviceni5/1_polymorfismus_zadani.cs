@@ -2,6 +2,8 @@ using Spectre.Console;
 using System;
 using System.Collections.Generic;
 
+// pridat nuget Spectre Console
+
 namespace ConsoleApp12
 {
     class Zviratko
@@ -16,6 +18,7 @@ namespace ConsoleApp12
 
     class Pejsek : Zviratko
     {
+        // internal const string Druh = "Pejsek";
 
         override public string Zvuk()
         {
@@ -37,7 +40,7 @@ namespace ConsoleApp12
         // Ukol 1: Pridejte novy druh zviratka
         // Ukol 2: Ukoncete nekonecny cyklus
         // Ukol 3 pokrocily: doplnte vice Zoo a doplnte Unit testy
-        // TODO pouzit enum pro druhy zviratek
+        // TODO pouzit konstanty pro druhy
 
         static void Main(string[] args)
         {
@@ -75,7 +78,6 @@ namespace ConsoleApp12
                 }
 
             } while (!konec);
-
         }
     }
 }
