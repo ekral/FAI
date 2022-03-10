@@ -111,7 +111,7 @@ foreach (Zviratko zviratko in zviratka)
 
 V jazyce JavaScript, protože používá dynamic typing, se o tom, která metoda se zavolá rozhoduje až za běhu programu. Proto by se zavolali správně metody pejska a kočičky. Což je to co chceme. V kontextu OOP tomu říkáme **late binding**. Pokud je late bindig očekáváné chování, proč se v jazyce C# a nebo jazyce C++ nepoužívá jako výchozí? Nepoužívá se jako výchozí z důvodu výkonu, protože rozhodování o tom, která metoda se má zavolat až za běhu programu je pomalejší, než když se o tom rozhodne je jednou hned při překladu programu.
 
-V jazyce C# a dalších z důvodu výkonu explicitně říkáme aby používali pomalejší late bindig jen ty metody u kterých to potřebujeme. V našem příkladu označíme metodu `Zvuk` v třídě `Zviratko` jako `virtual` a třídách `Pejsek` a `Kocicka` ji označíme klíčovým slovem `override`. Říkáme, že překrýváme virtuální metodu. Tímto zápisem potomu určíme, že se má pro metodu Zvuk použít late binding, tedy o tom, která metoda se zavolá se rozhodne až **za běhu programu dle typu objektu**.
+V jazyce C# a dalších z důvodu výkonu explicitně říkáme aby používali pomalejší late bindig jen ty metody u kterých to potřebujeme. V našem příkladu označíme metodu `Zvuk` v třídě `Zviratko` jako `virtual` a třídách `Pejsek` a `Kocicka` ji označíme klíčovým slovem `override`. Říkáme, že překrýváme virtuální metodu. Tímto zápisem potomu určíme, že se má pro metodu `Zvuk` použít late binding, tedy o tom, která metoda se zavolá se rozhodne až **za běhu programu dle typu objektu**.
 
 V následujícím kompletním příkaldu máme překrytou vrituální metodu Zvuk a zvířátka v seznamu zvířátek už správně vypisují konkrétní zvuky, které dělají:
 
