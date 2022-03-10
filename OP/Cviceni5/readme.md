@@ -98,9 +98,15 @@ zviratka.Add(new Kocicka() { Jmeno = "Micka" });
 
 V minulém příkladu jsme si vytvořili seznam zvířátek do kterého jsme přidali pejska a kočičku. Pokud ale prostřednictvím reference typu `Zviratko` zavoláme metodu Zvuk, tak se nám zavolá metoda třídy Zviratko a na terminál se vypíše dvakrát text "Jsem abstraktni zviratko a nedelam zadny konkretni zvuk". Je to opět proto, že v jazyk C# používá **static typing** a o tom, která metoda se zavolá se rozhodne *v době překladu dle typu reference*. V kontextu OOP mluvíme o **early bindingu**. 
 
+```cs
+List<Zviratko> zviratka = new List<Zviratko>();
+zviratka.Add(new Pejsek() { Jmeno = "Rex" });
+zviratka.Add(new Kocicka() { Jmeno = "Micka" });
+```
+
 V jazyce JavaScript, protože používá dynamic typing, se o tom, která metoda se zavolá rozhoduje až za běhu programu. Proto by se zavolali správně metody pejska a kočičky. Což je to co chceme. V kontextu OOP tomu říkáme **late binding**. Pokud je late bindig očekáváné chování, proč se v jazyce C# a nebo jazyce C++ nepoužívá jako výchozí? Nepoužívá se jako výchozí z důvodu výkonu, protože rozhodování o tom, která metoda se má zavolat až za běhu programu je pomalejší, než když se o tom rozhodne je jednou hned při překladu programu.
 
-V jazyce C# a dalších z důvodu výkonu označujeme aby používali pomalejší late bindig pouze ty metody u kterých to potřebujeme. V našem příkladu označíme metodu Zvuk v třídě Zviratko jako virtual a třídách Pejsek a Kocicka ji označíme klíčovým slovem override. Říkáme, že překrýváme virtuální metodu. Tímto zápisem potomu určíme, že se má pro metodu Zvuk použít late binding, tedy o tom, která metoda se zavolá se rozhodne až **za běhu programu dle typu objektu**.
+V jazyce C# a dalších z důvodu výkonu explicitně říkáme aby používali pomalejší late bindig jen ty metody u kterých to potřebujeme. V našem příkladu označíme metodu Zvuk v třídě Zviratko jako virtual a třídách Pejsek a Kocicka ji označíme klíčovým slovem override. Říkáme, že překrýváme virtuální metodu. Tímto zápisem potomu určíme, že se má pro metodu Zvuk použít late binding, tedy o tom, která metoda se zavolá se rozhodne až **za běhu programu dle typu objektu**.
 
 
 
