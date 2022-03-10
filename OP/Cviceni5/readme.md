@@ -10,6 +10,8 @@ Více se o runtime jazyka smalltalk můžete dozvědět na stránkách opensourc
 
 [The immersive programming experience. Pharo, 2022]( https://pharo.org/)
 
+###Polymorfismus a statická typová kontrola
+
 Nyní si probereme dynamický polymorfismus na příkladu. Nejprve si definujeme třídy `Pejsek` a `Kocicka`. V příkladech jsou vynechány konstruktory, aby byl kód kratší.
 ```cs 
 class Pejsek
