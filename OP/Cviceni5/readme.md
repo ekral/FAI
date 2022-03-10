@@ -162,7 +162,7 @@ class Kocicka : Zviratko
 
 ### downcasting
 
-Operaci, kdy přetypujeme potomka na rodiče říkáme upcasting. Vyjímečně ale můžeme i v kódu provést downcasting, kdy ale musíme být opatrní, protože ne každé zvířátko může být kočička. Využíváme především operátor is:
+Operaci, kdy přetypujeme potomka na rodiče říkáme upcasting. Vyjímečně ale můžeme i v kódu provést downcasting, kdy ale musíme být opatrní, protože ne každé zvířátko může být například kočička. Využíváme především operátor `is`:
 
 ```cs
 foreach (Zviratko zviratko in zviratka)
