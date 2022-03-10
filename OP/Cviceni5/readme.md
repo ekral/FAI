@@ -94,7 +94,7 @@ zviratka.Add(new Kocicka() { Jmeno = "Micka" });
 ```
 
 
-### Polymorfismus a early a late binding v OOP
+### Polymorfismus, early a late binding v OOP
 
 V minulém příkladu jsme si vytvořili seznam zvířátek do kterého jsme přidali pejska a kočičku. Pokud ale prostřednictvím reference typu `Zviratko` zavoláme metodu Zvuk, tak se nám zavolá metoda třídy Zviratko a na terminál se vypíše dvakrát text "Jsem abstraktni zviratko a nedelam zadny konkretni zvuk". Je to opět proto, že v jazyk C# používá **static typing** a o tom, která metoda se zavolá se rozhodne *v době překladu dle typu reference*. V kontextu OOP mluvíme o **early bindingu**. 
 
