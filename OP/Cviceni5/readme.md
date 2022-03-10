@@ -77,8 +77,21 @@ class Kocicka : Zviratko
 }
 ```
 
+Nyní můžeme prostřednictví reference typu `Zviratko` nahradit pejska kočičkou a naopak:
+```cs
+Zviratko z = new Pejsek() { Jmeno = "Rex" };
+z = new Kocicka() { Jmeno = "Micka" };
+```
 
-TODO: dokončit příklad
+A v zoo můžeme mít seznam zvířátek, do kterého můžeme dávat pejsky, kočičky a v budoucnu i všechna nová zvířátka, pokud budou potomkem třídy `Zviratko`:
+
+```cs
+List<Zviratko> zviratka = new List<Zviratko>();
+
+zviratka.Add(new Pejsek() { Jmeno = "Rex" });
+zviratka.Add(new Kocicka() { Jmeno = "Micka" });
+```
+
 TODO: vysvětlit early a late binding
 
 
