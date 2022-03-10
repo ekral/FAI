@@ -1,109 +1,72 @@
 using Spectre.Console;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace ConsoleApp11
+namespace ConsoleApp12
 {
-    class Zoo
-    {
-        public string Nazev { get; set; }
-        private List<Zviratko> zviratka;
-
-        public Zoo(string nazev)
-        {
-            Nazev = nazev;
-            zviratka = new List<Zviratko>();
-        }
-
-        public void Pridej(Zviratko zviratko)
-        {
-            zviratka.Add(zviratko);
-        }
-
-        public IEnumerable<string> VratZvuky()
-        {
-            return zviratka.Select(z => $"{z.Jmeno} dela {z.Zvuk()}");
-        }
-    }
-
     class Zviratko
     {
         public string Jmeno { get; set; }
-
-        public Zviratko(string jmeno)
-        {
-            Jmeno = jmeno;
-        }
-        // u prekrytych metod se rozhoduje az za behu programu, volani je o neco pomalejsi
+        // pozdni vazba (late binding)
         virtual public string Zvuk()
         {
-            // zjistuji zvuk
-            return "nemam konkretni zvuk, jsem abstraktni zviratko";
+            return "Jsem abstraktni zviratko nedelam zadny konrektni zvuk";
         }
     }
 
     class Pejsek : Zviratko
     {
-        public Pejsek(string jmeno) : base(jmeno)
-        {
-        }
 
         override public string Zvuk()
         {
-            // zjistuji zvuk
-            return "haf haf";
-        }
-
-        public override string ToString()
-        {
-            return $"Pejsek {Jmeno}";
+            return "Haf haf";
         }
     }
 
-    class Kocicka : Zviratko
+    class Kacenka : Zviratko
     {
-        public Kocicka(string jmeno) : base(jmeno)
-        {
-        }
-
         override public string Zvuk()
         {
-            return "Mnau mnau";
-        }
-
-        public override string ToString()
-        {
-            return $"Kocicka {Jmeno}";
+            return "mek mek";
         }
     }
+
 
     class Program
     {
-        static void VypisZvuky(Zoo zoo)
-        {
-            Console.WriteLine(zoo.Nazev);
-
-            IEnumerable<string> zvuky = zoo.VratZvuky();
-            foreach (string zvuk in zvuky)
-            {
-                Console.WriteLine(zvuk);
-            }
-        }
+        // TODO pouzit enum pro druhy zviratek
 
         static void Main(string[] args)
         {
-            Dictionary<string, Zoo> seznamZoo = new Dictionary<string, Zoo>();
+            List<Zviratko> zviratka = new List<Zviratko>();
+            bool konec = false;
 
-            Zoo lesna = new Zoo("Lesna");
-            lesna.Pridej(new Pejsek("Fik"));
-            lesna.Pridej(new Kocicka("Zavelina"));
-            
-            seznamZoo["lesna"] = lesna;
-    
-            foreach (KeyValuePair<string,Zoo> zoo in seznamZoo)
+            do
             {
-                VypisZvuky(zoo.Value);
+                string druh = AnsiConsole.Prompt(
+                    new SelectionPrompt<string>()
+                    .Title("Zvol [green]zviratko[/]:")
+                    .AddChoices(new[] { "Pejsek", "Kacenka" })
+                );
+
+                string name = AnsiConsole.Ask<string>("Zadej [green]jmeno[/]:");
+
+                Zviratko nove = druh switch
+                {
+                    "Pejsek" => new Pejsek() { Jmeno = name },
+                    "Kacenka" => new Kacenka() { Jmeno = name },
+                    _ => throw new ArgumentException("Neplatny druh zviratka")
+                };
+
+                zviratka.Add(nove);
+
+            } while (!konec);
+
+
+            foreach (Zviratko zviratko in zviratka)
+            {
+                Console.WriteLine(zviratko.Jmeno);
+                Console.WriteLine(zviratko.Zvuk());
             }
         }
     }
