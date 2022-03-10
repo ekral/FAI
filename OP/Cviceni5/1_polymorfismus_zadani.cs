@@ -1,77 +1,81 @@
+using Spectre.Console;
 using System;
 using System.Collections.Generic;
 
-namespace ConsoleApp11
+namespace ConsoleApp12
 {
     class Zviratko
     {
         public string Jmeno { get; set; }
-
-        public Zviratko(string jmeno)
+        // pozdni vazba (late binding)
+        virtual public string Zvuk()
         {
-            Jmeno = jmeno;
-        }
-
-        // u normalni metody se rozhoduje v dobe prekladu dle typu reference
-        // o virtualni metode se rozhoduje az za behu podle typu objektu
-        virtual public void Zvuk()
-        {
-            Console.WriteLine("jsem abstraktni zviratko, nedelam konkretni zvuk");
+            return "Jsem abstraktni zviratko nedelam zadny konrektni zvuk";
         }
     }
 
     class Pejsek : Zviratko
     {
-        public Pejsek(string jmeno) : base(jmeno)
-        {
-        }
 
-        override public void Zvuk()
+        override public string Zvuk()
         {
-            Console.WriteLine("haf haf");
+            return "Haf haf";
         }
     }
 
-    class Tucnak : Zviratko
+    class Kacenka : Zviratko
     {
-        public Tucnak(string jmeno) : base(jmeno)
+        override public string Zvuk()
         {
-        }
-
-        public override void Zvuk()
-        {
-            Console.WriteLine("NOOT NOOT");
+            return "mek mek";
         }
     }
+
+
     class Program
     {
+        // Ukol 1: Pridejte novy druh zviratka
+        // Ukol 2: Ukoncete nekonecny cyklus
+        // Ukol 3 pokrocily: doplnte vice Zoo a doplnte Unit testy
+        // TODO pouzit enum pro druhy zviratek
+
         static void Main(string[] args)
         {
-            // 1. Jedno Zoo
-            // Vytvorte manazera Zoo s rozhranim v Specter Console
-            // V manazeru budete moct pridavat ruzna zviratka do zoo
-            // a vypisovat jmena a zvuky vsech zviratek v danem zoo
-            // Vytvorte minimalne jeden unit test na to, kdyz pridate zviratko, tak ze je opravdu v zoo
-            // Ukazka: https://gist.github.com/ekral/ed05585728a4c032ec404c27971dc435#file-unittest1-cs
-            
-            // 2. Pridejte moznost spravy vice Zoo
-
-            Zviratko zviratko1 = new Pejsek("Maxipes"); // upcasting - mame referenci zviratka na pejska
-            zviratko1.Zvuk(); // rozhoduje typ reference
-
             List<Zviratko> zviratka = new List<Zviratko>();
-            zviratka.Add(new Pejsek("Rex"));
-            zviratka.Add(new Tucnak("Kowalski"));
+            bool konec = false;
 
-            foreach (Zviratko zviratko in zviratka)
+            do
             {
-                Console.WriteLine($"{zviratko.Jmeno}:");
-                zviratko.Zvuk();
-            }
+                string druh = AnsiConsole.Prompt(
+                    new SelectionPrompt<string>()
+                    .Title("Zvol [green]zviratko[/]:")
+                    .AddChoices(new[] { "Pejsek", "Kacenka" })
+                );
 
-            // Chceme v programu nahrazovat objekty jinymi kompatibilnimi objekty
-            // tak abychom nemuseli menit existujici kodu
-            // V C# mame statickou typovou kontrolou
+                string name = AnsiConsole.Ask<string>("Zadej [green]jmeno[/]:");
+
+                Zviratko nove = druh switch
+                {
+                    "Pejsek" => new Pejsek() { Jmeno = name },
+                    "Kacenka" => new Kacenka() { Jmeno = name },
+                    _ => throw new ArgumentException("Neplatny druh zviratka")
+                };
+
+                zviratka.Add(nove);
+
+                foreach (Zviratko zviratko in zviratka)
+                {
+                    Console.WriteLine(zviratko.Jmeno);
+                    Console.WriteLine(zviratko.Zvuk());
+                }
+
+                if (!AnsiConsole.Confirm("Pridat nove zviratko?"))
+                {
+                    
+                }
+
+            } while (!konec);
+
         }
     }
 }
