@@ -49,7 +49,7 @@ namespace ConsoleApp11
         {
             // 1. Jedno Zoo
             // Vytvorte manazera Zoo s rozhranim v Specter Console
-            // V manazeru budete moct pridavat do nich zviratka do zoo
+            // V manazeru budete moct pridavat ruzna zviratka do zoo
             // a vypisovat jmena a zvuky vsech zviratek v danem zoo
             // Vytvorte minimalne jeden unit test na to, kdyz pridate zviratko, tak ze je opravdu v zoo
             // Ukazka: https://gist.github.com/ekral/ed05585728a4c032ec404c27971dc435#file-unittest1-cs
