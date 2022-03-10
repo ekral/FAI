@@ -113,7 +113,7 @@ V jazyce JavaScript, protože používá dynamic typing, se o tom, která metoda
 
 V jazyce C# a dalších z důvodu výkonu explicitně říkáme aby používali pomalejší late bindig jen ty metody u kterých to potřebujeme. V našem příkladu označíme metodu `Zvuk` v třídě `Zviratko` jako `virtual` a třídách `Pejsek` a `Kocicka` ji označíme klíčovým slovem `override`. Říkáme, že překrýváme virtuální metodu. Tímto zápisem potomu určíme, že se má pro metodu `Zvuk` použít late binding, tedy o tom, která metoda se zavolá se rozhodne až **za běhu programu dle typu objektu**.
 
-V následujícím kompletním příkaldu máme překrytou vrituální metodu Zvuk a zvířátka v seznamu zvířátek už správně vypisují konkrétní zvuky, které dělají:
+V následujícím kompletním příkaldu máme překrytou vrituální metodu `Zvuk` a zvířátka v seznamu zvířátek už správně vypisují konkrétní zvuky, které dělají:
 
 ```cs
 List<Zviratko> zviratka = new List<Zviratko>();
