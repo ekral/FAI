@@ -78,12 +78,11 @@ class Kocicka : Zviratko
 }
 ```
 
-Nyní můžeme prostřednictví reference typu `Zviratko` nahradit pejska kočičkou a naopak:
+Nyní můžeme prostřednictví reference typu `Zviratko` nahradit pejska kočičkou a naopak. Této operaci, kdy převádíme potomka na rodiče říkáme **upcasting**.
 ```cs
 Zviratko z = new Pejsek() { Jmeno = "Rex" };
 z = new Kocicka() { Jmeno = "Micka" };
 ```
-TODO: upcasting downcasting
 
 A v zoo můžeme mít seznam zvířátek, do kterého můžeme dávat pejsky, kočičky a v budoucnu i všechna nová zvířátka, pokud budou potomkem třídy `Zviratko`:
 
@@ -157,8 +156,23 @@ class Kocicka : Zviratko
 }
 ```
 
-
 - O pojmech early a late binding se můžete dočíst v této knize na straně 66 a straně 103:
 
 [Booch, G., 2007. Object-oriented analysis and design with applications](https://www.amazon.com/Object-Oriented-Analysis-Design-Applications-3rd/dp/020189551X/ref=sr_1_1?crid=3J6T6XIHYPCP8&keywords=Object-Oriented+Analysis+and+Design+with+Application&qid=1646832764&s=books&sprefix=object-oriented+analysis+and+design+with+application%2Cstripbooks-intl-ship%2C128&sr=1-1)
 
+### downcasting
+
+Operaci, kdy přetypujeme potomka na rodiče říkáme upcasting. Vyjímečně ale můžeme i v kódu provést downcasting, kdy ale musíme být opatrní, protože ne každé zvířátko může být kočička. Využíváme především operátor is:
+
+```cs
+foreach (Zviratko zviratko in zviratka)
+{
+    if(zviratko is Kocicka kocicka)
+    {
+       
+    }
+}
+```
+
+---
+Důležité je si uvědomit, že výše zmíněné postupy se týkají především staticaly typed jazyků se zaměřením na výkon. Ve Smalltalku, který je dynamically typed, nebylo potřeba definovat virtuální funkce, protože všechny funkce byly jako výchozí late bind a nebylo nutné definovat rozhraní nebo rodičovskou třídu kvůli kompatibilitě objektů. Dá se říct, že OOP bylo ve smalltalku mnohem jednodušší a většina syntaxe kterou se teď učíme pochází z implementace OOP ve statically typed jazyce C++. 
