@@ -83,6 +83,7 @@ Nyní můžeme prostřednictví reference typu `Zviratko` nahradit pejska koči�
 Zviratko z = new Pejsek() { Jmeno = "Rex" };
 z = new Kocicka() { Jmeno = "Micka" };
 ```
+TODO: upcasting downcasting
 
 A v zoo můžeme mít seznam zvířátek, do kterého můžeme dávat pejsky, kočičky a v budoucnu i všechna nová zvířátka, pokud budou potomkem třídy `Zviratko`:
 
