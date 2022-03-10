@@ -47,11 +47,14 @@ namespace ConsoleApp11
     {
         static void Main(string[] args)
         {
-            // Vytvorte manazer Zoo s rozhranim v Specter Console
-            // V manazeru budete moct vytvaret nova zoo a pridavat do nich zviratka a 
+            // 1. Jedno Zoo
+            // Vytvorte manazera Zoo s rozhranim v Specter Console
+            // V manazeru budete moct pridavat do nich zviratka do zoo
             // a vypisovat jmena a zvuky vsech zviratek v danem zoo
             // Vytvorte minimalne jeden unit test na to, kdyz pridate zviratko, tak ze je opravdu v zoo
             // Ukazka: https://gist.github.com/ekral/ed05585728a4c032ec404c27971dc435#file-unittest1-cs
+            
+            // 2. Pridejte moznost spravy vice Zoo
 
             Zviratko zviratko1 = new Pejsek("Maxipes"); // upcasting - mame referenci zviratka na pejska
             zviratko1.Zvuk(); // rozhoduje typ reference
