@@ -43,6 +43,11 @@ x = Kocicka() { Jmeno = "Micka" }; // nejde prelozit
 
 Je to proto, že v **jazyce C#**, ale i například jazyce C++ nebo Java **není možné změnit objekt typu `Pejsek` na objekt typu `Kocicka`**. Je to proto, že jazyk C# používá statickou typovou kontrolu (Static typing), tedy kompilátor kontroluje typy v době překladu a vyžaduje abychom explicitně v kódu vyjádřili, že jsou vzájemně nahraditelné.  Tedy že mají například stejné metody, property nebo fieldy. Naproti tomu v jazyce JavaScript by to bylo možné, protože v JavaScriptu nemají proměnné pevně přiřazený typ a typová kontrola je dynamická (Dynamic typing). To znamená, že teprve až za běhu programu se v jazyce JavaScript ověří, že jak kočička, tak pejsek mají metodu `Zvuk`, někdy se tomuto postupu říká **duck typing** - tedy pokud to kváká a chodí jako kachna, tak je to kachna.
 
+- Více se pojmech statically a dynamicaly typed můžete dočíst například zde:
+
+[What is the difference between a strongly typed language and a statically typed language? StackOverlow, 2022](https://stackoverflow.com/a/2696369)
+
+
 V jazyce C#, protože má statickou typovou kontrolu, vyjádříme že jsou objekty kompatibilní buď pomocí rodičovské třídy nebo pomocí rozhraní. V následujícím kódu si nadefinujeme rodičovskou třídu `Zviratko` od ktere bude dedit jak `Pejsek`, tak Kocicka:
 
 ```cs
@@ -88,9 +93,7 @@ zviratka.Add(new Pejsek() { Jmeno = "Rex" });
 zviratka.Add(new Kocicka() { Jmeno = "Micka" });
 ```
 
-- Více se pojmech statically a dynamicaly typed můžete dočíst například zde:
 
-[What is the difference between a strongly typed language and a statically typed language? StackOverlow, 2022](https://stackoverflow.com/a/2696369)
 
 
 ### Polymorfismus a early a late binding
