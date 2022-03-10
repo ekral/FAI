@@ -96,7 +96,7 @@ zviratka.Add(new Kocicka() { Jmeno = "Micka" });
 
 ### Polymorfismus a early a late binding v OOP
 
-V minulém příkladu jsem si vytvořili seznam zvířátek do kterého jsme přidali pejska a kočičku. Pokud ale prostřednictvím reference typu `Zviratko` zavoláme metodu Zvuk, tak se nám zavolá metoda třídy Zviratko a na terminál se vypíše dvakrát text "Jsem abstraktni zviratko a nedelam zadny konkretni zvuk". Je to opět proto, že v jazyk C# používá **static typing** a o tom, která metoda se zavolá se rozhodne *v době překladu dle typu reference*. V kontextu OOP mluvíme o **early bindingu**. 
+V minulém příkladu jsme si vytvořili seznam zvířátek do kterého jsme přidali pejska a kočičku. Pokud ale prostřednictvím reference typu `Zviratko` zavoláme metodu Zvuk, tak se nám zavolá metoda třídy Zviratko a na terminál se vypíše dvakrát text "Jsem abstraktni zviratko a nedelam zadny konkretni zvuk". Je to opět proto, že v jazyk C# používá **static typing** a o tom, která metoda se zavolá se rozhodne *v době překladu dle typu reference*. V kontextu OOP mluvíme o **early bindingu**. 
 
 V jazyce JavaScript, protože používá dynamic typing, se o tom, která metoda se zavolá rozhoduje až za běhu programu. Proto by se zavolali správně metody pejska a kočičky. Což je to co chceme. V kontextu OOP tomu říkáme **late binding**. Pokud je late bindig očekáváné chování, proč se v jazyce C# a nebo jazyce C++ nepoužívá jako výchozí? Nepoužívá se jako výchozí z důvodu výkonu, protože rozhodování o tom, která metoda se má zavolat až za běhu programu je pomalejší, než když se o tom rozhodne je jednou hned při překladu programu.
 
