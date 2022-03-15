@@ -1,3 +1,13 @@
+// Ukol 1: zmente Zviratko na abstraktni tridu
+// Ukol 2: Vytvorte tridu Zoo, ktera bude obsahovat seznam zviratek
+// Ukol 3: (skolni priklad) pro tridu Zoo implementuje rozhrani IDisposal,
+//         tak aby ze Zoo odstranil vsechna zviratka,
+//         kdyz se zoo odstrani z pameti
+// Ukol 4: Napiste jaky je rozdil mezi:
+//         a) Rozhranim a
+//         b) Abstraktni tridou
+//         c) Neabstraktni tridou s virtualnimi metodami
+
 using Spectre.Console;
 using System;
 using System.Collections.Generic;
@@ -6,7 +16,7 @@ using System.Collections.Generic;
 // <PackageReference Include="Spectre.Console" Version="*"/>
 namespace ConsoleApp12
 {
-    // zmente Zviratko na abstraktni tridu
+    // Ukol 1: Zmente metodu Zvuk na abstraktni a Zviratko na abstraktni tridu
     class Zviratko
     {
         public string Jmeno { get; set; }
@@ -40,15 +50,7 @@ namespace ConsoleApp12
 
     class Program
     {
-        // Ukol 1: zmente Zviratko na abstraktni tridu
-        // Ukol 2: Vytvorte tridu Zoo, ktera bude obsahovat seznam zviratek
-        // Ukol 3: (skolni priklad) pro tridu Zoo implementuje rozhrani IDisposal,
-        //         tak aby ze Zoo odstranil vsechna zviratka,
-        //         kdyz se zoo odstrani z pameti
-        // Ukol 4: Napiste jaky je rozdil mezi:
-        //         a) Rozhranim a
-        //         b) Abstraktni tridou
-        //         c) Neabstraktni tridou s virtualnimi metodami
+        
 
         static void Main(string[] args)
         {
