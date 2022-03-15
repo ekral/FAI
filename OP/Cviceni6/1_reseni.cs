@@ -62,7 +62,7 @@ namespace ConsoleApp12
         public string Nazev { get; set; }
 
         private List<Zviratko> zviratka;
-        public IReadOnlyCollection<Zviratko> Zviratka => zviratka;
+        public IReadOnlyCollection<Zviratko> Zviratka => zviratka; // expression body definition pro read only property https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/statements-expressions-operators/expression-bodied-members#read-only-properties
 
         public Zoo(string nazev)
         {
