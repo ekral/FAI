@@ -25,6 +25,26 @@ namespace ConsoleApp12
         abstract public string Zvuk(); // nema zadnou implementaci
     }
 
+    class Pejsek : Zviratko
+    {
+        internal const string Druh = "Pejsek";
+
+        override public string Zvuk()
+        {
+            return "Haf haf";
+        }
+    }
+
+    class Kacenka : Zviratko
+    {
+        internal const string Druh = "Kacenka";
+
+        override public string Zvuk()
+        {
+            return "mek mek";
+        }
+    }
+
     // Ukol 2: a) Vytvorte tridu Zoo, ktera bude obsahovat seznam zviratek ✓
 
     class Zoo
@@ -47,25 +67,7 @@ namespace ConsoleApp12
         // metoda pro pridani noveho zviratka
 
     }
-    class Pejsek : Zviratko
-    {
-        internal const string Druh = "Pejsek";
-
-        override public string Zvuk()
-        {
-            return "Haf haf";
-        }
-    }
-
-    class Kacenka : Zviratko
-    {
-        internal const string Druh = "Kacenka";
-
-        override public string Zvuk()
-        {
-            return "mek mek";
-        }
-    }
+   
 
     class Program
     {
@@ -74,7 +76,7 @@ namespace ConsoleApp12
         {
             //Ukol 2: b) Vytvorte tridu Zoo a pouzijte ji v klientskem kodu ✓          
             Zoo zoo = new Zoo("Zoo Lesna");
-
+            
             bool konec = false;
 
             do
