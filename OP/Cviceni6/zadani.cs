@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 
 // pridat nuget Spectre Console
-
+// <PackageReference Include="Spectre.Console" Version="*"/>
 namespace ConsoleApp12
 {
     // zmente Zviratko na abstraktni tridu
