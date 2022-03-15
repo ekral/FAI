@@ -105,6 +105,7 @@ namespace ConsoleApp12
 
                 string name = AnsiConsole.Ask<string>("Zadej [green]jmeno[/]:");
 
+                // https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/functional/pattern-matching
                 Zviratko nove = druh switch
                 {
                     Pejsek.Druh => new Pejsek() { Jmeno = name },
