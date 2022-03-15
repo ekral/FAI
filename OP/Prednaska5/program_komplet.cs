@@ -1,6 +1,3 @@
-
-
-
 Eshop eshop = new Eshop();
 eshop.VytvorObjednavku();
 // eshop.Objednavky.Add(new Objednavka()); // nejde
