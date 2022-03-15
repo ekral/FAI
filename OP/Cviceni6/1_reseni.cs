@@ -79,6 +79,9 @@ namespace ConsoleApp12
         //       vyresit, kdyz by doslo na finalizer (constructor)
         public void Dispose()
         {
+            // skolni priklad, slouzi pouze jako ukazka, pro zviratka to nemusime delat protoze je spravuje Garbage collector
+            // tady odstranuje napriklad unmaged memmory, pristup k hardwaru, pripojeni k serveru
+            // v beznem kodu se to nepouziva
             Console.WriteLine("Zoo se rusi, odvazim  zviratka ze zoo");
             zviratka.Clear();
         }
