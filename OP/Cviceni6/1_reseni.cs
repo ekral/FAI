@@ -17,6 +17,14 @@ using System.Collections.Generic;
 
 namespace ConsoleApp12
 {
+    // Dedicnost kodu: IS-A
+    // Kompozice: HAS-A
+    // Rozhrani: Can Do
+    interface IPrintable
+    {
+        void Tiskni();
+    }
+
     // Ukol 1: Zmente metodu Zvuk na abstraktni a Zviratko na abstraktni tridu ✓
     abstract class Zviratko
     {
@@ -47,7 +55,9 @@ namespace ConsoleApp12
 
     // Ukol 2: a) Vytvorte tridu Zoo, ktera bude obsahovat seznam zviratek ✓
 
-    class Zoo
+    // Ukol 3: (skolni priklad) pro tridu Zoo implementuje rozhrani IDisposal ✓
+
+    class Zoo : IDisposable
     {
         public string Nazev { get; set; }
 
@@ -64,8 +74,14 @@ namespace ConsoleApp12
         {
             zviratka.Add(zviratko);
         }
-        // metoda pro pridani noveho zviratka
 
+        // TODO: vyresit, kdyz vyvojar zavola Dispose rucne
+        //       vyresit, kdyz by doslo na finalizer (constructor)
+        public void Dispose()
+        {
+            Console.WriteLine("Zoo se rusi, odvazim  zviratka ze zoo");
+            zviratka.Clear();
+        }
     }
    
 
@@ -75,7 +91,7 @@ namespace ConsoleApp12
         static void Main(string[] args)
         {
             //Ukol 2: b) Vytvorte tridu Zoo a pouzijte ji v klientskem kodu ✓          
-            Zoo zoo = new Zoo("Zoo Lesna");
+            using Zoo zoo = new Zoo("Zoo Lesna");
             
             bool konec = false;
 
