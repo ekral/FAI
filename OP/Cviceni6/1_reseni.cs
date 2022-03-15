@@ -1,3 +1,14 @@
+// Ukol 1: Zmente metodu Zvuk na abstraktni a Zviratko na abstraktni tridu
+// Ukol 2: a) Vytvorte tridu Zoo, ktera bude obsahovat seznam zviratek
+//         b) a pouzijte ji v klientskem kodu
+// Ukol 3: (skolni priklad) pro tridu Zoo implementuje rozhrani IDisposal,
+//         tak aby ze Zoo odstranil vsechna zviratka,
+//         kdyz se zoo odstrani z pameti
+// Ukol 4: Napiste jaky je rozdil mezi:
+//         a) Rozhranim a
+//         b) Abstraktni tridou
+//         c) Neabstraktni tridou s virtualnimi metodami
+
 using Spectre.Console;
 using System;
 using System.Collections.Generic;
@@ -14,8 +25,28 @@ namespace ConsoleApp12
         abstract public string Zvuk(); // nema zadnou implementaci
     }
 
-    // Ukol 2: Vytvorte tridu Zoo, ktera bude obsahovat seznam zviratek
+    // Ukol 2: a) Vytvorte tridu Zoo, ktera bude obsahovat seznam zviratek ✓
 
+    class Zoo
+    {
+        public string Nazev { get; set; }
+
+        private List<Zviratko> zviratka;
+        public IReadOnlyCollection<Zviratko> Zviratka => zviratka;
+
+        public Zoo(string nazev)
+        {
+            Nazev = nazev;
+            zviratka = new List<Zviratko>();
+        }
+
+        public void Pridej(Zviratko zviratko)
+        {
+            zviratka.Add(zviratko);
+        }
+        // metoda pro pridani noveho zviratka
+
+    }
     class Pejsek : Zviratko
     {
         internal const string Druh = "Pejsek";
@@ -38,20 +69,13 @@ namespace ConsoleApp12
 
     class Program
     {
-        // Ukol 1: Zmente metodu Zvuk na abstraktni a Zviratko na abstraktni tridu
-        // Ukol 2: Vytvorte tridu Zoo, ktera bude obsahovat seznam zviratek
-        //         a pouzijte ji v klientskem kodu
-        // Ukol 3: (skolni priklad) pro tridu Zoo implementuje rozhrani IDisposal,
-        //         tak aby ze Zoo odstranil vsechna zviratka,
-        //         kdyz se zoo odstrani z pameti
-        // Ukol 4: Napiste jaky je rozdil mezi:
-        //         a) Rozhranim a
-        //         b) Abstraktni tridou
-        //         c) Neabstraktni tridou s virtualnimi metodami
+
 
         static void Main(string[] args)
         {
-            List<Zviratko> zviratka = new List<Zviratko>();
+            //Ukol 2: b) Vytvorte tridu Zoo a pouzijte ji v klientskem kodu         
+            List<Zviratko> zviratka = new List<Zviratko>(); // nahradit tridou zoo
+
             bool konec = false;
 
             do
