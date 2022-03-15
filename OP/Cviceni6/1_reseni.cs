@@ -70,11 +70,10 @@ namespace ConsoleApp12
     class Program
     {
 
-
         static void Main(string[] args)
         {
-            //Ukol 2: b) Vytvorte tridu Zoo a pouzijte ji v klientskem kodu         
-            List<Zviratko> zviratka = new List<Zviratko>(); // nahradit tridou zoo
+            //Ukol 2: b) Vytvorte tridu Zoo a pouzijte ji v klientskem kodu ✓          
+            Zoo zoo = new Zoo("Zoo Lesna");
 
             bool konec = false;
 
@@ -95,9 +94,9 @@ namespace ConsoleApp12
                     _ => throw new ArgumentException("Neplatny druh zviratka")
                 };
 
-                zviratka.Add(nove);
+                zoo.Pridej(nove);
 
-                foreach (Zviratko zviratko in zviratka)
+                foreach (Zviratko zviratko in zoo.Zviratka)
                 {
                     Console.WriteLine(zviratko.Jmeno);
                     Console.WriteLine(zviratko.Zvuk());
