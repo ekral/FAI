@@ -1,4 +1,4 @@
-// Ukol 1: zmente Zviratko na abstraktni tridu ✓
+// Ukol 1: zmente Zviratko na abstraktni tridu
 // Ukol 2: a) Vytvorte tridu Zoo, ktera bude obsahovat seznam zviratek
 //         b) pouzijte ji v kodu misto promenne zviratka
 // Ukol 3: (skolni priklad) pro tridu Zoo implementuje rozhrani IDisposal,
