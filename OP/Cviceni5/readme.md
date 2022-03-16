@@ -169,7 +169,7 @@ foreach (Zviratko zviratko in zviratka)
 {
     if(zviratko is Kocicka kocicka)
     {
-       
+        Console.WriteLine(kocicka.Jmeno);       
     }
 }
 ```
