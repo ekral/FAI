@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 
 // pridat nuget Spectre Console
+// muzeme pouzit Manage Nuget Packages, nebo rucne pridat nasledujici radky do .csproj souboru:
 // <ItemGroup>
 //		<PackageReference Include="Spectre.Console" Version="*"/>
 // </ItemGroup>
