@@ -14,7 +14,9 @@ using System;
 using System.Collections.Generic;
 
 // pridat nuget Spectre Console
-// <PackageReference Include="Spectre.Console" Version="*"/>
+// <ItemGroup>
+//		<PackageReference Include="Spectre.Console" Version="*"/>
+// </ItemGroup>
 namespace ConsoleApp12
 {
     // Ukol 1: Zmente metodu Zvuk na abstraktni a Zviratko na abstraktni tridu
