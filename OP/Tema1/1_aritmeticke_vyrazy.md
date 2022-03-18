@@ -1,6 +1,6 @@
 Test 1 - příprava
 ---
-Pro zvládnutí prvního testu potřebujete znát dva datové typy a umět definovat proměnné těchto typů. Nezapomeňte, že záleží i na velkých a malých písmenech a proměnná `Math.Pow` musí být napsaná správně včetně velkých a malých písmen.
+Pro zvládnutí předmětu potřebujete znát dva datové typy a umět definovat proměnné těchto typů. Nezapomeňte, že záleží i na velkých a malých písmenech a proměnná `Math.Pow` musí být napsaná správně včetně velkých a malých písmen.
 * `double y = 0;` desetiné číslo se znaménkem
 * `int x = 0;` celé číslo se znaménkem
 
