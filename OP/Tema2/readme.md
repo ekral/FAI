@@ -1,0 +1,3 @@
+## Exceptions (výjimky)
+
+TODO
