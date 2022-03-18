@@ -1,5 +1,5 @@
-## Aritmetické výrazy
----
+## 1. Aritmetické výrazy
+
 Pro zvládnutí předmětu potřebujete znát minimálně dva aritmetické datové typy a umět definovat proměnné těchto typů. Nezapomeňte, že záleží i na velkých a malých písmenech a proměnná `Math.Pow` musí být napsaná správně včetně velkých a malých písmen.
 * `double y = 0;` desetiné číslo se znaménkem
 * `int x = 0;` celé číslo se znaménkem
