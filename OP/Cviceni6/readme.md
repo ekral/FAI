@@ -4,7 +4,7 @@ Příklady k procvičování:
 
 ## Abstraktni metoda a třída
 
-Abstraktní metoda nemá implementaci (tělo) a může být definována pouze v abstraktní třídy. Abstraktní třída slouží pouze jako rodičovská třída a v klientském kódu používáme její potomky, ale nemůžeme vytvářet její instance. Opět jde o kontrukci kterou vytváříme z důvodu statickké typové kontroly.
+Abstraktní metoda nemá implementaci (tělo) a může být definována pouze v abstraktní třídě. Abstraktní třída slouží pouze jako rodičovská třída a v klientském kódu používáme její potomky, ale nemůžeme vytvářet její instance. Opět jde o kontrukci kterou vytváříme z důvodu statickké typové kontroly.
 
 Nyní si projdeme příklad, kdy si nejprve vytvoříme virtuální metodu `VratZvuk`, kterou poté změníme na abstraktní.
 
