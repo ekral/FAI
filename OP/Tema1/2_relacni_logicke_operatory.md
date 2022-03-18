@@ -1,6 +1,6 @@
 Test 2 relační a logické operátory - příprava
 ---
-Pro zvládnutí druhého testu potřebujete znát typ `bool` a znát relační a logické operátory . Nezapomeňte, že opět záleží na prioritě operátorů a pro jistotu používejte kulaté závorky `()`.
+Pro zvládnutí předmětu musíte znát typ `bool` a znát relační a logické operátory . Nezapomeňte, že opět záleží na prioritě operátorů a pro jistotu používejte kulaté závorky `()`.
 
 Na následujících příkladech si probereme relační a logické operátory. 
 
