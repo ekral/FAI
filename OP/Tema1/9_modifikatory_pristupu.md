@@ -1,4 +1,4 @@
-## Modifikátory přístupu public a private
+## 9. Modifikátory přístupu public a private
 
 Pro zvládnutí příkladu potřebujete znát modifikátor přístupu `public` a `private` a umět jej používat s fieldy a metodami. 
 
