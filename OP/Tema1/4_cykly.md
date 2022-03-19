@@ -1,6 +1,6 @@
 Test 4 cykly - příprava
 ---
-Pro zvládnutí druhého testu potřebujete znát příkazy `goto`, `while`,  `do-while` a `for`. A dále ukončení cyklu pomocí `break` a přeskočení zbytku cyklu pomocí `continue`
+Pro zvládnutí předmětu potřebujete znát příkazy `goto`, `while`,  `do-while` a `for`. A dále ukončení cyklu pomocí `break` a přeskočení zbytku cyklu pomocí `continue`
 
 Na následujících příkladech si probereme jednotlivé příkazy. 
 
