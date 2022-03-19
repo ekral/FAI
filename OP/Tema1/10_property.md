@@ -1,6 +1,6 @@
 ## Property 
 
-Pro zvládnutí testu potřebujete umět definovat a používat property a auto-implemented property. 
+Pro zvládnutí předmětu potřebujete umět definovat a používat property a auto-implemented property. 
 
 Na následujících příkladech si probereme jednotlivé příkazy. 
 
