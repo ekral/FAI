@@ -9,7 +9,7 @@ Z předmětu Základy programování a algoritmizace si zopakujte následující
 5. [Pole](5_pole.md)
 6. [Struktury](6_struktury.md)
 7. [Metody](7_metody.md)
-8. [Konstruktor](8_konstruktor.md)
+8. [Konstruktory](8_konstruktory.md)
 9. [Modifikátory přístupu](9_modifikatory_pristupu.md)
 10. [Property](10_property.md)
 
