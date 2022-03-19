@@ -1,5 +1,5 @@
-Test 8 konstruktory - příprava
----
+## Konstruktory 
+
 Pro zvládnutí předmětu potřebujete vědět jak definovat konstruktory s parametry ve strukturách. 
 
 Na následujících příkladech si probereme jednotlivé příkazy. 
