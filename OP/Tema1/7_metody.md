@@ -1,4 +1,4 @@
-Test 7 metody - příprava
+Metody
 ---
 Pro zvládnutí předmětu potřebujete vědět jak definovat metody ve strukturách, jak definovat parametry metody a jak předávat argumenty metodám a nakonec jak vrátit hodnotu z metody. 
 
