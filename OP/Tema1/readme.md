@@ -7,4 +7,4 @@ Z předmětu Základy programování a algoritmizace si zopakujte následující
 3. [Podmíněný příkaz](3_podmineny_prikaz.md)
 4. [Cykly](4_cykly.md)
 5. [Pole](5_pole.md)
-
+6. [Struktury](6_struktury.md)
