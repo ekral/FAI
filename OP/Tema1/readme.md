@@ -10,6 +10,6 @@ Z předmětu Základy programování a algoritmizace si zopakujte následující
 6. [Struktury](6_struktury.md)
 7. [Metody](7_metody.md)
 8. [Konstruktor](8_konstruktor.md)
-9. [Struktury](6_struktury.md)
+9. [Modifikátory přístupu](9_modifikatory_pristupu.md)
 10. [Struktury](6_struktury.md)
 
