@@ -1,5 +1,5 @@
-Test 3 podmíněný příkaz - příprava
----
+## 3. Podmíněný příkaz
+
 Pro zvládnutí předmětu potřebujete znát podmíněné příkazy `if`,  `if-else` a zřetězení podmínek pomocí `else if`. Dále potřebujete vědět jak podmínit provedení jednoho příkazu nebo bloku příkazů pomocí složených závorek `{}`.
 
 Na následujících příkladech si probereme jednotlivé příkazy. 
