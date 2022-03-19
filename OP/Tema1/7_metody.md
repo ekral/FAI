@@ -1,5 +1,5 @@
-Metody
----
+## 7. Metody
+
 Pro zvládnutí předmětu potřebujete vědět jak definovat metody ve strukturách, jak definovat parametry metody a jak předávat argumenty metodám a nakonec jak vrátit hodnotu z metody. 
 
 Na následujících příkladech si probereme jednotlivé příkazy. 
