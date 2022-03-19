@@ -15,13 +15,10 @@ Z předmětu Základy programování a algoritmizace si zopakujte následující
 
 Pdf materiály k seminářům:
 1. [Proměnné](Seminare/Seminar_AP1PA_1.pdf)
-2. [Zásobník](Seminar_AP1PA_2.md)
-3. [Aritmetické výrazy](Seminar_AP1PA_3.md)
-4. [Booleanovské výrazy](Seminar_AP1PA_4.md)
-5. [Podmínky](Seminar_AP1PA_5.md)
-6. [Cykly](Seminar_AP1PA_6.md)
-7. [Kolekce](Seminar_AP1PA_7.md)
-8. [Třídy, struktury a referenční typy](Seminar_AP1PA_8.md)
-
-
-
+2. [Zásobník](Seminare/Seminar_AP1PA_2.pdf)
+3. [Aritmetické výrazy](Seminare/Seminar_AP1PA_3.pdf)
+4. [Booleanovské výrazy](Seminare/Seminar_AP1PA_4.pdf)
+5. [Podmínky](Seminare/Seminar_AP1PA_5.pdf)
+6. [Cykly](Seminare/Seminar_AP1PA_6.pdf)
+7. [Kolekce](Seminare/Seminar_AP1PA_7.pdf)
+8. [Třídy, struktury a referenční typy](Seminare/Seminar_AP1PA_8.pdf)
