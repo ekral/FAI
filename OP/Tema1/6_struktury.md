@@ -1,5 +1,5 @@
-Test 6 struktury - příprava
----
+## 6. Struktury
+
 Pro zvládnutí předmětu potřebujete vědět jak deklarovat strukturu, definovat promenou typu struktura, inicializovat vychozi hodnoty a pracovat s prvky struktury (fields). 
 
 Na následujících příkladech si probereme jednotlivé příkazy. 
