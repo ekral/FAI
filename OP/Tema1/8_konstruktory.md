@@ -1,4 +1,4 @@
-## Konstruktory 
+## 8. Konstruktory 
 
 Pro zvládnutí předmětu potřebujete vědět jak definovat konstruktory s parametry ve strukturách. 
 
