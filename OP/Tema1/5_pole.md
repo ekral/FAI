@@ -1,6 +1,6 @@
 Test 5 pole - příprava
 ---
-Pro zvládnutí testu potřebujete vědět jak definovat pole, inicializovat ho, přistupovat k jeho prvkům, vytvářet kopii pole a porovnávat hodnoty v poli. 
+Pro zvládnutí předmětu potřebujete vědět jak definovat pole, inicializovat ho, přistupovat k jeho prvkům, vytvářet kopii pole a porovnávat hodnoty v poli. 
 
 Na následujících příkladech si probereme jednotlivé příkazy. 
 
