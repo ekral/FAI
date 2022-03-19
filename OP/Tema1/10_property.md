@@ -1,4 +1,4 @@
-## Property 
+## 10. Property 
 
 Pro zvládnutí předmětu potřebujete umět definovat a používat property a auto-implemented property. 
 
