@@ -1,5 +1,5 @@
-Test 5 pole - příprava
----
+## 5. Pole
+
 Pro zvládnutí předmětu potřebujete vědět jak definovat pole, inicializovat ho, přistupovat k jeho prvkům, vytvářet kopii pole a porovnávat hodnoty v poli. 
 
 Na následujících příkladech si probereme jednotlivé příkazy. 
