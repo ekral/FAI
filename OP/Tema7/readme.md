@@ -246,6 +246,31 @@ Ucet banka = new Ucet(logger);
 banka.Vyber(1000000m);
 ```
 
+Výhodou použití techniky Dependency Injection v tomto příkladě například je, že můžeme pro potřeby unit testu vytvořit třídu, která neloguje nikam a použít ji v testu tak, aby test neměl žádné vedlejší efekty, tedy neměnil obsah souboru pro logování.
+
+```cs 
+class LoggerStub : ILogger
+{
+    public void Log(string text)
+    {
+        // neloguje nikam
+    }
+}
+
+public class TestBankovniUcet
+{
+    [Fact]
+    public void Vyber_Vse_NulovyZustatek()
+    {
+        LoggerStub logger = new LoggerStub();
+        Ucet banka = new Ucet(logger);
+
+        banka.Vyber(1000.0m);
+        Assert.Equal(0.0m, banka.Zustatek);
+    }
+}
+```
+
 ---
 Singleton a další klasické patterny byly představeny v následující klasické knize:
 
