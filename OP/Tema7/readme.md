@@ -230,6 +230,7 @@ class Ucet
     public Ucet(ILogger logger)
     {
         this.logger = logger;
+        
         Zustatek = 1000;
     }
 
