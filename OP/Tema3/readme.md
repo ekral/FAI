@@ -229,3 +229,8 @@ static async Task Main(string[] args)
     }
 }
 ```
+
+---
+Více o metodě dispose najdete například zde:
+
+[IDisposable.Dispose Method, 2022](https://docs.microsoft.com/en-us/dotnet/api/system.idisposable.dispose?view=net-6.0)
