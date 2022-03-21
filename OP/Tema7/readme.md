@@ -276,6 +276,11 @@ public class TestBankovniUcet
 ```
 
 ---
+
+Více se o technice Dependency Injection a Inversion of Control můžete dočíst například zde:
+
+[Dependency injection in .NET. Microsoft Docs. 2022](https://docs.microsoft.com/en-us/dotnet/core/extensions/dependency-injection )
+
 Singleton a další klasické patterny byly představeny v následující klasické knize:
 
 [GAMMA, Erich. Design patterns: elements of reusable object-oriented software. Boston: Addison-Wesley, 1995. ISBN 0-201-63361-2](https://www.oreilly.com/library/view/design-patterns-elements/0201633612/)
