@@ -230,6 +230,6 @@ static async Task Main(string[] args)
 }
 ```
 ---
-Více o metodě dispose najdete například zde:
+Singleton a další klasické patterny byly představeny v následující klasické knize. :
 
-[IDisposable.Dispose Method, 2022](https://docs.microsoft.com/en-us/dotnet/api/system.idisposable.dispose?view=net-6.0)
+[GAMMA, Erich. Design patterns: elements of reusable object-oriented software. Boston: Addison-Wesley, 1995. ISBN 0-201-63361-2](https://www.oreilly.com/library/view/design-patterns-elements/0201633612/)
