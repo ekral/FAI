@@ -125,10 +125,46 @@ static void Main(string[] args)
 Singleton představuje klasický návrhový vzor (postup) používaný pokud chceme mít pouze a jenom jednu instanci třídy v programu, například instanci třídy pro logování do souboru, můžeme využít návrhový vzor (design pattern) Singleton. Singleton je většinou implementovaný jako třída s private konstruktorem, která má statickou metodu Instance, která vrací referenci na statický field – vlastní instanci třídy, kterou chceme použít.
 I když má Singleton své výhody a zaručuje že v programuje je vždy jen jedna jeho instance, bývá někdy označován jako **anti-pattern**, protože využití statických členských metod může snižovat testovatelnost kódu.
 
+V následujícím příkladu nejprve použijeme pro logování, tedy zápis průběhu programu například do textového souboru, nejprve Singleton a poté ten samý příklad vyřešíme pomocí techniky Dependency Injection.
+
+Následující třída `SingletonLogger` má private konstruktor, což znamená, že můžeme vytvářet její instance jen v metodách této třídy a ne v klientském kódu. Potom máme static property `Instance`, která ověří zda je static field `instance` null, tedy zda je již instance vytvořena a pokud ne, tak ji vytvoří a vrátí referenci na tuto instanci. Pokud už instance existuje, tak novou nevytváří, tím je, zaručeno, že v celém programu bude existovat jen jedna instance třídy `SingletonLogger`.
+
+```cs 
+class SingletonLogger
+{
+    private static SingletonLogger instance;
+
+    private int counter;
+    private SingletonLogger()
+    {
+        counter = 0;
+    }
+    public void Log(string text)
+    {
+        Console.WriteLine(text);
+        ++counter;
+    }
+    public static SingletonLogger Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = new SingletonLogger();
+            }
+            return instance;
+        }
+    }
+}
+```
+
 ---
-Singleton a další klasické patterny byly představeny v následující klasické knize. :
+Singleton a další klasické patterny byly představeny v následující klasické knize:
 
 [GAMMA, Erich. Design patterns: elements of reusable object-oriented software. Boston: Addison-Wesley, 1995. ISBN 0-201-63361-2](https://www.oreilly.com/library/view/design-patterns-elements/0201633612/)
+
+
+
 
 
 
