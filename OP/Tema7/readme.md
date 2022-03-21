@@ -135,15 +135,18 @@ class SingletonLogger
     private static SingletonLogger instance;
 
     private int counter;
+    
     private SingletonLogger()
     {
         counter = 0;
     }
+    
     public void Log(string text)
     {
         Console.WriteLine($"{counter}: text");
         ++counter;
     }
+    
     public static SingletonLogger Instance
     {
         get
@@ -167,10 +170,12 @@ banka.Vyber(1000000m);
 class Ucet
 {
     public decimal Zustatek { get; set; }
+    
     public Ucet()
     {
         Zustatek = 1000;
     }
+    
     public void Vyber(decimal castka)
     {
         if (castka > Zustatek)
@@ -200,6 +205,7 @@ A potom třídu `ConsoleLogger` implementující toto rozhraní:
 class ConsoleLogger : ILogger
 {
     private int counter;
+    
     public ConsoleLogger()
     {
         counter = 0;
