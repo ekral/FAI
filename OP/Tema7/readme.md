@@ -4,7 +4,6 @@ Příklady k procvičování:
 
 ## Dependency injection
 
-Pro zvládnutí testu potřebujete vědět co je to technika Dependency Injection a umět ji používat.
 
 Technika Dependency Injection se používá k tomu aby jedna třída nebyla přímo závislá na jiné třídě a její konkrétní implementaci. Tato technika často používá proto aby byl kód lépe testovatelný, protože můžeme v kódu jednodušeji nakonfigurovat objekt pro potřeby testu. Technika Dependency Injection je založena na tom, že místo reference typu konkrétní třídy používáme referenci typu rozhraní a vlastní instanci potom předáváme nejčastěji v konstruktoru (jsou ale i varianty s Property nebo metdou). 
 
