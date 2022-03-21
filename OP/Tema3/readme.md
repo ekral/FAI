@@ -229,7 +229,3 @@ static async Task Main(string[] args)
     }
 }
 ```
----
-Singleton a další klasické patterny byly představeny v následující klasické knize. :
-
-[GAMMA, Erich. Design patterns: elements of reusable object-oriented software. Boston: Addison-Wesley, 1995. ISBN 0-201-63361-2](https://www.oreilly.com/library/view/design-patterns-elements/0201633612/)
