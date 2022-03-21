@@ -11,7 +11,8 @@ Lépe se ale tato technika chápe na konrétním příkladu. Ukážeme si přík
 
 ### Příklad bez použití Dependency Injection
 
-* Nejprve si definujeme třídu BenzinovyMotor:
+Nejprve si definujeme třídu BenzinovyMotor:
+
 ```cs 
 class BenzinovyMotor
 {
@@ -21,7 +22,8 @@ class BenzinovyMotor
     }
 }
 ```
-* A potom třídu `Automobil`, která bude mít referenci a objekt typu `BenzinovyMotor` a metodě Jed zavolá metodu motoru `Nastartuj`:
+
+A potom třídu `Automobil`, která bude mít referenci a objekt typu `BenzinovyMotor` a metodě Jed zavolá metodu motoru `Nastartuj`:
 
 ```cs 
 class Automobil
@@ -40,7 +42,8 @@ class Automobil
     }
 }
 ```
-* Použití třídy `Automobil` potom bude následující:
+
+Použití třídy `Automobil` potom bude následující:
 
 ```cs 
 static void Main(string[] args)
@@ -52,7 +55,7 @@ static void Main(string[] args)
 
 ### Příklad s použitím Dependency Injection
 
-* Představme si ale situaci, že bychom chtěli při vytváření nového automobilu zvolit typ motoru, například místo benzínového motoru bychom chtěli zvoli následující naftový motor, a nechtěli bychom přitom měnit kód třídy `Automobil`:
+Představme si ale situaci, že bychom chtěli při vytváření nového automobilu zvolit typ motoru, například místo benzínového motoru bychom chtěli zvoli následující naftový motor, a nechtěli bychom přitom měnit kód třídy `Automobil`:
 
 ```cs 
 class NaftovyMotor
@@ -63,7 +66,8 @@ class NaftovyMotor
     }
 }
 ```
-* Nejprve vytvoříme rozhraní, které budou implementovat oba motory (a případně i další nové typy motorů):
+
+Nejprve vytvoříme rozhraní, které budou implementovat oba motory (a případně i další nové typy motorů):
 
 ```cs 
 interface IMotor
@@ -87,7 +91,8 @@ class NaftovyMotor : IMotor
     }
 }
 ```
-* Ve třídě `Automobil` potom budeme mít referenci `motor` typu `IMotor` místo konkrétního typu motoru. A konkrétní motor si předáme jako parametr konstruktoru.
+
+Ve třídě `Automobil` potom budeme mít referenci `motor` typu `IMotor` místo konkrétního typu motoru. A konkrétní motor si předáme jako parametr konstruktoru.
 
 ```cs 
 class Automobil
@@ -107,7 +112,7 @@ class Automobil
 }
 ```
 
-* Při vytváření instance třídy `Automobil` v konstruktoru předáme referenci na instanci konkrétního typu motoru a nemusíme přitom měnit kód třídy `Automobil`:
+Při vytváření instance třídy `Automobil` v konstruktoru předáme referenci na instanci konkrétního typu motoru a nemusíme přitom měnit kód třídy `Automobil`:
 
 ```cs 
 static void Main(string[] args)
