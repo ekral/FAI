@@ -127,7 +127,7 @@ I když má Singleton své výhody a zaručuje že v programuje je vždy jen jed
 
 V následujícím příkladu nejprve použijeme pro logování (zápisu průběhu programu například do textového souboru) Singleton a poté ten samý příklad vyřešíme pomocí techniky Dependency Injection.
 
-Následující třída `SingletonLogger` má `private` konstruktor, což znamená, že můžeme vytvářet její instance jen v metodách této třídy a ne v klientském kódu. Potom máme static property `Instance`, která ověří zda má static field `instance` hodnotu `null`, tedy zda je již instance vytvořena a pokud ne, tak ji vytvoří a vrátí referenci na tuto instanci. Pokud už instance existuje, tak novou nevytváří, tím je, zaručeno, že v celém programu bude existovat jen jedna instance třídy `SingletonLogger`.
+Následující třída `SingletonLogger` má `private` konstruktor, což znamená, že můžeme vytvářet její instance jen v metodách této třídy a ne v klientském kódu. Potom máme static property `Instance`, která ověří zda má static field `instance` hodnotu `null`, tedy zda je již instance vytvořena a pokud ne, tak ji vytvoří a vrátí referenci na tuto instanci. Pokud už instance existuje, tak novou nevytváří, tím je, zaručeno, že v celém programu bude existovat jen jedna instance třídy `SingletonLogger`. Field `counter` počítá počet logů a v příkladu je uvedený jen pro ukázku použití fieldu v tříde `SingletonLogger`.
 
 ```cs 
 class SingletonLogger
