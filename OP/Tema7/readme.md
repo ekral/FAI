@@ -123,6 +123,13 @@ static void Main(string[] args)
 
 ## Singleton
 
+Singleton představuje klasický návrhový vzor (postup) používaný pokud chceme mít pouze a jenom jednu instanci třídy v programu, například instanci třídy pro logování do souboru, můžeme využít návrhový vzor (design pattern) Singleton. Singleton je většinou implementovaný jako třída s private konstruktorem, která má statickou metodu Instance, která vrací referenci na statický field – vlastní instanci třídy, kterou chceme použít.
+I když má Singleton své výhody a zaručuje že v programuje je vždy jen jedna jeho instance, bývá někdy označován jako **anti-pattern**, protože využití statických členských metod může snižovat testovatelnost kódu.
+
+---
+Singleton a další klasické patterny byly představeny v následující klasické knize. :
+
+[GAMMA, Erich. Design patterns: elements of reusable object-oriented software. Boston: Addison-Wesley, 1995. ISBN 0-201-63361-2](https://www.oreilly.com/library/view/design-patterns-elements/0201633612/)
 
 
 
