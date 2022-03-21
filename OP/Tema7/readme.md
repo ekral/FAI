@@ -148,7 +148,7 @@ class SingletonLogger
     
     public void Log(string text)
     {
-        Console.WriteLine($"{counter}: text");
+        Console.WriteLine($"{counter}: {text}");
         ++counter;
     }
     
@@ -166,11 +166,11 @@ class SingletonLogger
 }
 ```
 
-Nyní použijeme `SingletonLogger` v třídě `BankovniUcet`, kdy budeme logovat na konzoli každý vklad na účet.
+Nyní použijeme `SingletonLogger` v třídě `BankovniUcet`, kdy budeme logovat na konzoli každý výběr.
 
 ```cs 
 Ucet banka = new Ucet();
-banka.Vyber(1000000m);
+banka.Vyber(200m);
 
 class Ucet
 {
@@ -183,12 +183,8 @@ class Ucet
     
     public void Vyber(decimal castka)
     {
-        if (castka > Zustatek)
-        {
-            SingletonLogger.Instance.Log("error");
-            return;
-        }
-
+        SingletonLogger.Instance.Log($"vyber castky: {castka}");
+        
         Zustatek -= castka;
     }
 }
@@ -218,7 +214,7 @@ class ConsoleLogger : ILogger
 
     public void Log(string text)
     {
-        Console.WriteLine($"{counter}: text");
+        Console.WriteLine($"{counter}: {text}");
         ++counter;
     }
 }
@@ -241,11 +237,7 @@ class Ucet
 
     public void Vyber(decimal castka)
     {
-        if (castka > Zustatek)
-        {
-            logger.Log("error");
-            return;
-        }
+        logger.Log($"vyber castky: {castka}");
 
         Zustatek -= castka;
     }
@@ -255,7 +247,7 @@ V klientském kódu potom předáme objekt typu `ConsoleLogger` jako argument ko
 ```cs 
 ConsoleLogger logger = new ConsoleLogger();
 Ucet banka = new Ucet(logger);
-banka.Vyber(1000000m);
+banka.Vyber(200m);
 ```
 
 Výhodou použití techniky Dependency Injection v tomto příkladě například je, že můžeme pro potřeby unit testu vytvořit třídu, která neloguje nikam a použít ji v testu tak, aby test neměl žádné vedlejší efekty, tedy neměnil obsah souboru pro logování. A nemusíme přitom měnit kód třídy `BankovniUcet`.
