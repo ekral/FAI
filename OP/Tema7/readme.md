@@ -246,7 +246,7 @@ Ucet banka = new Ucet(logger);
 banka.Vyber(1000000m);
 ```
 
-Výhodou použití techniky Dependency Injection v tomto příkladě například je, že můžeme pro potřeby unit testu vytvořit třídu, která neloguje nikam a použít ji v testu tak, aby test neměl žádné vedlejší efekty, tedy neměnil obsah souboru pro logování.
+Výhodou použití techniky Dependency Injection v tomto příkladě například je, že můžeme pro potřeby unit testu vytvořit třídu, která neloguje nikam a použít ji v testu tak, aby test neměl žádné vedlejší efekty, tedy neměnil obsah souboru pro logování. A nemusíme přitom měnit kód třídy `BankovniUcet`.
 
 ```cs 
 class LoggerStub : ILogger
