@@ -141,7 +141,7 @@ class SingletonLogger
     }
     public void Log(string text)
     {
-        Console.WriteLine(text);
+        Console.WriteLine($"{counter}: text");
         ++counter;
     }
     public static SingletonLogger Instance
@@ -156,6 +156,94 @@ class SingletonLogger
         }
     }
 }
+```
+
+Nyní použijeme `SingletonLogger` v třídě `BankovniUcet`, kdy budeme logovat na konzoli každý vklad na účet.
+
+```cs 
+Ucet banka = new Ucet();
+banka.Vyber(1000000m);
+
+class Ucet
+{
+    public decimal Zustatek { get; set; }
+    public Ucet()
+    {
+        Zustatek = 1000;
+    }
+    public void Vyber(decimal castka)
+    {
+        if (castka > Zustatek)
+        {
+            SingletonLogger.Instance.Log("error");
+            return;
+        }
+
+        Zustatek -= castka;
+    }
+}
+```
+
+### Singleton vs Dependency Injection
+
+Nyní stejný příklad s logováním vkladu na bankovní účet vyřešíme s pomocí techniky Dependency Injection. Nejprve si nadefinujeme rozhraní `ILogger`:
+
+```cs 
+interface ILogger
+{
+    void Log(string text);
+}
+```
+
+A potom třídu `ConsoleLogger` implementující toto rozhraní:
+```cs 
+class ConsoleLogger : ILogger
+{
+    private int counter;
+    public ConsoleLogger()
+    {
+        counter = 0;
+    }
+
+    public void Log(string text)
+    {
+        Console.WriteLine($"{counter}: text");
+        ++counter;
+    }
+}
+```
+
+Třída bankovní účet potom bude používat pouze typ rozhraní `ILogger` a nemá žádnou referenci na konkrétní implementaci:
+```cs 
+class Ucet
+{
+    private ILogger logger;
+    
+    public decimal Zustatek { get; set; }
+    
+    public Ucet(ILogger logger)
+    {
+        this.logger = logger;
+        Zustatek = 1000;
+    }
+
+    public void Vyber(decimal castka)
+    {
+        if (castka > Zustatek)
+        {
+            logger.Log("error");
+            return;
+        }
+
+        Zustatek -= castka;
+    }
+}
+```
+V klientském kódu potom předáme objekt typu `ConsoleLogger` jako argument konstruktoru `BankovniUcet`:
+```cs 
+ConsoleLogger logger = new ConsoleLogger();
+Ucet banka = new Ucet(logger);
+banka.Vyber(1000000m);
 ```
 
 ---
