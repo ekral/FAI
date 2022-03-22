@@ -20,20 +20,23 @@ namespace Tema7
     }
 
     // TODO: osetrit exceptions
-    public class ConsoleLogger : ILogger
+    class FileLogger : ILogger
     {
-        private string path;
-
-        public ConsoleLogger(string path)
-        {
-            this.path = path;
-        }
-
         public void Log(string text)
         {
             string log = $"{DateTime.Now}: {text}";
-            
-            System.IO.File.AppendAllText(path, log + System.Environment.NewLine);
+
+            System.IO.File.AppendAllText("log.txt", log + System.Environment.NewLine);
+        }
+    }
+
+    class DebugLogger : ILogger
+    {
+        public void Log(string text)
+        {
+            string log = $"{DateTime.Now}: {text}";
+
+            System.Diagnostics.Debug.WriteLine(log);
         }
     }
 
