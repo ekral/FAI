@@ -14,7 +14,6 @@ using System.Collections.Generic;
 
 namespace Tema7
 {
-
     abstract class Zviratko
     {
         public string Jmeno { get; set; }
