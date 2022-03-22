@@ -2,9 +2,9 @@
 //         Vyuzite pri tom techniku Dependency Injection.
 // Ukol 2: Vytvorte unit test, ktery otestuje, ze zviratko bylo spravne pridane do zoo
 //         ale pri testu se nebude nic logovat do souboru.
-// Bonus:  Pridejte a otestujte metodu pro odebrani zviratka ze zoo
-//         kdy kazde zviratko bude mit navic Id pro snadnou identifikaci.
-// Ukol k zamysleni: Vytvorte logovani s pomoci Singletonu a zamyslete se nad tim, jak by to zhorsilo testovani kodu
+// Domaci ukol 1:  Pridejte a otestujte metodu pro odebrani zviratka ze zoo
+//                 kdy kazde zviratko bude mit navic Id pro snadnou identifikaci.
+// Domaci ukol 2: Vytvorte logovani s pomoci Singletonu a zamyslete se nad tim, jak by to zhorsilo testovani kodu
 
 using Spectre.Console;
 using System;
