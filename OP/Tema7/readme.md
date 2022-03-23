@@ -276,7 +276,7 @@ public class TestBankovniUcet
 ```
 ### Singleton vs Statická třída
 
-Třída pro logování by mohla také být implementována jako statická třída se statickými metodami a fieldy. Následující ukázka využívá i statický konstruktor. 
+Třída pro logování by mohla také být implementována jako statická třída se statickými metodami a fieldy. Následující ukázka využívá i statický konstruktor:
 
 ```cs 
 static class StaticLogger
@@ -296,7 +296,7 @@ static class StaticLogger
 }
 ```
 
-V případě statické třídy máme jedinou možnost jak ji použít a to voláním statické metody Log:
+V případě statické třídy máme jedinou možnost jak ji použít a to voláním statické metody `Log`:
 ```cs 
 class Ucet
 {
