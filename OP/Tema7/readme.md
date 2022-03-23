@@ -318,7 +318,7 @@ class Ucet
 
 Singleton má proti statické metodě výhodu, že může implementovat rozhraní a můžeme jej využít s technikou Dependency Injection. A také můžeme alokovat paměť pro objekty teprve až se poprvé zažádá o instanci singletonu. 
 
-V následujícím příkladu si nejprve nadefinujeme SingletonLogger implementující rozhraní ILogger z příkladu na dependency injection:
+V následujícím příkladu si nejprve nadefinujeme `SingletonLogger` implementující rozhraní `ILogger` z příkladu na dependency injection:
 
 ```cs 
 class SingletonLogger : ILogger
