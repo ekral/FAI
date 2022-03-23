@@ -274,6 +274,93 @@ public class TestBankovniUcet
     }
 }
 ```
+### Singleton vs Statická třída
+
+Třída pro logování by mohla také být implementována jako statická třída se statickými metodami a fieldy. Následující ukázka využívá i statický konstruktor. 
+
+```cs 
+static class StaticLogger
+{
+    private static int counter;
+
+    static StaticLogger()
+    {
+        counter = 0;
+    }
+
+    public static void Log(string text)
+    {
+        Console.WriteLine($"{counter}: {text}");
+        ++counter;
+    }
+}
+```
+
+V případě statické třídy máme jedinou možnost jak ji použít a to voláním statické metody Log:
+```cs 
+class Ucet
+{
+    public decimal Zustatek { get; set; }
+
+    public Ucet()
+    {
+        Zustatek = 1000;
+    }
+
+    public void Vyber(decimal castka)
+    {
+        StaticLogger.Log($"vyber castky: {castka}");
+
+        Zustatek -= castka;
+    }
+}
+```
+
+Singleton má proti statické metodě výhodu, že může implementovat rozhraní a můžeme jej využít s technikou Dependency Injection. A také můžeme alokovat paměť pro objekty teprve až se poprvé zažádá o instanci singletonu. 
+
+V následujícím příkladu si nejprve nadefinujeme SingletonLogger implementující rozhraní ILogger z příkladu na dependency injection:
+
+```cs 
+class SingletonLogger : ILogger
+{
+    private static SingletonLogger instance;
+
+    private int counter;
+
+    private SingletonLogger()
+    {
+        counter = 0;
+    }
+
+    public void Log(string text)
+    {
+        Console.WriteLine($"{counter}: {text}");
+        ++counter;
+    }
+
+    public static SingletonLogger Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = new SingletonLogger();
+            }
+            return instance;
+        }
+    }
+}
+```
+
+A objekt typu `SingletonLogger` pak můžeme použít všude tam, kde se vyžaduje typ `ILogger`, například v bankovním účtu z příkladu na Dependency Injection:
+
+```cs 
+ILogger logger = SingletonLogger.Instance;
+Ucet ucet = new Ucet(logger);
+ucet.Vyber(2000.0m);
+```
+
+Použití Singletonu je tedy mnohem pruženější proti použití statické třídy. 
 
 ---
 
