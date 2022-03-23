@@ -360,13 +360,13 @@ Ucet ucet = new Ucet(logger);
 ucet.Vyber(2000.0m);
 ```
 
-Použití Singletonu je tedy mnohem pruženější proti použití statické třídy. 
+Použití Singletonu je tedy mnohem pruženější proti použití statické třídy. Reálně se ale Singleton s technikou Dependency Injection tak často nevyužívá a využívá se spíše vzor Inversion of Control. 
 
 ---
 
 Více se o technice Dependency Injection a Inversion of Control můžete dočíst například zde:
 
-[Dependency injection in .NET. Microsoft Docs. 2022](https://docs.microsoft.com/en-us/dotnet/core/extensions/dependency-injection )
+[Dependency injection in .NET. Microsoft Docs. 2022](https://docs.microsoft.com/en-us/dotnet/core/extensions/dependency-injection)
 
 Singleton a další klasické patterny byly představeny v následující klasické knize:
 
