@@ -14,7 +14,7 @@ using System.Collections.Generic;
 
 namespace Tema7
 {
-    abstract class Zviratko
+    public abstract class Zviratko
     {
         public string Jmeno { get; set; }
 
@@ -26,7 +26,7 @@ namespace Tema7
         abstract public string Zvuk(); 
     }
 
-    class Pejsek : Zviratko
+    public class Pejsek : Zviratko
     {
         internal const string Druh = "Pejsek";
 
@@ -40,7 +40,7 @@ namespace Tema7
         }
     }
 
-    class Kacenka : Zviratko
+    public class Kacenka : Zviratko
     {
         internal const string Druh = "Kacenka";
 
@@ -54,7 +54,7 @@ namespace Tema7
         }
     }
 
-    class Zoo 
+    public class Zoo 
     {
         public string Nazev { get; set; }
 
