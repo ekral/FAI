@@ -1,5 +1,5 @@
 Příklady k procvičování:
-1. Generická třída [zadání](1_zadani.cs) [řešení](2_reseni)
+1. Generická třída [zadání](1_zadani.cs) [řešení](2_reseni.cs)
 2. Dictionary [zadání](2_zadani.cs) [řešení](2_reseni)
 ---
 
