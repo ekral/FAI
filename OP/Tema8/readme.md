@@ -125,7 +125,7 @@ Instanci třídy Dictionary<TKey,TValue> definujeme následujícím způsobem. P
 Dictionary<string, Student> studenti = new Dictionary<string, Student>();
 ```
 
-Prvky inicializujeme například následujícím způsobem kdy klíč je uvedený v hranatých závorkách a je mu přiřazená hodnota operátorem přiřazení. 
+Prvky inicializujeme například následujícím způsobem kdy klíč je uvedený v hranatých závorkách a je mu přiřazená hodnota operátorem přiřazení: 
  
 ```cs 
 Dictionary<string, Student> studenti = new Dictionary<string, Student>()
@@ -134,4 +134,15 @@ Dictionary<string, Student> studenti = new Dictionary<string, Student>()
     ["A200"] = new Student("Jiri"),
     ["A300"] = new Student("Jiri")
 };
-```   
+```
+    
+Nebo starším zápisem, kdy každý záznam je uvedený ve složených závorkách jako pár klíč hodnota oddělený čárkou:
+    
+```cs 
+Dictionary<string, Student> studenti = new Dictionary<string, Student>()
+{
+    { "A100", new Student("Jiri") },
+    { "A200", new Student("Jiri") },
+    { "A300", new Student("Jiri") }
+};
+```
