@@ -167,7 +167,7 @@ if(!exituje)
 }
 ```
 
-Dictionary můžeme také procházet pomocí cyklu foreach a to jak zvlášť hodnoty, klíče nebo pár klíč a hodnota.
+`Dictionary` můžeme také procházet pomocí cyklu `foreach` a to jak zvlášť hodnoty, klíče nebo pár klíč a hodnota.
     
 ```cs 
 foreach (Student student in studenti.Values)
@@ -186,7 +186,7 @@ foreach (KeyValuePair<string,Student> zaznam in studenti)
 }
 ```
 
- Prvek na konec listu vložíme pomocí metody Add. Parametry jsou klíč a hodnota prvku. Pokud vložíme již jednou existující klíč, tak metoda vyvolá výjímku.
+Prvek na konec listu vložíme pomocí metody `Add`. Parametry jsou klíč a hodnota prvku. Pokud vložíme již jednou existující klíč, tak metoda vyvolá výjímku.
 
 ```cs 
 try
@@ -199,7 +199,7 @@ catch (ArgumentException)
 }
 ```
     
-Před přidáním prvku můžeme otestovat, že klíč existuje pomocí metody ContainsKey.
+Před přidáním prvku můžeme otestovat, že klíč existuje pomocí metody `ContainsKey`.
 
 ```cs 
 if(!studenti.ContainsKey("A100"))
@@ -212,7 +212,7 @@ else
 }
 ```
     
-Prvek také můžeme vložit pomocí metody TryAdd. Metoda vrátí false, pokud se vložení nepovede.
+Prvek také můžeme vložit pomocí metody `TryAdd`. Metoda vrátí false, pokud se vložení nepovede.
 
 ```cs 
 if (!studenti.TryAdd("A100", new Student("Katerina")))
@@ -221,7 +221,8 @@ if (!studenti.TryAdd("A100", new Student("Katerina")))
 }
 ```
     
-Prvek potom odstraníme například pomocí metody Remove:
+Prvek potom odstraníme například pomocí metody `Remove`:
+
 if (studenti.ContainsKey("A100"))
 {
     studenti.Remove("A100");
