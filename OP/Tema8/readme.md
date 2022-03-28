@@ -85,6 +85,19 @@ foreach (int cislo in cisla)
     Console.WriteLine(cislo);
 }
 ```   
+
+V následujících příkladech projdeme základní operace s polem:
+
+```cs 
+List<char> znaky = new List<char>() { 'a', 'b', 'c' };
+
+znaky.Add('x'); // Vložení na konec
+znaky.Insert(1, 'x'); // Vložení na libovolnou pozici
+znaky.Insert(0, 'x'); // Vložení na začátek
+znaky.RemoveAt(1); // Odebrání prvku z indexu
+znaky.Remove('b'); // Odebrání prvků dle hodnoty
+znaky.Clear(); // Odebrání všech prvků
+```   
     
 ###  Dictionary<TKey,TValue> 
   
