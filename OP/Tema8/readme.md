@@ -48,7 +48,20 @@ string retezec = skladString.Vyloz();
 
 ### List<T>
  
-Generická třída List
+Generická třída List<T> představuje implementaci dynamického pole. Kdy pole s pevnou délkou (Array) má pevně danou délku, kterou není možné změnit. A dynamické pole umožňuje přidávat a odebírat prvky do již existujícího pole protože v případě potřeby si dynamické pole alokuje víc paměti.
+
+Instanci třídy List<int> definujeme následujícím způsobem. Po vytvoření instance neobsahuje žádné prvky.
+    
+```cs 
+List<int> cisla = new List<int>(); 
+```
+
+Instanci třídy List<int> inicializujeme stejným způsobem jako pole, tedy seznamem prvků ve složených závorkách oddělených čárkou:
+
+```cs 
+List<int> cisla = new List<int>() { 1, 2, 3 }; 
+```
+    
 ###  Dictionary<TKey,TValue> 
   
 Technika Dependency Injection se používá k tomu aby jedna třída nebyla přímo závislá na jiné třídě a její konkrétní implementaci. Tato technika často používá proto aby byl kód lépe testovatelný, protože můžeme v kódu jednodušeji nakonfigurovat objekt pro potřeby testu. Technika Dependency Injection je založena na tom, že místo reference typu konkrétní třídy používáme referenci typu rozhraní a vlastní instanci potom předáváme nejčastěji v konstruktoru (jsou ale i varianty s Property nebo metodou). 
