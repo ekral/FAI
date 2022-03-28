@@ -188,5 +188,39 @@ foreach (KeyValuePair<string,Student> zaznam in studenti)
 {
     Console.WriteLine($"{zaznam.Key}: {zaznam.Value.Jmeno}");
 }
+```
 
+ Prvek na konec listu vložíme pomocí metody Add. Parametry jsou klíč a hodnota prvku. Pokud vložíme již jednou existující klíč, tak metoda vyvolá výjímku.
+
+```cs 
+try
+{
+    studenti.Add("A100", new Student("Katerina"));
+}
+catch (ArgumentException)
+{
+    Console.WriteLine("Prvek se zadaným klíčem už existuje");
+}
+```
+    
+Před přidáním prvku můžeme otestovat, že klíč existuje pomocí metody ContainsKey.
+
+```cs 
+if(!studenti.ContainsKey("A100"))
+{
+    studenti.Add("A100", new Student("Katerina"));
+}
+else
+{
+    Console.WriteLine("Prvek se zadaným klíčem už existuje");
+}
+```
+    
+Prvek také můžeme vložit pomocí metody TryAdd. Metoda vrátí false, pokud se vložení nepovede.
+
+```cs 
+if (!studenti.TryAdd("A100", new Student("Katerina")))
+{
+    Console.WriteLine("Prvek se zadaným klíčem už existuje");
+}
 ```
