@@ -46,7 +46,7 @@ skladString.Zaloz("Ahoj");
 string retezec = skladString.Vyloz();
 ```
 
-### List<T>
+### Dynamické pole List
  
 Generická třída List<T> představuje implementaci dynamického pole. Kdy pole s pevnou délkou (Array) má pevně danou délku, kterou není možné změnit. A dynamické pole umožňuje přidávat a odebírat prvky do již existujícího pole protože v případě potřeby si dynamické pole alokuje víc paměti.
 
@@ -115,8 +115,24 @@ List<char> znaky = new List<char>() { 'a', 'b', 'c‘ };
 List<char> kopie = new List<char>(znaky);
 ```   
     
-###  Dictionary<TKey,TValue> 
+###  Asociativní pole Dictionary
   
-Technika Dependency Injection se používá k tomu aby jedna třída nebyla přímo závislá na jiné třídě a její konkrétní implementaci. Tato technika často používá proto aby byl kód lépe testovatelný, protože můžeme v kódu jednodušeji nakonfigurovat objekt pro potřeby testu. Technika Dependency Injection je založena na tom, že místo reference typu konkrétní třídy používáme referenci typu rozhraní a vlastní instanci potom předáváme nejčastěji v konstruktoru (jsou ale i varianty s Property nebo metodou). 
+Obyčejné pole ukládá pouze hodnoty. Asociativní pole ukládá dvojici klíč a hodnota. Díky klíči je potom možné velmi rychle vyhledávat vložené hodnoty. Díky ukládání klíče zabírá více paměti a při vyhledávání hodnoty se musí klíč převádět například pomocí hashovací funkce pro jednoznačné přiřazení hodnotě.
 
-Lépe se ale tato technika chápe na konrétním příkladu. Ukážeme si příklad, kdy budeme mít třídu `Automobil` a ta bude mít field `motor` a budeme chtít při vytváření instance třídy `Automobil` zvolit, zda bude mít benzínový nebo naftový motor.
+Instanci třídy Dictionary<TKey,TValue> definujeme následujícím způsobem. Po vytvoření instance neobsahuje žádné prvky. 
+
+```cs 
+Dictionary<string, Student> studenti = new Dictionary<string, Student>();
+```
+
+Hodnoty nicializujeme například následujícím způsobem kdy klíč je uvedený v hranatých závorkách a je mu přiřazená hodnota operátorem přiřazení. 
+ 
+
+```cs 
+Dictionary<string, Student> studenti = new Dictionary<string, Student>()
+{
+    ["A100"] = new Student("Jiri"),
+    ["A200"] = new Student("Jiri"),
+    ["A300"] = new Student("Jiri")
+};
+```   
