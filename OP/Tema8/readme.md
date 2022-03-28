@@ -1,6 +1,6 @@
 Příklady k procvičování:
 1. Generická třída [zadání](1_zadani.cs) [řešení](2_reseni)
-2. Dictionary [zadání](1_zadani.cs) [řešení](2_reseni)
+2. Dictionary [zadání](2_zadani.cs) [řešení](2_reseni)
 ---
 
 ## Generické datové typy a kolekce
