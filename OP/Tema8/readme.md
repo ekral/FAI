@@ -3,9 +3,30 @@ Příklady k procvičování:
 2. Dictionary [zadání](1_zadani.cs) [řešení](2_reseni)
 ---
 
-
 ## Generické datové typy a kolekce
 
+Generika (C#, Java) nebo šablony v C++, zmožňují odložit přesnou definici použitého datového typu v rámci datového typu, například třídy nebo rozhraní. V jazyce C se pro podobné účely používá příkaz textového preprocecoru #define.
+
+Generika poskytují vetší znovu použitelnost kódu, zlepšuje typovou bezpečnost a celkový výkon (není nutný boxing u hodnotových typů). Nejčastější aplikace je v rámci kolekcí. Je doporučováno vždy preferovat generické třídy a metody před jejími negenerickými verzemi
+
+V následujícím příkladu je ukázka definice generické třídy sklad:
+
+```cs 
+class Sklad<T>
+{
+    public void Zaloz(T objekt) { }
+}
+```
+
+A při použití této třídy zvolíme konrétní typ, který se použije místo generického parametru `T`:
+
+```cs 
+Sklad<int>  skladInt = new Sklad<int>();
+skladInt.Zaloz(1);
+
+Sklad<string> skladString = new Sklad<string>();
+skladString.Zaloz("Ahoj");
+```
 
 ### List<T>
  
