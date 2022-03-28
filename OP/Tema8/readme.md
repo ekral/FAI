@@ -65,8 +65,6 @@ List<int> cisla = new List<int>() { 1, 2, 3 };
 K prvkům přistupujeme pomocí operátoru indexace `[]` nebo pomocí cyklu foreach protože List<int> implementuje rozhraní `IEnumerable`. V následujících příkladech si ukážeme nejprve použití operátoru indexace a potom cyklu `foreach`.
 
 ```cs 
-List<int> cisla = new List<int>() { 1, 2, 3 };
-
 // Prvni prvek
 Console.WriteLine(cisla[0]);
 
@@ -78,8 +76,6 @@ Console.WriteLine(cisla[2]);
 ```    
     
 ```cs 
-List<int> cisla = new List<int>() { 1, 2, 3 };
-
 foreach (int cislo in cisla)
 {
     Console.WriteLine(cislo);
