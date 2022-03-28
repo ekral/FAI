@@ -98,6 +98,22 @@ znaky.RemoveAt(1); // Odebrání prvku z indexu
 znaky.Remove('b'); // Odebrání prvků dle hodnoty
 znaky.Clear(); // Odebrání všech prvků
 ```   
+
+List<T> je třída a tedy referenční typ, přiřazením se zkopíruje reference, která odkazuje na stejné data v paměti.
+
+```cs 
+List<char> znaky = new List<char>() { 'a', 'b', 'c’ };
+
+List<char> kopie = znaky;
+```   
+
+Hlubokou kopii instance třídy List<T> můžeme vytvořit předáním původního listu jako argumentu konstruktoru.
+
+```cs 
+List<char> znaky = new List<char>() { 'a', 'b', 'c‘ };
+
+List<char> kopie = new List<char>(znaky);
+```   
     
 ###  Dictionary<TKey,TValue> 
   
