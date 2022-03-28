@@ -107,7 +107,7 @@ List<char> znaky = new List<char>() { 'a', 'b', 'c’ };
 List<char> kopie = znaky;
 ```   
 
-Hlubokou kopii instance třídy `List<T>` můžeme vytvořit předáním původního listu jako argumentu konstruktoru.
+Hlubokou kopii instance třídy `List<T>` můžeme vytvořit předáním původního listu jako argumentu konstruktoru. V příkladu vytváříme hlubokou kopii instance třídy List<int> ale pokud by jako prvky byly referenční typy, tak kopie jednotlivých prvků by opět byly jen reference na stejný objekt.
 
 ```cs 
 List<char> znaky = new List<char>() { 'a', 'b', 'c‘ };
