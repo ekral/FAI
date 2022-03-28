@@ -62,6 +62,30 @@ Instanci třídy List<int> inicializujeme stejným způsobem jako pole, tedy sez
 List<int> cisla = new List<int>() { 1, 2, 3 }; 
 ```
     
+K prvkům přistupujeme pomocí operátoru indexace `[]` nebo pomocí cyklu foreach protože List<int> implementuje rozhraní `IEnumerable`. V následujících příkladech si ukážeme nejprve použití operátoru indexace a potom cyklu `foreach`.
+
+```cs 
+List<int> cisla = new List<int>() { 1, 2, 3 };
+
+// Prvni prvek
+Console.WriteLine(cisla[0]);
+
+// Druhy prvek
+Console.WriteLine(cisla[1]);
+
+// Treti prvek
+Console.WriteLine(cisla[2]);
+```    
+    
+```cs 
+List<int> cisla = new List<int>() { 1, 2, 3 };
+
+foreach (int cislo in cisla)
+{
+    Console.WriteLine(cislo);
+}
+```   
+    
 ###  Dictionary<TKey,TValue> 
   
 Technika Dependency Injection se používá k tomu aby jedna třída nebyla přímo závislá na jiné třídě a její konkrétní implementaci. Tato technika často používá proto aby byl kód lépe testovatelný, protože můžeme v kódu jednodušeji nakonfigurovat objekt pro potřeby testu. Technika Dependency Injection je založena na tom, že místo reference typu konkrétní třídy používáme referenci typu rozhraní a vlastní instanci potom předáváme nejčastěji v konstruktoru (jsou ale i varianty s Property nebo metodou). 
