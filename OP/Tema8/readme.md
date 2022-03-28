@@ -224,3 +224,11 @@ if (!studenti.TryAdd("A100", new Student("Katerina")))
     Console.WriteLine("Prvek se zadaným klíčem už existuje");
 }
 ```
+    
+Prvek potom odstraníme například pomocí metody Remove:
+if (studenti.ContainsKey("A100"))
+{
+    studenti.Remove("A100");
+}
+```
+    
