@@ -146,3 +146,30 @@ Dictionary<string, Student> studenti = new Dictionary<string, Student>()
     { "A300", new Student("Jiri") }
 };
 ```
+    
+K prvkům přistupujeme pomocí indexeru v hranatých závorkách. V případě, že klíč neexistuje, tak metoda vyvolá výjimku.
+    
+```cs 
+try
+{
+    Student student = studenti["A200"];
+}
+catch (KeyNotFoundException)
+{
+    Console.WriteLine("Klíč neexistuje");
+}
+```
+    
+Nebo můžeme použít metodu `TryGet`, která představuje bezpečnější a rychlejší způsob, protože nevyvolává výjimku:
+
+```cs 
+bool exituje = studenti.TryGetValue("A200", out Student student);
+           
+if(!exituje)
+{
+    Console.WriteLine("Klíč neexistuje");
+}
+```
+
+
+
