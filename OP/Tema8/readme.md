@@ -222,10 +222,17 @@ if (!studenti.TryAdd("A100", new Student("Katerina")))
 ```
     
 Prvek potom odstraníme například pomocí metody `Remove`:
-
+    
+```cs 
 if (studenti.ContainsKey("A100"))
 {
     studenti.Remove("A100");
 }
 ```
+    
+---
+
+Více se o různých typech kolekcích v jazyce C# dozvíte například zde:
+
+[Collections (C#). Microsoft Docs. 2022](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/collections)
     
