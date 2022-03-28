@@ -56,7 +56,7 @@ Instanci třídy List<int> definujeme následujícím způsobem. Po vytvoření 
 List<int> cisla = new List<int>(); 
 ```
 
-Instanci třídy List<int> inicializujeme stejným způsobem jako pole, tedy seznamem prvků ve složených závorkách oddělených čárkou:
+Prvky inicializujeme stejným způsobem jako pole, tedy seznamem prvků ve složených závorkách oddělených čárkou:
 
 ```cs 
 List<int> cisla = new List<int>() { 1, 2, 3 }; 
@@ -117,7 +117,7 @@ List<char> kopie = new List<char>(znaky);
     
 ###  Asociativní pole Dictionary
   
-Obyčejné pole ukládá pouze hodnoty. Asociativní pole ukládá dvojici klíč a hodnota. Díky klíči je potom možné velmi rychle vyhledávat vložené hodnoty. Díky ukládání klíče zabírá více paměti a při vyhledávání hodnoty se musí klíč převádět například pomocí hashovací funkce pro jednoznačné přiřazení hodnotě.
+Obyčejné pole ukládá pouze hodnoty. Asociativní pole ukládá dvojici klíč a hodnota. Díky klíči je potom možné velmi rychle vyhledávat vložené hodnoty. Díky ukládání klíče zabírá tento kontejner více paměti.
 
 Instanci třídy Dictionary<TKey,TValue> definujeme následujícím způsobem. Po vytvoření instance neobsahuje žádné prvky. 
 
@@ -125,9 +125,8 @@ Instanci třídy Dictionary<TKey,TValue> definujeme následujícím způsobem. P
 Dictionary<string, Student> studenti = new Dictionary<string, Student>();
 ```
 
-Hodnoty nicializujeme například následujícím způsobem kdy klíč je uvedený v hranatých závorkách a je mu přiřazená hodnota operátorem přiřazení. 
+Prvky inicializujeme například následujícím způsobem kdy klíč je uvedený v hranatých závorkách a je mu přiřazená hodnota operátorem přiřazení. 
  
-
 ```cs 
 Dictionary<string, Student> studenti = new Dictionary<string, Student>()
 {
