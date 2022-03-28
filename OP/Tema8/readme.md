@@ -9,27 +9,46 @@ Generika (C#, Java) nebo šablony v C++, zmožňují odložit přesnou definici 
 
 Generika poskytují vetší znovu použitelnost kódu, zlepšuje typovou bezpečnost a celkový výkon (není nutný boxing u hodnotových typů). Nejčastější aplikace je v rámci kolekcí. Je doporučováno vždy preferovat generické třídy a metody před jejími negenerickými verzemi
 
-V následujícím příkladu je ukázka definice generické třídy sklad:
+V následujícím příkladu je ukázka definice generické třídy sklad, který představuje zásobník s pevnou délkou:
 
 ```cs 
 class Sklad<T>
 {
-    public void Zaloz(T objekt) { }
+    T[] data;
+    private int pocet;
+
+    public Sklad(int kapacita)
+    {
+        data = new T[kapacita];
+    }
+
+    public void Zaloz(T objekt)
+    {
+        data[pocet++] = objekt;
+    }
+
+    public T Vyloz()
+    {
+        return data[--pocet];
+    }
 }
 ```
 
 A při použití této třídy zvolíme konrétní typ, který se použije místo generického parametru `T`:
 
 ```cs 
-Sklad<int>  skladInt = new Sklad<int>();
+Sklad<int>  skladInt = new Sklad<int>(10);
 skladInt.Zaloz(1);
+int celeCislo = skladInt.Vyloz();
 
-Sklad<string> skladString = new Sklad<string>();
+Sklad<string> skladString = new Sklad<string>(10);
 skladString.Zaloz("Ahoj");
+string retezec = skladString.Vyloz();
 ```
 
 ### List<T>
  
+Generická třída List
 ###  Dictionary<TKey,TValue> 
   
 Technika Dependency Injection se používá k tomu aby jedna třída nebyla přímo závislá na jiné třídě a její konkrétní implementaci. Tato technika často používá proto aby byl kód lépe testovatelný, protože můžeme v kódu jednodušeji nakonfigurovat objekt pro potřeby testu. Technika Dependency Injection je založena na tom, že místo reference typu konkrétní třídy používáme referenci typu rozhraní a vlastní instanci potom předáváme nejčastěji v konstruktoru (jsou ale i varianty s Property nebo metodou). 
