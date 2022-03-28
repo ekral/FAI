@@ -171,5 +171,22 @@ if(!exituje)
 }
 ```
 
+Dictionary můžeme také procházet pomocí cyklu foreach a to jak zvlášť hodnoty, klíče nebo pár klíč a hodnota.
+    
+```cs 
+foreach (Student student in studenti.Values)
+{
+    Console.WriteLine(student.Jmeno);
+}
 
+foreach (string key in studenti.Keys)
+{
+    Console.WriteLine(key);
+}
+        
+foreach (KeyValuePair<string,Student> zaznam in studenti)
+{
+    Console.WriteLine($"{zaznam.Key}: {zaznam.Value.Jmeno}");
+}
 
+```
