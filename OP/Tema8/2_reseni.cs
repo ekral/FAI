@@ -8,7 +8,7 @@ class Program
     static void Main(string[] args)
     {
         string line = "Ahoj Ahoj Ahoj jak se jak se mas; mas,mas";
-        string[] slovaArray = line.Split(new char[] {',',' ', '.', ';' });
+        string[] slovaArray = line.Split(new char[] { ',', ' ', '.', ';' });
 
         Dictionary<string, int> slova = new Dictionary<string, int>();
 
@@ -35,6 +35,6 @@ class Program
             .Label("[green bold underline]Vyskyt slov[/]")
             .CenterLabel()
             .AddItems(slova, (item) => new BarChartItem(
-                item.Key, item.Value, palette[index = ++index % palette.Count()])));
+                item.Key, item.Value, palette[index = ++index % palette.Length])));
     }
 }
