@@ -1,6 +1,7 @@
 // Ukol 2: S pomocí Dictionary vytvořte a na konzoli zobrazte histogram vyskytu slov v libovolnem textovem souboru
 
 using Spectre.Console;
+using System.Collections.Generic;
 
 class Program
 {
