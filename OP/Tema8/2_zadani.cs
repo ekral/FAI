@@ -4,8 +4,8 @@ class Program
 {
     static void Main(string[] args)
     {
-        string retezec = "Ahoj jak se mas";
-        string[] slova = retezec.Split(retezec);
+        string line = "Ahoj Ahoj Ahoj jak se jak se mas; mas,mas dnes dnes je hezky";
+        string[] slovaArray = line.Split(new char[] { ',', ' ', '.', ';' });
 
         // nebo muzu prochazet znaky postupne
     }
