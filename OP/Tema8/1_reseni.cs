@@ -1,4 +1,4 @@
-// Ukol 1: Prepracujte tridu Sklad na generickou, tak aby byl validni klientsky kod v metode Main
+// Ukol 1: Prepracujte tridu Sklad na generickou, tak aby byl validni klientsky kod v metode Main ✓
 
 class Sklad<T>
 {
@@ -42,6 +42,7 @@ class Kocicka : Zviratko
         return "mnau";
     }
 }
+// Ukol 2: Omezte genericky typ tak, aby do skladu sla pridavat jen zviratka ✓
 
 class SkladZviratek<T> where T : Zviratko
 {
