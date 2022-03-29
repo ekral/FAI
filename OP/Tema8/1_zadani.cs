@@ -1,4 +1,5 @@
 // Ukol 1: Prepracujte tridu Sklad na generickou, tak aby byl validni klientsky kod v metode Main
+// Ukol 2: Omezte genericky typ tak, aby do skladu sla pridavat jen zviratka.
 
 class Sklad
 {
