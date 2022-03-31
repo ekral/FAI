@@ -1,6 +1,20 @@
 // Ukol 1: Prepracujte tridu Sklad na generickou, tak aby byl validni klientsky kod v metode Main
 // Ukol 2: Omezte genericky typ tak, aby sel pouzit jen typ Zviratka a jeho potomci.
 
+abstract class Zviratko
+{
+    public string Jmeno { get; set; }
+    public abstract string VratZvuk();
+}
+
+class Pejsek : Zviratko
+{
+    public override string VratZvuk()
+    {
+        return "haf haf";
+    }
+}
+
 class Sklad
 {
     int[] data;
@@ -24,14 +38,18 @@ class Sklad
 
 class Program
 {
-        static void Main(string[] args)
-        {
-            Sklad<int>  skladInt = new Sklad<int>(10);
-            skladInt.Zaloz(1);
-            int celeCislo = skladInt.Vyloz();
+    static void Main(string[] args)
+    {
+        Sklad<int> skladInt = new Sklad<int>(10);
+        skladInt.Zaloz(1);
+        int celeCislo = skladInt.Vyloz();
 
-            Sklad<string> skladString = new Sklad<string>(10);
-            skladString.Zaloz("Ahoj");
-            string retezec = skladString.Vyloz();
-        }
+        Sklad<string> skladString = new Sklad<string>(10);
+        skladString.Zaloz("Ahoj");
+        string retezec = skladString.Vyloz();
+
+        Sklad<Zviratko> skladZviratek = new Sklad<Zviratko>(10);
+        skladZviratek.Zaloz(new Pejsek() { Jmeno = "Rex" });
+        Zviratko pejsek = skladZviratek.Vyloz();
+    }
 }
