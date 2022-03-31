@@ -1,5 +1,5 @@
-// Ukol 1: Prepracujte tridu Sklad na generickou, tak aby byl validni klientsky kod v metode Main
-// Ukol 2: Omezte genericky typ tak, aby sel pouzit jen typ Zviratka a jeho potomci.
+// Ukol 1a: Prepracujte tridu Sklad na generickou, tak aby byl validni klientsky kod v metode Main
+// Ukol 1b: Omezte genericky typ tak, aby sel pouzit jen typ Zviratka a jeho potomci.
 
 abstract class Zviratko
 {
