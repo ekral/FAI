@@ -40,15 +40,20 @@ class Program
 {
     static void Main(string[] args)
     {
-        Sklad<int> skladInt = new Sklad<int>(10);
+        // V Ukolu 1 pujdou vsechny tri
+
+        // Nepujde v Ukolu 2
+        Sklad<int> skladInt = new Sklad<int>(10); 
         skladInt.Zaloz(1);
         int celeCislo = skladInt.Vyloz();
 
-        Sklad<string> skladString = new Sklad<string>(10);
+        // Nepujde v Ukolu 2
+        Sklad<string> skladString = new Sklad<string>(10); 
         skladString.Zaloz("Ahoj");
         string retezec = skladString.Vyloz();
 
-        Sklad<Zviratko> skladZviratek = new Sklad<Zviratko>(10);
+        // Pujde v Ukolu 2
+        Sklad<Zviratko> skladZviratek = new Sklad<Zviratko>(10); 
         skladZviratek.Zaloz(new Pejsek() { Jmeno = "Rex" });
         Zviratko pejsek = skladZviratek.Vyloz();
     }
