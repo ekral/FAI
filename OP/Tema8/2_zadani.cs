@@ -1,4 +1,4 @@
-// Ukol 1: S pomocí Dictionary vytvořte a na konzoli zobrazte histogram vyskytu slov v libovolnem textovem souboru
+// Ukol 2: S pomocí Dictionary vytvořte a na konzoli zobrazte histogram vyskytu slov v libovolnem textovem souboru
 
 class Program
 {
