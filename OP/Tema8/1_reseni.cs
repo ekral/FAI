@@ -42,7 +42,8 @@ class Kocicka : Zviratko
         return "mnau";
     }
 }
-// Ukol 2: Omezte genericky typ tak, aby do skladu sla pridavat jen zviratka ✓
+
+// Ukol 2: Omezte genericky typ tak, aby sel pouzit jen typ Zviratka a jeho potomci. ✓
 
 class SkladZviratek<T> where T : Zviratko
 {
