@@ -1,60 +1,55 @@
-// Ukol 1: Prepracujte tridu Sklad na generickou, tak aby byl validni klientsky kod v metode Main
-// Ukol 2: Omezte genericky typ tak, aby sel pouzit jen typ Zviratka a jeho potomci.
+// Ukol 2: S pomocí Dictionary vytvořte a na konzoli zobrazte histogram vyskytu slov v libovolnem textovem souboru
 
-abstract class Zviratko
-{
-    public string Jmeno { get; set; }
-    public abstract string VratZvuk();
-}
-
-class Pejsek : Zviratko
-{
-    public override string VratZvuk()
-    {
-        return "haf haf";
-    }
-}
-
-class Sklad<T> where T : Zviratko
-{
-    T[] data;
-    private int pocet;
-
-    public Sklad(int kapacita)
-    {
-        data = new T[kapacita];
-    }
-
-    public void Zaloz(T objekt)
-    {
-        data[pocet++] = objekt;
-    }
-
-    public T Vyloz()
-    {
-        return data[--pocet];
-    }
-}
+using Spectre.Console;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 class Program
 {
     static void Main(string[] args)
     {
-        // V Ukolu 1 pujdou vsechny tri
+        // Domaci ukol: nacitat po jednom znaku
 
-        // Nepujde v Ukolu 2
-        //Sklad<int> skladInt = new Sklad<int>(10); 
-        //skladInt.Zaloz(1);
-        //int celeCislo = skladInt.Vyloz();
+        Dictionary<string, int> slovnik = new Dictionary<string, int>();
+        
+        using StreamReader reader = new StreamReader("text.txt");
+        
+        string line = null;
 
-        // Nepujde v Ukolu 2
-        //Sklad<string> skladString = new Sklad<string>(10); 
-        //skladString.Zaloz("Ahoj");
-        //string retezec = skladString.Vyloz();
+        while ((line = reader.ReadLine()) != null)
+        {
+            string[] slova = line.Split(new char[] { ',', ' ', '.', ';', '"', '[', ']', '„', '”', '?', '!' });
 
-        // Pujde v Ukolu 2
-        Sklad<Zviratko> skladZviratek = new Sklad<Zviratko>(10); 
-        skladZviratek.Zaloz(new Pejsek() { Jmeno = "Rex" });
-        Zviratko pejsek = skladZviratek.Vyloz();
+            foreach (string slovo in slova)
+            {
+                if (!string.IsNullOrWhiteSpace(slovo))
+                {
+                    if (slovnik.ContainsKey(slovo))
+                    {
+                        slovnik[slovo]++;
+                    }
+                    else
+                    {
+                        slovnik[slovo] = 1;
+                    }
+                }
+            }
+        }
+
+        //foreach (var pair in slovnik.OrderBy(p => p.Value))
+        //{
+        //    System.Console.WriteLine($"{pair.Key}\t\t {pair.Value}");
+        //}
+
+        Color[] palette = new Color[] { Color.Blue, Color.Blue1, Color.Blue3 };
+        int index = 0;
+
+        AnsiConsole.Write(new BarChart()
+           .Width(60)
+           .Label("[green bold underline]Vyskyt slov[/]")
+           .CenterLabel()
+           .AddItems(slovnik.OrderByDescending(p => p.Value), (item) => new BarChartItem(
+               item.Key, item.Value, palette[index = ++index % palette.Length])));;
     }
 }
