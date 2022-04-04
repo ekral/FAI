@@ -147,7 +147,7 @@ List<int> cisla = new List<int> { -20, 2, 5, -2, 7, 8 };
 List<int> kladna = cisla.Where(x => x > 0).ToList();
 ```
 
-V následujícím příkladu si všimněte, že v lambda výrazu používáme lokální proměnnou `min` a kopírujeme jen proměnné větší než tato hodnota.
+V následujícím příkladu si všimněte, že v lambda výrazu používáme lokální proměnnou `min` a kopírujeme jen proměnné větší než tato hodnota. Říkáme že tato proměnná je **captured** a prodlouží se i její **lifetime**.
 
 ```cs 
 int min = 2;
@@ -160,17 +160,22 @@ Lambda výraz je také možné prevést na strom výrazů, což se využívá v 
 
 Pokud chceme v lambda výrazu použít více příkazu, tak musíme použít statements lambda. Statements lambda nejde převést na strom výrazů.
 
-V následujícím příkazu opět filtrujeme jen kladná čísla z Listu, ale při každém testu, zda je číslo kladné, ještě hodnotu vypíšeme na terminál, musíme proto využít statemnts labmda. Všimněte si, že jsme museli použít klíčové slovo `retur`n a složené závorky.
+V následujícím příkazu opět filtrujeme jen kladná čísla z Listu, ale při každém testu, zda je číslo kladné, ještě zvyšíme hodnotu počítadla a vypíšeme ji na terminál, musíme proto využít statements labmda. Všimněte si, že jsme museli použít klíčové slovo `return` a složené závorky.
 
 ```cs 
-List<int> cisla = new List<int> { -20, 2, 5, -2, 7, 8 };
+int pocitadlo = 0;
 
-List<int> kladna = cisla.Where(x => 
-    { 
-        System.Console.WriteLine(x); 
-        return x > 0; 
-    })
-   .ToList();
+List<int> kladna = cisla.Where(x =>
+{
+    if(x > 0)
+    {
+        System.Console.WriteLine(++pocitadlo);
+        return true;
+    }
+
+    return false;
+
+}).ToList();
 ```
 
 Více se o lambda výrazech můžete dozvědět například zde:
