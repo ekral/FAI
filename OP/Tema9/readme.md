@@ -72,4 +72,4 @@ d?.Invoke(3); // vypise jen B 3
 Následuje kompletní příklad.
 1. [Výpis](01_vypis.cs)
 2. [Operace](02_operace.cs)
-3. [Predikát](01_vypis.cs)
+3. [Predikát](03_predicate.cs)
