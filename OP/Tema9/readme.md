@@ -100,7 +100,7 @@ delegate bool Operace(int x)
 
 ### `Func` 
 
-Je delegát metody, která vrací hodnotu a má více parametrů. Jde o nejobecnější z šablon delegátů.
+Je delegát metody, která vrací hodnotu a má více parametrů. Jde o nejobecnější z šablon delegátů. 
 
 Například typ
 ```cs 
@@ -111,10 +111,9 @@ odpovídá delegátu
 delegate bool Operace(int a, int b)
 ```
 
-
 ## Lambda výrazy
 
-Lambda výrazy nám umoňují zapsat anonymní funkci, tedy funkci bez jména. Používám se s polečně s delegáty.
+Lambda výrazy nám umoňují zapsat anonymní funkci, tedy funkci bez jména. Používám se s polečně s delegáty. V .NET 2.0 se pro stejný účel používali anonymní metody, tyto byly ale nahrazeny v .NET 3.0 lambda výrazy a už se nepoužívají. 
 
 ---
 Kompletní příklady:
