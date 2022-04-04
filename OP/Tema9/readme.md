@@ -72,7 +72,11 @@ d?.Invoke(3); // vypise jen B 3
 
 Pro nejčastější typy delegátů jsou připraveny šablony delegátů. Proto není potřeba psát vlastní delegáty. 
 
-- `Action` je delegát metody který může mít více parametrů a nevrací žádnou hodnotu (návratový typ je void)
+- `Action` 
+
+Je delegát metody který může mít více parametrů a nevrací žádnou hodnotu (návratový typ je void). Například následující typ `Action<string>` odpovídá delegátu `delegate void Operace(string msg)`.
+
+
 - `Func` je delegát metody, která vrací hodnotu a má více parametrů
 - `Predicate` je delegát metody, která vrací vždy boolean a má jeden parametr
 
