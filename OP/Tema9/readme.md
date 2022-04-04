@@ -129,7 +129,7 @@ string retezec = delegat.Invoke(2, true);
 Console.WriteLine(retezec);
 ```
 
-Pokud bychom tuto metodu používali jen jednou, tak ji nemusíme definovat jako metodu, ale můžeme použít lambda výraz. Všimněte si, že u proměnných x a y nemusíme uvádět typ a když metoda obsahuje pouze jeden příkaz, tak nepoužíváme ani klíčové slovo return a složené závorky. Zápis je potom velmi úsporný.
+Pokud bychom tuto metodu používali jen jednou, tak ji nemusíme definovat jako metodu, ale můžeme použít lambda výraz. Všimněte si, že u proměnných x a y nemusíme uvádět typ a když metoda obsahuje pouze jeden příkaz, tak nepoužíváme ani klíčové slovo `return` a složené závorky. Zápis je potom velmi úsporný.
 
 ```cs 
 Func<int,bool, string> delegat = (x,y) => $"x ma hodnotu {x} a promena y ma hodnotu {y}";
@@ -139,13 +139,35 @@ string retezec = delegat.Invoke(2, true);
 Console.WriteLine(retezec);
 ```
 
-Lambda výrazy se často používájí s knihovnou LINQ, například pokud chceme z Listu získat pouze kladná čísla. Všimněte si, že pokud má lambda výraz jen jeden parametr tak můžeme vynechat i složené závorky.
+Lambda výrazy se často používájí s knihovnou LINQ, například pokud chceme z Listu získat pouze kladná čísla. Všimněte si, že pokud má lambda výraz jen jeden parametr tak můžeme vynechat i složené závorky. 
 
 ```cs 
 List<int> cisla = new List<int> { -20, 2, 5, -2, 7, 8 };
 
 List<int> kladna = cisla.Where(x => x > 0).ToList();
 ```
+
+Lambda výraz je také možné prevést na strom výrazů, což se využívá v některých knihovnách například pro objektově relační mapování, kdy se ze stromu výrázů generuje výraz v jazyce SQL.
+
+### Statements lambda
+
+Pokud chceme v lambda výrazu použít více příkazu, tak musíme použít statements lambda. Statements lambda nejde převést na strom výrazů.
+
+V následujícím příkazu opět filtrujeme jen kladná čísla z Listu, ale při každém testu, zda je číslo kladné, ještě hodnotu vypíšeme na terminál, musíme proto využít statemnts labmda. Všimněte si, že jsme museli použít klíčové slovo `retur`n a složené závorky.
+
+```cs 
+List<int> cisla = new List<int> { -20, 2, 5, -2, 7, 8 };
+
+List<int> kladna = cisla.Where(x => 
+    { 
+        System.Console.WriteLine(x); 
+        return x > 0; 
+    })
+   .ToList();
+```
+
+Více se o lambda výrazech můžete dozvědět například zde:
+[Lambda expressions (C# reference). Microsoft Docs. 2022](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/lambda-expressions)
 
 ---
 Kompletní příklady:
