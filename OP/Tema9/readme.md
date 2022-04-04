@@ -72,7 +72,7 @@ d?.Invoke(3); // vypise jen B 3
 
 Pro nejčastější typy delegátů jsou připraveny šablony delegátů. Proto není potřeba psát vlastní delegáty. 
 
-- `Action` 
+### `Action` 
 
 Je delegát metody který může mít více parametrů a nevrací žádnou hodnotu (návratový typ je void). 
 
