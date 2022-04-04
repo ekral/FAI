@@ -68,8 +68,21 @@ d -= VypisA;
 d?.Invoke(3); // vypise jen B 3
 ```
 
+### Šablony delegátů
+
+Pro nejčastější typy delegátů jsou připraveny šablony delegátů. Proto není potřeba psát vlastní delegáty. 
+
+- `Action` je delegát metody který může mít více parametrů a nevrací žádnou hodnotu (návratový typ je void)
+- `Func` je delegát metody, která vrací hodnotu a má více parametrů
+- `Predicate` je delegát metody, která vrací vždy boolean a má jeden parametr
+
+
+## Lambda výrazy
+
+Lambda výrazy nám umoňují zapsat anonymní funkci, tedy funkci bez jména. Používám se s polečně s delegáty.
+
 ---
-Následuje kompletní příklad.
+Kompletní příklady:
 1. [Výpis](01_vypis.cs)
 2. [Operace](02_operace.cs)
 3. [Predikát](03_predicate.cs)
