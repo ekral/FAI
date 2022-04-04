@@ -74,10 +74,12 @@ Pro nejčastější typy delegátů jsou připraveny šablony delegátů. Proto 
 
 - `Action` 
 
-Je delegát metody který může mít více parametrů a nevrací žádnou hodnotu (návratový typ je void). Například následující typ `Action<string>` odpovídá delegátu `delegate void Operace(string msg)`.
+Je delegát metody který může mít více parametrů a nevrací žádnou hodnotu (návratový typ je void). Například typ `Action<string>` odpovídá delegátu `delegate void Operace(string msg)`.
 
+- `Func` 
 
-- `Func` je delegát metody, která vrací hodnotu a má více parametrů
+Je delegát metody, která vrací hodnotu a má více parametrů. Například typ `Action<string>` odpovídá delegátu `delegate void Operace(string msg)`.
+
 - `Predicate` je delegát metody, která vrací vždy boolean a má jeden parametr
 
 
