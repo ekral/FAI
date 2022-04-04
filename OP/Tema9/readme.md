@@ -115,6 +115,30 @@ delegate bool Operace(int a, int b)
 
 Lambda výrazy nám umoňují zapsat anonymní funkci, tedy funkci bez jména. Používám se s polečně s delegáty. V .NET 2.0 se pro stejný účel používali anonymní metody, tyto byly ale nahrazeny v .NET 3.0 lambda výrazy a už se nepoužívají. 
 
+V následujícím příkladu přiřazujeme referenci na metodu `JeSude` delegátu typu `Func`:
+```cs 
+Func<int,bool, string> delegat = VratRetezec;
+
+string retezec = delegat.Invoke(2, true);
+
+Console.WriteLine(retezec);
+
+string VratRetezec(int x, bool y)
+{
+    return $"x ma hodnotu {x} a promena y ma hodnotu {y}";
+}
+```
+
+Pokud bychom tuto metodu používali jen jednou, tak ji nemusíme definovat jako metodu, ale můžeme použít lambda výraz. Všimněte si, že u proměnných x a y nemusíme uvádět typ a když metoda obsahuje pouze jeden příkaz, tak nepoužíváme ani klíčové slovo return a složené závorky. Zápis je potom velmi úsporný.
+
+```cs 
+Func<int,bool, string> delegat = (x,y) => $"x ma hodnotu {x} a promena y ma hodnotu {y}";
+
+string retezec = delegat.Invoke(2, true);
+
+Console.WriteLine(retezec);
+```
+
 ---
 Kompletní příklady:
 1. [Výpis](01_vypis.cs)
