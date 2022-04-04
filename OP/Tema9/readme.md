@@ -85,13 +85,31 @@ odpovídá delegátu
 delegate void Operace(string msg)
 ```
 
-- `Func` 
-
-Je delegát metody, která vrací hodnotu a má více parametrů. Například typ `Action<string>` odpovídá delegátu `delegate void Operace(string msg)`.
-
-- `Predicate` 
+### `Predicate` 
 
 Je delegát metody, která vrací vždy boolean a má jeden parametr. Například typ `Func<int,int,bool>` odpovídá delegátu `delegate bool Operace(int a, int b)`.
+
+Například typ
+```cs 
+Predicate<int>
+```
+odpovídá delegátu 
+```cs 
+delegate bool Operace(int x)
+```
+
+### `Func` 
+
+Je delegát metody, která vrací hodnotu a má více parametrů. Jde o nejobecnější z šablon delegátů.
+
+Například typ
+```cs 
+Func<int,int,bool>
+```
+odpovídá delegátu 
+```cs 
+delegate bool Operace(int a, int b)
+```
 
 
 ## Lambda výrazy
