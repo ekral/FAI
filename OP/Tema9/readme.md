@@ -74,7 +74,16 @@ Pro nejčastější typy delegátů jsou připraveny šablony delegátů. Proto 
 
 - `Action` 
 
-Je delegát metody který může mít více parametrů a nevrací žádnou hodnotu (návratový typ je void). Například typ `Action<string>` odpovídá delegátu `delegate void Operace(string msg)`.
+Je delegát metody který může mít více parametrů a nevrací žádnou hodnotu (návratový typ je void). 
+
+Například typ
+```cs 
+Action<string>
+```
+odpovídá delegátu 
+```cs 
+delegate void Operace(string msg)
+```
 
 - `Func` 
 
