@@ -181,6 +181,8 @@ List<int> kladna = cisla.Where(x =>
 Více se o lambda výrazech můžete dozvědět například zde:
 [Lambda expressions (C# reference). Microsoft Docs. 2022](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/lambda-expressions)
 
+TODO: event
+
 ---
 Kompletní příklady:
 1. [Výpis](01_vypis.cs)
