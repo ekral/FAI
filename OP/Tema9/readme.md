@@ -139,6 +139,14 @@ string retezec = delegat.Invoke(2, true);
 Console.WriteLine(retezec);
 ```
 
+Lambda výrazy se často používájí s knihovnou LINQ, například pokud chceme z Listu získat pouze kladná čísla. Všimněte si, že pokud má lambda výraz jen jeden parametr tak můžeme vynechat i složené závorky.
+
+```cs 
+List<int> cisla = new List<int> { -20, 2, 5, -2, 7, 8 };
+
+List<int> kladna = cisla.Where(x => x > 0).ToList();
+```
+
 ---
 Kompletní příklady:
 1. [Výpis](01_vypis.cs)
