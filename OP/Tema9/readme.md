@@ -147,7 +147,7 @@ List<int> cisla = new List<int> { -20, 2, 5, -2, 7, 8 };
 List<int> kladna = cisla.Where(x => x > 0).ToList();
 ```
 
-V následujícím příkladu si všimněte, že v lambda výrazu používáme lokální proměnnou `min` a kopírujeme jen proměnné větší než tato hodnota. Říkáme že tato proměnná je **captured** a prodlouží se i její **lifetime**.
+V následujícím příkladu si všimněte, že v lambda výrazu používáme lokální proměnnou `min` a kopírujeme jen proměnné větší než tato hodnota. Říkáme že tato proměnná je **captured** a prodlouží se její **lifetime**.
 
 ```cs 
 int min = 2;
