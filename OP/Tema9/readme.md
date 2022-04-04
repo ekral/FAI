@@ -1,6 +1,6 @@
-A2OPN Příprava k testu 10 - delegát
----
-Pro zvládnutí testu potřebujete vědět co je to delegát a jak se používá. Delegát je uživatelsky definovaný typ představující jednu nebo více referencí na metody s konkrétním návratovým typem a parametry. Instanci delegáta můžeme tedy přiřadit reference na metody a tyto metody potom prostřednictvím této instance zavolat (říkáme také vyvolat - invoke). Pomocí delegátů můžeme předávat reference na metody jako argumenty jiným metodám.
+## delegát
+
+Delegát je uživatelsky definovaný typ představující jednu nebo více referencí na metody s konkrétním návratovým typem a parametry. Instanci delegáta můžeme tedy přiřadit reference na metody a tyto metody potom prostřednictvím této instance zavolat (říkáme také vyvolat - invoke). Pomocí delegátů můžeme předávat reference na metody jako argumenty jiným metodám.
 
 * Nejprve si deklarujeme typ delegáta, což je prakticky hlavička metody s klíčovým slovem `delegate`:
 ```cs 
