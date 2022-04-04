@@ -147,6 +147,13 @@ List<int> cisla = new List<int> { -20, 2, 5, -2, 7, 8 };
 List<int> kladna = cisla.Where(x => x > 0).ToList();
 ```
 
+V následujícím příkladu si všimněte, že v lambda výrazu používáme lokální proměnnou `min` a kopírujeme jen proměnné větší než tato hodnota.
+
+```cs 
+int min = 2;
+List<int> vetsi = cisla.Where(x => x > min).ToList();
+```
+
 Lambda výraz je také možné prevést na strom výrazů, což se využívá v některých knihovnách například pro objektově relační mapování, kdy se ze stromu výrázů generuje výraz v jazyce SQL.
 
 ### Statements lambda
