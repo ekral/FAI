@@ -70,3 +70,4 @@ d?.Invoke(3); // vypise jen B 3
 
 ---
 Následuje kompletní příklad.
+[Výpis](01_vypis.cs)
