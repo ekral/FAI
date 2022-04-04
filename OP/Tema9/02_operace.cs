@@ -1,6 +1,6 @@
 using System;
 
-namespace Test10
+namespace Tema9
 {
     delegate int DelegatOperace(int x, int y);
 
