@@ -90,6 +90,18 @@ odpovídá delegátu
 delegate void Operace(string msg)
 ```
 
+Pokud metoda nevrací žádnou hodnotu a nemá žádný parametr, tak použijeme typ `Action`, například:
+
+```cs 
+Action action = VypisAhoj;
+action.Invoke();
+
+void VypisAhoj()
+{
+    Console.WriteLine("Ahoj");
+}
+```
+
 ### `Predicate` 
 
 Je delegát metody, která vrací vždy boolean a má jeden parametr.
