@@ -103,15 +103,15 @@ delegate bool Operace(int x)
 
 ### `Func` 
 
-Je delegát metody, která vrací hodnotu a má více parametrů. Jde o nejobecnější z šablon delegátů. 
+Je delegát metody, která vrací hodnotu a má více parametrů. Návratový typ je uveden jako poslední. Jde o nejobecnější z šablon delegátů. 
 
 Například typ
 ```cs 
-Func<int,int,bool>
+Func<int,string,bool>
 ```
 odpovídá delegátu 
 ```cs 
-delegate bool Operace(int a, int b)
+delegate bool Operace(int a, string b)
 ```
 
 ## Lambda výrazy
