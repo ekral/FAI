@@ -1,5 +1,5 @@
 Úkoly k procvičování:
-1. Úkol delegát [zadání](zadani_delegat.cs)
+1. Úkol delegát [zadání](1_delegat_zadani.cs)
 
 ## Delegát
 
