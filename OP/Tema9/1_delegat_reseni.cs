@@ -2,11 +2,10 @@
 
 using System;
 
-namespace ConsoleApp23
+namespace Tema9
 {
     class Program
     {
-
         static int Soucet(int x, int y)
         {
             return x + y;
@@ -33,7 +32,7 @@ namespace ConsoleApp23
         }
 
         delegate int MujDelegat1(int x, int y);
-        delegate void MulDelegat2(string text);
+        delegate void MujDelegat2(string text);
         delegate bool MujDelegat3(int x);
         static void Main(string[] args)
         {
@@ -44,7 +43,7 @@ namespace ConsoleApp23
             int vysledek1 = d1.Invoke(x, y);
             Console.WriteLine(vysledek1);
             
-            MulDelegat2 d2 = Vypis;
+            MujDelegat2 d2 = Vypis;
             d2.Invoke("ahoj");
 
             MujDelegat3 d3 = JeSude;
