@@ -1,5 +1,6 @@
 Úkoly k procvičování:
 1. Úkol delegát [zadání](1_delegat_zadani.cs) [řešení](1_delegat_reseni.cs)
+2. Úkol šablony delegátů [zadání](2_sablony_zadani.cs) [řešení](2_sablony_reseni.cs)
 
 ## Delegát
 
