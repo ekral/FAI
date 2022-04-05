@@ -1,3 +1,6 @@
+Úkoly k procvičování:
+Delegát [zadání](zadani_delegat.cs)
+
 ## Delegát
 
 Delegát je uživatelsky definovaný typ představující jednu nebo více referencí na metody s konkrétním návratovým typem a parametry. Instanci delegáta můžeme tedy přiřadit reference na metody a tyto metody potom prostřednictvím této instance zavolat (říkáme také vyvolat - invoke). Pomocí delegátů můžeme předávat reference na metody jako argumenty jiným metodám.
