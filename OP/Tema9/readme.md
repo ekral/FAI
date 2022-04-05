@@ -90,7 +90,7 @@ delegate void Operace(string msg)
 
 ### `Predicate` 
 
-Je delegát metody, která vrací vždy boolean a má jeden parametr. Například typ `Func<int,int,bool>` odpovídá delegátu `delegate bool Operace(int a, int b)`.
+Je delegát metody, která vrací vždy boolean a má jeden parametr.
 
 Například typ
 ```cs 
