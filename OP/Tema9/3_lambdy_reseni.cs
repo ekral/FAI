@@ -1,4 +1,4 @@
-// Ukol 3: nahradte metody lambda vyrazy
+// Ukol 3 misto metod pouzijte lambda vyrazy
 
 using System;
 using System.Collections.Generic;
@@ -8,63 +8,61 @@ namespace ConsoleApp23
 {
     class Program
     {
-        static int Soucet(int x, int y)
+
+        //static int Soucet(int x, int y)
+        //{
+        //    return x + y;
+        //}
+
+        //static void Vypis(string text)
+        //{
+        //    Console.WriteLine(text);
+        //}
+
+        //static bool JeSude(int x)
+        //{
+        //    return x % 2 == 0;
+        //}
+
+        //static bool JeKladne(int x)
+        //{
+        //    return x > 0;
+        //}
+
+        //delegate int MujDelegat1(int x, int y);
+        //delegate void MulDelegat2(string text);
+        //delegate bool MujDelegat3(int x);
+
+        static Predicate<int> VratPredikat()
         {
-            return x + y;
+            int min = 0;
+            Predicate<int> p = x => x > min; // capture min
+
+            return p;
         }
-
-        static int Soucin(int x, int y)
-        {
-            return x * y;
-        }
-
-        static void Vypis(string text)
-        {
-            Console.WriteLine(text);
-        }
-
-        static bool JeSude(int x)
-        {
-            return x % 2 == 0;
-        }
-
-        static bool JeKladne(int x)
-        {
-            return x > 0;
-        }
-
-        //delegate int Operace(int x, int y);
-
-        //// Definujte typ delegate pro metodu Vypis a vytvorte ukazku pouziti typu delegate
-        //delegate void VypisDelegat(string text);
-
-        //// Definujte typ delegate pro metodu JeSude a vytvorte ukazku pouziti typu delegate
-        //delegate bool SudeDelegat(int x);
 
         static void Main(string[] args)
         {
-
             int x = 2;
             int y = 3;
 
-            Func<int, int, int> o1 = (x, y) => x * y; // nahradit lambda vyrazem
+            Func<int, int, int> d1 = (x, y) => x + y;  // Lambda vyraz
+            int vysledek1 = d1.Invoke(x, y);
+            Console.WriteLine(vysledek1);
 
-            int vysledek = o1.Invoke(x, y);
-            Console.WriteLine(vysledek);
+            Action<string> d2 = x => Console.WriteLine(x); // Lambda vyraz
+            d2.Invoke("ahoj");
 
-            Action<string> d1 = text => Console.WriteLine(text);  // nahradit lambda vyrazem
-
-            d1.Invoke("Ahoj");
-
-            Predicate<int> s1 = x => x > 0; // nahradit lambda vyrazem
-
-            bool vysledek2 = s1.Invoke(1);
+            Predicate<int> d3 = x => x > 0;  // Lambda vyraz
+            bool vysledek2 = d3.Invoke(2);
             Console.WriteLine(vysledek2);
 
-            List<int> cisla = new List<int> { -1, 2, 3, 4, 5, -2, -3 };
-            int min = 0; // capture
-            List<int> vetsiNezMin = cisla.Where(x => x > min).ToList();
-            Console.WriteLine(string.Join(",", vetsiNezMin));
+            // Prepiste d3 s pouzitim Func
+            Func<int, bool> d4 = x => x % 2 == 0; // Lambda vyraz
+
+            List<int> cisla = new List<int> { -2, -3, 0, 5, 9, 7 };
+            IEnumerable<int> kladna = cisla.Where(x => x > 0);
+            Console.WriteLine(string.Join(",", kladna));
         }
     }
 }
