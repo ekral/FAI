@@ -3,7 +3,7 @@
 
 using System;
 
-namespace ConsoleApp23
+namespace Tema9
 {
     class Program
     {
