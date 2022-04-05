@@ -1,4 +1,6 @@
-﻿using System;
+// Ukol Delegat: Definujte typ delegate pro metody Vypis a JeSude a vytvorte ukazku pouziti typu delegate
+
+using System;
 
 namespace ConsoleApp23
 {
@@ -14,7 +16,18 @@ namespace ConsoleApp23
             return x * y;
         }
 
+        static void Vypis(string text)
+        {
+            Console.WriteLine(text);
+        }
+
+        static bool JeSude(int x)
+        {
+            return x % 2 == 0;
+        }
+
         delegate int Operace(int x, int y);
+        
 
         static void Main(string[] args)
         {
