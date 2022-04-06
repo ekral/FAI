@@ -37,17 +37,18 @@ namespace Tema9
             NakupniCentrum nakupniCentrum = new NakupniCentrum("Zlate Jablko");
             nakupniCentrum.poplach += VyjezdHasicu;
             nakupniCentrum.poplach += VyjezdPolicie;
+            
+            nakupniCentrum.Pozar();
+            
             nakupniCentrum.poplach -= VyjezdPolicie;
 
-            nakupniCentrum.Pozar();
             // Doplnte spravne klicove slovo, aby nasledujici radky nesly prelozit
             // a slo o navrhovy vzor observer
 
             nakupniCentrum.poplach = VyjezdHasicu;
-            nakupniCentrum.poplach = null;
             nakupniCentrum.poplach.Invoke("neco");
+            nakupniCentrum.poplach = null;
 
-            
         }
     }
 }
