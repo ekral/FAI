@@ -199,7 +199,12 @@ List<int> kladna = cisla.Where(x =>
 Více se o lambda výrazech můžete dozvědět například zde:
 [Lambda expressions (C# reference). Microsoft Docs. 2022](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/lambda-expressions)
 
-TODO: event
+## Event
+
+Event představuje implementace návrhového vzoru Observer v jazyce C#. 
+Obsahuje 2 složky, zdroj události, tedy objekt ve kterém nastala událost a pozorovatele, co6 objekt, který chce být notifikován v případě vzniku události Událost může mít více pozorovatelů a pozorovatel může naslouchat více událostem Typické použití událostí je v rámci grafického uživatelského rozhraní
+např. signalizace stisku tlačítka
+
 
 ---
 Kompletní příklady:
