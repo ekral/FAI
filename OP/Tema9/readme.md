@@ -2,6 +2,7 @@
 1. Úkol delegát [zadání](1_delegat_zadani.cs) [řešení](1_delegat_reseni.cs)
 2. Úkol šablony delegátů [zadání](2_sablony_zadani.cs) [řešení](2_sablony_reseni.cs)
 3. Úkol lambdy [zadání](3_lambdy_zadani.cs) [řešení](3_lambdy_reseni.cs)
+4. Úkol event [zadání](4_event_zadani.cs) [řešení](4_event_reseni.cs)
 
 ## Delegát
 
