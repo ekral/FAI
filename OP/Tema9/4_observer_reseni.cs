@@ -44,12 +44,11 @@ namespace Tema9
 
             // Doplnte spravne klicove slovo, aby nasledujici radky nesly prelozit
             // a slo o navrhovy vzor observer
-          
-            //nakupniCentrum.poplach = VyjezdHasicu;
-            //nakupniCentrum.poplach = null;
-            //nakupniCentrum.poplach.Invoke("neco");
 
-            
+            //nakupniCentrum.poplach = VyjezdHasicu;
+            //nakupniCentrum.poplach.Invoke("neco");
+            //nakupniCentrum.poplach = null;
+
         }
     }
 }
