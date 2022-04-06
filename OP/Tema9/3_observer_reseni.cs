@@ -37,6 +37,9 @@ namespace Tema9
             NakupniCentrum nakupniCentrum = new NakupniCentrum("Zlate Jablko");
             nakupniCentrum.poplach += VyjezdHasicu;
             nakupniCentrum.poplach += VyjezdPolicie;
+            
+            nakupniCentrum.Pozar();
+            
             nakupniCentrum.poplach -= VyjezdPolicie;
 
             // Doplnte spravne klicove slovo, aby nasledujici radky nesly prelozit
@@ -46,7 +49,7 @@ namespace Tema9
             //nakupniCentrum.poplach = null;
             //nakupniCentrum.poplach.Invoke("neco");
 
-            nakupniCentrum.Pozar();
+            
         }
     }
 }
