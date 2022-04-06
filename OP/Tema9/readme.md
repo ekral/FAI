@@ -205,8 +205,19 @@ Event představuje implementace návrhového vzoru Observer v jazyce C#.
 Obsahuje 2 složky, zdroj události, tedy objekt ve kterém nastala událost a pozorovatele, co6 objekt, který chce být notifikován v případě vzniku události Událost může mít více pozorovatelů a pozorovatel může naslouchat více událostem Typické použití událostí je v rámci grafického uživatelského rozhraní
 např. signalizace stisku tlačítka
 
-Event definujeme pomocí klíčového slova `event` u fieldu typu delegate, například:
+Event definujeme pomocí klíčového slova `event` u fieldu typu delegate, například v následující třídě `Obchod` definujeme `event` `poplach` typu `Action`.
 
+```cs 
+class Obchod
+{
+    public event Action poplach;
+
+    public void Vloupani()
+    {
+        poplach?.Invoke();
+    }
+}
+```
 
 
 ---
