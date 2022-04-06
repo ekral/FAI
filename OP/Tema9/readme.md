@@ -203,7 +203,7 @@ Více se o lambda výrazech můžete dozvědět například zde:
 ## Event
 
 Event představuje implementace návrhového vzoru Observer v jazyce C#. 
-Obsahuje dvě složky, zdroj události, tedy objekt ve kterém nastala událost a pozorovatele, což je objekt, který chce být notifikován v případě vzniku události Událost může mít více pozorovatelů a pozorovatel může naslouchat více událostem Typické použití událostí je v rámci grafického uživatelského rozhraní
+Obsahuje dvě složky, zdroj události, tedy objekt ve kterém nastala událost a pozorovatele, což je objekt, který chce být notifikován v případě vzniku události. Událost může mít více pozorovatelů a pozorovatel může naslouchat více událostem. Typické použití událostí je v rámci grafického uživatelského rozhraní
 např. signalizace stisku tlačítka
 
 Event definujeme pomocí klíčového slova `event` u fieldu typu delegate, například v následující třídě `Obchod` definujeme `event` `poplach` typu `Action`.
@@ -220,7 +220,7 @@ class Obchod
 }
 ```
 
-Přihlášení k notifikaci eventu se provádí pomocí operátoru `+=`. K eventu se přihlašuje delegát (existující metoda, anonymní funkce, lambda výraz). Analogicky je možné provést odhlášení pomocí operátoru `-=` (instance může odhlásit pouze sama sebe, případně toho, o kom ví že se přihlásil). Operátor `+=` a `-=` lze použít i u delegáta, ale u eventu narozdíl od delegáta není možné použít operátor přiřazení `=` a tím odstranit ostatní pozorovatele. V následujícím příkladu se k notifikaci eventu poplach přihlásí dvě metody `VyjezdPolicie` a `VyjezdHasici` poté je uveden příklad na odhlášení notifikace.
+Přihlášení k notifikaci eventu se provádí pomocí operátoru `+=`. K eventu se přihlašuje delegát (existující metoda, lambda výraz). Analogicky je možné provést odhlášení pomocí operátoru `-=` (instance může odhlásit pouze sama sebe, případně toho, o kom ví že se přihlásil). Operátor `+=` a `-=` lze použít i u delegáta, ale u eventu narozdíl od delegáta není možné použít operátor přiřazení `=` a tím odstranit ostatní pozorovatele. V následujícím příkladu se k notifikaci eventu poplach přihlásí dvě metody `VyjezdPolicie` a `VyjezdHasici` poté je uveden příklad na odhlášení notifikace.
 
 ```cs 
 Obchod obchod = new Obchod();
