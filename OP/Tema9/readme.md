@@ -219,6 +219,26 @@ class Obchod
 }
 ```
 
+Přihlášení k notifikaci eventu se provádí pomocí operátoru `+=`. K eventu se přihlašuje delegát (existující metoda, anonymní funkce, lambda výraz). Analogicky je možné provést odhlášení pomocí operátoru `-=` (instance může odhlásit pouze sama sebe, případně toho, o kom ví že se přihlásil). Operátor `+=` a `-=` lze použít i u delegáta, ale u eventu narozdíl od delegáta není možné použít operátor přiřazení `=` a tím odstranit ostatní pozorovatele. V následujícím příkladu se k notifikaci eventu poplach přihlásí dvě metody `VyjezdPolicie` a `VyjezdHasici` poté je uveden příklad na odhlášení notifikace.
+
+```cs 
+Obchod obchod = new Obchod();
+
+obchod.poplach += VyjezdPolicie;
+obchod.poplach += VyjezdHasici;
+
+obchod.Vloupani();
+
+obchod.poplach -= VyjezdPolicie;
+```
+
+### Event vs delegát
+
+
+Event poskytuje na rozdíl od delegátu zapouzdření, protože event je možné vyvolat pouze uvnitř třídy, která jej definuje, dále event není možné „vynulovat“ mimo třídu a pozorovatel nemá možnost zjistit informace o dalších pozorovatelích.
+
+Více se o lambda výrazech můžete dozvědět například zde:
+[Events (C# Programming Guide). Microsoft Docs. 2022](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/events/)
 
 ---
 Kompletní příklady:
