@@ -1,5 +1,5 @@
-// Ukol 4 Observer: // Doplnte spravne klicove slovo, aby nasledujici radky nesly prelozit
-                   // a slo o navrhovy vzor observer
+// Ukol 4 Observer: // Doplnte spravne klicove slovo, aby oznacene radky v klientskem kodu nesly prelozit
+                    // a slo o navrhovy vzor observer
 
 using System;
 
