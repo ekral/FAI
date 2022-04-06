@@ -197,6 +197,7 @@ List<int> kladna = cisla.Where(x =>
 ```
 
 Více se o lambda výrazech můžete dozvědět například zde:
+
 [Lambda expressions (C# reference). Microsoft Docs. 2022](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/lambda-expressions)
 
 ## Event
@@ -238,6 +239,7 @@ obchod.poplach -= VyjezdPolicie;
 Event poskytuje na rozdíl od delegátu zapouzdření, protože event je možné vyvolat pouze uvnitř třídy, která jej definuje, dále event není možné „vynulovat“ mimo třídu a pozorovatel nemá možnost zjistit informace o dalších pozorovatelích.
 
 Více se o lambda výrazech můžete dozvědět například zde:
+
 [Events (C# Programming Guide). Microsoft Docs. 2022](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/events/)
 
 ---
