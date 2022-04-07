@@ -26,15 +26,15 @@ namespace Tema9
             return x % 2 == 0;
         }
 
-        delegate int Operace(int x, int y);
+        delegate int MujDelegat1(int x, int y);
         
 
         static void Main(string[] args)
         {
             int x = 2;
             int y = 3;
-            Operace o1 = Soucin;
-            int vysledek = o1.Invoke(x, y);
+            MujDelegat1 d1 = Soucin;
+            int vysledek = d1.Invoke(x, y);
             Console.WriteLine(vysledek);
         }
     }
