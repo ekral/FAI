@@ -59,29 +59,6 @@ zviratka.Zaloz(new Pejsek("Zeryk"));
 
 Zviratko? zviratko = zviratka.NajdiPodleJmena("Fik");
 
-abstract class Zviratko
-{
-    public string Jmeno { get; set; }
-    public abstract string Zvuk();
-
-    protected Zviratko(string jmeno)
-    {
-        Jmeno = jmeno;
-    }
-}
-
-class Pejsek : Zviratko
-{
-    public Pejsek(string jmeno) : base(jmeno)
-    {
-    }
-
-    public override string Zvuk()
-    {
-        return "Haf haf";
-    }
-}
-
 class Sklad<T> where T : Zviratko
 {
     T[] data;
@@ -105,6 +82,29 @@ class Sklad<T> where T : Zviratko
     public T? NajdiPodleJmena(string jmeno)
     {
         return data.FirstOrDefault(x => x.Jmeno == jmeno);
+    }
+}
+
+abstract class Zviratko
+{
+    public string Jmeno { get; set; }
+    public abstract string Zvuk();
+
+    protected Zviratko(string jmeno)
+    {
+        Jmeno = jmeno;
+    }
+}
+
+class Pejsek : Zviratko
+{
+    public Pejsek(string jmeno) : base(jmeno)
+    {
+    }
+
+    public override string Zvuk()
+    {
+        return "Haf haf";
     }
 }
 ```
