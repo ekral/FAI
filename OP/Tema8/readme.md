@@ -46,8 +46,48 @@ skladString.Zaloz("Ahoj");
 string retezec = skladString.Vyloz();
 ```
 
-TODO: Generic Constraints
-TODO: Odkaz na dokumentaci 
+### Generic Constraints
+
+Pomocí Generic Constraints můžeme omezit jaké typy můžeme použít pro generický parametr a tím také rozšířit operace, které s generickým typem můžeme provádět. V následujícím příkladu jsme omezili generický typ `T` třídy `Sklad<T>` na třídu `Zviratko` a její potomky. Díky tomu můžeme v metodě `NajdiPodleJmena` použít property `Jmeno` a vyhledat zvířátko podle jména. 
+
+```cs 
+Sklad<Zviratko> zviratka = new Sklad<Zviratko>(10);
+
+zviratka.Zaloz(new Pejsek("Rex"));
+zviratka.Zaloz(new Pejsek("Fik"));
+zviratka.Zaloz(new Pejsek("Zeryk"));
+
+Zviratko? zviratko = zviratka.NajdiPodleJmena("Fik");
+
+abstract class Zviratko
+{
+    public string Jmeno { get; set; }
+    public abstract string Zvuk();
+
+    protected Zviratko(string jmeno)
+    {
+        Jmeno = jmeno;
+    }
+}
+
+class Pejsek : Zviratko
+{
+    public Pejsek(string jmeno) : base(jmeno)
+    {
+    }
+
+    public override string Zvuk()
+    {
+        return "Haf haf";
+    }
+}
+```
+
+Více se o možnostech o generice a Generic Constraints můžete dozvědět například zde:
+
+[Generic classes and methods (C# Programming Guide). 2022](https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/types/generics)
+[Constraints on type parameters (C# Programming Guide). 2022](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/generics/constraints-on-type-parameters)
+
 
 ### Dynamické pole List
  
