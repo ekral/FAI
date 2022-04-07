@@ -86,6 +86,7 @@ class Pejsek : Zviratko
 Více se o možnostech o generice a Generic Constraints můžete dozvědět například zde:
 
 [Generic classes and methods (C# Programming Guide). 2022](https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/types/generics)
+
 [Constraints on type parameters (C# Programming Guide). 2022](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/generics/constraints-on-type-parameters)
 
 
