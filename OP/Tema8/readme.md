@@ -81,6 +81,32 @@ class Pejsek : Zviratko
         return "Haf haf";
     }
 }
+
+class Sklad<T> where T : Zviratko
+{
+    T[] data;
+    private int pocet;
+
+    public Sklad(int kapacita)
+    {
+        data = new T[kapacita];
+    }
+
+    public void Zaloz(T objekt)
+    {
+        data[pocet++] = objekt;
+    }
+
+    public T Vyloz()
+    {
+        return data[--pocet];
+    }
+
+    public T? NajdiPodleJmena(string jmeno)
+    {
+        return data.FirstOrDefault(x => x.Jmeno == jmeno);
+    }
+}
 ```
 
 Více se o možnostech o generice a Generic Constraints můžete dozvědět například zde:
