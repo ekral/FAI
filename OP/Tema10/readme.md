@@ -2,7 +2,7 @@
 
 Pomocí třídy `Task` můžeme spouštět typicky asynchronně jednu operaci (metodu) bez návratové hodnoty. 
 
-V následujícím příkladu spustíme provádění metody Metoda pomocí statické metody `Task.Run`, tato metoda nám vrátí proměnnou `task`, krerá popisuje již spuštěnou operaci běžící typicky v jiném vlákně. Kompilátor se totiž může rozhodnout, zda se vplatní operaci pouštět v jiném vlákně nebo stačí ji provést sychronně ve stejném vlákně.
+V následujícím příkladu spustíme provádění metody Metoda pomocí statické metody `Task.Run`, tato metoda nám vrátí proměnnou `task`, krerá popisuje již spuštěnou operaci běžící typicky v jiném vlákně. Kompilátor se totiž může rozhodnout, zda se vyplatí operaci pouštět v jiném vlákně nebo ji stačí provést sychronně ve stejném vlákně.
 
 ```cs 
 static void DlouhaMetoda()
@@ -22,7 +22,7 @@ static void Main(string[] args)
 }
 ```
 
-V předcházejícím kódu souběžně v jednom vklákně na konzoli zapisujeme a v jiném čekáme na vstup z klávesy. Je to možné proto, že konzole zápis a čtení synchronizuje [(Console I/O Streams. Microsoft Docs. 2022)](https://docs.microsoft.com/en-us/dotnet/api/system.console?view=net-6.0#console-io-streams). Pokud bychom ale chtěli počkat na dokončení provádění metody Metoda a teprve potom čekat na stisk klávesy, tak můžeme použít klíčové slovo `await`. Klíčové slovo await můžeme použít jen v metodě označené klíčovým slovem `async`. V následujícím příkladu si všimněte, že metoda  `Main` je označena `async` a návratový typ má `Task`, tento návratový typ si vysvětlíme později.
+V předcházejícím kódu souběžně v jednom vlákně na konzoli zapisujeme a v jiném vklákně čekáme na vstup z klávesy. Je to možné proto, že konzole zápis a čtení synchronizuje [(Console I/O Streams. Microsoft Docs. 2022)](https://docs.microsoft.com/en-us/dotnet/api/system.console?view=net-6.0#console-io-streams). Pokud bychom ale chtěli počkat na dokončení provádění metody `DlouhaMetoda` a teprve potom čekat na stisk klávesy, tak můžeme použít klíčové slovo `await`. Klíčové slovo await můžeme použít jen v metodě označené klíčovým slovem `async`. V následujícím příkladu si všimněte, že metoda  `Main` je označena `async` a návratový typ má `Task`, tento návratový typ si vysvětlíme později.
 
 ```cs 
 static void DlouhaMetoda()
