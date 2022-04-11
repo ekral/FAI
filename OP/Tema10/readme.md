@@ -96,7 +96,8 @@ static async Task Main(string[] args)
 ```
 
 Jak by ale vypadal návratový typ, když bychom nevraceli přímo `Task<int>`, ale chtěli provést dva výpočty v daném pořadí? V následujícím příkladu musíme použít klíčové slovo `await`, abychom pak mohli ještě výsledek umocnit. Všimněte si, že i když vracíme přímo `vysledek`, tedy typ `int`, tak protože jsme použili klíčové slovo `await`, tak návratový typ asynchornní metody je `Task<int>`.
-```   
+
+```cs 
 static int DlouhyVypocet()
 {
     Thread.Sleep(1000);
