@@ -70,3 +70,49 @@ Zápis může být zkrácen na jeden řádek:
 ```cs 
 int x = await Task.Run(Vypocet);
 ```
+
+## Návratová hodnota asynchronních metod
+
+V následujícím příkladu jsme si vytvořili asynchronní metodu `VypocetAsync`, kde vracíme přímo typ `Task<int>`. 
+
+```cs 
+static int DlouhyVypocet()
+{
+    Thread.Sleep(1000);
+    return Random.Shared.Next(0, 100);
+}
+
+static Task<int> VypocetAsync()
+{
+    return Task.Run(DlouhyVypocet);
+}
+
+static async Task Main(string[] args)
+{
+    int x = await VypocetAsync();
+
+    Console.WriteLine($"Vysledek je {x}");
+}
+```
+
+Jak by ale vypadal návratový typ, když bychom nevraceli přímo `Task<int>`, ale chtěli provést dva výpočty v daném pořadí? V následujícím příkladu musíme použít klíčové slovo `await`, abychom pak mohli ještě výsledek umocnit. Všimněte si, že i když vracíme přímo `vysledek`, tedy typ `int`, tak protože jsme použili klíčové slovo `await`, tak návratový typ asynchornní metody je `Task<int>`.
+```   
+static int DlouhyVypocet()
+{
+    Thread.Sleep(1000);
+    return Random.Shared.Next(0, 100);
+}
+
+static async Task<int> VypocetAsync()
+{
+    int vysledek = await Task.Run(DlouhyVypocet);
+    return vysledek * vysledek;
+}
+
+static async Task Main(string[] args)
+{
+    int x = await VypocetAsync();
+
+    Console.WriteLine($"Vysledek je {x}");
+}
+ ```
