@@ -1,5 +1,5 @@
 Úkoly k procvičování:
-1. Úkol načítání vtipů [zadání](1_zadani.md) [řešení](1_zadani.cs)
+1. Úkol načítání vtipů [zadání](1_zadani.md) [řešení](1_reseni.cs)
 
 
 
