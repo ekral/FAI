@@ -197,3 +197,11 @@ static async Task Main(string[] args)
     Console.WriteLine(vtip);
 }
 ```
+
+Více se o typu Task a klíčových slovech můžete dozvědět například zde:
+
+[Task-based asynchronous pattern. Microsoft Docs. 2022](https://docs.microsoft.com/en-us/dotnet/standard/parallel-programming/task-based-asynchronous-programming)
+
+A zde najdete přehled best practice asynchronního programování v jazyce C#:
+
+[Async/Await - Best Practices in Asynchronous Programming. MSDN Magazine Issues. 2013](https://docs.microsoft.com/en-us/archive/msdn-magazine/2013/march/async-await-best-practices-in-asynchronous-programming)
