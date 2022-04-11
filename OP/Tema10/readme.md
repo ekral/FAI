@@ -145,3 +145,26 @@ static async Task Main(string[] args)
 }
 ```
 
+Pokud změníme návratový typ asynchronní metody `MetodaAsync` na `Task`, tak s ním můžeme v metodě `Main` použít await a program se neukončí.
+
+```cs 
+static void DlouhaMetoda()
+{
+    for (int i = 0; i < 10; i++)
+    {
+        Console.WriteLine(i);
+        Thread.Sleep(400);
+    }
+}
+
+static async Task MetodaAsync()
+{
+    await Task.Run(DlouhaMetoda);
+    Console.WriteLine("Konec vypoctu");
+}
+
+static async Task Main(string[] args)
+{
+    await MetodaAsync();
+}
+```
