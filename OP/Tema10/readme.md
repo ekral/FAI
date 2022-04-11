@@ -120,7 +120,7 @@ static async Task Main(string[] args)
 
 Pokud metoda nevrací žádnou hodnotu, tak mám dvě možnosti, buď použít návratový typ void nebo `Task`. Doporučuje se používat návratový typ `Task`, protože jinak bychom nemohli použít s metodou `await` a provést nějakou operaci po dokončení této metody.
 
-V následujícím příkladu máme metodu  `MetodaAync `, ve které chceme po provedení asychroní operace počkat na stisk klávesy. Metoda nevrací žádnou hodnotu a v metodě Main na ni nemůžeme počkat a program se hned ukončí.
+V následujícím příkladu máme metodu  `MetodaAync `, ve které chceme po provedení asychroní operace počkat na stisk klávesy. Metoda nevrací žádnou hodnotu a v metodě Main na ni nemůžeme počkat a program se hned ukončí. Také nemužeme ošetřit výjimky vyvolané v asynchornní metodě s návratovým typem void.
 
 ```cs 
 static void DlouhaMetoda()
@@ -145,7 +145,7 @@ static async Task Main(string[] args)
 }
 ```
 
-Pokud změníme návratový typ asynchronní metody `MetodaAsync` na `Task`, tak s ním můžeme v metodě `Main` použít await a program se neukončí.
+Pokud změníme návratový typ asynchronní metody `MetodaAsync` na `Task`, tak s ním můžeme v metodě `Main` použít `await` a program se neukončí.
 
 ```cs 
 static void DlouhaMetoda()
@@ -166,5 +166,34 @@ static async Task MetodaAsync()
 static async Task Main(string[] args)
 {
     await MetodaAsync();
+}
+```
+
+## Příklad
+
+V následujícím příkladu získáváme z webového API pomocí asynchronní metody `GetStringAsync` text ve formátu json, který potom vypíšeme na konzoli. Pro ukázku je uvedené i ošetření výjimky. V případě použití klíčového slova `using` musíme použít klíčové slovo `await` a nevracet přímo `Task<string>` tak by mohla být zavolána metoda `Dispose`.
+
+```cs 
+static async Task<string> NactiVtipAsync()
+{
+    using (HttpClient client = new HttpClient())
+    {
+        try
+        {
+            string vtip = await client.GetStringAsync("https://geek-jokes.sameerkumar.website/api?format=json");
+            return vtip;
+        }
+        catch (HttpRequestException ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.Message);
+            throw;
+        }
+    }
+}
+
+static async Task Main(string[] args)
+{
+    string vtip = await NactiVtipAsync();
+    Console.WriteLine(vtip);
 }
 ```
