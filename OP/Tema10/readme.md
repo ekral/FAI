@@ -119,3 +119,29 @@ static async Task Main(string[] args)
 ```
 
 Pokud metoda nevrací žádnou hodnotu, tak mám dvě možnosti, buď použít návratový typ void nebo `Task`. Doporučuje se používat návratový typ `Task`, protože jinak bychom nemohli použít s metodou `await` a provést nějakou operaci po dokončení této metody.
+
+V následujícím příkladu máme metodu  `MetodaAync `, ve které chceme po provedení asychroní operace počkat na stisk klávesy. Metoda nevrací žádnou hodnotu a v metodě Main na ni nemůžeme počkat a program se hned ukončí.
+
+```cs 
+static void DlouhaMetoda()
+{
+    for (int i = 0; i < 10; i++)
+    {
+        Console.WriteLine(i);
+        Thread.Sleep(400);
+    }
+}
+
+static async void MetodaAsync()
+{
+    await Task.Run(DlouhaMetoda);
+    Console.WriteLine("Konec vypoctu");
+}
+
+static async Task Main(string[] args)
+{
+    MetodaAsync();
+    // program se uKonci, nemame zadny task s kterym pracovat
+}
+```
+
