@@ -22,7 +22,7 @@ static void Main(string[] args)
 }
 ```
 
-V předcházejícím kódu souběžně v jednom vklákně na konzoli zapisujeme a v jiném čekáme na vstup z klávesy. Je to možné proto, že konzole zápis a čtení synchronizuje [Console I/O Streams. Microsoft Docs. 2022](https://docs.microsoft.com/en-us/dotnet/api/system.console?view=net-6.0#console-io-streams). Pokud bychom ale chtěli počkat na dokončení provádění metody Metoda a teprve potom čekat na stisk klávesy, tak můžeme použít klíčové slovo `await`.
+V předcházejícím kódu souběžně v jednom vklákně na konzoli zapisujeme a v jiném čekáme na vstup z klávesy. Je to možné proto, že konzole zápis a čtení synchronizuje [(Console I/O Streams. Microsoft Docs. 2022)](https://docs.microsoft.com/en-us/dotnet/api/system.console?view=net-6.0#console-io-streams). Pokud bychom ale chtěli počkat na dokončení provádění metody Metoda a teprve potom čekat na stisk klávesy, tak můžeme použít klíčové slovo `await`.
 
 ```cs 
 static void Metoda()
