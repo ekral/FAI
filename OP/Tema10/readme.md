@@ -66,7 +66,7 @@ static async Task Main(string[] args)
 }
 ```
 
-Zápis mohl být zkrácen na jeden řádek:
+Zápis může být zkrácen na jeden řádek:
 ```cs 
 int x = await Task.Run(Vypocet);
 ```
