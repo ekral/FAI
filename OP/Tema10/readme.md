@@ -65,3 +65,8 @@ static async Task Main(string[] args)
     Console.WriteLine($"Vysledek je {x}");
 }
 ```
+
+Zápis mohl být zkrácen na jeden řádek:
+```cs 
+int x = await Task.Run(Vypocet);
+```
