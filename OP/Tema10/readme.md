@@ -1,3 +1,8 @@
+Úkoly k procvičování:
+1. Úkol načítání vtipů [zadání](1_zadani.md) [řešení](1_zadani.cs)
+
+
+
 ## Task
 
 Pomocí třídy `Task` můžeme spouštět typicky asynchronně jednu operaci (metodu) bez návratové hodnoty. 
@@ -197,7 +202,7 @@ static async Task Main(string[] args)
     Console.WriteLine(vtip);
 }
 ```
-
+---
 Více se o typu Task a klíčových slovech můžete dozvědět například zde:
 
 [Task-based asynchronous pattern. Microsoft Docs. 2022](https://docs.microsoft.com/en-us/dotnet/standard/parallel-programming/task-based-asynchronous-programming)
