@@ -51,7 +51,7 @@ Příkaz `await task;` nepozastaví běh programu, ale jen přeruší prováděn
 Pokud metoda, která má proběhnout asynchroně vrací hodnotu, tak používáme třídu `Task<TResult>`. V následujícím příkladu vrací metoda `Vypocet` celočíselnou hodnotu. Metoda `Run` potom vrací typ `Task<int>` a když potom použiji klíčové slovo `await` tak, až se výpočet dokončí, tak získám přímo hodnotu typu `int`.
 
 ```cs 
-static int Vypocet()
+static int DlouhyVypocet()
 {
     Thread.Sleep(1000);
     return Random.Shared.Next();
@@ -59,7 +59,7 @@ static int Vypocet()
 
 static async Task Main(string[] args)
 {
-    Task<int> task = Task.Run(Vypocet);
+    Task<int> task = Task.Run(DlouhyVypocet);
     int x = await task;
 
     Console.WriteLine($"Vysledek je {x}");
@@ -116,4 +116,6 @@ static async Task Main(string[] args)
 
     Console.WriteLine($"Vysledek je {x}");
 }
- ```
+```
+
+Pokud metoda nevrací žádnou hodnotu, tak mám dvě možnosti, buď použít návratový typ void nebo `Task`. Doporučuje se používat návratový typ `Task`, protože jinak bychom nemohli použít s metodou `await` a provést nějakou operaci po dokončení této metody.
