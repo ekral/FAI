@@ -48,7 +48,7 @@ Příkaz `await task;` nepozastaví běh programu, ale jen přeruší prováděn
 
 ## Task s návratovou hodnotou
     
-Pokud metoda, která má proběhnout asynchroně vrací hodnotu, tak používáme třídu `Task<TResult>`. V následujícím příkladu vrací metoda `Vypocet` celočíselnou hodnotu. Metoda `Run` potom vrací typ `Task<int>` a když potom použiji klíčové slovo `await` tak, až se výpočet dokončí, tak získám přímo hodnotu typu `int`.
+Pokud metoda, která má proběhnout asynchroně vrací hodnotu, tak používáme třídu `Task<TResult>`. V následujícím příkladu vrací metoda `Vypocet` celočíselnou hodnotu. Metoda `Run` potom vrací typ `Task<int>` a když potom použiji klíčové slovo `await` tak, až se výpočet dokončí, tak získáme přímo hodnotu typu `int`.
 
 ```cs 
 static int DlouhyVypocet()
