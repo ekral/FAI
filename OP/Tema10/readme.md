@@ -22,7 +22,7 @@ static void Main(string[] args)
 }
 ```
 
-V předcházejícím kódu souběžně v jednom vklákně na konzoli zapisujeme a v jiném čekáme na vstup z klávesy. Je to možné proto, že konzole zápis a čtení synchronizuje [(Console I/O Streams. Microsoft Docs. 2022)](https://docs.microsoft.com/en-us/dotnet/api/system.console?view=net-6.0#console-io-streams). Pokud bychom ale chtěli počkat na dokončení provádění metody Metoda a teprve potom čekat na stisk klávesy, tak můžeme použít klíčové slovo `await`.
+V předcházejícím kódu souběžně v jednom vklákně na konzoli zapisujeme a v jiném čekáme na vstup z klávesy. Je to možné proto, že konzole zápis a čtení synchronizuje [(Console I/O Streams. Microsoft Docs. 2022)](https://docs.microsoft.com/en-us/dotnet/api/system.console?view=net-6.0#console-io-streams). Pokud bychom ale chtěli počkat na dokončení provádění metody Metoda a teprve potom čekat na stisk klávesy, tak můžeme použít klíčové slovo `await`. Klíčové slovo await můžeme použít jen v metodě označené klíčovým slovem `async`. V následujícím příkladu si všimněte, že metoda  `Main` je označena `async` a návratový typ má `Task`, tento návratový typ si vysvětlíme později.
 
 ```cs 
 static void Metoda()
@@ -43,3 +43,25 @@ static async Task Main(string[] args)
 }
 ```
 
+Příkaz `await task;` nepozastaví běh programu, ale jen přeruší provádění metody `Main` a mezití běží ostatní operace a po dokončení metody `Metoda` bude v provádění metody `Main` pokračovat. 
+
+
+## Task<TResult>
+    
+Pokud metoda, která má proběhnout asynchroně vrací hodnotu, tak používáme třídu `Task<TResult>`.
+
+```cs 
+static int Vypocet()
+{
+    Thread.Sleep(1000);
+    return Random.Shared.Next();
+}
+
+static async Task Main(string[] args)
+{
+    Task<int> task = Task.Run(Vypocet);
+    int x = await task;
+
+    Console.WriteLine($"Vysledek je {x}");
+}
+```
