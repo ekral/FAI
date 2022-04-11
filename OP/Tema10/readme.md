@@ -46,9 +46,9 @@ static async Task Main(string[] args)
 Příkaz `await task;` nepozastaví běh programu, ale jen přeruší provádění metody `Main` a mezití běží ostatní operace a po dokončení metody `Metoda` bude v provádění metody `Main` pokračovat. 
 
 
-## Task<TResult>
+## Task s návratovou hodnotou
     
-Pokud metoda, která má proběhnout asynchroně vrací hodnotu, tak používáme třídu `Task<TResult>`.
+Pokud metoda, která má proběhnout asynchroně vrací hodnotu, tak používáme třídu `Task<TResult>`. V následujícím příkladu vrací metoda `Vypocet` celočíselnou hodnotu. Metoda `Run` potom vrací typ `Task<int>` a když potom použiji klíčové slovo `await` tak, až se výpočet dokončí, tak získám přímo hodnotu typu `int`.
 
 ```cs 
 static int Vypocet()
