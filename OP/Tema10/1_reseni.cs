@@ -4,12 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Tema10
 {
-    class JokeDto
-    {
-        [JsonPropertyName("joke")]
-        public string? Text { get; set; }
-    }
-    
+
     class Program
     {
 
@@ -19,9 +14,9 @@ namespace Tema10
             {
                 try
                 {
-                    string json = await client.GetStringAsync("https://geek-jokes.sameerkumar.website/api?format=json");
-                    JokeDto jokeDto = JsonSerializer.Deserialize<JokeDto>(json);
-                    return jokeDto.Text;
+                    string text = await client.GetStringAsync("https://geek-jokes.sameerkumar.website/api?format=plain");
+
+                    return text;
                 }
                 catch (HttpRequestException ex)
                 {
@@ -75,6 +70,7 @@ namespace Tema10
                         konec = true;
                         break;
                 }
+
             } while (!konec);
         }
     }
