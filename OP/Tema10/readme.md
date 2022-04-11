@@ -118,9 +118,9 @@ static async Task Main(string[] args)
 }
 ```
 
-Pokud metoda nevrací žádnou hodnotu, tak mám dvě možnosti, buď použít návratový typ void nebo `Task`. Doporučuje se používat návratový typ `Task`, protože jinak bychom nemohli použít s metodou `await` a provést nějakou operaci po dokončení této metody.
+Pokud metoda nevrací žádnou hodnotu, tak mám dvě možnosti, buď použít návratový typ void nebo `Task`. Doporučuje se používat návratový typ `Task`, protože jinak bychom nemohli použít s metodou `await` a provést nějakou operaci po dokončení této metody. Také nemužeme ošetřit výjimky vyvolané v asynchornní metodě s návratovým typem  `void `.
 
-V následujícím příkladu máme metodu  `MetodaAync `, ve které chceme po provedení asychroní operace počkat na stisk klávesy. Metoda nevrací žádnou hodnotu a v metodě Main na ni nemůžeme počkat a program se hned ukončí. Také nemužeme ošetřit výjimky vyvolané v asynchornní metodě s návratovým typem void.
+V následujícím příkladu máme metodu  `MetodaAync `, ve které chceme po provedení asychroní operace počkat na stisk klávesy. Metoda nevrací žádnou hodnotu a v metodě Main na ni nemůžeme počkat a program se hned ukončí. 
 
 ```cs 
 static void DlouhaMetoda()
