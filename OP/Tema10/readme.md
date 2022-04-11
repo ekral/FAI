@@ -2,7 +2,7 @@
 
 Pomocí třídy `Task` můžeme spouštět typicky asynchronně jednu operaci (metodu) bez návratové hodnoty. 
 
-V následujícím příkladu spustíme provádění metody Metoda pomocí statické metody `Task.Run`, tato metoda nám vrátí proměnnou task, krerá popisuje již spuštěnou operaci běžící typicky v jiném vlákně. Kompilátor se totiž může rozhodnout, zda se vplatní operaci pouštět v jiném vlákně nebo stačí ji provést sychronně ve stejném vlákně.
+V následujícím příkladu spustíme provádění metody Metoda pomocí statické metody `Task.Run`, tato metoda nám vrátí proměnnou `task`, krerá popisuje již spuštěnou operaci běžící typicky v jiném vlákně. Kompilátor se totiž může rozhodnout, zda se vplatní operaci pouštět v jiném vlákně nebo stačí ji provést sychronně ve stejném vlákně.
 
 ```cs 
 static void DlouhaMetoda()
