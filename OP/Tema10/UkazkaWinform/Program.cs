@@ -12,7 +12,7 @@ namespace WinFormsApp1
         {
             return Task.Run(() =>
             {
-                System.Threading.Thread.Sleep(2000);
+                System.Threading.Thread.Sleep(4000);
                 return $"Ahoj, ted je {DateTime.Now}";
             });
         }
@@ -29,10 +29,10 @@ namespace WinFormsApp1
 
             Form form = new Form() { Text = "Muj formular" };
 
-            FlowLayoutPanel panel = new FlowLayoutPanel();
+            FlowLayoutPanel panel = new FlowLayoutPanel() { AutoSize = true };
             form.Controls.Add(panel);
 
-            Label label = new Label() { Text = "..." };
+            Label label = new Label() { Text = "...", AutoSize = true };
             Button button = new Button() { Text = "Nacti vtip" };
 
             button.Click += (sender, e) =>
