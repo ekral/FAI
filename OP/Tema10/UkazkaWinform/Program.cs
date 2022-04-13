@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -35,10 +33,16 @@ namespace WinFormsApp1
             Label label = new Label() { Text = "...", AutoSize = true };
             Button button = new Button() { Text = "Nacti vtip" };
 
-            button.Click += (sender, e) =>
+            //button.Click += (sender, e) =>
+            //{
+            //    Task<string> task = GetStringSimulationAsync();
+
+            //    label.Text = task.Result;
+            //};
+
+            button.Click += async (sender, e) =>
             {
-                Task<string> task = GetStringSimulationAsync();
-                string text = task.Result;
+                string text = await GetStringSimulationAsync();
 
                 label.Text = text;
             };
