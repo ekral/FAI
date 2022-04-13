@@ -1,4 +1,5 @@
 using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -13,6 +14,15 @@ namespace WinFormsApp1
                 System.Threading.Thread.Sleep(4000);
                 return $"Ahoj, ted je {DateTime.Now}";
             });
+        }
+
+        static async Task<string> GetVtipAsync()
+        {
+            using(HttpClient client = new HttpClient())
+            {
+                string text = await client.GetStringAsync("https://geek-jokes.sameerkumar.website/api?format=plain");
+                return text;
+            }
         }
 
         /// <summary>
@@ -40,9 +50,16 @@ namespace WinFormsApp1
             //    label.Text = task.Result;
             //};
 
+            //button.Click += async (sender, e) =>
+            //{
+            //    string text = await GetStringSimulationAsync();
+
+            //    label.Text = text;
+            //};
+
             button.Click += async (sender, e) =>
             {
-                string text = await GetStringSimulationAsync();
+                string text = await GetVtipAsync();
 
                 label.Text = text;
             };
