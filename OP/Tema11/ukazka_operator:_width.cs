@@ -1,6 +1,7 @@
 // !! Vyzaduje alespon .NET 6.0
 // Ukazka pouziti operator with se strukturou
 // Operator with byl predstaveny v C# 9 pro pouziti s record, ale od .NET 6 a C# 10 jej muzeme pouzit i se strukturou
+// https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/with-expression
 
 Student s1;
 s1.jmeno = "Jana";
