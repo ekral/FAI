@@ -44,18 +44,18 @@ namespace ConsoleApp30
             return x > y;
         }
 
-        // Nadefinujte MujTyp1 ay MujTyp8 jako typ delegat, kod metody Main nemente
+        // Nadefinujte MujTyp1 az MujTyp8 jako typ delegat, kod metody Main nemente
 
         static void Main(string[] args)
         {
-            MujTyp1 d1 = Metoda1();
-            MujTyp2 d2 = Metoda2();
-            MujTyp3 d3 = Metoda3();
-            MujTyp4 d4 = Metoda4();
-            MujTyp5 d5 = Metoda5();
-            MujTyp6 d6 = Metoda6();
-            MujTyp7 d7 = Metoda7();
-            MujTyp8 d8 = Metoda8();
+            MujTyp1 d1 = Metoda1;
+            MujTyp2 d2 = Metoda2;
+            MujTyp3 d3 = Metoda3;
+            MujTyp4 d4 = Metoda4;
+            MujTyp5 d5 = Metoda5;
+            MujTyp6 d6 = Metoda6;
+            MujTyp7 d7 = Metoda7;
+            MujTyp8 d8 = Metoda8;
         }
     }
 }
