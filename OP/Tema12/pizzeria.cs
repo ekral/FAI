@@ -13,7 +13,7 @@ using System.Collections.Generic;
 // Nevytvarejte UI, ale jen si vytvorte testy
 // Zvolte minimalni funkcionalitu
 
-namespace ConsoleApp34
+namespace ProjektPizzeria
 {
     public enum Kategorie
     {
@@ -41,7 +41,7 @@ namespace ConsoleApp34
     {
         public Produkt Produkt { get; set; }
 
-        private List<Produkt> pridavky  = new List<Produkt>();
+        private List<Produkt> pridavky = new List<Produkt>();
         public IReadOnlyCollection<Produkt> Pridavky => pridavky;
 
 
@@ -57,7 +57,7 @@ namespace ConsoleApp34
 
         public void OdeberPridavek(Produkt produkt)
         {
-            Produkt odstranit = pridavky.Find(p => p.Kod == produkt.Kod);
+            Produkt? odstranit = pridavky.Find(p => p.Kod == produkt.Kod);
 
             if (odstranit == null)
             {
@@ -67,6 +67,22 @@ namespace ConsoleApp34
             pridavky.Remove(odstranit);
         }
     }
+
+    public class Kosik
+    {
+        private List<PolozkaKosiku> polozky = new List<PolozkaKosiku>();
+        public IReadOnlyCollection<PolozkaKosiku> Polozky => polozky;
+
+        public void PridejPolozku(PolozkaKosiku polozka)
+        {
+            polozky.Add(polozka);
+        }
+    }
+
+    // TODO Objednavka
+    // Kopie produktu identifikace podle Id
+    // Info o platbe
+    // Ulozeni do DB
 
     class Program
     {
@@ -80,6 +96,11 @@ namespace ConsoleApp34
             polozkaKosiku.PridejPridavek(ananas);
             polozkaKosiku.PridejPridavek(ananas);
             polozkaKosiku.OdeberPridavek(ananas);
+
+            Kosik kosik = new Kosik();
+            kosik.PridejPolozku(polozkaKosiku);
+
+
         }
     }
 }
