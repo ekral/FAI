@@ -65,12 +65,15 @@ namespace PizzeriaKonzole
 
         public Produkt Produkt { get; }
 
+        /// <summary>
+        /// Počet přídavku. Musí být kladné číslo. 
+        /// </summary>
         public int Pocet 
         { 
             get => pocet;
             set
             {
-                if (value <= 0) throw new ArgumentOutOfRangeException($"Pocet pridavku musi byt kladny");
+                if (value <= 0) throw new ArgumentOutOfRangeException($"Pocet pridavku musi byt kladny, pro odebrani pouzij metodu PolozkaKosiku.OdeberPridavek");
 
                 pocet = value;
             }
