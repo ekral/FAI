@@ -1,5 +1,5 @@
-using System;
-using System.Collections.Generic;
+// https://docs.microsoft.com/en-us/dotnet/standard/data/sqlite/?tabs=netcore-cli
+// Microsoft.Data.Sqlite
 
 // Dotykovy objednavkovy system pro pizzerii
 // Objednat pizzu a dalsi produkty
@@ -13,8 +13,30 @@ using System.Collections.Generic;
 // Nevytvarejte UI, ale jen si vytvorte testy
 // Zvolte minimalni funkcionalitu
 
-namespace ProjektPizzeria
+using Microsoft.Data.Sqlite;
+
+namespace PizzeriaKonzole
 {
+    class Database
+    {
+        public void CreateDatabase()
+        {
+            using (var connection = new SqliteConnection("Data Source=mojedb.db"))
+            {
+                connection.Open();
+
+                var command = connection.CreateCommand();
+                command.CommandText = @"CREATE TABLE employees
+                                      (
+                                            Id INTEGER PRIMARY KEY,
+                                            Cena DECIMAL,
+                                            Pocet VARCHAR
+                                      )";
+                command.ExecuteNonQuery();
+            }
+        }
+    }
+
     public enum Kategorie
     {
         Jidlo,
@@ -37,12 +59,36 @@ namespace ProjektPizzeria
         }
     }
 
+    public class Pridavek
+    {
+        private int pocet;
+
+        public Produkt Produkt { get; }
+
+        public int Pocet 
+        { 
+            get => pocet;
+            set
+            {
+                if (value <= 0) throw new ArgumentOutOfRangeException($"Pocet pridavku musi byt kladny");
+
+                pocet = value;
+            }
+        }
+
+        public Pridavek(Produkt produkt, int pocet)
+        {
+            Produkt = produkt;
+            Pocet = pocet;
+        }
+    }
+
     public class PolozkaKosiku
     {
         public Produkt Produkt { get; set; }
 
-        private List<Produkt> pridavky = new List<Produkt>();
-        public IReadOnlyCollection<Produkt> Pridavky => pridavky;
+        private List<Pridavek> pridavky = new List<Pridavek>();
+        public IReadOnlyCollection<Pridavek> Pridavky => pridavky;
 
 
         public PolozkaKosiku(Produkt produkt)
@@ -50,22 +96,16 @@ namespace ProjektPizzeria
             Produkt = produkt;
         }
 
-        public void PridejPridavek(Produkt produkt)
+        public void PridejPridavek(Pridavek pridavek)
         {
-            pridavky.Add(produkt);
+            pridavky.Add(pridavek);
         }
 
-        public void OdeberPridavek(Produkt produkt)
+        public void OdeberPridavek(Pridavek pridavek)
         {
-            Produkt? odstranit = pridavky.Find(p => p.Kod == produkt.Kod);
-
-            if (odstranit == null)
-            {
-                throw new ArgumentException("Produkt neni v pridavcich");
-            }
-
-            pridavky.Remove(odstranit);
+            pridavky.Remove(pridavek);
         }
+
     }
 
     public class Kosik
@@ -77,12 +117,13 @@ namespace ProjektPizzeria
         {
             polozky.Add(polozka);
         }
+        
+        public void OdeberPolozku(PolozkaKosiku polozka)
+        {
+            polozky.Remove(polozka);
+        }
     }
 
-    // TODO Objednavka
-    // Kopie produktu identifikace podle Id
-    // Info o platbe
-    // Ulozeni do DB
 
     class Program
     {
@@ -90,17 +131,34 @@ namespace ProjektPizzeria
         {
             Produkt pizza = new Produkt(1, "MARGHERITA", 132.0m, Kategorie.Jidlo);
             Produkt ananas = new Produkt(2, "ananas 120g", 25.0m, Kategorie.Pridavek);
+            Produkt ancovicky = new Produkt(2, "ančovičky 40g", 55.0m, Kategorie.Pridavek);
 
-            // Vlozit pridavky a vlozit do kosiku
             PolozkaKosiku polozkaKosiku = new PolozkaKosiku(pizza);
-            polozkaKosiku.PridejPridavek(ananas);
-            polozkaKosiku.PridejPridavek(ananas);
-            polozkaKosiku.OdeberPridavek(ananas);
+
+            Pridavek pridavekAnanas = new Pridavek(ananas, 2);
+            polozkaKosiku.PridejPridavek(pridavekAnanas);
+
+            Pridavek pridavekAncovicky = new Pridavek(ancovicky, 1);
+            polozkaKosiku.PridejPridavek(pridavekAncovicky);
+
+            foreach (Pridavek pridavek in polozkaKosiku.Pridavky)
+            {
+                Console.WriteLine($"{pridavek.Produkt.Nazev} cena za kus: {pridavek.Produkt.Cena} pocet: {pridavek.Pocet}");
+            }
+
+            pridavekAnanas.Pocet = 1;
+
+            polozkaKosiku.OdeberPridavek(pridavekAncovicky);
 
             Kosik kosik = new Kosik();
             kosik.PridejPolozku(polozkaKosiku);
 
+            // TODO Odeslani objednavky
+            // Kopie produktu identifikace podle Id
+            // Info o platbe
+            // Ulozeni do DB
 
+            
         }
     }
 }
