@@ -2,7 +2,7 @@
 
 int main()
 {
-	// pojmenovana hodnota v pameti
+	// Proměnná je pojmenovana hodnota v pameti
 	int a = 0; // cele cislo se znamenkem
 	double b = 0.0; // desetinne cislo se znamenkem
 	float c = 0.0f; // desetinne cislo se znamenkem s polovicnim presnosti proti double
