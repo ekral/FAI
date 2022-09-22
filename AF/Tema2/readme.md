@@ -1,0 +1,1 @@
+# Kód z přednášky
