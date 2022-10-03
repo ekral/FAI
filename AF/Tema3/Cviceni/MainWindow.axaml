@@ -1,0 +1,42 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:dd="clr-namespace:Avalonia.HypotecniKalkulackaReaktivni"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Avalonia.HypotecniKalkulackaReaktivni.MainWindow"
+        Title="Avalonia.HypotecniKalkulackaReaktivni">
+    <Design.DataContext>
+        <dd:HypotekaViewModelReactive/>
+    </Design.DataContext>
+    <StackPanel>
+        <TextBlock Text="Loan Amount"/>
+        <NumericUpDown Value="{Binding LoanAmount}"
+                       Increment="200000"/>
+        
+        <TextBlock Text="Property Value"/>
+        <NumericUpDown Value="{Binding PropertyValue}"
+                       Increment="200000"/>
+        
+        <TextBlock Text="Interest Rate"/>
+        <NumericUpDown Value="{Binding InterestRate}" />
+        
+        <TextBlock Text="Loan Term"/>
+        <NumericUpDown Value="{Binding LoanTerm}" />
+        
+        <TextBlock Text="Monthly Net Income"/>
+        <NumericUpDown Value="{Binding MonthlyNetIncome}"
+                       Increment="2000.0"/>
+        
+        <TextBlock Text="Other Monthly Payments"/>
+        <NumericUpDown Value="{Binding OtherMonthlyPayments}" />
+        
+        <TextBlock Text="Under 36"/>
+        <CheckBox IsChecked="{Binding DiscountEligibility}"/>
+        
+        <TextBlock Text="{Binding MonthlyPayment, StringFormat='Monthly Payment: {0:C2} '}"/>
+        <TextBlock Text="{Binding DTI, StringFormat='DTI: {0:0.0}'}"/>
+        <TextBlock Text="{Binding DSTI, StringFormat='DSTI: {0:0.0}'}"/>
+        <TextBlock Text="{Binding LTV, StringFormat='LTV: {0:0.0}'}"/>
+    </StackPanel>
+</Window>
