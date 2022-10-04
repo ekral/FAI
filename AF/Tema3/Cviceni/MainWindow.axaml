@@ -1,0 +1,65 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:dd="clr-namespace:Avalonia.NETCoreApp1"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Avalonia.NETCoreApp1.MainWindow"
+        Title="Avalonia.NETCoreApp1">
+    <Design.DataContext>
+        <dd:ViewModel/>
+    </Design.DataContext>
+    
+    <StackPanel>
+        <TextBlock Text="Loan Amount"/>
+        <NumericUpDown Value="{Binding LoanAmount}" Increment="200000"/>
+        
+        <TextBlock Text="Property Value"/>
+        <NumericUpDown Value="{Binding PropertyValue}" Increment="200000"/>
+        
+        <TextBlock Text="Interest Rate"/>
+        <NumericUpDown Value="{Binding InterestRate}" Increment="1.0"/>
+        
+        <TextBlock Text="Loan Term"/>
+        <NumericUpDown Value="{Binding LoanTerm}" Increment="1"/>
+        
+        <TextBlock Text="Monthly Net Income"/>
+        <NumericUpDown Value="{Binding MonthlyNetIncome}" Increment="2000"/>
+        
+        <TextBlock Text="Other Monthly Payments"/>
+        <NumericUpDown Value="{Binding OtherMonthlyPayments}" Increment="200"/>
+        
+        <TextBlock Text="Věk do 36"/>
+        <CheckBox IsChecked="{Binding EntitledToBenefits}"/>
+        
+        <TextBlock Text="{Binding MonthlyPayment, StringFormat='Monthly Payment: {0:C2}'}"/>
+        <TextBlock>
+            <TextBlock.Text>
+                <MultiBinding StringFormat="{}DTI Value: {1:F2} Maximum: {0:F1}">
+                    <Binding Path="DTILimit"/>
+                    <Binding Path="DTI"/>
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
+        
+        <TextBlock>
+            <TextBlock.Text>
+                <MultiBinding StringFormat="{}DTSI Value: {1:F2} Maximum: {0:F1}">
+                    <Binding Path="DSTILimit"/>
+                    <Binding Path="DSTI"/>
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
+        
+        <TextBlock>
+            <TextBlock.Text>
+                <MultiBinding StringFormat="{}DTSI Value: {1:F2} Maximum: {0:F1}">
+                    <Binding Path="LTVLimit"/>
+                    <Binding Path="LTV"/>
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
+        
+        
+    </StackPanel>
+</Window>
