@@ -1,0 +1,1 @@
+# Řešení s využitím tlačítka
