@@ -2,11 +2,13 @@
 
 struct Platno
 {
-	char pozadi;
+private:
 	static constexpr int pocetRadku = 20;
 	static constexpr int pocetSloupcu = 70;
+	char matice[pocetRadku][pocetSloupcu]; // TODO prevest na jednorozmerne pole alokovane na hadle, abychom mohli zvolit rozmery platna pri vytvareni platna
 
-	char matice[pocetRadku][pocetSloupcu];
+public:
+	char pozadi;
 
 	Platno(char pozadi) : pozadi(pozadi)
 	{
@@ -24,27 +26,36 @@ struct Platno
 		}
 	}
 
+	void Zobraz()
+	{
+		for (int i = 0; i < pocetRadku; i++)
+		{
+			for (int j = 0; j < pocetSloupcu; j++)
+			{
+				putchar(matice[i][j]);
+			}
+
+			putchar('\n');
+		}
+	}
+
 	void NakresliBod(int x, int y, char znak)
 	{
-		matice[y][x] = znak;
+		int i = pocetRadku - y - 1;
+		int j = x;
+		matice[i][j] = znak;
 	}
 };
 
 int main()
 {
-	Platno platno(' ');
-	platno.NakresliBod(5, 5, 'x');
-	platno.NakresliBod(0, 0, '1');
-	platno.NakresliBod(platno.pocetSloupcu - 1, 0, '2');
-	platno.NakresliBod(0, platno.pocetRadku - 1, '3');
-	platno.NakresliBod(platno.pocetSloupcu - 1, platno.pocetRadku - 1, '4');
-	// platno.NakresliUsecku(Bod(2, 3), Bod(7, 8);)
-	for (int i = 0; i < platno.pocetRadku; i++)
-	{
-		for (int j = 0; j < platno.pocetSloupcu; j++)
-		{
-			putchar(platno.matice[i][j]);
-		}
-		putchar('\n');
-	}
+	Platno platno('-');
+	platno.NakresliBod(0, 0, 'O');
+	platno.NakresliBod(0, 19, '1');
+	platno.NakresliBod(69, 19, '2');
+	platno.NakresliBod(69, 0, '3');
+
+	platno.Zobraz();
+
+	getchar();
 }
