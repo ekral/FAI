@@ -8,7 +8,7 @@
 //for (int i = 0; i < 10; i++)
 //{
 //    ConsoleKey consoleKey = Console.ReadKey().Key;
-//    if (consoleKey == ConsoleKey.Escape) continue;
+//    if (consoleKey == ConsoleKey.Escape) continue; // break
 //    Console.WriteLine(i);
 //}
 
