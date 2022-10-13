@@ -45,6 +45,11 @@ public:
 		int j = x;
 		matice[i][j] = znak;
 	}
+
+	void NakresliUsecku(int x1, int y1, int x2, int y2, char znak)
+	{
+		// TODO naprogramovat
+	}
 };
 
 int main()
@@ -54,7 +59,7 @@ int main()
 	platno.NakresliBod(0, 19, '1');
 	platno.NakresliBod(69, 19, '2');
 	platno.NakresliBod(69, 0, '3');
-
+	platno.NakresliUsecku(0, 0, 69, 19, 'x');
 	platno.Zobraz();
 
 	getchar();
