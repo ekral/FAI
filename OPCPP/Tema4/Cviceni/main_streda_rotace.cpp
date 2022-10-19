@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <numbers>
+#include <Windows.h>
 
 struct Bod2D
 {
@@ -41,6 +42,8 @@ public:
 
 	void Zobraz()
 	{
+		SetConsoleCursorPosition( GetStdHandle(STD_OUTPUT_HANDLE), COORD { 0, 0 } );
+
 		for (int i = 0; i < pocetRadku; i++)
 		{
 			for (int j = 0; j < pocetSloupcu; j++)
@@ -94,21 +97,22 @@ Bod2D Rotace(Bod2D p, double stupne)
 int main()
 {
 	Platno platno('-');
-	platno.NakresliBod(0, 0, 'O');
-	platno.NakresliBod(0, 19, '1');
-	platno.NakresliBod(69, 19, '2');
-	platno.NakresliBod(69, 0, '3');
 
-	Bod2D p1(0.0, 0.0);
-	Bod2D p2(25.0, 0.0);
+	double uhel = 0.0;
 
-	platno.NakresliUsecku(p1, p2, 'x');
+	while (uhel < 45.0)
+	{
+		Bod2D p1(0.0, 0.0);
+		Bod2D p2(25.0, 0.0);
 
-	Bod2D pt = Rotace(p2, 45.0);
+		platno.Vymaz();
 
-	platno.NakresliUsecku(p1, pt, 'x');
+		Bod2D pt = Rotace(p2, uhel);
 
-	platno.Zobraz();
+		platno.NakresliUsecku(p1, pt, 'x');
 
-	
+		platno.Zobraz();
+
+		++uhel;
+	}
 }
