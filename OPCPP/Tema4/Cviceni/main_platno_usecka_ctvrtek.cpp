@@ -1,6 +1,19 @@
 #include <stdio.h>
 #include <math.h>
 
+
+struct Bod2d
+{
+	double x;
+	double y;
+
+	Bod2d(double x, double y) : x(x), y(y)
+	{
+
+	}
+
+};
+
 struct Platno
 {
 private:
@@ -47,33 +60,38 @@ public:
 		matice[i][j] = znak;
 	}
 
-	void NakresliUsecku(int x1, int y1, int x2, int y2, char znak)
+	void NakresliUsecku(Bod2d p1, Bod2d p2, char znak)
 	{
-		double dx = x2 - x1;
-		double dy = y2 - y1;
+		double dx = p2.x - p1.x;
+		double dy = p2.y - p1.y;
+		
 		double maxd = dx > dy ? dx : dy;
 
-		double x = x1;
-		double y = y1;
+		double x = p1.x;
+		double y = p1.y;
 
 		for (int i = 0; i <= maxd; i++)
 		{
 			NakresliBod(round(x), round(y), znak);
+
 			x += (dx / maxd);
 			y += (dy / maxd);
 		}
 	}
 };
 
+
+
 int main()
 {
 	Platno platno('-');
-	platno.NakresliUsecku(10, 5, 30, 10, 'x');
 
-	platno.NakresliBod(0, 0, 'O');
-	platno.NakresliBod(0, 19, '1');
-	platno.NakresliBod(69, 19, '2');
-	platno.NakresliBod(69, 0, '3');
+	Bod2d p1(0.0, 0.0);
+	Bod2d p2(20.0, 0.0);
+
+	//Bod2d pt = Rotace(p2, 45);
+	platno.NakresliUsecku(p1, p2, 'x');
+
 	platno.Zobraz();
 
 	getchar();
