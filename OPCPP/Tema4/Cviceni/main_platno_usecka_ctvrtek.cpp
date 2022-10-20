@@ -1,6 +1,7 @@
 #include <stdio.h>
+#define _USE_MATH_DEFINES
 #include <math.h>
-
+#include <Windows.h>
 
 struct Bod2d
 {
@@ -9,7 +10,7 @@ struct Bod2d
 
 	Bod2d(double x, double y) : x(x), y(y)
 	{
-
+	
 	}
 
 };
@@ -42,6 +43,8 @@ public:
 
 	void Zobraz()
 	{
+		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), COORD{ 0, 0 });
+
 		for (int i = 0; i < pocetRadku; i++)
 		{
 			for (int j = 0; j < pocetSloupcu; j++)
@@ -80,7 +83,15 @@ public:
 	}
 };
 
+Bod2d Rotace(Bod2d p, double stupne)
+{
+	double theta = stupne / 180 * M_PI; 
 
+	double xt = p.x * cos(theta) - p.y * sin(theta);
+	double yt = p.x * sin(theta) + p.y * cos(theta);
+
+	return Bod2d(xt, yt);
+}
 
 int main()
 {
@@ -89,10 +100,18 @@ int main()
 	Bod2d p1(0.0, 0.0);
 	Bod2d p2(20.0, 0.0);
 
-	//Bod2d pt = Rotace(p2, 45);
-	platno.NakresliUsecku(p1, p2, 'x');
+	double uhel = 0.0;
 
-	platno.Zobraz();
+	while (uhel < 90)
+	{
+		Bod2d pt = Rotace(p2, uhel);
+		
+		platno.Vymaz();
+		platno.NakresliUsecku(p1, pt, 'x');
+		platno.Zobraz();
+
+		uhel += 1.0;
+	}
 
 	getchar();
 }
