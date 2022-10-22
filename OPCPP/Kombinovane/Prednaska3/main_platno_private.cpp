@@ -1,13 +1,17 @@
 #include <stdio.h>
 #include <math.h>
 
+// u struktury je vse public, dokud to nezmenime na private
+// u tridy je vse private, dokud to nezmenime na public
+
 struct Platno
 {
+private:
 	static constexpr int pocetRadku = 16; // tohle uz mozna nebude static
 	static constexpr int pocetSloupcu = 50;
-	char pozadi;
-
 	char matice[pocetRadku][pocetSloupcu]; // Mozna zmenime na jednorozmerne pole na halde
+public:
+	char pozadi;
 
 	Platno(char pozadi) : pozadi(pozadi)
 	{
@@ -51,6 +55,7 @@ struct Platno
 int main()
 {
 	Platno platno('-');
+	// platno.matice[0][0] = '2'; // tohle chci pred vyvojarem v klientskem kodu skryt
 	platno.NakresliBod(0, 0, 'O');
 	platno.NakresliBod(49, 15, 'P');
 	platno.Zobraz();
