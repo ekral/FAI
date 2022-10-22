@@ -1,12 +1,28 @@
 #include <stdio.h>
+#include <math.h>
 
+// u struktury je vse public, dokud to nezmenime na private
+// u tridy je vse private, dokud to nezmenime na public
+
+struct Bod2d
+{
+	double x;
+	double y;
+
+	// doplnit parametricky konstruktor
+	Bod2d(double x, double y) : x(x), y(y)
+	{
+
+	}
+};
 struct Platno
 {
-	static constexpr int pocetRadku = 20;
+private:
+	static constexpr int pocetRadku = 16; // tohle uz mozna nebude static
 	static constexpr int pocetSloupcu = 50;
+	char matice[pocetRadku][pocetSloupcu]; // Mozna zmenime na jednorozmerne pole na halde
+public:
 	char pozadi;
-
-	char matice[pocetRadku][pocetSloupcu];
 
 	Platno(char pozadi) : pozadi(pozadi)
 	{
@@ -24,56 +40,60 @@ struct Platno
 		}
 	}
 
-};
-
-// funkci pro vypis rozmeru obdelniku na konzoli
-
-struct Obdelnik
-{
-	double a;
-	double b;
-
-	// konstruktor je specialni clenska funkce
-	// jmenuje se stejne jako trida a nema zadny navratovy typ ani void
-	Obdelnik() : a(2.0), b(3.0) // member initializer list
+	void Zobraz()
 	{
+		for (int i = 0; i < pocetRadku; i++)
+		{
+			for (int j = 0; j < pocetSloupcu; j++)
+			{
+				putchar(matice[i][j]);
+			}
+
+			putchar('\n');
+		}
 	}
 
-	Obdelnik(double a, double b) : a(a), b(b) // member initializer list
+	void NakresliBod(double x, double y, char znak)
 	{
+		int indexSloupce = round(x);
+		int indexRadku = pocetRadku - round(y) - 1;
+
+		matice[indexRadku][indexSloupce] = znak;
 	}
-};
 
-void Vypis(Obdelnik* ob)
-{
-	printf("a: %lf, b: %lf\n", ob->a, ob->b);
-};
-
-// definice funkce Vypis ktera vypise printf("a: %lf b: %lf\n", o.a, o.b);
-
-struct Trojuhelnik
-{
-	double a;
-	double b;
-	double c;
-
-	// definujte parametricky konstruktor
-	// tak abych v klientskem kodu musel vzdy zadat delky vsech stran
-	// vyuzijte member initializer list
-
-	Trojuhelnik(double a, double b, double c) : a(a), b(b), c(c)
+	void NakresliUsecku(Bod2d p1, Bod2d p2, char znak)
 	{
-		
+		double dx = p2.x - p1.x;
+		double dy = p2.y - p1.y;
+
+		double max = dx > dy ? dx : dy;
+
+		double x = p1.x;
+		double y = p1.y;
+
+		for (double i = 0; i < max; i++)
+		{
+			x += dx / max;
+			y += dy / max;
+
+			NakresliBod(x, y, znak);
+		}
 	}
+
 };
 
 int main()
 {
-	Trojuhelnik t1(4.0, 5.0, 6.0);
-	Obdelnik o1;
-	Vypis(&o1);
-	Obdelnik o2(5.0, 7.0);
-	Vypis(&o2);
-
 	Platno platno('-');
+	// platno.matice[0][0] = '2'; // tohle chci pred vyvojarem v klientskem kodu skryt
+	
+	platno.NakresliBod(0, 0, 'O');
+	platno.NakresliBod(49, 15, 'P');
+
+	Bod2d p1(0.0, 0.0);
+	Bod2d p2(7.0, 10.0);
+
+	platno.NakresliUsecku(p1, p2, 'x');
+
+	platno.Zobraz();
 }
