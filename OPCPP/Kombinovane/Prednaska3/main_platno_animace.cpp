@@ -17,44 +17,51 @@ struct Bod2d
 
 	}
 };
+
 struct Platno
 {
 private:
-	static constexpr int pocetRadku = 16; // tohle uz mozna nebude static
-	static constexpr int pocetSloupcu = 50;
-	char matice[pocetRadku][pocetSloupcu]; // Mozna zmenime na jednorozmerne pole na halde
+	int pocetRadku = 16; // tohle uz mozna nebude static
+	int pocetSloupcu = 50;
+
+	char* pole; // Mozna zmenime na jednorozmerne pole na halde
 public:
 	char pozadi;
 
-	Platno(char pozadi) : pozadi(pozadi)
+	Platno(int pocetRadku, int pocetSloupcu, char pozadi) : pocetRadku(pocetRadku), pocetSloupcu(pocetSloupcu), pozadi(pozadi)
 	{
+		pole = new char[pocetRadku * pocetSloupcu + pocetRadku + 1];
 		Vymaz();
+	}
+
+	~Platno()
+	{
+		delete[] pole;
 	}
 
 	void Vymaz()
 	{
+		int index = 0;
+
 		for (int i = 0; i < pocetRadku; i++)
 		{
 			for (int j = 0; j < pocetSloupcu; j++)
 			{
-				matice[i][j] = pozadi;
+				pole[index] = pozadi;
+				++index;
 			}
+
+			pole[index] = '\n';
+			++index;
 		}
+
+		pole[index] = '\0';
 	}
 
 	void Zobraz()
 	{
 		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), COORD{ 0, 0 });
-
-		for (int i = 0; i < pocetRadku; i++)
-		{
-			for (int j = 0; j < pocetSloupcu; j++)
-			{
-				putchar(matice[i][j]);
-			}
-
-			putchar('\n');
-		}
+		puts(pole);
 	}
 
 	void NakresliBod(double x, double y, char znak)
@@ -62,7 +69,9 @@ public:
 		int indexSloupce = round(x);
 		int indexRadku = pocetRadku - round(y) - 1;
 
-		matice[indexRadku][indexSloupce] = znak;
+		int index = indexRadku * (pocetSloupcu + 1) + indexSloupce;
+
+		pole[index] = znak;
 	}
 
 	void NakresliUsecku(Bod2d p1, Bod2d p2, char znak)
@@ -83,7 +92,6 @@ public:
 			NakresliBod(x, y, znak);
 		}
 	}
-
 };
 
 Bod2d Rotace(Bod2d p, double stupne)
@@ -97,7 +105,7 @@ Bod2d Rotace(Bod2d p, double stupne)
 
 int main()
 {
-	Platno platno('-');
+	Platno platno(16, 50, '-');
 
 	Bod2d p1(0.0, 0.0);
 	Bod2d p2(14.0, 0.0);
