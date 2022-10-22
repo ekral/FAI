@@ -112,16 +112,30 @@ int main()
 
 	double uhel = 0.0;
 
-	while (uhel < 90.0)
+	bool nahoru = true;
+
+	for (int i = 0; i < 10000; i++)
 	{
 		Bod2d pt = Rotace(p2, uhel);
 
 		platno.Vymaz();
-
+	
 		platno.NakresliUsecku(p1, pt, 'x');
 
 		platno.Zobraz();
 
-		uhel += 1.0;
+		uhel = uhel + (nahoru ? 1.0 : -1);
+
+		if (uhel >= 90.0)
+		{
+			nahoru = false;
+			uhel = 90.0;
+		}
+		else if (uhel <= 0)
+		{
+			nahoru = true;
+			uhel = 0.0;
+		}
+
 	}
 }
