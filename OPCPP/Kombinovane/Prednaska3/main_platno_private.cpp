@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <math.h>
 
 struct Platno
 {
@@ -37,11 +38,20 @@ struct Platno
 		}
 	}
 
+	void NakresliBod(double x, double y, char znak)
+	{
+		int indexSloupce = round(x);
+		int indexRadku = pocetRadku - round(y) - 1;
+
+		matice[indexRadku][indexSloupce] = znak;
+	}
+
 };
 
 int main()
 {
 	Platno platno('-');
+	platno.NakresliBod(0, 0, 'O');
+	platno.NakresliBod(49, 15, 'P');
 	platno.Zobraz();
-	
 }
