@@ -1,5 +1,3 @@
-// Pouze pro Windows 
-
 #include <stdio.h>
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -100,17 +98,22 @@ Bod2d Rotace(Bod2d p, double stupne)
 int main()
 {
 	Platno platno('-');
-	// platno.matice[0][0] = '2'; // tohle chci pred vyvojarem v klientskem kodu skryt
-	
-	platno.NakresliBod(0, 0, 'O');
-	platno.NakresliBod(49, 15, 'P');
 
 	Bod2d p1(0.0, 0.0);
 	Bod2d p2(14.0, 0.0);
 
-	Bod2d pt = Rotace(p2, 10.0);
+	double uhel = 0.0;
 
-	platno.NakresliUsecku(p1, pt, 'x');
+	while (uhel < 90.0)
+	{
+		Bod2d pt = Rotace(p2, uhel);
 
-	platno.Zobraz();
+		platno.Vymaz();
+
+		platno.NakresliUsecku(p1, pt, 'x');
+
+		platno.Zobraz();
+
+		uhel += 1.0;
+	}
 }
