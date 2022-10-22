@@ -1,5 +1,4 @@
 #include <stdio.h>
-#define _USE_MATH_DEFINES
 #include <math.h>
 
 // u struktury je vse public, dokud to nezmenime na private
@@ -83,15 +82,6 @@ public:
 
 };
 
-Bod2d Rotace(Bod2d p, double stupne)
-{
-	double theta = stupne * M_PI / 180 ;
-	double xt = p.x * cos(theta) - p.y * sin(theta);
-	double yt = p.x * sin(theta) + p.y * cos(theta);
-
-	return Bod2d(xt, yt);
-}
-
 int main()
 {
 	Platno platno('-');
@@ -101,11 +91,9 @@ int main()
 	platno.NakresliBod(49, 15, 'P');
 
 	Bod2d p1(0.0, 0.0);
-	Bod2d p2(14.0, 0.0);
+	Bod2d p2(7.0, 10.0);
 
-	Bod2d pt = Rotace(p2, 10.0);
-
-	platno.NakresliUsecku(p1, pt, 'x');
+	platno.NakresliUsecku(p1, p2, 'x');
 
 	platno.Zobraz();
 }
