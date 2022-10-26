@@ -2,6 +2,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <Windows.h>
+//#include <chrono>
 
 struct Bod2d
 {
@@ -107,7 +108,7 @@ Bod2d Rotace(Bod2d p, double stupne)
 	return Bod2d(xt, yt);
 }
 
-enum Stav
+enum class Stav
 {
 	Nahoru,
 	Dolu
@@ -115,7 +116,7 @@ enum Stav
 
 int main()
 {
-	Stav stav = Nahoru;
+	Stav stav = Stav::Nahoru;
 
 	Platno platno(20, 70, '-');
 
@@ -123,8 +124,12 @@ int main()
 	Bod2d p2(20.0, 0.0);
 
 	double uhel = 0.0;
+	double rychlost = 1.0;
 
-	while (uhel < 90)
+	//std::chrono::high_resolution_clock timer;
+	// https://stackoverflow.com/questions/23526556/c11-analog-of-c-sharp-stopwatch
+
+	for (int i = 0; i < 10000; i++)
 	{
 		Bod2d pt = Rotace(p2, uhel);
 
@@ -132,15 +137,30 @@ int main()
 		platno.NakresliUsecku(p1, pt, 'x');
 		platno.Zobraz();
 
+
 		switch (stav)
 		{
-		case Nahoru:
-			uhel += 1.0;
+		case Stav::Nahoru:
+			uhel += rychlost;
+
+			if (uhel >= 90.0)
+			{
+				uhel -= rychlost;
+				stav = Stav::Dolu;
+			}
 
 			break;
-		case Dolu:
+		case Stav::Dolu:
+			uhel -= rychlost;
+
+			if (uhel <= 0)
+			{
+				uhel += rychlost;
+				stav = Stav::Nahoru;
+			}
 
 			break;
 		}
+
 	}
 }
