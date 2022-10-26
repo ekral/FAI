@@ -18,6 +18,7 @@ struct Bod2d
 struct Platno
 {
 private:
+	// Ukol: změnit z použití matice na zásobníku na použití řetězce znaků včetně znaků pro nový řádek v jednorozměrném poli na haldě.
 	static constexpr int pocetRadku = 20;
 	static constexpr int pocetSloupcu = 70;
 	char matice[pocetRadku][pocetSloupcu]; // TODO prevest na jednorozmerne pole alokovane na hadle, abychom mohli zvolit rozmery platna pri vytvareni platna
