@@ -10,7 +10,7 @@ struct Bod2d
 
 	Bod2d(double x, double y) : x(x), y(y)
 	{
-	
+
 	}
 
 };
@@ -19,56 +19,69 @@ struct Platno
 {
 private:
 	// Ukol: změnit z použití matice na zásobníku na použití řetězce znaků včetně znaků pro nový řádek v jednorozměrném poli na haldě.
-	static constexpr int pocetRadku = 20;
-	static constexpr int pocetSloupcu = 70;
-	char matice[pocetRadku][pocetSloupcu]; // TODO prevest na jednorozmerne pole alokovane na hadle, abychom mohli zvolit rozmery platna pri vytvareni platna
+	int pocetRadku;
+	int pocetSloupcu;
+	char* data;
 
 public:
 	char pozadi;
 
-	Platno(char pozadi) : pozadi(pozadi)
+	Platno(int pocetRadku, int pocetSloupcu, char pozadi) : pozadi(pozadi), pocetRadku(pocetRadku), pocetSloupcu(pocetSloupcu)
 	{
+		int pocet = (pocetRadku * (pocetSloupcu + 1)) + 1;
+		data = new char[pocet];
 		Vymaz();
+	}
+
+	~Platno()
+	{
+		delete[] data;
 	}
 
 	void Vymaz()
 	{
+		int index = 0;
+
 		for (int i = 0; i < pocetRadku; i++)
 		{
 			for (int j = 0; j < pocetSloupcu; j++)
 			{
-				matice[i][j] = pozadi;
+				data[index] = pozadi;
+				++index;
 			}
+
+			data[index] = '\n';
+			++index;
 		}
+
+		data[index] = '\0';
 	}
 
 	void Zobraz()
 	{
 		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), COORD{ 0, 0 });
 
-		for (int i = 0; i < pocetRadku; i++)
-		{
-			for (int j = 0; j < pocetSloupcu; j++)
-			{
-				putchar(matice[i][j]);
-			}
-
-			putchar('\n');
-		}
+		puts(data);
 	}
 
-	void NakresliBod(int x, int y, char znak)
+	void NakresliBod(double x, double y, char znak)
 	{
-		int i = pocetRadku - y - 1;
-		int j = x;
-		matice[i][j] = znak;
+		int xRound = (int)round(y);
+		int yRound = (int)round(x);
+
+		int indexRadku = pocetRadku - xRound - 1;
+		int indexSloupce = yRound;
+
+		int index = (indexRadku * (pocetSloupcu + 1)) + indexSloupce;
+
+		data[index] = znak;
 	}
 
 	void NakresliUsecku(Bod2d p1, Bod2d p2, char znak)
 	{
 		double dx = p2.x - p1.x;
 		double dy = p2.y - p1.y;
-		
+
 		double maxd = dx > dy ? dx : dy;
 
 		double x = p1.x;
@@ -76,7 +89,7 @@ public:
 
 		for (int i = 0; i <= maxd; i++)
 		{
-			NakresliBod(round(x), round(y), znak);
+			NakresliBod(x, y, znak);
 
 			x += (dx / maxd);
 			y += (dy / maxd);
@@ -86,7 +99,7 @@ public:
 
 Bod2d Rotace(Bod2d p, double stupne)
 {
-	double theta = stupne / 180 * M_PI; 
+	double theta = stupne / 180 * M_PI;
 
 	double xt = p.x * cos(theta) - p.y * sin(theta);
 	double yt = p.x * sin(theta) + p.y * cos(theta);
@@ -94,9 +107,17 @@ Bod2d Rotace(Bod2d p, double stupne)
 	return Bod2d(xt, yt);
 }
 
+enum class Stav
+{
+	Nahoru,
+	Dolu
+};
+
 int main()
 {
-	Platno platno('-');
+	Stav stav = Stav::Nahoru;
+
+	Platno platno(20, 70, '-');
 
 	Bod2d p1(0.0, 0.0);
 	Bod2d p2(20.0, 0.0);
@@ -106,13 +127,20 @@ int main()
 	while (uhel < 90)
 	{
 		Bod2d pt = Rotace(p2, uhel);
-		
+
 		platno.Vymaz();
 		platno.NakresliUsecku(p1, pt, 'x');
 		platno.Zobraz();
 
-		uhel += 1.0;
-	}
+		switch (stav)
+		{
+		case Stav::Nahoru:
+			uhel += 1.0;
 
-	getchar();
+			break;
+		case Stav::Dolu:
+
+			break;
+		}
+	}
 }
