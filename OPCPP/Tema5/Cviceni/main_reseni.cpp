@@ -2,7 +2,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <Windows.h>
-//#include <chrono>
+#include <chrono>
 
 struct Bod2d
 {
@@ -88,7 +88,7 @@ public:
 		double x = p1.x;
 		double y = p1.y;
 
-		for (int i = 0; i <= maxd; i++)
+		for (int i = 0; i < maxd; i++)
 		{
 			NakresliBod(x, y, znak);
 
@@ -124,43 +124,52 @@ int main()
 	Bod2d p2(20.0, 0.0);
 
 	double uhel = 0.0;
-	double rychlost = 1.0;
+	double rychlost = 0.00002; // uhel za mikrosekundu
 
-	//std::chrono::high_resolution_clock timer;
 	// https://stackoverflow.com/questions/23526556/c11-analog-of-c-sharp-stopwatch
+
+	auto last = std::chrono::steady_clock::now();
 
 	for (int i = 0; i < 10000; i++)
 	{
+		auto current = std::chrono::steady_clock::now();
+		auto elapsed = current - last;
+		std::chrono::microseconds microseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsed);
+		last = current;
+		
+		long microsecondsCount = microseconds.count();
+		double zmena = rychlost * (int)microsecondsCount;
+
 		Bod2d pt = Rotace(p2, uhel);
 
 		platno.Vymaz();
 		platno.NakresliUsecku(p1, pt, 'x');
 		platno.Zobraz();
-
+		double frekvence =
+		printf("microseconds: %ld             \n", microsecondsCount);
 
 		switch (stav)
 		{
 		case Stav::Nahoru:
-			uhel += rychlost;
+			uhel += zmena;
 
 			if (uhel >= 90.0)
 			{
-				uhel -= rychlost;
+				uhel -= zmena;
 				stav = Stav::Dolu;
 			}
 
 			break;
 		case Stav::Dolu:
-			uhel -= rychlost;
+			uhel -= zmena;
 
 			if (uhel <= 0)
 			{
-				uhel += rychlost;
+				uhel += zmena;
 				stav = Stav::Nahoru;
 			}
 
 			break;
 		}
-
 	}
 }
