@@ -38,7 +38,7 @@ command.CommandText =
 await command.ExecuteNonQueryAsync();
 ```
 
-A v následujícím příkladu vytvořené databáze vložíme nový řádek. Proměnná ```count``` bude obsahovat počet změněných řádků tabulky.
+A v následujícím příkladu do vytvořené databáze vložíme nový řádek. Proměnná ```count``` bude obsahovat počet změněných řádků tabulky.
 
 ```csharp
 command.CommandText =
