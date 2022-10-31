@@ -86,4 +86,18 @@ if(reader.HasRows)
 
 ## ExecuteScalar
 
-Prokud provedeme SQL dotaz, který vrátí pouze jednu hodnotu, například ```SQL SELECT AVG(LoanAmount) FROM Mortgage``` , tak místo **readeru** z předchozího příkladu můžeme použít metodu 
+Prokud provedeme SQL dotaz, který vrátí pouze jednu hodnotu, například ```SELECT AVG(LoanAmount) FROM Mortgage```, tak můžeme použít ```reader``` jak minulém příkladu a načíst první sloupce prvního řádku nebo můžeme použít metodu ```command.ExecuteScalarAsync()```.
+
+```csharp
+command.CommandText =
+@$"
+    SELECT AVG(LoanAmount) FROM Mortgage
+";
+
+object? result = await command.ExecuteScalarAsync();
+
+if(result is double average)
+{
+    return average;
+}
+```
