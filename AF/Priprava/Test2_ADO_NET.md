@@ -1,6 +1,6 @@
 # Přáce s databází pomocí ADO.NET
 
-Následující příkaz používají provider Microsoft.Data.Sqlite, návod na instalaci najdete v dokuemntaci mirosoftu (https://learn.microsoft.com/en-us/dotnet/standard/data/sqlite/?tabs=netcore-cli)[Microsoft.Data.Sqlite overview]
+Následující příkaz používají provider Microsoft.Data.Sqlite, návod na instalaci najdete například v dokumemntaci Microsoftu [Microsoft.Data.Sqlite overview](https://learn.microsoft.com/en-us/dotnet/standard/data/sqlite/?tabs=netcore-cli).
 **Vytvoření databáze**
 
 - **View** představuje to co vidí uživatel na obrazovce. Obsahuje elementy uživatelského rozhraní jako například ```TextBlock``` nebo ```Button```.
