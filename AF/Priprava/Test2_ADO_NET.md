@@ -54,9 +54,9 @@ command.Parameters.Add("@LoanTerm", SqliteType.Integer).Value = model.LoanTerm;
 int count = await command.ExecuteNonQueryAsync();
 ```
 
-V předchozím příkladu jsem použili parametry Commandu. Parametry můžeme zadávat buď s generickými SQL typy nebo s konkrétními typy pro danou databází s metodou, kterou poskytuje konkrétní provider. 
+V předchozím příkladu jsme použili parametry Commandu. Parametry můžeme zadávat buď s generickými SQL typy nebo s konkrétními typy pro danou databází s metodou, kterou poskytuje konkrétní provider. 
 
-Použití parametrů proskytuje kontrolu typu a validaci zadané hodnoty parametru a pomáhá zabránit útoku technikou SQL Injection. Použití parametrů nemá výrazný vliv na rychlost dotazu.
+Použití parametrů proskytuje kontrolu typu a validaci zadané hodnoty parametru a pomáhá zabránit útoku technikou SQL Injection. Použití parametrů nám nezpomaluje provedení dotazu, spíše nám může pomoct jej lépe sestavit dle konkrétního typu a provedení dotazu by mohlo být efektivnější.
 
 
 ## ExecuteReader
