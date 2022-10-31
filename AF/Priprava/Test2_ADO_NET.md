@@ -1,6 +1,6 @@
 # Přáce s databází pomocí ADO.NET
 
-Následující příkaz používají provider *Microsoft.Data.Sqlite* pro souborovou databázi Sqlite, návod na instalaci najdete například v dokumemntaci Microsoftu [Microsoft.Data.Sqlite overview](https://learn.microsoft.com/en-us/dotnet/standard/data/sqlite/?tabs=netcore-cli).
+Následující příkaz používají provider *Microsoft.Data.Sqlite* pro souborovou databázi Sqlite, návod na instalaci najdete například v dokumentaci Microsoftu [Microsoft.Data.Sqlite overview](https://learn.microsoft.com/en-us/dotnet/standard/data/sqlite/?tabs=netcore-cli).
 
 ## Vytvoření databáze
 
@@ -10,9 +10,12 @@ Dokumentaci vytvoříme pomocí následujícího príkazu. *Connection* implemet
 await using SqliteConnection connection = new SqliteConnection(connectionString);
 await connection.OpenAsync();
 ```
+## ExecuteNonQuery
+
+Pro vytvoření databáze, vložení nového řádku, nebo aktualizaci hodnot sloupců, tedy příkazy, které neprovádějí dotaz a nevrací hodnoty používáme metodu ```csharp command.ExecuteNonQueryAsync()```.
 
 ## ExecuteReader
 
-## ExecuteNonQuery
+
 
 ## ExecuteScalar
