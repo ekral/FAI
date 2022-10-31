@@ -2,9 +2,9 @@
 
 Následující příklady používají provider *Microsoft.Data.Sqlite* pro souborovou databázi *Sqlite*, návod na instalaci najdete například v dokumentaci Microsoftu [Microsoft.Data.Sqlite overview](https://learn.microsoft.com/en-us/dotnet/standard/data/sqlite/?tabs=netcore-cli).
 
-## Vytvoření databáze
+## Připojení k databázi
 
-Dokumentaci vytvoříme pomocí následujícího príkazu. *Connection* implemetuje rozhraní *IDispose* a proto se nám připojení uzavře automaticky s využití Dispose patternu a nemusíme jej už ručně uzavírat.
+K databázi se připojíme pomocí následujícího príkazu. Pokud Sqlite databáze neexistuje, tak se vytvoří. Třída *SqliteConnection* implemetuje rozhraní *IDispose* a proto se nám připojení uzavře automaticky s využití Dispose patternu a nemusíme jej už ručně uzavírat.
 
 ```csharp
 await using SqliteConnection connection = new SqliteConnection(connectionString);
