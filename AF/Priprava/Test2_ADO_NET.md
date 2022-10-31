@@ -4,7 +4,7 @@ Následující příklady používají provider *Microsoft.Data.Sqlite* pro soub
 
 ## Připojení k databázi
 
-K databázi se připojíme pomocí následujícího príkazu. Pokud Sqlite databáze neexistuje, tak se vytvoří. Třída *SqliteConnection* implemetuje rozhraní *IDispose* a proto se nám připojení uzavře automaticky s využití Dispose patternu a nemusíme jej už ručně uzavírat.
+K databázi se připojíme pomocí následujícího príkazu. Pokud Sqlite databáze již neexistuje, tak se vytvoří nová. Třída *SqliteConnection* implemetuje rozhraní *IDispose* a proto se nám připojení uzavře automaticky s využití Dispose patternu a nemusíme jej už ručně uzavírat.
 
 ```csharp
 await using SqliteConnection connection = new SqliteConnection(connectionString);
