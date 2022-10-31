@@ -85,3 +85,5 @@ if(reader.HasRows)
 ```
 
 ## ExecuteScalar
+
+Prokud provedeme SQL dotaz, který vrátí pouze jednu hodnotu, například ```SQL SELECT AVG(LoanAmount) FROM Mortgage``` , tak místo **readeru** z předchozího příkladu můžeme použít metodu 
