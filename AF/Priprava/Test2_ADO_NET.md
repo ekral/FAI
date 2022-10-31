@@ -19,7 +19,7 @@ SqliteCommand command = connection.CreateCommand();
 
 ## ExecuteNonQuery
 
-Pro vytvoření databáze, vložení nového řádku, nebo aktualizaci hodnot sloupců, tedy příkazy, které neprovádějí dotaz a nevrací hodnoty používáme metodu ```csharp command.ExecuteNonQueryAsync()```. 
+Pro vytvoření databáze, vložení nového řádku, nebo aktualizaci hodnot sloupců, tedy příkazy, které neprovádějí dotaz a nevrací hodnoty používáme metodu ```command.ExecuteNonQueryAsync()```. 
 
 V následujícím kódu vytvoříme databází:
 
@@ -38,7 +38,7 @@ command.CommandText =
 await command.ExecuteNonQueryAsync();
 ```
 
-A v následujícím příkladu vytvořené databáze vložíme nový řádek. Proměnná ```charp count``` bude obsahovat počet změněných řádků tabulky.
+A v následujícím příkladu vytvořené databáze vložíme nový řádek. Proměnná ```count``` bude obsahovat počet změněných řádků tabulky.
 
 ```csharp
 command.CommandText =
