@@ -1,11 +1,18 @@
 # Přáce s databází pomocí ADO.NET
 
 Následující příkaz používají provider Microsoft.Data.Sqlite, návod na instalaci najdete například v dokumemntaci Microsoftu [Microsoft.Data.Sqlite overview](https://learn.microsoft.com/en-us/dotnet/standard/data/sqlite/?tabs=netcore-cli).
-**Vytvoření databáze**
 
-- **View** představuje to co vidí uživatel na obrazovce. Obsahuje elementy uživatelského rozhraní jako například ```TextBlock``` nebo ```Button```.
-- **ViewModel** obsahuje property, Commandy (zatím jsme neprobrali) a metody na které binduje View. Pokud se ve ViewModelu změní hodnota nějaké property, tak o této změně ViewModel informuje informuje View pomocí eventu ```PropertyChanged```. ViewModel představuje prostředníka mezi View a Modelem, připravuje data pro zobrazení a reaguje na akce uživatele, ale nepoužívá elementy uživatelského rozhraní.
-- **Model** představuje aplikační logiku aplikace. Například složitý výpočet parametrů životního pojištění. Model pracuje z hlediska logiky aplikace a vůbec s nezajímá o uživatelské rozhraní.
-- Event **PropertyChanged** používá ViewModel k tomu aby infomoval (notifikoval) View o změnách ve svých propertách. Je součástí rozhraní ```INotifyPropertyChanged```.
+## Vytvoření databáze
 
-Použití MVVM je ve frameworku Avalonia, ale i dalších dobrovolné a nemusíme jej používat. Cílem je mít modulární návrh aplikace, tak abychom mohli jednoduše měnit ViewModel například za testovací verzi a také vyvíjet uživatelské rozhran nezávisle na vývoji ViewModelu.
+Dokumentaci vytvoříme pomocí následujícího príkazu. *Connection* implemetuje rozhraní *IDispose* a proto se nám připojení uzavře automaticky s využití Dispose patternu a nemusíme jej už ručně uzavírat.
+
+```csharp
+await using SqliteConnection connection = new SqliteConnection(connectionString);
+await connection.OpenAsync();
+```
+
+## ExecuteReader
+
+## ExecuteNonQuery
+
+## ExecuteScalar
