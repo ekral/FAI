@@ -56,7 +56,7 @@ int count = await command.ExecuteNonQueryAsync();
 
 V předchozím příkladu jsme použili parametry Commandu. Parametry můžeme zadávat buď s generickými SQL typy nebo s konkrétními typy pro danou databází s metodou, kterou poskytuje konkrétní provider. 
 
-Použití parametrů proskytuje kontrolu typu a validaci zadané hodnoty parametru a pomáhá zabránit útoku technikou SQL Injection. Použití parametrů nám nezpomaluje provedení dotazu, spíše nám může pomoct jej lépe sestavit dle konkrétního typu a provedení dotazu by mohlo být efektivnější.
+Použití parametrů proskytuje kontrolu typu a validaci zadané hodnoty parametru a pomáhá zabránit útoku technikou SQL Injection. Použití parametrů nezpomaluje provedení dotazu, spíše nám může pomoct dotaz lépe sestavit dle konkrétního typu a díky tomu by provedení dotazu by mohlo být v některých případech efektivnější.
 
 
 ## ExecuteReader
