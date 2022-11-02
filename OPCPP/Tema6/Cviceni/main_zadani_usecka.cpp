@@ -130,8 +130,8 @@ int main()
 	Bod2d p2(19.0, 0.0);
   
   // Pouziti:
-  // Usecka u1(p1, p2)
-  // Usecka u2(0.0, 0.0, 19.0, 0.0)
+  // Usecka u1(p1, p2);
+  // Usecka u2(0.0, 0.0, 19.0, 0.0);
   // Vypis(&u1);
   // Vypis(&u2);
   
