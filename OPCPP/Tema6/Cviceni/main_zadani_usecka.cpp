@@ -132,6 +132,7 @@ int main()
   // Pouziti:
   // Usecka u1(p1, p2);
   // Usecka u2(0.0, 0.0, 19.0, 0.0);
+  // Bod2d stred = u1.Stred();
   // Vypis(&u1);
   // Vypis(&u2);
   
