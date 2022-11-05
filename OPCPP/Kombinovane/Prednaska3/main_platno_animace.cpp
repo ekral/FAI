@@ -79,7 +79,7 @@ public:
 		double dx = p2.x - p1.x;
 		double dy = p2.y - p1.y;
 
-		double max = dx > dy ? dx : dy;
+		double max = fabs(dx) > fabs(dy) ? fabs(dx) : fabs(dy);
 
 		double x = p1.x;
 		double y = p1.y;
@@ -96,7 +96,7 @@ public:
 
 Bod2d Rotace(Bod2d p, double stupne)
 {
-	double theta = stupne * M_PI / 180 ;
+	double theta = stupne * M_PI / 180;
 	double xt = p.x * cos(theta) - p.y * sin(theta);
 	double yt = p.x * sin(theta) + p.y * cos(theta);
 
@@ -119,7 +119,7 @@ int main()
 		Bod2d pt = Rotace(p2, uhel);
 
 		platno.Vymaz();
-	
+
 		platno.NakresliUsecku(p1, pt, 'x');
 
 		platno.Zobraz();
