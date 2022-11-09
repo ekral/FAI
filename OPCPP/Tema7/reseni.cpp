@@ -3,6 +3,7 @@
 #include <math.h>
 #include <cmath>
 #include <Windows.h>
+#include <conio.h>
 
 struct Bod2d
 {
@@ -37,6 +38,15 @@ struct Usecka
 		double x = P1.x + ((P2.x - P1.x) / 2);
 		double y = P1.y + ((P2.y - P1.y) / 2);
 		return Bod2d(x, y);
+	}
+
+	void Posun(double x, double y)
+	{
+		P1.x += x;
+		P1.y += y;
+
+		P2.x += x;
+		P2.y += y;
 	}
 };
 
@@ -175,11 +185,11 @@ int main()
 	SetConsoleTextAttribute(hConsole, 2);
 
 	double uhel = 0.0;
-	double speed = 0.1;
+	double speed = 0.5;
 
 	int pocetOtocek = 0;
 	int maxPocetOtacek = 5;
-	double maxUhel = 360.0;
+	double maxUhel = 10 * 360.0;
 
 	while (pocetOtocek < maxPocetOtacek)
 	{
@@ -191,7 +201,31 @@ int main()
 		Bod2d p1t = RotaceKolemBodu(u1.P1, stred, uhel);
 		Bod2d p2t = RotaceKolemBodu(u1.P2, stred, uhel);
 
-		platno.NakresliUsecku(p1t, p2t, 'x');
+		// #include <conio.h>
+		if (_kbhit())
+		{
+			int znak = _getch();
+			switch (znak)
+			{
+				case 'a':
+					u1.P1.x -= 1.0;
+					u1.P2.x -= 1.0;
+					break;
+				case 'd':
+					u1.P1.x += 1.0;
+					u1.P2.x += 1.0;
+					break;
+				case 's':
+					u1.P1.y -= 1.0;
+					u1.P2.y -= 1.0;
+					break;
+				case 'w':
+					u1.P1.y += 1.0;
+					u1.P2.y += 1.0;
+					break;
+			}
+		}
+		platno.NakresliUsecku(p1t, p2t, '1');
 
 		platno.Zobraz();
 
