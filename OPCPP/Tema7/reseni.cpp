@@ -19,10 +19,13 @@ struct Bod2d
 // navrhnete strukturu Usecka, vyuzijte strukturu Bod2d
 struct Usecka
 {
+	double uhel = 0.0;
+	double speed = 0.5;
+
 	Bod2d P1;
 	Bod2d P2;
 
-	Usecka(Bod2d p1, Bod2d p2) : P1(p1), P2(p2)
+	Usecka(Bod2d p1, Bod2d p2, double speed) : P1(p1), P2(p2), speed(speed)
 	{
 
 	}
@@ -38,15 +41,6 @@ struct Usecka
 		double x = P1.x + ((P2.x - P1.x) / 2);
 		double y = P1.y + ((P2.y - P1.y) / 2);
 		return Bod2d(x, y);
-	}
-
-	void Posun(double x, double y)
-	{
-		P1.x += x;
-		P1.y += y;
-
-		P2.x += x;
-		P2.y += y;
 	}
 };
 
@@ -179,13 +173,11 @@ int main()
 	int max_y = 20;
 	Platno platno(max_y, max_x, '-');
 
-	Usecka u1(Bod2d(31, 6), Bod2d(39, 14.0));
+	Usecka u1(Bod2d(31, 6), Bod2d(39, 14.0), 0.5);
+	Usecka u2(Bod2d(32, 7), Bod2d(38, 11.0), -1.2);
 
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, 2);
-
-	double uhel = 0.0;
-	double speed = 0.5;
 
 	int pocetOtocek = 0;
 	int maxPocetOtacek = 5;
@@ -196,10 +188,8 @@ int main()
 		
 		platno.Vymaz();
 
-		Bod2d stred = u1.Stred();
-
-		Bod2d p1t = RotaceKolemBodu(u1.P1, stred, uhel);
-		Bod2d p2t = RotaceKolemBodu(u1.P2, stred, uhel);
+		Bod2d p1t = RotaceKolemBodu(u1.P1, u1.Stred(), u1.uhel);
+		Bod2d p2t = RotaceKolemBodu(u1.P2, u1.Stred(), u1.uhel);
 
 		// #include <conio.h>
 		if (_kbhit())
@@ -226,8 +216,11 @@ int main()
 			}
 		}
 		platno.NakresliUsecku(p1t, p2t, '1');
+		platno.NakresliUsecku(RotaceKolemBodu(u2.P1, u2.Stred(), u2.uhel), RotaceKolemBodu(u2.P2, u2.Stred(), u2.uhel), '2');
 
 		platno.Zobraz();
+
+		u2.uhel += u2.speed;
 
 		Stav novy;
 
@@ -235,34 +228,34 @@ int main()
 		{
 		case Stav::Nahoru:
 
-			if (uhel >= maxUhel)
+			if (u1.uhel >= maxUhel)
 			{
 				novy = Stav::Dolu;
 
-				uhel -= speed;
+				u1.uhel -= u1.speed;
 			}
 			else
 			{
 				novy = Stav::Nahoru;
 
-				uhel += speed;
+				u1.uhel += u1.speed;
 			}
 			break;
 
 		case Stav::Dolu:
 
-			if (uhel <= 0)
+			if (u1.uhel <= 0)
 			{
 				novy = Stav::Nahoru;
 
-				uhel += speed;
+				u1.uhel += u1.speed;
 				++pocetOtocek;
 			}
 			else
 			{
 				novy = Stav::Dolu;
 
-				uhel -= speed;
+				u1.uhel -= u1.speed;
 			}
 
 			break;
