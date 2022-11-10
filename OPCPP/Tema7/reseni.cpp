@@ -3,7 +3,6 @@
 #include <math.h>
 #include <cmath>
 #include <Windows.h>
-#include <conio.h>
 
 struct Bod2d
 {
@@ -14,18 +13,25 @@ struct Bod2d
 	{
 
 	}
+
+	Bod2d operator + (Bod2d& other)
+	{
+		return Bod2d(x + other.x, y + other.y);
+	}
+
+	Bod2d operator - (Bod2d& other)
+	{
+		return Bod2d(x - other.x, y - other.y);
+	}
 };
 
 // navrhnete strukturu Usecka, vyuzijte strukturu Bod2d
 struct Usecka
 {
-	double uhel = 0.0;
-	double speed = 0.5;
-
 	Bod2d P1;
 	Bod2d P2;
 
-	Usecka(Bod2d p1, Bod2d p2, double speed) : P1(p1), P2(p2), speed(speed)
+	Usecka(Bod2d p1, Bod2d p2) : P1(p1), P2(p2)
 	{
 
 	}
@@ -44,14 +50,13 @@ struct Usecka
 	}
 };
 
-// Vypis(&u1);
-// Chci vypsat P1, P2 a stred
 void Vypis(Usecka* u) {
 	Bod2d Stred = u->Stred();
 	printf("Usecka: [%lf, %lf] [%lf, %lf] \n", u->P1.x, u->P1.y, u->P2.x, u->P2.y);
 	printf("Stred: [%lf, %lf]\n", Stred.x, Stred.y);
 
 }
+
 
 struct Platno
 {
@@ -147,15 +152,7 @@ Bod2d Rotace(Bod2d p, double stupne)
 
 Bod2d RotaceKolemBodu(Bod2d p, Bod2d stred, double stupne)
 {
-	p.x -= stred.x;
-	p.y -= stred.y;
-
-	Bod2d pt = Rotace(p, stupne);
-
-	pt.x += stred.x;
-	pt.y += stred.y;
-
-	return pt;
+	return Rotace(p - stred, stupne) + stred;
 }
 
 enum class Stav
@@ -166,18 +163,17 @@ enum class Stav
 
 int main()
 {
-
 	Stav stav = Stav::Nahoru;
 
-	int max_x = 70;
-	int max_y = 20;
-	Platno platno(max_y, max_x, '-');
+	Platno platno(20, 70, '-');
 
-	Usecka u1(Bod2d(31, 6), Bod2d(39, 14.0), 0.5);
-	Usecka u2(Bod2d(32, 7), Bod2d(38, 11.0), -1.2);
+	Usecka u1(Bod2d(30.0, 10.0), Bod2d(35.0, 15.0));
 
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, 2);
+
+	double uhel = 0.0;
+	double speed = 0.4;
 
 	int pocetOtocek = 0;
 	int maxPocetOtacek = 5;
@@ -185,42 +181,16 @@ int main()
 
 	while (pocetOtocek < maxPocetOtacek)
 	{
-		
 		platno.Vymaz();
 
-		Bod2d p1t = RotaceKolemBodu(u1.P1, u1.Stred(), u1.uhel);
-		Bod2d p2t = RotaceKolemBodu(u1.P2, u1.Stred(), u1.uhel);
+		Bod2d stred = u1.Stred();
 
-		// #include <conio.h>
-		if (_kbhit())
-		{
-			int znak = _getch();
-			switch (znak)
-			{
-				case 'a':
-					u1.P1.x -= 1.0;
-					u1.P2.x -= 1.0;
-					break;
-				case 'd':
-					u1.P1.x += 1.0;
-					u1.P2.x += 1.0;
-					break;
-				case 's':
-					u1.P1.y -= 1.0;
-					u1.P2.y -= 1.0;
-					break;
-				case 'w':
-					u1.P1.y += 1.0;
-					u1.P2.y += 1.0;
-					break;
-			}
-		}
-		platno.NakresliUsecku(p1t, p2t, '1');
-		platno.NakresliUsecku(RotaceKolemBodu(u2.P1, u2.Stred(), u2.uhel), RotaceKolemBodu(u2.P2, u2.Stred(), u2.uhel), '2');
+		Bod2d pt1 = RotaceKolemBodu(u1.P1, stred, uhel);
+		Bod2d pt2 = RotaceKolemBodu(u1.P2, stred, uhel);
+		
+		platno.NakresliUsecku(pt1, pt2, 'x');
 
 		platno.Zobraz();
-
-		u2.uhel += u2.speed;
 
 		Stav novy;
 
@@ -228,34 +198,34 @@ int main()
 		{
 		case Stav::Nahoru:
 
-			if (u1.uhel >= maxUhel)
+			if (uhel >= maxUhel)
 			{
 				novy = Stav::Dolu;
 
-				u1.uhel -= u1.speed;
+				uhel -= speed;
 			}
 			else
 			{
 				novy = Stav::Nahoru;
 
-				u1.uhel += u1.speed;
+				uhel += speed;
 			}
 			break;
 
 		case Stav::Dolu:
 
-			if (u1.uhel <= 0)
+			if (uhel <= 0)
 			{
 				novy = Stav::Nahoru;
 
-				u1.uhel += u1.speed;
+				uhel += speed;
 				++pocetOtocek;
 			}
 			else
 			{
 				novy = Stav::Dolu;
 
-				u1.uhel -= u1.speed;
+				uhel -= speed;
 			}
 
 			break;
