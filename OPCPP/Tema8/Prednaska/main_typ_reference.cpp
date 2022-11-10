@@ -33,7 +33,7 @@ int main()
 	int x = 0;
 
 	int* p = nullptr; // typ ukazatel
-	p = &x; // operator reference znamy taky adresni operator
+	p = &x; // operator reference znamy taky jako adresni operator
 	*p = 1; // operator dereference znamy taky jako operator indirekce
 
 	int& ref = x;// typ reference
