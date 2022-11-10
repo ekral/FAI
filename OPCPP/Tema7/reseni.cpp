@@ -168,6 +168,7 @@ int main()
 	Platno platno(20, 70, '-');
 
 	Usecka u1(Bod2d(30.0, 10.0), Bod2d(35.0, 15.0));
+	Usecka u2(Bod2d(25.0, 8.0), Bod2d(30.0, 12.0));
 
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, 2);
@@ -176,8 +177,9 @@ int main()
 	double speed = 0.4;
 
 	int pocetOtocek = 0;
-	int maxPocetOtacek = 5;
 	double maxUhel = 10 * 360.0;
+
+	int maxPocetOtacek = 5;
 
 	while (pocetOtocek < maxPocetOtacek)
 	{
@@ -188,7 +190,14 @@ int main()
 		Bod2d pt1 = RotaceKolemBodu(u1.P1, stred, uhel);
 		Bod2d pt2 = RotaceKolemBodu(u1.P2, stred, uhel);
 		
-		platno.NakresliUsecku(pt1, pt2, 'x');
+		platno.NakresliUsecku(pt1, pt2, '1');
+
+		Bod2d stred2 = u2.Stred();
+
+		Bod2d pt3 = RotaceKolemBodu(u2.P1, stred2, uhel);
+		Bod2d pt4 = RotaceKolemBodu(u2.P2, stred2, uhel);
+
+		platno.NakresliUsecku(pt3, pt4, '2');
 
 		platno.Zobraz();
 
