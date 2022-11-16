@@ -1,0 +1,1 @@
+Řešení obsahuje více souborů.
