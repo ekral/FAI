@@ -5,7 +5,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
-SkolaContext db = new();
+using SkolaContext db = new();
 db.Database.EnsureCreated();
 // eager
 foreach (Skupina skupina in db.Skupiny.Include(skupina => skupina.Studenti))
