@@ -1,0 +1,1 @@
+Struktura animovaná úsečka.
