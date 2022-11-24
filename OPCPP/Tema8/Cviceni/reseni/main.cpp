@@ -17,18 +17,19 @@ int main()
 
 	// pridejte druhou usecku
 	AnimovanaUsecka u1(Bod2d(25.0, 8.0), Bod2d(30.0, 12.0), 0.0, 0.2, 10 * 360.0);
-
+	AnimovanaUsecka u2(Bod2d(15.0, 8.0), Bod2d(20.0, 12.0), 0.0, 0.2, 5 * 360);
 	for (int i = 0; i < 10000; i++)
 	{
 
 		platno.Vymaz();
 
 		u1.Nakresli(platno);
+		u2.Nakresli(platno);
 
 		platno.Zobraz();
 
 		u1.DalsiPozice();
-
+		u2.DalsiPozice();
 	}
 
 	getchar();
