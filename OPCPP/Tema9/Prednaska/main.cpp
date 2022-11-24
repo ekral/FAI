@@ -1,11 +1,5 @@
 #include <stdio.h>
-struct Obdelnik
-{
-    int a;
-    int b;
-
-    int Obsah();
-};
+#include "obdelnik.h"
 
 
 int main()
