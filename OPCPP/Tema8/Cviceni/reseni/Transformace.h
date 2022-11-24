@@ -1,4 +1,5 @@
 #pragma once
+
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include "Bod2d.h"
