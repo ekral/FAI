@@ -1,6 +1,9 @@
 #pragma once
+
+#include "Bod2d.h"
 #include "Usecka.h"
-#include "Transformace.h"
+#include "Algoritmy.h"
+#include "Platno.h"
 
 enum class Stav
 {
@@ -13,14 +16,15 @@ struct AnimovanaUsecka
 	Usecka usecka;
 	Bod2d pt1;
 	Bod2d pt2;
-	double speed;
-	double maxUhel;
-	double uhel;
-	Stav stav;
+	Stav stav = Stav::Nahoru;
+	double uhel = 0.0;
+	double speed = 0.4;
+	double maxUhel = 10 * 360.0;
 
-	AnimovanaUsecka(Bod2d p1, Bod2d p2, double speed, double maxUhel) 
-		: usecka(p1, p2), pt1(p1), pt2(p2), speed(speed), maxUhel(maxUhel), uhel(0.0), stav(Stav::Nahoru)
+	AnimovanaUsecka(Bod2d p1, Bod2d p2, double uhel, double speed, double maxUhel) 
+		: usecka(p1, p2), pt1(p1), pt2(p2), uhel(uhel), speed(speed), maxUhel(maxUhel)
 	{
+
 	}
 
 	void DalsiPozice()
@@ -55,6 +59,7 @@ struct AnimovanaUsecka
 				novy = Stav::Dolu;
 				uhel -= speed;
 			}
+
 			break;
 		}
 
@@ -64,5 +69,10 @@ struct AnimovanaUsecka
 
 		pt1 = RotaceKolemBodu(usecka.P1, stred, uhel);
 		pt2 = RotaceKolemBodu(usecka.P2, stred, uhel);
+	}
+
+	void Nakresli(Platno& platno)
+	{
+		platno.NakresliUsecku(pt1, pt2, 'x');
 	}
 };
