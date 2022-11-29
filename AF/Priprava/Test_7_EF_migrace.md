@@ -21,7 +21,7 @@ Pomocí migrací můžeme vytvářet a aktualizovat databázi pomocí příkazů
 
 Proto, abychom mohli vytvářet nové migrace a aktualizovat databázi, tak musíme nainstalovat:
 - nástroj **dotnet ef**. 
-- Nuget balíček podporující vytváření migrací končící názvem **.Design**
+- Nuget balíček podporující vytváření migrací **Microsoft.EntityFrameworkCore.Design**
 
 Následující příkaz nainstaluje příkaz **dotnet ef** globálně pro všechny projekty.
 
