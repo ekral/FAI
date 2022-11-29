@@ -1,9 +1,9 @@
 Návod pro Entity Framework: [Getting Started with EF Core](https://learn.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=netcore-cli)
 
 Budeme používat následující příkazy pro příkazovou řádku:
-- Příkaz ```powershell dotnet add packgage``` stáhne nuget balíček z repozitáře nuget.org a přidá ho do projektu.
-- Příkaz ```powershell dotnet tool install```, který instaluje nové příkazy pro příkazovou řádku.
-- Příkaz ```powershell dotnet ef``` pomocí kterého vytváříme například nové migrace nebo aktualizujeme databázi.
+- Příkaz ```dotnet add packgage``` stáhne nuget balíček z repozitáře nuget.org a přidá ho do projektu.
+- Příkaz ```dotnet tool install```, který instaluje nové příkazy pro příkazovou řádku.
+- Příkaz ```dotnet ef``` pomocí kterého vytváříme například nové migrace nebo aktualizujeme databázi.
 
 - Pokud chceme používat konkrétní databázi s Entity Frameworkem, tak musím do projektu přidat providera pro tuto databázi. Provider je většinou knihovna distriovaná jako nuget balíček. Následující příkaz nainstaluje nuget balíček, konrétně EF database provider pro databázi Sqlite. 
 
