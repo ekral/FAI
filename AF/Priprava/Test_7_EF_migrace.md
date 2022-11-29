@@ -13,16 +13,11 @@ Pokud chceme používat konkrétní databázi s Entity Frameworkem, tak musím d
 dotnet add package Microsoft.EntityFrameworkCore.Sqlite
 ```
 
-Bez použití migrací můžeme vytvořit databází pomocí metody *EnsureCreated()*.
+Bez použití migrací můžeme vytvořit databází pomocí metody *EnsureCreated() nebo EnsureCreatedAsync()*.
 
 ```csharp
-public async Task<bool> EnsureCreated()
-{
-    await using SkolaContext db = new SkolaContext();
-    bool created = await db.Database.EnsureCreatedAsync();
-
-    return created;
-}
+await using SkolaContext db = new SkolaContext();
+bool created = await db.Database.EnsureCreatedAsync();
 ```
 
 ## Migrace
