@@ -17,7 +17,7 @@ dotnet add package Microsoft.EntityFrameworkCore.Sqlite
 
 Pomocí migrací můžeme vytvářet a aktualizovat databázi pomocí příkazů pro příkazovou řádku.
 
-### Nástroj dotnet a nuget balíček 
+### Nástroj dotnet ef a nuget balíček .Design
 
 Proto, abychom mohli vytvářet nové migrace a aktualizovat databázi, tak musíme nainstalovat nástroj **dotnet ef**. Následující příkaz nainstaluje příkaz **dotnet ef** globálně pro všechny projekty.
 
