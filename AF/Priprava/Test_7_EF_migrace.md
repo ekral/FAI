@@ -5,13 +5,17 @@ Budeme používat následující příkazy pro příkazovou řádku:
 - Příkaz ```dotnet tool install```, který instaluje nové příkazy pro příkazovou řádku.
 - Příkaz ```dotnet ef``` pomocí kterého vytváříme například nové migrace nebo aktualizujeme databázi.
 
-- Pokud chceme používat konkrétní databázi s Entity Frameworkem, tak musím do projektu přidat providera pro tuto databázi. Provider je většinou knihovna distriovaná jako nuget balíček. Následující příkaz nainstaluje nuget balíček, konrétně EF database provider pro databázi Sqlite. 
+## Entity Framework Provider
+
+Pokud chceme používat konkrétní databázi s Entity Frameworkem, tak musím do projektu přidat providera pro tuto databázi. Provider je většinou knihovna distriovaná jako nuget balíček. Následující příkaz nainstaluje nuget balíček, konrétně EF database provider pro databázi Sqlite. 
 
 ```powershell
 dotnet add package Microsoft.EntityFrameworkCore.Sqlite
 ```
 
-- Proto, abychom mohli vytvářet nové migrace a aktualizovat databázi, tak musíme nainstalovat nástroj **dotnet ef**. Následující příkaz nainstaluje příkaz **dotnet ef** globálně pro všechny projekty.
+## Migrace
+
+Proto, abychom mohli vytvářet nové migrace a aktualizovat databázi, tak musíme nainstalovat nástroj **dotnet ef**. Následující příkaz nainstaluje příkaz **dotnet ef** globálně pro všechny projekty.
 
 ```powershell
 dotnet tool install --global dotnet-ef
