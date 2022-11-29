@@ -2,7 +2,7 @@ Návod pro Entity Framework: [Getting Started with EF Core](https://learn.micros
 
 Příkaz ```powershell dotnet add packgage``` stáhne nuget balíček z repozitáře nuget.org a přidá ho do projektu.
 
-- Příkaz nainstaluje nuget balíček EF database provider, konrétně pro databázi Sqlite.
+- Pokud chceme používat konkrétní databázi s Entity Frameworkem, tak musím do projektu přidat providera pro tuto databázi. Provider je většinou knihovna distriovaná jako nuget balíček. Příkaz nainstaluje nuget balíček, konrétně EF database provider pro databázi Sqlite. 
 
 ```powershell
 dotnet add package Microsoft.EntityFrameworkCore.Sqlite
