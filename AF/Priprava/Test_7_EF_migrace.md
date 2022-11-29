@@ -20,7 +20,7 @@ dotnet tool install --global dotnet-ef
 - Pokud chceme vytvářet migrace, tak musíme do projektu také přidat ještě následující nuget balíček.
 
 ```powershell
-dotnet add package Microsoft.EntityFrameworkCore.Sqlite
+dotnet add package Microsoft.EntityFrameworkCore.Design
 ```
 
 Migrace představuje kód v jazyce C# který umí například vytvářet nebo aktualizovat tabulky v databázi a případně i vložit výchozí data pro model. Následující příkaz **dotnet ef** vytvoří novou migraci s názvem *VychoziMigrace*. 
