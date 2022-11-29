@@ -8,7 +8,7 @@ Příkaz ```powershell dotnet add packgage``` stáhne nuget balíček z repozit�
 dotnet add package Microsoft.EntityFrameworkCore.Sqlite
 ```
 
-- Proto, abychom mohli vytvářet nové migrace a aktualizovat databázi, tak musíme nainstalovat nástroj **dotnet ef**. Následující příkaz nainstaluje **dotnet ef** globálně pro všechny projekty.
+- Proto, abychom mohli vytvářet nové migrace a aktualizovat databázi, tak musíme nainstalovat nástroj **dotnet ef**. Následující příkaz nainstaluje příkaz **dotnet ef** globálně pro všechny projekty.
 
 ```powershell
 dotnet tool install --global dotnet-ef
