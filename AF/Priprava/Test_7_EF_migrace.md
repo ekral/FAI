@@ -2,7 +2,7 @@ Návod pro Entity Framework: [Getting Started with EF Core](https://learn.micros
 
 Příkaz ```powershell dotnet add packgage``` stáhne nuget balíček z repozitáře nuget.org a přidá ho do projektu.
 
-- Pokud chceme používat konkrétní databázi s Entity Frameworkem, tak musím do projektu přidat providera pro tuto databázi. Provider je většinou knihovna distriovaná jako nuget balíček. Příkaz nainstaluje nuget balíček, konrétně EF database provider pro databázi Sqlite. 
+- Pokud chceme používat konkrétní databázi s Entity Frameworkem, tak musím do projektu přidat providera pro tuto databázi. Provider je většinou knihovna distriovaná jako nuget balíček. Následující příkaz nainstaluje nuget balíček, konrétně EF database provider pro databázi Sqlite. 
 
 ```powershell
 dotnet add package Microsoft.EntityFrameworkCore.Sqlite
@@ -14,8 +14,14 @@ dotnet add package Microsoft.EntityFrameworkCore.Sqlite
 dotnet tool install --global dotnet-ef
 ```
 
-- Příkaz vygeneruje C# program pro vytvoření tabulek v databázi a případně i výchozích dat pro model.
+- Pokud chceme vytvářet migrace, tak musíme do projektu také přidat ještě následující nuget balíček.
 
 ```powershell
 dotnet add package Microsoft.EntityFrameworkCore.Sqlite
+```
+
+Migrace představuje kód v jazyce C# který umí například vytvářet nebo aktualizovat tabulky v databázi a případně i vložit výchozí data pro model. Následující příkaz **dotnet ef** vytvoří novou migraci s názvem *VychoziMigrace*. 
+
+```powershell
+dotnet ef migrations add VychoziMigrace
 ```
