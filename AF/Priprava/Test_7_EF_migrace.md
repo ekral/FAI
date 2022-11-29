@@ -17,15 +17,19 @@ dotnet add package Microsoft.EntityFrameworkCore.Sqlite
 
 Pomocí migrací můžeme vytvářet a aktualizovat databázi pomocí příkazů pro příkazovou řádku.
 
-### Nástroj dotnet ef a nuget balíček .Design
+### Příprava potřebných závislostí 
 
-Proto, abychom mohli vytvářet nové migrace a aktualizovat databázi, tak musíme nainstalovat nástroj **dotnet ef**. Následující příkaz nainstaluje příkaz **dotnet ef** globálně pro všechny projekty.
+Proto, abychom mohli vytvářet nové migrace a aktualizovat databázi, tak musíme nainstalovat:
+- nástroj **dotnet ef**. 
+- Nuget balíček podporující vytváření migrací končící názvem .Design
+
+Následující příkaz nainstaluje příkaz **dotnet ef** globálně pro všechny projekty.
 
 ```powershell
 dotnet tool install --global dotnet-ef
 ```
 
-- Pokud chceme vytvářet migrace, tak musíme do projektu také přidat ještě následující nuget balíček.
+A následující příkaz přída do projektu nuget balíček **Microsoft.EntityFrameworkCore.Design**.
 
 ```powershell
 dotnet add package Microsoft.EntityFrameworkCore.Design
@@ -33,8 +37,16 @@ dotnet add package Microsoft.EntityFrameworkCore.Design
 
 ## Vytváření a spuštění migrací
 
-Migrace představuje kód v jazyce C# který umí například vytvářet nebo aktualizovat tabulky v databázi a případně i vložit výchozí data pro model. Následující příkaz **dotnet ef** vytvoří novou migraci s názvem *VychoziMigrace*. 
+Migrace představuje kód v jazyce C# který umí například vytvářet nebo aktualizovat tabulky v databázi a případně i vložit výchozí data pro model. 
+
+Následující příkaz **dotnet ef** vytvoří novou migraci s názvem *VychoziMigrace*. 
 
 ```powershell
 dotnet ef migrations add VychoziMigrace
+```
+
+A následující příkaz migraci aplikuje a vytvoří novou databází, nebo zaktualizuje stávající.
+
+```powershell
+dotnet ef database update
 ```
