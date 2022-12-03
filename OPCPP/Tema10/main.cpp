@@ -25,9 +25,9 @@ struct Wav
 	uint32_t Size{};
 	uint8_t* Data;
 
-	uint32_t FramesCount()
+	size_t FramesCount()
 	{
-		return Size / (FmtNumChannels * FmtBlockAlign);
+		return (size_t)Size / (FmtNumChannels * FmtBlockAlign);
 	}
 
 	size_t FrameIndex(size_t milliseconds)
