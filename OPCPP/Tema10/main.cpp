@@ -112,12 +112,6 @@ struct Wav
 			if (Data != nullptr) delete[] Data;
 		}
 	}
-
-private:
-	bool Error()
-	{
-		return false;
-	}
 };
 
 struct Frame
