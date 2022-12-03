@@ -30,6 +30,12 @@ struct Wav
 		return Size / (FmtNumChannels * FmtBlockAlign);
 	}
 
+	size_t FrameIndex(size_t milliseconds)
+	{
+		size_t index = (milliseconds * FmtSampleRate) / 1000;
+		return index;
+	}
+
 	bool LoadWavFile(const char* filePath)
 	{
 		FILE* fp;
@@ -139,6 +145,8 @@ int main()
 		printf("Nespravny format wav souboru..\n");
 		return -1;
 	}
+
+	//int test = wav.FrameIndex(6000);
 
 	// kvuli rychlejsimu vypisu pouzivam uz cely retezec
 	constexpr int n = 80;
