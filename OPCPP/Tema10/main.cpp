@@ -1,10 +1,10 @@
 #include <fstream>
 
-struct WavFile
+struct Wav
 {
-	WavFile(WavFile&) = delete;
+	Wav(Wav&) = delete;
 
-	WavFile() : Data(nullptr)
+	Wav() : Data(nullptr)
 	{
 	}
 
@@ -25,6 +25,11 @@ struct WavFile
 	uint32_t Size{};
 	uint8_t* Data;
 
+	uint32_t FramesCount()
+	{
+		return Size / (FmtNumChannels * FmtBlockAlign);
+	}
+
 	bool LoadWavFile(const char* filePath)
 	{
 		FILE* fp;
@@ -36,45 +41,71 @@ struct WavFile
 			return false;
 		}
 
-		ReadId(RiffChunkId, fp);
-		ReadValue(&RiffChunkSize, fp);
-		ReadId(RiffFormat, fp);
+		size_t count = 0;
 
-		ReadId(FmtSubchunk1Id, fp);
-		ReadValue(&FmtSubchunk1Size, fp);
-		ReadValue(&FmtAudioFormat, fp);
-		ReadValue(&FmtNumChannels, fp);
-		ReadValue(&FmtSampleRate, fp);
-		ReadValue(&FmtByteRate, fp);
-		ReadValue(&FmtBlockAlign, fp);
-		ReadValue(&FmtBitsPerSample, fp);
+		count = fread(&RiffChunkId[0], sizeof(RiffChunkId), 1, fp);
+		if (count != 1) goto exit;
+		
+		count = fread(&RiffChunkSize, sizeof(RiffChunkSize), 1, fp);
+		if (count != 1) goto exit;
+
+		count = fread(&RiffFormat[0], sizeof(RiffFormat), 1, fp);
+		if (count != 1) goto exit;
+
+		count = fread(&FmtSubchunk1Id[0], sizeof(FmtSubchunk1Id), 1, fp);
+		if (count != 1) goto exit;
+
+		count = fread(&FmtSubchunk1Size, sizeof(FmtSubchunk1Size), 1, fp);
+		if (count != 1) goto exit;
+
+		count = fread(&FmtAudioFormat, sizeof(FmtAudioFormat), 1, fp);
+		if (count != 1) goto exit;
+
+		count = fread(&FmtNumChannels, sizeof(FmtNumChannels), 1, fp);
+		if (count != 1) goto exit;
+
+		count = fread(&FmtSampleRate, sizeof(FmtSampleRate), 1, fp);
+		if (count != 1) goto exit;
+
+		count = fread(&FmtByteRate, sizeof(FmtByteRate), 1, fp);
+		if (count != 1) goto exit;
+
+		count = fread(&FmtBlockAlign, sizeof(FmtBlockAlign), 1, fp);
+		if (count != 1) goto exit;
+
+		count = fread(&FmtBitsPerSample, sizeof(FmtBitsPerSample), 1, fp);
+		if (count != 1) goto exit;
 
 		do
 		{
-			ReadId(Id, fp);
-			ReadValue(&Size, fp);
+			count = fread(&Id[0], sizeof(Id), 1, fp);
+			if (count != 1) goto exit;
+
+			count = fread(&Size, sizeof(Size), 1, fp);
+			if (count != 1) goto exit;
 
 			if (Id[0] == 'd' && Id[1] == 'a' && Id[2] == 't' && Id[3] == 'a')
 			{
-				Data = new uint8_t[Size];
-				ReadData(Data, Size, fp);
+				int n = Size;
+				Data = new uint8_t[n];
+
+				count = fread(Data, sizeof(uint8_t), n, fp);
+				if (count != Size) goto exit;
 			}
 			else
 			{
-				fseek(fp, Size, SEEK_CUR);
+				int count = fseek(fp, Size, SEEK_CUR);
+				if (count != Size) return false;
 			}
 
 		} while (Data == nullptr);
 
-		if (fp != nullptr)
-		{
-			fclose(fp);
-		}
-
-		return true;
+	exit:
+		fclose(fp);
+		return Data == nullptr ? false : true;
 	}
 
-	~WavFile()
+	~Wav()
 	{
 		if (Data != nullptr)
 		{
@@ -83,26 +114,16 @@ struct WavFile
 	}
 
 private:
-	void ReadId(uint8_t* p, FILE* fp)
+	bool Error()
 	{
-		fread(p, sizeof(uint8_t), 4, fp);
-
+		return false;
 	}
+};
 
-	void ReadValue(uint32_t* p, FILE* fp)
-	{
-		fread(p, sizeof(uint32_t), 1, fp);
-	}
-
-	void ReadValue(uint16_t* p, FILE* fp)
-	{
-		fread(p, sizeof(uint16_t), 1, fp);
-	}
-
-	void ReadData(uint8_t* p, int count, FILE* fp)
-	{
-		fread(p, sizeof(uint8_t), count, fp);
-	}
+struct Frame
+{
+	int16_t leftSample;
+	int16_t rightSample;
 };
 
 int main()
@@ -110,12 +131,18 @@ int main()
 	// Doporuceny soubor pro testovani:
 	// https://freewavesamples.com/ensoniq-zr-76-01-dope-77-bpm
 
-	WavFile wav;
+	Wav wav;
 	bool ok = wav.LoadWavFile("C:\\Users\\erik\\Downloads\\file.wav");
 
 	if (!ok)
 	{
 		printf("Nepovedlo se nacist soubor.\n");
+		return -1;
+	}
+
+	if (wav.FmtAudioFormat != 1 && wav.FmtNumChannels != 2 && wav.FmtBitsPerSample != 16)
+	{
+		printf("Nespravny format wav souboru..\n");
 		return -1;
 	}
 
@@ -129,22 +156,20 @@ int main()
 	}
 
 	retezec[n] = 0;
-	
+
 	int oldPosition = 0;
 	int newPosition = 0;
 
-	int frames = wav.Size / (wav.FmtNumChannels * wav.FmtBlockAlign);
-	
-	int16_t* p2 = (int16_t*)wav.Data;
+	Frame* p = (Frame*)wav.Data;
 
-	for (int i = 0; i < frames; i++)
+	for (size_t i = 0; i < wav.FramesCount(); i++)
 	{
-		int16_t leftSample = *p2;
-		double d = (double)leftSample / (INT16_MAX + 1);
-		
+		Frame frame = *p;
+		double d = (double)frame.leftSample / (INT16_MAX + 1);
+
 		newPosition = (int)((d + 1) * n / 2);
 
-		printf("%10d ", i);
+		printf("%10lld ", i);
 
 		retezec[oldPosition] = ' ';
 		retezec[newPosition] = 'x';
@@ -153,7 +178,7 @@ int main()
 
 		oldPosition = newPosition;
 
-		p2 += 2;
+		++p;
 	}
 
 	int znak = getchar();
