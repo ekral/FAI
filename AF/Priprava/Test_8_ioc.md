@@ -46,6 +46,19 @@ Nyní mně kontejner vytvoří dvě instance třídy ```StudentViewModel```, ale
 StudentListViewModel viewModel1 = provider.GetRequiredService<StudentListViewModel>();
 StudentListViewModel viewModel2 = provider.GetRequiredService<StudentListViewModel>();
 ```
+
+### IoC a Dependency Injection
+
+IoC kontejner se používa společně s Dependency Injection. V následujícím příkladu máme rozhraní IDatabaseService a dvě implementace DatabaseService, která pracuje s databází a FakeDatabaseService, která slouží jen pro testování a vrací jen objekty v paměti.
+
+V kontejneru si potom můžeme jednoduše volit konkrétní implementaci.
+
+```csharp
+IServiceCollection serviceCollection = new ServiceCollection()
+  .AddSingleton<IDatabaseService, FakeDatabaseService>()
+  .AddTransient<StudentListViewModel>();
+```
+
 ---
 Použité rozhraní a třídy.
 
