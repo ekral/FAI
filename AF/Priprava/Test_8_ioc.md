@@ -2,7 +2,7 @@ Dokumentace: [Dependency inversion]([https://learn.microsoft.com/en-us/ef/core/g
 
 ## IoC Container
 
-IoC Container je třída pomocí které vytváříme instance jiných tříd a zároveň při vytváření těchto instancí zjištťuje jaké jsou parametry konstruktoru a umí automaticky vkládat (inject) další instace.
+IoC Container je třída pomocí které vytváříme instance jiných tříd a zároveň při vytváření těchto instancí zjistí jaké jsou parametry konstruktoru a umí automaticky vkládat (inject) další instace.
 
 Dotnet obsahuje zabudovaný IoC kontejner, který přidáme do projektu pomocí následujího nuget balíčku:
 
