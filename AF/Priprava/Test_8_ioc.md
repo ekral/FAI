@@ -4,6 +4,8 @@ Návod pro Entity Framework: [Dependency inversion]([https://learn.microsoft.com
 
 IoC Container je třída pomocí které vytváříme instance jiných tříd a zároveň při vytváření těchto instancí zjištťuje jaké jsou parametry konstruktoru a umí automaticky vkládat (inject) další instace.
 
+Dotnet obsahuje zabudovaný IoC kontejner, který přidáme do projektu pomocí následujího nuget balíčku:
+
 ```powershell
-dotnet ef database update
+dotnet add package Microsoft.Extensions.DependencyInjection
 ```
