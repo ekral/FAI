@@ -16,7 +16,19 @@ Nejprve si zaregistruje třídy, jejichž instance, chceme vytvářet. Zároveň
 - Transient znamé, že se vytvoří vždy nová instance třídy. Kontejner tedy vrátí vždy referenci na nový objekt.
 - Scooped znamená, že se vytvoří vždy nová instance třídy pro nový request, ale v rámci jednoho requestu pak už vrací referenci na stejný objekt.
 
-  
- ```csharp
+
+V následujícím příkladu registrujme DatabaseService jako Singleton:
+
+```csharp
 IServiceCollection serviceCollection = new ServiceCollection().AddSingleton<DatabaseService>();
 ```
+
+A instance třídy DatabaseService vytváříme následujícím způsobem pomocí třídy ```ServiceProvider```. Kdy ```service1``` i ```service2``` představují referenci na stejný objekt.
+
+```csharp
+ServiceProvider provider = serviceCollection.BuildServiceProvider();
+
+DatabaseService service1 = provider.GetRequiredService<DatabaseService>();
+DatabaseService service2 = provider.GetRequiredService<DatabaseService>();
+```
+
