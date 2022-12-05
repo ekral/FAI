@@ -32,3 +32,17 @@ DatabaseService service1 = provider.GetRequiredService<DatabaseService>();
 DatabaseService service2 = provider.GetRequiredService<DatabaseService>();
 ```
 
+Příklad rozšíříme a zaregistrujeme ViewModel jako transient. 
+
+```csharp
+IServiceCollection serviceCollection = new ServiceCollection()
+                .AddSingleton<DatabaseService>()
+                .AddTransient<StudentListViewModel>();
+```
+
+Nyní mně kontejner vytvoří dvě instance třídy ```StudentViewModel```, ale každé instanci ```StudentViewModelu``` předá jako argument konstruktoru refenci na stejnou instanci třídy ```DatabaseService```.
+
+```csharp
+StudentListViewModel viewModel1 = provider.GetRequiredService<StudentListViewModel>();
+StudentListViewModel viewModel2 = provider.GetRequiredService<StudentListViewModel>();
+```
