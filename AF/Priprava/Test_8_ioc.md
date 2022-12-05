@@ -9,3 +9,14 @@ Dotnet obsahuje zabudovaný IoC kontejner, který přidáme do projektu pomocí 
 ```powershell
 dotnet add package Microsoft.Extensions.DependencyInjection
 ```
+
+Nejprve si zaregistruje třídy, jejichž instance, chceme vytvářet. Zároveň zvolím jaký bude životnost vytvořených objektů. 
+
+- Singleton znamená, že bude existovat jen jedna instance dané třídy. Kontejner tedy vždy vrátí referenci na stejný objekt.
+- Transient znamé, že se vytvoří vždy nová instance třídy. Kontejner tedy vrátí vždy referenci na nový objekt.
+- Scooped znamená, že se vytvoří vždy nová instance třídy pro nový request, ale v rámci jednoho requestu pak už vrací referenci na stejný objekt.
+
+  
+ ```csharp
+IServiceCollection serviceCollection = new ServiceCollection().AddSingleton<DatabaseService>();
+```
