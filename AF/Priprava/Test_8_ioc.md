@@ -46,3 +46,28 @@ Nyní mně kontejner vytvoří dvě instance třídy ```StudentViewModel```, ale
 StudentListViewModel viewModel1 = provider.GetRequiredService<StudentListViewModel>();
 StudentListViewModel viewModel2 = provider.GetRequiredService<StudentListViewModel>();
 ```
+
+Třída StudentListViewModel:
+
+```csharp
+public class StudentListViewModel
+{
+private readonly DatabaseService databaseService;
+
+public StudentListViewModel(DatabaseService databaseService)
+{
+    this.databaseService = databaseService;
+}
+
+public ObservableCollection<Student> Students { get; } = new();
+
+public async void LoadStudents()
+{
+    List<Student> studentsFromDatabase = await databaseService.GetAllStudents();
+
+    foreach (Student student in studentsFromDatabase)
+    {
+        Students.Add(student);
+    }
+}
+```
