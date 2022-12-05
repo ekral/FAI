@@ -46,9 +46,47 @@ Nyní mně kontejner vytvoří dvě instance třídy ```StudentViewModel```, ale
 StudentListViewModel viewModel1 = provider.GetRequiredService<StudentListViewModel>();
 StudentListViewModel viewModel2 = provider.GetRequiredService<StudentListViewModel>();
 ```
+---
+Použité rozhraní a třídy.
 
-Třída StudentListViewModel:
+```csharp
+public interface IDatabaseService
+{
+    Task<List<Student>> GetAllStudents();
+}
+```
 
+```csharp
+public class DatabaseService : IDatabaseService
+{
+    public async Task<List<Student>> GetAllStudents()
+    {
+        await using SchoolContext schoolContext = new SchoolContext();
+
+        List<Student> students = await schoolContext.Students.ToListAsync();
+
+        return students;
+    }
+}
+```
+
+```csharp
+public class FakeDatabaseService : IDatabaseService
+{
+    public Task<List<Student>> GetAllStudents()
+    {
+        List<Student> studenti = new List<Student>()
+        {
+            new Student() { Id = 1, Name = "Jitka"},
+            new Student() { Id = 2, Name = "Oto"},
+            new Student() { Id = 3, Name = "Jiri"}
+        };
+
+        return Task.FromResult(studenti);
+    }
+}
+```
+  
 ```csharp
 public class StudentListViewModel
 {
