@@ -37,3 +37,16 @@ Výsledný řetězec v proměnné text bude:
 }
 ```
 
+A následující příklad zase z řetězce deserializuje studenta.
+
+```csharp
+string text = "{ \"Id\" = 1, \"Name\" = \"Cert\"  }";
+Student? student = JsonSerializer.Deserialize<Student>(text);
+```
+
+V C#11 z .NET 7 můžeme použít raw string literals a zadávat dvojité uvozovky přímo v textu řetězce bez escape sekvence.
+ 
+ ```csharp
+string text = """{ "Id" = 1, "Name" = "Cert"  }""";
+Student? student = JsonSerializer.Deserialize<Student>(text);
+```
