@@ -50,3 +50,5 @@ V C#11 z .NET 7 můžeme použít raw string literals a zadávat dvojité uvozov
 string text = """{ "Id" = 1, "Name" = "Cert"  }""";
 Student? student = JsonSerializer.Deserialize<Student>(text);
 ```
+
+Pro serializaci a deserialici volíme jednoduché objekty obsahují ideálně pouze zabudované typy jazyka. Těmto objektům říkame Data Transfer Object, napříkad StudentDTO. Pro serializace tedy často definujeme speciální třídy.
