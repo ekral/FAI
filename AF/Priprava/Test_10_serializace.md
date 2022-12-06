@@ -9,8 +9,28 @@ Máme několik možností:
 - člověkem čitelný textový formát, nejběžnější je JSON používaný pro REST webové služby založené na HTTP protokolu. Dříve se používal XML formát pro SOAP služby.
 - binární formát pro vysoký výkon. Příkladem je protokol gRPC.
 
-Dotnet obsahuje mimo jiné zabudovanou podporu pro serializaci a deserializaci do formátu JSON.
+Dotnet obsahuje mimo jiné zabudovanou podporu pro serializaci a deserializaci do formátu JSON. Není nutné vkládat žádný nuget balíček.
 
-```powershell
-dotnet add package Microsoft.Extensions.DependencyInjection
+Máme následující třídu:
+
+```csharp
+public class Student
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+}
 ```
+
+Následují příklad serializuje studenta.
+
+
+```csharp
+Student student = new Student() { Id = 1, Name = "Mikulas" };
+string text = JsonSerializer.Serialize(student);
+```
+
+Výsledný řetězec v proměnné text bude:
+```json
+
+```
+
