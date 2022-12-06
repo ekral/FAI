@@ -7,7 +7,7 @@ Objekty v paměti nejsou kompatibilní mezi hardwarovými platformami (AMR, x86,
 Máme několik možností:
 
 - člověkem čitelný textový formát, nejběžnější je JSON používaný pro REST webové služby založené na HTTP protokolu. Dříve se používal XML formát pro SOAP služby.
-- binární formát pro vysoký výkon. Příkladem je protokol gRP.
+- binární formát pro vysoký výkon. Příkladem je protokol gRPC.
 
 Dotnet obsahuje mimo jiné zabudovanou podporu pro serializaci a deserializaci do formátu JSON.
 
