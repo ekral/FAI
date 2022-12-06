@@ -31,6 +31,9 @@ string text = JsonSerializer.Serialize(student);
 
 Výsledný řetězec v proměnné text bude:
 ```json
-
+{
+    "Id" : 1,
+    "Name" : "Mikulas"
+}
 ```
 
