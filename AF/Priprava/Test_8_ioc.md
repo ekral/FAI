@@ -1,6 +1,6 @@
 # IoC Container
 
-Dokumentace: [Dependency injection](https://learn.microsoft.com/en-us/dotnet/core/extensions/dependency-injection))
+Dokumentace: [Dependency injection](https://learn.microsoft.com/en-us/dotnet/core/extensions/dependency-injection)
 
 IoC Container je třída pomocí které vytváříme instance jiných tříd a zároveň při vytváření těchto instancí zjistí jaké jsou parametry konstruktoru a umí automaticky vkládat (inject) další instace jako argumenty konstruktoru.
 
