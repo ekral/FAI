@@ -197,10 +197,6 @@ static async Task Main(string[] args)
         string jsonString = await client.GetStringAsync(url);
         Console.WriteLine(jsonString);
     }
-    catch (HttpRequestException ex)
-    {
-        Console.WriteLine(ex.Message);
-    }
     finally
     {
         client.Dispose();
@@ -217,15 +213,8 @@ static async Task Main(string[] args)
 
     using (HttpClient client = new HttpClient())
     {
-        try
-        {
-            string jsonString = await client.GetStringAsync(url);
-            Console.WriteLine(jsonString);
-        }
-        catch (HttpRequestException ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
+        string jsonString = await client.GetStringAsync(url);
+        Console.WriteLine(jsonString);
     }
 }
 ```
