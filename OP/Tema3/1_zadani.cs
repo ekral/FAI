@@ -45,6 +45,19 @@ namespace ConsoleApp7
 
             // jednoduche, otevre, zapise a zavre
             System.IO.File.AppendAllText("text2.txt", text + System.Environment.NewLine + "jak se mas");
+            
+            // slozitejsi, pracuje s polem bytu, nejvic moznosti (napriklad soubezny zapis do souboru z vice vlaken atd.), prepisovani casti souboru a dalsi.
+            using (FileStream fileStream = new FileStream("text2.txt", FileMode.Append))
+            {
+                byte[] bytes = Encoding.UTF8.GetBytes(text + Environment.NewLine);
+                fileStream.Write(bytes);
+
+                ReadOnlySpan<byte> span = "jak se mas\n"u8;
+                fileStream.Write(span); // novejsi zpusob C# 11
+
+                fileStream.Write("konec"u8);
+            }
+            
         }
     }
 }
