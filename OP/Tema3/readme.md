@@ -219,6 +219,9 @@ static async Task Main(string[] args)
 }
 ```
 
+Příklad s třídou `StreamWriter` si můžete vyzkoušet na stránkách SharpLab, které zobrazují vygenerovaný kód kompilátorem:
+[Sharplab.io](https://sharplab.io/#v2:CYLg1APgAgTAjAWAFBQMwAJboMLoN7LpGYZQAs6AKgKYDOALgBQCUhxBSxXmADOo1DgA6AJIB5IQGV6AJ2oBDALYB1GQEt61GegDu6zdoC86AHbUdmYeKmyFK/VsYAiTQA96Q+u6cAadPIAHAOoTUHRZAFdqZlZObiIONniuPQ0tIVU0gBk1M2cAQQALAHsAKydmAG4k7gBfGvqkWqA=)
+
 ---
 Více o metodě dispose najdete například zde:
 
