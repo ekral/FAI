@@ -221,7 +221,7 @@ static async Task Main(string[] args)
 
 Příklad s třídou `StreamWriter` si můžete vyzkoušet na stránkách SharpLab.io, které zobrazují vygenerovaný kód kompilátorem:
 
-[Sharplab.io](https://sharplab.io/#v2:CYLg1APgAgTAjAWAFBQMwAJboMLoN7LpGYZQAs6AKgKYDOALgBQCUhxBSxXmADOo1DgA6AJIB5IQGV6AJ2oBDALYB1GQEt61GegDu6zdoC86AHbUdmYeKmyFK/VsYAiTQA96Q+u6cAadPIAHAOoTUHRZAFdqZlZObiIONniuPQ0tIVU0gBk1M2cAQQALAHsAKydmAG4k7gBfGvqkWqA=)
+[Sharplab.io](https://sharplab.io/#v2:CYLg1APgAgTAjAWAFBQAwAIpwHQEkDyA3MslAMyYzoDCyA3suk5hVACzoAqApgM4AuACgCUjZgyTMpmDIKx582AMr8ATtwCGAWwDqqgJb9uq9AHcDRkwF50AO26nMOAsrWbdF44IBERgB782PwB3gA06BoADpHctqDoagCu3MKiktJMEmIZUuaGxth6+QAy+vY+AIIAFgD2AFbewsTpGQC+JC3SAPQAVGjocs6KKuraRZZmntZ2Dk4KrqMe+ao+/oHB/GER0bHxSSlpOegSR1JqAJ7ZpyenGXmWhZ6l5d7V9Y3Nt0ztnUcAxhp+H8qoICABRPx/biRfj6Gq2dDcPyHL43L7MeQAEX0GgA5rYagJ9H9eNhMdwAEaJXGPEplbiCJHYACyfF4eJSny+PyOrR6XSuP1aQA==)
 
 ---
 Více o metodě dispose najdete například zde:
