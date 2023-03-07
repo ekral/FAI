@@ -38,6 +38,14 @@ class Kocicka
 
 Nyní bychom chtěli mít třídu Zoo, do které bychom mohli dávat jak pejsky tak kočičky. Následující kód ale není platný, to znamená, že bychom do našeho Zoo mohli dávat jen kočiky a případně jen kočičky, ale ne zvířátka různého typu do jedné zoo.
 ```cs
+Zoo zoo = new Zoo();
+
+Pejsek rex = new Pejsek() { Jmeno = "Rex" };
+Kocicka micka = new Kocicka() { Jmeno = "Micka" };
+
+zoo.Pridej(micka);
+zoo.Pridej(rex); // nejde prelozit
+
 class Zoo
 {
     private  List<Kocicka> zviratka = new();
@@ -47,14 +55,6 @@ class Zoo
         zviratka.Add(kocicka);
     }
 }
-
-Zoo zoo = new Zoo();
-
-Pejsek rex = new Pejsek() { Jmeno = "Rex" };
-Kocicka micka = new Kocicka() { Jmeno = "Micka" };
-
-zoo.Pridej(micka);
-zoo.Pridej(rex); // nejde prelozit
 ```
 
 Je to proto, že v **jazyce C#**, ale i například jazyce C++ nebo Java **není možné změnit objekt typu `Pejsek` na objekt typu `Kocicka`**. Je to proto, že jazyk C# používá statickou typovou kontrolu (Static typing), tedy kompilátor kontroluje typy v době překladu a vyžaduje abychom explicitně v kódu vyjádřili, že jsou vzájemně nahraditelné.  Tedy že mají například stejné metody, property nebo fieldy. Naproti tomu v jazyce JavaScript by to bylo možné, protože v JavaScriptu nemají proměnné pevně přiřazený typ a typová kontrola je dynamická (Dynamic typing). To znamená, že teprve až za běhu programu se v jazyce JavaScript ověří, že jak kočička, tak pejsek mají metodu `Zvuk`, někdy se tomuto postupu říká **duck typing** - tedy pokud to kváká a chodí jako kachna, tak je to kachna.
