@@ -13,7 +13,7 @@ Polymorfismem (mnohotvarost) rozumíme statický polymorfismus jako přetěžov�
 
 ### Polymorfismus a statická typová kontrola
 
-Většinou se ale obecně polymorfismem v OOP myslí dynamickz polyformismus a ten si nyní probereme na příkladu. Nejprve si definujeme třídy `Pejsek` a `Kocicka`. V příkladech jsou vynechány konstruktory, aby byl kód kratší.
+Většinou se ale obecně polymorfismem v OOP myslí dynamický polyformismus a ten si nyní probereme na příkladu. Nejprve si definujeme třídy `Pejsek` a `Kocicka`. V příkladech jsou vynechány konstruktory, aby byl kód kratší.
 ```cs 
 class Pejsek
 {
