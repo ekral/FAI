@@ -4,4 +4,4 @@ Polyglot notebooky jsou podobné jako Jupyter notebooky, ale možňují v jednom
 
 Pro otevření notebooku potřebujete:
 
-1. Visual studio Code [download](https://code.visualstudio.com/]
+1. Visual studio Code (https://code.visualstudio.com/)
