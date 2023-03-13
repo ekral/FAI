@@ -1,0 +1,73 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"name":"csharp","languageName":"C#","aliases":["c#","C#"]},{"name":"vscode","aliases":["frontend"],"languageName":null}]}}
+
+#!markdown
+
+# Partial function vs Currying
+
+Nejprve si nadefinujeme funkci `Format`, která má dva parametry typu `int` a `bool` a vrací řetězec s hodnotami těchto proměnných.
+
+#!csharp
+
+string Format(int a, bool b)
+{
+    return $"a: {a} b: {b}";
+}
+
+string vysledek = Format(1, true);
+
+Console.WriteLine(vysledek);
+
+#!markdown
+
+## 1. Partial function application 
+
+Partial function application znamená, že předáme jednomu parametru argument a definujeme například pomocí lambda výrazu novou funkci, která má už jen parametr jeden. Typ `Func<bool, string>` představuje delegáta metody, která má jeden parametr typu `int` a vrací `string`. Návratový typ se uvádí vždy jako poslední.
+
+#!csharp
+
+Func<bool, string> funkce = b => Format(1, b);
+
+string vysledek = funkce(true);
+
+Console.WriteLine(vysledek);
+
+#!markdown
+
+## 2. Currying
+
+Currying představuje převod funkce s více argumenty na sérii volání funkcí s jedním argumentem. Jazyk C# nemá narozdíl například od funkcionálního jazyka Haskel zabudovanou podporu pro currying. V haskelu jsou také všechny funkce považovány za curried, což znamená že funkce v Haskelu získávají jen jeden argument [wiki.haskell.org/Currying](https://wiki.haskell.org/Currying).
+
+V následujícím příkladu funkce `formatCurried` vrací typ `Func<int, Func<bool, string>>`, což znamená delegát, který má jako parametr typ `int` a jako návratový typ má znovu delegáta, tentokrát s parametrem `bool` a návratovým typem `string`.
+
+#!csharp
+
+Func<int, Func<bool, string>> formatCurried = a => b => Format(a, b);
+
+string vysledek = formatCurried(1)(true);
+
+Console.WriteLine(vysledek);
+
+#!markdown
+
+Předchozí zřetěžené volání funkcí `formatCurried(1)(true)` si můžeme rozepsat na více kroků. Získáme tedy opět funkci typu `Func<bool, string>`.
+
+#!csharp
+
+Func<bool, string> funkce = formatCurried(1);
+
+string vysledek = funkce(true);
+
+Console.WriteLine(vysledek);
+
+#!markdown
+
+Pro lepší pochopení můžeme místo vnějšího lambda výrazu použít metodu.
+
+#!csharp
+
+Func<bool, string> FormatCurry(int a)
+{
+    return b => Format(a, b);
+}
