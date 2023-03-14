@@ -230,7 +230,7 @@ Console.WriteLine("Pracuji s tridou");
 
 ---
 
-Následující příklad je pokročilý a pro splnění předmětu jej nemusíte studovat. Demonstruje kompletní implementaci rozhraní IDisposable, kde bereme v úvahu i to, že uživatel nepoužije Dispose a používáme i Finalizer (v C++ se mu říká destruktor.). Připomínám, že rozhraní IDisposable používáme jen ve speciálních případech, kdy musíme uvolnit alokované zdroje a běžně se v klientském kódu nepoužívá. Celá problematika interakce managed jazyka s unmanaged kódem složitá a nad rámec tohoto předmětu a více se můžete dočíst v dokumentaci k rozhraní  [IDisposable](https://learn.microsoft.com/en-us/dotnet/api/system.idisposable?redirectedfrom=MSDN&view=net-7.0).
+Následující příklad je pokročilý a pro splnění předmětu jej nemusíte studovat a nepopisuje kompletní problematiku uvolňování zdrojů. Příklad demonstruje implementaci rozhraní IDisposable, kde bereme v úvahu i to, že uživatel nepoužije Dispose a používáme i Finalizer (v C++ se mu říká destruktor.). Připomínám, že rozhraní IDisposable používáme jen ve speciálních případech, kdy musíme uvolnit alokované zdroje a běžně se v klientském kódu nepoužívá. Celá problematika interakce managed jazyka s unmanaged kódem složitá a nad rámec tohoto předmětu a více se můžete dočíst v dokumentaci [Implement a Dispose method](https://learn.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose).
 
 #!csharp
 
