@@ -199,7 +199,7 @@ VypisZvuk(auto);
 
 #!markdown
 
-Nyní si ukážeme školní příklad na implementaci rozhraní `IDisposable`. V následujícím kódu se nám po ukončení bloku using zavolá automaticky metoda `Dispose`.
+Nyní si ukážeme školní příklad na implementaci rozhraní [IDisposable](https://learn.microsoft.com/en-us/dotnet/api/system.idisposable?redirectedfrom=MSDN&view=net-7.0). V následujícím kódu se nám po ukončení bloku using zavolá automaticky metoda `Dispose`.
 
 #!csharp
 
@@ -228,7 +228,9 @@ Console.WriteLine("Pracuji s tridou");
 
 #!markdown
 
-Následující příklad je pokročilý a pro splnění předmětu jej nemusíte studovat. Demonstruje kompletní implementaci rozhraní IDisposable, kde bereme v úvahu i to, že uživatel nepoužije Dispose a používáme i Finalizer (v C++ se mu říká destruktor.). Připomínám, že rozhraní IDisposable používáme jen ve speciálních případech, kdy musíme uvolnit alokované zdroje a běžně se v klientském kódu nepoužívá. 
+---
+
+Následující příklad je pokročilý a pro splnění předmětu jej nemusíte studovat. Demonstruje kompletní implementaci rozhraní IDisposable, kde bereme v úvahu i to, že uživatel nepoužije Dispose a používáme i Finalizer (v C++ se mu říká destruktor.). Připomínám, že rozhraní IDisposable používáme jen ve speciálních případech, kdy musíme uvolnit alokované zdroje a běžně se v klientském kódu nepoužívá. Celá problematika interakce managed jazyka s unmanaged kódem složitá a nad rámec tohoto předmětu a více se můžete dočíst v dokumentaci k rozhraní  [IDisposable](https://learn.microsoft.com/en-us/dotnet/api/system.idisposable?redirectedfrom=MSDN&view=net-7.0).
 
 #!csharp
 
@@ -264,6 +266,7 @@ class Trida : IDisposable
     }
 
     // Finalizer, zavola se jako posledni moznost pred uvolneni objektu z pameti
+    // Jako vhodnejsi alternativu pro uvolneni Unmanaged resources Microsoft doporucuje SafeHandle
     ~Trida()
     {
         Dispose(disposing: false);
