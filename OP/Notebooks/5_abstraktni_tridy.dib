@@ -195,3 +195,82 @@ VypisZvuk(auto);
 #!markdown
 
 ## Příklad implementace rozhraní IDisposable
+---
+
+#!markdown
+
+Nyní si ukážeme školní příklad na implementaci rozhraní `IDisposable`. V následujícím kódu se nám po ukončení bloku using zavolá automaticky metoda `Dispose`.
+
+#!csharp
+
+class Trida : IDisposable
+{
+    public void Dispose()
+    {
+        Console.WriteLine("Uvolnuji zdroje..");
+    }
+}
+
+using(Trida trida = new Trida())
+{
+    Console.WriteLine("Pracuji s tridou");
+}
+
+#!markdown
+
+Pokud bychom klíčové slovo using nepoužili, tak by se nám metoda Dispose nezavolá.
+
+#!csharp
+
+Trida trida = new Trida();
+
+Console.WriteLine("Pracuji s tridou");
+
+#!markdown
+
+Následující příklad je pokročilý a pro splnění předmětu jej nemusíte studovat. Demonstruje kompletní implementaci rozhraní IDisposable, kde bereme v úvahu i to, že uživatel nepoužije Dispose a používáme i Finalizer (v C++ se mu říká destruktor.). Připomínám, že rozhraní IDisposable používáme jen ve speciálních případech, kdy musíme uvolnit alokované zdroje a běžně se v klientském kódu nepoužívá. 
+
+#!csharp
+
+class Trida : IDisposable
+{
+    System.Net.Http.HttpClient client = new();
+
+    private bool disposed = false;
+
+    public void Dispose()
+    {
+        Dispose(disposing: true);
+        
+        // Protoze jsem uz vse uvolnil, tak uz nechci aby se znovu volal Finalizer
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if(!this.disposed)
+        {
+            if(disposing)
+            {
+                Console.WriteLine("Uvolnuji managed objekty");
+                client.Dispose();
+            }
+            
+            Console.WriteLine("Uvolnuji unmanaged objekty");
+            // uvolnovani unmanaged objektu, kvuli kterym bych pripadne IDisposable musel implementovat
+            
+            disposed = true;
+        }
+    }
+
+    // Finalizer, zavola se jako posledni moznost pred uvolneni objektu z pameti
+    ~Trida()
+    {
+        Dispose(disposing: false);
+    }
+}
+
+using(Trida trida = new Trida())
+{
+    Console.WriteLine("Pracuji s tridou");
+}
