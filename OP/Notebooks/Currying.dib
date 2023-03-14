@@ -26,7 +26,7 @@ Console.WriteLine(vysledek);
 
 ## 1. Partial function application 
 
-Partial function application znamená, že předáme jednomu parametru argument a definujeme například pomocí lambda výrazu novou funkci, která má už jen parametr jeden. Typ `Func<bool, string>` představuje delegáta metody, která má jeden parametr typu `int` a vrací `string`. Návratový typ se uvádí vždy jako poslední.
+Partial function application znamená, že předáme jednomu parametru argument a definujeme například pomocí lambda výrazu novou funkci, která má o jeden parametr méně. Typ `Func<bool, string>` představuje delegáta metody, která má jeden parametr typu `int` a vrací `string`. Návratový typ se uvádí vždy jako poslední.
 
 #!csharp
 
