@@ -9,13 +9,11 @@
 
 Abstraktní metoda nemá implementaci (tělo) a může být definována pouze v abstraktní třídě. Abstraktní třída slouží pouze jako rodičovská třída a v klientském kódu používáme její potomky, ale nemůžeme vytvářet její instance. Opět jde o kontrukci kterou vytváříme z důvodu statické typové kontroly.
 
-Nyní si projdeme příklad, kdy si nejprve vytvoříme virtuální metodu `VratZvuk`, kterou poté změníme na abstraktní.
-
-Nejprve si definujeme třídu `Zviratko`, ktera ma property `Jmeno` a virtuální metodu `VratZvuk`.
-
 #!markdown
 
-A potom definujeme dva potomky této třídy, které překryjí s použitím klíčového slova `override` metodu `VratZvuk`. Prvním potomkem je třída `Pejsek`, která vrací zvuk "haf haf" a druhým třída `Kocicka`, která vrací zvuk "mnau".
+Nyní si projdeme příklad, kdy si nejprve vytvoříme virtuální metodu `VratZvuk`, kterou poté změníme na abstraktní.
+
+Nejprve si definujeme třídu `Zviratko`, ktera ma property `Jmeno` a virtuální metodu `VratZvuk`. A potom definujeme dva potomky této třídy, které překryjí s použitím klíčového slova `override` metodu `VratZvuk`. Prvním potomkem je třída `Pejsek`, která vrací zvuk "haf haf" a druhým třída `Kocicka`, která vrací zvuk "mnau".
 
 #!csharp
 
@@ -25,7 +23,7 @@ class Zviratko
 
     public virtual string VratZvuk()
     {
-        return "?";
+        return "nema zadny konkretni zvuk";
     }
 }
 
@@ -55,7 +53,7 @@ Console.WriteLine($"{kocicka.Jmeno} dela {kocicka.VratZvuk()}");
 
 #!markdown
 
-Pokud se zamyslíme nad metodou `VratZvuk` ve třídě `Zviratko`, tak pro ni **nemáme smysluplnou implementaci** protože jde o obecné (abstraktní) zvířátko které nedělá žádný zvuk. Takové metody pro které nemáme implementaci a které musí implementovat až potomci této třídy můžeme označit jako abstraktní klíčovým slovem `abstract`. Abstraktní metody mohou mít pouze abstraktní třídy, třída `Zviratko` tedy musí být označená klíčovým slovem `abstract`. Takové třídy jsou potom určené pouze pro dědičnost a nemůžeme vytvářet jejich instance ale jen mít reference. Potomci těchto tříd potom musí povinně implementovat abstraktní metody.
+Pokud se zamyslíme nad metodou `VratZvuk` ve třídě `Zviratko`, tak pro ni **nemáme smysluplnou implementaci** protože jde o obecné (abstraktní) zvířátko které nedělá žádný zvuk. Takové metody pro které nemáme implementaci a které musí implementovat až potomci této třídy můžeme označit jako abstraktní klíčovým slovem `abstract`. Abstraktní metody mohou mít pouze abstraktní třídy, třída `Zviratko` tedy musí být označená klíčovým slovem `abstract`. Takové třídy jsou potom určené pouze pro dědičnost a nemůžeme vytvářet jejich instance ale jen mít reference. Potomci těchto tříd potom musí povinně implementovat abstraktní metody. Abstraktní třída může být jako abstraktní označena i když nemá abstraktní metody.
 
 #!csharp
 
@@ -101,7 +99,7 @@ Zviratko zviratko = new Zviratko();
 ## Rozhraní
 ---
 
-Rozhraní je podobné jako abstraktní třída pouze s abstraktními metodami. Říkáme, že třída implementuje rozhraní. Každá třída může v jazyce c# dědit od jedné třídy ale může implementovat libovolný počet rozhraní. Rozhraní na rozdíl od abstraktních tříd neobsahují fieldy.
+Rozhraní je podobné abstraktní třídě pouze s abstraktními metodami. Říkáme, že třída implementuje rozhraní. Každá třída může v jazyce c# dědit od jedné třídy ale může implementovat libovolný počet rozhraní. Rozhraní na rozdíl od abstraktních tříd neobsahují fieldy.
 
 Z hlediska použití popisuje abstraktní třída vztah **"is a"** tedy pejsek **je** zvířátko nebo monitor **je** produkt. Zatímco rozhraní popisuje spíše vztah **"can do"** nebo možná lépe **"must do"**, tedy například že třída faktura **umí** serializaci do textového souboru nebo třída soubor **umí** metodu Dispose, tedy uvolnit všechny své alokované zdroje a zavřít otevřený soubor. Většinou preferujeme více jednoduchých rozhraní s méně metodami, než jedno velké rozhraní s mnoha metodami.
 
