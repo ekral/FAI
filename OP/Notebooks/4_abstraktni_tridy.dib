@@ -118,6 +118,8 @@ class Pejsek : Zviratko
     }
 }
 
+Console.WriteLine(new Pejsek().VratZvuk());
+
 #!markdown
 
 Podobný příklad bychom potom mohli zapsat pomocí rozhraní, které zápis zjednodušuje.
@@ -168,3 +170,20 @@ class Auto : IZvuk
 
 Console.WriteLine(new Pejsek().VratZvuk());
 Console.WriteLine(new Auto().VratZvuk());
+
+#!markdown
+
+Použití v klientském kódu potom může být následující.
+
+#!csharp
+
+static void VypisZvuk(IZvuk objektSeZvukem)
+{
+    Console.WriteLine(objektSeZvukem.VratZvuk());
+}
+
+Pejsek pejsek = new Pejsek();
+Auto auto = new Auto();
+
+VypisZvuk(pejsek);
+VypisZvuk(auto);
