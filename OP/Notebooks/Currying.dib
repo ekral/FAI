@@ -40,7 +40,7 @@ Console.WriteLine(vysledek);
 
 ## 2. Currying
 
-Currying představuje převod funkce s více argumenty na sérii volání funkcí s jedním argumentem. Jazyk C# nemá narozdíl například od funkcionálního programovacího jazyka Haskel zabudovanou podporu pro currying. Jazyk Haskel má přímo příkazy *curry* a *uncurry* a všechny funkce v Haskelu jsou považovány za curried, což znamená že funkce v Haskelu získávají jen jeden argument ([Haskell Currying](https://wiki.haskell.org/Currying)). Jazyk Haskel byl pojmenován po matematikovi se jménem [Haskell Curry](https://en.wikipedia.org/wiki/Haskell_Curry), odtud tedy pochází i název této technky. Následující příklad v jazyce C# je tedy určený jen pro pochopení základního principu. 
+Currying představuje převod funkce s více argumenty na sérii volání funkcí s jedním argumentem. Jazyk C# nemá narozdíl například od funkcionálního programovacího jazyka Haskel zabudovanou podporu pro currying. Jazyk Haskel má přímo příkazy *curry* a *uncurry* a všechny funkce v Haskelu jsou považovány za curried, což znamená že funkce v Haskelu získávají jen jeden argument ([Haskell Currying](https://wiki.haskell.org/Currying)). Jazyk Haskel byl pojmenován po matematikovi se jménem [Haskell Curry](https://en.wikipedia.org/wiki/Haskell_Curry), odtud tedy pochází i název této technky. Následující příklad v jazyce C# je určený jen pro pochopení základního principu techniky.
 
 V následujícím příkladu funkce `formatCurried` vrací typ `Func<int, Func<bool, string>>`, což znamená delegát, který má jako parametr typ `int` a jako návratový typ má znovu delegáta, tentokrát s parametrem `bool` a návratovým typem `string`.
 
