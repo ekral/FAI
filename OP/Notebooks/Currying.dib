@@ -1,6 +1,6 @@
 #!meta
 
-{"kernelInfo":{"defaultKernelName":"csharp","items":[{"name":"csharp","languageName":"C#","aliases":["c#","C#"]},{"name":"vscode","aliases":["frontend"],"languageName":null}]}}
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"name":"csharp","languageName":"C#","aliases":["c#","C#"]},{"name":"vscode","aliases":["frontend"],"languageName":null},{"name":".NET","languageName":null,"aliases":[]}]}}
 
 #!markdown
 
@@ -51,7 +51,7 @@ Console.WriteLine(vysledek);
 
 #!markdown
 
-Předchozí zřetěžené volání funkcí `formatCurried(1)(true)` si můžeme rozepsat na více kroků. Získáme tedy opět funkci typu `Func<bool, string>`.
+Předchozí zřetěžené volání funkcí `formatCurried(1)(true)` si můžeme rozepsat na více kroků. Získáme tedy opět funkci typu `Func<bool, string>`. Currying tedy představuje techniku umožnující mimo jiné Partial function application.
 
 #!csharp
 
