@@ -21,7 +21,7 @@ class Zviratko
     }
 }
 ```
-a potom definujeme dva potomky této třídy, které překryjí s použitím klíčového slova `override` metodu `VratZvuk`. Prvním potomkem je třída `Pejsek`, která vrací zvuk "haf haf" a druhým třída `Kocicka`, která vrazí zvuk "mnau".
+a potom definujeme dva potomky této třídy, které překryjí s použitím klíčového slova `override` metodu `VratZvuk`. Prvním potomkem je třída `Pejsek`, která vrací zvuk "haf haf" a druhým třída `Kocicka`, která vrací zvuk "mnau".
 
 ```cs 
 class Pejsek : Zviratko

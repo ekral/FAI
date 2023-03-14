@@ -1,0 +1,48 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"name":"csharp","aliases":["c#","C#"],"languageName":"C#"},{"name":"vscode","languageName":null,"aliases":["frontend"]}]}}
+
+#!markdown
+
+## Abstraktní metoda a třída
+---
+
+Abstraktní metoda nemá implementaci (tělo) a může být definována pouze v abstraktní třídě. Abstraktní třída slouží pouze jako rodičovská třída a v klientském kódu používáme její potomky, ale nemůžeme vytvářet její instance. Opět jde o kontrukci kterou vytváříme z důvodu statické typové kontroly.
+
+Nyní si projdeme příklad, kdy si nejprve vytvoříme virtuální metodu `VratZvuk`, kterou poté změníme na abstraktní.
+
+Nejprve si definujeme třídu `Zviratko`, ktera ma property `Jmeno` a virtuální metodu `VratZvuk`.
+
+#!csharp
+
+class Zviratko
+{
+    public string Jmeno { get; set; }
+
+    public virtual string VratZvuk()
+    {
+        return "?";
+    }
+}
+
+#!markdown
+
+A potom definujeme dva potomky této třídy, které překryjí s použitím klíčového slova `override` metodu `VratZvuk`. Prvním potomkem je třída `Pejsek`, která vrací zvuk "haf haf" a druhým třída `Kocicka`, která vrací zvuk "mnau".
+
+#!csharp
+
+class Pejsek : Zviratko
+{
+    public override string VratZvuk()
+    {
+        return "haf haf";
+    }
+}
+
+class Kocicka : Zviratko
+{
+    public override string VratZvuk()
+    {
+        return "mnau";
+    }
+}
