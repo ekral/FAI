@@ -53,7 +53,7 @@ Console.WriteLine($"{kocicka.Jmeno} dela {kocicka.VratZvuk()}");
 
 #!markdown
 
-Pokud se zamyslíme nad metodou `VratZvuk` ve třídě `Zviratko`, tak pro ni **nemáme smysluplnou implementaci** protože jde o obecné (abstraktní) zvířátko které nedělá žádný zvuk. Takové metody pro které nemáme implementaci a které musí implementovat až potomci této třídy můžeme označit jako abstraktní klíčovým slovem `abstract`. Abstraktní metody mohou mít pouze abstraktní třídy, třída `Zviratko` tedy musí být označená klíčovým slovem `abstract`. Takové třídy jsou potom určené pouze pro dědičnost a nemůžeme vytvářet jejich instance ale jen mít reference. Potomci těchto tříd potom musí povinně implementovat abstraktní metody. Abstraktní třída může být jako abstraktní označena i když nemá abstraktní metody.
+Pokud se zamyslíme nad metodou `VratZvuk` ve třídě `Zviratko`, tak pro ni **nemáme smysluplnou implementaci** protože jde o obecné (abstraktní) zvířátko které nedělá žádný zvuk. Takové metody pro které nemáme implementaci a které musí implementovat až potomci této třídy můžeme označit jako abstraktní klíčovým slovem `abstract`. Abstraktní metody mohou mít pouze abstraktní třídy, třída `Zviratko` tedy musí být označená klíčovým slovem `abstract`. Takové třídy jsou potom určené pouze pro dědičnost a nemůžeme vytvářet jejich instance ale jen mít reference. Potomci těchto tříd potom musí povinně implementovat abstraktní metody. Abstraktní třída může být jako abstraktní označena klíčovým slovem `abstract` i když nemá abstraktní metody.
 
 #!csharp
 
@@ -88,7 +88,7 @@ Console.WriteLine($"{kocicka.Jmeno} dela {kocicka.VratZvuk()}");
 
 #!markdown
 
-Použití tříd `Pejsek` a `Kocicka`a v klientském kódu zůstává stejné, jediný rozdíl je v tom, že nemůžeme vytvářet instance třídy `Zviratko`.
+Použití tříd `Pejsek` a `Kocicka` a v klientském kódu zůstává stejné, jediný rozdíl je v tom, že nemůžeme vytvářet instance třídy `Zviratko`.
 
 #!csharp
 
@@ -191,3 +191,7 @@ Auto auto = new Auto();
 
 VypisZvuk(pejsek);
 VypisZvuk(auto);
+
+#!markdown
+
+## Příklad implementace rozhraní IDisposable
