@@ -1,6 +1,6 @@
 #!meta
 
-{"kernelInfo":{"defaultKernelName":"csharp","items":[{"name":"csharp","aliases":["c#","C#"],"languageName":"C#"},{"name":"vscode","languageName":null,"aliases":["frontend"]}]}}
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"name":"csharp","languageName":"C#","aliases":["c#","C#"]},{"name":"vscode","aliases":["frontend"],"languageName":null},{"name":"fsharp","languageName":"F#","aliases":["f#","F#"]}]}}
 
 #!markdown
 
@@ -49,15 +49,13 @@ Zviratko zviratko = new Zviratko() { Jmeno = "Obecne zviratko" };
 Zviratko pejsek = new Pejsek() { Jmeno = "Azor" };
 Zviratko kocicka = new Kocicka() { Jmeno = "Micka" };
 
-Console.WriteLine($"{zviratko.Jmeno} dela {zviratko.VratZvuk()}"); // Obecne zviratko dela ?
-Console.WriteLine($"{pejsek.Jmeno} dela {pejsek.VratZvuk()}"); // Azor dela haf haf
-Console.WriteLine($"{kocicka.Jmeno} dela {kocicka.VratZvuk()}"); // Micka dela mnau
+Console.WriteLine($"{zviratko.Jmeno} dela {zviratko.VratZvuk()}");
+Console.WriteLine($"{pejsek.Jmeno} dela {pejsek.VratZvuk()}");
+Console.WriteLine($"{kocicka.Jmeno} dela {kocicka.VratZvuk()}");
 
 #!markdown
 
-Pokud se zamyslíme nad metodou `VratZvuk` ve třídě `Zviratko`, tak pro ni **nemáme smysluplnou implementaci** protože jde o obecné (abstraktní) zvířátko které nedělá žádný zvuk. Takové metody pro které nemáme implementaci a které musí implementovat až potomci této třídy můžeme označit jako abstraktní klíčovým slovem `abstract`. Abstraktní metody mohou mít pouze abstraktní třídy, třída `Zviratko` tedy musí být označená klíčovým slovem `abstract`. Takové třídy jsou potom určené pouze pro dědičnost a nemůžeme vytvářet jejich instance. Potomci těchto tříd potom musí povinně implementovat abstraktní metody.
-
-Použití tříd `Pejsek` a `Kocicka`a v klientském kódu zůstává stejné, jediný rozdíl je v tom, že nemůžeme vytvářet instance třídy `Zviratko`, můžeme mít pouze referenci tohoto typu:
+Pokud se zamyslíme nad metodou `VratZvuk` ve třídě `Zviratko`, tak pro ni **nemáme smysluplnou implementaci** protože jde o obecné (abstraktní) zvířátko které nedělá žádný zvuk. Takové metody pro které nemáme implementaci a které musí implementovat až potomci této třídy můžeme označit jako abstraktní klíčovým slovem `abstract`. Abstraktní metody mohou mít pouze abstraktní třídy, třída `Zviratko` tedy musí být označená klíčovým slovem `abstract`. Takové třídy jsou potom určené pouze pro dědičnost a nemůžeme vytvářet jejich instance ale jen mít reference. Potomci těchto tříd potom musí povinně implementovat abstraktní metody.
 
 #!csharp
 
@@ -87,8 +85,16 @@ class Kocicka : Zviratko
 Zviratko pejsek = new Pejsek() { Jmeno = "Azor" };
 Zviratko kocicka = new Kocicka() { Jmeno = "Micka" };
 
-Console.WriteLine($"{pejsek.Jmeno} dela {pejsek.VratZvuk()}"); // Azor dela haf haf
-Console.WriteLine($"{kocicka.Jmeno} dela {kocicka.VratZvuk()}"); // Micka dela mnau
+Console.WriteLine($"{pejsek.Jmeno} dela {pejsek.VratZvuk()}");
+Console.WriteLine($"{kocicka.Jmeno} dela {kocicka.VratZvuk()}"); 
+
+#!markdown
+
+Použití tříd `Pejsek` a `Kocicka`a v klientském kódu zůstává stejné, jediný rozdíl je v tom, že nemůžeme vytvářet instance třídy `Zviratko`.
+
+#!csharp
+
+Zviratko zviratko = new Zviratko();
 
 #!markdown
 
