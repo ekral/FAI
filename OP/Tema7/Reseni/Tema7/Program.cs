@@ -113,7 +113,8 @@ namespace Tema7
     {
         static void Main(string[] args)
         {
-            Zoo zoo = new Zoo("Zoo Lesna", new ConsoleLogger("log.txt"));
+            // TODO: Zoo zoo = new Zoo("Zoo Lesna", new FileLogger("log.txt"));
+            Zoo zoo = new Zoo("Zoo Lesna", new FileLogger());
 
             bool konec = false;
 
