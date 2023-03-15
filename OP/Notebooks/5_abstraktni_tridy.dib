@@ -1,6 +1,6 @@
 #!meta
 
-{"kernelInfo":{"defaultKernelName":"csharp","items":[{"name":"csharp","languageName":"C#","aliases":["c#","C#"]},{"name":"vscode","aliases":["frontend"],"languageName":null},{"name":"fsharp","languageName":"F#","aliases":["f#","F#"]}]}}
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"name":"csharp","aliases":[]}]}}
 
 #!markdown
 
