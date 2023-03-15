@@ -48,7 +48,7 @@ zoo.Pridej(rex); // nejde prelozit
 
 class Zoo
 {
-    private  List<Kocicka> zviratka = new();
+    private  List<Kocicka> zviratka = new List<Zviratko>();
 
     public void Pridej(Kocicka kocicka)
     {
