@@ -346,3 +346,7 @@ Definujte třídu `Obrazek` implementující rozhraní `IDrawable`, kdy v metode
 
 IDrawable drawable = new Obrazek();
 drawable.Draw();
+
+#!markdown
+
+3. V předchozích příkladech odstraňte definici rozhraní a abstraktní třídy a zkuste si jej sami nadefinovat.
