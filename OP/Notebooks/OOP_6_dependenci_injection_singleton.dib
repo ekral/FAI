@@ -230,7 +230,7 @@ banka.Vyber(50m);
 
 #!markdown
 
-## Singleton vs Dependency Injection
+## Dependency Injection vs Singleton
 ---
 
 #!markdown
@@ -305,7 +305,7 @@ banka.Vyber(200m);
 
 #!markdown
 
-Výhodou použití techniky Dependency Injection v tomto příkladě například je, že můžeme pro potřeby unit testu vytvořit třídu, která neloguje nikam a použít ji v testu tak, aby test neměl žádné vedlejší efekty, tedy neměnil obsah souboru pro logování. A nemusíme přitom měnit kód třídy `BankovniUcet`.
+Výhodou použití techniky Dependency Injection proti například statické je, že můžeme volit různé implementace loggeru a nemusíme přitom měnit kód třídy `Ucet`. Například pro potřeby unit testu vytvořit třídu, která neloguje nikam a použít ji v testu tak, aby test neměl žádné vedlejší efekty, tedy neměnil obsah souboru pro logování. 
 
 #!csharp
 
@@ -319,7 +319,7 @@ class LoggerStub : ILogger
 
 #!markdown
 
-Následující test bychom mohli spustit napříkald pomocí příkazu `dotnet test`, ale v Notebooku jej jednoduše pustit nelze.
+Zkuste zmenit kód metody Vyber třídy `Ucet`, tak aby nesprávně odečítal zůstatek a test vyvolá vyjímku a upozorní nás na chybu. Testy se běžně nepouští v kódu, ale automatizovaně například pomocí příkazu `dotnet test` nad projektem obsahujícím unit testy. V tomto notebooku takový projekt nemáme, tak test pouštíme přímo z kódu.
 
 #!csharp
 
@@ -339,3 +339,143 @@ public class TestBankovniUcet
         Assert.Equal(0.0m, banka.Zustatek);
     }
 }
+
+TestBankovniUcet test = new();
+test.Vyber_Vse_NulovyZustatek();
+
+#!markdown
+
+## Singleton vs Statická třída
+---
+
+#!markdown
+
+Třída pro logování by mohla také být implementována jako statická třída se statickými metodami a fieldy. Následující ukázka využívá i statický konstruktor:
+
+#!csharp
+
+static class StaticLogger
+{
+    private static int counter;
+
+    static StaticLogger()
+    {
+        counter = 0;
+    }
+
+    public static void Log(string text)
+    {
+        Console.WriteLine($"{counter}: {text}");
+        ++counter;
+    }
+}
+
+#!markdown
+
+V případě statické třídy máme jedinou možnost jak ji použít a to voláním statické metody `Log`:
+
+#!csharp
+
+class Ucet
+{
+    public decimal Zustatek { get; set; }
+
+    public Ucet()
+    {
+        Zustatek = 1000;
+    }
+
+    public void Vyber(decimal castka)
+    {
+        StaticLogger.Log($"vyber castky: {castka}");
+
+        Zustatek -= castka;
+    }
+}
+
+#!markdown
+
+Singleton má proti statické metodě výhodu, že může implementovat rozhraní a můžeme jej využít s technikou Dependency Injection. A také můžeme alokovat paměť pro objekty teprve až se poprvé zažádá o instanci singletonu. 
+
+V následujícím příkladu si nejprve nadefinujeme `SingletonLogger` implementující rozhraní `ILogger` z příkladu na dependency injection:
+
+#!csharp
+
+class SingletonLogger : ILogger
+{
+    private static SingletonLogger instance;
+
+    private int counter;
+
+    private SingletonLogger()
+    {
+        counter = 0;
+    }
+
+    public void Log(string text)
+    {
+        Console.WriteLine($"{counter}: {text}");
+        ++counter;
+    }
+
+    public static SingletonLogger Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = new SingletonLogger();
+            }
+            return instance;
+        }
+    }
+}
+
+#!markdown
+
+A objekt typu `SingletonLogger` pak můžeme použít všude tam, kde se vyžaduje typ `ILogger`, například v bankovním účtu z příkladu na Dependency Injection:
+
+#!csharp
+
+class Ucet
+{
+    private ILogger logger;
+    
+    public decimal Zustatek { get; set; }
+    
+    public Ucet(ILogger logger)
+    {
+        this.logger = logger;
+        
+        Zustatek = 1000;
+    }
+
+    public void Vyber(decimal castka)
+    {
+        logger.Log($"vyber castky: {castka}");
+
+        Zustatek -= castka;
+    }
+}
+
+#!csharp
+
+ILogger logger = SingletonLogger.Instance;
+Ucet ucet = new Ucet(logger);
+ucet.Vyber(2000.0m);
+
+#!markdown
+
+Použití Singletonu je tedy mnohem pruženější proti použití statické třídy. Reálně se ale Singleton s technikou Dependency Injection tak často nevyužívá a využívá se spíše vzor Inversion of Control. 
+
+#!markdown
+
+---
+
+Více se o technice Dependency Injection a Inversion of Control můžete dočíst například zde:
+
+[Dependency injection in .NET. Microsoft Docs. 2022](https://docs.microsoft.com/en-us/dotnet/core/extensions/dependency-injection)
+
+Singleton a další klasické patterny byly představeny v následující klasické knize:
+
+[GAMMA, Erich. Design patterns: elements of reusable object-oriented software. Boston: Addison-Wesley, 1995. ISBN 0-201-63361-2](https://www.oreilly.com/library/view/design-patterns-elements/0201633612/)
