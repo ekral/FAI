@@ -1,6 +1,6 @@
 #!meta
 
-{"kernelInfo":{"defaultKernelName":"csharp","items":[{"name":"csharp","aliases":["c#","C#"],"languageName":"C#"},{"name":"javascript","aliases":["js"],"languageName":"JavaScript"},{"name":"webview","aliases":[]},{"name":"vscode","languageName":null,"aliases":["frontend"]}]}}
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"name":"csharp","languageName":"C#","aliases":["c#","C#"]},{"name":"javascript","languageName":"JavaScript","aliases":["js"]},{"name":"webview","aliases":[]},{"name":"vscode","aliases":["frontend"],"languageName":null}]}}
 
 #!markdown
 
@@ -302,6 +302,10 @@ abstract class Kontrolka
 #!markdown
 
 Doplňte definici třídy `Tlacitko` tak,
+
+#!csharp
+
+// definice tridy Tlacitko
 
 #!markdown
 
