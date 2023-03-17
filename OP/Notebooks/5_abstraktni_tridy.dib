@@ -1,6 +1,6 @@
 #!meta
 
-{"kernelInfo":{"defaultKernelName":"csharp","items":[{"name":"csharp","languageName":"C#","aliases":["c#","C#"]},{"name":"javascript","languageName":"JavaScript","aliases":["js"]},{"name":"webview","aliases":[]},{"name":"vscode","aliases":["frontend"],"languageName":null}]}}
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"aliases":["C#","c#"],"languageName":"C#","name":"csharp"},{"aliases":["js"],"languageName":"JavaScript","name":"javascript"},{"aliases":["frontend"],"name":"vscode"},{"aliases":[],"name":"webview"}]}}
 
 #!markdown
 
@@ -309,7 +309,7 @@ Doplňte definici třídy `Tlacitko` tak,
 
 #!markdown
 
-aby byl funkční následující kód a vypsal na terminál text "Kreslim tlacitko".
+Aby byl funkční následující kód a vypsal na terminál text "Kreslim tlacitko".
 
 #!csharp
 
@@ -318,3 +318,31 @@ kontrolka.sirka = 200;
 kontrolka.vyska = 300;
 
 kontrolka.Vykresli(); 
+
+#!markdown
+
+2. Příklad na implementaci rozhraní
+
+#!markdown
+
+Máte rozhraní `IDrawable.
+
+#!csharp
+
+interface IDrawable
+{
+    void Draw();
+}
+
+#!markdown
+
+Definujte třídu `Obrazek` implementující rozhraní `IDrawable`, kdy v metode `Draw` vypiste na terminal "Kreslim obrazek"
+
+#!csharp
+
+// Definice třídy obrázek
+
+#!csharp
+
+IDrawable drawable = new Obrazek();
+drawable.Draw();
