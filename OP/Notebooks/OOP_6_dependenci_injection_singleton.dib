@@ -68,7 +68,7 @@ automobil.Jed();
 
 #!markdown
 
-Představme si ale situaci, že bychom chtěli při vytváření nového automobilu zvolit typ motoru, například místo benzínového motoru bychom chtěli zvoli následující naftový motor, a nechtěli bychom přitom měnit kód třídy `Automobil`:
+Představme si ale situaci, že bychom chtěli při vytváření nového automobilu zvolit typ motoru, například místo benzínového motoru bychom chtěli zvoli následující naftový motor, a **nechtěli bychom přitom měnit kód třídy** `Automobil`:
 
 #!csharp
 
@@ -82,7 +82,7 @@ class NaftovyMotor
 
 #!markdown
 
-Nejprve vytvoříme rozhraní, které budou implementovat oba motory (a případně i další nové typy motorů):
+Aby to bylo možné, tak si nejprve vytvoříme rozhraní, které budou implementovat oba motory (a případně i další nové typy motorů):
 
 #!csharp
 
@@ -305,7 +305,7 @@ banka.Vyber(200m);
 
 #!markdown
 
-Výhodou použití techniky Dependency Injection proti například statické je, že můžeme volit různé implementace loggeru a nemusíme přitom měnit kód třídy `Ucet`. Například pro potřeby unit testu vytvořit třídu, která neloguje nikam a použít ji v testu tak, aby test neměl žádné vedlejší efekty, tedy neměnil obsah souboru pro logování. 
+Výhodou použití techniky Dependency Injection proti například statické metodě je, že můžeme volit různé implementace loggeru a nemusíme přitom měnit kód třídy `Ucet`. Například pro potřeby unit testu vytvořit třídu, která neloguje nikam a použít ji v testu tak, aby test neměl žádné vedlejší efekty, tedy neměnil obsah souboru pro logování. 
 
 #!csharp
 
@@ -319,7 +319,7 @@ class LoggerStub : ILogger
 
 #!markdown
 
-Zkuste zmenit kód metody Vyber třídy `Ucet`, tak aby nesprávně odečítal zůstatek a test vyvolá vyjímku a upozorní nás na chybu. Testy se běžně nepouští v kódu, ale automatizovaně například pomocí příkazu `dotnet test` nad projektem obsahujícím unit testy. V tomto notebooku takový projekt nemáme, tak test pouštíme přímo z kódu.
+Zkuste zmenit kód metody Vyber třídy `Ucet`, tak aby nesprávně odečítal zůstatek a následující test vyvolá vyjímku a upozorní nás na chybu. Testy se běžně nepouští v kódu, ale automatizovaně například pomocí příkazu `dotnet test` nad projektem obsahujícím unit testy. V tomto notebooku takový projekt nemáme, tak test pouštíme přímo z kódu.
 
 #!csharp
 
@@ -466,7 +466,7 @@ ucet.Vyber(2000.0m);
 
 #!markdown
 
-Použití Singletonu je tedy mnohem pruženější proti použití statické třídy. Reálně se ale Singleton s technikou Dependency Injection tak často nevyužívá a využívá se spíše vzor Inversion of Control. 
+Použití Singletonu je tedy mnohem pruženější proti použití statické třídy. Reálně se ale Singleton s technikou Dependency Injection tak často nevyužívá a využívá se spíše technika Inversion of Control. 
 
 #!markdown
 
