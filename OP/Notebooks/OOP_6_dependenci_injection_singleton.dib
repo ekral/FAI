@@ -4,8 +4,19 @@
 
 #!markdown
 
-## Dependency injection
+# Dependency injection a Singleton
 ---
+
+Obsah
+- Dependency Injection
+- Dependency Injection a Unit Testy
+- Singleton
+- Singleton a Dependency Injection
+- Singleton vs Statická třída
+
+#!markdown
+
+## Dependency injection
 
 #!markdown
 
@@ -153,89 +164,11 @@ Cvičení
 
 #!markdown
 
-## Singleton
----
+## Dependency Injection a Unit Testy
 
 #!markdown
 
-Singleton představuje klasický návrhový vzor (postup) používaný pokud chceme mít pouze a jenom jednu instanci třídy v programu, například instanci třídy pro logování do souboru. Singleton je většinou implementovaný jako třída s private konstruktorem, která má statickou metodu Instance, která vrací referenci na statický field – vlastní instanci třídy, kterou chceme použít.
-I když má Singleton své výhody a zaručuje že v programuje je vždy jen jedna jeho instance, bývá někdy označován jako **anti-pattern**, protože využití statických členských metod může snižovat testovatelnost kódu.
-
-#!markdown
-
-V následujícím příkladu nejprve použijeme pro logování (zápisu průběhu programu například do textového souboru) Singleton a poté ten samý příklad vyřešíme pomocí techniky Dependency Injection.
-
-Následující třída `SingletonLogger` má `private` konstruktor, což znamená, že můžeme vytvářet její instance jen v metodách této třídy a ne v klientském kódu. Potom máme static property `Instance`, která ověří zda má static field `instance` hodnotu `null`, tedy zda je již instance vytvořena a pokud ne, tak ji vytvoří a vrátí referenci na tuto instanci. Pokud už instance existuje, tak novou nevytváří, tím je, zaručeno, že v celém programu bude existovat jen jedna instance třídy `SingletonLogger`. Field `counter` počítá počet logů a v příkladu je uvedený jen pro ukázku použití fieldu v tříde `SingletonLogger`.
-
-#!csharp
-
-class SingletonLogger
-{
-    private static SingletonLogger instance;
-
-    private int counter;
-    
-    private SingletonLogger()
-    {
-        counter = 0;
-    }
-    
-    public void Log(string text)
-    {
-        Console.WriteLine($"{counter}: {text}");
-        ++counter;
-    }
-    
-    public static SingletonLogger Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = new SingletonLogger();
-            }
-            return instance;
-        }
-    }
-}
-
-#!markdown
-
-Nyní použijeme `SingletonLogger` v třídě `BankovniUcet`, kdy budeme logovat na konzoli každý výběr.
-
-#!csharp
-
-class Ucet
-{
-    public decimal Zustatek { get; set; }
-    
-    public Ucet()
-    {
-        Zustatek = 1000;
-    }
-    
-    public void Vyber(decimal castka)
-    {
-        SingletonLogger.Instance.Log($"vyber castky: {castka}");
-        
-        Zustatek -= castka;
-    }
-}
-
-#!csharp
-
-Ucet banka = new Ucet();
-banka.Vyber(200m);
-banka.Vyber(50m);
-
-#!markdown
-
-## Dependency Injection vs Singleton
----
-
-#!markdown
-
-Nyní stejný příklad s logováním vkladu na bankovní účet vyřešíme s pomocí techniky Dependency Injection. Nejprve si nadefinujeme rozhraní `ILogger`:
+Dependency Injection se často používá také proto, aby byl kód testovatelný. Nyní si vytvoříme příklad na Depenndency injection s logováním vkladu na bankovní účet a poté jej otestujeme pomocí Unit Testu. Nejprve si nadefinujeme rozhraní `ILogger`:
 
 #!csharp
 
@@ -319,11 +252,13 @@ class LoggerStub : ILogger
 
 #!markdown
 
-Zkuste zmenit kód metody Vyber třídy `Ucet`, tak aby nesprávně odečítal zůstatek a následující test vyvolá vyjímku a upozorní nás na chybu. Testy se běžně nepouští v kódu, ale automatizovaně například pomocí příkazu `dotnet test` nad projektem obsahujícím unit testy. V tomto notebooku takový projekt nemáme, tak test pouštíme přímo z kódu.
+Nyní vytvoříme Unit Test, který otestuje, zda metoda `Vyber` odečítá správně částku od zůstatku. Zkuste zmenit kód metody Vyber třídy `Ucet`, tak aby nesprávně odečítal zůstatek a následující test vyvolá vyjímku a upozorní nás na chybu. Testy se běžně nepouští v kódu, ale automatizovaně například pomocí příkazu `dotnet test` nad projektem obsahujícím unit testy. V tomto notebooku takový projekt nemáme, tak test pouštíme přímo z kódu. První příkaz nainstaluje nuget balíček xunit, což je jeden z frameworků pro tvorbu Unit testů.
 
 #!csharp
 
 #r "nuget:xunit"
+
+#!csharp
 
 using Xunit;
 
@@ -345,59 +280,89 @@ test.Vyber_Vse_NulovyZustatek();
 
 #!markdown
 
-## Singleton vs Statická třída
----
+## Singleton
 
 #!markdown
 
-Třída pro logování by mohla také být implementována jako statická třída se statickými metodami a fieldy. Následující ukázka využívá i statický konstruktor:
+Singleton představuje klasický návrhový vzor (postup) používaný pokud chceme mít pouze a jenom jednu instanci třídy v programu, například instanci třídy pro logování do souboru. Singleton je většinou implementovaný jako třída s private konstruktorem, která má statickou metodu Instance, která vrací referenci na statický field – vlastní instanci třídy, kterou chceme použít.
+I když má Singleton své výhody a zaručuje že v programuje je vždy jen jedna jeho instance, bývá někdy označován jako **anti-pattern**, protože využití statických členských metod může snižovat testovatelnost kódu.
+
+#!markdown
+
+V následujícím příkladu vytvoříme třídu pro logování (zápisu průběhu programu například do textového souboru) jako Singleton.
+
+Následující třída `SingletonLogger` má `private` konstruktor, což znamená, že můžeme vytvářet její instance jen v metodách této třídy a ne v klientském kódu. Potom máme static property `Instance`, která ověří zda má static field `instance` hodnotu `null`, tedy zda je již instance vytvořena a pokud ne, tak ji vytvoří a vrátí referenci na tuto instanci. Pokud už instance existuje, tak novou nevytváří, tím je, zaručeno, že v celém programu bude existovat jen jedna instance třídy `SingletonLogger`. Field `counter` počítá počet logů a v příkladu je uvedený jen pro ukázku použití fieldu v tříde `SingletonLogger`.
 
 #!csharp
 
-static class StaticLogger
+class SingletonLogger
 {
-    private static int counter;
+    private static SingletonLogger instance;
 
-    static StaticLogger()
+    private int counter;
+    
+    private SingletonLogger()
     {
         counter = 0;
     }
-
-    public static void Log(string text)
+    
+    public void Log(string text)
     {
         Console.WriteLine($"{counter}: {text}");
         ++counter;
+    }
+    
+    public static SingletonLogger Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = new SingletonLogger();
+            }
+            return instance;
+        }
     }
 }
 
 #!markdown
 
-V případě statické třídy máme jedinou možnost jak ji použít a to voláním statické metody `Log`:
+Nyní použijeme `SingletonLogger` v třídě `BankovniUcet`, kdy budeme logovat na konzoli každý výběr.
 
 #!csharp
 
 class Ucet
 {
     public decimal Zustatek { get; set; }
-
+    
     public Ucet()
     {
         Zustatek = 1000;
     }
-
+    
     public void Vyber(decimal castka)
     {
-        StaticLogger.Log($"vyber castky: {castka}");
-
+        SingletonLogger.Instance.Log($"vyber castky: {castka}");
+        
         Zustatek -= castka;
     }
 }
 
+#!csharp
+
+Ucet banka = new Ucet();
+banka.Vyber(200m);
+banka.Vyber(50m);
+
 #!markdown
 
-Singleton má proti statické metodě výhodu, že může implementovat rozhraní a můžeme jej využít s technikou Dependency Injection. A také můžeme alokovat paměť pro objekty teprve až se poprvé zažádá o instanci singletonu. 
+## Singleton a Dependency Injection
 
-V následujícím příkladu si nejprve nadefinujeme `SingletonLogger` implementující rozhraní `ILogger` z příkladu na dependency injection:
+#!markdown
+
+Singleton má proti čistě statické metodě výhodu, že může implementovat rozhraní a můžeme jej využít s technikou Dependency Injection. A také můžeme alokovat paměť pro objekty teprve až se poprvé zažádá o instanci singletonu. Lepší ale bude opět využít využít Dependency Injection.
+
+V následujícím příkladu si nejprve nadefinujeme `SingletonLogger` implementující rozhraní `ILogger` z příkladu na dependency injection.
 
 #!csharp
 
@@ -467,6 +432,55 @@ ucet.Vyber(2000.0m);
 #!markdown
 
 Použití Singletonu je tedy mnohem pruženější proti použití statické třídy. Reálně se ale Singleton s technikou Dependency Injection tak často nevyužívá a využívá se spíše technika Inversion of Control. 
+
+#!markdown
+
+## Singleton vs Statická třída
+
+#!markdown
+
+Třída pro logování by mohla také být implementována jako statická třída se statickými metodami a fieldy. Následující ukázka využívá i statický konstruktor:
+
+#!csharp
+
+static class StaticLogger
+{
+    private static int counter;
+
+    static StaticLogger()
+    {
+        counter = 0;
+    }
+
+    public static void Log(string text)
+    {
+        Console.WriteLine($"{counter}: {text}");
+        ++counter;
+    }
+}
+
+#!markdown
+
+V případě statické třídy máme jedinou možnost jak ji použít a to voláním statické metody `Log`. Kód je tedy obtížnější testovat a také není z konstruktoru zřejmé, že třída používá jinou metodu na logování.
+
+#!csharp
+
+class Ucet
+{
+    public decimal Zustatek { get; set; }
+
+    public Ucet()
+    {
+        Zustatek = 1000;
+    }
+
+    public void Vyber(decimal castka)
+    {
+        StaticLogger.Log($"vyber castky: {castka}");
+
+        Zustatek -= castka;
+    }
+}
 
 #!markdown
 
