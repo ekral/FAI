@@ -236,7 +236,7 @@ obchod.poplach -= VyjezdPolicie;
 ### Event vs delegát
 
 
-Event poskytuje na rozdíl od delegátu zapouzdření, protože event je možné vyvolat pouze uvnitř třídy, která jej definuje, dále event není možné „vynulovat“ mimo třídu a pozorovatel nemá možnost zjistit informace o dalších pozorovatelích.
+
 
 Více se o eventech můžete dozvědět například zde:
 
