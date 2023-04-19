@@ -1,6 +1,9 @@
 Úkoly k procvičování:
 1. Úkol načítání vtipů [zadání](1_zadani.cs) [řešení](1_reseni.cs)
 
+Následující text je zataralý, Aktuální verzi materiálu najdete zde:
+
+[Notebooks/OPN_10_async.ipynb](https://github.com/ekral/FAI/blob/master/OP/Notebooks/OPN_10_async.ipynb)
 
 
 ## Task
