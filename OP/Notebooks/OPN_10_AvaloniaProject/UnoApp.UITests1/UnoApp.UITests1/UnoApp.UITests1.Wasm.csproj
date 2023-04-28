@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <RootNamespace>UnoApp.UITests1</RootNamespace>
+    <AssemblyName>UnoApp.UITests1</AssemblyName>
+    <DefineConstants>$(DefineConstants);WINUI</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Uno.WinUI.Runtime.WebAssembly" Version="4.8.24" />
+  </ItemGroup>
+</Project>
