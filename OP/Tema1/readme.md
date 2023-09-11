@@ -1,6 +1,6 @@
 ## Opakování
 
-V předmětu Základy programování a algoritmizace probereme následující témata:
+Opakování z předmětu Základy programování a algoritmizace probereme následující témata:
 
 1. [Aritmetické výrazy](1_aritmeticke_vyrazy.md)
 2. [Relační a logické operátory](2_relacni_logicke_operatory.md)
