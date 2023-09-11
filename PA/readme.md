@@ -1,56 +1,24 @@
-Test 1 - pøíprava
----
-Pro zvládnutí prvního testu potøebujete znát dva datové typy a umìt definovat promìnné tìchto typù. Nezapomeòte, e záleí i na velkıch a malıch písmenech a promìnná `Math.Pow` musí bıt napsaná správnì vèetnì velkıch a malıch písmen.
-* `double y = 0;` desetiné èíslo se znaménkem
-* `int x = 0;` celé èíslo se znaménkem
+## OpakovÃ¡nÃ­
 
-Dále byste mìli znát následující operace, které si postupnì probereme na pøíkladech. 
+V pÅ™edmÄ›tu zÃ¡klady programovÃ¡nÃ­ a algoritmizace probereme nÃ¡sledujÃ­cÃ­ tÃ©mata:
 
-Nejprve si ale definujme tøi promìnné `x`, `y` a `z`:
-```cs 
-double x = 2.0;
-double y = 3.0;
-double z = 0.0;
-```
-* Matematické operátory souèet, rozdíl, souèin, podíl, záporná hodnota, druhá mocnina. Pro druhou mocninu pouíváme zápis `x * x` protoe protoe je to rychlejší a jednoduší ne pouití metody *Math.Pow*.
-```cs 
-z = x + y; // soucet
-z = x - y; // rozdil
-z = x * y; // soucin
-z = x / y; // podil
-z = -x; // zaporna hodnota
-z = x * x; // druha mocnina
-```
-* Matematické operace ze tøídy *Math* pro mocninu a odmocninu
-```cs 
-z = Math.Pow(x, 100.0); // mocnina x^100
-z = Math.Sqrt(9.0); // druha odmocnina
-```
-* Pouití konstanty PI ze tøídy *Math*
-```cs 
-z = 2 * Math.PI * x; // konstanta PI
-```
-* Urèování priorit operátorù pomocí kulatıch závorek ():
-```cs 
-z = x * (y + 3.0); // kulate zavorky urcuji prioritu 
-```
+1. [AritmetickÃ© vÃ½razy](1_aritmeticke_vyrazy.md)
+2. [RelaÄnÃ­ a logickÃ© operÃ¡tory](2_relacni_logicke_operatory.md)
+3. [PodmÃ­nÄ›nÃ½ pÅ™Ã­kaz](3_podmineny_prikaz.md)
+4. [Cykly](4_cykly.md)
+5. [Pole](5_pole.md)
+6. [Struktury](6_struktury.md)
+7. [Metody](7_metody.md)
+8. [Konstruktory](8_konstruktory.md)
+9. [ModifikÃ¡tory pÅ™Ã­stupu](9_modifikatory_pristupu.md)
+10. [Property](10_property.md)
 
-* A nakonec zmìna hodnot promìnné samotné:
-```cs 
-z = z + 2.0; // zvyseni o hodnotu
-z = z - 2.0; // snizeni o hodnotu
-++z; // zvyseni o 1
---z; // snizeni o 1
-```
----
-Pro typ `int` je zápis pøedchozích operací stejnı, jen pouíváme celoèíselné numerické konstanty. Nejvìtší rozdíl je ale v tom, e metody *Math.Pow* a *Math.Sqrt* pracují s typem `double` take vısledek musíme explicitnì pøetypovat s pomocí zápisu `(int)`. Samotné argumenty tìchto metod jsou ale typu `double` a typ `int` lze na typ `double` pøevést implicitnì (nemusíme do kódu nic psát).
-```cs 
-int a = 2;
-int b = 3;
-b = (int)Math.Pow(a, 100.0); // mocnina x^100
-b = (int)Math.Sqrt(9.0); // druha odmocnina
-a = a + 2; // zvyseni o hodnotu
-a = a - 2; // snizeni o hodnotu
-```
----
-V následujících kódech je uvedenı kompletní pøíklad a øešení pøíkladù ze cvièení.
+Pdf materiÃ¡ly k seminÃ¡Å™Å¯m:
+1. [PromÄ›nnÃ©](Seminare/Seminar_AP1PA_1.pdf)
+2. [ZÃ¡sobnÃ­k](Seminare/Seminar_AP1PA_2.pdf)
+3. [AritmetickÃ© vÃ½razy](Seminare/Seminar_AP1PA_3.pdf)
+4. [BooleanovskÃ© vÃ½razy](Seminare/Seminar_AP1PA_4.pdf)
+5. [PodmÃ­nky](Seminare/Seminar_AP1PA_5.pdf)
+6. [Cykly](Seminare/Seminar_AP1PA_6.pdf)
+7. [Kolekce](Seminare/Seminar_AP1PA_7.pdf)
+8. [TÅ™Ã­dy, struktury a referenÄnÃ­ typy](Seminare/Seminar_AP1PA_8.pdf)
