@@ -207,16 +207,16 @@ namespace MujPrvniProjekt
     { 
         static void Main(string[] args)
         {
-            double hmotnost = 85;
-            double vyska = 1.78;
+double hmotnost = 85;
+double vyska = 1.78;
 
-            Console.WriteLine($"hmotnost {hmotnost}kg a vyska {vyska}m");
-            
-            // vypocet bmi dle vzorce https://cs.wikipedia.org/wiki/Index_t%C4%9Blesn%C3%A9_hmotnosti
+Console.WriteLine($"hmotnost {hmotnost}kg a vyska {vyska}m");
 
-            double bmi = hmotnost / (vyska * vyska);
+// vypocet bmi dle vzorce https://cs.wikipedia.org/wiki/Index_t%C4%9Blesn%C3%A9_hmotnosti
 
-            Console.WriteLine($"bmi je {bmi}");
+double bmi = hmotnost / (vyska * vyska);
+
+Console.WriteLine($"bmi je {bmi}");
         }
     }
 }
