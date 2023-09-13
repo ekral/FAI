@@ -1,1 +1,0 @@
-PDF verze wordovských dokumentů.
