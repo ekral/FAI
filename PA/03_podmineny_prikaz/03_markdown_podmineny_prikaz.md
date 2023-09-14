@@ -1,4 +1,6 @@
-## 3. Podmíněný příkaz
+## 3. Vývojový diagram a podmíněný příkaz
+
+TODO: doplnit vývojové diagramy
 
 Pro zvládnutí předmětu potřebujete znát podmíněné příkazy `if`,  `if-else` a zřetězení podmínek pomocí `else if`. Dále potřebujete vědět jak podmínit provedení jednoho příkazu nebo bloku příkazů pomocí složených závorek `{}`.
 
