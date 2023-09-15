@@ -9,8 +9,8 @@ namespace Utb
     class Student
     {
         public int Id { get; set; }
-        public required string Jmeno { get; set; }
-        public required double Body { get; set; }
+        public required string Name { get; set; }
+        public required double Points { get; set; }
     }
 
     class SkolaContext : DbContext
@@ -35,9 +35,9 @@ namespace Utb
         {
             List<Student> studenti = new List<Student>()
             {
-                new Student() { Jmeno = "Jolana", Body = 100.0},
-                new Student() { Jmeno = "Karel", Body = 7.0},
-                new Student() { Jmeno = "Pavel", Body = 55.0}
+                new Student() { Name = "Jolana", Points = 100.0},
+                new Student() { Name = "Karel", Points = 7.0},
+                new Student() { Name = "Pavel", Points = 55.0}
             };
 
             modelBuilder.Entity<Student>().HasData(studenti);
@@ -52,17 +52,17 @@ namespace Utb
 
             List<Student> studenti = new List<Student>()
             {
-                new Student() { Jmeno = "Jolana", Body = 100.0},
-                new Student() { Jmeno = "Karel", Body = 7.0},
-                new Student() { Jmeno = "Pavel", Body = 55.0}
+                new Student() { Name = "Jolana", Points = 100.0},
+                new Student() { Name = "Karel", Points = 7.0},
+                new Student() { Name = "Pavel", Points = 55.0}
             };
 
             // chci ziskat kolekci studenti, kteri splnili zapocet z predmetu AP3AF
-            IEnumerable<Student> uspesniStudenti = studenti.Where(s => s.Body >= 50);
+            IEnumerable<Student> uspesniStudenti = studenti.Where(s => s.Points >= 50);
 
             foreach (Student student in uspesniStudenti)
             {
-                Console.WriteLine($"jmeno: {student.Jmeno} body: {student.Body}");
+                Console.WriteLine($"jmeno: {student.Name} body: {student.Points}");
             }
         }
     }
