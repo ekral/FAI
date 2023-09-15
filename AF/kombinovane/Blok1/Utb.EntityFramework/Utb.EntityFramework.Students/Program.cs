@@ -1,6 +1,8 @@
 ﻿using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Reflection.Emit;
 
 namespace Utb
 {
@@ -41,7 +43,7 @@ namespace Utb
             modelBuilder.Entity<Student>().HasData(studenti);
         }
     }
-    
+
 
     internal class Program
     {
@@ -58,12 +60,10 @@ namespace Utb
             // chci ziskat kolekci studenti, kteri splnili zapocet z predmetu AP3AF
             IEnumerable<Student> uspesniStudenti = studenti.Where(s => s.Body >= 50);
 
-            foreach(Student student in uspesniStudenti)
+            foreach (Student student in uspesniStudenti)
             {
                 Console.WriteLine($"jmeno: {student.Jmeno} body: {student.Body}");
             }
-
-            
         }
     }
 }
