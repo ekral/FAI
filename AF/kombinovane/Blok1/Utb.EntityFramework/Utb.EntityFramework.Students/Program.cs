@@ -15,7 +15,7 @@ namespace Utb
 
     class SkolaContext : DbContext
     {
-        DbSet<Student> Studenti { get; set; }
+        public DbSet<Student> Studenti { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -28,42 +28,45 @@ namespace Utb
                 DataSource = filePath
             };
 
-            optionsBuilder.UseSqlite(builder.ConnectionString);
+            optionsBuilder
+                .UseSqlite(builder.ConnectionString)
+                .LogTo(log => System.Diagnostics.Debug.WriteLine(log));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             List<Student> studenti = new List<Student>()
             {
-                new Student() { Name = "Jolana", Points = 100.0},
-                new Student() { Name = "Karel", Points = 7.0},
-                new Student() { Name = "Pavel", Points = 55.0}
+                new Student() { Id = 1, Name = "Jolana", Points = 100.0},
+                new Student() { Id = 2, Name = "Karel", Points = 7.0},
+                new Student() { Id = 3, Name = "Pavel", Points = 55.0}
             };
 
             modelBuilder.Entity<Student>().HasData(studenti);
         }
     }
 
-
     internal class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
+            using SkolaContext skolaKontext = new SkolaContext();
 
-            List<Student> studenti = new List<Student>()
-            {
-                new Student() { Name = "Jolana", Points = 100.0},
-                new Student() { Name = "Karel", Points = 7.0},
-                new Student() { Name = "Pavel", Points = 55.0}
-            };
-
-            // chci ziskat kolekci studenti, kteri splnili zapocet z predmetu AP3AF
-            IEnumerable<Student> uspesniStudenti = studenti.Where(s => s.Points >= 50);
+            IQueryable<Student> uspesniStudenti = skolaKontext.Studenti.Where(s => s.Points >= 50.0);
 
             foreach (Student student in uspesniStudenti)
             {
                 Console.WriteLine($"jmeno: {student.Name} body: {student.Points}");
             }
+
+            //Student novy = new Student() { Name = "Alice", Points = 80.0 };
+
+            //skolaKontext.Studenti.Add(novy);
+
+            //int pocet = await skolaKontext.SaveChangesAsync();
+
+            //Console.WriteLine(novy.Id);
+
         }
     }
 }
