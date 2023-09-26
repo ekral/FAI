@@ -45,7 +45,7 @@ Příkaz musíte spustit v adresáři, kde se nachází projekt, tedy soubor s p
 dotnet add package Microsoft.EntityFrameworkCore.Sqlite
 ```
 
-Dále definujeme potomka třídy DbContext a kolekce DbSet potom definuje tabulku v databázi.
+Dále definujeme potomka třídy ```DbContext``` a kolekce ```DbSet``` potom definuje tabulku v databázi.
 
 ```csharp
 using Microsoft.EntityFrameworkCore;
