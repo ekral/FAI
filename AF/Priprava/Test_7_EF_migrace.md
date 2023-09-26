@@ -67,11 +67,11 @@ dotnet ef database update
 ## Úkol na cvičení
 
 1) Nadefinujte třídu Pizza z projektu [Pizza.Kiosk](https://github.com/ekral/Utb.PizzaKiosk) a pomoci Entity Frameworku a migrací Vytvořte Sqlite databázi. Do databáze vložte tři pizzy jako výchozí data při vytvoření databáze.
-   a) Definujte třídu Pizza.
-   b) Definujte potomka třídy DbContext a DbSet pro tabulku Pizzas.
-   c) Definujte metodu OnConfiguring a nakonfigurujte Sqlite.
-   d) Definujte metodu OnCreating a přidejte výchozí pizzy.
-   e) Spusťte migraci a vytvořte databázi.
+   - Definujte třídu Pizza.
+   - Definujte potomka třídy DbContext a DbSet pro tabulku Pizza.
+   - Definujte metodu OnConfiguring a nakonfigurujte Sqlite.
+   - Definujte metodu OnCreating a přidejte výchozí pizzy.
+   - Spusťte migraci a vytvořte databázi.
 3) Vytvořte kód který vypíše všechny pizzy z databáze.
 4) Vytvořte kód, který vypíše pouze pizzy levnější než 150.
 5) Vytvořte kód, který vloží do databáze novou pizzu.
