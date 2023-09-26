@@ -59,3 +59,11 @@ A následující příkaz migraci aplikuje a vytvoří novou databází, nebo za
 ```powershell
 dotnet ef database update
 ```
+
+---
+## Úkol na cvičení
+
+1) Nadefinujte třídu Pizza z projektu [Pizza.Kiosk](https://github.com/ekral/Utb.PizzaKiosk) a pomoci Entity Frameworku a migrací Vytvořte Sqlite databázi. Do databáze vložte tři pizzy jako výchozí data při vytvoření databáze.
+2) Vytvořte kód který vypíše všechny pizzy z databáze.
+3) Vytvořte kód, který vypíše pouze pizzy levnější než 150.
+4) Vytvořte kód, který vloží do databáze novou pizzu.
