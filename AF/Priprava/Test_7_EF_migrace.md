@@ -97,6 +97,7 @@ class StudentContext : DbContext
 
 Dále přidáme metodu ```OnModelCreating```, kde můžeme zadat výchozí data v databází, ale také přesněji specifikovat primární klíče, cizí klíče a další.
 
+```csharp
 class StudentContext : DbContext
 {
     public DbSet<Student> Students { get; set; }
@@ -112,6 +113,7 @@ class StudentContext : DbContext
         );
     }
 }
+```
 
 ## Migrace
 
