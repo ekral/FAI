@@ -13,9 +13,9 @@ Budeme používat následující příkazy pro příkazovou řádku*:
 
 V následujícím příkladu definujteme třídu Student a pomocí migrací vytvoříme Sqlite databázi.
 
-### Definice třídy Student
+### 1. Definice třídy Student
 
-Ve třídě nechceme mít parametrický konstruktor, což by nám mohlo komplikovat práci s Entity Frameworkem. 
+Ve třídě nechceme mít parametrický konstruktor, což by nám mohlo komplikovat práci s Entity Frameworkem. Property představují sloupce tabulky a ```Id``` je dle jmenných konvencí primární klíč.
 
 ```csharp
 class Student
@@ -35,22 +35,30 @@ Student student = new()
     Prijmeni = "Nova"
 };
 ```
-## Entity Framework Provider
+## 2. DbContext a Entity Framework Provider
 
-Pokud chceme používat konkrétní databázi s Entity Frameworkem, tak musím do projektu přidat providera pro tuto databázi. Provider je většinou knihovna distriovaná jako nuget balíček. Následující příkaz nainstaluje nuget balíček, konrétně EF database provider pro databázi Sqlite. 
+Pokud chceme používat konkrétní databázi s Entity Frameworkem, tak musím do projektu přidat providera pro tuto databázi. Provider je většinou knihovna distriovaná jako nuget balíček. Následující příkaz nainstaluje nuget balíček, konrétně EF database provider pro databázi Sqlite.
+
+Příkaz musíte spustit v adresáři, kde se nachází projekt, tedy soubor s příponou *.csproj.
 
 ```powershell
 dotnet add package Microsoft.EntityFrameworkCore.Sqlite
 ```
 
-Bez použití migrací můžeme vytvořit databází pomocí metody *EnsureCreated() nebo EnsureCreatedAsync()*.
+Dále definujeme potomka třídy DbContext a kolekce DbSet potom definuje tabulku v databázi.
 
 ```csharp
-await using SkolaContext db = new SkolaContext();
-bool created = await db.Database.EnsureCreatedAsync();
+using Microsoft.EntityFrameworkCore;
+
+class StudentContext : DbContext
+{
+    public DbSet<Student> Students { get; set; }
+}
 ```
 
 ## Migrace
+
+
 
 Pomocí migrací můžeme vytvářet a aktualizovat databázi pomocí příkazů pro příkazovou řádku.
 
@@ -86,6 +94,13 @@ A následující příkaz migraci aplikuje a vytvoří novou databází, nebo za
 
 ```powershell
 dotnet ef database update
+```
+
+Poznámka: bez použití migrací můžeme vytvořit databází pomocí metody *EnsureCreated() nebo EnsureCreatedAsync()*.
+
+```csharp
+await using SkolaContext db = new SkolaContext();
+bool created = await db.Database.EnsureCreatedAsync();
 ```
 
 ---
