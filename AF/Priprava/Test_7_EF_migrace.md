@@ -2,10 +2,13 @@
 
 Návod pro Entity Framework: [Getting Started with EF Core](https://learn.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=netcore-cli)
 
-Budeme používat následující příkazy pro příkazovou řádku:
+Budeme používat následující příkazy pro příkazovou řádku*:
 - Příkaz ```dotnet add packgage``` stáhne nuget balíček z repozitáře nuget.org a přidá ho do projektu.
 - Příkaz ```dotnet tool install```, který instaluje nové příkazy pro příkazovou řádku.
 - Příkaz ```dotnet ef``` pomocí kterého vytváříme například nové migrace nebo aktualizujeme databázi.
+
+*Příkazy musíme spouštět v Terminálu a v adresáři, kde je uložený *.csproj.
+
 
 ## Entity Framework Provider
 
