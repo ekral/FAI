@@ -121,6 +121,8 @@ Pomocí migrací můžeme vytvářet a aktualizovat databázi pomocí příkazů
 
 ### Příprava potřebných závislostí 
 
+Příkazy opět pouštějte v adresáři, kde se nachází projekt, tedy soubor s příponou *.csproj a před spuštěním nezapomeňte uložit všechny soubory.
+
 Proto, abychom mohli vytvářet nové migrace a aktualizovat databázi, tak musíme nainstalovat:
 - nástroj **dotnet ef**. 
 - Nuget balíček podporující vytváření migrací **Microsoft.EntityFrameworkCore.Design**
@@ -131,7 +133,7 @@ Následující příkaz nainstaluje příkaz **dotnet ef** globálně pro všech
 dotnet tool install --global dotnet-ef
 ```
 
-A následující příkaz přída do projektu nuget balíček **Microsoft.EntityFrameworkCore.Design**.
+A následující příkaz přídá do projektu nuget balíček **Microsoft.EntityFrameworkCore.Design**.
 
 ```powershell
 dotnet add package Microsoft.EntityFrameworkCore.Design
