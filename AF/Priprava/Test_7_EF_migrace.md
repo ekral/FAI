@@ -117,11 +117,9 @@ class StudentContext : DbContext
 
 ## Migrace
 
-Pomocí migrací můžeme vytvářet a aktualizovat databázi pomocí příkazů pro příkazovou řádku.
+Pomocí migrací můžeme vytvářet a aktualizovat databázi pomocí příkazů pro příkazovou řádku. Příkazy opět pouštějte v adresáři, kde se nachází projekt, tedy soubor s příponou *.csproj a před spuštěním nezapomeňte uložit všechny soubory.
 
 ### Příprava potřebných závislostí 
-
-Příkazy opět pouštějte v adresáři, kde se nachází projekt, tedy soubor s příponou *.csproj a před spuštěním nezapomeňte uložit všechny soubory.
 
 Proto, abychom mohli vytvářet nové migrace a aktualizovat databázi, tak musíme nainstalovat:
 - nástroj **dotnet ef**. 
