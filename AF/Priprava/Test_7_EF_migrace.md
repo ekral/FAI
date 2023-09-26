@@ -56,9 +56,46 @@ class StudentContext : DbContext
 }
 ```
 
+Pomocí přetížené metody OnConfiguring potom nakonfigurujeme databázi, konrétně zadáme connection string. 
+
+Jednoduchý zápis:
+
+```csharp
+class StudentContext : DbContext
+{
+    public DbSet<Student> Students { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseSqlite("Data Source=studenti.db");
+    }
+}
+```
+
+Zápis, který ukládá databázi do dokumentů uživatele a používá connection string builder aby nedošlo k chybnému zápisu.
+
+```csharp
+class StudentContext : DbContext
+{
+    public DbSet<Student> Students { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        var folder = Environment.SpecialFolder.MyDocuments;
+        string folderPath = Environment.GetFolderPath(folder);
+        string filePath = Path.Join(folderPath, "studenti3.db");
+
+        SqliteConnectionStringBuilder csb = new SqliteConnectionStringBuilder
+        {
+            DataSource = filePath
+        };
+
+        optionsBuilder.UseSqlite(csb.ConnectionString);
+    }
+}
+```
+
 ## Migrace
-
-
 
 Pomocí migrací můžeme vytvářet a aktualizovat databázi pomocí příkazů pro příkazovou řádku.
 
