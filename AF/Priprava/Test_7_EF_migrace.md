@@ -9,7 +9,32 @@ Budeme používat následující příkazy pro příkazovou řádku*:
 
 *Příkazy musíme spouštět v Terminálu a v adresáři, kde je uložený *.csproj.
 
+## Příklad
 
+V následujícím příkladu definujteme třídu Student a pomocí migrací vytvoříme Sqlite databázi.
+
+### Definice třídy Student
+
+Ve třídě nechceme mít parametrický konstruktor, což by nám mohlo komplikovat práci s Entity Frameworkem. 
+
+```csharp
+class Student
+{
+    public int Id { get; set; } // Primární klíč dle jmenných konvencí
+    public required string Jmeno { get; set; }     
+    public required string Prijmeni { get; set; }     
+}
+```
+
+Použiváme proto klíčové slovo ```required```, které říká, že ```Jmeno``` a ```Prijmeni``` musi mit přiřazenou hodnotu nejpozději v Object Initializeru jak je ukázané v následujícím kódu
+
+```csharp
+Student student = new()
+{
+    Jmeno = "Andrea",
+    Prijmeni = "Nova"
+};
+```
 ## Entity Framework Provider
 
 Pokud chceme používat konkrétní databázi s Entity Frameworkem, tak musím do projektu přidat providera pro tuto databázi. Provider je většinou knihovna distriovaná jako nuget balíček. Následující příkaz nainstaluje nuget balíček, konrétně EF database provider pro databázi Sqlite. 
