@@ -95,6 +95,24 @@ class StudentContext : DbContext
 }
 ```
 
+Dále přidáme metodu ```OnModelCreating```, kde můžeme zadat výchozí data v databází, ale také přesněji specifikovat primární klíče, cizí klíče a další.
+
+class StudentContext : DbContext
+{
+    public DbSet<Student> Students { get; set; }
+
+    // OnModelConfiguring je stejny jako v predchozim prikladu
+    
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Student>().HasData(
+            new Student() { Id = 1, Jmeno = "Andrea", Prijmeni = "Nova"},
+            new Student() { Id = 2, Jmeno = "Jiri", Prijmeni = "Novotny"},
+            new Student() { Id = 3, Jmeno = "Karel", Prijmeni = "Vesely"}
+        );
+    }
+}
+
 ## Migrace
 
 Pomocí migrací můžeme vytvářet a aktualizovat databázi pomocí příkazů pro příkazovou řádku.
