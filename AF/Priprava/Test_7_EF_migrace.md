@@ -71,7 +71,7 @@ dotnet ef database update
    - Definujte potomka třídy DbContext a DbSet pro tabulku Pizza.
    - Definujte metodu OnConfiguring a nakonfigurujte Sqlite.
    - Definujte metodu OnCreating a přidejte výchozí pizzy.
-   - Spusťte migraci a vytvořte databázi.
+   - Vytvořte a proveďte migraci (vytvořte databázi).
 3) Vytvořte kód který vypíše všechny pizzy z databáze.
 4) Vytvořte kód, který vypíše pouze pizzy levnější než 150.
 5) Vytvořte kód, který vloží do databáze novou pizzu.
