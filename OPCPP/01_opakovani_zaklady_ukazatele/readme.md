@@ -25,7 +25,7 @@ Pomocí adresního operátoru `&` získám adresu proměnné a pomocí operátor
 
 int main()
 {
-	// Proměnná je pojmenovana hodnota v pameti
+	// Definice a inicializace proměnné
 	int a = 0; // cele cislo se znamenkem
 	double b = 0.0; // desetinne cislo se znamenkem
 	float c = 0.0f; // desetinne cislo se znamenkem s polovicnim presnosti proti double
