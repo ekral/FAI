@@ -1,7 +1,6 @@
-# Třídy a struktury
---
+# 02 Třídy a struktury
 
-* Třídu definujeme pomocí klíčového slova `class`. Pokud chceme přistupovat k členským proměnným mimo třídu, tak je musíme deklarovat jako `public`. Následující příklad definuje třídu pro dvourozměrný bod s public členskými proměnnými `x` a `y`. Na rozdíl od ostatních jazyků, například Java, nebo C# musíme v jazyce C++ uvést za definicí třídy středník `;`.
+Třídu definujeme pomocí klíčového slova `class`. Pokud chceme přistupovat k členským proměnným mimo třídu, tak je musíme deklarovat jako `public`. Následující příklad definuje třídu pro dvourozměrný bod s public členskými proměnnými `x` a `y`. Na rozdíl od ostatních jazyků, například Java, nebo C# musíme v jazyce C++ uvést za definicí třídy středník `;`.
 
 ```c++
 class Bod
