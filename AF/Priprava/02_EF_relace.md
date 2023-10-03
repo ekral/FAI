@@ -2,7 +2,7 @@
 
 [Introduction to relationships](https://learn.microsoft.com/en-us/ef/core/modeling/relationships)
 
-``csharp
+```csharp
 public class Student
 {
     public int Id { get; set; }
@@ -12,7 +12,7 @@ public class Student
 }
 ```
 
-``csharp
+```csharp
 public class Skupina
 {
     public int Id { get; set; }
