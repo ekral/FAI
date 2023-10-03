@@ -102,7 +102,19 @@ class StudentContext : DbContext
 {
     public DbSet<Student> Students { get; set; }
 
-    // OnModelConfiguring je stejny jako v predchozim prikladu
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        var folder = Environment.SpecialFolder.MyDocuments;
+        string folderPath = Environment.GetFolderPath(folder);
+        string filePath = Path.Join(folderPath, "studenti3.db");
+
+        SqliteConnectionStringBuilder csb = new SqliteConnectionStringBuilder
+        {
+            DataSource = filePath
+        };
+
+        optionsBuilder.UseSqlite(csb.ConnectionString);
+    }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
