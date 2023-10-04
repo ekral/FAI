@@ -7,7 +7,10 @@ Přidejte do třídy `Platno` kód, který na plátno vykreslí úsečku.
 
 Naivní řešení, 
 1) Máme bod A = (x1,y1) a B = (x2, y2)
-2) Spočítáme
+2) Spočítáme (dx, dy) = B - A
+3) max = Max(dx, dy)
+4) 
+
 Třída `Bod2d`:
 
 ```cpp
@@ -23,13 +26,18 @@ struct Bod2d
 };
 ```
 
+Hlavičkové soubory:
+```cpp
+#include <stdio.h>
+```
 A třída `Platno`:
 
 ```cpp
 class Platno
 {
 private:
-	static constexpr int columnCount = 30;
+	// static constexpr je moderni zpusob zadani konstanty zname v dobe prekladu
+	static constexpr int columnCount = 30; 
 	static constexpr int rowCount = 20;
 	static constexpr int totalChars = columnCount * rowCount;
 	char pozadi;
