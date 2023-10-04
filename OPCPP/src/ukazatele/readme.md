@@ -25,9 +25,9 @@ int main()
     int x = 2;
     int y = 3;
 
-    prohod(x, y);
+    prohod(&x, &y);
 
-    printf("x: %d y: %d\n", &x, &y);
+    printf("x: %d y: %d\n", x, y);
 
     assert(x == 3);
     assert(y == 2);
