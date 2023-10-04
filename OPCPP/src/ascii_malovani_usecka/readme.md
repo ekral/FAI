@@ -72,11 +72,6 @@ public:
 		data[pos] = popredi;
 	}
 
-	void NakresliUsecku(Bod2d bodA, Bod2d bodB)
-	{
-		NakresliBod(bodA.x, bodB.y);
-	}
-
 	void Zobraz()
 	{
 		int pos = 0;
