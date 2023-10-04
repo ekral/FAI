@@ -1,6 +1,12 @@
 # Úkol prohození čísel
 
-Máme následující kód, doplňte kód tak, aby kód nespadnul díky příkazu assert. Kód funkce **main neměňte**.
+Máme následující kód, doplňte kód tak, aby kód nespadnul díky příkazu assert. 
+
+- Využijte:
+    - ukazatele,
+    - adresní operátor,
+    - operátor indirekce. 
+-Kód funkce **main neměňte**.
 
 ```cpp
 #include <assert.h>
