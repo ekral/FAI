@@ -1,6 +1,6 @@
 # Úkol prohození čísel
 
-Máme následující kód, doplňte kód tak, aby kód nespadnul díky příkazu assert. 
+Máme následující kód, doplňte kód tak, aby kód šel přeložit a nespadnul díky příkazu assert. 
 
 - Využijte:
     - ukazatele,
@@ -27,7 +27,7 @@ int main()
 
     prohod(x, y);
 
-    printf("x: %d y: %d\n", x, y);
+    printf("x: %d y: %d\n", &x, &y);
 
     assert(x == 3);
     assert(y == 2);
