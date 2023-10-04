@@ -5,7 +5,7 @@ Přidejte do třídy `Platno` kód, který na plátno vykreslí úsečku.
 - Při vykreslování nezapomeňte otestovat všechny směry úsečky.
 - Zvolte jakýkoliv algoritmus, nemusí být optimální, přednost má čitelnost kódu.
 
-Naivní řešení, 
+Naivní řešení:
 1) Máme bod A = (x1,y1) a B = (x2, y2).
 2) Spočítáme (dx, dy) = B - A.
 3) dmax = Max(Abs(dx), Abs(dy)).
