@@ -9,7 +9,7 @@ Přidejte do třídy `Platno` kód, který na plátno vykreslí úsečku z **bod
 Naivní řešení:
 1) Máme bod A = (x1,y1) a B = (x2, y2).
 2) Spočítáme (dx, dy) = B - A.
-3) dmax = Max(Abs(dx), Abs(dy)).
+3) dmax = fmax(fabs(dx), fabs(dy)).
 4) stepx = dx / dmax a stepy = dy / dmax.
 5) Provádíme A + (stepx, stepy) dokud je hodnota menší nebo rovna B.
 
