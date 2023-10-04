@@ -67,11 +67,12 @@ public:
 
 int main()
 {
-	Bod2d bod(2.0, 3.0);
+	Bod2d p1(2.0, 3.0);
+	Bod2d p2(5.0, 6.0);
 
 	Platno platno('-', 'x');
 
-	bool konec = false;
+	bool konec = true;
 
 	do
 	{
@@ -90,7 +91,8 @@ int main()
 		platno.popredi = '3';
 		platno.NakresliBod(0, platno.maxRowIndex);
 
-		platno.popredi = '-';
+		platno.popredi = 'x';
+		// platno.NakresliUsecku(p1, p2);
 
 		platno.Zobraz();
 
