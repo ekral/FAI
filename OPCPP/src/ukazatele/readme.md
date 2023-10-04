@@ -6,6 +6,7 @@ Máme následující kód, doplňte kód tak, aby kód nespadnul díky příkazu
     - ukazatele,
     - adresní operátor,
     - operátor indirekce.
+ 
 -Kód funkce **main neměňte**.
 
 ```cpp
