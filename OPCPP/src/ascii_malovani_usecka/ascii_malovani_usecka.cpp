@@ -17,12 +17,13 @@ private:
 	static constexpr int columnCount = 30;
 	static constexpr int rowCount = 20;
 	static constexpr int totalChars = columnCount * rowCount;
+	char pozadi;
 	
 	char data[totalChars];
 public:
 	static constexpr int maxColumnIndex = columnCount - 1;
 	static constexpr int maxRowIndex = rowCount - 1;
-	char pozadi;
+	
 	char popredi;
 
 	Platno(char pozadi, char popredi) : pozadi(pozadi), popredi(popredi), data{ 0 }
