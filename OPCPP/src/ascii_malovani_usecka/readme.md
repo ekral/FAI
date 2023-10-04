@@ -5,7 +5,7 @@ Přidejte do třídy `Platno` kód, který na plátno vykreslí úsečku.
 - Při vykreslování nezapomeňte otestovat všechny směry úsečky.
 - Zvolte jakýkoliv algoritmus, nemusí být optimální, přednost má čitelnost kódu.
 
-Naivní řešení, máme $`\A={x0,y0}$
+Naivní řešení, máme $f(x) = x^2$
 
 Třída `Bod2d`:
 
