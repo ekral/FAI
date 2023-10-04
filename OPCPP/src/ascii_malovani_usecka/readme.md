@@ -12,6 +12,11 @@ Naivní řešení,
 4) stepx = dx / dmax a stepy = dy / dmax.
 5) Provádíme A + (stepx, stepy) dokud je hodnota menší nebo rovna B.
 
+Hlavičkové soubory:
+```cpp
+#include <stdio.h>
+```
+
 Třída `Bod2d`:
 
 ```cpp
@@ -27,10 +32,7 @@ struct Bod2d
 };
 ```
 
-Hlavičkové soubory:
-```cpp
-#include <stdio.h>
-```
+
 A třída `Platno`:
 
 ```cpp
