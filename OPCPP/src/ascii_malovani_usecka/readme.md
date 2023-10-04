@@ -112,13 +112,10 @@ int main()
 		platno.NakresliBod(0, platno.maxRowIndex);
 
 		platno.popredi = 'x';
-		// platno.NakresliUsecku(p1, p2);
+		platno.NakresliUsecku(p1, p2);
 
 		platno.Zobraz();
 
-		// zpracujeme vstupy z klavesnice
-
-		// spocitame nove pozice
 	} while (!konec);
 }
 ```
