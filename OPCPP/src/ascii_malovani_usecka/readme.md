@@ -5,7 +5,7 @@ Přidejte do třídy `Platno` kód, který na plátno vykreslí úsečku.
 - Při vykreslování nezapomeňte otestovat všechny směry úsečky.
 - Zvolte jakýkoliv algoritmus, nemusí být optimální, přednost má čitelnost kódu.
 
-Naivní řešení, máme $$ a \ b $$
+Naivní řešení, máme $`\sqrt{3x-1}+(1+x)^2`$
 
 Třída `Bod2d`:
 
