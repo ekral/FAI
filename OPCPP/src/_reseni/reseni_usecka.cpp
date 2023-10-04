@@ -50,7 +50,11 @@ public:
 
 	void NakresliUsecku(Bod2d bodA, Bod2d bodB)
 	{
-		NakresliBod(bodA.x, bodB.y);
+		NakresliBod(bodA.x, bodA.y);
+		NakresliBod(bodB.x, bodB.y);
+
+		double dx = bodB.x - bodA.x;
+		double dy = bodB.y - bodA.y;
 	}
 
 	void Zobraz()
