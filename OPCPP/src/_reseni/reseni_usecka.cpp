@@ -3,111 +3,128 @@
 
 struct Bod2d
 {
-	double x;
-	double y;
+    double x;
+    double y;
 
-	Bod2d(double x, double y) : x(x), y(y)
-	{
+    Bod2d(double x, double y) : x(x), y(y)
+    {
 
-	}
+    }
 };
 
 class Platno
 {
 private:
-	// static constexpr je moderni zpusob zadani konstanty zname v dobe prekladu
-	static constexpr int columnCount = 30;
-	static constexpr int rowCount = 20;
-	static constexpr int totalChars = columnCount * rowCount;
-	char pozadi;
+    // static constexpr je moderni zpusob zadani konstanty zname v dobe prekladu
+    static constexpr int columnCount = 30;
+    static constexpr int rowCount = 20;
+    static constexpr int totalChars = columnCount * rowCount;
+    char pozadi;
 
-	char data[totalChars];
+    char data[totalChars];
 public:
-	static constexpr int maxColumnIndex = columnCount - 1;
-	static constexpr int maxRowIndex = rowCount - 1;
+    static constexpr int maxColumnIndex = columnCount - 1;
+    static constexpr int maxRowIndex = rowCount - 1;
 
-	char popredi;
+    char popredi;
 
-	Platno(char pozadi, char popredi) : pozadi(pozadi), popredi(popredi), data{ 0 }
-	{
-		Vymaz();
-	}
+    Platno(char pozadi, char popredi) : pozadi(pozadi), popredi(popredi), data{ 0 }
+    {
+        Vymaz();
+    }
 
-	void Vymaz()
-	{
-		for (int i = 0; i < totalChars; i++)
-		{
-			data[i] = pozadi;
-		}
-	}
+    void Vymaz()
+    {
+        for (int i = 0; i < totalChars; i++)
+        {
+            data[i] = pozadi;
+        }
+    }
 
-	void NakresliBod(double x, double y)
-	{
-		int pos = ((rowCount - round(y) - 1) * columnCount) + round(x);
+    void NakresliBod(double x, double y)
+    {
+        int pos = ((rowCount - round(y) - 1) * columnCount) + round(x);
 
-		data[pos] = popredi;
-	}
+        data[pos] = popredi;
+    }
 
-	void NakresliUsecku(Bod2d bodA, Bod2d bodB)
-	{
-		NakresliBod(bodA.x, bodA.y);
-		NakresliBod(bodB.x, bodB.y);
+    void NakresliUsecku(Bod2d bodA, Bod2d bodB)
+    {
+        double dx = bodB.x - bodA.x;
+        double dy = bodB.y - bodA.y;
 
-		double dx = bodB.x - bodA.x;
-		double dy = bodB.y - bodA.y;
-	}
 
-	void Zobraz()
-	{
-		int pos = 0;
+        double dmax = fmax(fabs(dx), fabs(dy));
 
-		for (int i = 0; i < rowCount; i++)
-		{
-			for (int j = 0; j < columnCount; j++)
-			{
-				char znak = data[pos];
-				++pos;
+        double stepx = dx / dmax;
+        double stepy = dy / dmax;
 
-				putchar(znak);
-			}
+        Bod2d bod = bodA;
 
-			putchar('\n');
-		}
-	}
+        double d = 0;
+
+        while(d <= dmax)
+        {
+            NakresliBod(bod.x, bod.y);
+
+            bod.x += stepx;
+            bod.y += stepy;
+
+            ++d;
+        }
+
+    }
+
+    void Zobraz()
+    {
+        int pos = 0;
+
+        for (int i = 0; i < rowCount; i++)
+        {
+            for (int j = 0; j < columnCount; j++)
+            {
+                char znak = data[pos];
+                ++pos;
+
+                putchar(znak);
+            }
+
+            putchar('\n');
+        }
+    }
 
 };
 
 int main()
 {
-	Bod2d bodA(2.0, 3.0);
-	Bod2d bodB(5.0, 6.0);
+    Bod2d bodA(2.0, 3.0);
+    Bod2d bodB(5.0, 6.0);
 
-	Platno platno('-', 'x');
+    Platno platno('-', 'x');
 
-	bool konec = true;
+    bool konec = true;
 
-	do
-	{
-		platno.Vymaz();
-		platno.NakresliBod(2, 3);
+    do
+    {
+        platno.Vymaz();
+        platno.NakresliBod(2, 3);
 
-		platno.popredi = 'O';
-		platno.NakresliBod(0, 0);
+        platno.popredi = 'O';
+        platno.NakresliBod(0, 0);
 
-		platno.popredi = '1';
-		platno.NakresliBod(platno.maxColumnIndex, 0);
+        platno.popredi = '1';
+        platno.NakresliBod(platno.maxColumnIndex, 0);
 
-		platno.popredi = '2';
-		platno.NakresliBod(platno.maxColumnIndex, platno.maxRowIndex);
+        platno.popredi = '2';
+        platno.NakresliBod(platno.maxColumnIndex, platno.maxRowIndex);
 
-		platno.popredi = '3';
-		platno.NakresliBod(0, platno.maxRowIndex);
+        platno.popredi = '3';
+        platno.NakresliBod(0, platno.maxRowIndex);
 
-		platno.popredi = 'A';
-		platno.NakresliUsecku(bodA, bodB);
+        platno.popredi = 'A';
+        platno.NakresliUsecku(bodA, bodB);
 
-		platno.Zobraz();
+        platno.Zobraz();
 
-	} while (!konec);
+    } while (!konec);
 }
-
