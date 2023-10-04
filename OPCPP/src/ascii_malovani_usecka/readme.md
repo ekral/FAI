@@ -7,7 +7,7 @@ Přidejte do třídy `Platno` kód, který na plátno vykreslí úsečku.
 
 Naivní řešení, 
 1) Máme bod $A = \left( {x_1, x_2 } \right)$ a $A = \left( {x_1, x_2 } \right)$.
-2) Spočítáme $d_x = \left( {x_2 - x_ } \right$ a $d_y = \left( {y_2 - y_1} \right$.
+2) Spočítáme $d_x = \left(x_2 - x_ \right)$ a $d_y = \left( {y_2 - y_1} \right$.
 3) Spočítáme $d_max = \max(|d_1|, |d_2|)$.
 
 Třída `Bod2d`:
