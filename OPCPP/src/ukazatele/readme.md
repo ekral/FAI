@@ -1,6 +1,6 @@
 # Úkol prohození čísel
 
-Máme následující kód, doplňte kód tak, aby kód šel přeložit a nespadnul díky příkazu assert. 
+Máme následující kód, změňte kód tak, aby kód šel přeložit a nespadnul díky příkazu assert. 
 
 - Využijte:
     - ukazatele,
