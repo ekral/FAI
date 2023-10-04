@@ -40,16 +40,16 @@ class Platno
 {
 private:
 	// static constexpr je moderni zpusob zadani konstanty zname v dobe prekladu
-	static constexpr int columnCount = 30; 
+	static constexpr int columnCount = 30;
 	static constexpr int rowCount = 20;
 	static constexpr int totalChars = columnCount * rowCount;
 	char pozadi;
-	
+
 	char data[totalChars];
 public:
 	static constexpr int maxColumnIndex = columnCount - 1;
 	static constexpr int maxRowIndex = rowCount - 1;
-	
+
 	char popredi;
 
 	Platno(char pozadi, char popredi) : pozadi(pozadi), popredi(popredi), data{ 0 }
@@ -64,12 +64,17 @@ public:
 			data[i] = pozadi;
 		}
 	}
-	
+
 	void NakresliBod(double x, double y)
 	{
-		int pos = ((rowCount - y - 1) * columnCount) + x;
+		int pos = ((rowCount - round(y) - 1) * columnCount) + round(x);
 
 		data[pos] = popredi;
+	}
+
+	void NakresliUsecku(Bod2d bodA, Bod2d bodB)
+	{
+		NakresliBod(bodA.x, bodB.y);
 	}
 
 	void Zobraz()
@@ -93,13 +98,13 @@ public:
 };
 ```
 
-Kód funkce main **neměňte**:
+Odpoznámkujte zapoznámkovanou funkci a jinak kód funkce main **neměňte**.
 
 ```cpp
 int main()
 {
-	Bod2d p1(2.0, 3.0);
-	Bod2d p2(5.0, 6.0);
+	Bod2d bodA(2.0, 3.0);
+	Bod2d bodB(5.0, 6.0);
 
 	Platno platno('-', 'x');
 
@@ -122,8 +127,10 @@ int main()
 		platno.popredi = '3';
 		platno.NakresliBod(0, platno.maxRowIndex);
 
-		platno.popredi = 'x';
-		platno.NakresliUsecku(p1, p2);
+		platno.popredi = 'A';
+
+		// Odpoznamkuje nasledujici radek a definujte nasledujici clenskou funkci
+		//platno.NakresliUsecku(bodA, bodB);
 
 		platno.Zobraz();
 
