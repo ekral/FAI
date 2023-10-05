@@ -36,6 +36,12 @@ Spočítejte výši měsíční spátky hypotéky dle vzorce:
 
 $$M = \frac{P \cdot r \cdot (1 + r)^n}{(1 + r)^n - 1}$$
 
+Kde:
+*M* je měsíční splátka hypotéky.
+*P* je výše půjčené částky (počáteční zůstatek půjčky).
+*r* je měsíční úroková sazba (roční úroková sazba dělená 12 měsíci a převedená na desetinné číslo).
+*n* je celkový počet měsíčních plateb (doba trvání půjčky v letech násobená 12.
+
 
 
 
