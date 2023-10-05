@@ -1,4 +1,4 @@
-# Renderování úsečky
+# Ascci malování úsečky
 
 Přidejte do třídy `Platno` kód, který na plátno vykreslí úsečku z **bodA** do **bodB**. 
 
