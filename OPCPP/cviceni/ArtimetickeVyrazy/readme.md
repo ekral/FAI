@@ -34,14 +34,32 @@ s &= \frac{a + b + c}{2} \\
 
 Spočítejte a vypošte výši měsíční spátky hypotéky dle vzorce:
 
-$$M = \frac{P \cdot r \cdot (1 + r)^n}{(1 + r)^n - 1}$$
+$$m = \frac{p \cdot r \cdot (1 + r)^n}{(1 + r)^n - 1}$$
 
 Kde:
-*M* je měsíční splátka hypotéky.
-*P* je výše půjčené částky (počáteční zůstatek půjčky).
+*m* je měsíční splátka hypotéky.
+*p* je výše půjčené částky (počáteční zůstatek půjčky).
 *r* je měsíční úroková sazba (roční úroková sazba dělená 12 měsíci a převedená na desetinné číslo).
 *n* je celkový počet měsíčních plateb (doba trvání půjčky v letech násobená 12.
 
+```cpp
+#include <stdio.h>
+#define _USE_MATH_DEFINES
+#include <math.h>
 
+int main()
+{
+    double p = 6000000.0;
+    int rocniUrokProcenta = 6.0;
+    int pocetLet = 30;
+
+    double r = 0.0;
+    int n = 0.0;
+
+    double m = 0.0;
+
+    printf("splatka je %lf\n", m);
+}
+```
 
 
