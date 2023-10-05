@@ -2,7 +2,7 @@
 
 Podle [návodu v přípravě](https://github.com/ekral/FAI/blob/master/AF/Priprava/01_EF_zaklady.md) proveďte následující úkoly.
 
-1) Nadefinujte třídu Pizza z projektu [Pizza.Kiosk](https://github.com/ekral/Utb.PizzaKiosk) a pomoci Entity Frameworku a migrací vytvořte Sqlite databázi. Do databáze vložte tři pizzy jako výchozí data při vytvoření databáze.
+1) Nadefinujte třídu Pizza z projektu [Pizza.Kiosk](https://github.com/ekral/FAI/tree/master/AF/src/Utb.PizzaKiosk) a pomoci Entity Frameworku a migrací vytvořte Sqlite databázi. Do databáze vložte tři pizzy jako výchozí data při vytvoření databáze.
 
    - Definujte třídu Pizza.
 
