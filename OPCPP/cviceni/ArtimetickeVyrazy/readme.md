@@ -32,7 +32,7 @@ s &= \frac{a + b + c}{2} \\
 
 ## Výpočet splátky hypotéky
 
-Spočítejte výši měsíční spátky hypotéky dle vzorce:
+Spočítejte a vypošte výši měsíční spátky hypotéky dle vzorce:
 
 $$M = \frac{P \cdot r \cdot (1 + r)^n}{(1 + r)^n - 1}$$
 
