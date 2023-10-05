@@ -1,4 +1,4 @@
-# Úkoly na aritmetické operace a proměnné
+# Úkoly na cvičení: Aritmetické operace a proměnné
 
 ## Výpočet obsahu a obvodu trojúhelníka
 
