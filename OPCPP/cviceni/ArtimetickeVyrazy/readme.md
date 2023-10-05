@@ -34,7 +34,7 @@ int main()
 
 ## Výpočet splátky hypotéky
 
-Spočítejte a vypošte výši měsíční spátky hypotéky dle vzorce:
+Spočítejte a vypočítejte výši měsíční spátky hypotéky dle vzorce:
 
 $$m = \frac{p \cdot r \cdot (1 + r)^n}{(1 + r)^n - 1}$$
 
