@@ -1,6 +1,8 @@
 # Entity framework
 
-Návod pro Entity Framework: [Getting Started with EF Core](https://learn.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=netcore-cli)
+Návod pro Entity Framework: [Getting Started with EF Core](https://learn.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=netcore-cli). 
+
+Poznámka: Zvolte minimálně **.NET 7**.
 
 Budeme používat následující příkazy pro příkazovou řádku*:
 - Příkaz ```dotnet add packgage``` stáhne nuget balíček z repozitáře nuget.org a přidá ho do projektu.
