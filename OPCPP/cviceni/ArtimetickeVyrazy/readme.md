@@ -49,7 +49,7 @@ Dále vypište splátkový kalendář. Každý měsíc vypište výši úroku, �
 1) Nejprve spočítáme nominální výši úroku, tedy $r \cdot p$
 2) Úmor se potom rovná výše splátky - nominální výše úroku, tedy $m - (r \cdot p)$
 3) Snižte částku *p* o výši úmoru.
-4) Pokračujte tak dlouho dokud je částka větší než 0.
+4) Pokračujte tak dlouho dokud je částka *p* větší než 0.
    
 Výchozí kód funkce **main**:
 
