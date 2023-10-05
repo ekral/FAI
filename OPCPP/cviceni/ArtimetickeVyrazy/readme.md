@@ -42,7 +42,7 @@ Kde:
 - *m* je měsíční splátka hypotéky.
 - *p* je výše půjčené částky (počáteční zůstatek půjčky).
 - *r* je měsíční úroková sazba jako desetinné číslo (roční úroková sazba v procentech (6%) dělená 12 měsíci (6 / 12) a převedená na desetinné číslo ( 6 / 12 / 100)).
-- *n* je celkový počet měsíčních plateb (doba trvání půjčky v letech násobená 12.
+- *n* je celkový počet měsíčních plateb (doba trvání půjčky v letech násobená 12).
 
 Pojmy:
 - **Úrok**: nominální částka, například 5000,- Kč.
