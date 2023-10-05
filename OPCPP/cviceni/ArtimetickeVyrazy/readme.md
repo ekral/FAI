@@ -2,7 +2,16 @@
 
 ## Výpočet obsahu a obvodu trojúhelníka
 
-Máte trojúhelník definovaný delkami stran `a`,`b`, `c` a výchozí kód funkce `main`:
+Máte trojúhelník definovaný delkami stran `a`,`b`, `c. 
+
+Spočítejte a vypište obsah tohoto trojúhelníka pomocí Herronova vzorce:
+
+$$\begin{align*}
+s &= \frac{a + b + c}{2} \\
+\text{area} &= \sqrt{s \cdot (s - a) \cdot (s - b) \cdot (s - c)}
+\end{align*}$$
+
+Výchozí kód funkce **main**:
 
 ```cpp
 #include <stdio.h>
@@ -22,13 +31,6 @@ int main()
     printf("obvod je %lf\n", obvod);
 }
 ```
-
-Spočítejte a vypište obsah tohoto trojúhelníka pomocí Herronova vzorce:
-
-$$\begin{align*}
-s &= \frac{a + b + c}{2} \\
-\text{area} &= \sqrt{s \cdot (s - a) \cdot (s - b) \cdot (s - c)}
-\end{align*}$$
 
 ## Výpočet splátky hypotéky
 
