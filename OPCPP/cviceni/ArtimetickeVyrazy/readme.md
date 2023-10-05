@@ -62,7 +62,7 @@ int main()
 
     double m = 0.0;
 
-    printf("splatka je %lf\n", m);
+    printf("splatka je %lf\n", m); // 35973.03 
 }
 ```
 
