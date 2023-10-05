@@ -44,6 +44,13 @@ Kde:
 - *r* je měsíční úroková sazba (roční úroková sazba dělená 12 měsíci a převedená na desetinné číslo).
 - *n* je celkový počet měsíčních plateb (doba trvání půjčky v letech násobená 12.
 
+Dále vypište splátkový kalendář. Každý měsíc vypište výši úroku, úmoru a aktuálního dluhu:
+
+1) Nejprve spočítáme nominální výši úroku, tedy $$r \cdot p$$;
+2) Úmor se potom rovná *m* - nominální výše úroku, tedy $$m - (r \cdot p)$$;
+3) Snižte částku *p* o výši úmoru.
+4) Pokračujte tak dlouho dokud je částka větší než 0.
+   
 Výchozí kód funkce **main**:
 
 ```cpp
