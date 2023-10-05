@@ -30,6 +30,11 @@ s &= \frac{a + b + c}{2} \\
 \text{area} &= \sqrt{s \cdot (s - a) \cdot (s - b) \cdot (s - c)}
 \end{align*}$$
 
+## Výpočet splátky hypotéky
+
+Spočítejte výši měsíční spátky hypotéky dle vzorce:
+
+$$M = \frac{P \cdot r \cdot (1 + r)^n}{(1 + r)^n - 1}$$
 
 
 
