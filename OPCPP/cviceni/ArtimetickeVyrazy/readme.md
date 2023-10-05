@@ -45,9 +45,9 @@ Kde:
 - *n* je celkový počet měsíčních plateb (doba trvání půjčky v letech násobená 12.
 
 Pojmy:
-- Úrok: nominální částka, například 5000,- Kč.
-- Úroková míra:  úrok vyjádřený v procentech z částky, například 6 %.
-- Desetinná úroková míra: úrok vyjádřený jako desetinné číslo pro výpočet v matematických operacích, například 0.06.
+- **Úrok**: nominální částka, například 5000,- Kč.
+- **Úroková míra**:  úrok vyjádřený v procentech z částky, například 6 %.
+- **Desetinná úroková míra**: úrok vyjádřený jako desetinné číslo pro výpočet v matematických operacích, například 0.06.
 
 Dále vypište splátkový kalendář. Každý měsíc vypište výši úroku, úmoru a aktuálního dluhu:
 
