@@ -171,16 +171,3 @@ Poznámka: bez použití migrací můžeme vytvořit databází pomocí metody *
 await using SkolaContext db = new SkolaContext();
 bool created = await db.Database.EnsureCreatedAsync();
 ```
-
----
-## Úkol na cvičení
-
-1) Nadefinujte třídu Pizza z projektu [Pizza.Kiosk](https://github.com/ekral/Utb.PizzaKiosk) a pomoci Entity Frameworku a migrací vytvořte Sqlite databázi. Do databáze vložte tři pizzy jako výchozí data při vytvoření databáze.
-   - Definujte třídu Pizza.
-   - Definujte potomka třídy DbContext a DbSet pro tabulku Pizza.
-   - Definujte metodu OnConfiguring a nakonfigurujte Sqlite.
-   - Definujte metodu OnCreating a přidejte výchozí pizzy.
-   - Vytvořte a proveďte migraci (vytvořte databázi).
-3) Vytvořte kód který vypíše všechny pizzy z databáze.
-4) Vytvořte kód, který vypíše pouze pizzy levnější než 150.
-5) Vytvořte kód, který vloží do databáze novou pizzu.
