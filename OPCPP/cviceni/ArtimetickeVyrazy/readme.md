@@ -2,7 +2,7 @@
 
 ## Výpočet obsahu a obvodu trojúhelníka
 
-Máte trojúhelník definovaný delkami stran `a`,`b`, `c. 
+Máte trojúhelník definovaný delkami stran `a`,`b`, `c`. 
 
 Spočítejte a vypište obsah tohoto trojúhelníka pomocí Herronova vzorce:
 
