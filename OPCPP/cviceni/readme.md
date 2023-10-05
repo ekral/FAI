@@ -12,7 +12,7 @@ double c = 7.0;
 
 Spočítejte a vypište obsah tohoto trojúhelníka pomocí Herronova vzorce:
 
-$$\[ s = \frac{a + b + c}{2} \]
+$$\[ s = \frac{a + b + c}{2} \]  \\
 \[ \text{area} = \sqrt{s \cdot (s - a) \cdot (s - b) \cdot (s - c)} \]$$
 
 
