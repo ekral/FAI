@@ -5,6 +5,8 @@
 Máte trojúhelník definovaný delkami stran `a`,`b`, `c` a výchozí kód funkce `main`:
 
 ```cpp
+#include <stdio.h>
+#define _USE_MATH_DEFINES
 #include <math.h>
 
 int main()
