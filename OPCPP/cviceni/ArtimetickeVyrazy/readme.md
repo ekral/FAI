@@ -41,7 +41,7 @@ $$m = \frac{p \cdot r \cdot (1 + r)^n}{(1 + r)^n - 1}$$
 Kde:
 - *m* je měsíční splátka hypotéky.
 - *p* je výše půjčené částky (počáteční zůstatek půjčky).
-- *r* je měsíční úroková sazba (roční úroková sazba dělená 12 měsíci a převedená na desetinné číslo).
+- *r* je měsíční úrok jako desetinné číslo (roční úroková sazba v procentech dělená 12 měsíci a převedená na desetinné číslo).
 - *n* je celkový počet měsíčních plateb (doba trvání půjčky v letech násobená 12.
 
 Dále vypište splátkový kalendář. Každý měsíc vypište výši úroku, úmoru a aktuálního dluhu:
