@@ -12,8 +12,8 @@ y' &= x \cdot \sin(\theta) + y \cdot \cos(\theta)
 kde:
 
 $$\begin{align*}
-(x', y') \text{ jsou souřadnice zarotovaného bodu.}\\
-(x, y) \text{ jsou souřadnice původního bodu.}\\
+\text{ Kde} (x', y') \text{ jsou souřadnice zarotovaného bodu.},
+(x, y) \text{ jsou souřadnice původního bodu.} a 
 \theta \text{ je úhel rotace v radiánech.}
 \end{align*}$$
 
