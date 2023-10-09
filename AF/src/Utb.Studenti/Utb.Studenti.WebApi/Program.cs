@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Utb.Studenti.Models;
 
@@ -12,15 +13,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<StudentContext>();
 
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-
 app.UseHttpsRedirection();
 
-app.MapGet("/studenti", async (StudentContext context) =>
-{
-    var studenti = await context.Studenti.ToListAsync();
-    return studenti;
-});
+app.MapGet("/studenti", GetAllStudents);
 
 app.Run();
+
+static async Task<Ok<Student[]>> GetAllStudents(StudentContext context)
+{
+    var studenti = await context.Studenti.ToArrayAsync();
+
+    return TypedResults.Ok(studenti);
+}

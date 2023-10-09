@@ -3,6 +3,7 @@ using Utb.Studenti.Models;
 
 namespace Utb.Studenti.Tests
 {
+    [Collection("Database collection")]
     public class StudentContextTest : IClassFixture<TestDatabaseFixture>
     {
         public StudentContextTest(TestDatabaseFixture fixture) => Fixture = fixture;
