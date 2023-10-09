@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Utb.Studenti.Models\Utb.Studenti.Models.csproj" />
+    <ProjectReference Include="..\Utb.Studenti.WebApi\Utb.Studenti.WebApi.csproj" />
   </ItemGroup>
 
 </Project>

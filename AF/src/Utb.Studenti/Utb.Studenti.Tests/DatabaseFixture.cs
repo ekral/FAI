@@ -33,7 +33,7 @@ namespace Utb.Studenti.Tests
                         context.Database.EnsureDeleted();
                         context.Database.EnsureCreated();
 
-                        // add test data
+                        // add test only data
                     }
 
                     _databaseInitialized = true;
