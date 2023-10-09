@@ -16,6 +16,7 @@ Naivní řešení:
 Hlavičkové soubory:
 ```cpp
 #include <stdio.h>
+#include <math.h>
 ```
 
 Třída `Bod2d`:
