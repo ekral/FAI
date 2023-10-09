@@ -15,7 +15,7 @@ $$\begin{align*}
 \theta \text{ je úhel rotace v radiánech.}
 \end{align*}$$
 
-B) Zarotuje úsečku kolem středu úsečky.
+B) Zarotujte úsečku kolem středu úsečky.
 
 Pokud chceme zarotovat úsečku, tak musíme:
 
