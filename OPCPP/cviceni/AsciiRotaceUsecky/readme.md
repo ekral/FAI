@@ -2,7 +2,7 @@
 
 S využitím kódu z úkolu [AsciiKresleníUsecky](../AsciiKresleniUsecky) vytvořte program, který:
 
-1) Zarotuje bod kolem počátku souřadnic (0,0) a vykreslete úsečku z počátku souřacnic do zarotovaného bodu. Použijte vzorec:
+- Zarotuje bod kolem počátku souřadnic (0,0) a vykreslete úsečku z počátku souřacnic do zarotovaného bodu. Použijte vzorec:
 
 $$\begin{align*}
 x' &= x \cdot \cos(\theta) - y \cdot \sin(\theta) \\
@@ -15,4 +15,11 @@ $$\begin{align*}
 \theta \text{ je úhel rotace v radiánech.}
 \end{align*}$$
 
-2) Zarotuje úsečku kolem středu úsečky.
+- Zarotuje úsečku kolem středu úsečky.
+
+Pokud chceme zarotovat úsečku, tak musíme:
+
+ 1) Zjistit střed úsečky.
+ 2) Posunout úsečku tak aby její střed byl v počátku souřadnic.
+ 3) Zarotovat krajní body úsečky kolem počátku souřadnic.
+ 4) Posunout úsečku zpět aby její střed byl opět na původním místě.
