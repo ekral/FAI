@@ -1,12 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Utb.Studenti.Models
 {
@@ -19,7 +12,7 @@ namespace Utb.Studenti.Models
 
         public StudentContext()
         {
-            
+
         }
 
         public StudentContext(string dbPath)
@@ -43,23 +36,33 @@ namespace Utb.Studenti.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Student>()
+            modelBuilder
+                .Entity<Student>()
                 .HasMany(s => s.Predmety)
                 .WithMany(p => p.Studenti)
                 .UsingEntity<StudentNaPredmetu>();
 
-            Predmet predmet = new Predmet() { Id = 1, Nazev = "Telocvik" };
-            Skupina skupina = new Skupina() { Id = 1, Nazev = "swi1" };
-            Student student = new Student() { Id = 1, SkupinaId = 1, Jmeno = "Bohumil" };
-            StudentNaPredmetu studentNaPredmetu = new StudentNaPredmetu() { PredmetId = 1, StudentId = 1 };
+            modelBuilder
+                .Entity<Predmet>()
+                .HasData(
+                    new Predmet() { Id = 1, Nazev = "Telocvik" });
 
-            
-            modelBuilder.Entity<Predmet>().HasData(predmet);
-            modelBuilder.Entity<Skupina>().HasData(skupina);
-            modelBuilder.Entity<Student>().HasData(student);
-            modelBuilder.Entity<StudentNaPredmetu>().HasData(studentNaPredmetu);
+            modelBuilder
+                .Entity<Skupina>()
+                .HasData(
+                    new Skupina() { Id = 1, Nazev = "swi1" });
 
+            modelBuilder
+                .Entity<Student>()
+                .HasData(
+                    new Student() { Id = 1, SkupinaId = 1, Jmeno = "Bohumil" }, 
+                    new Student() { Id = 2, SkupinaId = 1, Jmeno = "Stefan" });
 
+            modelBuilder
+                .Entity<StudentNaPredmetu>()
+                .HasData(
+                    new StudentNaPredmetu() { PredmetId = 1, StudentId = 1 }, 
+                    new StudentNaPredmetu() { PredmetId = 1, StudentId = 2 });
         }
     }
 }
