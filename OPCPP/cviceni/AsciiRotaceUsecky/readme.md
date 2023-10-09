@@ -13,7 +13,7 @@ kde:
 
 $$\begin{align*}
 \text{ Kde} (x', y') \text{ jsou souřadnice zarotovaného bodu.},
-(x, y) \text{ jsou souřadnice původního bodu.} a 
+(x, y) \text{ jsou souřadnice původního bodu a }
 \theta \text{ je úhel rotace v radiánech.}
 \end{align*}$$
 
