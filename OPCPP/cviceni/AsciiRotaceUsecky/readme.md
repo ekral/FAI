@@ -9,8 +9,6 @@ x' &= x \cdot \cos(\theta) - y \cdot \sin(\theta) \\
 y' &= x \cdot \sin(\theta) + y \cdot \cos(\theta)
 \end{align*}$$
 
-kde:
-
 $$\begin{align*}
 \text{ Kde} (x', y') \text{ jsou souřadnice zarotovaného bodu, }
 (x, y) \text{ jsou souřadnice původního bodu a }
