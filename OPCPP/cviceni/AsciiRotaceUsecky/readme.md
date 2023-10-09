@@ -12,9 +12,9 @@ y' &= x \cdot \sin(\theta) + y \cdot \cos(\theta)
 kde:
 
 $$\begin{align*}
-\text{Let } (x', y') \text{ jsou souřadnice zarotovaného bodu.}\\
-\text{Let } (x, y) \text{ jsou souřadnice původního bodu.}\\
-\text{Let } \theta \text{ je úhel rotace v radiánech.}
+(x', y') \text{ jsou souřadnice zarotovaného bodu.}\\
+(x, y) \text{ jsou souřadnice původního bodu.}\\
+\theta \text{ je úhel rotace v radiánech.}
 \end{align*}$$
 
 2) Zarotuje úsečku kolem středu úsečky.
