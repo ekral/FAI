@@ -11,8 +11,8 @@ y' &= x \cdot \sin(\theta) + y \cdot \cos(\theta)
 
 kde:
 
-\text{Let } (x', y') \text{ jsou souřadnice zarotovaného bodu.}\\
+$$\text{Let } (x', y') \text{ jsou souřadnice zarotovaného bodu.}\\
 \text{Let } (x, y) \text{ jsou souřadnice původního bodu.}\\
-\text{Let } \theta \text{ je úhel rotace v radiánech.}\\
+\text{Let } \theta \text{ je úhel rotace v radiánech.}\\$$
 
 2) Zarotuje úsečku kolem středu úsečky.
