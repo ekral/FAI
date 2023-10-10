@@ -13,7 +13,7 @@ Cílem je otestovat, zda je databáze správně vytvořená a zda jsou správně
 1) Vytvořte nový projekt typu **class library** ve verzi minimálně .NET 7.
   - Název projektu: *Utb.PizzaKiosk.Models*.
   - Název solution: *Utb.PizzaKiosk*.
-2) Podle [návodu v přípravě](https://github.com/ekral/FAI/blob/master/AF/Priprava/01_EF_zaklady.md) proveďte do projektu *Utb.PizzaKiosk.Models* přidejte modely pro Pizza Kiosk a DbContext a vytvořte migraci. Minimálně stačí jedna entita **Pizza** v tabulce **Pizzas**.
+2) Podle [návodu v přípravě](https://github.com/ekral/FAI/blob/master/AF/Priprava/01_EF_zaklady.md) proveďte do projektu *Utb.PizzaKiosk.Models* přidejte modely pro Pizza Kiosk a DbContext a vytvořte a aplikujte migraci. Minimálně stačí jedna entita **Pizza** v tabulce **Pizzas**.
 3) Do solution přidejte nový projekt typu **xUnit test** s názvem *Utb.PizzaKiosk.Tests*.
 4) Do projektu *Utb.PizzaKiosk.Tests* přidejte referenci na projekt *Utb.PizzaKiosk.Models*.
 5) Vytvořte testy dle následujícího textu.
