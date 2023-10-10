@@ -4,6 +4,8 @@ Otestujte databází vytvořenou ve cvičení [Model Utb.Kiosk](../ModelUtbKiosk
 
 Otestujte funkčnost modelu, kdy můžete využít i [xUnit testy](https://learn.microsoft.com/en-us/ef/core/testing/testing-with-the-database), vyjděte z příkladu na [Utb.Studenti](https://github.com/ekral/FAI/tree/master/AF/src/Utb.Studenti).
 
+Cílem je otestovat, zda je databáze správně vytvořená a zda jsou správně nastavené relace. Tedy to, co jste předtím vytvářeli v konzolové aplikaci a jen jste se podívali na výstup na konzoli. Tento postup chceme zautomatizovat v testech.
+
 1) Vytvořte nový projekt *Utb.PizzaKiosk.Models* typu class library ve verzi minimálně .NET 7. Název Solution bude *Utb.PizzaKiosk*.
 2) Do solution přidejte nový projekt typu xUnit test s názvem *Utb.PizzaKiosk.Tests*.
 3) Do projektu *Utb.PizzaKiosk.Tests* přidejte referenci na projekt *Utb.PizzaKiosk.Models*.
@@ -85,7 +87,7 @@ Database context je upravený tak, aby bylo možné pro test zadávat jiný soub
     }
 ```
 
-V testech potom použiji TestDatabaseFixture a "Database collection".
+V testech potom použiji `TestDatabaseFixture` a `Collection` "Database collection".
 
 ```csharp
 [Collection("Database collection")]
