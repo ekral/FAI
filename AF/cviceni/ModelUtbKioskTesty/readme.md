@@ -87,7 +87,7 @@ Database context je upravený tak, aby bylo možné pro test zadávat jiný soub
 
 V testech potom použiji TestDatabaseFixture a "Database collection".
 
-```charp
+```csharp
 [Collection("Database collection")]
     public class StudentContextTest : IClassFixture<TestDatabaseFixture>
     {
