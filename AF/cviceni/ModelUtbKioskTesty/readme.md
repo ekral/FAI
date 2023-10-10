@@ -48,7 +48,7 @@ public class TestDatabaseFixture
 }
 ```
 
-Database context je upravený tak, aby bylo možné pro test zadávat jiný soubor. Existuje více řešení, například pomocí dědičnosti, nebo parametrického konstruktoru. Ale pro tento případ jsem zvolil jen název souboru.¨
+Database context je upravený tak, aby bylo možné pro test zadávat jiný soubor. Existuje více řešení, například pomocí dědičnosti, nebo parametrického konstruktoru. Ale pro tento případ jsem zvolil jen název souboru.
 
 ```csharp
  public class StudentContext : DbContext
