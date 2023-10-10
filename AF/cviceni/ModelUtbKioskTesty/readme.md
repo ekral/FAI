@@ -139,3 +139,9 @@ s2 =>
     Assert.Equal("Stefan", s2.Jmeno);
 });
 ```
+
+---
+Tutoriály
+
+- [Getting Started with EF Core](https://learn.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=netcore-cli).
+- [Testing against your production database system](https://learn.microsoft.com/en-us/ef/core/testing/testing-with-the-database).
