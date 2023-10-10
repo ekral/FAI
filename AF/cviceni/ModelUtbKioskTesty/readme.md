@@ -18,6 +18,7 @@ Cílem je otestovat, zda je databáze správně vytvořená a zda jsou správně
 4) Do projektu *Utb.PizzaKiosk.Tests* přidejte referenci na projekt *Utb.PizzaKiosk.Models*.
 5) Vytvořte testy dle následujícího textu.
 
+## Poznámky k implementaci
 
 Database context je upravený tak, aby bylo možné pro test zadávat jiný název souboru. Existuje více řešení, například pomocí dědičnosti, nebo parametrického konstruktoru. Ale pro tento případ jsem zvolil jen název souboru. Pro potřeby migrací musí být ve třídě i konstruktor bez parametru.
 
