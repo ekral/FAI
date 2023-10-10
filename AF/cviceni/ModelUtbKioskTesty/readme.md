@@ -18,6 +18,44 @@ Cílem je otestovat, zda je databáze správně vytvořená a zda jsou správně
 4) Do projektu *Utb.PizzaKiosk.Tests* přidejte referenci na projekt *Utb.PizzaKiosk.Models*.
 5) Vytvořte testy dle následujícího textu.
 
+
+Database context je upravený tak, aby bylo možné pro test zadávat jiný název souboru. Existuje více řešení, například pomocí dědičnosti, nebo parametrického konstruktoru. Ale pro tento případ jsem zvolil jen název souboru. Pro potřeby migrací musí být ve třídě i konstruktor bez parametru.
+
+```csharp
+ public class StudentContext : DbContext
+    {
+        public DbSet<Student> Studenti { get; set; }
+        public DbSet<Skupina> Skupiny { get; set; }
+
+        private string dbPath = "studenti.db";
+
+        public StudentContext()
+        {
+
+        }
+
+        public StudentContext(string dbPath)
+        {
+            this.dbPath = dbPath;
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            var folder = Environment.SpecialFolder.MyDocuments;
+            string folderPath = Environment.GetFolderPath(folder);
+            string filePath = Path.Join(folderPath, dbPath);
+
+            SqliteConnectionStringBuilder csb = new SqliteConnectionStringBuilder
+            {
+                DataSource = filePath
+            };
+
+            optionsBuilder.UseSqlite(csb.ConnectionString);
+        }
+
+    }
+```
+
 Pro xUnit testy můžeme vytvořit DatabaseFixture protože chceme aby se databáze vytvořila jenom jednou a byla bezpečně vytvořená i v rámci testů spuštěných ve více vláknech, k tomu nám slouží ```CollectionDefinition```.
 
 ```csharp
@@ -55,43 +93,6 @@ public class TestDatabaseFixture
 
     public StudentContext CreateContext() => new StudentContext("test.db");
 }
-```
-
-Database context je upravený tak, aby bylo možné pro test zadávat jiný název souboru. Existuje více řešení, například pomocí dědičnosti, nebo parametrického konstruktoru. Ale pro tento případ jsem zvolil jen název souboru. Pro potřeby migrací musí být ve třídě i konstruktor bez parametru.
-
-```csharp
- public class StudentContext : DbContext
-    {
-        public DbSet<Student> Studenti { get; set; }
-        public DbSet<Skupina> Skupiny { get; set; }
-
-        private string dbPath = "studenti.db";
-
-        public StudentContext()
-        {
-
-        }
-
-        public StudentContext(string dbPath)
-        {
-            this.dbPath = dbPath;
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            var folder = Environment.SpecialFolder.MyDocuments;
-            string folderPath = Environment.GetFolderPath(folder);
-            string filePath = Path.Join(folderPath, dbPath);
-
-            SqliteConnectionStringBuilder csb = new SqliteConnectionStringBuilder
-            {
-                DataSource = filePath
-            };
-
-            optionsBuilder.UseSqlite(csb.ConnectionString);
-        }
-
-    }
 ```
 
 V testech potom použiji `TestDatabaseFixture` a `Collection` "Database collection".
