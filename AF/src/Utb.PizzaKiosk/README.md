@@ -319,7 +319,7 @@ classDiagram
 ```
 #### Implementation notes
 
-- [Getting Started with EF Core](https://learn.microsoft.com/en-us/ef/core/modeling/inheritance)
+- [Getting Started with EF Core](https://learn.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=netcore-cli)
 - [Tutorial: Create a minimal API with ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/tutorials/min-web-api?view=aspnetcore-7.0&tabs=visual-studio)
 - [Unit and integration tests in Minimal API apps](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/test-min-api?view=aspnetcore-7.0)
 - [Value Conversions EF Core](https://learn.microsoft.com/en-us/ef/core/modeling/value-conversions?tabs=data-annotations)
