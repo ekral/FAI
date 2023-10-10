@@ -13,10 +13,10 @@ Cílem je otestovat, zda je databáze správně vytvořená a zda jsou správně
 1) Vytvořte nový projekt typu **class library** ve verzi minimálně .NET 7.
   - Název projektu: *Utb.PizzaKiosk.Models*.
   - Název solution: *Utb.PizzaKiosk*.
-3) Podle [návodu v přípravě](https://github.com/ekral/FAI/blob/master/AF/Priprava/01_EF_zaklady.md) proveďte do projektu *Utb.PizzaKiosk.Models* přidejte modely pro Pizza Kiosk a DbContext a vytvořte migraci.
-4) Do solution přidejte nový projekt typu **xUnit test** s názvem *Utb.PizzaKiosk.Tests*.
-5) Do projektu *Utb.PizzaKiosk.Tests* přidejte referenci na projekt *Utb.PizzaKiosk.Models*.
-6) Vytvořte testy dle následujícího textu.
+2) Podle [návodu v přípravě](https://github.com/ekral/FAI/blob/master/AF/Priprava/01_EF_zaklady.md) proveďte do projektu *Utb.PizzaKiosk.Models* přidejte modely pro Pizza Kiosk a DbContext a vytvořte migraci.
+3) Do solution přidejte nový projekt typu **xUnit test** s názvem *Utb.PizzaKiosk.Tests*.
+4) Do projektu *Utb.PizzaKiosk.Tests* přidejte referenci na projekt *Utb.PizzaKiosk.Models*.
+5) Vytvořte testy dle následujícího textu.
 
 Pro xUnit testy můžeme vytvořit DatabaseFixture protože chceme aby se databáze vytvořila jenom jednou a byla bezpečně vytvořená i v rámci testů spuštěných ve více vláknech, k tomu nám slouží ```CollectionDefinition```.
 
