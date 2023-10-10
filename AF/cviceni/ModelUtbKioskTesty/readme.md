@@ -2,6 +2,9 @@
 
 Otestujte databází vytvořenou ve cvičení [Model Utb.Kiosk](../ModelUtbKiosk).
 
+Výjděte z předmětu:
+- Vývoj softwarových projektů.
+  
 Otestujte funkčnost modelu, kdy můžete využít i [xUnit testy](https://learn.microsoft.com/en-us/ef/core/testing/testing-with-the-database), vyjděte z příkladu na [Utb.Studenti](https://github.com/ekral/FAI/tree/master/AF/src/Utb.Studenti).
 
 Cílem je otestovat, zda je databáze správně vytvořená a zda jsou správně nastavené relace. Tedy to, co jste předtím vytvářeli v konzolové aplikaci a jen jste se podívali na výstup na konzoli. Tento postup chceme zautomatizovat v testech.
