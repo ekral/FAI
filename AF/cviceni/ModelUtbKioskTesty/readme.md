@@ -11,9 +11,10 @@ Otestujte funkčnost modelu, kdy můžete využít i [xUnit testy](https://learn
 Cílem je otestovat, zda je databáze správně vytvořená a zda jsou správně nastavené relace. Tedy to, co jste předtím vytvářeli v konzolové aplikaci a jen jste se podívali na výstup na konzoli. Tento postup chceme zautomatizovat v testech.
 
 1) Vytvořte nový projekt *Utb.PizzaKiosk.Models* typu **class library** ve verzi minimálně .NET 7. Název Solution bude *Utb.PizzaKiosk*.
-2) Do solution přidejte nový projekt typu **xUnit test** s názvem *Utb.PizzaKiosk.Tests*.
-3) Do projektu *Utb.PizzaKiosk.Tests* přidejte referenci na projekt *Utb.PizzaKiosk.Models*.
-4) Vytvořte testy dle následujícího textu.
+2) Do projektu *Utb.PizzaKiosk.Models* přidejte modely pro Pizza Kiosk a vytvořte migraci.
+3) Do solution přidejte nový projekt typu **xUnit test** s názvem *Utb.PizzaKiosk.Tests*.
+4) Do projektu *Utb.PizzaKiosk.Tests* přidejte referenci na projekt *Utb.PizzaKiosk.Models*.
+5) Vytvořte testy dle následujícího textu.
 
 Pro xUnit testy můžeme vytvořit DatabaseFixture protože chceme aby se databáze vytvořila jenom jednou a byla bezpečně vytvořená i v rámci testů spuštěných ve více vláknech, k tomu nám slouží ```CollectionDefinition```.
 
