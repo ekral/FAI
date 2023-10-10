@@ -118,3 +118,19 @@ public class StudentContextTest : IClassFixture<TestDatabaseFixture>
     }
 }
 ```
+
+Kolekci můžete v xUnit otestovat následující způsobem.
+
+```csharp
+Assert.Collection(studenti.Value, 
+s1 =>
+{
+    Assert.Equal(1, s1.Id);
+    Assert.Equal("Bohumil", s1.Jmeno);
+}, 
+s2 =>
+{
+    Assert.Equal(2, s2.Id);
+    Assert.Equal("Stefan", s2.Jmeno);
+});
+```
