@@ -20,7 +20,7 @@ V následujícím příkladu definujteme třídu Student a pomocí migrací vytv
 Ve třídě nechceme mít parametrický konstruktor, což by nám mohlo komplikovat práci s Entity Frameworkem. Property představují sloupce tabulky a ```Id``` je dle jmenných konvencí primární klíč.
 
 ```csharp
-class Student
+public class Student
 {
     public int Id { get; set; } // Primární klíč dle jmenných konvencí
     public required string Jmeno { get; set; }     
@@ -52,7 +52,7 @@ Dále definujeme potomka třídy ```DbContext``` a kolekce ```DbSet``` potom def
 ```csharp
 using Microsoft.EntityFrameworkCore;
 
-class StudentContext : DbContext
+public class StudentContext : DbContext
 {
     public DbSet<Student> Students { get; set; }
 }
@@ -63,7 +63,7 @@ Pomocí přetížené metody OnConfiguring potom nakonfigurujeme databázi, konr
 Jednoduchý zápis:
 
 ```csharp
-class StudentContext : DbContext
+public class StudentContext : DbContext
 {
     public DbSet<Student> Students { get; set; }
 
@@ -77,7 +77,7 @@ class StudentContext : DbContext
 Zápis, který ukládá databázi do dokumentů uživatele a používá connection string builder aby nedošlo k chybnému zápisu.
 
 ```csharp
-class StudentContext : DbContext
+public class StudentContext : DbContext
 {
     public DbSet<Student> Students { get; set; }
 
@@ -100,7 +100,7 @@ class StudentContext : DbContext
 Dále přidáme metodu ```OnModelCreating```, kde můžeme zadat výchozí data v databází, ale také přesněji specifikovat primární klíče, cizí klíče a další.
 
 ```csharp
-class StudentContext : DbContext
+public class StudentContext : DbContext
 {
     public DbSet<Student> Students { get; set; }
 
