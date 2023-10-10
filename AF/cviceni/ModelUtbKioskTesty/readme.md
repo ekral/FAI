@@ -9,7 +9,7 @@ Otestujte funkčnost modelu, kdy můžete využít i [xUnit testy](https://learn
 3) Do projektu *Utb.PizzaKiosk.Tests* přidejte referenci na projekt *Utb.PizzaKiosk.Models*.
 4) Vytvořte testy dle následujícího textu.
 
-Pro xUnit testy můžeme vytvořit DatabaseFixture:
+Pro xUnit testy můžeme vytvořit DatabaseFixture protože chceme aby se databáze vytvořila jenom jednou a byla bezpečně vytvořená i v rámci testů spuštěných ve více vláknech, k tomu nám slouží ```CollectionDefinition```.
 
 ```csharp
 [CollectionDefinition("Database collection")]
