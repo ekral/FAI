@@ -124,10 +124,10 @@ public class StudentContextTest : IClassFixture<TestDatabaseFixture>
 }
 ```
 
-Kolekci můžete v xUnit otestovat následující způsobem. Pro každý prvek kolekce můžeme použít lambda výraz, `s1` je v tomto případě první student v kolekci, `s2` je druhý student v kolekci.
+Kolekci můžete v xUnit otestovat následující způsobem. Pro každý prvek kolekce můžeme použít lambda výraz, `s1` je v tomto případě první student v kolekci, `s2` je druhý student v kolekci. Předpokládám tedy, že v kolekci budou dva prvky.
 
 ```csharp
-Assert.Collection(studenti.Value, 
+Assert.Collection(studenti, 
 s1 =>
 {
     Assert.Equal(1, s1.Id);
