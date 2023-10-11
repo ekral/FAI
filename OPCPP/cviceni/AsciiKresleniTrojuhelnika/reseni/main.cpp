@@ -1,14 +1,3 @@
-# ASCII Kreslení rovnostranného trojúhelníka
-
-S kódem pro ASCII kreslení úsečky vykreslete rovnoramenný trojúhelník.
-
-1) Definujte třídu reprezetující rovnostranný trojúhleník `RovnostrannyTrojuhelnik`
-- Trojúhelník bude definovaný **středem** `S` a **délkou strany** `a` a úsečka AB bude rovnoběžná s osou *x*.
-- Proměnné `S` a `a` budou private.
-4) Ve třídě `RovnostrannyTrojuhelnik` definujte parametrický konstruktor a member initializer list.
-2) Ve třídě `RovnostrannyTrojuhelnik` definujte členskou funkci `void Nakresli(Platno* platno)` ktera nakresli trojuhelnik na plátno.
-
-```cpp
 #include <stdio.h>
 #include <math.h>
 
@@ -106,7 +95,31 @@ public:
 
 };
 
-// Zde definujte tridu Trojuhelnik
+class RovnostrannyTrojuhelnik
+{
+private:
+    double a;
+    Bod2d S;
+public:
+    RovnostrannyTrojuhelnik(Bod2d S, int a): S(S), a(a)
+    {
+
+    }
+
+    void Nakresli(Platno* platno)
+    {
+        // spocitejte souradnice vrcholu trojuhelnika
+        double vp = (a * sqrt(3.0)) / 4;
+
+        Bod2d A(S.x - a / 2, S.y - vp);
+        Bod2d B(S.x + a / 2, S.y - vp);
+        Bod2d C(S.x, S.y + vp);
+
+        platno->NakresliUsecku(A,B);
+        platno->NakresliUsecku(B,C);
+        platno->NakresliUsecku(C,A);
+    }
+};
 
 int main()
 {
@@ -143,12 +156,11 @@ int main()
         platno.NakresliBod(stred.x, stred.y);
 
         // Odpoznamkovat
-        //platno.popredi = 't';
-        //RovnostrannyTrojuhelnik trojuhelnik(stred, 10.0);
-        //trojuhelnik.Nakresli(&platno);
+        platno.popredi = 't';
+        RovnostrannyTrojuhelnik trojuhelnik(stred, 10.0);
+        trojuhelnik.Nakresli(&platno);
 
         platno.Zobraz();
 
     } while (!konec);
 }
-```
