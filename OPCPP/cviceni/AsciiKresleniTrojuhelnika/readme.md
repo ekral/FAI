@@ -1,8 +1,8 @@
-# ASCII Kreslení rovnoramenného trojúhelníka
+# ASCII Kreslení rovnostranného trojúhelníka
 
 S kódem pro ASCII kreslení úsečky vykreslete rovnoramenný trojúhelník.
 
-1) Definujte třídu reprezetující rovnoramenný trojúhleník `RovnoramennyTrojuhelnik` který bude definovaný **středem S** a **délkou strany n**.
+1) Definujte třídu reprezetující rovnostranný trojúhleník `RovnostrannyTrojuhelnik` který bude definovaný **středem S** a **délkou strany a**.
 2) Ve třídě `RovnoramennyTrojuhelnik` definujte parametrický konstruktor a member initializer list.
 2) Ve třídě `RovnoramennyTrojuhelnik` definujte členskou funkci `void Nakresli(Platno& platno)` ktera nakresli trojuhelnik na plátno.
 
