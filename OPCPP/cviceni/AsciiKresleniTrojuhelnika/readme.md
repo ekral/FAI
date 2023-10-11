@@ -1,4 +1,4 @@
-# ASCII Kreslení trojúhelníka
+# ASCII Kreslení rovnoramenného trojúhelníka
 
 S kódem pro ASCII kreslení úsečky vykreslete rovnoramenný trojúhelník.
 
