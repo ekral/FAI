@@ -95,20 +95,29 @@ public:
 
 };
 
-class RovnostrannyTrojuhelnik{
+class RovnostrannyTrojuhelnik
+{
+private:
+    double a;
+    Bod2d stred;
 public:
-    RovnostrannyTrojuhelnik(Bod2d s, int a): s(s), a(a)
+    RovnostrannyTrojuhelnik(Bod2d stred, int a): stred(stred), a(a)
     {
 
     }
 
     void Nakresli(Platno* platno)
     {
+        // spocitejte souradnice vrcholu trojuhelnika
 
+        Bod2d A(0.0, 0.0);
+        Bod2d B(0.0, 0.0);
+        Bod2d C(0.0, 0.0);
+
+        platno->NakresliUsecku(A,B);
+        platno->NakresliUsecku(B,C);
+        platno->NakresliUsecku(C,A);
     }
-private:
-    double a;
-    Bod2d s;
 };
 
 int main()
@@ -125,7 +134,7 @@ int main()
         platno.Vymaz();
 
         Bod2d stred(7.0, 8.0);
-        
+
         platno.NakresliBod(2, 3);
 
         platno.popredi = 'O';
@@ -143,10 +152,11 @@ int main()
         platno.popredi = 'A';
         platno.NakresliUsecku(bodA, bodB);
 
+        // Odpoznamkovat
         platno.popredi = 't';
         RovnostrannyTrojuhelnik trojuhelnik(stred, 5.0);
         trojuhelnik.Nakresli(&platno);
-        
+
         platno.Zobraz();
 
     } while (!konec);
