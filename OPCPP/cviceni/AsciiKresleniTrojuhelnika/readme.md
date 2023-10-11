@@ -121,8 +121,6 @@ int main()
     {
         platno.Vymaz();
 
-        Bod2d stred(7.0, 8.0);
-
         platno.NakresliBod(2, 3);
 
         platno.popredi = 'O';
@@ -140,9 +138,13 @@ int main()
         platno.popredi = 'A';
         platno.NakresliUsecku(bodA, bodB);
 
+        platno.popredi = 'S';
+        Bod2d stred(10.0, 8.0);
+        platno.NakresliBod(stred.x, stred.y);
+
         // Odpoznamkovat
         //platno.popredi = 't';
-        //RovnostrannyTrojuhelnik trojuhelnik(stred, 5.0);
+        //RovnostrannyTrojuhelnik trojuhelnik(stred, 10.0);
         //trojuhelnik.Nakresli(&platno);
 
         platno.Zobraz();
