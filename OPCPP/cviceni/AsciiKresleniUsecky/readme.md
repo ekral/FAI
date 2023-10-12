@@ -11,7 +11,7 @@ Naivní řešení:
 2) Spočítáme (dx, dy) = B - A.
 3) dmax = fmax(fabs(dx), fabs(dy)).
 4) stepx = dx / dmax a stepy = dy / dmax.
-5) Provádíme A + (stepx, stepy) dokud je hodnota přibližně rovna B (například můžeme počítat od 0.0 po 1.0 do do dmax).
+5) Provádíme A + (stepx, stepy) dokud je hodnota přibližně rovna B (například můžeme počítat od 0.0 po 1.0 do dmax).
 
 Hlavičkové soubory:
 ```cpp
