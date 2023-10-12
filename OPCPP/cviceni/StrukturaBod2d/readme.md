@@ -1,7 +1,7 @@
 # Struktura Bod2d
 
 Definujte strukturu `Bod2d` aby byl platný kód ve funkci `main`. Funkci `main` neměňte.
-- Použijte konstruktor a **member initializer list**.
+- Použijte **konstruktor** a **member initializer list**.
 - Otestuje a napište, co udělají klíčová slova `private` a `public` s členskými proměnnými.
 - Otestujte a napište, co se stane, kdyz zmenim struktru `Bod2d` na třídu.
 
