@@ -9,6 +9,7 @@ Aplikujte znalosti z předmětu:
 ---
 Tutoriály a materiály k vypracování
 
+- [Příprava: Entity framework základy](https://github.com/ekral/FAI/blob/master/AF/Priprava/01_EF_zaklady.md)
 - [Vzorové řešení Utb.Studenti](https://github.com/ekral/FAI/tree/master/AF/src/Utb.Studenti).
 - [Getting Started with EF Core](https://learn.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=netcore-cli).
 - [Testing against your production database system](https://learn.microsoft.com/en-us/ef/core/testing/testing-with-the-database).
