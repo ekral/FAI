@@ -19,7 +19,7 @@ Hlavičkové soubory:
 #include <math.h>
 ```
 
-Třída `Bod2d`:
+Struktura `Bod2d`:
 
 ```cpp
 struct Bod2d
