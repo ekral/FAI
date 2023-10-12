@@ -1,16 +1,18 @@
 # Úkol na cvičení: Testy pro Model Utb.Kiosk
 
-Otestujte funkčnost modelu ze cvičení cvičení [Model Utb.Kiosk](../ModelUtbKiosk). Vyjděte z příkladu na [Utb.Studenti](https://github.com/ekral/FAI/tree/master/AF/src/Utb.Studenti). 
+Otestujte funkčnost modelu pro Utb.PizzaKiosk.
 
-Vyjděte z předmětu:
+Aplikujte znalosti z předmětu:
 
 - Nástroje pro vývoj softwarových projektů.
 
 ---
-Tutoriály
+Tutoriály a materiály k vypracování
 
 - [Getting Started with EF Core](https://learn.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=netcore-cli).
 - [Testing against your production database system](https://learn.microsoft.com/en-us/ef/core/testing/testing-with-the-database).
+- [Utb.PizzaKiosk](https://github.com/ekral/FAI/tree/master/AF/src/Utb.PizzaKiosk).
+- [Vzorové řešení Utb.Studenti](https://github.com/ekral/FAI/tree/master/AF/src/Utb.Studenti). 
 ---
   
 
