@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utb.PizzaKiosk.Models", "Utb.PizzaKiosk.Models\Utb.PizzaKiosk.Models.csproj", "{21ADC640-53F8-4DCF-B609-34FB26F22FE1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utb.PizzaKiosk.Tests", "Utb.PizzaKiosk.Tests\Utb.PizzaKiosk.Tests.csproj", "{0048EEDF-E165-48F0-A5F2-134C18E40681}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{21ADC640-53F8-4DCF-B609-34FB26F22FE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21ADC640-53F8-4DCF-B609-34FB26F22FE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21ADC640-53F8-4DCF-B609-34FB26F22FE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21ADC640-53F8-4DCF-B609-34FB26F22FE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0048EEDF-E165-48F0-A5F2-134C18E40681}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0048EEDF-E165-48F0-A5F2-134C18E40681}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0048EEDF-E165-48F0-A5F2-134C18E40681}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0048EEDF-E165-48F0-A5F2-134C18E40681}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9CF5B4AA-368F-4D8F-8901-2F5FEF9C9332}
+	EndGlobalSection
+EndGlobal
