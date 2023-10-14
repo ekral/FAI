@@ -3,7 +3,7 @@ using Utb.PizzaKiosk.Models;
 namespace Utb.PizzaKiosk.Tests
 {
     [Collection("Database collection")]
-    public class PizzaContextUnitTest : IClassFixture<TestDatabaseFixture>
+    public class PizzaContextUnitTest
     {
         public PizzaContextUnitTest(TestDatabaseFixture fixture) => Fixture = fixture;
 
