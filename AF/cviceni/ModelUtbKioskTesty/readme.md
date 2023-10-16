@@ -1,22 +1,31 @@
 # Úkol na cvičení: Testy pro Model Utb.Kiosk
 
-Otestujte databází vytvořenou ve cvičení [Model Utb.Kiosk](../ModelUtbKiosk).
+Otestujte funkčnost modelu pro Utb.PizzaKiosk.
 
-Vyjděte z předmětu:
+Aplikujte znalosti z předmětu:
 
 - Nástroje pro vývoj softwarových projektů.
+
+---
+Tutoriály a materiály k vypracování
+
+- [Příprava: Entity framework základy](https://github.com/ekral/FAI/blob/master/AF/Priprava/01_EF_zaklady.md)
+- [Vzorové řešení Utb.Studenti](https://github.com/ekral/FAI/tree/master/AF/src/Utb.Studenti).
+- [Getting Started with EF Core](https://learn.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=netcore-cli).
+- [Testing against your production database system](https://learn.microsoft.com/en-us/ef/core/testing/testing-with-the-database).
+- [Utb.PizzaKiosk](https://github.com/ekral/FAI/tree/master/AF/src/Utb.PizzaKiosk).
+---
   
-Otestujte funkčnost modelu, kdy můžete využít i [xUnit testy](https://learn.microsoft.com/en-us/ef/core/testing/testing-with-the-database), vyjděte z příkladu na [Utb.Studenti](https://github.com/ekral/FAI/tree/master/AF/src/Utb.Studenti).
 
 Cílem je otestovat, zda je databáze správně vytvořená a zda jsou správně nastavené relace. Tedy to, co jste předtím vytvářeli v konzolové aplikaci a jen jste se podívali na výstup na konzoli. Tento postup chceme zautomatizovat v testech.
 
 1) Vytvořte nový projekt typu **class library** ve verzi minimálně .NET 7.
   - Název projektu: *Utb.PizzaKiosk.Models*.
   - Název solution: *Utb.PizzaKiosk*.
-2) Podle [návodu v přípravě](https://github.com/ekral/FAI/blob/master/AF/Priprava/01_EF_zaklady.md) přidejte do projektu *Utb.PizzaKiosk.Models* modely pro Pizza Kiosk a DbContext a vytvořte a aplikujte migraci. Minimálně stačí jedna entita **Pizza** v tabulce **Pizzas**.
-3) Do solution přidejte nový projekt typu **xUnit test** s názvem *Utb.PizzaKiosk.Tests*.
-4) Do projektu *Utb.PizzaKiosk.Tests* přidejte referenci na projekt *Utb.PizzaKiosk.Models*.
-5) Vytvořte testy dle následujícího textu.
+   - Přidejte do projektu *Utb.PizzaKiosk.Models* modely pro Pizza Kiosk a DbContext a vytvořte a aplikujte migraci. Minimálně stačí jedna entita **Pizza** v tabulce **Pizzas**.
+2) Do solution přidejte nový projekt typu **xUnit test** s názvem *Utb.PizzaKiosk.Tests*.
+3) Do projektu *Utb.PizzaKiosk.Tests* přidejte referenci na projekt *Utb.PizzaKiosk.Models*.
+4) Vytvořte testy dle následujícího textu.
 
 ## Poznámky k implementaci
 
@@ -144,8 +153,4 @@ s2 =>
 });
 ```
 
----
-Tutoriály
 
-- [Getting Started with EF Core](https://learn.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=netcore-cli).
-- [Testing against your production database system](https://learn.microsoft.com/en-us/ef/core/testing/testing-with-the-database).
