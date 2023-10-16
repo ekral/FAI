@@ -1,6 +1,6 @@
 # ASCII Kreslení rovnostranného trojúhelníka
 
-S kódem pro ASCII kreslení úsečky vykreslete rovnoramenný trojúhelník.
+S kódem pro ASCII kreslení úsečky vykreslete rovnostranný trojúhelník.
 
 1) Definujte třídu reprezetující rovnostranný trojúhleník `RovnostrannyTrojuhelnik`
 - Trojúhelník bude definovaný **středem** `S` a **délkou strany** `a` a úsečka AB bude rovnoběžná s osou *x*.
