@@ -27,6 +27,21 @@ app.MapGet("/", (PizzaContext context) => context.Pizzas);
 
 - WebApi otestujte Unit Testu pomocí frameworku xUnit.
 
+Pro potřeby testování a dokumentace je vhodné si definovat přesný typ návratové hodnoty a kvůli přehlednosti a možnosti testování v unit testu můžeme použít statickou metodu místo lambdy.
+
+```charp
+app.MapGet("/", WebApiV1.GetAllPizzas);
+
+public static class WebApiV1
+{
+    public static async Task<Ok<Pizza[]>> GetAllPizzas(PizzaContext context)
+    {
+        Pizza[] pizzas = await context.Pizzas.ToArrayAsync();
+
+        return TypedResults.Ok(pizzas);
+    }
+}
+```
 
 ---
 Tutoriály a materiály k vypracování
