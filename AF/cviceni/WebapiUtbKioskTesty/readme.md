@@ -8,6 +8,8 @@ Pokud nemáte vlastní řešení minulých úkolů, tak můžete použít projek
 
 1) Vytvořte nový projekt Asp.net core Empty s názvem *Utb.PizzaKiosk.WebApi*.
 2) Přidejte referenci na projekt obsahující DbContext, například *Utb.PizzaKiosk.Models*.
+3) Pomocí migrací vytvořte databázi.
+
 - WebApi otestujte Unit Testu pomocí frameworku xUnit.
 
 
