@@ -49,7 +49,35 @@ public static class WebApiV1
 2) Do projektu *Utb.PizzaKiosk.Test* přidejte referenci na projekt *Utb.PizzaKiosk.WebApi*.
 3) Do projektu *Utb.PizzaKiosk.Test* přidejte novou testovací třídu `UnitTestPizzaWebApi`:
 
- 
+```sharp
+using Microsoft.AspNetCore.Http.HttpResults;
+using Utb.PizzaKiosk.Models;
+
+[Collection("Database collection")]
+public class UnitTestPizzaWebApi
+{
+    private DatabaseFixture Fixture { get; }
+
+    public UnitTestPizzaWebApi(DatabaseFixture fixture)
+    {
+        Fixture = fixture;
+    }
+
+    [Fact]
+    public async Task ThereShouldBeThreePizzas()
+    {
+        using PizzaContext context = Fixture.CreateContext();
+
+        Ok<Pizza[]> result = await WebApiV1.GetAllPizzas(context);
+
+        Assert.NotNull(result.Value);
+
+        Pizza[] pizzas = result.Value;
+
+        Assert.Equal(3, pizzas.Length);
+    }
+```
+
 ---
 Tutoriály a materiály k vypracování
 
