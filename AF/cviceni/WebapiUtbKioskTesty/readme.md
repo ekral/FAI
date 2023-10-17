@@ -29,7 +29,7 @@ app.MapGet("/", (PizzaContext context) => context.Pizzas);
 
 Pro potřeby testování a dokumentace je vhodné si definovat přesný typ návratové hodnoty a kvůli přehlednosti a možnosti testování v unit testu můžeme použít statickou metodu místo lambdy.
 
-```charp
+```csharp
 app.MapGet("/", WebApiV1.GetAllPizzas);
 
 public static class WebApiV1
