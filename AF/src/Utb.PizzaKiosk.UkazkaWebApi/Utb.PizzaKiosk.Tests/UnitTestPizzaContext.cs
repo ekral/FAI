@@ -22,7 +22,7 @@ namespace Utb.PizzaKiosk.Tests
             
             context.Database.BeginTransaction();
 
-            Pizza nova = new Pizza()
+            Pizza nova = new()
             {
                 Id = 0,
                 Name = "Hranolkova",
@@ -33,7 +33,6 @@ namespace Utb.PizzaKiosk.Tests
             context.Add(nova);
             
             context.SaveChanges();
-
 
             context.ChangeTracker.Clear();
 
@@ -109,9 +108,9 @@ namespace Utb.PizzaKiosk.Tests
         {
             using PizzaContext context = Fixture.CreateContext();
 
-            bool existuje = context.Pizzas.Any(p => p.Name == "Margharita" && p.Incrediences.Any(i => i.Name == "Hranolky"));
+            bool exists = context.Pizzas.Any(p => p.Name == "Margharita" && p.Incrediences.Any(i => i.Name == "Hranolky"));
 
-            Assert.True(existuje);
+            Assert.True(exists);
         }
     }
 
