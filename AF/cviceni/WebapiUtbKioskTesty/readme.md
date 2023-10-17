@@ -6,9 +6,24 @@ Pokud nemáte vlastní řešení minulých úkolů, tak můžete použít projek
 
 [Utb.PizzaKiosk.UkazkaTestu](https://github.com/ekral/FAI/blob/master/AF/src/Utb.PizzaKiosk.UkazkaTestu)
 
-1) Vytvořte nový projekt Asp.net core Empty s názvem *Utb.PizzaKiosk.WebApi*.
-2) Přidejte referenci na projekt obsahující DbContext, například *Utb.PizzaKiosk.Models*.
-3) Pomocí migrací vytvořte databázi.
+1) Pomocí migrací vytvořte databázi.
+2) Přidejte do Solution nový projekt *Asp.net core Empty* s názvem *Utb.PizzaKiosk.WebApi*.
+3) Do projektu *Utb.PizzaKiosk.WebApi* přidejte referenci na projekt obsahující DbContext, například *Utb.PizzaKiosk.Models*.
+4) Zaregistrujte `PizzaContext` do IoC kontejneru dle vzoru v následující kódu.
+
+```csharp
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<PizzaContext>();
+
+var app = builder.Build();
+```
+
+5) Přidejte parametr typu PizzaContext do metody obsluhující dotaz *GET*:
+
+```csharp
+app.MapGet("/", (PizzaContext context) => context.Pizzas);
+```
 
 - WebApi otestujte Unit Testu pomocí frameworku xUnit.
 
