@@ -1,8 +1,7 @@
 # Úkol na cvičení: Testy pro Model Utb.Kiosk
 
-Do projektu Utb.Kiosk přidejte projekt Minimal Web Api a vytvořet metodu, která vrátí všechny pizzy v pizzerie. Využijte model vytvořený v minulém projektu.
-
-WebApi otestujte Unit Testu pomocí frameworku xUnit.
+1) Do projektu Utb.Kiosk přidejte projekt Minimal Web Api a vytvořet metodu, která vrátí všechny pizzy v pizzerie. Využijte model vytvořený v minulém projektu.
+2) WebApi otestujte Unit Testu pomocí frameworku xUnit.
 
 
 ---
