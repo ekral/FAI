@@ -1,6 +1,8 @@
 # Úkol na cvičení: Testy pro Model Utb.Kiosk
 
-- Do projektu Utb.Kiosk přidejte projekt Minimal Web Api a vytvořet metodu, která vrátí všechny pizzy v pizzerie. Využijte model vytvořený v minulém projektu.
+## Minimal WebApi
+
+Do projektu Utb.Kiosk přidejte projekt Minimal Web Api a vytvořet metodu, která vrátí všechny pizzy v pizzerie. Využijte model vytvořený v minulém projektu.
 
 Pokud nemáte vlastní řešení minulých úkolů, tak můžete použít projekt: 
 
@@ -25,9 +27,11 @@ var app = builder.Build();
 app.MapGet("/", (PizzaContext context) => context.Pizzas);
 ```
 
-- WebApi otestujte Unit Testu pomocí frameworku xUnit.
+## Unit Testy pro WebApi.
 
-Pro potřeby testování a dokumentace je vhodné si definovat přesný typ návratové hodnoty a kvůli přehlednosti a možnosti testování v unit testu můžeme použít statickou metodu místo lambdy.
+Otestujte Unit Testu pomocí frameworku xUnit.
+
+1) Pro potřeby testování a dokumentace je vhodné si definovat přesný typ návratové hodnoty a kvůli přehlednosti a možnosti testování v unit testu můžeme použít statickou metodu místo lambdy.
 
 ```csharp
 app.MapGet("/", WebApiV1.GetAllPizzas);
@@ -42,7 +46,10 @@ public static class WebApiV1
     }
 }
 ```
+2) Do projektu *Utb.PizzaKiosk.Test* přidejte referenci na projekt *Utb.PizzaKiosk.WebApi*.
+3) Do projektu *Utb.PizzaKiosk.Test* přidejte novou testovací třídu `UnitTestPizzaWebApi`:
 
+ 
 ---
 Tutoriály a materiály k vypracování
 
