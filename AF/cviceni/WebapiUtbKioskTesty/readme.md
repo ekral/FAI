@@ -4,7 +4,7 @@
 
 Pokud nemáte vlastní řešení minulých úkolů, tak můžete použít projekt: 
 
-[ModelUtbKioskTesty](https://github.com/ekral/FAI/blob/master/AF/cviceni/ModelUtbKioskTesty)
+[Utb.PizzaKiosk.UkazkaTestu](https://github.com/ekral/FAI/blob/master/AF/src/Utb.PizzaKiosk.UkazkaTestu)
 
 2) WebApi otestujte Unit Testu pomocí frameworku xUnit.
 
