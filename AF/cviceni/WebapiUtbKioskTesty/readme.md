@@ -49,7 +49,7 @@ public static class WebApiV1
 2) Do projektu *Utb.PizzaKiosk.Test* přidejte referenci na projekt *Utb.PizzaKiosk.WebApi*.
 3) Do projektu *Utb.PizzaKiosk.Test* přidejte novou testovací třídu `UnitTestPizzaWebApi`:
 
-```sharp
+```csharp
 using Microsoft.AspNetCore.Http.HttpResults;
 using Utb.PizzaKiosk.Models;
 
