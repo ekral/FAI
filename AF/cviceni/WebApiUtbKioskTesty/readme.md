@@ -1,4 +1,4 @@
-# Úkol na cvičení: Testy pro Model Utb.Kiosk
+# Úkol na cvičení: Minimal WebApi a jejich testy pro Model Utb.Kiosk
 
 ## Minimal WebApi
 
