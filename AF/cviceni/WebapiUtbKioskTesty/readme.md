@@ -1,12 +1,14 @@
 # Úkol na cvičení: Testy pro Model Utb.Kiosk
 
-1) Do projektu Utb.Kiosk přidejte projekt Minimal Web Api a vytvořet metodu, která vrátí všechny pizzy v pizzerie. Využijte model vytvořený v minulém projektu.
+- Do projektu Utb.Kiosk přidejte projekt Minimal Web Api a vytvořet metodu, která vrátí všechny pizzy v pizzerie. Využijte model vytvořený v minulém projektu.
 
 Pokud nemáte vlastní řešení minulých úkolů, tak můžete použít projekt: 
 
 [Utb.PizzaKiosk.UkazkaTestu](https://github.com/ekral/FAI/blob/master/AF/src/Utb.PizzaKiosk.UkazkaTestu)
 
-2) WebApi otestujte Unit Testu pomocí frameworku xUnit.
+1) Vytvořte nový projekt Asp.net core Empty s názvem *Utb.PizzaKiosk.WebApi*.
+2) Přidejte referenci na projekt obsahující DbContext, například *Utb.PizzaKiosk.Models*.
+- WebApi otestujte Unit Testu pomocí frameworku xUnit.
 
 
 ---
