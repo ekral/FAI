@@ -27,7 +27,7 @@ var app = builder.Build();
 app.MapGet("/", (PizzaContext context) => context.Pizzas);
 ```
 
-## Unit Testy pro WebApi.
+## Unit Testy pro WebApi
 
 Otestujte Unit Testu pomocí frameworku xUnit.
 
