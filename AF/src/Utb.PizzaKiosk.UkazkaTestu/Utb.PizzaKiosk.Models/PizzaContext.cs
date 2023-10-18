@@ -51,9 +51,9 @@ namespace Utb.PizzaKiosk.Models
                 new PizzaStyle() { Id = 2, Description = "Americky styl"});
 
             modelBuilder.Entity<Pizza>().HasData(
-                new Pizza() { Id = 1, Name = "Margharita", Cena = 100, PizzaStyleId = 1 },
-                new Pizza() { Id = 2, Name = "Salami", Cena = 130, PizzaStyleId = 1 },
-                new Pizza() { Id = 3, Name = "Funghi", Cena = 135, PizzaStyleId = 2 }
+                new Pizza() { Id = 1, Name = "Margharita", Price = 100, PizzaStyleId = 1 },
+                new Pizza() { Id = 2, Name = "Salami", Price = 130, PizzaStyleId = 1 },
+                new Pizza() { Id = 3, Name = "Funghi", Price = 135, PizzaStyleId = 2 }
             );
 
             modelBuilder.Entity<Incredience>().HasData(
