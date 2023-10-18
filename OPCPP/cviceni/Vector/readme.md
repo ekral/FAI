@@ -6,7 +6,7 @@ Místo pole s pevnou délkou `char data[totalChars]` použijte v třídě `Platn
 
 2) Dynamická alokace paměti na haldě
 
-Změňte implementaci na dynamickou alokaci paměti na haldě s pomocí operátorů `new[]` (v konstruktoru) a delete[] (v destruktoru) a vysvětlete jaké jsou výhody a nevýhody tohoto řešení v porovnání s použítím třídy `std::vector`.
+Změňte implementaci na dynamickou alokaci paměti na haldě s pomocí operátorů `new[]` (v konstruktoru) a `delete[]` (v destruktoru) a vysvětlete jaké jsou výhody a nevýhody tohoto řešení v porovnání s použítím třídy `std::vector`.
 
 ```cpp
 int columnCount = 30;
