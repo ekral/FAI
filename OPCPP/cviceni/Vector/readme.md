@@ -5,7 +5,7 @@ Místo pole s pevnou délkou `char data[totalChars]` použijte v třídě `Platn
 ```cpp
 int columnCount = 30;
 int rowCount = 20;
-PPlatno platno(columnCount, rowCount, '-', 'x');
+Platno platno(columnCount, rowCount, '-', 'x');
 ```
 
 Zdrojový kód třídy plátno:
