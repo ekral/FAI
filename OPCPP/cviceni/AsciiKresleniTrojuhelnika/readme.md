@@ -34,8 +34,8 @@ private:
 
     char data[totalChars];
 public:
-    static constexpr int maxColumnIndex = columnCount - 1;
-    static constexpr int maxRowIndex = rowCount - 1;
+    const int maxColumnIndex = columnCount - 1;
+    const int maxRowIndex = rowCount - 1;
 
     char popredi;
 
