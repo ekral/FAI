@@ -4,27 +4,6 @@ using Xunit;
 
 namespace Utb.PizzaKiosk.Tests
 {
-    [CollectionDefinition("Database collection")]
-    public class DatabaseCollection : ICollectionFixture<DatabaseFixture>
-    {
-
-    }
-
-    public class DatabaseFixture
-    {
-        public DatabaseFixture()
-        {
-            using PizzaContext context = CreateContext();
-
-            context.Database.EnsureDeleted();
-            context.Database.EnsureCreated();
-        }
-
-        public PizzaContext CreateContext()
-        {
-            return new PizzaContext("pizzatests.db");
-        }
-    }
 
     [Collection("Database collection")]
     public class UnitTestPizzaContext 
@@ -37,13 +16,13 @@ namespace Utb.PizzaKiosk.Tests
         }
 
         [Fact]
-        public void FirstPizzaIsMargharita()
+        public void FirstPizzaIsMargherita()
         {
             using PizzaContext context = Fixture.CreateContext();
 
             Pizza pizza = context.Pizzas.Single(p => p.Id == 1);
 
-            Assert.Equal("Margharita", pizza.Name);
+            Assert.Equal("Margherita", pizza.Name);
         }
 
         [Fact]
