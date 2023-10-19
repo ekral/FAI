@@ -149,16 +149,11 @@ The pizza description example:
 - Description: Tomato base shredded mozzarella.
 
 Pizza's selection example:
-- List options:
+- Pizza options:
    - Size: Small, Medium (default), Large.
-   - Cheese type: Mozzarella (default), Parmesan, Vegetarian.
-- Boolean options: 
-   - Pineaple: no (default) / yes.
-   - Garlic Powder: no (default) / yes.
-   - Extra Sauce: no (default) / yes.
-- Numeric options:
-   -  Number of Artichoke Hearts: minimum: 0, maximum: 10, default: 5
-   -  Number of Jalapeños, minimum: 0, maximum: 10, default: 3
+- Additional toppings (unsigned number):
+   -  Onion: +5
+   -  Jalapeños: +3
 
 The pizza’s configuration choosen by the customer:
 - List values 
@@ -180,13 +175,20 @@ TODO: Rewrite as complete sentences.
 ```mermaid
 classDiagram
 
-   class OrderStatusType{
+class OrderStatusType{
       <<enumeration>>
       Pending
       Processing
       Ready
       Delivered
       Cancelled
+   }
+
+
+   class IngredienceUnit{
+      <<enumeration>>
+      Gram
+      Pinch
    }
 
    class CartStatusType{
@@ -222,28 +224,14 @@ classDiagram
       << Immutable >> +CartPizzas: List~PizzaConfiguration~
    }
 
-   note for PizzaOption "Represents available pizza options with default value for a customer,
-   which may include pizza size: Small, Medium (default), Large, 
-   Extra Sauce: false (default) / true,
-   or the number of artichoke hearts: minimum: 0, maximum: 10, default: 5."
-   class PizzaOption{
+
+   class Ingredience{
       <<TaggedUnion>>
-      +Description: string
-   }
-
-    class StringOptions{
-      +Options : List~string~
-      +DefaultValueIndex : int
-   }
-
-   class BooleanOption {
-      +DefaultValue : bool
-   }
-
-   class QuantityOption{
-      +MinimalValue : int
-      +MaximalValue : int
-      +DefaultValue : int
+      +Name: string
+      +Unit: IngredienceUnit
+      +UnitPrice: double
+      +Number: unsigned int
+      +Adjustable: bool
    }
 
    
@@ -291,6 +279,7 @@ classDiagram
       +Name : string
       +Description : string
       +Price : double
+
    }
 
    PizzaSelection "1" --> "1" Pizza
