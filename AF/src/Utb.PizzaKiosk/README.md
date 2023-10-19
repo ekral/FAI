@@ -175,7 +175,7 @@ TODO: Rewrite as complete sentences.
 ```mermaid
 classDiagram
 
-class OrderStatusType{
+   class OrderStatusType{
       <<enumeration>>
       Pending
       Processing
@@ -184,8 +184,7 @@ class OrderStatusType{
       Cancelled
    }
 
-
-   class IngredienceUnit{
+   class IngredientUnit{
       <<enumeration>>
       Gram
       Pinch
@@ -207,104 +206,43 @@ class OrderStatusType{
    class KioskSession{
       +FulfillmentOption : FulfillmentOptionType
       +Cart : ShopingCart
-      +SelectedPizza : PizzaConfiguration
+      +SelectedPizza : Pizza
       +SessionMenu : Menu
    }
 
-   note for Order "In EF, immutability of a collection can be achieved using ICollection instead of List."
    class Order{
       +OrderId
       +Status : OrderStatusType
-      << Immutable >> +OrderPizzas: List~PizzaConfiguration~
+      << Immutable >> +OrderPizzas: List~Pizza~
    }
 
-   note for ShopingCart "PizzaConfiguration is deep copied from the KioskSession's SelectedPizza"
    class ShopingCart{
       +Status : CartStatusType
-      << Immutable >> +CartPizzas: List~PizzaConfiguration~
+      << Immutable >> +CartPizzas: List~Pizza~
    }
 
-
-   class Ingredience{
-      <<TaggedUnion>>
+   class Ingredient{
       +Name: string
-      +Unit: IngredienceUnit
+      +Unit: IngredientUnit
       +UnitPrice: double
       +Number: unsigned int
       +Adjustable: bool
    }
 
-   
-   class BooleanValue{
-      +Value : bool
-      +Option : BoleanOption
-   }
-
-   
-   class ListValue{
-      +Value : List~string~
-      +Option : ListOption
-   }
-   
-   class NumericValue{
-      +Value : int
-      +Option : NumericOption
-   }
-
-   note for SelectedValue "Represents selected pizza options by a customer,
-   such as Pizza size: Small,
-   Extra Sauce: false,
-   or the Number of artichoke hearts: 0."
-   class SelectedValue{
-      <<TaggedUnion>>
-      IsDefault()
-   }
-
-   class PizzaConfiguration{
-      +Pizza : Pizza
-      +ConfigurationValues: List~SelectedValue~
-   }
-
-   note for Menu "Menu won't be displayed if it has no menu items."
    class Menu{
-      +Items: List~PizzaSelection~
-   }
-
-   class PizzaSelection{
-      +Pizza : Pizza
-      +SelectionOptions : List~PizzaOption~
+      +Items: List~Pizza~
    }
 
    class Pizza {
       +Name : string
       +Description : string
       +Price : double
-
+      +Ingredients : List~Ingredient~
    }
 
-   PizzaSelection "1" --> "1" Pizza
-   Pizza "1" <-- "1" PizzaConfiguration
-   PizzaSelection "*" --> "*" PizzaOption
-   PizzaConfiguration --> SelectedValue
-   Menu "1"--> "*" PizzaSelection
-   KioskSession "1" --> "1" Menu
-   KioskSession "1" --> "1" PizzaConfiguration
-   KioskSession "1" --> "1" ShopingCart
-   KioskSession  "1" -->  "1" Order
-   ShopingCart "1" --> "*" PizzaConfiguration
-   Order "1" --> "*" PizzaConfiguration
+   Menu "1" --> "*" Pizza
+   Pizza "*" --> "*" Ingredient
 
-   PizzaOption <|--StringOptions
-   SelectedValue <|--ListValue
-   %%ListValue "1" --> "1" StringOptions
-
-   PizzaOption <|--BooleanOption
-   SelectedValue <|--BooleanValue
-   %%BooleanValue "1" --> "1" BooleanOption
-
-   PizzaOption <|--QuantityOption
-   SelectedValue <|--NumericValue
-   %%NumericValue "1" --> "1" QuantityOption
 ```
 #### Implementation notes
 
