@@ -230,7 +230,7 @@ classDiagram
       +Name : string
       +Description : string
       +Price : double
-      +Ingredients : List~Ingredient~
+      +Ingredients : List~PizzaIngredient~
    }
 
    class PizzaIngredient {
