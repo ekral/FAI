@@ -1,5 +1,7 @@
 # ASCII Kreslení rovnostranného trojúhelníka
 
+Cvičení procvičuje definici třídy, členských proměnných, členských funkcí, konstruktoru, member initializer listu a práci s ukazateli na strukturu.
+
 S kódem pro ASCII kreslení úsečky vykreslete rovnostranný trojúhelník.
 
 1) Definujte třídu reprezetující rovnostranný trojúhleník `RovnostrannyTrojuhelnik`
