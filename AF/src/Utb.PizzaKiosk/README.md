@@ -245,8 +245,8 @@ classDiagram
    ShopingCart "*" --> "*" Pizza
    Order "*" --> "*" Pizza
    KioskSession *-- Pizza  : SelectedPizza
-   KioskSession *--> ShopingCart
-   KioskSession *--> Menu
+   KioskSession *--> ShopingCart : Cart
+   KioskSession *--> Menu : Menu
 
 ```
 #### Implementation notes
