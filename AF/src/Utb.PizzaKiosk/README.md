@@ -213,19 +213,18 @@ classDiagram
    class Order{
       +OrderId
       +Status : OrderStatusType
-      << Immutable >> +OrderPizzas: List~Pizza~
+      +OrderPizzas: List~Pizza~
    }
 
    class ShopingCart{
       +Status : CartStatusType
-      << Immutable >> +CartPizzas: List~Pizza~
+      +CartPizzas: List~Pizza~
    }
 
    class Ingredient{
       +Name: string
       +Unit: IngredientUnit
       +UnitPrice: double
-      +Number: unsigned int
       +Adjustable: bool
    }
 
@@ -240,10 +239,31 @@ classDiagram
       +Ingredients : List~Ingredient~
    }
 
+   class PizzaIngredient {
+      +PizzaId
+      +IngredietId
+      +Quantity: unsigned int
+   }
+
+   class OrderPizza {
+      +OrderId
+      +PizzaId
+      +Quantity: unsigned int
+   }
+
+   class OrderPizzaIngredient {
+       +OrderId
+       +PizzaId
+       +IngredietId
+       +Quantity: unsigned int
+   }
+
    Menu "1" --> "*" Pizza
-   Pizza "*" --> "*" Ingredient
+   Pizza "1" --> "*" PizzaIngredient
+   PizzaIngredient "*" --> "1" Ingredient
    ShopingCart "*" --> "*" Pizza
-   Order "*" --> "*" Pizza
+   Order "*" --> "*" OrderPizza
+   OrderPizza "*" --> "*" OrderPizzaIngredient
    KioskSession *-- Pizza  : SelectedPizza
    KioskSession *--> ShopingCart : Cart
    KioskSession *--> Menu : Menu
