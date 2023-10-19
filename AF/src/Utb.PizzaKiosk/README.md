@@ -149,16 +149,11 @@ The pizza description example:
 - Description: Tomato base shredded mozzarella.
 
 Pizza's selection example:
-- List options:
+- Pizza options:
    - Size: Small, Medium (default), Large.
-   - Cheese type: Mozzarella (default), Parmesan, Vegetarian.
-- Boolean options: 
-   - Pineaple: no (default) / yes.
-   - Garlic Powder: no (default) / yes.
-   - Extra Sauce: no (default) / yes.
-- Numeric options:
-   -  Number of Artichoke Hearts: minimum: 0, maximum: 10, default: 5
-   -  Number of Jalapeños, minimum: 0, maximum: 10, default: 3
+- Additional toppings (unsigned number):
+   -  Onion: +5
+   -  Jalapeños: +3
 
 The pizza’s configuration choosen by the customer:
 - List values 
@@ -189,6 +184,12 @@ classDiagram
       Cancelled
    }
 
+   class IngredientUnit{
+      <<enumeration>>
+      Gram
+      Pinch
+   }
+
    class CartStatusType{
       <<enumeration>>
       InCart
@@ -205,117 +206,48 @@ classDiagram
    class KioskSession{
       +FulfillmentOption : FulfillmentOptionType
       +Cart : ShopingCart
-      +SelectedPizza : PizzaConfiguration
+      +SelectedPizza : Pizza
       +SessionMenu : Menu
    }
 
-   note for Order "In EF, immutability of a collection can be achieved using ICollection instead of List."
    class Order{
       +OrderId
       +Status : OrderStatusType
-      << Immutable >> +OrderPizzas: List~PizzaConfiguration~
+      << Immutable >> +OrderPizzas: List~Pizza~
    }
 
-   note for ShopingCart "PizzaConfiguration is deep copied from the KioskSession's SelectedPizza"
    class ShopingCart{
       +Status : CartStatusType
-      << Immutable >> +CartPizzas: List~PizzaConfiguration~
+      << Immutable >> +CartPizzas: List~Pizza~
    }
 
-   note for PizzaOption "Represents available pizza options with default value for a customer,
-   which may include pizza size: Small, Medium (default), Large, 
-   Extra Sauce: false (default) / true,
-   or the number of artichoke hearts: minimum: 0, maximum: 10, default: 5."
-   class PizzaOption{
-      <<TaggedUnion>>
-      +Description: string
+   class Ingredient{
+      +Name: string
+      +Unit: IngredientUnit
+      +UnitPrice: double
+      +Number: unsigned int
+      +Adjustable: bool
    }
 
-    class StringOptions{
-      +Options : List~string~
-      +DefaultValueIndex : int
-   }
-
-   class BooleanOption {
-      +DefaultValue : bool
-   }
-
-   class QuantityOption{
-      +MinimalValue : int
-      +MaximalValue : int
-      +DefaultValue : int
-   }
-
-   
-   class BooleanValue{
-      +Value : bool
-      +Option : BoleanOption
-   }
-
-   
-   class ListValue{
-      +Value : List~string~
-      +Option : ListOption
-   }
-   
-   class NumericValue{
-      +Value : int
-      +Option : NumericOption
-   }
-
-   note for SelectedValue "Represents selected pizza options by a customer,
-   such as Pizza size: Small,
-   Extra Sauce: false,
-   or the Number of artichoke hearts: 0."
-   class SelectedValue{
-      <<TaggedUnion>>
-      IsDefault()
-   }
-
-   class PizzaConfiguration{
-      +Pizza : Pizza
-      +ConfigurationValues: List~SelectedValue~
-   }
-
-   note for Menu "Menu won't be displayed if it has no menu items."
    class Menu{
-      +Items: List~PizzaSelection~
-   }
-
-   class PizzaSelection{
-      +Pizza : Pizza
-      +SelectionOptions : List~PizzaOption~
+      +Items: List~Pizza~
    }
 
    class Pizza {
       +Name : string
       +Description : string
       +Price : double
+      +Ingredients : List~Ingredient~
    }
 
-   PizzaSelection "1" --> "1" Pizza
-   Pizza "1" <-- "1" PizzaConfiguration
-   PizzaSelection "*" --> "*" PizzaOption
-   PizzaConfiguration --> SelectedValue
-   Menu "1"--> "*" PizzaSelection
-   KioskSession "1" --> "1" Menu
-   KioskSession "1" --> "1" PizzaConfiguration
-   KioskSession "1" --> "1" ShopingCart
-   KioskSession  "1" -->  "1" Order
-   ShopingCart "1" --> "*" PizzaConfiguration
-   Order "1" --> "*" PizzaConfiguration
+   Menu "1" --> "*" Pizza
+   Pizza "*" --> "*" Ingredient
+   ShopingCart "*" --> "*" Pizza
+   Order "*" --> "*" Pizza
+   KioskSession *-- Pizza  : SelectedPizza
+   KioskSession *--> ShopingCart : Cart
+   KioskSession *--> Menu : Menu
 
-   PizzaOption <|--StringOptions
-   SelectedValue <|--ListValue
-   %%ListValue "1" --> "1" StringOptions
-
-   PizzaOption <|--BooleanOption
-   SelectedValue <|--BooleanValue
-   %%BooleanValue "1" --> "1" BooleanOption
-
-   PizzaOption <|--QuantityOption
-   SelectedValue <|--NumericValue
-   %%NumericValue "1" --> "1" QuantityOption
 ```
 #### Implementation notes
 

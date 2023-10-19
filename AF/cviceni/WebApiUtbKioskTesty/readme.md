@@ -8,7 +8,7 @@ Pokud nemáte vlastní řešení minulých úkolů, tak můžete použít projek
 
 [Utb.PizzaKiosk.UkazkaTestu](https://github.com/ekral/FAI/blob/master/AF/src/Utb.PizzaKiosk.UkazkaTestu)
 
-1) Pomocí migrací vytvořte databázi.
+1) Pomocí migrací vytvořte databázi. Před vytvořením databáze ověřte, zda databáze se stejnou cestou a názvem už existuje a pokud ano, tak ji odstraňte.
 2) Přidejte do Solution nový projekt *Asp.net core Empty* s názvem *Utb.PizzaKiosk.WebApi*.
 3) Do projektu *Utb.PizzaKiosk.WebApi* přidejte referenci na projekt obsahující DbContext, například *Utb.PizzaKiosk.Models*.
 4) Zaregistrujte `PizzaContext` do IoC kontejneru dle vzoru v následující kódu.

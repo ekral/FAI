@@ -1,6 +1,12 @@
 # Použití typu std::vector pro data ASCII plátna
 
-Místo pole s pevnou délkou `char data[totalChars]` použijte v třídě `Platno` dynamické pole `std::vector` a změňte třídu tak, aby bylo možné zadávat rozměry plátna v konstruktoru.
+1) Implementaace s datovým kontejnerem std::vector
+   
+Místo pole s pevnou délkou `char data[totalChars]` použijte v třídě `Platno` dynamické pole `std::vector` a změňte třídu tak, aby bylo možné zadávat rozměry plátna v konstruktoru. V member intializer listu zadejte hodnoty proměnných `columnCount`, `rowCount`, `totalChars`, `maxColumnIndex` a `maxRowIndex` a tyto proměnné budou definovány jako konstanty bez inicializace hodnoty, například `const int columnCount;`.
+
+2) Dynamická alokace paměti na haldě
+
+Změňte implementaci na dynamickou alokaci paměti na haldě s pomocí operátorů `new[]` (v konstruktoru) a `delete[]` (v destruktoru) a vysvětlete jaké jsou výhody a nevýhody tohoto řešení v porovnání s použítím třídy `std::vector`.
 
 ```cpp
 int columnCount = 30;
@@ -8,7 +14,7 @@ int rowCount = 20;
 Platno platno(columnCount, rowCount, '-', 'x');
 ```
 
-Zdrojový kód třídy plátno:
+Zdrojový kód třídy plátno.
 
 ```cpp
 class Platno
