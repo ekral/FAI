@@ -210,12 +210,6 @@ classDiagram
       +SessionMenu : Menu
    }
 
-   class Order{
-      +OrderId
-      +Status : OrderStatusType
-      +OrderPizzas: List~Pizza~
-   }
-
    class ShopingCart{
       +Status : CartStatusType
       +CartPizzas: List~Pizza~
@@ -245,25 +239,32 @@ classDiagram
       +Quantity: unsigned int
    }
 
-   class OrderPizza {
-      +OrderId
-      +PizzaId
-      +Quantity: unsigned int
+  class Order{
+      +Status : OrderStatusType
+      +OrderedPizzas: List~OrderedPizza~
+      +TotalPrice : double
    }
 
-   class OrderPizzaIngredient {
-       +OrderId
-       +PizzaId
-       +IngredietId
+   class OrderedPizza {
+      +Name : string
+      +TotalPrice : double
+      +OrderedIngredients: List~OrderedIngredient~
+   }
+
+   class OrderedIngredient {
+       +Name
+       +Unit: IngredientUnit
+       +UnitPrice: double
        +Quantity: unsigned int
+       +TotalPrice : double
    }
 
-   Menu "1" --> "*" Pizza
-   Pizza --> PizzaIngredient
-   PizzaIngredient --> Ingredient
-   ShopingCart "*" --> "*" Pizza
-   Order --> OrderPizza
-   OrderPizza --> OrderPizzaIngredient
+   Menu --> Pizza
+   Pizza -- PizzaIngredient
+   PizzaIngredient -- Ingredient
+   ShopingCart --> Pizza
+   Order --> OrderedPizza
+   OrderedPizza -- OrderedIngredient
    KioskSession *-- Pizza  : SelectedPizza
    KioskSession *--> ShopingCart : Cart
    KioskSession *--> Menu : Menu
