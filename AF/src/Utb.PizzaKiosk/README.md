@@ -242,6 +242,11 @@ classDiagram
 
    Menu "1" --> "*" Pizza
    Pizza "*" --> "*" Ingredient
+   ShopingCart "*" --> "*" Pizza
+   Order "*" --> "*" Pizza
+   KioskSession *-- Pizza
+   KioskSession *--> ShopingCart
+   KioskSession *--> Menu
 
 ```
 #### Implementation notes
