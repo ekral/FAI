@@ -259,11 +259,11 @@ classDiagram
    }
 
    Menu "1" --> "*" Pizza
-   Pizza "1" --> "*" PizzaIngredient
-   PizzaIngredient "*" --> "1" Ingredient
+   Pizza --> PizzaIngredient
+   PizzaIngredient --> Ingredient
    ShopingCart "*" --> "*" Pizza
-   Order "*" --> "*" OrderPizza
-   OrderPizza "*" --> "*" OrderPizzaIngredient
+   Order --> OrderPizza
+   OrderPizza --> OrderPizzaIngredient
    KioskSession *-- Pizza  : SelectedPizza
    KioskSession *--> ShopingCart : Cart
    KioskSession *--> Menu : Menu
