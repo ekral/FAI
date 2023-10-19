@@ -244,7 +244,7 @@ classDiagram
    Pizza "*" --> "*" Ingredient
    ShopingCart "*" --> "*" Pizza
    Order "*" --> "*" Pizza
-   KioskSession *-- Pizza
+   KioskSession *-- Pizza  : SelectedPizza
    KioskSession *--> ShopingCart
    KioskSession *--> Menu
 
