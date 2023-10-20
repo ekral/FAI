@@ -208,22 +208,12 @@ classDiagram
       +FulfillmentOption : FulfillmentOptionType
       +Cart : ShopingCart
       +SelectedPizza : Pizza
-      +SessionMenu : Menu
    }
 
    class ShopingCart {
       <<Object>>
       +Status : CartStatusType
       +CartPizzas: List~Pizza~
-   }
-
-   class Ingredient {
-      <<Entity>>
-      +Id : int
-      +Name: string
-      +Unit: IngredientUnit
-      +UnitPrice: decimal
-      +Adjustable: bool
    }
 
    class Pizza {
@@ -233,7 +223,7 @@ classDiagram
       +Description : string
       +Price : decimal
       +IsAvailable : bool
-      +Ingredients : List~PizzaIngredient~
+      +Ingredients : ICollection~PizzaIngredient~
    }
 
    class PizzaIngredient {
@@ -244,12 +234,22 @@ classDiagram
       +Quantity: int
    }
 
+  class Ingredient {
+      <<Entity>>
+      +Id : int
+      +Name: string
+      +Unit: IngredientUnit
+      +UnitPrice: decimal
+      +Adjustable: bool
+   }
+
+
   class Order {
       <<Entity>>
       +Id : int
       +Status : OrderStatusType
       +FulfillmentOption : FulfillmentOptionType
-      +OrderedPizzas: List~OrderedPizza~
+      +OrderedPizzas: ICollection~OrderedPizza~
       +TotalPrice : decimal
    }
 
@@ -258,7 +258,7 @@ classDiagram
       +Id : int
       +Name : string
       +TotalPrice : decimal
-      +OrderedIngredients: List~OrderedIngredient~
+      +OrderedIngredients: ICollection~OrderedIngredient~
    }
 
    class OrderedIngredient {
