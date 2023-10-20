@@ -217,15 +217,6 @@ classDiagram
       +CartPizzas: List~Pizza~
    }
 
-   class Ingredient {
-      <<Entity>>
-      +Id : int
-      +Name: string
-      +Unit: IngredientUnit
-      +UnitPrice: decimal
-      +Adjustable: bool
-   }
-
    class Pizza {
       <<Entity>>
       +Id : int
@@ -243,6 +234,16 @@ classDiagram
       +IngredietId
       +Quantity: int
    }
+
+  class Ingredient {
+      <<Entity>>
+      +Id : int
+      +Name: string
+      +Unit: IngredientUnit
+      +UnitPrice: decimal
+      +Adjustable: bool
+   }
+
 
   class Order {
       <<Entity>>
