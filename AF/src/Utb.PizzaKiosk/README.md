@@ -214,7 +214,7 @@ classDiagram
    class ShopingCart {
       <<Object>>
       +Status : CartStatusType
-      +CartPizzas: List~Pizza~
+      +CartPizzas: ICollection~Pizza~
    }
 
    class Ingredient {
@@ -233,7 +233,7 @@ classDiagram
       +Description : string
       +Price : decimal
       +IsAvailable : bool
-      +Ingredients : List~PizzaIngredient~
+      +Ingredients : ICollection~PizzaIngredient~
    }
 
    class PizzaIngredient {
