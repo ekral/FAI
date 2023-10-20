@@ -247,8 +247,8 @@ classDiagram
   class Order {
       <<Entity>>
       +Id : int
-      +FulfillmentOption : FulfillmentOptionType
       +Status : OrderStatusType
+      +FulfillmentOption : FulfillmentOptionType
       +OrderedPizzas: List~OrderedPizza~
       +TotalPrice : decimal
    }
