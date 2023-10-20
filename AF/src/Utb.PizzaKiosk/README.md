@@ -204,7 +204,7 @@ classDiagram
    }
 
    class KioskSession {
-      +Id : int
+      <<Object>>
       +FulfillmentOption : FulfillmentOptionType
       +Cart : ShopingCart
       +SelectedPizza : Pizza
@@ -212,12 +212,13 @@ classDiagram
    }
 
    class ShopingCart {
-      +Id : int
+      <<Object>>
       +Status : CartStatusType
       +CartPizzas: List~Pizza~
    }
 
    class Ingredient {
+      <<Entity>>
       +Id : int
       +Name: string
       +Unit: IngredientUnit
@@ -226,6 +227,7 @@ classDiagram
    }
 
    class Pizza {
+      <<Entity>>
       +Id : int
       +Name : string
       +Description : string
@@ -235,6 +237,7 @@ classDiagram
    }
 
    class PizzaIngredient {
+      <<Entity>>
       +Id : int
       +PizzaId
       +IngredietId
@@ -242,13 +245,16 @@ classDiagram
    }
 
   class Order {
+      <<Entity>>
       +Id : int
+      +FulfillmentOption : FulfillmentOptionType
       +Status : OrderStatusType
       +OrderedPizzas: List~OrderedPizza~
       +TotalPrice : decimal
    }
 
    class OrderedPizza {
+      <<Entity>>
       +Id : int
       +Name : string
       +TotalPrice : decimal
@@ -256,12 +262,13 @@ classDiagram
    }
 
    class OrderedIngredient {
-       +Id : int
-       +Name : string
-       +Unit: IngredientUnit
-       +UnitPrice: decimal
-       +Quantity: int
-       +TotalPrice : decimal
+      <<Entity>>
+      +Id : int
+      +Name : string
+      +Unit: IngredientUnit
+      +UnitPrice: decimal
+      +Quantity: int
+      +TotalPrice : decimal
    }
 
    Pizza -- PizzaIngredient
