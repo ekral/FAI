@@ -236,7 +236,7 @@ classDiagram
    class PizzaIngredient {
       +PizzaId
       +IngredietId
-      +Quantity: unsigned int
+      +Quantity: int
    }
 
   class Order{
@@ -255,7 +255,7 @@ classDiagram
        +Name
        +Unit: IngredientUnit
        +UnitPrice: decimal
-       +Quantity: unsigned int
+       +Quantity: int
        +TotalPrice : decimal
    }
 
