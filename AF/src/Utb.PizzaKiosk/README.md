@@ -203,63 +203,74 @@ classDiagram
       Delivery
    }
 
-   class KioskSession{
+   class KioskSession {
+      <<Object>>
       +FulfillmentOption : FulfillmentOptionType
       +Cart : ShopingCart
       +SelectedPizza : Pizza
       +SessionMenu : Menu
    }
 
-   class ShopingCart{
+   class ShopingCart {
+      <<Object>>
       +Status : CartStatusType
       +CartPizzas: List~Pizza~
    }
 
-   class Ingredient{
+   class Ingredient {
+      <<Entity>>
+      +Id : int
       +Name: string
       +Unit: IngredientUnit
-      +UnitPrice: double
+      +UnitPrice: decimal
       +Adjustable: bool
    }
 
-   class Menu{
-      +Items: List~Pizza~
-   }
-
    class Pizza {
+      <<Entity>>
+      +Id : int
       +Name : string
       +Description : string
-      +Price : double
+      +Price : decimal
+      +IsAvailable : bool
       +Ingredients : List~PizzaIngredient~
    }
 
    class PizzaIngredient {
+      <<Entity>>
+      +Id : int
       +PizzaId
       +IngredietId
-      +Quantity: unsigned int
+      +Quantity: int
    }
 
-  class Order{
+  class Order {
+      <<Entity>>
+      +Id : int
       +Status : OrderStatusType
+      +FulfillmentOption : FulfillmentOptionType
       +OrderedPizzas: List~OrderedPizza~
-      +TotalPrice : double
+      +TotalPrice : decimal
    }
 
    class OrderedPizza {
+      <<Entity>>
+      +Id : int
       +Name : string
-      +TotalPrice : double
+      +TotalPrice : decimal
       +OrderedIngredients: List~OrderedIngredient~
    }
 
    class OrderedIngredient {
-       +Name
-       +Unit: IngredientUnit
-       +UnitPrice: double
-       +Quantity: unsigned int
-       +TotalPrice : double
+      <<Entity>>
+      +Id : int
+      +Name : string
+      +Unit: IngredientUnit
+      +UnitPrice: decimal
+      +Quantity: int
+      +TotalPrice : decimal
    }
 
-   Menu --> Pizza
    Pizza -- PizzaIngredient
    PizzaIngredient -- Ingredient
    ShopingCart --> Pizza
@@ -267,7 +278,6 @@ classDiagram
    OrderedPizza -- OrderedIngredient
    KioskSession *-- Pizza  : SelectedPizza
    KioskSession *--> ShopingCart : Cart
-   KioskSession *--> Menu : Menu
 
 ```
 #### Implementation notes
