@@ -249,7 +249,7 @@ classDiagram
       +Id : int
       +Status : OrderStatusType
       +FulfillmentOption : FulfillmentOptionType
-      +OrderedPizzas: List~OrderedPizza~
+      +OrderedPizzas: ICollection~OrderedPizza~
       +TotalPrice : decimal
    }
 
@@ -258,7 +258,7 @@ classDiagram
       +Id : int
       +Name : string
       +TotalPrice : decimal
-      +OrderedIngredients: List~OrderedIngredient~
+      +OrderedIngredients: ICollection~OrderedIngredient~
    }
 
    class OrderedIngredient {
