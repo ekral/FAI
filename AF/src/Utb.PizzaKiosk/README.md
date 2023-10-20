@@ -218,7 +218,7 @@ classDiagram
    class Ingredient{
       +Name: string
       +Unit: IngredientUnit
-      +UnitPrice: double
+      +UnitPrice: decimal
       +Adjustable: bool
    }
 
@@ -229,7 +229,7 @@ classDiagram
    class Pizza {
       +Name : string
       +Description : string
-      +Price : double
+      +Price : decimal
       +Ingredients : List~PizzaIngredient~
    }
 
@@ -242,21 +242,21 @@ classDiagram
   class Order{
       +Status : OrderStatusType
       +OrderedPizzas: List~OrderedPizza~
-      +TotalPrice : double
+      +TotalPrice : decimal
    }
 
    class OrderedPizza {
       +Name : string
-      +TotalPrice : double
+      +TotalPrice : decimal
       +OrderedIngredients: List~OrderedIngredient~
    }
 
    class OrderedIngredient {
        +Name
        +Unit: IngredientUnit
-       +UnitPrice: double
+       +UnitPrice: decimal
        +Quantity: unsigned int
-       +TotalPrice : double
+       +TotalPrice : decimal
    }
 
    Menu --> Pizza
