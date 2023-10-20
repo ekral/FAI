@@ -261,7 +261,7 @@ classDiagram
 
    class OrderedIngredient {
        +Id : int
-       +Name
+       +Name : string
        +Unit: IngredientUnit
        +UnitPrice: decimal
        +Quantity: int
