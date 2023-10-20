@@ -214,7 +214,7 @@ classDiagram
    class ShopingCart {
       <<Object>>
       +Status : CartStatusType
-      +CartPizzas: ICollection~Pizza~
+      +CartPizzas: List~Pizza~
    }
 
    class Ingredient {
