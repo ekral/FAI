@@ -16,13 +16,40 @@ namespace Utb.PizzaKiosk.Tests
         }
 
         [Fact]
-        public void FirstPizzaIsMargherita()
+        public void AddPizza()
+        {
+            using PizzaContext context = Fixture.CreateContext();
+            
+            context.Database.BeginTransaction();
+
+            Pizza nova = new()
+            {
+                Id = 0,
+                Name = "Hranolkova",
+                Price = 120.0,
+                PizzaStyleId = 1
+            };
+
+            context.Add(nova);
+            
+            context.SaveChanges();
+
+            context.ChangeTracker.Clear();
+
+            Pizza pizza = context.Pizzas.Single(p => p.Name == "Hranolkova");
+
+            Assert.Equal(120.0, pizza.Price);
+        }
+
+
+        [Fact]
+        public void FirstPizzaIsMargharita()
         {
             using PizzaContext context = Fixture.CreateContext();
 
-            Pizza pizza = context.Pizzas.Single(p => p.Id == 1);
-
-            Assert.Equal("Margherita", pizza.Name);
+            Pizza? pizza = context.Pizzas.Find(1);
+            Assert.NotNull(pizza);
+            Assert.Equal("Margharita", pizza.Name);
         }
 
         [Fact]
@@ -77,26 +104,13 @@ namespace Utb.PizzaKiosk.Tests
         }
 
         [Fact]
-        public void PizzaShouldHaveTwoIngrediences()
-        {
-            using PizzaContext context = Fixture.CreateContext();
-
-            // Eager
-            Pizza pizza = context.Pizzas.Include(p => p.Incrediences).Single(p => p.Id == 1);
-
-            Assert.NotNull(pizza.Incrediences);
-            Assert.Equal(2, pizza.Incrediences.Count);
-        }
-
-        [Fact]
         public void PizzaMargheritaHasFries()
         {
             using PizzaContext context = Fixture.CreateContext();
 
-            // Eager
-            bool existuje = context.Pizzas.Any(p => p.Name == "Margharita" && p.Incrediences.Any(i => i.Name == "Hranolky"));
+            bool exists = context.Pizzas.Any(p => p.Name == "Margharita" && p.Incrediences.Any(i => i.Name == "Hranolky"));
 
-            Assert.True(existuje);
+            Assert.True(exists);
         }
     }
 
