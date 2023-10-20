@@ -1,6 +1,6 @@
 ﻿namespace Utb.PizzaKiosk.Models
 {
-    enum OrderStatusType
+    public enum OrderStatusType
     {
         Pending,
         Processing,

@@ -1,6 +1,6 @@
 ﻿namespace Utb.PizzaKiosk.Models
 {
-    enum IngredientUnit
+    public enum IngredientUnit
     {
         Gram,
         Pinch
