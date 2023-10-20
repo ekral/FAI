@@ -203,30 +203,35 @@ classDiagram
       Delivery
    }
 
-   class KioskSession{
+   class KioskSession {
+      +Id : int
       +FulfillmentOption : FulfillmentOptionType
       +Cart : ShopingCart
       +SelectedPizza : Pizza
       +SessionMenu : Menu
    }
 
-   class ShopingCart{
+   class ShopingCart {
+      +Id : int
       +Status : CartStatusType
       +CartPizzas: List~Pizza~
    }
 
-   class Ingredient{
+   class Ingredient {
+      +Id : int
       +Name: string
       +Unit: IngredientUnit
       +UnitPrice: decimal
       +Adjustable: bool
    }
 
-   class Menu{
+   class Menu {
+      +Id : int
       +Items: List~Pizza~
    }
 
    class Pizza {
+      +Id : int
       +Name : string
       +Description : string
       +Price : decimal
@@ -234,24 +239,28 @@ classDiagram
    }
 
    class PizzaIngredient {
+      +Id : int
       +PizzaId
       +IngredietId
       +Quantity: int
    }
 
-  class Order{
+  class Order {
+      +Id : int
       +Status : OrderStatusType
       +OrderedPizzas: List~OrderedPizza~
       +TotalPrice : decimal
    }
 
    class OrderedPizza {
+      +Id : int
       +Name : string
       +TotalPrice : decimal
       +OrderedIngredients: List~OrderedIngredient~
    }
 
    class OrderedIngredient {
+       +Id : int
        +Name
        +Unit: IngredientUnit
        +UnitPrice: decimal
