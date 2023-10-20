@@ -225,16 +225,12 @@ classDiagram
       +Adjustable: bool
    }
 
-   class Menu {
-      +Id : int
-      +Items: List~Pizza~
-   }
-
    class Pizza {
       +Id : int
       +Name : string
       +Description : string
       +Price : decimal
+      +IsAvailable : bool
       +Ingredients : List~PizzaIngredient~
    }
 
@@ -268,7 +264,6 @@ classDiagram
        +TotalPrice : decimal
    }
 
-   Menu --> Pizza
    Pizza -- PizzaIngredient
    PizzaIngredient -- Ingredient
    ShopingCart --> Pizza
