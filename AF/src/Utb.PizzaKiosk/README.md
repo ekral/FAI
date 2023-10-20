@@ -271,7 +271,6 @@ classDiagram
    OrderedPizza -- OrderedIngredient
    KioskSession *-- Pizza  : SelectedPizza
    KioskSession *--> ShopingCart : Cart
-   KioskSession *--> Menu : Menu
 
 ```
 #### Implementation notes
