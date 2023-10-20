@@ -208,7 +208,6 @@ classDiagram
       +FulfillmentOption : FulfillmentOptionType
       +Cart : ShopingCart
       +SelectedPizza : Pizza
-      +SessionMenu : Menu
    }
 
    class ShopingCart {
