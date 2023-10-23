@@ -17,6 +17,8 @@ $$\begin{align*}
 
 B) Zarotujte úsečku kolem středu úsečky.
 
+C) Zarotujte rovnostranný trojúhleník kolem jeho středu.
+
 Pokud chceme zarotovat úsečku, tak musíme:
 
  1) Zjistit střed úsečky.
