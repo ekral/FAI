@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <math.h>
 #include <vector>
-
 struct Bod2d
 {
     double x;
@@ -20,27 +19,26 @@ private:
     const int columnCount;
     const int rowCount;
     const int totalChars;
-
-    std::vector<char> data;
-
     char pozadi;
 
+    std::vector<char> data;
 public:
     const int maxColumnIndex;
-    const int maxRowIndex;
-
+    const int maxRowIndex ;
+    
     char popredi;
 
-    Platno(int columnCount, int rowCount, char pozadi, char popredi) : 
-        columnCount(columnCount), 
+    Platno(int columnCount, int rowCount, char pozadi, char popredi) :
+        columnCount(columnCount),
         rowCount(rowCount),
-        totalChars(columnCount * rowCount),
-        data( columnCount * rowCount,  0),
-        pozadi(pozadi), 
-        maxColumnIndex(columnCount - 1),
-        maxRowIndex(rowCount - 1),
-        popredi(popredi)
+        pozadi(pozadi),
+        popredi(popredi),
+        totalChars(columnCount*rowCount),
+        maxColumnIndex(columnCount-1),
+        maxRowIndex(rowCount-1),
+        data(totalChars,0)
     {
+
         Vymaz();
     }
 
@@ -54,7 +52,7 @@ public:
 
     void NakresliBod(double x, double y)
     {
-        int pos = static_cast<int>(((rowCount - round(y) - 1) * columnCount) + round(x));
+        int pos = ((rowCount - round(y) - 1) * columnCount) + round(x);
 
         data[pos] = popredi;
     }
@@ -106,7 +104,31 @@ public:
 
 };
 
-// Zde definujte tridu Trojuhelnik
+class RovnostrannyTrojuhelnik
+{
+private:
+    double a;
+    Bod2d S;
+public:
+    RovnostrannyTrojuhelnik(Bod2d S, int a) : S(S), a(a)
+    {
+
+    }
+
+    void Nakresli(Platno* platno)
+    {
+        // spocitejte souradnice vrcholu trojuhelnika
+        double vp = (a * sqrt(3.0)) / 4;
+
+        Bod2d A(S.x - a / 2, S.y - vp);
+        Bod2d B(S.x + a / 2, S.y - vp);
+        Bod2d C(S.x, S.y + vp);
+
+        platno->NakresliUsecku(A, B);
+        platno->NakresliUsecku(B, C);
+        platno->NakresliUsecku(C, A);
+    }
+};
 
 int main()
 {
@@ -115,8 +137,8 @@ int main()
 
     int columnCount = 30;
     int rowCount = 20;
-    Platno platno(columnCount, rowCount, '-', 'x');
 
+    Platno platno(columnCount, rowCount, '-', 'x');
 
     bool konec = true;
 
