@@ -2,6 +2,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <vector>
+
 struct Bod2d
 {
     double x;
@@ -147,14 +148,14 @@ int main()
     {
         platno.Vymaz();
 
-        double x = 2.0;
-        double y = 3.0;
+        double x = 10.0;
+        double y = 0.0;
 
         // rotace podle vzorce
-        double uhelStupne = 45.0;
+        double uhelStupne = 90.0;
         double uhelRadiany = (uhelStupne * M_PI) / 180.0;
-        double xt = x;
-        double yt = y;
+        double xt = (x * cos(uhelRadiany))-(y*sin(uhelRadiany));
+        double yt = (x * sin(uhelRadiany)) + (y * cos(uhelRadiany));
 
         platno.NakresliBod(xt, xt);
         platno.NakresliUsecku(Bod2d(0.0, 0.0), Bod2d(xt, yt));
