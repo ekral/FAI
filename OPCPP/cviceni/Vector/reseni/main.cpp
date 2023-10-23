@@ -146,9 +146,9 @@ int main()
         platno.NakresliBod(stred.x, stred.y);
 
         // Odpoznamkovat
-        /*platno.popredi = 't';
+        platno.popredi = 't';
         RovnostrannyTrojuhelnik trojuhelnik(stred, 10.0);
-        trojuhelnik.Nakresli(&platno);*/
+        trojuhelnik.Nakresli(&platno);
 
         platno.Zobraz();
 
