@@ -2,6 +2,13 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <vector>
+#include <Windows.h>
+
+void gotoxy(int x, int y) {
+    COORD pos = { x, y };
+    HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleCursorPosition(output, pos);
+}
 
 struct Bod2d
 {
@@ -143,16 +150,18 @@ int main()
     Platno platno(columnCount, rowCount, '-', 'x');
 
     bool konec = true;
+    double uhelStupne = 0.0;
 
     do
     {
         platno.Vymaz();
 
-        double x = 10.0;
+        double x = min(platno.maxRowIndex, platno.maxColumnIndex);
         double y = 0.0;
 
         // rotace podle vzorce
-        double uhelStupne = 90.0;
+        gotoxy(0, 0);
+
         double uhelRadiany = (uhelStupne * M_PI) / 180.0;
         double xt = (x * cos(uhelRadiany))-(y*sin(uhelRadiany));
         double yt = (x * sin(uhelRadiany)) + (y * cos(uhelRadiany));
@@ -186,5 +195,7 @@ int main()
 
         platno.Zobraz();
 
-    } while (!konec);
+        uhelStupne += 1;
+
+    } while (uhelStupne < 90);
 }
