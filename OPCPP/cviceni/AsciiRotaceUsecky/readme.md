@@ -17,14 +17,14 @@ $$\begin{align*}
 
 B) Zarotujte úsečku kolem středu úsečky.
 
-C) Zarotujte rovnostranný trojúhleník kolem jeho středu.
-
 Pokud chceme zarotovat úsečku, tak musíme:
 
  1) Zjistit střed úsečky.
  2) Posunout úsečku tak aby její střed byl v počátku souřadnic.
  3) Zarotovat krajní body úsečky kolem počátku souřadnic.
  4) Posunout úsečku zpět aby její střed byl opět na původním místě.
+
+C) Zarotujte rovnostranný trojúhleník kolem jeho středu.
 
 ```cpp
 #include <stdio.h>
