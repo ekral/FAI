@@ -17,14 +17,23 @@ namespace Utb.PizzaKiosk.Tests
     {
         public DatabaseFixture()
         {
-            var builder = new DbContextOptionsBuilder<PizzaKioskContext>().UseSqlite("Data Source = testovaci.db");
-
-            using PizzaKioskContext context = new PizzaKioskContext(builder.Options);
+            using var context = CreateContext();
 
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
+
+            // Add data for test 
         }
 
+
+        public PizzaKioskContext CreateContext()
+        {
+            var builder = new DbContextOptionsBuilder<PizzaKioskContext>().UseSqlite("Data Source = testovaci.db");
+
+            PizzaKioskContext context = new PizzaKioskContext(builder.Options);
+
+            return context;
+        }
 
     }
 }
