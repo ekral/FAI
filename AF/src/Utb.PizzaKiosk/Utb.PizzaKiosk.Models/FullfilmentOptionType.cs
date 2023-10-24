@@ -3,7 +3,6 @@
     public enum FullfilmentOptionType
     {
         DineIn,
-        Takeout,
-        Delivery
+        Takeout
     }
 }
