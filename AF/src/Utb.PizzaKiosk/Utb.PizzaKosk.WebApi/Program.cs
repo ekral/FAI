@@ -8,7 +8,7 @@ builder.Services.AddSingleton<IMojeSluzba, MojeSluzba>();
 
 var app = builder.Build();
 
-app.MapGet("/", (PizzaKioskContext context, IMojeSluzba sluzba) => context.PizzaIngredients.Include(p => p.Ingredient));
+app.MapGet("/", (PizzaKioskContext context, IMojeSluzba sluzba) => context.Pizzas.Include(p => p.PizzaIngredients).ThenInclude(pi => pi.Ingredient));
 
 app.Run();
 

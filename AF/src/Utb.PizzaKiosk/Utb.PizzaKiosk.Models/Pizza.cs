@@ -8,6 +8,6 @@
         public required decimal Price { get; set; }
         public required bool IsAvailable { get; set; }
         public required string AlergensList { get; set; }
-        public ICollection<PizzaIngredient>? PizzaIngredients{ get; set; }
+        public ICollection<PizzaIngredient> PizzaIngredients { get; set; } = new List<PizzaIngredient>();
     }
 }
