@@ -5,11 +5,11 @@ namespace Utb.PizzaKiosk.Tests
 {
 
     [Collection("PizzaKiosk Database Collection")]
-    public class UnitTest1
+    public class UnitTestDatabase
     {
         public DatabaseFixture Fixture { get; }
 
-        public UnitTest1(DatabaseFixture fixture)
+        public UnitTestDatabase(DatabaseFixture fixture)
         {
             Fixture = fixture;    
         }
