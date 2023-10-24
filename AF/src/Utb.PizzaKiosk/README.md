@@ -220,7 +220,6 @@ classDiagram
       +Description : string
       +Price : decimal
       +IsAvailable : bool
-      +PizzaIngredients : ICollection~PizzaIngredient~
    }
 
    class PizzaIngredient {
@@ -247,7 +246,6 @@ classDiagram
       +Id : int
       +Status : OrderStatusType
       +FulfillmentOption : FulfillmentOptionType
-      +OrderedPizzas: ICollection~OrderedPizza~
       +TotalPrice : decimal
    }
 
@@ -256,7 +254,6 @@ classDiagram
       +Id : int
       +Name : string
       +TotalPrice : decimal
-      +OrderedIngredients: ICollection~OrderedIngredient~
    }
 
    class OrderedIngredient {
@@ -264,8 +261,9 @@ classDiagram
       +Id : int
       +Name : string
       +Unit: IngredientUnit
+      +UnitQuantity : int
       +UnitPrice: decimal
-      +Quantity: int
+      +OrderedQuantity: int
       +TotalPrice : decimal
       +Ingredient : Ingredient 
    }
