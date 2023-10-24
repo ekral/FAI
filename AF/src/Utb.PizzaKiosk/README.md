@@ -177,10 +177,8 @@ classDiagram
 
    class OrderStatusType{
       <<enumeration>>
-      Pending
       Processing
       Ready
-      Delivered
       Cancelled
    }
 
