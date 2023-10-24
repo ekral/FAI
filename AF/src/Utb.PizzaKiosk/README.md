@@ -275,7 +275,7 @@ classDiagram
    PizzaIngredient -- Ingredient
    ShopingCart --> Pizza
    Order --> OrderedPizza
-   OrderedPizza -- OrderedIngredient
+   OrderedPizza -- OrderedPizzaIngredient
    KioskSession *-- Pizza  : SelectedPizza
    KioskSession *--> ShopingCart : Cart
 
