@@ -177,10 +177,8 @@ classDiagram
 
    class OrderStatusType{
       <<enumeration>>
-      Pending
       Processing
       Ready
-      Delivered
       Cancelled
    }
 
@@ -200,7 +198,6 @@ classDiagram
       <<enumeration>>
       DineIn
       Takeout
-      Delivery
    }
 
    class KioskSession {
@@ -223,14 +220,13 @@ classDiagram
       +Description : string
       +Price : decimal
       +IsAvailable : bool
-      +Ingredients : ICollection~PizzaIngredient~
    }
 
    class PizzaIngredient {
       <<Entity>>
       +Id : int
-      +PizzaId
-      +IngredietId
+      +PizzaId : int
+      +IngredietId : int
       +Quantity: int
    }
 
@@ -239,6 +235,7 @@ classDiagram
       +Id : int
       +Name: string
       +Unit: IngredientUnit
+      +UnitQuantity: int
       +UnitPrice: decimal
       +Adjustable: bool
    }
@@ -249,7 +246,6 @@ classDiagram
       +Id : int
       +Status : OrderStatusType
       +FulfillmentOption : FulfillmentOptionType
-      +OrderedPizzas: ICollection~OrderedPizza~
       +TotalPrice : decimal
    }
 
@@ -258,7 +254,6 @@ classDiagram
       +Id : int
       +Name : string
       +TotalPrice : decimal
-      +OrderedIngredients: ICollection~OrderedIngredient~
    }
 
    class OrderedIngredient {
@@ -266,9 +261,11 @@ classDiagram
       +Id : int
       +Name : string
       +Unit: IngredientUnit
+      +UnitQuantity : int
       +UnitPrice: decimal
-      +Quantity: int
+      +OrderedQuantity: int
       +TotalPrice : decimal
+      +Ingredient : Ingredient 
    }
 
    Pizza -- PizzaIngredient
