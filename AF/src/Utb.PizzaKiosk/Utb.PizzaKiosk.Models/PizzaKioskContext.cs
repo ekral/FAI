@@ -42,7 +42,7 @@ namespace Utb.PizzaKiosk.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+            modelBuilder.Entity<PizzaIngredient>().HasKey(pi => new { pi.PizzaId, pi.IngredientId });
         }
     }
 }
