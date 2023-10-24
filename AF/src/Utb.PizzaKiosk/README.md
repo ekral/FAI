@@ -261,7 +261,7 @@ classDiagram
    class OrderedIngredient {
       <<Entity>>
       +Id : int
-      +PizzaId : int
+      +OrderedPizzaId : int
       +Name : string
       +Unit: IngredientUnit
       +UnitQuantity : int
