@@ -10,6 +10,6 @@ namespace Utb.Studenti.Models
     {
         public int Id { get; set; }
         public required string Nazev { get; set; }
-        public ICollection<Student>? Studenti { get; set; }
+        public ICollection<Student> Studenti { get; set; } = new List<Student>();
     }
 }
