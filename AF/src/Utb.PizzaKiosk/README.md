@@ -220,6 +220,7 @@ classDiagram
       +Description : string
       +Price : decimal
       +IsAvailable : bool
+      +AlergensList : string
    }
 
    class PizzaIngredient {
@@ -238,6 +239,7 @@ classDiagram
       +UnitQuantity: int
       +UnitPrice: decimal
       +Adjustable: bool
+      +AlergensList : string
    }
 
 
