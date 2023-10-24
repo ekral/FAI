@@ -13,5 +13,6 @@ namespace Utb.PizzaKiosk.Models
         public required IngredientUnit Unit { get; set; }
         public required int UnitQuantity { get; set; }
         public required decimal Price { get; set; }
+        public required string AlergensList { get; set; }
     }
 }
