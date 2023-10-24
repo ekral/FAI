@@ -1,11 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Utb.PizzaKiosk.Models
+﻿namespace Utb.PizzaKiosk.Models
 {
     public class Order
     {
