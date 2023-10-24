@@ -3,11 +3,12 @@
     public class OrderedIngredient
     {
         public int Id { get; set; }
+        public required int PizzaId { get; set; }
         public required string Name { get; set; }
         public required IngredientUnit Unit { get; set; }
-        public int UnitQuantity { get; set; }
-        public decimal UnitPrice { get; set; }
-        public int OrderedQuantity { get; set; }
-        public decimal TotalPrice { get; set; }
+        public required int UnitQuantity { get; set; }
+        public required decimal UnitPrice { get; set; }
+        public required int OrderedQuantity { get; set; }
+        public required decimal TotalPrice { get; set; }
     }
 }
