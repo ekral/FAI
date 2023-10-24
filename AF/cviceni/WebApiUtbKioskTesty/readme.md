@@ -2,7 +2,7 @@
 
 ## Minimal WebApi
 
-Do projektu Utb.Kiosk přidejte projekt Minimal Web Api a vytvořet metodu, která vrátí všechny pizzy v pizzerii. Využijte model vytvořený v minulém projektu.
+Do projektu [Utb.Kiosk](https://github.com/ekral/FAI/tree/master/AF/src/Utb.PizzaKiosk) přidejte projekt Minimal Web Api a vytvořet metodu, která vrátí všechny pizzy v pizzerii. Využijte model vytvořený v minulém projektu.
 
 Pokud nemáte vlastní řešení minulých úkolů, tak můžete použít projekt: 
 
