@@ -8,11 +8,6 @@ using Utb.PizzaKiosk.Models;
 
 namespace Utb.PizzaKiosk.Tests
 {
-    [CollectionDefinition("PizzaKiosk Database Collection")]
-    public class DatabaseCollection : ICollectionFixture<DatabaseFixture>
-    {
-
-    }
     public class DatabaseFixture
     {
         public DatabaseFixture()
