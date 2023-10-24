@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Utb.PizzaKiosk.Models
 {
-    public class Ingrediet
+    public class Ingredient
     {
         public int Id { get; set; }
         public required string Name { get; set; }
