@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
         public required string Description { get; set; }
-        public ICollection<Pizza>? Pizzas { get; set; } // Collection Navigation property
+        public ICollection<Pizza> Pizzas { get; set; } = new List<Pizza>();
     }
 
 }
