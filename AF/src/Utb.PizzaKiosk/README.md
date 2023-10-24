@@ -265,7 +265,6 @@ classDiagram
       +UnitPrice: decimal
       +OrderedQuantity: int
       +TotalPrice : decimal
-      +Ingredient : Ingredient 
    }
 
    Pizza -- PizzaIngredient
