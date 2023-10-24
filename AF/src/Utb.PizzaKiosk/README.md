@@ -259,9 +259,10 @@ classDiagram
       +TotalPrice : decimal
    }
 
-   class OrderedIngredient {
+   class OrderedPizzaIngredient {
       <<Entity>>
       +Id : int
+      +PizzaId : int
       +Name : string
       +Unit: IngredientUnit
       +UnitQuantity : int
@@ -274,7 +275,7 @@ classDiagram
    PizzaIngredient -- Ingredient
    ShopingCart --> Pizza
    Order --> OrderedPizza
-   OrderedPizza -- OrderedIngredient
+   OrderedPizza -- OrderedPizzaIngredient
    KioskSession *-- Pizza  : SelectedPizza
    KioskSession *--> ShopingCart : Cart
 
