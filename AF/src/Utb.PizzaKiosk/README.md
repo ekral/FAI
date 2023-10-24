@@ -229,6 +229,7 @@ classDiagram
       +PizzaId : int
       +IngredietId : int
       +Quantity: int
+      +Adjustable: bool
    }
 
   class Ingredient {
@@ -238,10 +239,8 @@ classDiagram
       +Unit: IngredientUnit
       +UnitQuantity: int
       +UnitPrice: decimal
-      +Adjustable: bool
       +AlergensList : string
-   }
-
+  }
 
   class Order {
       <<Entity>>
