@@ -198,7 +198,6 @@ classDiagram
       <<enumeration>>
       DineIn
       Takeout
-      Delivery
    }
 
    class KioskSession {
