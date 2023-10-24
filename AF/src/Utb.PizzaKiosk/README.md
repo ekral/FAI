@@ -237,6 +237,7 @@ classDiagram
       +Id : int
       +Name: string
       +Unit: IngredientUnit
+      +UnitQuantity: int
       +UnitPrice: decimal
       +Adjustable: bool
    }
