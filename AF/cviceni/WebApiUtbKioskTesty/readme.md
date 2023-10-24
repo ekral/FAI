@@ -2,11 +2,7 @@
 
 ## Minimal WebApi
 
-Do projektu Utb.Kiosk přidejte projekt Minimal Web Api a vytvořet metodu, která vrátí všechny pizzy v pizzerii. Využijte model vytvořený v minulém projektu.
-
-Pokud nemáte vlastní řešení minulých úkolů, tak můžete použít projekt: 
-
-[Utb.PizzaKiosk.UkazkaTestu](https://github.com/ekral/FAI/blob/master/AF/src/Utb.PizzaKiosk.UkazkaTestu)
+Do projektu [Utb.Kiosk](https://github.com/ekral/FAI/tree/master/AF/src/Utb.PizzaKiosk) přidejte projekt Minimal Web Api a vytvořet metodu, která vrátí všechny pizzy v pizzerii. Využijte model vytvořený v minulém projektu.
 
 1) Pomocí migrací vytvořte databázi. Před vytvořením databáze ověřte, zda databáze se stejnou cestou a názvem už existuje a pokud ano, tak ji odstraňte.
 2) Přidejte do Solution nový projekt *Asp.net core Empty* s názvem *Utb.PizzaKiosk.WebApi*.
