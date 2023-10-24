@@ -254,6 +254,7 @@ classDiagram
    class OrderedPizza {
       <<Entity>>
       +Id : int
+      +OrderId : int
       +Name : string
       +TotalPrice : decimal
    }
