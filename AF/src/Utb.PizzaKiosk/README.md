@@ -229,7 +229,6 @@ classDiagram
       +Id : int
       +PizzaId : int
       +IngredietId : int
-      +Ingredient : Ingredient
       +Quantity: int
    }
 
