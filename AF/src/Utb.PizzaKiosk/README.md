@@ -179,6 +179,7 @@ classDiagram
       <<enumeration>>
       Processing
       Ready
+      Served,
       Cancelled
    }
 
