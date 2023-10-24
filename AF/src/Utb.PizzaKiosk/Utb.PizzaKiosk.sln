@@ -9,7 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utb.PizzaKiosk.CustomerApp"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utb.PizzaKiosk.CustomerApp.Desktop", "Utb.PizzaKiosk.CustomerApp.Desktop\Utb.PizzaKiosk.CustomerApp.Desktop.csproj", "{1F20EF10-370B-470F-AE3E-FDB395FA3D34}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utb.PizzaKiosk.Tests", "Utb.PizzaKiosk.Tests\Utb.PizzaKiosk.Tests.csproj", "{EE7A1E75-0965-43CF-B2ED-0D3D48F1A7D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utb.PizzaKiosk.Tests", "Utb.PizzaKiosk.Tests\Utb.PizzaKiosk.Tests.csproj", "{EE7A1E75-0965-43CF-B2ED-0D3D48F1A7D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utb.PizzaKosk.WebApi", "Utb.PizzaKosk.WebApi\Utb.PizzaKosk.WebApi.csproj", "{776AA3DE-FB8E-4478-8827-8C6DC5252A2F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utb.PizzaKiosk.DataSeeder", "Utb.PizzaKiosk.DataSeeder\Utb.PizzaKiosk.DataSeeder.csproj", "{42A1FED2-A4F6-4E48-9D3B-8F11EDD0098D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{EE7A1E75-0965-43CF-B2ED-0D3D48F1A7D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE7A1E75-0965-43CF-B2ED-0D3D48F1A7D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE7A1E75-0965-43CF-B2ED-0D3D48F1A7D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{776AA3DE-FB8E-4478-8827-8C6DC5252A2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{776AA3DE-FB8E-4478-8827-8C6DC5252A2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{776AA3DE-FB8E-4478-8827-8C6DC5252A2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{776AA3DE-FB8E-4478-8827-8C6DC5252A2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42A1FED2-A4F6-4E48-9D3B-8F11EDD0098D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42A1FED2-A4F6-4E48-9D3B-8F11EDD0098D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42A1FED2-A4F6-4E48-9D3B-8F11EDD0098D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42A1FED2-A4F6-4E48-9D3B-8F11EDD0098D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

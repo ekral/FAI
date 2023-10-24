@@ -7,5 +7,6 @@
         public required int IngredientId { get; set; }
         public required Ingrediet? Ingrediet { get; set; }
         public required int Quantity { get; set; }
+        public required bool IsAdjustable { get; set; }
     }
 }
