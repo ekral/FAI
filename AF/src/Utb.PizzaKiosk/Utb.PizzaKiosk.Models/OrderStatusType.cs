@@ -4,6 +4,7 @@
     {
         Processing,
         Ready,
+        Served,
         Cancelled
     }
      
