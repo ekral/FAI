@@ -221,14 +221,15 @@ classDiagram
       +Description : string
       +Price : decimal
       +IsAvailable : bool
-      +Ingredients : ICollection~PizzaIngredient~
+      +PizzaIngredients : ICollection~PizzaIngredient~
    }
 
    class PizzaIngredient {
       <<Entity>>
       +Id : int
-      +PizzaId
-      +IngredietId
+      +PizzaId : int
+      +IngredietId : int
+      +Ingredient : Ingredient
       +Quantity: int
    }
 
