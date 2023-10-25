@@ -145,7 +145,13 @@ int main()
     Bod2d bodA(2.0, 3.0);
     Bod2d bodB(5.0, 6.0);
 
+    // Misto teto definice:
     Platno platno('-', 'x');
+
+    // bude:
+    //int columnCount = 30;
+    //int rowCount = 20;
+    //Platno platno(columnCount, rowCount, '-', 'x');
 
     bool konec = true;
 
