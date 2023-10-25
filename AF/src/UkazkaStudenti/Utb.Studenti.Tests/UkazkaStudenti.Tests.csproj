@@ -23,8 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Utb.Studenti.Models\Utb.Studenti.Models.csproj" />
-    <ProjectReference Include="..\Utb.Studenti.WebApi\Utb.Studenti.WebApi.csproj" />
+    <ProjectReference Include="..\Utb.Studenti.Models\UkazkaStudenti.Models.csproj" />
+    <ProjectReference Include="..\Utb.Studenti.WebApi\UkazkaStudenti.WebApi.csproj" />
   </ItemGroup>
 
 </Project>
