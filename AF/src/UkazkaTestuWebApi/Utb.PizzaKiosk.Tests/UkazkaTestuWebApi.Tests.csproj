@@ -23,8 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Utb.PizzaKiosk.Models\Utb.PizzaKiosk.Models.csproj" />
-    <ProjectReference Include="..\Utb.PizzaKiosk.WebApi\Utb.PizzaKiosk.WebApi.csproj" />
+    <ProjectReference Include="..\Utb.PizzaKiosk.Models\UkazkaTestuWebApi.Models.csproj" />
+    <ProjectReference Include="..\Utb.PizzaKiosk.WebApi\UkazkaTestuWebApi.WebApi.csproj" />
   </ItemGroup>
 
 </Project>
