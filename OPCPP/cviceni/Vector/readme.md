@@ -155,7 +155,7 @@ int main()
 
     bool konec = true;
 
-    do
+   do
     {
         platno.Vymaz();
 
@@ -165,13 +165,13 @@ int main()
         platno.NakresliBod(0, 0);
 
         platno.popredi = '1';
-        platno.NakresliBod(Platno::maxColumnIndex, 0);
+        platno.NakresliBod(platno.maxColumnIndex, 0);
 
         platno.popredi = '2';
-        platno.NakresliBod(Platno::maxColumnIndex, Platno::maxRowIndex);
+        platno.NakresliBod(platno.maxColumnIndex, platno.maxRowIndex);
 
         platno.popredi = '3';
-        platno.NakresliBod(0, Platno::maxRowIndex);
+        platno.NakresliBod(0, platno.maxRowIndex);
 
         platno.popredi = 'A';
         platno.NakresliUsecku(bodA, bodB);
