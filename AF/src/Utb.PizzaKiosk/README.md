@@ -224,7 +224,6 @@ classDiagram
       +PizzaId : int
       +IngredietId : int
       +DefaultQuantity : int
-      +Adjustable: bool
    }
 
   class Ingredient {
