@@ -10,6 +10,6 @@ namespace Utb.PizzaKiosk.CustomerApp
     public class ShoppingCart
     {
         public CartStatusType Status { get; set; }
-        public List<OrderedPizza> CartPizzas { get; set; } = new();
+        public List<PurchasePizza> CartPizzas { get; set; } = new();
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Utb.PizzaKiosk.Models
 {
-    public class OrderedIngredient
+    public class PurchaseIngredient
     {
         public int Id { get; set; }
         public required int PizzaId { get; set; }
