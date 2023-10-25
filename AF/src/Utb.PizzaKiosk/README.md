@@ -256,8 +256,7 @@ classDiagram
       +Id : int
       +OrderedPizzaId : int
       +Name : string
-      +Unit: IngredientUnit
-      +UnitQuantity : int
+      +QuantityDescription : string
       +UnitPrice: decimal
       +OrderedQuantity: int
       +TotalPrice : decimal
