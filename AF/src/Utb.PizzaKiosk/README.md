@@ -260,7 +260,7 @@ classDiagram
       +QuantityDescription : string
       +UnitPrice: decimal
       +FreeQuantity: int
-      +OrderedQuantity: int
+      +PaidQuantity: int
       +TotalPrice : decimal
    }
 
