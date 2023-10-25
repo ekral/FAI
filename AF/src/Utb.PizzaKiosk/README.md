@@ -183,12 +183,6 @@ classDiagram
       Cancelled
    }
 
-   class IngredientUnit{
-      <<enumeration>>
-      Gram
-      Pinch
-   }
-
    class CartStatusType{
       <<enumeration>>
       InCart
@@ -236,9 +230,9 @@ classDiagram
       <<Entity>>
       +Id : int
       +Name: string
-      +Unit: IngredientUnit
-      +UnitQuantity: int
+      +QuantityDescription : string
       +UnitPrice: decimal
+      +DefaultQuantity : int
       +AlergensList : string
   }
 
