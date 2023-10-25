@@ -18,13 +18,13 @@ context.Ingredients.AddRange(
     );
 
 context.PizzaIngredients.AddRange(
-    new PizzaIngredient() { PizzaId = 1, IngredientId = 1, MinimalQuantity = 0, DefaultQuantity = 1 },
-    new PizzaIngredient() { PizzaId = 1, IngredientId = 2, MinimalQuantity = 0, DefaultQuantity = 0},
-    new PizzaIngredient() { PizzaId = 2, IngredientId = 1, MinimalQuantity = 0, DefaultQuantity = 0},
-    new PizzaIngredient() { PizzaId = 2, IngredientId = 2, MinimalQuantity = 0, DefaultQuantity = 0},
-    new PizzaIngredient() { PizzaId = 3, IngredientId = 1, MinimalQuantity = 0, DefaultQuantity = 0 },
-    new PizzaIngredient() { PizzaId = 3, IngredientId = 2, MinimalQuantity = 0, DefaultQuantity = 0 },
-    new PizzaIngredient() { PizzaId = 3, IngredientId = 3, MinimalQuantity = 1, DefaultQuantity = 1 }
+    new PizzaIngredient() { PizzaId = 1, IngredientId = 1, MinimalQuantity = 0, FreeQuantity = 1 },
+    new PizzaIngredient() { PizzaId = 1, IngredientId = 2, MinimalQuantity = 0, FreeQuantity = 0},
+    new PizzaIngredient() { PizzaId = 2, IngredientId = 1, MinimalQuantity = 0, FreeQuantity = 0},
+    new PizzaIngredient() { PizzaId = 2, IngredientId = 2, MinimalQuantity = 0, FreeQuantity = 0},
+    new PizzaIngredient() { PizzaId = 3, IngredientId = 1, MinimalQuantity = 0, FreeQuantity = 0 },
+    new PizzaIngredient() { PizzaId = 3, IngredientId = 2, MinimalQuantity = 0, FreeQuantity = 0 },
+    new PizzaIngredient() { PizzaId = 3, IngredientId = 3, MinimalQuantity = 1, FreeQuantity = 1 }
     );
 
 
