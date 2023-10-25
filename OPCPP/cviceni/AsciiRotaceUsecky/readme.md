@@ -2,7 +2,7 @@
 
 S využitím kódu z úkolu uvedenéno níže vytvořte program, který:
 
-A) Zarotuje bod kolem počátku souřadnic (0,0) a vykreslete úsečku z počátku souřadnic do zarotovaného bodu. Použijte vzorec:
+A) Zarotuje bod (x,y) kolem počátku souřadnic (0,0) a vykreslete úsečku z počátku souřadnic do zarotovaného bodu (x', y'). Použijte vzorec:
 
 $$\begin{align*}
 x' &= x \cdot \cos(\theta) - y \cdot \sin(\theta) \\
