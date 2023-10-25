@@ -270,7 +270,7 @@ classDiagram
    Order --> OrderedPizza
    OrderedPizza -- PurchaseIngredient
    KioskSession *-- Pizza  : PizzasInMenu
-   KioskSession *-- OrderedPizza  : SelectedPizza
+   KioskSession *-- PurchasePizza  : SelectedPizza
    KioskSession *--> ShopingCart : Cart
 
 ```
