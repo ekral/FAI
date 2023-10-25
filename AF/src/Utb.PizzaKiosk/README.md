@@ -264,8 +264,8 @@ classDiagram
       +TotalPrice : decimal
    }
 
-   Pizza --> PizzaIngredient
-   PizzaIngredient <-- Ingredient
+   Pizza -- PizzaIngredient
+   PizzaIngredient -- Ingredient
    ShopingCart --> PurchasePizza
    Order --> PurchasePizza
    PurchasePizza --> PurchaseIngredient
