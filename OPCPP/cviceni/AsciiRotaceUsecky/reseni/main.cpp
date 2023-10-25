@@ -1,14 +1,15 @@
-#include <stdio.h>
+#include <cstdio>
 #define _USE_MATH_DEFINES
-#include <math.h>
+#include <cmath>
 #include <vector>
-#include <Windows.h>
+#include <windows.h>
 
 void gotoxy(int x, int y) {
-    COORD pos = { x, y };
+    COORD pos = { (SHORT)x, (SHORT)y };
     HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleCursorPosition(output, pos);
 }
+
 
 struct Bod2d
 {
@@ -34,18 +35,18 @@ private:
 public:
     const int maxColumnIndex;
     const int maxRowIndex ;
-    
+
     char popredi;
 
     Platno(int columnCount, int rowCount, char pozadi, char popredi) :
-        columnCount(columnCount),
-        rowCount(rowCount),
-        pozadi(pozadi),
-        popredi(popredi),
-        totalChars(columnCount*rowCount),
-        maxColumnIndex(columnCount-1),
-        maxRowIndex(rowCount-1),
-        data(totalChars,0)
+            columnCount(columnCount),
+            rowCount(rowCount),
+            pozadi(pozadi),
+            popredi(popredi),
+            totalChars(columnCount*rowCount),
+            maxColumnIndex(columnCount-1),
+            maxRowIndex(rowCount-1),
+            data(totalChars,0)
     {
 
         Vymaz();
@@ -105,6 +106,7 @@ public:
                 ++pos;
 
                 putchar(znak);
+                putchar(znak);
             }
 
             putchar('\n');
@@ -145,30 +147,19 @@ int main()
     Bod2d bodB(5.0, 6.0);
 
     int columnCount = 30;
-    int rowCount = 20;
+    int rowCount = 30;
 
     Platno platno(columnCount, rowCount, '-', 'x');
 
     bool konec = true;
-    double uhelStupne = 0.0;
+    double uhelStupne = 0;
 
     do
     {
         platno.Vymaz();
 
-        double x = min(platno.maxRowIndex, platno.maxColumnIndex);
-        double y = 0.0;
+        platno.NakresliBod(2, 3);
 
-        // rotace podle vzorce
-        gotoxy(0, 0);
-
-        double uhelRadiany = (uhelStupne * M_PI) / 180.0;
-        double xt = (x * cos(uhelRadiany))-(y*sin(uhelRadiany));
-        double yt = (x * sin(uhelRadiany)) + (y * cos(uhelRadiany));
-
-        platno.NakresliBod(xt, xt);
-        platno.NakresliUsecku(Bod2d(0.0, 0.0), Bod2d(xt, yt));
-    
         platno.popredi = 'O';
         platno.NakresliBod(0, 0);
 
@@ -193,9 +184,23 @@ int main()
         RovnostrannyTrojuhelnik trojuhelnik(stred, 10.0);
         trojuhelnik.Nakresli(&platno);
 
+
+        double uhelRadiany = (uhelStupne * M_PI) / 180.0;
+
+        double x = 29.0;
+        double y = 0.0;
+
+        double xt = (x*cos(uhelRadiany))-(y*sin(uhelRadiany));
+        double yt = (x*sin(uhelRadiany))+(y*cos(uhelRadiany));
+
+        platno.popredi = 'P';
+        platno.NakresliBod(x, y);
+
+        platno.popredi = 'H';
+        platno.NakresliUsecku(Bod2d(0,0), Bod2d(xt,yt));
+
+        gotoxy(0,0);
         platno.Zobraz();
-
-        uhelStupne += 1;
-
-    } while (uhelStupne < 90);
+        uhelStupne+= 1;
+    } while (uhelStupne<90);
 }
