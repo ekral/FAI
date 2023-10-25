@@ -266,8 +266,8 @@ classDiagram
 
    Pizza -- PizzaIngredient
    PizzaIngredient -- Ingredient
-   ShopingCart --> PurchasePizza
-   Order "1" --> "0..*" PurchasePizza
+   ShopingCart "1" --> "0..*" PurchasePizza
+   Order "0" --> "1..*" PurchasePizza
    PurchasePizza --> PurchaseIngredient
    KioskSession *-- Pizza  : PizzasInMenu
    KioskSession *-- PurchasePizza  : SelectedPizza
