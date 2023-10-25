@@ -54,15 +54,15 @@ public:
 
     void Vymaz()
     {
-        for (int i = 0; i < totalChars; i++)
+        for (char& i : data)
         {
-            data[i] = pozadi;
+            i = pozadi;
         }
     }
 
     void NakresliBod(double x, double y)
     {
-        int pos = ((rowCount - round(y) - 1) * columnCount) + round(x);
+        int pos = static_cast<int>(((rowCount - round(y) - 1) * columnCount) + round(x));
 
         data[pos] = popredi;
     }
@@ -125,7 +125,7 @@ public:
 
     }
 
-    void Nakresli(Platno* platno)
+    void Nakresli(Platno* platno) const
     {
         // spocitejte souradnice vrcholu trojuhelnika
         double vp = (a * sqrt(3.0)) / 4;
@@ -180,7 +180,6 @@ int main()
         Bod2d stred(10.0, 8.0);
         platno.NakresliBod(stred.x, stred.y);
 
-        // Odpoznamkovat
         platno.popredi = 't';
         RovnostrannyTrojuhelnik trojuhelnik(stred, 10.0);
         trojuhelnik.Nakresli(&platno);
