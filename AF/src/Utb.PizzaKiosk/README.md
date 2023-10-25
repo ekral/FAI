@@ -224,7 +224,7 @@ classDiagram
       +PizzaId : int
       +IngredietId : int
       +MinimalQuantity : int
-      +DefaultQuantity : int
+      +FreeQuantity: int
    }
 
   class Ingredient {
@@ -259,6 +259,7 @@ classDiagram
       +Name : string
       +QuantityDescription : string
       +UnitPrice: decimal
+      +FreeQuantity: int
       +OrderedQuantity: int
       +TotalPrice : decimal
    }
