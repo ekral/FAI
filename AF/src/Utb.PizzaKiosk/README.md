@@ -255,7 +255,7 @@ classDiagram
    class PurchaseIngredient {
       <<Entity>>
       +Id : int
-      +OrderedPizzaId : int
+      +PurchasePizzaId : int
       +Name : string
       +QuantityDescription : string
       +UnitPrice: decimal
