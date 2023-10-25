@@ -199,7 +199,8 @@ classDiagram
       <<Object>>
       +FulfillmentOption : FulfillmentOptionType
       +Cart : ShopingCart
-      +SelectedPizza : Pizza
+      +PizzasInMenu : List~Pizzas~
+      +SelectedPizza : OrderedPizza
    }
 
    class ShopingCart {
