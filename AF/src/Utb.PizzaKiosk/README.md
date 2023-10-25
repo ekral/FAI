@@ -268,7 +268,8 @@ classDiagram
    ShopingCart --> OrderedPizza
    Order --> OrderedPizza
    OrderedPizza -- OrderedIngredient
-   KioskSession *-- Pizza  : SelectedPizza
+   KioskSession *-- Pizza  : PizzasInMenu
+   KioskSession *-- OrderedPizza  : SelectedPizza
    KioskSession *--> ShopingCart : Cart
 
 ```
