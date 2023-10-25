@@ -14,7 +14,7 @@ int rowCount = 20;
 Platno platno(columnCount, rowCount, '-', 'x');
 ```
 
-Zdrojový kód třídy plátno.
+Zdrojový kód:
 
 ```cpp
 #include <stdio.h>
