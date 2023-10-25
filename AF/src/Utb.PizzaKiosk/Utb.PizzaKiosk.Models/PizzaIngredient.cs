@@ -5,7 +5,6 @@
         public required int PizzaId { get; set; }
         public required int IngredientId { get; set; }
         public Ingredient? Ingredient { get; set; }
-        public required int Quantity { get; set; }
-        public required bool Adjustable { get; set; }
+        public required int DefaultQuantity { get; set; }
     }
 }
