@@ -205,7 +205,7 @@ classDiagram
    class ShopingCart {
       <<Object>>
       +Status : CartStatusType
-      +CartPizzas: List~Pizza~
+      +CartPizzas: List~OrderedPizza~
    }
 
    class Pizza {
@@ -264,7 +264,7 @@ classDiagram
 
    Pizza -- PizzaIngredient
    PizzaIngredient -- Ingredient
-   ShopingCart --> Pizza
+   ShopingCart --> OrderedPizza
    Order --> OrderedPizza
    OrderedPizza -- OrderedIngredient
    KioskSession *-- Pizza  : SelectedPizza
