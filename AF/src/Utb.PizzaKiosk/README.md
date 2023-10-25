@@ -267,7 +267,7 @@ classDiagram
    Pizza -- PizzaIngredient
    PizzaIngredient -- Ingredient
    ShopingCart --> PurchasePizza
-   Order --> OrderedPizza
+   Order --> PurchasePizza
    OrderedPizza -- PurchaseIngredient
    KioskSession *-- Pizza  : PizzasInMenu
    KioskSession *-- PurchasePizza  : SelectedPizza
