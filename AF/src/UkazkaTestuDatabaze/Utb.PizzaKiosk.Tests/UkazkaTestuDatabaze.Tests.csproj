@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Utb.PizzaKiosk.Models\Utb.PizzaKiosk.Models.csproj" />
+    <ProjectReference Include="..\Utb.PizzaKiosk.Models\UkazkaTestuDatabaze.Models.csproj" />
   </ItemGroup>
 
 </Project>
