@@ -183,12 +183,6 @@ classDiagram
       Cancelled
    }
 
-   class IngredientUnit{
-      <<enumeration>>
-      Gram
-      Pinch
-   }
-
    class CartStatusType{
       <<enumeration>>
       InCart
@@ -205,13 +199,14 @@ classDiagram
       <<Object>>
       +FulfillmentOption : FulfillmentOptionType
       +Cart : ShopingCart
-      +SelectedPizza : Pizza
+      +PizzasInMenu : List~Pizzas~
+      +SelectedPizza : OrderedPizza
    }
 
    class ShopingCart {
       <<Object>>
       +Status : CartStatusType
-      +CartPizzas: List~Pizza~
+      +CartPizzas: List~OrderedPizza~
    }
 
    class Pizza {
@@ -228,7 +223,7 @@ classDiagram
       <<Entity>>
       +PizzaId : int
       +IngredietId : int
-      +Quantity: int
+      +DefaultQuantity : int
       +Adjustable: bool
    }
 
@@ -236,8 +231,7 @@ classDiagram
       <<Entity>>
       +Id : int
       +Name: string
-      +Unit: IngredientUnit
-      +UnitQuantity: int
+      +QuantityDescription : string
       +UnitPrice: decimal
       +AlergensList : string
   }
@@ -263,8 +257,7 @@ classDiagram
       +Id : int
       +OrderedPizzaId : int
       +Name : string
-      +Unit: IngredientUnit
-      +UnitQuantity : int
+      +QuantityDescription : string
       +UnitPrice: decimal
       +OrderedQuantity: int
       +TotalPrice : decimal
@@ -272,10 +265,11 @@ classDiagram
 
    Pizza -- PizzaIngredient
    PizzaIngredient -- Ingredient
-   ShopingCart --> Pizza
+   ShopingCart --> OrderedPizza
    Order --> OrderedPizza
    OrderedPizza -- OrderedIngredient
-   KioskSession *-- Pizza  : SelectedPizza
+   KioskSession *-- Pizza  : PizzasInMenu
+   KioskSession *-- OrderedPizza  : SelectedPizza
    KioskSession *--> ShopingCart : Cart
 
 ```
