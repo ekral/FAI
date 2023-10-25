@@ -17,8 +17,8 @@ Platno platno(columnCount, rowCount, '-', 'x');
 Zdrojový kód:
 
 ```cpp
-#include <stdio.h>
-#include <math.h>
+#include <cstdio>
+#include <cmath>
 
 struct Bod2d
 {
@@ -165,13 +165,13 @@ int main()
         platno.NakresliBod(0, 0);
 
         platno.popredi = '1';
-        platno.NakresliBod(platno.maxColumnIndex, 0);
+        platno.NakresliBod(Platno::maxColumnIndex, 0);
 
         platno.popredi = '2';
-        platno.NakresliBod(platno.maxColumnIndex, platno.maxRowIndex);
+        platno.NakresliBod(Platno::maxColumnIndex, Platno::maxRowIndex);
 
         platno.popredi = '3';
-        platno.NakresliBod(0, platno.maxRowIndex);
+        platno.NakresliBod(0, Platno::maxRowIndex);
 
         platno.popredi = 'A';
         platno.NakresliUsecku(bodA, bodB);
