@@ -200,13 +200,13 @@ classDiagram
       +FulfillmentOption : FulfillmentOptionType
       +Cart : ShopingCart
       +PizzasInMenu : List~Pizzas~
-      +SelectedPizza : OrderedPizza
+      +SelectedPizza : PurchasePizza
    }
 
    class ShopingCart {
       <<Object>>
       +Status : CartStatusType
-      +CartPizzas: List~OrderedPizza~
+      +CartPizzas: List~PurchasePizza~
    }
 
    class Pizza {
