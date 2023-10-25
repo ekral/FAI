@@ -223,6 +223,7 @@ classDiagram
       <<Entity>>
       +PizzaId : int
       +IngredietId : int
+      +MinimalQuantity : int
       +DefaultQuantity : int
    }
 
