@@ -27,5 +27,9 @@ context.PizzaIngredients.AddRange(
     new PizzaIngredient() { PizzaId = 3, IngredientId = 3, MinimalQuantity = 1, FreeQuantity = 1 }
     );
 
+context.PurchasePizzas.AddRange(
+    new PurchasePizza() { Id = 1, Name = "Hot Dog Pizza",  }
+    );
+
 
 context.SaveChanges();
