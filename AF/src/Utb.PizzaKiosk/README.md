@@ -222,7 +222,7 @@ classDiagram
       <<Entity>>
       +PizzaId : int
       +IngredietId : int
-      +Quantity: int
+      +DefaultQuantity : int
       +Adjustable: bool
    }
 
@@ -232,7 +232,6 @@ classDiagram
       +Name: string
       +QuantityDescription : string
       +UnitPrice: decimal
-      +DefaultQuantity : int
       +AlergensList : string
   }
 
