@@ -34,7 +34,11 @@ context.Orders.AddRange(
     );
 
 context.OrderedPizzas.AddRange(
-    new OrderedPizza() { Id = 1, OrderId = 1, Name = "Hot Dog Pizza", TotalPrice = 220.0m}
+    new OrderedPizza() { Id = 1, OrderId = 1, Name = "Hot Dog Pizza", TotalPrice = 320.0m}
     );
 
+context.OrderedIngredients.AddRange(
+    new OrderedIngredient() { Id = 1, OrderedPizzaId = 1, QuantityDescription = "15 g", Name = "Nakládaná okurka", FreeQuantity = 1, PaidQuantity = 3, UnitPrice = 15.0m,  TotalPrice = 45.0m },
+    new OrderedIngredient() { Id = 2, OrderedPizzaId = 1, QuantityDescription = "80 g", Name = "Ananas", FreeQuantity = 0, PaidQuantity = 1, UnitPrice = 25.0m,  TotalPrice = 25.0m }
+    );
 context.SaveChanges();
