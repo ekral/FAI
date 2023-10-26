@@ -172,7 +172,7 @@ TODO: Rewrite as complete sentences.
 
 #### Class diagrams
 
-note: `PizzaIngredient` is a connection table in Many (`Pizza`) to Many (`Ingredient`) relation with payload `MinimalQuantity` and `FreeQuantity`.
+note: `PizzaIngredient` is a join table in a Many (`Pizza`) to Many (`Ingredient`) relation with payload `MinimalQuantity` and `FreeQuantity`.
 
 ```mermaid
 classDiagram
