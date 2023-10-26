@@ -9,8 +9,8 @@ namespace Utb.PizzaKiosk.Models
         public DbSet<PizzaIngredient> PizzaIngredients { get; set; } 
         public DbSet<Ingredient> Ingredients { get; set; } 
         public DbSet<Order> Orders { get; set; } 
-        public DbSet<PurchasePizza> PurchasePizzas { get; set; } 
-        public DbSet<PurchaseIngredient> PurchaseIngredients { get; set; }
+        public DbSet<OrderedPizza> PurchasePizzas { get; set; } 
+        public DbSet<OrderedIngredient> PurchaseIngredients { get; set; }
 
         public PizzaKioskContext()
         {

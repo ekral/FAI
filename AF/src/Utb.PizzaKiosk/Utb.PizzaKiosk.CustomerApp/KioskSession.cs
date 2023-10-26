@@ -12,7 +12,7 @@ namespace Utb.PizzaKiosk.CustomerApp
         FullfilmentOptionType FullfilmentOption { get; set; }
         public ShoppingCart Cart { get; set; } = new();
         public List<Pizza> PizzasInMenu { get; set; } = new();
-        public PurchasePizza? SelectedPizza { get; set; }
+        public OrderedPizza? SelectedPizza { get; set; }
 
     }
 }
