@@ -199,7 +199,8 @@ classDiagram
       +AlergensList : string
    }
 
-   note for PizzaIngredient "Connection table in Many (Pizza) to Many (Ingredient) relation with Payload MinimalQuantity and FreeQuantity."
+   note "Connection table in Many (Pizza) to Many (Ingredient) relation with Payload MinimalQuantity and FreeQuantity."
+
    class PizzaIngredient {
       <<Entity>>
       +PizzaId : int
