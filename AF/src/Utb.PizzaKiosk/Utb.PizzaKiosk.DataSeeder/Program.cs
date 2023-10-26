@@ -33,4 +33,8 @@ context.Orders.AddRange(
     new Order() { Id = 1, FullfilmentOption = FullfilmentOptionType.DineIn, OrderStatus = OrderStatusType.Processing, TotalPrice = 220.0m }
     );
 
+context.OrderedPizzas.AddRange(
+    new OrderedPizza() { Id = 1, OrderId = 1, Name = "Hot Dog Pizza", TotalPrice = 220.0m}
+    );
+
 context.SaveChanges();

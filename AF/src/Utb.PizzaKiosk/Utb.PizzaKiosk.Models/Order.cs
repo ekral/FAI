@@ -6,5 +6,6 @@
         public required OrderStatusType OrderStatus { get; set; }
         public required FullfilmentOptionType FullfilmentOption { get; set; }
         public required decimal TotalPrice { get; set; }
+        public ICollection<OrderedPizza> OrderedPizzas { get; set; } = new List<OrderedPizza>(); // Navigation Property
     }
 }
