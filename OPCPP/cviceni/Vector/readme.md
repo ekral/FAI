@@ -2,7 +2,7 @@
 
 1) Implementace s datovým kontejnerem std::vector
    
-Místo pole s pevnou délkou `char data[totalChars]` použijte v třídě `Platno` dynamické pole `std::vector` a změňte třídu tak, aby bylo možné zadávat rozměry plátna v konstruktoru. V member intializer listu zadejte hodnoty proměnných `columnCount`, `rowCount`, `totalChars`, `maxColumnIndex` a `maxRowIndex` a tyto proměnné budou definovány jako konstanty bez inicializace hodnoty, například `const int columnCount;`.
+Místo pole s pevnou délkou `char data[totalChars]` použijte v třídě `Platno` dynamické pole `std::vector` a změňte třídu tak, aby bylo možné zadávat rozměry plátna v konstruktoru. V member intializer listu zadejte hodnoty proměnných `columnCount`, `rowCount`, `totalChars`, `maxColumnIndex`, `maxRowIndex` a `data` a tyto proměnné budou definovány jako konstanty bez inicializace hodnoty, například `const int columnCount;`.
 
 ```cpp
 int columnCount = 30;
