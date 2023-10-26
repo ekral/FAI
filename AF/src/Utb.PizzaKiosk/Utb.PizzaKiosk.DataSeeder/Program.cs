@@ -29,9 +29,8 @@ context.PizzaIngredients.AddRange(
 
 // Vytvorte ukazku Objednane pizzy vcetne objednanych ingredienci
 
-/*context.PurchasePizzas.AddRange(
-    new PurchasePizza() { Id = 1, OrderId = 1, Name = "Hot Dog Pizza", TotalPrice = 220.0m }
-    );*/
-
+context.Orders.AddRange(
+    new Order() { Id = 1, FullfilmentOption = FullfilmentOptionType.DineIn, OrderStatus = OrderStatusType.Processing, TotalPrice = 220.0m }
+    );
 
 context.SaveChanges();
