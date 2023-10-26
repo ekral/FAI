@@ -183,30 +183,10 @@ classDiagram
       Cancelled
    }
 
-   class CartStatusType{
-      <<enumeration>>
-      InCart
-      PendingCheckout
-   }
-
    class FulfillmentOptionType{
       <<enumeration>>
       DineIn
       Takeout
-   }
-
-   class KioskSession {
-      <<Object>>
-      +FulfillmentOption : FulfillmentOptionType
-      +Cart : ShopingCart
-      +PizzasInMenu : List~Pizzas~
-      +SelectedPizza : PurchasePizza
-   }
-
-   class ShopingCart {
-      <<Object>>
-      +Status : CartStatusType
-      +CartPizzas: List~PurchasePizza~
    }
 
    class Pizza {
@@ -266,14 +246,36 @@ classDiagram
 
    Pizza -- PizzaIngredient
    PizzaIngredient -- Ingredient
-   ShopingCart --> PurchasePizza
    Order --> PurchasePizza
    PurchasePizza --> PurchaseIngredient
-   KioskSession *-- Pizza  : PizzasInMenu
-   KioskSession *-- PurchasePizza  : SelectedPizza
-   KioskSession *--> ShopingCart : Cart
-
 ```
+
+Customer App
+
+```mermaid
+classDiagram
+
+   class KioskSession {
+      <<Object>>
+      +FulfillmentOption : FulfillmentOptionType
+      +Cart : ShopingCart
+      +PizzasInMenu : List~Pizzas~
+      +SelectedPizza : PurchasePizza
+   }
+
+   class CartStatusType{
+      <<enumeration>>
+      InCart
+      PendingCheckout
+   }
+
+   class ShopingCart {
+      <<Object>>
+      +Status : CartStatusType
+      +CartPizzas: List~PurchasePizza~
+   }
+```
+
 #### Implementation notes
 
 - [Getting Started with EF Core](https://learn.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=netcore-cli).
