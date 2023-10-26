@@ -199,7 +199,7 @@ classDiagram
       +AlergensList : string
    }
 
-   note "Connection table in Many (Pizza) to Many (Ingredient) relation with Payload MinimalQuantity and FreeQuantity."
+   
 
    class PizzaIngredient {
       <<Entity>>
@@ -250,6 +250,8 @@ classDiagram
    PizzaIngredient -- Ingredient
    Order --> PurchasePizza
    PurchasePizza --> PurchaseIngredient
+
+   note "PizzaIngredient is a connection table in Many (Pizza) to Many (Ingredient) relation with payload MinimalQuantity and FreeQuantity."
 ```
 
 Customer App
