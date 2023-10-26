@@ -172,6 +172,8 @@ TODO: Rewrite as complete sentences.
 
 #### Class diagrams
 
+note: `PizzaIngredient` is a connection table in Many (`Pizza`) to Many (`Ingredient`) relation with payload `MinimalQuantity` and `FreeQuantity`.
+
 ```mermaid
 classDiagram
 
@@ -251,7 +253,6 @@ classDiagram
    Order --> PurchasePizza
    PurchasePizza --> PurchaseIngredient
 
-   note "PizzaIngredient is a connection table in Many (Pizza) to Many (Ingredient) relation with payload MinimalQuantity and FreeQuantity."
 ```
 
 Customer App
