@@ -58,6 +58,12 @@ int main()
 {
     // Klientsky kod
     Platno platno;
+
+    platno.Vymaz();
+
     platno.NakresliBod(2.0, 3.0);
+    
+    platno.Zobraz();
+
     return 0;
 } 
