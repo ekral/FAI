@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <vector>
 
 struct Bod2d
 {
@@ -14,7 +15,7 @@ private:
     int pocetRadku;
     int pocetSloupcu;
     int pocetZnaku;
-    char* data;
+    std::vector<char> data;
 
 public:
     // Konstruktor a za : je member initializer list
@@ -22,17 +23,12 @@ public:
         pocetRadku(pocetRadku),
         pocetSloupcu(pocetSloupcu),
         pocetZnaku(pocetRadku * pocetSloupcu),
-        data(new char[pocetZnaku])
+        data(pocetZnaku, 0)
     {
-
+        Vymaz();
     }
 
-    // Destruktor
-    ~Platno()
-    {
-        delete[] data;
-    }
-
+    
     void Vymaz()
     {
         for (int i = 0; i < pocetZnaku; i++)
@@ -73,17 +69,15 @@ public:
 
 int main()
 {
-
     // Klientsky kod
     Platno platno(20,30);
- 
 
-    platno.Vymaz();
+    platno.NakresliBod(0.0, 0.0);
 
-    platno.NakresliBod(2.0, 3.0);
-    
     platno.Zobraz();
 
+    std::vector<int> cisla;
+    cisla.push_back(1);
 
     return 0;
 } 
