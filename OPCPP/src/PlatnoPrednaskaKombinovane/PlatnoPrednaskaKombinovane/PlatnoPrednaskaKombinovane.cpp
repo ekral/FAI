@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
 
@@ -10,17 +11,33 @@ struct Bod2d
 class Platno
 {
 private:
-    int pocetRadku = 20;
-    int pocetSloupcu = 30;
-    int pocetZnaku = pocetRadku * pocetSloupcu;
-    char data[20 * 30];
+    int pocetRadku;
+    int pocetSloupcu;
+    int pocetZnaku;
+    char* data;
 
 public:
+    // Konstruktor a za : je member initializer list
+    Platno(int pocetRadku, int pocetSloupcu) : 
+        pocetRadku(pocetRadku),
+        pocetSloupcu(pocetSloupcu),
+        pocetZnaku(pocetRadku * pocetSloupcu),
+        data(new char[pocetZnaku])
+    {
+
+    }
+
+    // Destruktor
+    ~Platno()
+    {
+        delete[] data;
+    }
+
     void Vymaz()
     {
         for (int i = 0; i < pocetZnaku; i++)
         {
-            data[i] = 'x';
+            data[i] = '-';
         }
     }
 
@@ -56,14 +73,17 @@ public:
 
 int main()
 {
+
     // Klientsky kod
-    Platno platno;
+    Platno platno(20,30);
+ 
 
     platno.Vymaz();
 
     platno.NakresliBod(2.0, 3.0);
     
     platno.Zobraz();
+
 
     return 0;
 } 
