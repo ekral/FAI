@@ -7,6 +7,8 @@ namespace PujcovnaAutomobilu.Models
 {
     public class PujcovnaAutomobiluContext : DbContext
     {
+        public DbSet<Automobil> Automobils { get; set; }
+
         public PujcovnaAutomobiluContext()
         {
 
