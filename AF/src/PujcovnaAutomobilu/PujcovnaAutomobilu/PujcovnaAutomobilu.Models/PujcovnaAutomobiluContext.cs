@@ -5,14 +5,14 @@ using System.Data.Common;
 
 namespace PujcovnaAutomobilu.Models
 {
-    public class PujcovnaContext : DbContext
+    public class PujcovnaAutomobiluContext : DbContext
     {
-        public PujcovnaContext()
+        public PujcovnaAutomobiluContext()
         {
 
         }
 
-        public PujcovnaContext(DbContextOptions<PujcovnaContext> options) : base(options)
+        public PujcovnaAutomobiluContext(DbContextOptions<PujcovnaAutomobiluContext> options) : base(options)
         {
 
         }
