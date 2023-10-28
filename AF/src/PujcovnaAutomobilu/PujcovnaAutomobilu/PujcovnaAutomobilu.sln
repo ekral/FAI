@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PujcovnaAutomobilu.WebApi",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PujcovnaAutomobilu.ConsolePlayground", "PujcovnaAutomobilu.ConsolePlayground\PujcovnaAutomobilu.ConsolePlayground.csproj", "{EF73021D-B732-4FD0-98EC-20C6ABB041AE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PujcovnaAutomobilu.Tests", "PujcovnaAutomobilu.Tests\PujcovnaAutomobilu.Tests.csproj", "{7D8F249E-B84C-4B47-8B4E-2AEFB28B6A56}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{EF73021D-B732-4FD0-98EC-20C6ABB041AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF73021D-B732-4FD0-98EC-20C6ABB041AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF73021D-B732-4FD0-98EC-20C6ABB041AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D8F249E-B84C-4B47-8B4E-2AEFB28B6A56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D8F249E-B84C-4B47-8B4E-2AEFB28B6A56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D8F249E-B84C-4B47-8B4E-2AEFB28B6A56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D8F249E-B84C-4B47-8B4E-2AEFB28B6A56}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
