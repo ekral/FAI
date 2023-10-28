@@ -4,5 +4,6 @@
     {
         public int Id { get; set; }
         public required string Model { get; set; }
+        public required bool Pujceno { get; set; }
     }
 }
