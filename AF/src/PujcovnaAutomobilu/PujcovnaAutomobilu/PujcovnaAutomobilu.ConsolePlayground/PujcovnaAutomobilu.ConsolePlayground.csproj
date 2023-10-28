@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PujcovnaAutomobilu.WebApi\PujcovnaAutomobilu.WebApi.csproj" />
+    <ProjectReference Include="..\PujcovnaAutomobilu.Models\PujcovnaAutomobilu.Models.csproj" />
   </ItemGroup>
 
 </Project>
