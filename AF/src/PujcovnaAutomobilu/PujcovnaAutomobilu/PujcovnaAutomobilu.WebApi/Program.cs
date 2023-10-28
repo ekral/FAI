@@ -9,7 +9,18 @@ builder.Services.AddDbContext<PujcovnaAutomobiluContext>();
 var app = builder.Build();
 
 app.MapGet("/", (PujcovnaAutomobiluContext context) => context.Automobils);
-app.MapGet("/Automobil/{id}", (PujcovnaAutomobiluContext context) => context.Automobils);
+
+app.MapGet("/Automobil/{id}", async (int id, PujcovnaAutomobiluContext context) =>
+{
+    Automobil? automobil = await context.Automobils.FindAsync(id);
+
+    if (automobil is null)
+    {
+        return Results.NotFound();
+    }
+
+    return Results.Ok(automobil);
+});
 
 app.MapGet("/Pujcit/{id}", async (int id, IEmailSender emailSender, PujcovnaAutomobiluContext context) =>
 {
