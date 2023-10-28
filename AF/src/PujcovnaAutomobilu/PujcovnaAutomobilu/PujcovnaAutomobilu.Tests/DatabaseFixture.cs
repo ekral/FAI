@@ -18,6 +18,8 @@ namespace PujcovnaAutomobilu.Tests
                 new Automobil() { Id = 2, Model = "Citroen Berlingo", Pujceno = false },
                 new Automobil() { Id = 3, Model = "Škoda Octavia", Pujceno = false }
             );
+
+            context.SaveChanges();
         }
 
 
