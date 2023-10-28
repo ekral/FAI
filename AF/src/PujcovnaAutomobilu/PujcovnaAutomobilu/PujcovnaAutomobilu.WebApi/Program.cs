@@ -27,7 +27,7 @@ app.MapGet("/Pujcit/{id}", WebApiVersion1.VratAutomobil);
 
 app.Run();
 
-static class WebApiVersion1
+public static class WebApiVersion1
 {
     public static async Task<Results<NotFound, BadRequest, Ok<Automobil>>> VratAutomobil(int id, IEmailSender emailSender, PujcovnaAutomobiluContext context)
     {
