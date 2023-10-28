@@ -19,7 +19,7 @@ namespace PujcovnaAutomobilu.Tests
         {
             using PujcovnaAutomobiluContext context = Fixture.CreateContext();
 
-            var result = await WebApiVersion1.VratAutomobil(1, new MockEmailSender(), context);
+            Results<NotFound, BadRequest, Ok<Automobil>> result = await WebApiVersion1.VratAutomobil(1, new MockEmailSender(), context);
 
             Ok<Automobil> okAutomobil = Assert.IsType<Ok<Automobil>>(result.Result);
 
