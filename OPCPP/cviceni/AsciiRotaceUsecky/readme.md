@@ -179,7 +179,7 @@ int main()
     Bod2d A(2.0, 3.0);
     Bod2d B(5.0, 6.0);
 
-    Bod2d S(0.0, 0.0); // 🚗 ✔
+    Bod2d S(0.0, 0.0); // 🚗
 
     int columnCount = 30;
     int rowCount = 30;
