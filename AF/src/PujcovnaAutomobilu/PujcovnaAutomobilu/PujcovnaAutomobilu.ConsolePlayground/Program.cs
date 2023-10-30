@@ -1,5 +1,4 @@
-﻿
-using PujcovnaAutomobilu.Models;
+﻿using PujcovnaAutomobilu.Models;
 using System.Net.Http.Json;
 using System.Text.Json;
 

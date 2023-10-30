@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using PujcovnaAutomobilu.Models;
 using PujcovnaAutomobilu.WebApi;
 
@@ -8,7 +9,7 @@ builder.Services.AddDbContext<PujcovnaAutomobiluContext>();
 
 var app = builder.Build();
 
-app.MapGet("/", (PujcovnaAutomobiluContext context) => context.Automobils);
+app.MapGet("/", IResult (PujcovnaAutomobiluContext context) => Results.Ok(context.Automobils)).Produces(400);
 
 app.MapGet("/Automobil/{id}", async (int id, PujcovnaAutomobiluContext context) =>
 {
@@ -22,27 +23,32 @@ app.MapGet("/Automobil/{id}", async (int id, PujcovnaAutomobiluContext context) 
     return Results.Ok(automobil);
 });
 
-app.MapGet("/Pujcit/{id}", async (int id, IEmailSender emailSender, PujcovnaAutomobiluContext context) =>
-{
-    Automobil? automobil = await context.Automobils.FindAsync(id);
-
-    if(automobil is null)
-    {
-        return Results.NotFound();
-    }
-
-    if(automobil.Pujceno)
-    {
-        return Results.BadRequest();
-    }
-
-    automobil.Pujceno = true;
-
-    int count = await context.SaveChangesAsync();
-
-    emailSender.SendEmail();
-
-    return Results.Ok();
-});
+app.MapGet("/Pujcit/{id}", WebApiVersion1.VratAutomobil);
 
 app.Run();
+
+public static class WebApiVersion1
+{
+    public static async Task<Results<NotFound, BadRequest, Ok<Automobil>>> VratAutomobil(int id, IEmailSender emailSender, PujcovnaAutomobiluContext context)
+    {
+        Automobil? automobil = await context.Automobils.FindAsync(id);
+
+        if(automobil is null)
+        {
+            return TypedResults.NotFound();
+        }
+
+        if (automobil.Pujceno)
+        {
+            return TypedResults.BadRequest();
+        }
+
+        automobil.Pujceno = true;
+
+        int count = await context.SaveChangesAsync();
+
+        emailSender.SendEmail();
+
+        return TypedResults.Ok(automobil);
+    }
+}
