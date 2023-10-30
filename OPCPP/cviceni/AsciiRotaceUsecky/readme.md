@@ -179,7 +179,7 @@ int main()
     Bod2d A(2.0, 3.0);
     Bod2d B(5.0, 6.0);
 
-    Bod2d S(0.0, 0.0); // 🚗
+    Bod2d S(0.0, 0.0); // 🚗 ✔
 
     int columnCount = 30;
     int rowCount = 30;
@@ -192,20 +192,6 @@ int main()
     do
     {
         platno.Vymaz();
-
-        platno.NakresliBod(2, 3);
-
-        platno.popredi = 'O';
-        platno.NakresliBod(0, 0);
-
-        platno.popredi = '1';
-        platno.NakresliBod(platno.maxColumnIndex, 0);
-
-        platno.popredi = '2';
-        platno.NakresliBod(platno.maxColumnIndex, platno.maxRowIndex);
-
-        platno.popredi = '3';
-        platno.NakresliBod(0, platno.maxRowIndex);
        
         platno.popredi = 't';
         RovnostrannyTrojuhelnik trojuhelnik(Bod2d(10.0, 8.0), 10.0);
@@ -227,14 +213,14 @@ int main()
         
         //platno.NakresliUsecku(At, Bt);
 
-        platno.popredi = 'A';
-        platno.NakresliBod(A);
+        //platno.popredi = 'A';
+        //platno.NakresliBod(A);
 
         platno.popredi = 'S';
         platno.NakresliBod(S);
 
-        platno.popredi = 'B';
-        platno.NakresliBod(B);
+        //platno.popredi = 'B';
+        //platno.NakresliBod(B);
 
         // 🍌
 
