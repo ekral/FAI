@@ -2,7 +2,16 @@
 
 S využitím kódu z úkolu uvedenéno níže vytvořte program, který:
 
-A) Zarotuje bod (x,y) kolem počátku souřadnic (0,0) a vykreslete úsečku z počátku souřadnic do zarotovaného bodu (x', y'). Použijte vzorec:
+Zarotuje úsečku kolem středu úsečky.
+
+Pokud chceme zarotovat úsečku, tak musíme:
+
+ 1) Zjistit střed úsečky.
+ 2) Posunout krajní body úsečky, tak aby střed úsečky byl v počátku souřadnic.
+ 3) Zarotovat krajní body úsečky kolem počátku souřadnic.
+ 4) Posunout úsečku zpět aby její střed byl opět na původním místě.
+
+Použijte vzorec:
 
 $$\begin{align*}
 x' &= x \cdot \cos(\theta) - y \cdot \sin(\theta) \\
@@ -15,21 +24,22 @@ $$\begin{align*}
 \theta \text{ je úhel rotace v radiánech.}
 \end{align*}$$
 
-B) Zarotujte úsečku kolem středu úsečky.
-
-Pokud chceme zarotovat úsečku, tak musíme:
-
- 1) Zjistit střed úsečky.
- 2) Posunout krajní body úsečky, tak aby střed úsečky byl v počátku souřadnic.
- 3) Zarotovat krajní body úsečky kolem počátku souřadnic.
- 4) Posunout úsečku zpět aby její střed byl opět na původním místě.
-
 C) Zarotujte rovnostranný trojúhleník kolem jeho středu.
 
 ```cpp
-#include <stdio.h>
-#include <math.h>
+#include <cstdio>
+#define _USE_MATH_DEFINES
+#include <cmath>
 #include <vector>
+#include <windows.h>
+
+void gotoxy(int x, int y) {
+    COORD pos = { (SHORT)x, (SHORT)y };
+    HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleCursorPosition(output, pos);
+}
+
+
 struct Bod2d
 {
     double x;
@@ -53,8 +63,8 @@ private:
     std::vector<char> data;
 public:
     const int maxColumnIndex;
-    const int maxRowIndex ;
-    
+    const int maxRowIndex;
+
     char popredi;
 
     Platno(int columnCount, int rowCount, char pozadi, char popredi) :
@@ -62,10 +72,10 @@ public:
         rowCount(rowCount),
         pozadi(pozadi),
         popredi(popredi),
-        totalChars(columnCount*rowCount),
-        maxColumnIndex(columnCount-1),
-        maxRowIndex(rowCount-1),
-        data(totalChars,0)
+        totalChars(columnCount* rowCount),
+        maxColumnIndex(columnCount - 1),
+        maxRowIndex(rowCount - 1),
+        data(totalChars, 0)
     {
 
         Vymaz();
@@ -125,6 +135,7 @@ public:
                 ++pos;
 
                 putchar(znak);
+                putchar(znak);
             }
 
             putchar('\n');
@@ -146,7 +157,7 @@ public:
 
     void Nakresli(Platno* platno)
     {
-        // spocitejte souradnice vrcholu trojuhelnika
+        // spocitejte souradnice vrcholu trojuhelnika 
         double vp = (a * sqrt(3.0)) / 4;
 
         Bod2d A(S.x - a / 2, S.y - vp);
@@ -164,12 +175,15 @@ int main()
     Bod2d bodA(2.0, 3.0);
     Bod2d bodB(5.0, 6.0);
 
+    Bod2d stred(0.0, 0.0); // 🚗
+
     int columnCount = 30;
-    int rowCount = 20;
+    int rowCount = 30;
 
     Platno platno(columnCount, rowCount, '-', 'x');
 
     bool konec = true;
+    double uhelStupne = 0;
 
     do
     {
@@ -189,8 +203,7 @@ int main()
         platno.popredi = '3';
         platno.NakresliBod(0, platno.maxRowIndex);
 
-        platno.popredi = 'A';
-        platno.NakresliUsecku(bodA, bodB);
+      
 
         platno.popredi = 'S';
         Bod2d stred(10.0, 8.0);
@@ -201,8 +214,27 @@ int main()
         RovnostrannyTrojuhelnik trojuhelnik(stred, 10.0);
         trojuhelnik.Nakresli(&platno);
 
-        platno.Zobraz();
 
-    } while (!konec);
+        double uhelRadiany = (uhelStupne * M_PI) / 180.0;
+
+        // 🍌
+        
+        //Bod2d At = Rotuj(A, uhelRadiany, Bod2d stred);
+        //Bod2d Bt = Rotuj(B, uhelRadiany, Bod2d stred);
+
+        // Predelat na funkci 🛴
+        //double xt = (x * cos(uhelRadiany)) - (y * sin(uhelRadiany));
+        //double yt = (x * sin(uhelRadiany)) + (y * cos(uhelRadiany));
+        // Predelat na funkci 🛴
+
+        platno.popredi = 'A';
+        platno.NakresliUsecku(At, Bt);
+
+        // 🍌
+
+        gotoxy(0, 0);
+        platno.Zobraz();
+        uhelStupne += 1;
+    } while (uhelStupne < 90);
 }
 ```
