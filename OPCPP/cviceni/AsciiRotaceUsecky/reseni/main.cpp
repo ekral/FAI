@@ -149,7 +149,7 @@ public:
 
 Bod2d Rotuj(Bod2d bod, double uhelRadiany, Bod2d stred)
 {
-    // doplnit
+    // doplnit ⌨
 }
 
 int main()
