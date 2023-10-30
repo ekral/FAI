@@ -147,6 +147,11 @@ public:
     }
 };
 
+Bod2d Rotuj(Bod2d bod, double uhelRadiany, Bod2d stred)
+{
+    // doplnit
+}
+
 int main()
 {
     Bod2d A(2.0, 3.0);
@@ -175,8 +180,8 @@ int main()
 
         // 🍌
         
-        //Bod2d At = Rotuj(A, uhelRadiany, Bod2d stred);
-        //Bod2d Bt = Rotuj(B, uhelRadiany, Bod2d stred);
+        Bod2d At = Rotuj(A, uhelRadiany, S);
+        Bod2d Bt = Rotuj(B, uhelRadiany, S);
 
         // Predelat na funkci 🛴
         //double xt = (x * cos(uhelRadiany)) - (y * sin(uhelRadiany));
@@ -186,14 +191,14 @@ int main()
         
         //platno.NakresliUsecku(At, Bt);
 
-        //platno.popredi = 'A';
-        //platno.NakresliBod(A);
+        platno.popredi = 'A';
+        platno.NakresliBod(At);
 
         platno.popredi = 'S';
         platno.NakresliBod(S);
 
-        //platno.popredi = 'B';
-        //platno.NakresliBod(B);
+        platno.popredi = 'B';
+        platno.NakresliBod(Bt);
 
         // 🍌
 
