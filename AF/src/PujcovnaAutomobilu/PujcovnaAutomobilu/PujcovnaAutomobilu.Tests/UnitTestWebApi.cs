@@ -26,7 +26,6 @@ namespace PujcovnaAutomobilu.Tests
             Assert.NotNull(okAutomobil.Value);
 
             Assert.Equal("Škoda 105", okAutomobil.Value.Model);
-
         }
     }
 }
