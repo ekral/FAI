@@ -24,8 +24,6 @@ $$\begin{align*}
 \theta \text{ je úhel rotace v radiánech.}
 \end{align*}$$
 
-C) Zarotujte rovnostranný trojúhleník kolem jeho středu.
-
 ```cpp
 #include <cstdio>
 #define _USE_MATH_DEFINES
@@ -88,6 +86,12 @@ public:
             data[i] = pozadi;
         }
     }
+    
+    // 😲
+    void NakresliBod(Bod2d bod)
+    {
+        NakresliBod(bod.x, bod.y);
+    }
 
     void NakresliBod(double x, double y)
     {
@@ -135,7 +139,7 @@ public:
                 ++pos;
 
                 putchar(znak);
-                putchar(znak);
+                //putchar(znak);
             }
 
             putchar('\n');
@@ -172,10 +176,10 @@ public:
 
 int main()
 {
-    Bod2d bodA(2.0, 3.0);
-    Bod2d bodB(5.0, 6.0);
+    Bod2d A(2.0, 3.0);
+    Bod2d B(5.0, 6.0);
 
-    Bod2d stred(0.0, 0.0); // 🚗
+    Bod2d S(0.0, 0.0); // 🚗
 
     int columnCount = 30;
     int rowCount = 30;
@@ -202,16 +206,9 @@ int main()
 
         platno.popredi = '3';
         platno.NakresliBod(0, platno.maxRowIndex);
-
-      
-
-        platno.popredi = 'S';
-        Bod2d stred(10.0, 8.0);
-        platno.NakresliBod(stred.x, stred.y);
-
-        // Odpoznamkovat
+       
         platno.popredi = 't';
-        RovnostrannyTrojuhelnik trojuhelnik(stred, 10.0);
+        RovnostrannyTrojuhelnik trojuhelnik(Bod2d(10.0, 8.0), 10.0);
         trojuhelnik.Nakresli(&platno);
 
 
@@ -227,8 +224,17 @@ int main()
         //double yt = (x * sin(uhelRadiany)) + (y * cos(uhelRadiany));
         // Predelat na funkci 🛴
 
+        
+        //platno.NakresliUsecku(At, Bt);
+
         platno.popredi = 'A';
-        platno.NakresliUsecku(At, Bt);
+        platno.NakresliBod(A);
+
+        platno.popredi = 'S';
+        platno.NakresliBod(S);
+
+        platno.popredi = 'B';
+        platno.NakresliBod(B);
 
         // 🍌
 
