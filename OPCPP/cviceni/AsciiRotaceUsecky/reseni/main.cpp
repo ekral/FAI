@@ -34,19 +34,19 @@ private:
     std::vector<char> data;
 public:
     const int maxColumnIndex;
-    const int maxRowIndex ;
+    const int maxRowIndex;
 
     char popredi;
 
     Platno(int columnCount, int rowCount, char pozadi, char popredi) :
-            columnCount(columnCount),
-            rowCount(rowCount),
-            pozadi(pozadi),
-            popredi(popredi),
-            totalChars(columnCount*rowCount),
-            maxColumnIndex(columnCount-1),
-            maxRowIndex(rowCount-1),
-            data(totalChars,0)
+        columnCount(columnCount),
+        rowCount(rowCount),
+        pozadi(pozadi),
+        popredi(popredi),
+        totalChars(columnCount* rowCount),
+        maxColumnIndex(columnCount - 1),
+        maxRowIndex(rowCount - 1),
+        data(totalChars, 0)
     {
 
         Vymaz();
@@ -58,6 +58,12 @@ public:
         {
             data[i] = pozadi;
         }
+    }
+    
+    // 😲
+    void NakresliBod(Bod2d bod)
+    {
+        NakresliBod(bod.x, bod.y);
     }
 
     void NakresliBod(double x, double y)
@@ -106,7 +112,7 @@ public:
                 ++pos;
 
                 putchar(znak);
-                putchar(znak);
+                //putchar(znak);
             }
 
             putchar('\n');
@@ -128,7 +134,7 @@ public:
 
     void Nakresli(Platno* platno)
     {
-        // spocitejte souradnice vrcholu trojuhelnika
+        // spocitejte souradnice vrcholu trojuhelnika 
         double vp = (a * sqrt(3.0)) / 4;
 
         Bod2d A(S.x - a / 2, S.y - vp);
@@ -145,6 +151,8 @@ int main()
 {
     Bod2d bodA(2.0, 3.0);
     Bod2d bodB(5.0, 6.0);
+
+    Bod2d stred(bodA.x + bodB.x / 2, bodA.y + bodB.y / 2); // 🚗 ✔
 
     int columnCount = 30;
     int rowCount = 30;
@@ -172,8 +180,7 @@ int main()
         platno.popredi = '3';
         platno.NakresliBod(0, platno.maxRowIndex);
 
-        platno.popredi = 'A';
-        platno.NakresliUsecku(bodA, bodB);
+      
 
         platno.popredi = 'S';
         Bod2d stred(10.0, 8.0);
@@ -187,20 +194,25 @@ int main()
 
         double uhelRadiany = (uhelStupne * M_PI) / 180.0;
 
-        double x = 29.0;
-        double y = 0.0;
+        // 🍌
+        
+        //Bod2d At = Rotuj(A, uhelRadiany, Bod2d stred);
+        //Bod2d Bt = Rotuj(B, uhelRadiany, Bod2d stred);
 
-        double xt = (x*cos(uhelRadiany))-(y*sin(uhelRadiany));
-        double yt = (x*sin(uhelRadiany))+(y*cos(uhelRadiany));
+        // Predelat na funkci 🛴
+        //double xt = (x * cos(uhelRadiany)) - (y * sin(uhelRadiany));
+        //double yt = (x * sin(uhelRadiany)) + (y * cos(uhelRadiany));
+        // Predelat na funkci 🛴
 
-        platno.popredi = 'P';
-        platno.NakresliBod(x, y);
+        platno.popredi = 'A';
+        //platno.NakresliUsecku(At, Bt);
 
-        platno.popredi = 'H';
-        platno.NakresliUsecku(Bod2d(0,0), Bod2d(xt,yt));
+        platno.popredi = 'S';
+        platno.NakresliBod(stred);
+        // 🍌
 
-        gotoxy(0,0);
+        gotoxy(0, 0);
         platno.Zobraz();
-        uhelStupne+= 1;
-    } while (uhelStupne<90);
+        uhelStupne += 1;
+    } while (uhelStupne < 90);
 }
