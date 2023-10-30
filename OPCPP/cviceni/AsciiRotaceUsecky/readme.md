@@ -202,8 +202,8 @@ int main()
 
         // 🍌
         
-        //Bod2d At = Rotuj(A, uhelRadiany, Bod2d stred);
-        //Bod2d Bt = Rotuj(B, uhelRadiany, Bod2d stred);
+        //Bod2d At = Rotuj(A, uhelRadiany, S);
+        //Bod2d Bt = Rotuj(B, uhelRadiany, S);
 
         // Predelat na funkci 🛴
         //double xt = (x * cos(uhelRadiany)) - (y * sin(uhelRadiany));
