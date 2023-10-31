@@ -1,6 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using Utb.PizzaKiosk.Models;
-
 namespace Utb.PizzaKiosk.Tests
 {
 

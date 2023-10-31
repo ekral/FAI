@@ -1,10 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Utb.PizzaKiosk.Models;
+using Utb.PizzaKiosk.Data;
 
 namespace Utb.PizzaKiosk.Tests
 {

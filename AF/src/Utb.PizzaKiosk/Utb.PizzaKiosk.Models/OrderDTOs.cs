@@ -1,6 +1,6 @@
 ﻿using Utb.PizzaKiosk.Models;
 
-namespace Utb.PizzaKosk.WebApi
+namespace Utb.PizzaKosk.Models
 {
     public record IngredientDTO(int IngredientId, int Quantity);
     public record PizzaDTO(int PizzaId, IngredientDTO[] Ingredients);
