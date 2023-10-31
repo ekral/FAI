@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Utb.PizzaKiosk.Models\Utb.PizzaKiosk.Models.csproj" />
+    <ProjectReference Include="..\Utb.PizzaKiosk.Data\Utb.PizzaKiosk.Data.csproj" />
   </ItemGroup>
 
 </Project>
