@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Utb.PizzaKiosk.Models;
 
 namespace Utb.PizzaKiosk.Data
 {
