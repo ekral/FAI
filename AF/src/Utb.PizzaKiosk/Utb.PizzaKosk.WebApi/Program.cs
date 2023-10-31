@@ -72,9 +72,10 @@ public static class WebApiVersion1
 
     // CreateOrder
 
-    public async static Task CreateOrder(OrderDTO orderDTO, PizzaKioskContext context)
+    public async static Task<Created<Order>> CreateOrder(OrderDTO orderDTO, PizzaKioskContext context)
     {
-       
+        // TODO add code to compute price and create order according to he orderDTO
+
         Order order = new Order()
         {
             Id = 0,
@@ -89,17 +90,29 @@ public static class WebApiVersion1
                     Id = 0,
                     Name = "Nova",
                     OrderId = 0,
-                    TotalPrice = 300
-
-
+                    TotalPrice = 300,
+                    OrderedIngredients = new List<OrderedIngredient>()
+                    {
+                        new OrderedIngredient()
+                        {
+                            Id = 0,
+                            Name = "Neco",
+                            FreeQuantity = 0,
+                            OrderedPizzaId = 0,
+                            PaidQuantity = 1,
+                            QuantityDescription = "10 g",
+                            TotalPrice = 20.0m,
+                            UnitPrice = 20.0m
+                        }
+                    }
                 }
             }
         };
 
-
         context.Add(order);
 
         await context.SaveChangesAsync();
-        // TODO Business Code
+
+        return TypedResults.Created($"Order/{order.Id}", order);
     }
 }
