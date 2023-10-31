@@ -6,7 +6,7 @@
         public required int OrderId { get; set; }
         public required string Name { get; set; }
         public required decimal TotalPrice { get; set; }
-        public ICollection<OrderedIngredient> OrderedIngredients { get; set; } = new List<OrderedIngredient>();
+        public List<OrderedIngredient> OrderedIngredients { get; set; } = new();
 
     }
 }
