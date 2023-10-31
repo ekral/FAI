@@ -72,19 +72,34 @@ public static class WebApiVersion1
 
     // CreateOrder
 
-    public static void CreateOrder(OrderDTO orderDTO, PizzaKioskContext context)
+    public async static Task CreateOrder(OrderDTO orderDTO, PizzaKioskContext context)
     {
+       
         Order order = new Order()
         {
             Id = 0,
             FullfilmentOption = FullfilmentOptionType.DineIn,
             OrderStatus = OrderStatusType.Processing,
-            TotalPrice = 200.0m
+            TotalPrice = 200.0m,
+
+            OrderedPizzas = new List<OrderedPizza>()
+            {
+                new OrderedPizza()
+                {
+                    Id = 0,
+                    Name = "Nova",
+                    OrderId = 0,
+                    TotalPrice = 300
+
+
+                }
+            }
         };
 
 
         context.Add(order);
 
+        await context.SaveChangesAsync();
         // TODO Business Code
     }
 }
