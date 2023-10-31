@@ -15,9 +15,11 @@ namespace Utb.PizzaKiosk.Tests
         }
 
         [Fact]
-        public void Test1()
+        public void CreateOrder()
         {
             using var context = Fixture.CreateContext();
+
+            
         }
     }
 }

@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 using Utb.PizzaKiosk.Models;
+using Utb.PizzaKosk.WebApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +13,8 @@ var app = builder.Build();
 
 app.MapGet("/", WebApiVersion1.AllPizzas);
 app.MapGet("/Pizza/{id}", WebApiVersion1.GetPizza);
-app.MapPost("/AddIngredient", WebApiVersion1.CreateIngredient);
+app.MapPost("/AddIngredient", WebApiVersion1.AddIngredient);
+app.MapPost("/CreateOrder", WebApiVersion1.CreateOrder);
 app.MapGet("/Orders", WebApiVersion1.AllOrders);
 
 app.Run();
@@ -45,7 +48,7 @@ public static class WebApiVersion1
     {
         Pizza? pizza = await context.Pizzas.FindAsync(id);
 
-        if(pizza is null)
+        if (pizza is null)
         {
             return TypedResults.NotFound();
         }
@@ -53,8 +56,22 @@ public static class WebApiVersion1
         return TypedResults.Ok(pizza);
     }
 
-    public static async Task<Created<Ingredient>> CreateIngredient(Ingredient ingredient, IEmailSender emailSender, PizzaKioskContext context)
+    public static async Task<Created<Ingredient>> AddIngredient(Ingredient ingredient, IEmailSender emailSender, PizzaKioskContext context)
     {
+        OrderDTO order = new OrderDTO(
+            FullfilmentOptionType.DineIn, 
+            new PizzaDTO[] 
+            { 
+                new PizzaDTO(1, new IngredientDTO[]
+                {
+                    new IngredientDTO(1, 3),
+                    new IngredientDTO(2, 1)
+                }) 
+            
+            });
+
+        string json = JsonSerializer.Serialize(order);
+
         context.Add(ingredient);
 
         await context.SaveChangesAsync();
@@ -65,4 +82,9 @@ public static class WebApiVersion1
     }
 
     // CreateOrder
+
+    public static void CreateOrder(OrderDTO order, PizzaKioskContext context)
+    {
+        // TODO Business Code
+    }
 }

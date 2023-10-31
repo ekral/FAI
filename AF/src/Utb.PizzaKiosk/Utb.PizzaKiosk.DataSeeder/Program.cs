@@ -42,3 +42,5 @@ context.OrderedIngredients.AddRange(
     new OrderedIngredient() { Id = 2, OrderedPizzaId = 1, QuantityDescription = "80 g", Name = "Ananas", FreeQuantity = 0, PaidQuantity = 1, UnitPrice = 25.0m,  TotalPrice = 25.0m }
     );
 context.SaveChanges();
+
+
