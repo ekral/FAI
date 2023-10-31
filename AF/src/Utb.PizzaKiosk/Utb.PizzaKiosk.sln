@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utb.PizzaKiosk.DataSeeder",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utb.PizzaKiosk.Data", "Utb.PizzaKiosk.Data\Utb.PizzaKiosk.Data.csproj", "{307051FC-2C25-47FB-A55E-0F1733773FAF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utb.PizzaKiosk.ConsolePlaygroud", "Utb.PizzaKiosk.ConsolePlaygroud\Utb.PizzaKiosk.ConsolePlaygroud.csproj", "{CBB5E344-9B3F-4FEB-ABA3-EDAB02179997}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{307051FC-2C25-47FB-A55E-0F1733773FAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{307051FC-2C25-47FB-A55E-0F1733773FAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{307051FC-2C25-47FB-A55E-0F1733773FAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBB5E344-9B3F-4FEB-ABA3-EDAB02179997}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBB5E344-9B3F-4FEB-ABA3-EDAB02179997}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBB5E344-9B3F-4FEB-ABA3-EDAB02179997}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBB5E344-9B3F-4FEB-ABA3-EDAB02179997}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

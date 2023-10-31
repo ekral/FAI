@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
 using Utb.PizzaKiosk.Data;
 using Utb.PizzaKiosk.Models;
-using Utb.PizzaKiosk.Models.DTOs;
+using Utb.PizzaKiosk.Models.DTO;
 
 var builder = WebApplication.CreateBuilder(args);
 
