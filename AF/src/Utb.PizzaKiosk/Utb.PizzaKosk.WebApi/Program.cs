@@ -13,6 +13,7 @@ var app = builder.Build();
 
 app.MapGet("/", WebApiVersion1.AllPizzas);
 app.MapGet("/Pizza/{id}", WebApiVersion1.GetPizza);
+app.MapPost("/AddIngredient", WebApiVersion1.CreateIngredient);
 
 app.MapGet("/Orders", (PizzaKioskContext context) => 
 context
@@ -46,5 +47,14 @@ public static class WebApiVersion1
         }
 
         return TypedResults.Ok(pizza);
+    }
+
+    public static async Task<Created<Ingredient>> CreateIngredient(Ingredient ingredient, PizzaKioskContext context)
+    {
+        context.Add(ingredient);
+
+        await context.SaveChangesAsync();
+
+        return TypedResults.Created($"Ingredients/{ingredient.Id}", ingredient);
     }
 }
