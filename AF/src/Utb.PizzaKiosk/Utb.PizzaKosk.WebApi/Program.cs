@@ -70,8 +70,19 @@ public static class WebApiVersion1
 
     // CreateOrder
 
-    public static void CreateOrder(OrderDTO order, PizzaKioskContext context)
+    public static void CreateOrder(OrderDTO orderDTO, PizzaKioskContext context)
     {
+        Order order = new Order()
+        {
+            Id = 0,
+            FullfilmentOption = FullfilmentOptionType.DineIn,
+            OrderStatus = OrderStatusType.Processing,
+            TotalPrice = 200.0m
+        };
+
+
+        context.Add(order);
+
         // TODO Business Code
     }
 }
