@@ -14,7 +14,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PujcovnaAutomobilu.WebApi",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PujcovnaAutomobilu.ConsolePlayground", "PujcovnaAutomobilu.ConsolePlayground\PujcovnaAutomobilu.ConsolePlayground.csproj", "{EF73021D-B732-4FD0-98EC-20C6ABB041AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PujcovnaAutomobilu.Tests", "PujcovnaAutomobilu.Tests\PujcovnaAutomobilu.Tests.csproj", "{7D8F249E-B84C-4B47-8B4E-2AEFB28B6A56}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PujcovnaAutomobilu.Tests", "PujcovnaAutomobilu.Tests\PujcovnaAutomobilu.Tests.csproj", "{7D8F249E-B84C-4B47-8B4E-2AEFB28B6A56}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -19,13 +19,13 @@ namespace PujcovnaAutomobilu.Tests
         {
             using PujcovnaAutomobiluContext context = Fixture.CreateContext();
 
-            Results<NotFound, BadRequest, Ok<Automobil>> result = await WebApiVersion1.VratAutomobil(1, new MockEmailSender(), context);
+            Results<NotFound, BadRequest, Ok<Automobil>> results = await WebApiVersion1.VratAutomobil(1, new MockEmailSender(), context);
+            
+            Ok<Automobil> result = Assert.IsType<Ok<Automobil>>(results.Result);
 
-            Ok<Automobil> okAutomobil = Assert.IsType<Ok<Automobil>>(result.Result);
+            Assert.NotNull(result.Value);
 
-            Assert.NotNull(okAutomobil.Value);
-
-            Assert.Equal("Škoda 105", okAutomobil.Value.Model);
+            Assert.Equal("Škoda 105", result.Value.Model);
         }
     }
 }
