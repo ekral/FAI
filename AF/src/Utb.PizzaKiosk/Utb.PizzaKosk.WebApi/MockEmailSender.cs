@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-public class EmailSenderMock : IEmailSender
+public class MockEmailSender : IEmailSender
 {
     public void SendEmail()
     {

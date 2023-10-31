@@ -3,7 +3,6 @@
 @hostname=localhost
 @port=7149
 
-
 GET https://{{hostname}}:{{port}}/
 
 ###

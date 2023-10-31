@@ -1,12 +1,10 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using System.Runtime.CompilerServices;
 using Utb.PizzaKiosk.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Zaregistrujte EmailSender jako singleton
-
+builder.Services.AddSingleton<IEmailSender, MockEmailSender>();
 builder.Services.AddDbContext<PizzaKioskContext>();
 
 var app = builder.Build();
@@ -14,17 +12,24 @@ var app = builder.Build();
 app.MapGet("/", WebApiVersion1.AllPizzas);
 app.MapGet("/Pizza/{id}", WebApiVersion1.GetPizza);
 app.MapPost("/AddIngredient", WebApiVersion1.CreateIngredient);
-
-app.MapGet("/Orders", (PizzaKioskContext context) => 
-context
-    .Orders
-    .Include(o => o.OrderedPizzas)
-    .ThenInclude(op => op.OrderedIngredients));
+app.MapGet("/Orders", WebApiVersion1.AllOrders);
 
 app.Run();
 
 public static class WebApiVersion1
 {
+    public static async Task<Ok<Order[]>> AllOrders(PizzaKioskContext context)
+    {
+        Order[] orders = await context
+            .Orders
+            .Include(o => o.OrderedPizzas)
+            .ThenInclude(op => op.OrderedIngredients)
+            .ToArrayAsync();
+
+
+        return TypedResults.Ok(orders);
+    }
+
     public static async Task<Ok<Pizza[]>> AllPizzas(PizzaKioskContext context)
     {
         Pizza[] pizzas = await context
@@ -32,7 +37,6 @@ public static class WebApiVersion1
             .Include(p => p.PizzaIngredients)
             .ThenInclude(pi => pi.Ingredient)
             .ToArrayAsync();
-
 
         return TypedResults.Ok(pizzas);
     }
@@ -49,11 +53,13 @@ public static class WebApiVersion1
         return TypedResults.Ok(pizza);
     }
 
-    public static async Task<Created<Ingredient>> CreateIngredient(Ingredient ingredient, PizzaKioskContext context)
+    public static async Task<Created<Ingredient>> CreateIngredient(Ingredient ingredient, IEmailSender emailSender, PizzaKioskContext context)
     {
         context.Add(ingredient);
 
         await context.SaveChangesAsync();
+
+        emailSender.SendEmail();
 
         return TypedResults.Created($"Ingredients/{ingredient.Id}", ingredient);
     }
