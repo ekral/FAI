@@ -8,6 +8,7 @@ using Utb.PizzaKosk.WebApi.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<IEmailSender, MockEmailSender>();
+builder.Services.AddTransient<MyService>();
 builder.Services.AddDbContext<PizzaKioskContext>();
 
 var app = builder.Build();
@@ -57,7 +58,7 @@ public static class WebApiVersion1
         return TypedResults.Ok(pizza);
     }
 
-    public static async Task<Created<Ingredient>> AddIngredient(Ingredient ingredient, IEmailSender emailSender, PizzaKioskContext context)
+    public static async Task<Created<Ingredient>> AddIngredient(Ingredient ingredient, MyService service, IEmailSender emailSender, PizzaKioskContext context)
     {
         context.Add(ingredient);
 
