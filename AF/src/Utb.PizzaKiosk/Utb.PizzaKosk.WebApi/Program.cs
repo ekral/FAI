@@ -7,7 +7,8 @@ using Utb.PizzaKosk.WebApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton<IEmailSender, MockEmailSender>();
+// Kolik MockEmailSenderu bude vytvoreno po dvou requestech?
+builder.Services.AddScoped<IEmailSender, MockEmailSender>();
 builder.Services.AddTransient<MyService>();
 builder.Services.AddDbContext<PizzaKioskContext>();
 
