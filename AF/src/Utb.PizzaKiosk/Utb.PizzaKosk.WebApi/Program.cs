@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using Utb.PizzaKiosk.Data;
 using Utb.PizzaKiosk.Models;
-using Utb.PizzaKosk.WebApi;
+using Utb.PizzaKiosk.Models.DTOs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -58,20 +59,6 @@ public static class WebApiVersion1
 
     public static async Task<Created<Ingredient>> AddIngredient(Ingredient ingredient, IEmailSender emailSender, PizzaKioskContext context)
     {
-        OrderDTO order = new OrderDTO(
-            FullfilmentOptionType.DineIn, 
-            new PizzaDTO[] 
-            { 
-                new PizzaDTO(1, new IngredientDTO[]
-                {
-                    new IngredientDTO(1, 3),
-                    new IngredientDTO(2, 1)
-                }) 
-            
-            });
-
-        string json = JsonSerializer.Serialize(order);
-
         context.Add(ingredient);
 
         await context.SaveChangesAsync();

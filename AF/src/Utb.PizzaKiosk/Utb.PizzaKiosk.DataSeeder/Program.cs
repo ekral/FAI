@@ -1,4 +1,5 @@
-﻿using Utb.PizzaKiosk.Models;
+﻿using Utb.PizzaKiosk.Data;
+using Utb.PizzaKiosk.Models;
 
 using var context = new PizzaKioskContext();
 
