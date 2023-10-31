@@ -12,6 +12,7 @@ builder.Services.AddDbContext<PizzaKioskContext>();
 var app = builder.Build();
 
 app.MapGet("/", WebApiVersion1.AllPizzas);
+app.MapGet("/Pizza/{id}", WebApiVersion1.GetPizza);
 
 app.MapGet("/Orders", (PizzaKioskContext context) => 
 context
