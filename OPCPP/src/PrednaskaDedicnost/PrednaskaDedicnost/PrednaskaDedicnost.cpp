@@ -15,7 +15,7 @@ protected:
 public:
 	string jmeno;
 
-	Osoba(int id, string jmeno) : id(id), jmeno(jmeno)
+	Osoba(int id, string jmeno, double hodnoceni) : id(id), jmeno(jmeno), hodnoceni(hodnoceni)
 	{
 		puts("Konstruktor Osoby");
 	}
@@ -41,7 +41,7 @@ class Student : public Osoba
 public:
 	string skupina;
 
-	Student(int id, string jmeno, string skupina) : Osoba(id, jmeno), skupina(skupina)
+	Student(int id, string jmeno, string skupina, double hodnoceni) : Osoba(id, jmeno, hodnoceni), skupina(skupina)
 	{
 		puts("Konstruktor Studenta");
 	}
@@ -63,7 +63,7 @@ class Zamestnanec : public Osoba
 public:
 	string kancelar;
 
-	Zamestnanec(int id, string jmeno, string kancelar) : Osoba(id, jmeno), kancelar(kancelar)
+	Zamestnanec(int id, string jmeno, string kancelar, double hodnoceni) : Osoba(id, jmeno, hodnoceni), kancelar(kancelar)
 	{
 		puts("Konstruktor Zamestnance");
 	}
@@ -78,10 +78,10 @@ int main()
 {
 	// Klientsky kod
 
-	Student student(1, "Stepanka", "ISRXY");
+	Student student(1, "Stepanka", "ISRXY", 80.0);
 	student.Vypis();
 
-	Zamestnanec zamestnanec(1, "Kral", "51-822");
+	Zamestnanec zamestnanec(1, "Kral", "51-822", 70.0);
 
 	Osoba* osoba = &student;
 }
