@@ -10,12 +10,12 @@ var app = builder.Build();
 app.MapGet("/", (PizzaKioskContext context) => context
 .Pizzas
     .Include(p => p.PizzaIngredients)
-    .ThenInclude(pi => pi.Ingredient);
+    .ThenInclude(pi => pi.Ingredient));
 
 app.MapGet("/Orders", (PizzaKioskContext context) => 
 context
     .Orders
     .Include(o => o.OrderedPizzas)
-    .ThenInclude(op => op.OrderedIngredients) });
+    .ThenInclude(op => op.OrderedIngredients));
 
 app.Run();
