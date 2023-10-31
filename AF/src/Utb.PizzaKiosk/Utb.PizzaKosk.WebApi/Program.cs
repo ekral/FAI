@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Utb.PizzaKiosk.Data;
 using Utb.PizzaKiosk.Models;
 using Utb.PizzaKiosk.Models.DTO;
+using Utb.PizzaKosk.WebApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

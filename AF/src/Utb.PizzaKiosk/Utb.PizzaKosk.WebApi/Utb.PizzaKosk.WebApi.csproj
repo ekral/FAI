@@ -10,8 +10,4 @@
     <ProjectReference Include="..\Utb.PizzaKiosk.Data\Utb.PizzaKiosk.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="NewFolder\" />
-  </ItemGroup>
-
 </Project>
