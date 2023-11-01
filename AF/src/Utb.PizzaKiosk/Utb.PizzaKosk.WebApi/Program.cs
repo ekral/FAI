@@ -100,9 +100,39 @@ public static class WebApiVersion1
                 TotalPrice = pizza.Price
             };
 
-            foreach (var ingredientDto in pizza.PizzaIngredients)
+            foreach (IngredientDTO ingredientDto in pizzaDto.Ingredients)
             {
+                PizzaIngredient? pizzaIngredient = context.PizzaIngredients.Find(pizzaDto.PizzaId, ingredientDto.IngredientId);
 
+                if (pizzaIngredient is null)
+                {
+                    return TypedResults.BadRequest();
+                }
+
+                context.Entry(pizzaIngredient).Reference(p => p.Ingredient).Load(); // Explicit loading
+
+                if (pizzaIngredient.Ingredient is null)
+                {
+                    return TypedResults.BadRequest();
+                }
+
+                // TODO calculate minimal quantity
+                int paidQuantity = ingredientDto.Quantity - pizzaIngredient.MinimalQuantity;
+
+                if(paidQuantity < 0)
+                {
+                    paidQuantity = 0;
+                }
+
+                OrderedIngredient orderedIngredient = new OrderedIngredient()
+                {
+                     Id = 0,
+                     OrderedPizzaId = 0,
+                     FreeQuantity = pizzaIngredient.FreeQuantity,
+                     PaidQuantity = paidQuantity,
+                     Name = pizzaIngredient.Ingredient.Name,
+                       
+                };
             }
         }
 
