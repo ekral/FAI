@@ -72,42 +72,72 @@ public static class WebApiVersion1
 
     // CreateOrder
 
-    public async static Task<Created<Order>> CreateOrder(OrderDTO orderDTO, PizzaKioskContext context)
+    public async static Task<Results<BadRequest, Created<Order>>> CreateOrder(OrderDTO orderDTO, PizzaKioskContext context)
     {
-        // TODO add code to compute price and create order according to he orderDTO
+        // TODO add code to compute price and create order according to the orderDTO
 
         Order order = new Order()
         {
-            Id = 0,
-            FullfilmentOption = FullfilmentOptionType.DineIn,
+            FullfilmentOption = orderDTO.FullfilmentOption,
             OrderStatus = OrderStatusType.Processing,
-            TotalPrice = 200.0m,
-
-            OrderedPizzas = new List<OrderedPizza>()
-            {
-                new OrderedPizza()
-                {
-                    Id = 0,
-                    Name = "Nova",
-                    OrderId = 0,
-                    TotalPrice = 300,
-                    OrderedIngredients = new List<OrderedIngredient>()
-                    {
-                        new OrderedIngredient()
-                        {
-                            Id = 0,
-                            Name = "Neco",
-                            FreeQuantity = 0,
-                            OrderedPizzaId = 0,
-                            PaidQuantity = 1,
-                            QuantityDescription = "10 g",
-                            TotalPrice = 20.0m,
-                            UnitPrice = 20.0m
-                        }
-                    }
-                }
-            }
+            TotalPrice = 0.0m
         };
+
+        foreach (var pizzaDto in orderDTO.Pizzas)
+        {
+            Pizza? pizza = context.Pizzas.Find(pizzaDto.PizzaId);
+
+            if(pizza is null)
+            {
+                return TypedResults.BadRequest();
+            }
+
+            OrderedPizza orderedPizza = new OrderedPizza()
+            {
+                Id = 0,
+                OrderId = 0,
+                Name = pizza.Name,
+                TotalPrice = pizza.Price
+            };
+
+            foreach (var ingredientDto in pizza.PizzaIngredients)
+            {
+
+            }
+        }
+
+        //Order order = new Order()
+        //{
+        //    Id = 0,
+        //    FullfilmentOption = FullfilmentOptionType.DineIn,
+        //    OrderStatus = OrderStatusType.Processing,
+        //    TotalPrice = 200.0m,
+
+        //    OrderedPizzas = new List<OrderedPizza>()
+        //    {
+        //        new OrderedPizza()
+        //        {
+        //            Id = 0,
+        //            Name = "Nova",
+        //            OrderId = 0,
+        //            TotalPrice = 300,
+        //            OrderedIngredients = new List<OrderedIngredient>()
+        //            {
+        //                new OrderedIngredient()
+        //                {
+        //                    Id = 0,
+        //                    Name = "Neco",
+        //                    FreeQuantity = 0,
+        //                    OrderedPizzaId = 0,
+        //                    PaidQuantity = 1,
+        //                    QuantityDescription = "10 g",
+        //                    TotalPrice = 20.0m,
+        //                    UnitPrice = 20.0m
+        //                }
+        //            }
+        //        }
+        //    }
+        //};
 
         context.Add(order);
 
