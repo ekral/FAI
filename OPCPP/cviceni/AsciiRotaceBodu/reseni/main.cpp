@@ -2,7 +2,10 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <vector>
+#include <string>
+#include <sstream>
 #include <windows.h>
+#include <iostream>
 
 void gotoxy(int x, int y) {
     COORD pos = { (SHORT)x, (SHORT)y };
@@ -95,6 +98,8 @@ public:
 
     void Zobraz()
     {
+        std::stringstream ss;
+
         int pos = 0;
 
         for (int i = 0; i < rowCount; i++)
@@ -104,11 +109,17 @@ public:
                 char znak = data[pos];
                 ++pos;
 
-                putchar(znak);
+                ss << znak;
             }
 
-            putchar('\n');
+            ss << '\n';
         }
+
+        std::string retezec = ss.str();
+
+        std::cout << retezec;
+        
+        //puts(retezec.c_str());
     }
 
 };
@@ -159,7 +170,6 @@ int main()
         double x = 10.0;
         double y = 0.0;
 
-
         double uhel_radian = (stupne / 180) * M_PI;
 
         double xt = x * cos(uhel_radian) - y * sin(uhel_radian);
@@ -168,15 +178,13 @@ int main()
         Bod2d A(0.0, 0.0);
         Bod2d B(xt, yt);
        
-
-
         // vykreslit usecku z bodu (0,0) do (xt, yt)
         platno.NakresliUsecku(A, B);
 
         gotoxy(0, 0);
         platno.Zobraz();
 
-        stupne += 0.2;
+        stupne += 0.005;
 
     } while (stupne < 90.0);
 }
