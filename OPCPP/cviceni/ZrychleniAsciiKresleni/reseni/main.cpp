@@ -72,7 +72,13 @@ public:
         int rowIndex = (int)round(y);
         int columnIndex = (int)round(x);
 
-        // pokud je rowIndex nebo columnIndex mimo rozsah, tak bod nevykresli
+        // pokud je rowIndex nebo columnIndex mimo rozsah, tak se bod nevykresli
+        // do 17:15
+
+        if ((rowIndex < 0 || rowIndex > maxRowIndex) && (columnIndex < 0 || columnIndex > maxColumnIndex))
+        {
+            return;
+        }
 
         int pos = ((rowCount - rowIndex - 1) * columnCount) + columnIndex;
 
@@ -126,7 +132,7 @@ public:
         }
 
         std::string retezec = ss.str();
-        
+
         std::cout << retezec;
 
         //puts(retezec.c_str());
@@ -185,12 +191,12 @@ Bod2d Rotuj(Bod2d bod, double stupne, Bod2d stred)
 int main()
 {
     Bod2d A(7.0, 8.0);
-    Bod2d B(10.0, 12.0);
+    Bod2d B(10.0, 25.0);
 
     Bod2d S((A.x + B.x) / 2.0, (A.y + B.y) / 2.0); // 🚗 ✔
 
     int columnCount = 30;
-    int rowCount = 30;
+    int rowCount = 20;
 
     Platno platno(columnCount, rowCount, '-', 'x');
 
@@ -218,7 +224,7 @@ int main()
 
         gotoxy(0, 0);
         platno.Zobraz();
-        uhelStupne += 1.0;
+        uhelStupne += 0.1;
 
-    } while (uhelStupne < 360.0);
+    } while (uhelStupne < 100 * 360.0);
 }
