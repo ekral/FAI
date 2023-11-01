@@ -150,6 +150,11 @@ public:
     }
 };
 
+Bod2d Rotace(Bod2d bod, double stupne)
+{
+
+}
+
 int main()
 {
    
@@ -170,16 +175,15 @@ int main()
         double x = 10.0;
         double y = 0.0;
 
-        double uhel_radian = (stupne / 180) * M_PI;
-
-        double xt = x * cos(uhel_radian) - y * sin(uhel_radian);
-        double yt = x * sin(uhel_radian) + y * cos(uhel_radian);
+        Bod2d B(10.0, 0.0);
+        //double uhel_radian = (stupne / 180) * M_PI;
+        //double xt = x * cos(uhel_radian) - y * sin(uhel_radian);
+        //double yt = x * sin(uhel_radian) + y * cos(uhel_radian);
         
         Bod2d A(0.0, 0.0);
-        Bod2d B(xt, yt);
+        Bod2d Bt = Rotace(B, stupne); // vytvorit do 13:30
        
-        // vykreslit usecku z bodu (0,0) do (xt, yt)
-        platno.NakresliUsecku(A, B);
+        platno.NakresliUsecku(A, Bt);
 
         gotoxy(0, 0);
         platno.Zobraz();
