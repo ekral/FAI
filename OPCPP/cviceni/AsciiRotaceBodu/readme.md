@@ -1,4 +1,4 @@
-# Ascii Rotace úsečky
+# Ascii Rotace bodu
 
 S využitím kódu z úkolu uvedenéno níže vytvořte program, který:
 
