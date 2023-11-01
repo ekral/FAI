@@ -152,6 +152,12 @@ public:
 
 Bod2d Rotace(Bod2d bod, double stupne)
 {
+    double uhel_radian = (stupne / 180) * M_PI;
+    double xt = bod.x * cos(uhel_radian) - bod.y * sin(uhel_radian);
+    double yt = bod.x * sin(uhel_radian) + bod.y * cos(uhel_radian);
+    Bod2d bodnavrat(xt, yt);
+
+    return bodnavrat;
 
 }
 
@@ -176,10 +182,7 @@ int main()
         double y = 0.0;
 
         Bod2d B(10.0, 0.0);
-        //double uhel_radian = (stupne / 180) * M_PI;
-        //double xt = x * cos(uhel_radian) - y * sin(uhel_radian);
-        //double yt = x * sin(uhel_radian) + y * cos(uhel_radian);
-        
+      
         Bod2d A(0.0, 0.0);
         Bod2d Bt = Rotace(B, stupne); // vytvorit do 13:30
        
