@@ -15,7 +15,7 @@ $$\begin{align*}
 \theta \text{ je úhel rotace v radiánech.}
 \end{align*}$$
 
-B) Zarotujte úsečku kolem středu úsečky.
+Vyjděte z následujících zdrojových kódů:
 
 ```cpp
 #include <stdio.h>
