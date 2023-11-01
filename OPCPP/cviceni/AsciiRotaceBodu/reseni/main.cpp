@@ -1,11 +1,14 @@
 #include <stdio.h>
+#define _USE_MATH_DEFINES
 #include <math.h>
+#include <vector>
+#include <windows.h>
 
-// Definujte strukturu Bod2d aby byl platny kod ve funkci main.
-// Pouzijte konstruktor a member initializer list
-// Otestuje co udelaji klicoval slovat private a public
-// A co se stane, kdyz zmenim Bod2d na tridu.
-// Funkci main nemente.
+void gotoxy(int x, int y) {
+    COORD pos = { (SHORT)x, (SHORT)y };
+    HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleCursorPosition(output, pos);
+}
 
 struct Bod2d
 {
@@ -18,10 +21,162 @@ struct Bod2d
     }
 };
 
+class Platno
+{
+private:
+    // static constexpr je moderni zpusob zadani konstanty zname v dobe prekladu
+    const int columnCount;
+    const int rowCount;
+    const int totalChars;
+    char pozadi;
+
+    std::vector<char> data;
+public:
+    const int maxColumnIndex;
+    const int maxRowIndex;
+
+    char popredi;
+
+    Platno(int columnCount, int rowCount, char pozadi, char popredi) :
+        columnCount(columnCount),
+        rowCount(rowCount),
+        pozadi(pozadi),
+        popredi(popredi),
+        totalChars(columnCount* rowCount),
+        maxColumnIndex(columnCount - 1),
+        maxRowIndex(rowCount - 1),
+        data(totalChars, 0)
+    {
+
+        Vymaz();
+    }
+
+    void Vymaz()
+    {
+        for (int i = 0; i < totalChars; i++)
+        {
+            data[i] = pozadi;
+        }
+    }
+
+    void NakresliBod(double x, double y)
+    {
+        int pos = ((rowCount - round(y) - 1) * columnCount) + round(x);
+
+        data[pos] = popredi;
+    }
+
+    void NakresliUsecku(Bod2d bodA, Bod2d bodB)
+    {
+        double dx = bodB.x - bodA.x;
+        double dy = bodB.y - bodA.y;
+
+
+        double dmax = fmax(fabs(dx), fabs(dy));
+
+        double stepx = dx / dmax;
+        double stepy = dy / dmax;
+
+        Bod2d bod = bodA;
+
+        double d = 0;
+
+        while (d <= dmax)
+        {
+            NakresliBod(bod.x, bod.y);
+
+            bod.x += stepx;
+            bod.y += stepy;
+
+            ++d;
+        }
+
+    }
+
+    void Zobraz()
+    {
+        int pos = 0;
+
+        for (int i = 0; i < rowCount; i++)
+        {
+            for (int j = 0; j < columnCount; j++)
+            {
+                char znak = data[pos];
+                ++pos;
+
+                putchar(znak);
+            }
+
+            putchar('\n');
+        }
+    }
+
+};
+
+class RovnostrannyTrojuhelnik
+{
+private:
+    double a;
+    Bod2d S;
+public:
+    RovnostrannyTrojuhelnik(Bod2d S, int a) : S(S), a(a)
+    {
+
+    }
+
+    void Nakresli(Platno* platno)
+    {
+        // spocitejte souradnice vrcholu trojuhelnika
+        double vp = (a * sqrt(3.0)) / 4;
+
+        Bod2d A(S.x - a / 2, S.y - vp);
+        Bod2d B(S.x + a / 2, S.y - vp);
+        Bod2d C(S.x, S.y + vp);
+
+        platno->NakresliUsecku(A, B);
+        platno->NakresliUsecku(B, C);
+        platno->NakresliUsecku(C, A);
+    }
+};
+
 int main()
 {
-    
-    Bod2d bodA(2.0, 3.0);
-    printf("x: %lf y: %lf", bodA.x, bodA.y);
-}
+   
 
+    int columnCount = 30;
+    int rowCount = 20;
+
+    Platno platno(columnCount, rowCount, '-', 'x');
+
+    bool konec = true;
+
+    double stupne = 0.0;
+
+    do
+    {
+        platno.Vymaz();
+
+        double x = 10.0;
+        double y = 0.0;
+
+
+        double uhel_radian = (stupne / 180) * M_PI;
+
+        double xt = x * cos(uhel_radian) - y * sin(uhel_radian);
+        double yt = x * sin(uhel_radian) + y * cos(uhel_radian);
+        
+        Bod2d A(0.0, 0.0);
+        Bod2d B(xt, yt);
+       
+
+
+        // vykreslit usecku z bodu (0,0) do (xt, yt)
+        platno.NakresliUsecku(A, B);
+
+        gotoxy(0, 0);
+        platno.Zobraz();
+
+        stupne += 0.2;
+
+    } while (stupne < 90.0);
+}
