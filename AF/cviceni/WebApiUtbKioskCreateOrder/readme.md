@@ -6,6 +6,7 @@ Aktualizujte si repozitář (proveďte pull nebo si naklonujte repozitář znovu
 
 V solution [Utb.PizzaKiosk.sln](https://github.com/ekral/FAI/blob/master/AF/src/Utb.PizzaKiosk) a projektu [Utb.PizzaKiosk.WebApi](https://github.com/ekral/FAI/blob/master/AF/src/Utb.PizzaKiosk/Utb.PizzaKosk.WebApi):
 
+- Spusťe jako první konzolovou aplikaci **DataSeeder**, která vytvoří databází (a předtím odstraní případně jejích předchozí verzi) a naplní databázi výchozími daty.
 - Vyzkoušejte soubor [app.http](https://github.com/ekral/FAI/blob/master/AF/src/Utb.PizzaKiosk/Utb.PizzaKosk.WebApi/app.http) (Jen nové Visual Studio)
 - Doprogramujte metodu [CreateOrder](https://github.com/ekral/FAI/blob/master/AF/src/Utb.PizzaKiosk/Utb.PizzaKosk.WebApi/Program.cs#L75).
 
