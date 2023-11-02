@@ -59,7 +59,7 @@ public:
             data[i] = pozadi;
         }
     }
-    
+
     // 😲
     void NakresliBod(Bod2d bod)
     {
@@ -68,7 +68,12 @@ public:
 
     void NakresliBod(double x, double y)
     {
-        int pos = ((rowCount - round(y) - 1) * columnCount) + round(x);
+        int rowIndex = (int)round(y);
+        int columnIndex = (int)round(x);
+
+        // pokud je rowIndex nebo columnIndex mimo rozsah, tak bod nevykresli
+
+        int pos = ((rowCount - rowIndex - 1) * columnCount) + columnIndex;
 
         data[pos] = popredi;
     }
@@ -132,9 +137,9 @@ public:
 
     }
 
-    void Nakresli(Platno* platno)
+    void Nakresli(Platno* platno) const
     {
-        // spocitejte souradnice vrcholu trojuhelnika 
+        // spocitejte souradnice vrcholu trojuhelnika
         double vp = (a * sqrt(3.0)) / 4;
 
         Bod2d A(S.x - a / 2, S.y - vp);
@@ -147,22 +152,32 @@ public:
     }
 };
 
-Bod2d Rotuj(Bod2d bod, double uhelRadiany, Bod2d stred)
+Bod2d Rotuj(Bod2d bod, double stupne)
 {
-    // doplnit
-    Bod2d T(bod.x, bod.y);
+    double uhelRadiany = (stupne * M_PI) / 180.0;
 
-    // odecist stred
-    // zarotovat
-    // pricist stred
+    double xt = (bod.x * cos(uhelRadiany)) - (bod.y * sin(uhelRadiany));
+    double yt = (bod.x * sin(uhelRadiany)) + (bod.y * cos(uhelRadiany));
 
-    return T;
+    return Bod2d{xt, yt};
+}
+
+Bod2d Rotuj(Bod2d bod, double stupne, Bod2d stred)
+{
+    Bod2d bodT(bod.x - stred.x, bod.y - stred.y);
+
+    bodT = Rotuj(bodT, stupne);
+
+    bodT.x += stred.x;
+    bodT.y += stred.y;
+
+    return bodT;
 }
 
 int main()
 {
-    Bod2d A(2.0, 3.0);
-    Bod2d B(5.0, 6.0);
+    Bod2d A(7.0, 8.0);
+    Bod2d B(10.0, 12.0);
 
     Bod2d S((A.x + B.x) / 2.0, (A.y + B.y) / 2.0); // 🚗 ✔
 
@@ -177,25 +192,11 @@ int main()
     do
     {
         platno.Vymaz();
-       
-        platno.popredi = 't';
-        RovnostrannyTrojuhelnik trojuhelnik(Bod2d(10.0, 8.0), 10.0);
-        trojuhelnik.Nakresli(&platno);
 
+        Bod2d At = Rotuj(A, uhelStupne, S);
+        Bod2d Bt = Rotuj(B, uhelStupne, S);
 
-        double uhelRadiany = (uhelStupne * M_PI) / 180.0;
-
-        // 🍌
-        
-        Bod2d At = Rotuj(A, uhelRadiany, S);
-        Bod2d Bt = Rotuj(B, uhelRadiany, S);
-
-        // Predelat na funkci 🛴
-        //double xt = (x * cos(uhelRadiany)) - (y * sin(uhelRadiany));
-        //double yt = (x * sin(uhelRadiany)) + (y * cos(uhelRadiany));
-        // Predelat na funkci 🛴
-
-        
+        platno.popredi = 'x';
         //platno.NakresliUsecku(At, Bt);
 
         platno.popredi = 'A';
@@ -207,10 +208,9 @@ int main()
         platno.popredi = 'B';
         platno.NakresliBod(Bt);
 
-        // 🍌
-
         gotoxy(0, 0);
         platno.Zobraz();
-        uhelStupne += 1;
-    } while (uhelStupne < 90);
+        uhelStupne += 1.0;
+
+    } while (uhelStupne < 360.0);
 }

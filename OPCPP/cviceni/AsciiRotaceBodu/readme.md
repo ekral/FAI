@@ -1,4 +1,4 @@
-# Ascii Rotace úsečky
+# Ascii Rotace bodu
 
 S využitím kódu z úkolu uvedenéno níže vytvořte program, který:
 
@@ -15,7 +15,7 @@ $$\begin{align*}
 \theta \text{ je úhel rotace v radiánech.}
 \end{align*}$$
 
-B) Zarotujte úsečku kolem středu úsečky.
+Vyjděte z následujících zdrojových kódů:
 
 ```cpp
 #include <stdio.h>
