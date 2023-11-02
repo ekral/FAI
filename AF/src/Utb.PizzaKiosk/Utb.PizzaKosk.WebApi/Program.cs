@@ -95,7 +95,6 @@ public static class WebApiVersion1
 
             OrderedPizza orderedPizza = new OrderedPizza()
             {
-                OrderedPizzaId = 0,
                 OrderId = 0,
                 Name = pizzaEntity.Name,
                 UnitPrice = pizzaEntity.Price,
