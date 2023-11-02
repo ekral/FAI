@@ -98,6 +98,7 @@ public static class WebApiVersion1
                 Id = 0,
                 OrderId = 0,
                 Name = pizzaEntity.Name,
+                UnitPrice = pizzaEntity.Price,
                 TotalPrice = pizzaEntity.Price
             };
 

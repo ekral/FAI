@@ -35,7 +35,7 @@ context.Orders.AddRange(
     );
 
 context.OrderedPizzas.AddRange(
-    new OrderedPizza() { Id = 1, OrderId = 1, Name = "Hot Dog Pizza", TotalPrice = 320.0m}
+    new OrderedPizza() { Id = 1, OrderId = 1, Name = "Hot Dog Pizza", UnitPrice = 250.0m, TotalPrice = 320.0m}
     );
 
 context.OrderedIngredients.AddRange(
