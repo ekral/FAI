@@ -19,8 +19,10 @@ Vyjděte z následujících zdrojových kódů:
 
 ```cpp
 #include <stdio.h>
+#define _USE_MATH_DEFINES
 #include <math.h>
 #include <vector>
+
 struct Bod2d
 {
     double x;
@@ -150,6 +152,9 @@ public:
     }
 };
 
+// Zde definujte globalni funkci 🚀
+
+
 int main()
 {
     int columnCount = 30;
@@ -166,7 +171,7 @@ int main()
         Bod2d A(2.0, 3.0);
 
         // 🏎
-        //Bod2d At = Rotuj(A, stupne);
+        // Bod2d At = Rotuj(A, stupne);
         // vykreslete usecku z bodu 0,0 do bodu At
 
 
