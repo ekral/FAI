@@ -2,12 +2,12 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <vector>
-#include <string>
 #include <sstream>
-#include <windows.h>
 #include <iostream>
+#include <windows.h>
 
-void gotoxy(int x, int y) {
+void gotoxy(int x, int y) 
+{
     COORD pos = { (SHORT)x, (SHORT)y };
     HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleCursorPosition(output, pos);
@@ -62,9 +62,17 @@ public:
         }
     }
 
+    void NakresliBod(Bod2d bod)
+    {
+        NakresliBod(bod.x, bod.y);
+    }
+
     void NakresliBod(double x, double y)
     {
-        int pos = ((rowCount - round(y) - 1) * columnCount) + round(x);
+        int rowIndex = (int)round(y);
+        int columnIndex = (int)round(x);
+        
+        int pos = ((rowCount - rowIndex - 1) * columnCount) + columnIndex;
 
         data[pos] = popredi;
     }
@@ -73,7 +81,6 @@ public:
     {
         double dx = bodB.x - bodA.x;
         double dy = bodB.y - bodA.y;
-
 
         double dmax = fmax(fabs(dx), fabs(dy));
 
@@ -116,12 +123,10 @@ public:
         }
 
         std::string retezec = ss.str();
-
-        std::cout << retezec;
         
+        std::cout << retezec;
         //puts(retezec.c_str());
     }
-
 };
 
 class RovnostrannyTrojuhelnik
@@ -150,27 +155,22 @@ public:
     }
 };
 
-Bod2d Rotace(Bod2d bod, double stupne)
+// Zde definujte globalni funkci 🚀
+Bod2d Rotace(Bod2d A, double stupne) 
 {
-    double uhel_radian = (stupne / 180) * M_PI;
-    double xt = bod.x * cos(uhel_radian) - bod.y * sin(uhel_radian);
-    double yt = bod.x * sin(uhel_radian) + bod.y * cos(uhel_radian);
-    Bod2d bodnavrat(xt, yt);
-
-    return bodnavrat;
-
+    double uhelradian = (stupne / 180) * M_PI;
+    double xt = A.x * cos(uhelradian) - A.y * sin(uhelradian);
+    double yt = A.x * sin(uhelradian) + A.y * cos(uhelradian);
+    Bod2d bod(xt, yt);
+    return bod;
 }
 
 int main()
 {
-   
-
     int columnCount = 30;
     int rowCount = 20;
 
     Platno platno(columnCount, rowCount, '-', 'x');
-
-    bool konec = true;
 
     double stupne = 0.0;
 
@@ -178,20 +178,17 @@ int main()
     {
         platno.Vymaz();
 
-        double x = 10.0;
-        double y = 0.0;
-
-        Bod2d B(10.0, 0.0);
-      
-        Bod2d A(0.0, 0.0);
-        Bod2d Bt = Rotace(B, stupne); // vytvorit do 13:30
-       
-        platno.NakresliUsecku(A, Bt);
+        Bod2d A(10.0, 0.0);
+        Bod2d S(0.0, 0.0);
+        
+        Bod2d At = Rotace(A, stupne);
+        platno.NakresliUsecku(At, S);
 
         gotoxy(0, 0);
+
         platno.Zobraz();
 
-        stupne += 0.005;
+        stupne += 0.1;
 
     } while (stupne < 90.0);
 }
