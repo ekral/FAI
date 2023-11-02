@@ -72,22 +72,23 @@ public static class WebApiVersion1
 
     // CreateOrder
 
-    public async static Task<Results<BadRequest, Created<Order>>> CreateOrder(OrderDTO orderDTO, PizzaKioskContext context)
+    public async static Task<Results<BadRequest, Created<Order>>> CreateOrder(OrderDTO clientOrder, PizzaKioskContext context)
     {
-        // TODO add code to compute price and create order according to the orderDTO
 
+        // Primarni i cizi klice doplni Entity Framework
+        
         Order order = new Order()
         {
-            FullfilmentOption = orderDTO.FullfilmentOption,
+            FullfilmentOption = clientOrder.FullfilmentOption,
             OrderStatus = OrderStatusType.Processing,
             TotalPrice = 0.0m
         };
 
-        foreach (var pizzaDto in orderDTO.Pizzas)
+        foreach (var clientOrderPizza in clientOrder.Pizzas)
         {
-            Pizza? pizza = context.Pizzas.Find(pizzaDto.PizzaId);
+            Pizza? pizzaEntity = context.Pizzas.Find(clientOrderPizza.PizzaId);
 
-            if(pizza is null)
+            if(pizzaEntity is null)
             {
                 return TypedResults.BadRequest();
             }
@@ -96,82 +97,62 @@ public static class WebApiVersion1
             {
                 Id = 0,
                 OrderId = 0,
-                Name = pizza.Name,
-                TotalPrice = pizza.Price
+                Name = pizzaEntity.Name,
+                TotalPrice = pizzaEntity.Price
             };
 
-            foreach (IngredientDTO ingredientDto in pizzaDto.Ingredients)
+            foreach (IngredientDTO clientOrderIngredient in clientOrderPizza.Ingredients)
             {
-                PizzaIngredient? pizzaIngredient = context.PizzaIngredients.Find(pizzaDto.PizzaId, ingredientDto.IngredientId);
+                PizzaIngredient? pizzaIngredientEntity = context.PizzaIngredients.Find(clientOrderPizza.PizzaId, clientOrderIngredient.IngredientId);
 
-                if (pizzaIngredient is null)
+                if (pizzaIngredientEntity is null)
                 {
                     return TypedResults.BadRequest();
                 }
 
-                context.Entry(pizzaIngredient).Reference(p => p.Ingredient).Load(); // Explicit loading
+                context.Entry(pizzaIngredientEntity).Reference(p => p.Ingredient).Load(); // Explicit loading
 
-                if (pizzaIngredient.Ingredient is null)
+                if (pizzaIngredientEntity.Ingredient is null)
                 {
                     return TypedResults.BadRequest();
                 }
 
-                // TODO calculate minimal quantity
-                int paidQuantity = ingredientDto.Quantity - pizzaIngredient.MinimalQuantity;
+                if(clientOrderIngredient.Quantity < pizzaIngredientEntity.MinimalQuantity)
+                {
+                    return TypedResults.BadRequest();
+                }
+
+                int paidQuantity = clientOrderIngredient.Quantity - pizzaIngredientEntity.FreeQuantity;
 
                 if(paidQuantity < 0)
                 {
                     paidQuantity = 0;
                 }
 
-                decimal totalPrice = paidQuantity * pizzaIngredient.Ingredient.UnitPrice;
+                decimal ingredientTotalPrice = paidQuantity * pizzaIngredientEntity.Ingredient.UnitPrice;
 
                 OrderedIngredient orderedIngredient = new OrderedIngredient()
                 {
                      Id = 0,
                      OrderedPizzaId = 0,
-                     FreeQuantity = pizzaIngredient.FreeQuantity,
                      PaidQuantity = paidQuantity,
-                     Name = pizzaIngredient.Ingredient.Name,
-                     QuantityDescription = pizzaIngredient.Ingredient.QuantityDescription,
-                     UnitPrice = pizzaIngredient.Ingredient.UnitPrice, 
-                     TotalPrice = totalPrice  
+                     FreeQuantity = pizzaIngredientEntity.FreeQuantity,
+                     Name = pizzaIngredientEntity.Ingredient.Name,
+                     QuantityDescription = pizzaIngredientEntity.Ingredient.QuantityDescription,
+                     UnitPrice = pizzaIngredientEntity.Ingredient.UnitPrice, 
+                     TotalPrice = ingredientTotalPrice  
                 };
+
+                orderedPizza.OrderedIngredients.Add(orderedIngredient);
+
+                orderedPizza.TotalPrice += orderedIngredient.TotalPrice;
+
             }
+
+            order.OrderedPizzas.Add(orderedPizza);
+
+            order.TotalPrice += orderedPizza.TotalPrice;
         }
-
-        //Order order = new Order()
-        //{
-        //    Id = 0,
-        //    FullfilmentOption = FullfilmentOptionType.DineIn,
-        //    OrderStatus = OrderStatusType.Processing,
-        //    TotalPrice = 200.0m,
-
-        //    OrderedPizzas = new List<OrderedPizza>()
-        //    {
-        //        new OrderedPizza()
-        //        {
-        //            Id = 0,
-        //            Name = "Nova",
-        //            OrderId = 0,
-        //            TotalPrice = 300,
-        //            OrderedIngredients = new List<OrderedIngredient>()
-        //            {
-        //                new OrderedIngredient()
-        //                {
-        //                    Id = 0,
-        //                    Name = "Neco",
-        //                    FreeQuantity = 0,
-        //                    OrderedPizzaId = 0,
-        //                    PaidQuantity = 1,
-        //                    QuantityDescription = "10 g",
-        //                    TotalPrice = 20.0m,
-        //                    UnitPrice = 20.0m
-        //                }
-        //            }
-        //        }
-        //    }
-        //};
 
         context.Add(order);
 
