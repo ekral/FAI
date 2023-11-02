@@ -76,7 +76,7 @@ public static class WebApiVersion1
     {
 
         // Primarni i cizi klice doplni Entity Framework
-        
+
         Order order = new Order()
         {
             FullfilmentOption = clientOrder.FullfilmentOption,
@@ -86,9 +86,9 @@ public static class WebApiVersion1
 
         foreach (var clientOrderPizza in clientOrder.Pizzas)
         {
-            Pizza? pizza = context.Pizzas.Find(pizzaDto.PizzaId);
+            Pizza? pizzaEntity = context.Pizzas.Find(clientOrderPizza.PizzaId);
 
-            if(pizzaEntity is null)
+            if (pizzaEntity is null)
             {
                 return TypedResults.BadRequest();
             }
@@ -102,42 +102,53 @@ public static class WebApiVersion1
                 TotalPrice = pizzaEntity.Price
             };
 
-            foreach (IngredientDTO ingredientDto in pizzaDto.Ingredients)
+            foreach (IngredientDTO clientOrderIngredient in clientOrderPizza.Ingredients)
             {
-                PizzaIngredient? pizzaIngredient = context.PizzaIngredients.Find(pizzaDto.PizzaId, ingredientDto.IngredientId);
+                PizzaIngredient? pizzaIngredientEntity = context.PizzaIngredients.Find(clientOrderPizza.PizzaId, clientOrderIngredient.IngredientId);
 
                 if (pizzaIngredientEntity is null)
                 {
                     return TypedResults.BadRequest();
                 }
 
-                context.Entry(pizzaIngredient).Reference(p => p.Ingredient).Load(); // Explicit loading
+                context.Entry(pizzaIngredientEntity).Reference(p => p.Ingredient).Load(); // Explicit loading
 
-                if (pizzaIngredient.Ingredient is null)
+                if (pizzaIngredientEntity.Ingredient is null)
                 {
                     return TypedResults.BadRequest();
                 }
 
-                // TODO calculate minimal quantity
-                int paidQuantity = ingredientDto.Quantity - pizzaIngredient.MinimalQuantity;
+                if (clientOrderIngredient.Quantity < pizzaIngredientEntity.MinimalQuantity)
+                {
+                    return TypedResults.BadRequest();
+                }
 
                 int paidQuantity = clientOrderIngredient.Quantity - pizzaIngredientEntity.FreeQuantity;
 
-                if(paidQuantity < 0)
+                if (paidQuantity < 0)
                 {
                     paidQuantity = 0;
                 }
 
+                decimal ingredientTotalPrice = paidQuantity * pizzaIngredientEntity.Ingredient.UnitPrice;
+
                 OrderedIngredient orderedIngredient = new OrderedIngredient()
                 {
-                     Id = 0,
-                     OrderedPizzaId = 0,
-                     PaidQuantity = paidQuantity,
-                     Name = pizzaIngredient.Ingredient.Name,
-                       
+                    Id = 0,
+                    OrderedPizzaId = 0,
+                    PaidQuantity = paidQuantity,
+                    FreeQuantity = pizzaIngredientEntity.FreeQuantity,
+                    Name = pizzaIngredientEntity.Ingredient.Name,
+                    QuantityDescription = pizzaIngredientEntity.Ingredient.QuantityDescription,
+                    UnitPrice = pizzaIngredientEntity.Ingredient.UnitPrice,
+                    TotalPrice = ingredientTotalPrice
                 };
+
+                orderedPizza.OrderedIngredients.Add(orderedIngredient);
+
+                orderedPizza.TotalPrice += orderedIngredient.TotalPrice;
+
             }
-        }
 
             order.OrderedPizzas.Add(orderedPizza);
 
