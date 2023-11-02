@@ -163,6 +163,8 @@ int main()
     Platno platno(columnCount, rowCount, '-', 'x');
 
     bool konec = true;
+   
+    double stupne = 45.0;
 
     do
     {
