@@ -124,6 +124,8 @@ public static class WebApiVersion1
                     paidQuantity = 0;
                 }
 
+                decimal totalPrice = paidQuantity * pizzaIngredient.Ingredient.UnitPrice;
+
                 OrderedIngredient orderedIngredient = new OrderedIngredient()
                 {
                      Id = 0,
@@ -131,7 +133,9 @@ public static class WebApiVersion1
                      FreeQuantity = pizzaIngredient.FreeQuantity,
                      PaidQuantity = paidQuantity,
                      Name = pizzaIngredient.Ingredient.Name,
-                       
+                     QuantityDescription = pizzaIngredient.Ingredient.QuantityDescription,
+                     UnitPrice = pizzaIngredient.Ingredient.UnitPrice, 
+                     TotalPrice = totalPrice  
                 };
             }
         }
