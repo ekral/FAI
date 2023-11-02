@@ -170,7 +170,7 @@ int main()
 
         Bod2d A(2.0, 3.0);
 
-        // 🏎
+        // 🍌
         // Bod2d At = Rotuj(A, stupne);
         // vykreslete usecku z bodu 0,0 do bodu At
 
