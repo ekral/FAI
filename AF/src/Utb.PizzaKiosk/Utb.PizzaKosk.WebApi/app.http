@@ -11,7 +11,7 @@ GET https://{{hostname}}:{{port}}/Orders
 
 ###
 
-GET https://{{hostname}}:{{port}}/Pizza/4
+GET https://{{hostname}}:{{port}}/Pizza/2
 
 ###
 

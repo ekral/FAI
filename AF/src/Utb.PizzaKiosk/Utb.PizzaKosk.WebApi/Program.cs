@@ -83,9 +83,9 @@ public static class WebApiVersion1
             TotalPrice = 0.0m
         };
 
-        foreach (var pizzaDto in orderDTO.Pizzas)
+        foreach (var dtoPizza in orderDTO.Pizzas)
         {
-            Pizza? pizza = context.Pizzas.Find(pizzaDto.PizzaId);
+            Pizza? pizza = context.Pizzas.Find(dtoPizza.PizzaId);
 
             if(pizza is null)
             {
@@ -100,13 +100,25 @@ public static class WebApiVersion1
                 TotalPrice = pizza.Price
             };
 
-            foreach (IngredientDTO ingredientDto in pizzaDto.Ingredients)
+            foreach (IngredientDTO dtoIngredient in dtoPizza.Ingredients)
             {
-                PizzaIngredient? pizzaIngredient = context.PizzaIngredients.Find(pizzaDto.PizzaId, ingredientDto.IngredientId);
+                PizzaIngredient? pizzaIngredient = context.PizzaIngredients.Find(dtoPizza.PizzaId, dtoIngredient.IngredientId);
 
                 if (pizzaIngredient is null)
                 {
                     return TypedResults.BadRequest();
+                }
+
+                if(dtoIngredient.Quantity < pizzaIngredient.MinimalQuantity)
+                {
+                    return TypedResults.BadRequest();
+                }
+
+                int paidQuantity = dtoIngredient.Quantity - pizzaIngredient.FreeQuantity;
+
+                if(paidQuantity < 0)
+                {
+                    paidQuantity = 0;
                 }
 
                 context.Entry(pizzaIngredient).Reference(p => p.Ingredient).Load(); // Explicit loading
@@ -116,13 +128,7 @@ public static class WebApiVersion1
                     return TypedResults.BadRequest();
                 }
 
-                // TODO calculate minimal quantity
-                int paidQuantity = ingredientDto.Quantity - pizzaIngredient.MinimalQuantity;
-
-                if(paidQuantity < 0)
-                {
-                    paidQuantity = 0;
-                }
+                decimal totalPrice = paidQuantity * pizzaIngredient.Ingredient.UnitPrice;
 
                 OrderedIngredient orderedIngredient = new OrderedIngredient()
                 {
@@ -131,9 +137,15 @@ public static class WebApiVersion1
                      FreeQuantity = pizzaIngredient.FreeQuantity,
                      PaidQuantity = paidQuantity,
                      Name = pizzaIngredient.Ingredient.Name,
-                       
+                     QuantityDescription = pizzaIngredient.Ingredient.QuantityDescription,
+                     UnitPrice = pizzaIngredient.Ingredient.UnitPrice,
+                     TotalPrice = totalPrice
                 };
+
+                orderedPizza.OrderedIngredients.Add(orderedIngredient);
             }
+
+            orderedPizza.TotalPrice = orderedPizza.OrderedIngredients.Sum(oi => oi.TotalPrice);
         }
 
         //Order order = new Order()
