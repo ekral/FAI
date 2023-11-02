@@ -2,7 +2,7 @@
 {
     public class OrderedIngredient
     {
-        public int Id { get; set; }
+        public int OrderedIngredientId { get; set; }
         public required int OrderedPizzaId { get; set; }
         public required string Name { get; set; }
         public required string QuantityDescription { get; set; }

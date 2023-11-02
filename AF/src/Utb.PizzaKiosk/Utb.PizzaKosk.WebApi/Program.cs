@@ -67,7 +67,7 @@ public static class WebApiVersion1
 
         emailSender.SendEmail();
 
-        return TypedResults.Created($"Ingredients/{ingredient.Id}", ingredient);
+        return TypedResults.Created($"Ingredients/{ingredient.IngredientId}", ingredient);
     }
 
     // CreateOrder
@@ -95,7 +95,7 @@ public static class WebApiVersion1
 
             OrderedPizza orderedPizza = new OrderedPizza()
             {
-                Id = 0,
+                OrderedPizzaId = 0,
                 OrderId = 0,
                 Name = pizzaEntity.Name,
                 UnitPrice = pizzaEntity.Price,
@@ -134,7 +134,7 @@ public static class WebApiVersion1
 
                 OrderedIngredient orderedIngredient = new OrderedIngredient()
                 {
-                    Id = 0,
+                    OrderedIngredientId = 0,
                     OrderedPizzaId = 0,
                     PaidQuantity = paidQuantity,
                     FreeQuantity = pizzaIngredientEntity.FreeQuantity,
@@ -159,6 +159,6 @@ public static class WebApiVersion1
 
         await context.SaveChangesAsync();
 
-        return TypedResults.Created($"Order/{order.Id}", order);
+        return TypedResults.Created($"Order/{order.OrderId}", order);
     }
 }
