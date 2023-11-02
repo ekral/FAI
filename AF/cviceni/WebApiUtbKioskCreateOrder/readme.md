@@ -2,7 +2,7 @@
 
 Aktualizujte si repozitář (proveďte pull nebo si naklonujte repozitář znovu).
 
-[github.com/ekral/FAI.git](https://github.com/ekral/FAI.git)
+[https://github.com/ekral/FAI.git](https://github.com/ekral/FAI.git)
 
 V solution [Utb.PizzaKiosk.sln](https://github.com/ekral/FAI/blob/master/AF/src/Utb.PizzaKiosk) a projektu [Utb.PizzaKiosk.WebApi](https://github.com/ekral/FAI/blob/master/AF/src/Utb.PizzaKiosk/Utb.PizzaKosk.WebApi):
 
