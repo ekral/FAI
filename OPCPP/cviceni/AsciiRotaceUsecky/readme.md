@@ -29,14 +29,16 @@ $$\begin{align*}
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <vector>
+#include <iostream>
+#include <sstream>
 #include <windows.h>
 
-void gotoxy(int x, int y) {
+void gotoxy(int x, int y) 
+{
     COORD pos = { (SHORT)x, (SHORT)y };
     HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleCursorPosition(output, pos);
 }
-
 
 struct Bod2d
 {
@@ -86,8 +88,7 @@ public:
             data[i] = pozadi;
         }
     }
-    
-    // 😲
+
     void NakresliBod(Bod2d bod)
     {
         NakresliBod(bod.x, bod.y);
@@ -95,7 +96,12 @@ public:
 
     void NakresliBod(double x, double y)
     {
-        int pos = ((rowCount - round(y) - 1) * columnCount) + round(x);
+        int rowIndex = (int)round(y);
+        int columnIndex = (int)round(x);
+
+        // pokud je rowIndex nebo columnIndex mimo rozsah, tak bod nevykresli
+
+        int pos = ((rowCount - rowIndex - 1) * columnCount) + columnIndex;
 
         data[pos] = popredi;
     }
@@ -127,8 +133,11 @@ public:
 
     }
 
+    // 😲
     void Zobraz()
     {
+        std::stringstream ss;
+
         int pos = 0;
 
         for (int i = 0; i < rowCount; i++)
@@ -138,12 +147,17 @@ public:
                 char znak = data[pos];
                 ++pos;
 
-                putchar(znak);
-                //putchar(znak);
+                ss << znak;
             }
 
-            putchar('\n');
+            ss << '\n';
         }
+
+        std::string retezec = ss.str();
+
+        std::cout << retezec;
+
+        //puts(retezec.c_str());
     }
 
 };
@@ -159,9 +173,9 @@ public:
 
     }
 
-    void Nakresli(Platno* platno)
+    void Nakresli(Platno* platno) const
     {
-        // spocitejte souradnice vrcholu trojuhelnika 
+        // spocitejte souradnice vrcholu trojuhelnika
         double vp = (a * sqrt(3.0)) / 4;
 
         Bod2d A(S.x - a / 2, S.y - vp);
@@ -174,15 +188,27 @@ public:
     }
 };
 
+Bod2d Rotuj(Bod2d bod, double stupne)
+{
+    double uhelRadiany = (stupne * M_PI) / 180.0;
+
+    double xt = (bod.x * cos(uhelRadiany)) - (bod.y * sin(uhelRadiany));
+    double yt = (bod.x * sin(uhelRadiany)) + (bod.y * cos(uhelRadiany));
+
+    return Bod2d{ xt, yt };
+}
+
+// 🚀 Zde definujte pretizenou (overloaded) funkci Rotuj navic s parametrem Bod2d S
+
 int main()
 {
-    Bod2d A(2.0, 3.0);
-    Bod2d B(5.0, 6.0);
+    Bod2d A(7.0, 8.0);
+    Bod2d B(10.0, 12.0);
 
-    Bod2d S(0.0, 0.0); // 🚗
+    Bod2d S((A.x + B.x) / 2.0, (A.y + B.y) / 2.0); // ✔
 
     int columnCount = 30;
-    int rowCount = 30;
+    int rowCount = 20;
 
     Platno platno(columnCount, rowCount, '-', 'x');
 
@@ -192,41 +218,33 @@ int main()
     do
     {
         platno.Vymaz();
-       
-        platno.popredi = 't';
-        RovnostrannyTrojuhelnik trojuhelnik(Bod2d(10.0, 8.0), 10.0);
-        trojuhelnik.Nakresli(&platno);
-
-
-        double uhelRadiany = (uhelStupne * M_PI) / 180.0;
 
         // 🍌
-        
-        //Bod2d At = Rotuj(A, uhelRadiany, S);
-        //Bod2d Bt = Rotuj(B, uhelRadiany, S);
+        // Nasledujici radky nahradte nize zapoznamkovanymi
+        Bod2d At = A;
+        Bod2d Bt = B;
+           
+        //Bod2d At = Rotuj(A, uhelStupne, S);
+        //Bod2d Bt = Rotuj(B, uhelStupne, S);
 
-        // Predelat na funkci 🛴
-        //double xt = (x * cos(uhelRadiany)) - (y * sin(uhelRadiany));
-        //double yt = (x * sin(uhelRadiany)) + (y * cos(uhelRadiany));
-        // Predelat na funkci 🛴
+        platno.popredi = 'x';
+        platno.NakresliUsecku(At, Bt);
 
-        
-        //platno.NakresliUsecku(At, Bt);
-
-        //platno.popredi = 'A';
-        //platno.NakresliBod(A);
+        platno.popredi = 'A';
+        platno.NakresliBod(At);
 
         platno.popredi = 'S';
         platno.NakresliBod(S);
 
-        //platno.popredi = 'B';
-        //platno.NakresliBod(B);
-
-        // 🍌
+        platno.popredi = 'B';
+        platno.NakresliBod(Bt);
 
         gotoxy(0, 0);
+
         platno.Zobraz();
-        uhelStupne += 1;
-    } while (uhelStupne < 90);
+
+        uhelStupne += 1.0;
+
+    } while (uhelStupne < 10 * 360.0);
 }
 ```
