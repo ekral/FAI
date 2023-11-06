@@ -2,14 +2,16 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <vector>
+#include <iostream>
+#include <sstream>
 #include <windows.h>
 
-void gotoxy(int x, int y) {
+void gotoxy(int x, int y) 
+{
     COORD pos = { (SHORT)x, (SHORT)y };
     HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleCursorPosition(output, pos);
 }
-
 
 struct Bod2d
 {
@@ -60,7 +62,6 @@ public:
         }
     }
 
-    // 😲
     void NakresliBod(Bod2d bod)
     {
         NakresliBod(bod.x, bod.y);
@@ -105,8 +106,11 @@ public:
 
     }
 
+    // 😲
     void Zobraz()
     {
+        std::stringstream ss;
+
         int pos = 0;
 
         for (int i = 0; i < rowCount; i++)
@@ -116,12 +120,17 @@ public:
                 char znak = data[pos];
                 ++pos;
 
-                putchar(znak);
-                //putchar(znak);
+                ss << znak;
             }
 
-            putchar('\n');
+            ss << '\n';
         }
+
+        std::string retezec = ss.str();
+
+        std::cout << retezec;
+
+        //puts(retezec.c_str());
     }
 
 };
@@ -159,19 +168,20 @@ Bod2d Rotuj(Bod2d bod, double stupne)
     double xt = (bod.x * cos(uhelRadiany)) - (bod.y * sin(uhelRadiany));
     double yt = (bod.x * sin(uhelRadiany)) + (bod.y * cos(uhelRadiany));
 
-    return Bod2d{xt, yt};
+    return Bod2d{ xt, yt };
 }
 
-Bod2d Rotuj(Bod2d bod, double stupne, Bod2d stred)
+// 🚀 Zde definujte pretizenou (overloaded) funkci Rotuj navic s parametrem Bod2d S
+
+Bod2d Rotuj(Bod2d bod, double stupne, Bod2d S)
 {
-    Bod2d bodT(bod.x - stred.x, bod.y - stred.y);
+    bod.x = bod.x - S.x;
+    bod.y = bod.y - S.y;
+    bod = Rotuj(bod, stupne);
+    bod.x = bod.x + S.x;
+    bod.y = bod.y + S.y;
 
-    bodT = Rotuj(bodT, stupne);
-
-    bodT.x += stred.x;
-    bodT.y += stred.y;
-
-    return bodT;
+    return bod;
 }
 
 int main()
@@ -179,10 +189,10 @@ int main()
     Bod2d A(7.0, 8.0);
     Bod2d B(10.0, 12.0);
 
-    Bod2d S((A.x + B.x) / 2.0, (A.y + B.y) / 2.0); // 🚗 ✔
+    Bod2d S((A.x + B.x) / 2.0, (A.y + B.y) / 2.0); // ✔
 
     int columnCount = 30;
-    int rowCount = 30;
+    int rowCount = 20;
 
     Platno platno(columnCount, rowCount, '-', 'x');
 
@@ -193,11 +203,16 @@ int main()
     {
         platno.Vymaz();
 
+        // 🍌
+        // Nasledujici radky nahradte nize zapoznamkovanymi
+        //Bod2d At = A;
+        //Bod2d Bt = B;
+           
         Bod2d At = Rotuj(A, uhelStupne, S);
         Bod2d Bt = Rotuj(B, uhelStupne, S);
 
         platno.popredi = 'x';
-        //platno.NakresliUsecku(At, Bt);
+        platno.NakresliUsecku(At, Bt);
 
         platno.popredi = 'A';
         platno.NakresliBod(At);
@@ -209,8 +224,10 @@ int main()
         platno.NakresliBod(Bt);
 
         gotoxy(0, 0);
+
         platno.Zobraz();
+
         uhelStupne += 1.0;
 
-    } while (uhelStupne < 360.0);
+    } while (uhelStupne < 10 * 360.0);
 }
