@@ -1,12 +1,13 @@
-#include <stdio.h>
+#include <cstdio>
 #define _USE_MATH_DEFINES
-#include <math.h>
+#include <cmath>
 #include <vector>
-#include <algorithm>
-#include <Windows.h>
+#include <sstream>
+#include <iostream>
+#include <windows.h>
 
 void gotoxy(int x, int y) {
-    COORD pos = { x, y };
+    COORD pos = { (SHORT)x, (SHORT)y };
     HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleCursorPosition(output, pos);
 }
@@ -43,7 +44,7 @@ public:
         rowCount(rowCount),
         pozadi(pozadi),
         popredi(popredi),
-        totalChars((columnCount* rowCount) + rowCount),
+        totalChars(columnCount* rowCount),
         maxColumnIndex(columnCount - 1),
         maxRowIndex(rowCount - 1),
         data(totalChars, 0)
@@ -54,28 +55,32 @@ public:
 
     void Vymaz()
     {
-        int k = 0;
-
-        for (size_t j = 0; j < rowCount; j++)
+        for (int i = 0; i < totalChars; i++)
         {
-            for (size_t i = 0; i < columnCount; i++)
-            {
-                data[k] = pozadi;
-                ++k;
-            }
-
-            data[k] = '\n';
-            ++k;
+            data[i] = pozadi;
         }
+    }
 
-        --k;
-        data[k] = 0;
-
+    // 😲
+    void NakresliBod(Bod2d bod)
+    {
+        NakresliBod(bod.x, bod.y);
     }
 
     void NakresliBod(double x, double y)
     {
-        int pos = ((rowCount - round(y) - 1) * columnCount) + round(x);
+        int rowIndex = (int)round(y);
+        int columnIndex = (int)round(x);
+
+        // pokud je rowIndex nebo columnIndex mimo rozsah, tak se bod nevykresli
+        // do 17:15
+
+        if ((rowIndex < 0 || rowIndex > maxRowIndex) && (columnIndex < 0 || columnIndex > maxColumnIndex))
+        {
+            return;
+        }
+
+        int pos = ((rowCount - rowIndex - 1) * columnCount) + columnIndex;
 
         data[pos] = popredi;
     }
@@ -109,8 +114,28 @@ public:
 
     void Zobraz()
     {
-        char* p = data.data();
-        puts(p);
+        std::stringstream ss;
+
+        int pos = 0;
+
+        for (int i = 0; i < rowCount; i++)
+        {
+            for (int j = 0; j < columnCount; j++)
+            {
+                char znak = data[pos];
+                ++pos;
+
+                ss << znak;
+            }
+
+            ss << '\n';
+        }
+
+        std::string retezec = ss.str();
+
+        std::cout << retezec;
+
+        //puts(retezec.c_str());
     }
 
 };
@@ -126,7 +151,7 @@ public:
 
     }
 
-    void Nakresli(Platno& platno)
+    void Nakresli(Platno* platno) const
     {
         // spocitejte souradnice vrcholu trojuhelnika
         double vp = (a * sqrt(3.0)) / 4;
@@ -135,69 +160,71 @@ public:
         Bod2d B(S.x + a / 2, S.y - vp);
         Bod2d C(S.x, S.y + vp);
 
-        platno.NakresliUsecku(A, B);
-        platno.NakresliUsecku(B, C);
-        platno.NakresliUsecku(C, A);
+        platno->NakresliUsecku(A, B);
+        platno->NakresliUsecku(B, C);
+        platno->NakresliUsecku(C, A);
     }
 };
 
+Bod2d Rotuj(Bod2d bod, double stupne)
+{
+    double uhelRadiany = (stupne * M_PI) / 180.0;
+
+    double xt = (bod.x * cos(uhelRadiany)) - (bod.y * sin(uhelRadiany));
+    double yt = (bod.x * sin(uhelRadiany)) + (bod.y * cos(uhelRadiany));
+
+    return Bod2d{xt, yt};
+}
+
+Bod2d Rotuj(Bod2d bod, double stupne, Bod2d stred)
+{
+    Bod2d bodT(bod.x - stred.x, bod.y - stred.y);
+
+    bodT = Rotuj(bodT, stupne);
+
+    bodT.x += stred.x;
+    bodT.y += stred.y;
+
+    return bodT;
+}
+
 int main()
 {
-    Bod2d bodA(2.0, 3.0);
-    Bod2d bodB(5.0, 6.0);
+    Bod2d A(7.0, 8.0);
+    Bod2d B(10.0, 25.0);
 
-    int columnCount = 3;
-    int rowCount = 2;
+    Bod2d S((A.x + B.x) / 2.0, (A.y + B.y) / 2.0); // 🚗 ✔
+
+    int columnCount = 30;
+    int rowCount = 20;
 
     Platno platno(columnCount, rowCount, '-', 'x');
 
     bool konec = true;
-    double uhelStupne = 0.0;
+    double uhelStupne = 0;
 
     do
     {
         platno.Vymaz();
 
-        platno.popredi = 'O';
-        platno.NakresliBod(0, 0);
+        Bod2d At = Rotuj(A, uhelStupne, S);
+        Bod2d Bt = Rotuj(B, uhelStupne, S);
 
-        platno.popredi = '1';
-        platno.NakresliBod(platno.maxColumnIndex, 0);
-
-        platno.popredi = '2';
-        platno.NakresliBod(platno.maxColumnIndex, platno.maxRowIndex);
-
-        platno.popredi = '3';
-        platno.NakresliBod(0, platno.maxRowIndex);
+        platno.popredi = 'x';
+        platno.NakresliUsecku(At, Bt);
 
         platno.popredi = 'A';
-        platno.NakresliUsecku(bodA, bodB);
+        platno.NakresliBod(At);
 
         platno.popredi = 'S';
-        Bod2d stred(10.0, 8.0);
-        platno.NakresliBod(stred.x, stred.y);
+        platno.NakresliBod(S);
 
-        // Odpoznamkovat
-        platno.popredi = 't';
-        RovnostrannyTrojuhelnik trojuhelnik(stred, 10.0);
-        trojuhelnik.Nakresli(platno);
-
-        double x = min(platno.maxRowIndex, platno.maxColumnIndex);
-        double y = 0.0;
-
-        double uhelRadiany = (uhelStupne * M_PI) / 180.0;
-        double xt = (x * cos(uhelRadiany)) - (y * sin(uhelRadiany));
-        double yt = (x * sin(uhelRadiany)) + (y * cos(uhelRadiany));
-
-        platno.popredi = '*';
-        platno.NakresliBod(xt, xt);
-        platno.NakresliUsecku(Bod2d(0.0, 0.0), Bod2d(xt, yt));
+        platno.popredi = 'B';
+        platno.NakresliBod(Bt);
 
         gotoxy(0, 0);
-
         platno.Zobraz();
+        uhelStupne += 0.1;
 
-        uhelStupne += 1;
-
-    } while (uhelStupne < 90);
+    } while (uhelStupne < 100 * 360.0);
 }

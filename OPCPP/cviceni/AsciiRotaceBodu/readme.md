@@ -1,4 +1,4 @@
-# Ascii Rotace úsečky
+# Ascii Rotace bodu
 
 S využitím kódu z úkolu uvedenéno níže vytvořte program, který:
 
@@ -15,12 +15,14 @@ $$\begin{align*}
 \theta \text{ je úhel rotace v radiánech.}
 \end{align*}$$
 
-B) Zarotujte úsečku kolem středu úsečky.
+Vyjděte z následujících zdrojových kódů:
 
 ```cpp
 #include <stdio.h>
+#define _USE_MATH_DEFINES
 #include <math.h>
 #include <vector>
+
 struct Bod2d
 {
     double x;
@@ -44,8 +46,8 @@ private:
     std::vector<char> data;
 public:
     const int maxColumnIndex;
-    const int maxRowIndex ;
-    
+    const int maxRowIndex;
+
     char popredi;
 
     Platno(int columnCount, int rowCount, char pozadi, char popredi) :
@@ -53,10 +55,10 @@ public:
         rowCount(rowCount),
         pozadi(pozadi),
         popredi(popredi),
-        totalChars(columnCount*rowCount),
-        maxColumnIndex(columnCount-1),
-        maxRowIndex(rowCount-1),
-        data(totalChars,0)
+        totalChars(columnCount* rowCount),
+        maxColumnIndex(columnCount - 1),
+        maxRowIndex(rowCount - 1),
+        data(totalChars, 0)
     {
 
         Vymaz();
@@ -72,7 +74,10 @@ public:
 
     void NakresliBod(double x, double y)
     {
-        int pos = ((rowCount - round(y) - 1) * columnCount) + round(x);
+        int rowIndex = (int)round(y);
+        int columnIndex = (int)round(x);
+        
+        int pos = ((rowCount - rowIndex - 1) * columnCount) + columnIndex;
 
         data[pos] = popredi;
     }
@@ -150,47 +155,30 @@ public:
     }
 };
 
+// Zde definujte globalni funkci 🚀
+
+
 int main()
 {
-    Bod2d bodA(2.0, 3.0);
-    Bod2d bodB(5.0, 6.0);
-
     int columnCount = 30;
     int rowCount = 20;
 
     Platno platno(columnCount, rowCount, '-', 'x');
 
     bool konec = true;
+   
+    double stupne = 45.0;
 
     do
     {
         platno.Vymaz();
 
-        platno.NakresliBod(2, 3);
+        Bod2d A(2.0, 3.0);
 
-        platno.popredi = 'O';
-        platno.NakresliBod(0, 0);
+        // 🍌
+        // Bod2d At = Rotuj(A, stupne);
+        // vykreslete usecku z bodu 0,0 do bodu At
 
-        platno.popredi = '1';
-        platno.NakresliBod(platno.maxColumnIndex, 0);
-
-        platno.popredi = '2';
-        platno.NakresliBod(platno.maxColumnIndex, platno.maxRowIndex);
-
-        platno.popredi = '3';
-        platno.NakresliBod(0, platno.maxRowIndex);
-
-        platno.popredi = 'A';
-        platno.NakresliUsecku(bodA, bodB);
-
-        platno.popredi = 'S';
-        Bod2d stred(10.0, 8.0);
-        platno.NakresliBod(stred.x, stred.y);
-
-        // Odpoznamkovat
-        platno.popredi = 't';
-        RovnostrannyTrojuhelnik trojuhelnik(stred, 10.0);
-        trojuhelnik.Nakresli(&platno);
 
         platno.Zobraz();
 

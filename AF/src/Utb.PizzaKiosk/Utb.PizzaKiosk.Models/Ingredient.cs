@@ -8,7 +8,7 @@ namespace Utb.PizzaKiosk.Models
 {
     public class Ingredient
     {
-        public int Id { get; set; }
+        public int IngredientId { get; set; }
         public required string Name { get; set; }
         public required string QuantityDescription { get; set; }
         public required decimal UnitPrice { get; set; }
