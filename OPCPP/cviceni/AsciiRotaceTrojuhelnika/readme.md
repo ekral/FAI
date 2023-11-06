@@ -214,9 +214,7 @@ int main()
 
     RovnostrannyTrojuhelnik trojuhelnik(Bod2d(15.0, 10.0), 8);
 
-    // 🍌 Odpoznamkujte nasledujici prikaz
 
-    // trojuhelnik.ZadejRotaci(uhelStupne);
 
 
     bool konec = true;
@@ -226,6 +224,9 @@ int main()
     {
         platno.Vymaz();
 
+        // 🍌 Odpoznamkujte nasledujici prikaz
+        // trojuhelnik.ZmenUhelRotace(uhelStupne);
+        
         trojuhelnik.Nakresli(platno);
 
         gotoxy(0, 0);
