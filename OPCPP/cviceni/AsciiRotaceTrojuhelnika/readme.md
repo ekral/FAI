@@ -157,7 +157,8 @@ class RovnostrannyTrojuhelnik
 private:
     double a;
     Bod2d S;
-    // Pridejte uhel rotace
+    // 🐱‍👤 Pridejte uhel rotace
+
 public:
     RovnostrannyTrojuhelnik(Bod2d S, int a) : S(S), a(a)
     {
@@ -191,8 +192,6 @@ Bod2d Rotuj(Bod2d bod, double stupne)
     return Bod2d{ xt, yt };
 }
 
-// 🚀 Zde definujte pretizenou (overloaded) funkci Rotuj navic s parametrem Bod2d S
-
 Bod2d Rotuj(Bod2d bod, double stupne, Bod2d S)
 {
     bod.x = bod.x - S.x;
@@ -213,7 +212,7 @@ int main()
 
     RovnostrannyTrojuhelnik trojuhelnik(Bod2d(15.0, 10.0), 8);
 
-    // 🍌
+    // 🍌 Odpoznamkujte nasledujici prikaz
 
     // trojuhelnik.ZadejRotaci(uhelStupne);
 
