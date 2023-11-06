@@ -22,14 +22,16 @@ $$\begin{align*}
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <vector>
+#include <iostream>
+#include <sstream>
 #include <windows.h>
 
-void gotoxy(int x, int y) {
+void gotoxy(int x, int y) 
+{
     COORD pos = { (SHORT)x, (SHORT)y };
     HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleCursorPosition(output, pos);
 }
-
 
 struct Bod2d
 {
@@ -45,7 +47,6 @@ struct Bod2d
 class Platno
 {
 private:
-    // static constexpr je moderni zpusob zadani konstanty zname v dobe prekladu
     const int columnCount;
     const int rowCount;
     const int totalChars;
@@ -80,9 +81,19 @@ public:
         }
     }
 
+    void NakresliBod(Bod2d bod)
+    {
+        NakresliBod(bod.x, bod.y);
+    }
+
     void NakresliBod(double x, double y)
     {
-        int pos = ((rowCount - round(y) - 1) * columnCount) + round(x);
+        int rowIndex = (int)round(y);
+        int columnIndex = (int)round(x);
+
+        // pokud je rowIndex nebo columnIndex mimo rozsah, tak bod nevykresli
+
+        int pos = ((rowCount - rowIndex - 1) * columnCount) + columnIndex;
 
         data[pos] = popredi;
     }
@@ -91,7 +102,6 @@ public:
     {
         double dx = bodB.x - bodA.x;
         double dy = bodB.y - bodA.y;
-
 
         double dmax = fmax(fabs(dx), fabs(dy));
 
@@ -116,6 +126,8 @@ public:
 
     void Zobraz()
     {
+        std::stringstream ss;
+
         int pos = 0;
 
         for (int i = 0; i < rowCount; i++)
@@ -125,12 +137,17 @@ public:
                 char znak = data[pos];
                 ++pos;
 
-                putchar(znak);
-                putchar(znak);
+                ss << znak;
             }
 
-            putchar('\n');
+            ss << '\n';
         }
+
+        std::string retezec = ss.str();
+
+        std::cout << retezec;
+
+        //puts(retezec.c_str());
     }
 
 };
@@ -140,38 +157,66 @@ class RovnostrannyTrojuhelnik
 private:
     double a;
     Bod2d S;
+    // Pridejte uhel rotace
 public:
     RovnostrannyTrojuhelnik(Bod2d S, int a) : S(S), a(a)
     {
 
     }
 
-    void Nakresli(Platno* platno)
+    void Nakresli(Platno& platno) const
     {
-        // spocitejte souradnice vrcholu trojuhelnika 
+        // 🚀 Zarotujte body kolem stredu
+        
+        // spocitejte souradnice vrcholu trojuhelnika
         double vp = (a * sqrt(3.0)) / 4;
 
         Bod2d A(S.x - a / 2, S.y - vp);
         Bod2d B(S.x + a / 2, S.y - vp);
         Bod2d C(S.x, S.y + vp);
 
-        platno->NakresliUsecku(A, B);
-        platno->NakresliUsecku(B, C);
-        platno->NakresliUsecku(C, A);
+        platno.NakresliUsecku(A, B);
+        platno.NakresliUsecku(B, C);
+        platno.NakresliUsecku(C, A);
     }
 };
 
+Bod2d Rotuj(Bod2d bod, double stupne)
+{
+    double uhelRadiany = (stupne * M_PI) / 180.0;
+
+    double xt = (bod.x * cos(uhelRadiany)) - (bod.y * sin(uhelRadiany));
+    double yt = (bod.x * sin(uhelRadiany)) + (bod.y * cos(uhelRadiany));
+
+    return Bod2d{ xt, yt };
+}
+
+// 🚀 Zde definujte pretizenou (overloaded) funkci Rotuj navic s parametrem Bod2d S
+
+Bod2d Rotuj(Bod2d bod, double stupne, Bod2d S)
+{
+    bod.x = bod.x - S.x;
+    bod.y = bod.y - S.y;
+    bod = Rotuj(bod, stupne);
+    bod.x = bod.x + S.x;
+    bod.y = bod.y + S.y;
+
+    return bod;
+}
+
 int main()
 {
-    Bod2d bodA(2.0, 3.0);
-    Bod2d bodB(5.0, 6.0);
-
-    Bod2d stred(0.0, 0.0); // 🚗
-
     int columnCount = 30;
-    int rowCount = 30;
+    int rowCount = 20;
 
     Platno platno(columnCount, rowCount, '-', 'x');
+
+    RovnostrannyTrojuhelnik trojuhelnik(Bod2d(15.0, 10.0), 8);
+
+    // 🍌
+
+    // trojuhelnik.ZadejRotaci(uhelStupne);
+
 
     bool konec = true;
     double uhelStupne = 0;
@@ -180,52 +225,14 @@ int main()
     {
         platno.Vymaz();
 
-        platno.NakresliBod(2, 3);
-
-        platno.popredi = 'O';
-        platno.NakresliBod(0, 0);
-
-        platno.popredi = '1';
-        platno.NakresliBod(platno.maxColumnIndex, 0);
-
-        platno.popredi = '2';
-        platno.NakresliBod(platno.maxColumnIndex, platno.maxRowIndex);
-
-        platno.popredi = '3';
-        platno.NakresliBod(0, platno.maxRowIndex);
-
-      
-
-        platno.popredi = 'S';
-        Bod2d stred(10.0, 8.0);
-        platno.NakresliBod(stred.x, stred.y);
-
-        // Odpoznamkovat
-        platno.popredi = 't';
-        RovnostrannyTrojuhelnik trojuhelnik(stred, 10.0);
-        trojuhelnik.Nakresli(&platno);
-
-
-        double uhelRadiany = (uhelStupne * M_PI) / 180.0;
-
-        // 🍌
-        
-        //Bod2d At = Rotuj(A, uhelRadiany, Bod2d stred);
-        //Bod2d Bt = Rotuj(B, uhelRadiany, Bod2d stred);
-
-        // Predelat na funkci 🛴
-        //double xt = (x * cos(uhelRadiany)) - (y * sin(uhelRadiany));
-        //double yt = (x * sin(uhelRadiany)) + (y * cos(uhelRadiany));
-        // Predelat na funkci 🛴
-
-        platno.popredi = 'A';
-        platno.NakresliUsecku(At, Bt);
-
-        // 🍌
+        trojuhelnik.Nakresli(platno);
 
         gotoxy(0, 0);
+
         platno.Zobraz();
-        uhelStupne += 1;
-    } while (uhelStupne < 90);
+
+        uhelStupne += 1.0;
+
+    } while (uhelStupne < 10 * 360.0);
 }
 ```
