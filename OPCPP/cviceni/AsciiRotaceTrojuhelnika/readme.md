@@ -15,7 +15,6 @@ $$\begin{align*}
 \theta \text{ je úhel rotace v radiánech.}
 \end{align*}$$
 
-.
 
 ```cpp
 #include <cstdio>
@@ -91,7 +90,10 @@ public:
         int rowIndex = (int)round(y);
         int columnIndex = (int)round(x);
 
-        // pokud je rowIndex nebo columnIndex mimo rozsah, tak bod nevykresli
+        if ((rowIndex < 0 || rowIndex > maxRowIndex) && (columnIndex < 0 || columnIndex > maxColumnIndex))
+        {
+            return;
+        }
 
         int pos = ((rowCount - rowIndex - 1) * columnCount) + columnIndex;
 
