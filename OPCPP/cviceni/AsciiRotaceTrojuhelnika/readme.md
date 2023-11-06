@@ -32,6 +32,26 @@ void gotoxy(int x, int y)
     SetConsoleCursorPosition(output, pos);
 }
 
+Bod2d Rotuj(Bod2d bod, double stupne)
+{
+    double uhelRadiany = (stupne * M_PI) / 180.0;
+
+    double xt = (bod.x * cos(uhelRadiany)) - (bod.y * sin(uhelRadiany));
+    double yt = (bod.x * sin(uhelRadiany)) + (bod.y * cos(uhelRadiany));
+
+    return Bod2d{ xt, yt };
+}
+
+Bod2d Rotuj(Bod2d bod, double stupne, Bod2d S)
+{
+    bod.x = bod.x - S.x;
+    bod.y = bod.y - S.y;
+    bod = Rotuj(bod, stupne);
+    bod.x = bod.x + S.x;
+    bod.y = bod.y + S.y;
+
+    return bod;
+}
 struct Bod2d
 {
     double x;
@@ -184,26 +204,7 @@ public:
     }
 };
 
-Bod2d Rotuj(Bod2d bod, double stupne)
-{
-    double uhelRadiany = (stupne * M_PI) / 180.0;
 
-    double xt = (bod.x * cos(uhelRadiany)) - (bod.y * sin(uhelRadiany));
-    double yt = (bod.x * sin(uhelRadiany)) + (bod.y * cos(uhelRadiany));
-
-    return Bod2d{ xt, yt };
-}
-
-Bod2d Rotuj(Bod2d bod, double stupne, Bod2d S)
-{
-    bod.x = bod.x - S.x;
-    bod.y = bod.y - S.y;
-    bod = Rotuj(bod, stupne);
-    bod.x = bod.x + S.x;
-    bod.y = bod.y + S.y;
-
-    return bod;
-}
 
 int main()
 {
