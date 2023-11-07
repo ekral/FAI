@@ -15,11 +15,5 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <ListBox ItemsSource="{Binding Jidla}">
-		<ListBox.ItemTemplate>
-			<DataTemplate>
-				<TextBlock Text="{Binding Nazev}" />
-			</DataTemplate>
-		</ListBox.ItemTemplate>
-	</ListBox>
+    <ListBox ItemsSource="{Binding Jidla}" />
 </Window>

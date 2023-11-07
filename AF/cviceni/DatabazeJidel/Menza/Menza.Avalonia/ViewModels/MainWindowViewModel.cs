@@ -14,7 +14,7 @@ namespace Menza.Avalonia.ViewModels
     {
         private static readonly HttpClient client = new();
 
-        public ObservableCollection<Jidlo> Jidla { get; } = new();
+        public ObservableCollection<JidloViewModel> Jidla { get; } = new();
 
         public MainWindowViewModel()
         {
@@ -29,7 +29,7 @@ namespace Menza.Avalonia.ViewModels
             {
                 foreach (Jidlo jidlo in jidla)
                 {
-                    Jidla.Add(jidlo);
+                    Jidla.Add(new JidloViewModel(jidlo));
                 }
             }
         }
