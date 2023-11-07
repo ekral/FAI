@@ -10,7 +10,7 @@ Solution bude obsahovat projekty
    
 3. Class Library: **Menza.Data**
   
-   - Bude obsahovat context pro EntityFramework.
+   - Bude obsahovat třídu `MenzaContext` pro EntityFramework.
    - Použijte Entity Framework providera pro Sqlite.
    - Reference na projekt Menza.Models.
    
