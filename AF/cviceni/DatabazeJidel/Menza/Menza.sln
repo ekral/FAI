@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Menza.Models", "Menza.Models\Menza.Models.csproj", "{8198D9A7-9F1C-4E1B-95DC-D363AB530B42}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Menza.Data", "Menza.Data\Menza.Data.csproj", "{8475DAF6-3C42-4A6A-964B-B2408C871135}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8198D9A7-9F1C-4E1B-95DC-D363AB530B42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8198D9A7-9F1C-4E1B-95DC-D363AB530B42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8198D9A7-9F1C-4E1B-95DC-D363AB530B42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8198D9A7-9F1C-4E1B-95DC-D363AB530B42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8475DAF6-3C42-4A6A-964B-B2408C871135}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8475DAF6-3C42-4A6A-964B-B2408C871135}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8475DAF6-3C42-4A6A-964B-B2408C871135}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8475DAF6-3C42-4A6A-964B-B2408C871135}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0273C9B8-787E-407B-8F24-4F2F81062079}
+	EndGlobalSection
+EndGlobal
