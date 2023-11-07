@@ -11,7 +11,7 @@ Solution bude obsahovat projekty
 3. Class Library: **Menza.Data**
   
    - Bude obsahovat context pro EntityFramework.
-   - Použijte providera pro Sqlite.
+   - Použijte Entity Framework providera pro Sqlite.
    - Reference na projekt Menza.Models.
    
 6. Console Application: **Menza.DataSeeder**
