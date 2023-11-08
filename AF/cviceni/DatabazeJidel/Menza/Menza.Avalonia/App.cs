@@ -37,10 +37,10 @@ namespace Menza.Avalonia
 
             ListBox listBox = new ListBox
             {
-                ItemTemplate = new FuncDataTemplate<Jidlo>((value, namescope) =>
+                ItemTemplate = new FuncDataTemplate<Jidlo>((jidlo, namescope) =>
                 new TextBlock
                 {
-                    [!TextBlock.TextProperty] = new Binding("Nazev"),
+                    [!TextBlock.TextProperty] = new Binding(nameof(jidlo.Nazev)),
                 })
             };
             //listBox.ItemsPanel = new ItemsPanelTemplate() { Content = new WrapPanel() };
