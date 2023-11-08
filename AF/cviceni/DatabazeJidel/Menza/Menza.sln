@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Menza.WebApi", "Menza.WebAp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Menza.ConsoleClient", "Menza.ConsoleClient\Menza.ConsoleClient.csproj", "{8DB533DE-1E1C-4045-B723-5113188594C5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Menza.Avalonia", "Menza.Avalonia\Menza.Avalonia.csproj", "{3EE0A10A-81F5-43E8-95AF-47BBD2804B25}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{8DB533DE-1E1C-4045-B723-5113188594C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DB533DE-1E1C-4045-B723-5113188594C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DB533DE-1E1C-4045-B723-5113188594C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EE0A10A-81F5-43E8-95AF-47BBD2804B25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EE0A10A-81F5-43E8-95AF-47BBD2804B25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EE0A10A-81F5-43E8-95AF-47BBD2804B25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EE0A10A-81F5-43E8-95AF-47BBD2804B25}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
