@@ -91,7 +91,7 @@ public:
         int rowIndex = (int)round(y);
         int columnIndex = (int)round(x);
 
-        if ((rowIndex < 0 || rowIndex > maxRowIndex) || (columnIndex < 0 || columnIndex > maxColumnIndex))
+        if ((rowIndex < 0) || (rowIndex > maxRowIndex) || (columnIndex < 0) || (columnIndex > maxColumnIndex))
         {
             return;
         }
@@ -191,14 +191,14 @@ public:
 
     void Nakresli(Platno& platno) const
     {
-        // 🚀 Zarotujte body kolem stredu
-
         // spocitejte souradnice vrcholu trojuhelnika
         double vp = (a * sqrt(3.0)) / 4;
 
         Bod2d A(S.x - a / 2, S.y - vp);
         Bod2d B(S.x + a / 2, S.y - vp);
         Bod2d C(S.x, S.y + vp);
+
+        // 🚀 Zarotujte body kolem stredu
 
         platno.NakresliUsecku(A, B);
         platno.NakresliUsecku(B, C);
