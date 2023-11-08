@@ -167,11 +167,13 @@ Bod2d Rotuj(Bod2d bod, double stupne)
 
 Bod2d Rotuj(Bod2d bod, double stupne, Bod2d S)
 {
-    bod.x = bod.x - S.x;
-    bod.y = bod.y - S.y;
+    bod.x -= S.x;
+    bod.y -= S.y;
+
     bod = Rotuj(bod, stupne);
-    bod.x = bod.x + S.x;
-    bod.y = bod.y + S.y;
+
+    bod.x += S.x;
+    bod.y += S.y;
 
     return bod;
 }
