@@ -91,7 +91,7 @@ public:
         int rowIndex = (int)round(y);
         int columnIndex = (int)round(x);
 
-        if ((rowIndex < 0 || rowIndex > maxRowIndex) && (columnIndex < 0 || columnIndex > maxColumnIndex))
+        if ((rowIndex < 0 || rowIndex > maxRowIndex) || (columnIndex < 0 || columnIndex > maxColumnIndex))
         {
             return;
         }
