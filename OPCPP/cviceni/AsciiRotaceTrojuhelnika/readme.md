@@ -25,6 +25,7 @@ $$\begin{align*}
 #include <sstream>
 #include <windows.h>
 
+// na CLion dat Emulovat terminal
 
 void gotoxy(int x, int y)
 {
