@@ -60,14 +60,14 @@ public:
     char popredi;
 
     Platno(int columnCount, int rowCount, char pozadi, char popredi) :
-        columnCount(columnCount),
-        rowCount(rowCount),
-        pozadi(pozadi),
-        popredi(popredi),
-        totalChars(columnCount* rowCount),
-        maxColumnIndex(columnCount - 1),
-        maxRowIndex(rowCount - 1),
-        data(totalChars, 0)
+            columnCount(columnCount),
+            rowCount(rowCount),
+            pozadi(pozadi),
+            popredi(popredi),
+            totalChars(columnCount* rowCount),
+            maxColumnIndex(columnCount - 1),
+            maxRowIndex(rowCount - 1),
+            data(totalChars, 0)
     {
 
         Vymaz();
@@ -141,6 +141,7 @@ public:
                 ++pos;
 
                 ss << znak;
+                ss << znak;
             }
 
             ss << '\n';
@@ -194,17 +195,20 @@ public:
     void Nakresli(Platno& platno) const
     {
         // spocitejte souradnice vrcholu trojuhelnika
-        double vp = (a * sqrt(3.0)) / 4;
+        double R = (a * sqrt(3.0)) / 3;
+        double r = R / 2.0;
 
-        Bod2d A(S.x - a / 2, S.y - vp);
-        Bod2d B(S.x + a / 2, S.y - vp);
-        Bod2d C(S.x, S.y + vp);
+        Bod2d A(S.x - a / 2, S.y - r);
+        Bod2d B(S.x + a / 2, S.y - r);
+        Bod2d C(S.x, S.y + R);
 
         // 🚀 Zarotujte body kolem stredu
 
         platno.NakresliUsecku(A, B);
         platno.NakresliUsecku(B, C);
         platno.NakresliUsecku(C, A);
+
+        platno.NakresliBod(S);
     }
 };
 
@@ -236,8 +240,8 @@ int main()
 
         platno.Zobraz();
 
-        uhelStupne += 1.0;
+        uhelStupne += 0.1;
 
-    } while (uhelStupne < 10 * 360.0);
+    } while (uhelStupne < 20 * 360.0);
 }
 ```
