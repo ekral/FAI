@@ -1,22 +1,3 @@
-# Ascii Rotace trojúhelníka
-
-Zarotujte rovnostranný trojúhleník kolem jeho středu. Do trojúhleníka přidejte členskou proměnnou rotace. Samotnou rotaci vyřešte v členské funkci třídy `RovnostrannyTrojuhelnik` `Nakresli`.
-
-Použijte vzorec:
-
-$$\begin{align*}
-x' &= x \cdot \cos(\theta) - y \cdot \sin(\theta) \\
-y' &= x \cdot \sin(\theta) + y \cdot \cos(\theta)
-\end{align*}$$
-
-$$\begin{align*}
-\text{ Kde} (x', y') \text{ jsou souřadnice zarotovaného bodu, }
-(x, y) \text{ jsou souřadnice původního bodu a }
-\theta \text{ je úhel rotace v radiánech.}
-\end{align*}$$
-
-
-```cpp
 #include <cstdio>
 #define _USE_MATH_DEFINES
 #include <cmath>
@@ -25,6 +6,9 @@ $$\begin{align*}
 #include <sstream>
 #include <windows.h>
 
+// Forward Declaration
+struct Bod2d;
+Bod2d Rotuj(Bod2d bod, double stupne);
 
 void gotoxy(int x, int y)
 {
@@ -91,7 +75,7 @@ public:
         int rowIndex = (int)round(y);
         int columnIndex = (int)round(x);
 
-        if ((rowIndex < 0 || rowIndex > maxRowIndex) || (columnIndex < 0 || columnIndex > maxColumnIndex))
+        if ((rowIndex < 0) || (rowIndex > maxRowIndex) || (columnIndex < 0) || (columnIndex > maxColumnIndex))
         {
             return;
         }
@@ -138,9 +122,10 @@ public:
             for (int j = 0; j < columnCount; j++)
             {
                 char znak = data[pos];
-                ++pos;
 
                 ss << znak;
+
+                ++pos;
             }
 
             ss << '\n';
@@ -167,11 +152,13 @@ Bod2d Rotuj(Bod2d bod, double stupne)
 
 Bod2d Rotuj(Bod2d bod, double stupne, Bod2d S)
 {
-    bod.x = bod.x - S.x;
-    bod.y = bod.y - S.y;
+    bod.x -= S.x;
+    bod.y -= S.y;
+
     bod = Rotuj(bod, stupne);
-    bod.x = bod.x + S.x;
-    bod.y = bod.y + S.y;
+    
+    bod.x += S.x;
+    bod.y += S.y;
 
     return bod;
 }
@@ -182,27 +169,42 @@ private:
     double a;
     Bod2d S;
     // 🐱‍👤 Pridejte uhel rotace
+    double uhelStupne;
 
 public:
-    RovnostrannyTrojuhelnik(Bod2d S, int a) : S(S), a(a)
+    RovnostrannyTrojuhelnik(Bod2d S, int a) : S(S), a(a), uhelStupne(0.0)
     {
 
     }
 
     void Nakresli(Platno& platno) const
     {
-        // 🚀 Zarotujte body kolem stredu
-
         // spocitejte souradnice vrcholu trojuhelnika
-        double vp = (a * sqrt(3.0)) / 4;
+        double vp = (a * sqrt(3.0)) / 4.0;
 
         Bod2d A(S.x - a / 2, S.y - vp);
         Bod2d B(S.x + a / 2, S.y - vp);
         Bod2d C(S.x, S.y + vp);
 
+        // 🚀 Zarotujte body kolem stredu
+
+        A = Rotuj (A, uhelStupne, S);
+        B = Rotuj (B, uhelStupne, S);
+        C = Rotuj (C, uhelStupne, S);
+
         platno.NakresliUsecku(A, B);
         platno.NakresliUsecku(B, C);
         platno.NakresliUsecku(C, A);
+    }
+
+    void ZmenUhelRotace(double uhelStupne)
+    {
+        this->uhelStupne = uhelStupne;
+    }
+
+    Bod2d VratStred()
+    {
+        return S;
     }
 };
 
@@ -215,27 +217,27 @@ int main()
 
     Platno platno(columnCount, rowCount, '-', 'x');
 
-    RovnostrannyTrojuhelnik trojuhelnik(Bod2d(15.0, 10.0), 8);
+    RovnostrannyTrojuhelnik trojuhelnik(Bod2d(15.0, 10.0), 18);
 
 
     bool konec = true;
-    double uhelStupne = 0;
-
+    double uhelStupne = 0.0;
     do
     {
         platno.Vymaz();
 
         // 🍌 Odpoznamkujte nasledujici prikaz
-        // trojuhelnik.ZmenUhelRotace(uhelStupne);
+        trojuhelnik.ZmenUhelRotace(uhelStupne);
 
         trojuhelnik.Nakresli(platno);
+
+        platno.NakresliBod(trojuhelnik.VratStred());
 
         gotoxy(0, 0);
 
         platno.Zobraz();
 
-        uhelStupne += 1.0;
+        uhelStupne += 0.01;
 
     } while (uhelStupne < 10 * 360.0);
 }
-```
