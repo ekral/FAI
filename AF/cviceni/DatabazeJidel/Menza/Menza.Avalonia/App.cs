@@ -30,17 +30,10 @@ namespace Menza.Avalonia
 
         public override void OnFrameworkInitializationCompleted()
         {
-            ObservableCollection<Jidlo> jidla = new ObservableCollection<Jidlo>
-            {
-                new Jidlo() { Id = 1, Cena = 2.0, Nazev = "Dada da" },
-                new Jidlo() { Id = 2, Cena = 2.0, Nazev = "Dada da" },
-                new Jidlo() { Id = 3, Cena = 2.0, Nazev = "Dada da" }
-            };
-
-            Subject<Jidlo> subject = new Subject<Jidlo>();
+            //Subject<Jidlo> subject = new Subject<Jidlo>();
            
-            TextBlock textBlock = new TextBlock();
-            textBlock.Bind(TextBlock.TextProperty, subject.Select(s => s.Nazev));
+            //TextBlock textBlock = new TextBlock();
+            //textBlock.Bind(TextBlock.TextProperty, subject.Select(s => s.Nazev));
 
             ListBox listBox = new ListBox
             {
@@ -53,7 +46,7 @@ namespace Menza.Avalonia
             //listBox.ItemsPanel = new ItemsPanelTemplate() { Content = new WrapPanel() };
             //listBox.ItemsSource = jidla;
 
-            subject.OnNext(new Jidlo() { Id = 1, Cena = 2.0, Nazev = "Dada da" });
+            //subject.OnNext(new Jidlo() { Id = 1, Cena = 2.0, Nazev = "Dada da" });
 
             Window window = new Window()
             {
