@@ -25,33 +25,14 @@ $$\begin{align*}
 #include <sstream>
 #include <windows.h>
 
-void gotoxy(int x, int y) 
+
+void gotoxy(int x, int y)
 {
     COORD pos = { (SHORT)x, (SHORT)y };
     HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleCursorPosition(output, pos);
 }
 
-Bod2d Rotuj(Bod2d bod, double stupne)
-{
-    double uhelRadiany = (stupne * M_PI) / 180.0;
-
-    double xt = (bod.x * cos(uhelRadiany)) - (bod.y * sin(uhelRadiany));
-    double yt = (bod.x * sin(uhelRadiany)) + (bod.y * cos(uhelRadiany));
-
-    return Bod2d{ xt, yt };
-}
-
-Bod2d Rotuj(Bod2d bod, double stupne, Bod2d S)
-{
-    bod.x = bod.x - S.x;
-    bod.y = bod.y - S.y;
-    bod = Rotuj(bod, stupne);
-    bod.x = bod.x + S.x;
-    bod.y = bod.y + S.y;
-
-    return bod;
-}
 struct Bod2d
 {
     double x;
@@ -174,6 +155,27 @@ public:
 
 };
 
+Bod2d Rotuj(Bod2d bod, double stupne)
+{
+    double uhelRadiany = (stupne * M_PI) / 180.0;
+
+    double xt = (bod.x * cos(uhelRadiany)) - (bod.y * sin(uhelRadiany));
+    double yt = (bod.x * sin(uhelRadiany)) + (bod.y * cos(uhelRadiany));
+
+    return Bod2d{ xt, yt };
+}
+
+Bod2d Rotuj(Bod2d bod, double stupne, Bod2d S)
+{
+    bod.x = bod.x - S.x;
+    bod.y = bod.y - S.y;
+    bod = Rotuj(bod, stupne);
+    bod.x = bod.x + S.x;
+    bod.y = bod.y + S.y;
+
+    return bod;
+}
+
 class RovnostrannyTrojuhelnik
 {
 private:
@@ -190,7 +192,7 @@ public:
     void Nakresli(Platno& platno) const
     {
         // 🚀 Zarotujte body kolem stredu
-        
+
         // spocitejte souradnice vrcholu trojuhelnika
         double vp = (a * sqrt(3.0)) / 4;
 
@@ -216,8 +218,6 @@ int main()
     RovnostrannyTrojuhelnik trojuhelnik(Bod2d(15.0, 10.0), 8);
 
 
-
-
     bool konec = true;
     double uhelStupne = 0;
 
@@ -227,7 +227,7 @@ int main()
 
         // 🍌 Odpoznamkujte nasledujici prikaz
         // trojuhelnik.ZmenUhelRotace(uhelStupne);
-        
+
         trojuhelnik.Nakresli(platno);
 
         gotoxy(0, 0);
