@@ -6,9 +6,7 @@
 #include <sstream>
 #include <windows.h>
 
-// Forward Declaration
-struct Bod2d;
-Bod2d Rotuj(Bod2d bod, double stupne);
+// na CLion dat Emulovat terminal
 
 void gotoxy(int x, int y)
 {
@@ -44,14 +42,14 @@ public:
     char popredi;
 
     Platno(int columnCount, int rowCount, char pozadi, char popredi) :
-        columnCount(columnCount),
-        rowCount(rowCount),
-        pozadi(pozadi),
-        popredi(popredi),
-        totalChars(columnCount* rowCount),
-        maxColumnIndex(columnCount - 1),
-        maxRowIndex(rowCount - 1),
-        data(totalChars, 0)
+            columnCount(columnCount),
+            rowCount(rowCount),
+            pozadi(pozadi),
+            popredi(popredi),
+            totalChars(columnCount* rowCount),
+            maxColumnIndex(columnCount - 1),
+            maxRowIndex(rowCount - 1),
+            data(totalChars, 0)
     {
 
         Vymaz();
@@ -122,10 +120,10 @@ public:
             for (int j = 0; j < columnCount; j++)
             {
                 char znak = data[pos];
+                ++pos;
 
                 ss << znak;
-
-                ++pos;
+                ss << znak;
             }
 
             ss << '\n';
@@ -156,7 +154,7 @@ Bod2d Rotuj(Bod2d bod, double stupne, Bod2d S)
     bod.y -= S.y;
 
     bod = Rotuj(bod, stupne);
-    
+
     bod.x += S.x;
     bod.y += S.y;
 
@@ -168,7 +166,6 @@ class RovnostrannyTrojuhelnik
 private:
     double a;
     Bod2d S;
-    // 🐱‍👤 Pridejte uhel rotace
     double uhelStupne;
 
 public:
@@ -177,34 +174,31 @@ public:
 
     }
 
+    void ZmenUhelRotace(double stupne)
+    {
+        uhelStupne = stupne;
+    }
+
     void Nakresli(Platno& platno) const
     {
         // spocitejte souradnice vrcholu trojuhelnika
-        double vp = (a * sqrt(3.0)) / 4.0;
+        double R = (a * sqrt(3.0)) / 3;
+        double r = R / 2.0;
 
-        Bod2d A(S.x - a / 2, S.y - vp);
-        Bod2d B(S.x + a / 2, S.y - vp);
-        Bod2d C(S.x, S.y + vp);
+        Bod2d A(S.x - a / 2, S.y - r);
+        Bod2d B(S.x + a / 2, S.y - r);
+        Bod2d C(S.x, S.y + R);
 
         // 🚀 Zarotujte body kolem stredu
-
-        A = Rotuj (A, uhelStupne, S);
-        B = Rotuj (B, uhelStupne, S);
-        C = Rotuj (C, uhelStupne, S);
+        A = Rotuj(A, uhelStupne, S);
+        B = Rotuj(B, uhelStupne, S);
+        C = Rotuj(C, uhelStupne, S);
 
         platno.NakresliUsecku(A, B);
         platno.NakresliUsecku(B, C);
         platno.NakresliUsecku(C, A);
-    }
 
-    void ZmenUhelRotace(double uhelStupne)
-    {
-        this->uhelStupne = uhelStupne;
-    }
-
-    Bod2d VratStred()
-    {
-        return S;
+        platno.NakresliBod(S);
     }
 };
 
@@ -217,11 +211,11 @@ int main()
 
     Platno platno(columnCount, rowCount, '-', 'x');
 
-    RovnostrannyTrojuhelnik trojuhelnik(Bod2d(15.0, 10.0), 18);
-
+    RovnostrannyTrojuhelnik trojuhelnik(Bod2d(15.0, 10.0), 16);
 
     bool konec = true;
-    double uhelStupne = 0.0;
+    double uhelStupne = 0;
+
     do
     {
         platno.Vymaz();
@@ -231,13 +225,11 @@ int main()
 
         trojuhelnik.Nakresli(platno);
 
-        platno.NakresliBod(trojuhelnik.VratStred());
-
         gotoxy(0, 0);
 
         platno.Zobraz();
 
-        uhelStupne += 0.01;
+        uhelStupne += 0.1;
 
-    } while (uhelStupne < 10 * 360.0);
+    } while (uhelStupne < 20 * 360.0);
 }
