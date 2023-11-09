@@ -3,18 +3,12 @@ using Avalonia.Controls;
 using Avalonia.Styling;
 using Avalonia.Themes.Fluent;
 using Avalonia;
-using System.Security.Cryptography.X509Certificates;
-using System.Reactive.Subjects;
 using Menza.Models;
-using System.Reactive.Linq;
 using Avalonia.Data;
-using System;
-using Avalonia.Markup.Xaml.Templates;
-using static System.Formats.Asn1.AsnWriter;
-using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Net.Http.Json;
 using Avalonia.Controls.Templates;
+using Avalonia.Markup.Xaml.Templates;
 
 namespace Menza.Avalonia
 {
@@ -43,7 +37,10 @@ namespace Menza.Avalonia
                     [!TextBlock.TextProperty] = new Binding(nameof(jidlo.Nazev)),
                 })
             };
-            //listBox.ItemsPanel = new ItemsPanelTemplate() { Content = new WrapPanel() };
+            ItemsPanelTemplate itemsPanelTemplate = new ItemsPanelTemplate();
+            itemsPanelTemplate.Content = itemsPanelTemplate;
+
+            listBox.ItemsPanel = itemsPanelTemplate;
             //listBox.ItemsSource = jidla;
 
             //subject.OnNext(new Jidlo() { Id = 1, Cena = 2.0, Nazev = "Dada da" });
