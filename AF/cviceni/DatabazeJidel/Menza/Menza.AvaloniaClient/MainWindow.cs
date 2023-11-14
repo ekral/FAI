@@ -14,8 +14,10 @@ namespace Menza.AvaloniaClient
         {
             listBox = new ListBox()
             {
-                ItemsPanel = new FuncTemplate<Panel?>(() => new WrapPanel()),
-                ItemTemplate = new FuncDataTemplate<Jidlo>((jidlo, scope) => new TextBlock() { Text = jidlo.Nazev })
+                ItemsPanel = new FuncTemplate<Panel?>(() => new WrapPanel() { Orientation = Avalonia.Layout.Orientation.Vertical}),
+                ItemTemplate = new FuncDataTemplate<Jidlo>((jidlo, scope) =>
+                
+                    new TextBlock() { Text = jidlo.Nazev })
             };
 
             Content = listBox;
