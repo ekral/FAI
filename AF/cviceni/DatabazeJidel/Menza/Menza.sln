@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Menza.WebApi", "Menza.WebAp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Menza.ConsoleClient", "Menza.ConsoleClient\Menza.ConsoleClient.csproj", "{8DB533DE-1E1C-4045-B723-5113188594C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Menza.AvaloniaClient", "Menza.AvaloniaClient\Menza.AvaloniaClient.csproj", "{D9E67794-9E79-4D0C-951E-967A5EC9FF34}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Menza.AvaloniaClient", "Menza.AvaloniaClient\Menza.AvaloniaClient.csproj", "{D9E67794-9E79-4D0C-951E-967A5EC9FF34}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

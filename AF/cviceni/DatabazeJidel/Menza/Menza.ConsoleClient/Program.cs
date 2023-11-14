@@ -20,6 +20,10 @@ namespace Menza.ConsoleClient
                 }
             }
 
+            // 🍌 
+            // Uzivatel zada na konzoli id
+            // A pomoci http clienta provedte dotaz a vypiste jidlo dle id
+            Console.WriteLine("Zadej id pizzy");
             Console.ReadLine();
         }
 

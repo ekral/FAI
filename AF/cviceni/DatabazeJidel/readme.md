@@ -1,5 +1,9 @@
 # Úkol: Databáze jídel v menze
 
+- [Tutorial: Create a minimal API with ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/tutorials/min-web-api?view=aspnetcore-7.0&tabs=visual-studio).
+- [How to create responses in Minimal API apps](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/responses?view=aspnetcore-8.0#typedresults-vs-results).
+- [Make HTTP requests with the HttpClient class](https://learn.microsoft.com/en-us/dotnet/fundamentals/networking/http/httpclient).
+  
 Vytvořte databází jídel v menze.
 
 Solution bude obsahovat projekty
@@ -21,10 +25,20 @@ Solution bude obsahovat projekty
    
 8. ASP.NET Core Empty: **Menza.WebApi**
   
-    - Webová služba, která vrátí seznam jídel.
+    - Webová služba, která vrátí:
+        -  seznam jídel,
+        -  **jedno jídlo podle Id**.
     - Reference na projekt Menza.Data.
       
 11. Console Application: **Menza.ConsoleClient**
 
-    - Pomocí http clienta načte a zobrazí seznam jídel.
+    - Pomocí http clienta načte a zobrazí:
+        -  seznam jídel,
+        -  **jedno jídlo v menze pomocí Id**.
+    - Reference na projekt Menza.Models.
+   
+12. Avalonia .NET App: **Menza.DesktopClient**
+
+    - Pomocí http clienta načte a zobrazí:
+        -  **jedno jídlo v menze pomocí Id**.
     - Reference na projekt Menza.Models.
