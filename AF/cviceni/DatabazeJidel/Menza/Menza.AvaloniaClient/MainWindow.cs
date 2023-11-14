@@ -1,8 +1,11 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Menza.Models;
+using Avalonia.Media;
+using Avalonia.Layout;
 using System.Collections.Generic;
 using System.Net.Http.Json;
+using Avalonia;
 
 namespace Menza.AvaloniaClient
 {
@@ -12,12 +15,47 @@ namespace Menza.AvaloniaClient
 
         public MainWindow()
         {
+
             listBox = new ListBox()
             {
-                ItemsPanel = new FuncTemplate<Panel?>(() => new WrapPanel() { Orientation = Avalonia.Layout.Orientation.Vertical}),
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                ItemsPanel = new FuncTemplate<Panel?>(() =>
+                    new WrapPanel()
+                    {
+                        HorizontalAlignment = HorizontalAlignment.Stretch,
+                        Orientation = Orientation.Horizontal,
+                    }),
                 ItemTemplate = new FuncDataTemplate<Jidlo>((jidlo, scope) =>
-                
-                    new TextBlock() { Text = jidlo.Nazev })
+                    new Border()
+                    {
+                        Width = 120,
+                        Height = 120,
+                        Background = Brushes.Red,
+                        BorderBrush = Brushes.Black,
+                        BorderThickness = new Thickness(2.0),
+                        CornerRadius = new CornerRadius(2.0),
+                        Padding = new Thickness(4.0),
+                        Child = new StackPanel()
+                        {
+                            HorizontalAlignment = HorizontalAlignment.Center,
+                            VerticalAlignment = VerticalAlignment.Center,
+                            Children =
+                            {
+                                new TextBlock()
+                                {
+                                    HorizontalAlignment = HorizontalAlignment.Center,
+                                    VerticalAlignment = VerticalAlignment.Center,
+                                    Text = jidlo.Nazev
+                                },
+                                new TextBlock()
+                                {
+                                    HorizontalAlignment = HorizontalAlignment.Center,
+                                    VerticalAlignment = VerticalAlignment.Center,
+                                    Text = jidlo.Cena.ToString()
+                                },
+                            }
+                        }
+                    })
             };
 
             Content = listBox;
