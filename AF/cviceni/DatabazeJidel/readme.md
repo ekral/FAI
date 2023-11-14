@@ -1,5 +1,8 @@
 # Úkol: Databáze jídel v menze
 
+- [Tutorial: Create a minimal API with ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/tutorials/min-web-api?view=aspnetcore-7.0&tabs=visual-studio).
+- [How to create responses in Minimal API apps](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/responses?view=aspnetcore-8.0#typedresults-vs-results).
+  
 Vytvořte databází jídel v menze.
 
 Solution bude obsahovat projekty
