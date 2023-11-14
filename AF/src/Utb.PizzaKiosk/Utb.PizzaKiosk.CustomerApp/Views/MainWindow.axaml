@@ -7,6 +7,6 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Utb.PizzaKiosk.CustomerApp.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
-        Title="Utb.PizzaKiosk.CustomerApp">
+        Title="Utb.PizzaKiosk.CustomerApp"		>
         <views:MainView />
 </Window>

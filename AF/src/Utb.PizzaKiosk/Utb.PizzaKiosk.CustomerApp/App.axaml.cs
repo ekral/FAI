@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-
+using System.Net.Http;
 using Utb.PizzaKiosk.CustomerApp.ViewModels;
 using Utb.PizzaKiosk.CustomerApp.Views;
 
@@ -9,6 +9,8 @@ namespace Utb.PizzaKiosk.CustomerApp;
 
 public partial class App : Application
 {
+    public static HttpClient Client { get; } = new();
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);

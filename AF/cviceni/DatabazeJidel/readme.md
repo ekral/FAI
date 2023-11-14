@@ -4,8 +4,27 @@ Vytvořte databází jídel v menze.
 
 Solution bude obsahovat projekty
 
-1. Menza.Models - bude obsahovat třídu Jidlo s Id, názvem a cenou. 
-2. Menza.Data - bude obsahovat context pro EntityFramework. Použijte providera pro Sqlite.
-3. Menza.DataSeeder - konzolová aplikace pro vytvoření a naplnění databáze.
-4. Menza.WebApi - Webová služba, která vrátí seznam jídel.
-5. Menza.ConsoleClient - pomocí http clienta načte a zobrazí seznam jídel.
+1. Class Library: **Menza.Models**
+
+    - Bude obsahovat třídu Jidlo s Id, názvem a cenou.
+   
+3. Class Library: **Menza.Data**
+  
+   - Bude obsahovat třídu `MenzaContext` pro EntityFramework.
+   - Použijte Entity Framework providera pro Sqlite.
+   - Reference na projekt Menza.Models.
+   
+6. Console Application: **Menza.DataSeeder**
+
+   - Konzolová aplikace pro vytvoření a naplnění databáze.
+   - Reference na projekt Menza.Data.
+   
+8. ASP.NET Core Empty: **Menza.WebApi**
+  
+    - Webová služba, která vrátí seznam jídel.
+    - Reference na projekt Menza.Data.
+      
+11. Console Application: **Menza.ConsoleClient**
+
+    - Pomocí http clienta načte a zobrazí seznam jídel.
+    - Reference na projekt Menza.Models.

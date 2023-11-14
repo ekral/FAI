@@ -4,7 +4,17 @@
 #include <vector>
 #include <iostream>
 #include <sstream>
+#include <windows.h>
 
+
+// na CLion dat Emulovat terminal
+
+void gotoxy(int x, int y)
+{
+    COORD pos = { (SHORT)x, (SHORT)y };
+    HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleCursorPosition(output, pos);
+}
 
 struct Bod2d
 {
@@ -33,14 +43,14 @@ public:
     char popredi;
 
     Platno(int columnCount, int rowCount, char pozadi, char popredi) :
-            columnCount(columnCount),
-            rowCount(rowCount),
-            pozadi(pozadi),
-            popredi(popredi),
-            totalChars(columnCount* rowCount),
-            maxColumnIndex(columnCount - 1),
-            maxRowIndex(rowCount - 1),
-            data(totalChars, 0)
+        columnCount(columnCount),
+        rowCount(rowCount),
+        pozadi(pozadi),
+        popredi(popredi),
+        totalChars(columnCount* rowCount),
+        maxColumnIndex(columnCount - 1),
+        maxRowIndex(rowCount - 1),
+        data(totalChars, 0)
     {
 
         Vymaz();
@@ -99,6 +109,7 @@ public:
         }
 
     }
+    
 
     void Zobraz()
     {
@@ -152,20 +163,33 @@ Bod2d Rotuj(Bod2d bod, double stupne, Bod2d S)
     return bod;
 }
 
-class RovnostrannyTrojuhelnik
+class GrafickyObjekt
+{
+public:
+    virtual void Nakresli(Platno& platno) const = 0;
+
+};
+
+
+class RovnostrannyTrojuhelnik : public GrafickyObjekt
 {
 private:
     double a;
     Bod2d S;
-    // 🐱‍👤 Pridejte uhel rotace
+    double uhelStupne;
 
 public:
-    RovnostrannyTrojuhelnik(Bod2d S, int a) : S(S), a(a)
+    RovnostrannyTrojuhelnik(Bod2d S, int a) : S(S), a(a), uhelStupne(0.0)
     {
 
     }
 
-    void Nakresli(Platno& platno) const
+    void ZmenUhelRotace(double stupne)
+    {
+        uhelStupne = stupne;
+    }
+
+    void Nakresli(Platno& platno) const override
     {
         // spocitejte souradnice vrcholu trojuhelnika
         double R = (a * sqrt(3.0)) / 3;
@@ -176,6 +200,9 @@ public:
         Bod2d C(S.x, S.y + R);
 
         // 🚀 Zarotujte body kolem stredu
+        A = Rotuj(A, uhelStupne, S);
+        B = Rotuj(B, uhelStupne, S);
+        C = Rotuj(C, uhelStupne, S);
 
         platno.NakresliUsecku(A, B);
         platno.NakresliUsecku(B, C);
@@ -185,6 +212,50 @@ public:
     }
 };
 
+
+class Ctverec : public GrafickyObjekt
+{
+private:
+    double a;
+    Bod2d S;
+    double uhelStupne;
+
+public:
+    Ctverec(Bod2d S, int a) : S(S), a(a), uhelStupne(0.0)
+    {
+
+    }
+
+    void ZmenUhelRotace(double stupne)
+    {
+        uhelStupne = stupne;
+    }
+
+    void Nakresli(Platno& platno) const override
+    {
+       
+        Bod2d A(S.x - a / 2, S.y - a/2);
+        Bod2d B(S.x + a / 2, S.y - a/2);
+        Bod2d C(S.x - a / 2, S.y + a/2);
+        Bod2d D(S.x + a / 2, S.y + a/2);
+
+        // 🚀 Zarotujte body kolem stredu
+        A = Rotuj(A, uhelStupne, S);
+        B = Rotuj(B, uhelStupne, S);
+        C = Rotuj(C, uhelStupne, S);
+        D = Rotuj(D, uhelStupne, S);
+
+
+        platno.NakresliUsecku(A, B);
+        platno.NakresliUsecku(B, D);
+        platno.NakresliUsecku(A, C);
+        platno.NakresliUsecku(C, D);
+
+        platno.NakresliBod(S);
+    }
+};
+
+
 int main()
 {
     int columnCount = 30;
@@ -192,15 +263,28 @@ int main()
 
     Platno platno(columnCount, rowCount, '-', 'x');
 
-    RovnostrannyTrojuhelnik trojuhelnik(Bod2d(15.0, 10.0), 8);
+    RovnostrannyTrojuhelnik trojuhelnik(Bod2d(15.0, 10.0), 16);
+    Ctverec ctverec(Bod2d(15.0, 10.0), 16);
+
+    std::vector<GrafickyObjekt*> objekty = { &trojuhelnik, &ctverec };
 
     bool konec = true;
+    double uhelStupne = 0;
 
-    platno.Vymaz();
+    do
+    {
+        platno.Vymaz();
 
-    trojuhelnik.Nakresli(platno);
+        for (GrafickyObjekt* objekt : objekty) 
+        {
+            objekt->Nakresli(platno);
+        }
 
-    platno.Zobraz();
+        gotoxy(0, 0);
 
-    getchar();
+        platno.Zobraz();
+
+        uhelStupne += 0.1;
+
+    } while (uhelStupne < 20 * 360.0);
 }
