@@ -6,6 +6,7 @@ using Avalonia.Layout;
 using System.Collections.Generic;
 using System.Net.Http.Json;
 using Avalonia;
+using Avalonia.Styling;
 
 namespace Menza.AvaloniaClient
 {
@@ -18,6 +19,7 @@ namespace Menza.AvaloniaClient
 
             listBox = new ListBox()
             {
+              
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 ItemsPanel = new FuncTemplate<Panel?>(() =>
                     new WrapPanel()
@@ -58,6 +60,9 @@ namespace Menza.AvaloniaClient
                     })
             };
 
+            
+           
+            Title = "Menza";
             Content = listBox;
         }
 
