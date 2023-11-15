@@ -1,6 +1,6 @@
 # ASCII Rotace čtverce
 
-Podle vzoru třídy `RovnostrannyTrojuhelnik` v kódu níže vytvořte rotaci čtverce kolem středu. Čtverec bude zadaný středem a délkou strany.
+Podle vzoru třídy `RovnostrannyTrojuhelnik` v kódu níže vytvořte třídu `Ctverec` kdy čtverec bude zadaný středem a délkou strany. A čtverec bude opět rotovat.
 
 ```cpp
 #include <cstdio>
