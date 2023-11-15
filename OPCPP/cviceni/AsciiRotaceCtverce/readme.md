@@ -1,8 +1,3 @@
-# ASCII Rotace čtverce
-
-Podle vzoru třídy `RovnostrannyTrojuhelnik` v kódu níže vytvořte třídu `Ctverec` kdy čtverec bude zadaný středem a délkou strany. A čtverec bude opět rotovat.
-
-```cpp
 #include <cstdio>
 #define _USE_MATH_DEFINES
 #include <cmath>
@@ -11,7 +6,7 @@ Podle vzoru třídy `RovnostrannyTrojuhelnik` v kódu níže vytvořte třídu `
 #include <sstream>
 #include <windows.h>
 
-// na CLion dat Externi terminal
+// na CLion dat Emulovat terminal
 
 void gotoxy(int x, int y)
 {
@@ -172,7 +167,7 @@ private:
     double zmenaUhlu;
 
 public:
-    RovnostrannyTrojuhelnik(Bod2d S, int a, double zmenaUhlu) : S(S), a(a), uhelStupne(0.0), zmenaUhlu(0.01)
+    RovnostrannyTrojuhelnik(Bod2d S, int a, double zmenaUhlu) : S(S), a(a), uhelStupne(0.0), zmenaUhlu(zmenaUhlu)
     {
 
     }
@@ -238,4 +233,3 @@ int main()
 
     } while (!konec);
 }
-```
