@@ -2,7 +2,7 @@
 
 Vytvořte dynamické pole grafických objektů, který vykreslíte v jednom cyklu.
 
-1) Vytvořte abstraktní rodičovskou třídu `GrafickyObjekt`, která bude mít pure virtual functions `Nakresli`, `Rotuj` a `ZmenaUhlu`. 
+1) Vytvořte abstraktní rodičovskou třídu `GrafickyObjekt`, která bude mít pure virtual functions `Nakresli`, `Rotuj` a `ZmenaUhlu` s hlavičkami jako v třídách `RovnostrannyTrojuhelnik` a `Ctverec`. 
 2) Třídy `RovnostrannyTrojuhelnik` a `Ctverec` budou tyto funkce implementovat.
 3) S pomocí třídy `std::vector` z knihovny `#include <vector>` vytvořte dynamické pole grafických objektů, které pak vykreslíte na plátno pomocí `range base loop` (zjednodušený cyklus `for` pro procházení objektů). Do pole vložte jak ukazatel na rovnostranný trojúhelník tak na čtverec.
 
