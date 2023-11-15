@@ -11,7 +11,7 @@ Podle vzoru třídy `RovnostrannyTrojuhelnik` v kódu níže vytvořte třídu `
 #include <sstream>
 #include <windows.h>
 
-// na CLion dat Emulovat terminal
+// na CLion dat Externi terminal
 
 void gotoxy(int x, int y)
 {
