@@ -1,8 +1,3 @@
-# ASCII Rotace čtverce
-
-Podle vzoru třídy `RovnostrannyTrojuhelnik` v kódu níže vytvořte třídu `Ctverec` kdy čtverec bude zadaný středem a délkou strany. A čtverec bude opět rotovat.
-
-```cpp
 #include <cstdio>
 #define _USE_MATH_DEFINES
 #include <cmath>
@@ -210,7 +205,53 @@ public:
 };
 
 // 🚀 Zde nadefinujte tridu Ctverec
+class Ctverec
+{
+private:
+    double a;
+    Bod2d S;
+    double uhelStupne;
+    double zmenaUhlu;
 
+public:
+    Ctverec(Bod2d S, int a, double zmenaUhlu) : S(S), a(a), uhelStupne(0.0), zmenaUhlu(zmenaUhlu)
+    {
+
+    }
+
+    void ZmenaUhlu(double stupne)
+    {
+        zmenaUhlu = stupne;
+    }
+
+    void Rotuj()
+    {
+        uhelStupne += zmenaUhlu;
+    }
+
+    void Nakresli(Platno& platno) const
+    {
+        double aPul= a/2;
+
+        Bod2d A(S.x - aPul, S.y - aPul);
+        Bod2d B(S.x + aPul, S.y - aPul);
+        Bod2d C(S.x + aPul, S.y + aPul);
+        Bod2d D(S.x - aPul, S.y + aPul);
+
+
+        A = ::Rotuj(A, uhelStupne, S); // :: odlisi clenskou funkci od globalni funkce
+        B = ::Rotuj(B, uhelStupne, S);
+        C = ::Rotuj(C, uhelStupne, S);
+        D = ::Rotuj(D, uhelStupne, S);
+
+        platno.NakresliUsecku(A, B);
+        platno.NakresliUsecku(B, C);
+        platno.NakresliUsecku(C, D);
+        platno.NakresliUsecku(D, A);
+
+        platno.NakresliBod(S);
+    }
+};
 int main()
 {
     int columnCount = 30;
@@ -218,10 +259,10 @@ int main()
 
     Platno platno(columnCount, rowCount, '-', 'x');
 
-    RovnostrannyTrojuhelnik trojuhelnik(Bod2d(15.0, 10.0), 16, 0.1);
+    RovnostrannyTrojuhelnik trojuhelnik(Bod2d(20.0, 16.0), 16, 0.1);
 
     // 🍌 Vytvorte instanci tridy ctverec a v nakreslete ho a rotujte podobne jako trojuhelnik
-
+    Ctverec ctverec(Bod2d(10.0, 5.0), 10, -0.05);
     bool konec = false;
 
     do
@@ -229,13 +270,12 @@ int main()
         platno.Vymaz();
 
         trojuhelnik.Nakresli(platno);
-
+        ctverec.Nakresli(platno);
         gotoxy(0, 0);
 
         platno.Zobraz();
 
         trojuhelnik.Rotuj();
-
+        ctverec.Rotuj();
     } while (!konec);
 }
-```
