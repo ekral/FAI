@@ -7,6 +7,6 @@ namespace Menza.AvaloniaClient
 {
     public interface IMenzaService
     {
-        Task<IReadOnlyList<Jidlo>?> GetJidlaAsync();
+        Task<IReadOnlyList<Jidlo>> GetJidlaAsync();
     }
 }

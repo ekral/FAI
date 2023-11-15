@@ -66,12 +66,10 @@ namespace Menza.AvaloniaClient
         {
             base.OnInitialized();
 
-            IReadOnlyList<Jidlo>? jidla = await menzaService.GetJidlaAsync();
+            IReadOnlyList<Jidlo> jidla = await menzaService.GetJidlaAsync();
 
-            if (jidla is not null)
-            {
-                listBox.ItemsSource = jidla;
-            }
+            listBox.ItemsSource = jidla;
+
         }
     }
 }

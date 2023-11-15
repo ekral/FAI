@@ -18,7 +18,7 @@ namespace Menza.AvaloniaClient
 
             ServiceCollection serviceCollection = new ServiceCollection();
             serviceCollection.AddSingleton(p => new HttpClient() { BaseAddress = new System.Uri("https://localhost:7007/") });
-            serviceCollection.AddSingleton<IMenzaService, MenzaService>();
+            serviceCollection.AddSingleton<IMenzaService, MenzaServiceMock>();
             serviceCollection.AddTransient<MainWindow>();
             ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
             
