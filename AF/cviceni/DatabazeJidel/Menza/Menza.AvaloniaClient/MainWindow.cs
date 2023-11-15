@@ -4,7 +4,6 @@ using Menza.Models;
 using Avalonia.Media;
 using Avalonia.Layout;
 using System.Collections.Generic;
-using System.Net.Http.Json;
 using Avalonia;
 using Avalonia.Styling;
 
@@ -13,8 +12,9 @@ namespace Menza.AvaloniaClient
     class MainWindow : Window
     {
         readonly ListBox listBox;
+        private readonly IMenzaService menzaService;
 
-        public MainWindow()
+        public MainWindow(IMenzaService menzaService)
         {
 
             listBox = new ListBox()
@@ -64,18 +64,17 @@ namespace Menza.AvaloniaClient
            
             Title = "Menza";
             Content = listBox;
+            this.menzaService = menzaService;
         }
 
         protected override async void OnInitialized()
         {
             base.OnInitialized();
 
-            IReadOnlyList<Jidlo>? jidla = await App.Client.GetFromJsonAsync<IReadOnlyList<Jidlo>>("https://localhost:7007/");
+            IReadOnlyList<Jidlo> jidla = await menzaService.GetJidlaAsync();
 
-            if (jidla is not null)
-            {
-                listBox.ItemsSource = jidla;
-            }
+            listBox.ItemsSource = jidla;
+
         }
     }
 }
