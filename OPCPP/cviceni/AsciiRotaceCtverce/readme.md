@@ -137,10 +137,7 @@ public:
         std::string retezec = ss.str();
 
         std::cout << retezec;
-
-        //puts(retezec.c_str());
     }
-
 };
 
 Bod2d Rotuj(Bod2d bod, double stupne)
@@ -192,7 +189,6 @@ public:
 
     void Nakresli(Platno& platno) const
     {
-        // spocitejte souradnice vrcholu trojuhelnika
         double R = (a * sqrt(3.0)) / 3;
         double r = R / 2.0;
 
@@ -200,7 +196,7 @@ public:
         Bod2d B(S.x + a / 2, S.y - r);
         Bod2d C(S.x, S.y + R);
 
-        // 🚀 Zarotujte body kolem stredu
+        
         A = ::Rotuj(A, uhelStupne, S); // :: odlisi clenskou funkci od globalni funkce
         B = ::Rotuj(B, uhelStupne, S);
         C = ::Rotuj(C, uhelStupne, S);
@@ -213,7 +209,7 @@ public:
     }
 };
 
-
+// 🚀 Zde nadefinujte tridu Ctverec
 
 int main()
 {
@@ -223,6 +219,8 @@ int main()
     Platno platno(columnCount, rowCount, '-', 'x');
 
     RovnostrannyTrojuhelnik trojuhelnik(Bod2d(15.0, 10.0), 16, 0.1);
+
+    // 🍌 Vytvorte instanci tridy ctverec a v nakreslete ho a rotujte podobne jako trojuhelnik
 
     bool konec = false;
 
