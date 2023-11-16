@@ -23,8 +23,31 @@ namespace Menza.ConsoleClient
             // 🍌 
             // Uzivatel zada na konzoli id
             // A pomoci http clienta provedte dotaz a vypiste jidlo dle id
+            
             Console.WriteLine("Zadej id pizzy");
-            Console.ReadLine();
+            
+            string? retezec = Console.ReadLine();
+
+            if (retezec is not null)
+            {
+                if (int.TryParse(retezec, out int id))
+                {
+                    Console.WriteLine($"Zadane id: {id}");
+
+                    HttpResponseMessage response = await client.GetAsync($"https://localhost:7007/{id}");
+
+                    if(response.IsSuccessStatusCode)
+                    {
+                        Jidlo? jidlo = await response.Content.ReadFromJsonAsync<Jidlo>();
+
+                        if (jidlo is not null)
+                        {
+                            Console.WriteLine(jidlo.Nazev);
+                            Console.ReadKey();
+                        }
+                    }
+                }
+            }
         }
 
       

@@ -3,3 +3,7 @@
 GET {{Menza.WebApi_HostAddress}}/
 
 ###
+
+GET {{Menza.WebApi_HostAddress}}/1
+
+###
