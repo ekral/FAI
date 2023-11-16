@@ -6,6 +6,6 @@ GET {{Menza.WebApi_HostAddress}}/jidla
 ###
 
 
-GET {{Menza.WebApi_HostAddress}}/jidla/10
+GET {{Menza.WebApi_HostAddress}}/jidla/1
 
 ###
