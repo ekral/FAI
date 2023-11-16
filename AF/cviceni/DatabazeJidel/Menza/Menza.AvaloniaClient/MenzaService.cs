@@ -21,7 +21,7 @@ namespace Menza.AvaloniaClient
         public async Task<IReadOnlyList<Jidlo>> GetJidlaAsync()
         {
 
-            IReadOnlyList<Jidlo>? jidla = await httpClient.GetFromJsonAsync<IReadOnlyList<Jidlo>>("");
+            IReadOnlyList<Jidlo>? jidla = await httpClient.GetFromJsonAsync<IReadOnlyList<Jidlo>>("jidla");
 
             return jidla;
         }

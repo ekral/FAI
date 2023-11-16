@@ -10,7 +10,7 @@ namespace Menza.ConsoleClient
 
         static async Task Main(string[] args)
         {
-            Jidlo[]? jidla = await client.GetFromJsonAsync<Jidlo[]>("https://localhost:7007");
+            Jidlo[]? jidla = await client.GetFromJsonAsync<Jidlo[]>("https://localhost:7007/jidla");
 
             if(jidla is not null)
             {
@@ -34,7 +34,7 @@ namespace Menza.ConsoleClient
                 {
                     Console.WriteLine($"Zadane id: {id}");
 
-                    HttpResponseMessage response = await client.GetAsync($"https://localhost:7007/{id}");
+                    HttpResponseMessage response = await client.GetAsync($"https://localhost:7007/jidla/{id}");
 
                     if(response.IsSuccessStatusCode)
                     {
