@@ -291,9 +291,10 @@ class Krychle : public GrafickyObjekt
 private:
     double a;
     Bod3d S;
+    double f;
 public:
 
-    Krychle(Bod3d S, double a) : S(S), a(a)
+    Krychle(Bod3d S, double a, double f) : S(S), a(a), f(f)
     {
 
     }
@@ -305,7 +306,6 @@ public:
 
     void Nakresli(Platno& platno) const override
     {
-        double f = 2.0;
         // 🐱‍👤 urcit souradnice krychle
 
         Bod2d projekceS = Projekce(S, f);
@@ -321,7 +321,7 @@ int main()
 
     RovnostrannyTrojuhelnik trojuhelnik(Bod2d(20.0, 16.0), 16, 0.1);
     Ctverec ctverec(Bod2d(10.0, 5.0), 10, -0.05);
-
+    Krychle krychle(Bod3d(20.0, 20, 20.0), 10.0, 4.0);
     // 🍌 Vytvorte instanci krychle a pridejte ji do pole objektu
 
     vector<GrafickyObjekt*> objekty = { &trojuhelnik, &ctverec };
