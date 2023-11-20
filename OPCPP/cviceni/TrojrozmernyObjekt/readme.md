@@ -322,9 +322,8 @@ int main()
     RovnostrannyTrojuhelnik trojuhelnik(Bod2d(20.0, 16.0), 16, 0.1);
     Ctverec ctverec(Bod2d(10.0, 5.0), 10, -0.05);
     Krychle krychle(Bod3d(20.0, 20, 20.0), 10.0, 4.0);
-    // 🍌 Vytvorte instanci krychle a pridejte ji do pole objektu
 
-    vector<GrafickyObjekt*> objekty = { &trojuhelnik, &ctverec };
+    vector<GrafickyObjekt*> objekty = { &trojuhelnik, &ctverec, &krychle };
 
     bool konec = false;
 
