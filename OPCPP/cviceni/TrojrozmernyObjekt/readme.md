@@ -32,6 +32,18 @@ struct Bod2d
     }
 };
 
+struct Bod3d
+{
+    double x;
+    double y;
+    double z;
+
+    Bod3d(double x, double y, double z) : x(x), y(y), z(z)
+    {
+
+    }
+};
+
 class Platno
 {
 private:
@@ -164,6 +176,13 @@ Bod2d Rotuj(Bod2d bod, double stupne, Bod2d S)
     return bod;
 }
 
+Bod2d Projekce(Bod3d bod, double f)
+{
+    Bod2d projekce = Bod2d(f * bod.x / bod.z, f * bod.y / bod.z);
+
+    return projekce;
+}
+
 class GrafickyObjekt
 {
 public:
@@ -267,18 +286,32 @@ public:
 
 // 🚀 doplnte implementaci metod
 
-class Kryche : public GrafickyObjekt
+class Krychle : public GrafickyObjekt
 {
+private:
+    double a;
+    Bod3d S;
+public:
+
+    Krychle(Bod3d S, double a) : S(S), a(a)
+    {
+
+    }
+
     void Rotuj() override
     {
-       
+
     }
 
     void Nakresli(Platno& platno) const override
     {
+        double f = 2.0;
+        // 🐱‍👤 urcit souradnice krychle
 
+        Bod2d projekceS = Projekce(S, f);
     }
-}
+};
+
 int main()
 {
     int columnCount = 30;
@@ -288,7 +321,7 @@ int main()
 
     RovnostrannyTrojuhelnik trojuhelnik(Bod2d(20.0, 16.0), 16, 0.1);
     Ctverec ctverec(Bod2d(10.0, 5.0), 10, -0.05);
-    
+
     // 🍌 Vytvorte instanci krychle a pridejte ji do pole objektu
 
     vector<GrafickyObjekt*> objekty = { &trojuhelnik, &ctverec };
