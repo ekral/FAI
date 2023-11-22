@@ -1,6 +1,6 @@
 # Trojrozměrný objekt
 
-S pomocí kamerové projekce zobrazte na plátně krychli. 
+S pomocí [pinhole camera projection](https://staff.fnwi.uva.nl/r.vandenboomgaard/IPCV20162017/LectureNotes/CV/PinholeCamera/PinholeCamera.html) zobrazte na plátně krychli. 
 
 ```cpp
 #include <cstdio>
