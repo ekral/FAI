@@ -167,6 +167,8 @@ Bod2d Rotuj(Bod2d bod, double stupne, Bod2d S)
     return bod;
 }
 
+// 🚀 Nadefinujte abstraktni tridu Graficky Objekt
+
 class RovnostrannyTrojuhelnik
 {
 private:
@@ -200,7 +202,7 @@ public:
         Bod2d B(S.x + a / 2, S.y - r);
         Bod2d C(S.x, S.y + R);
 
-        
+
         A = ::Rotuj(A, uhelStupne, S); // :: odlisi clenskou funkci od globalni funkce
         B = ::Rotuj(B, uhelStupne, S);
         C = ::Rotuj(C, uhelStupne, S);
@@ -213,7 +215,6 @@ public:
     }
 };
 
-// 🚀 Zde nadefinujte tridu Ctverec
 class Ctverec
 {
 private:
@@ -240,7 +241,7 @@ public:
 
     void Nakresli(Platno& platno) const
     {
-        double aPul= a/2;
+        double aPul = a / 2;
 
         Bod2d A(S.x - aPul, S.y - aPul);
         Bod2d B(S.x + aPul, S.y - aPul);
@@ -269,14 +270,17 @@ int main()
     Platno platno(columnCount, rowCount, '-', 'x');
 
     RovnostrannyTrojuhelnik trojuhelnik(Bod2d(20.0, 16.0), 16, 0.1);
-
-    // 🍌 Vytvorte instanci tridy ctverec a v nakreslete ho a rotujte podobne jako trojuhelnik
     Ctverec ctverec(Bod2d(10.0, 5.0), 10, -0.05);
+
+    // 🍌Vlozte adresu na trojuhelnik a ctverec do dynamickeho pole vector
+
     bool konec = false;
 
     do
     {
         platno.Vymaz();
+
+        // 🐱‍👤Vypis a rotaci provedte v cyklu prvky dynamickeho pole
 
         trojuhelnik.Nakresli(platno);
         ctverec.Nakresli(platno);
