@@ -4,13 +4,33 @@ using Avalonia.Media;
 using Avalonia.Layout;
 using Avalonia.Data;
 using System.ComponentModel;
+using Avalonia.Styling;
+using System.Collections.Generic;
 
 namespace AvaloniaAplikace
 {
-    public class ViewModelObjednavka : INotifyPropertyChanged
+    public class ViewModelBase : INotifyPropertyChanged
     {
-
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected void OnPropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        protected bool SetProperty<T>(ref T field, T newValue, string name)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, newValue)) return false;
+
+            field = newValue;
+            OnPropertyChanged(name);
+
+            return true;
+        }
+    }
+
+    public class ViewModelObjednavka : ViewModelBase
+    {
 
         public required string NazevProduktu { get; set; }
         public decimal Cena { get; set; }
@@ -19,12 +39,8 @@ namespace AvaloniaAplikace
         private decimal cenaCelkem;
         public decimal CenaCelkem 
         {
-            get => cenaCelkem; 
-            set
-            {
-                cenaCelkem = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CenaCelkem)));
-            }
+            get => cenaCelkem;
+            set => SetProperty(ref cenaCelkem, value, nameof(CenaCelkem));
         }
 
         public void SpocitejCenuCelkem()
