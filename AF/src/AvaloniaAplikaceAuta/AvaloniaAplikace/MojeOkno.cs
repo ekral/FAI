@@ -6,6 +6,8 @@ using Avalonia.Data;
 using System.ComponentModel;
 using Avalonia.Styling;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System;
 
 namespace AvaloniaAplikace
 {
@@ -18,8 +20,10 @@ namespace AvaloniaAplikace
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        protected bool SetProperty<T>(ref T field, T newValue, string name)
+        protected bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string? name = null )
         {
+            ArgumentException.ThrowIfNullOrEmpty(name);
+
             if (EqualityComparer<T>.Default.Equals(field, newValue)) return false;
 
             field = newValue;
@@ -40,7 +44,7 @@ namespace AvaloniaAplikace
         public decimal CenaCelkem 
         {
             get => cenaCelkem;
-            set => SetProperty(ref cenaCelkem, value, nameof(CenaCelkem));
+            set => SetProperty(ref cenaCelkem, value);
         }
 
         public void SpocitejCenuCelkem()
@@ -53,7 +57,7 @@ namespace AvaloniaAplikace
     {
         public MojeOkno()
         {
-            DataContext = new ViewModelObjednavka() { NazevProduktu = "Tesla 3", Cena = 1100000.0m, Pocet = 1 };
+            //DataContext = new ViewModelObjednavka() { NazevProduktu = "Tesla 3", Cena = 1100000.0m, Pocet = 1 };
 
             TextBlock textBlockNazevProduktu = new TextBlock();
             textBlockNazevProduktu.Bind(TextBlock.TextProperty, new Binding("NazevProduktu"));
