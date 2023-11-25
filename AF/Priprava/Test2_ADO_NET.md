@@ -2,6 +2,17 @@
 
 Následující příklady používají provider *Microsoft.Data.Sqlite* pro souborovou databázi *Sqlite*, návod na instalaci najdete například v dokumentaci Microsoftu [Microsoft.Data.Sqlite overview](https://learn.microsoft.com/en-us/dotnet/standard/data/sqlite/?tabs=netcore-cli).
 
+V následujícíh příkladech budeme používat třídu Model:
+
+```csharp
+public class Model
+{
+    public int Id { get; set; }
+    public double LoanAmount { get; set; }
+    public double InterestRate { get; set; }
+    public int LoanTerm { get; set; }
+}
+```
 ## Připojení k databázi
 
 K databázi se připojíme pomocí následujícího príkazu. Pokud Sqlite databáze již neexistuje, tak se vytvoří nová. Třída *SqliteConnection* implemetuje rozhraní *IDispose* a proto se nám připojení uzavře automaticky s využití Dispose patternu a nemusíme jej už ručně uzavírat.
@@ -41,6 +52,13 @@ await command.ExecuteNonQueryAsync();
 A v následujícím příkladu do vytvořené databáze vložíme nový řádek. Proměnná ```count``` bude obsahovat počet změněných řádků tabulky.
 
 ```csharp
+Model model = new Model()
+{
+    LoanAmount = 6000000.0,
+    InterestRate = 6.0,
+    LoanTerm = 30
+};
+
 command.CommandText =
 @$"
     INSERT INTO Mortgage (LoanAmount, InterestRate, LoanTerm)
@@ -67,6 +85,8 @@ Pokud chceme provést dotaz na data tabulky a načíst jednotlivé řádky a slo
 List<Model> models = new List<Model>();
 
 SqliteDataReader reader = await command.ExecuteReaderAsync();
+
+command.CommandText = "SELECT Id, LoanAmount, InterestRate, LoanTerm FROM Mortgage";
 
 if(reader.HasRows)
 {

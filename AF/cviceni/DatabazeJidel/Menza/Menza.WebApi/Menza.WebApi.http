@@ -1,0 +1,11 @@
+﻿@Menza.WebApi_HostAddress = https://localhost:7007
+
+
+GET {{Menza.WebApi_HostAddress}}/jidla
+
+###
+
+
+GET {{Menza.WebApi_HostAddress}}/jidla/1
+
+###
