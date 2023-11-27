@@ -56,13 +56,17 @@ class Kamera
 {
 public:
     double f;
+    double z;
 
-    Kamera(double f) :f(f)
+    Kamera(double f) :f(f), z(0.0)
     {
 
     }
+
     Bod2d Projekce(Bod3d bod)
     {
+        bod.z -= z;
+
         Bod2d projekce = Bod2d(f * bod.x / bod.z, f * bod.y / bod.z);
 
         return projekce;
@@ -79,9 +83,9 @@ private:
 
     std::vector<char> data;
 
+public:
     Kamera kamera;
 
-public:
     const int maxColumnIndex;
     const int maxRowIndex;
 
@@ -400,6 +404,12 @@ int main()
             {
             case 'k':
                 konec = true;
+                break;
+            case 'w':
+                platno.kamera.z += 1.0;
+                break;
+            case 's':
+                platno.kamera.z -= 1.0;
                 break;
             }
         }
