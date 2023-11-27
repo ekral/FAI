@@ -1,4 +1,4 @@
-# Transformace kamery
+# Posunutí a rotace kamery
 
 Do kódu doplňte kód pro posunutí a rotaci kamery.
 
