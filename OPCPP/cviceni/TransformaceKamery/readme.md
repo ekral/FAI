@@ -4,8 +4,8 @@ Do kódu doplňte kód pro posunutí a rotaci kamery.
 
 1. Posunujte kameru v ose *z*.
 2. Posunujte kameru navíc v osách *x* a *y*.
-3. Rotujte kameru kolem osy *z*.
-4. Rotujte kameru kolem os *x* a *y*.
+3. Rotujte kameru kolem osy *y*.
+4. Rotujte kameru kolem os *x* a *z*.
 
 ```cpp
 #include <cstdio>
