@@ -1,56 +1,70 @@
-﻿using Avalonia;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
+using Avalonia.Layout;
 
 namespace AvaloniaAplikace
 {
     public class MojeOkno : Window
     {
-        private int count = 0;
-
+        int count = 0;
+    
         public MojeOkno()
         {
-            // Pridejte do aplikace dva textboxy
-            // A tlacitko Secti
-            // Po stlaceni tlacitka prevedte text z textboxu na int, sectete oba inty a vysledek zobrazte v textbloku
-            TextBox textBox = new TextBox();
-
-            TextBlock textBlock = new TextBlock()
+    
+            TextBlock textBlockPopis = new TextBlock()
             {
-                HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-                Text = count.ToString()
+                FontSize = 18.0,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Margin = new Thickness(5, 0),
+                Text = "Alignment, Margin and Padding Sample"
             };
-
-            Button button = new Button()
-            {
-                HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Right,
-                Margin = new Thickness(10),
-                Content = "Tlacitko"
-            };
-
-            button.Click += (sender, e) => 
+            Button button = new Button() 
             { 
-                ++count; 
-                textBlock.Text = count.ToString(); 
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                Margin = new Thickness(20),
+                Content = "Tlacitko" ,
+                HorizontalContentAlignment = HorizontalAlignment.Center
             };
-
-            Border border = new Border
+    
+            TextBlock textBlock = new TextBlock() 
+            {
+                FontSize = 28.0,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Margin = new Thickness(20),
+                Text = count.ToString() 
+            };
+    
+            button.Click += (sender, e) =>
+            {
+                ++count;
+                textBlock.Text = count.ToString();
+                textBlock.FontSize += 1.0;
+    
+            };
+    
+            StackPanel stackPanel = new StackPanel()
+            {
+                Background = Brushes.White,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Top
+            };
+    
+            stackPanel.Children.Add(textBlockPopis);
+            stackPanel.Children.Add(button);
+            stackPanel.Children.Add(textBlock);
+    
+            Border border = new Border()
             {
                 Background = Brushes.LightBlue,
                 BorderBrush = Brushes.Black,
                 BorderThickness = new Thickness(2),
                 Padding = new Thickness(15),
-                CornerRadius = new CornerRadius(8)
+                Child = stackPanel
             };
-
-            StackPanel stackPanel = new StackPanel() { Background = Brushes.Black };
-            stackPanel.Children.Add(textBlock);
-            stackPanel.Children.Add(button);
-            stackPanel.Children.Add(textBox);
-
-            border.Child = stackPanel;
-
+    
             Content = border;
         }
     }
 }
+
