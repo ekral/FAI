@@ -1,10 +1,11 @@
-# Cvičení: Pole grafických objektů
+# Posunutí a rotace kamery
 
-Vytvořte dynamické pole grafických objektů, který vykreslíte v jednom cyklu.
+Do kódu doplňte kód pro posunutí a rotaci kamery.
 
-1) Vytvořte abstraktní rodičovskou třídu `GrafickyObjekt`, která bude mít pure virtual functions `Nakresli`, `Rotuj` a `ZmenaUhlu` s hlavičkami jako v třídách `RovnostrannyTrojuhelnik` a `Ctverec`. 
-2) Třídy `RovnostrannyTrojuhelnik` a `Ctverec` budou tyto funkce implementovat.
-3) S pomocí třídy `std::vector` z knihovny `#include <vector>` vytvořte dynamické pole grafických objektů, které pak vykreslíte na plátno pomocí `range base loop` (zjednodušený cyklus `for` pro procházení objektů). Do pole vložte jak ukazatel na rovnostranný trojúhelník tak na čtverec.
+1. Posunujte kameru v ose *z*.
+2. Posunujte kameru navíc v osách *x* a *y*.
+3. Rotujte kameru kolem osy *y*.
+4. Rotujte kameru kolem os *x* a *z*.
 
 ```cpp
 #include <cstdio>
@@ -13,9 +14,11 @@ Vytvořte dynamické pole grafických objektů, který vykreslíte v jednom cykl
 #include <vector>
 #include <iostream>
 #include <sstream>
+#include <conio.h>
 #include <windows.h>
 
 // na CLion dat Emulovat terminal
+using namespace std;
 
 void gotoxy(int x, int y)
 {
@@ -35,6 +38,41 @@ struct Bod2d
     }
 };
 
+struct Bod3d
+{
+    double x;
+    double y;
+    double z;
+
+    Bod3d(double x, double y, double z) : x(x), y(y), z(z)
+    {
+
+    }
+};
+
+// 🚀 Do tridy kamera pridejte posunuti a rotaci kamery, kdy budete ve skutecnosti rotovat vykreslovane objekty.
+
+class Kamera
+{
+public:
+    double f;
+    double z;
+
+    Kamera(double f) :f(f), z(0.0)
+    {
+
+    }
+
+    Bod2d Projekce(Bod3d bod)
+    {
+        bod.z -= z;
+
+        Bod2d projekce = Bod2d(f * bod.x / bod.z, f * bod.y / bod.z);
+
+        return projekce;
+    }
+};
+
 class Platno
 {
 private:
@@ -44,7 +82,10 @@ private:
     char pozadi;
 
     std::vector<char> data;
+
 public:
+    Kamera kamera;
+
     const int maxColumnIndex;
     const int maxRowIndex;
 
@@ -58,7 +99,8 @@ public:
         totalChars(columnCount* rowCount),
         maxColumnIndex(columnCount - 1),
         maxRowIndex(rowCount - 1),
-        data(totalChars, 0)
+        data(totalChars, 0),
+        kamera(6)
     {
 
         Vymaz();
@@ -92,7 +134,7 @@ public:
         data[pos] = popredi;
     }
 
-    void NakresliUsecku(Bod2d bodA, Bod2d bodB)
+    void NakresliDvojrozmernouUsecku(Bod2d bodA, Bod2d bodB)
     {
         double dx = bodB.x - bodA.x;
         double dy = bodB.y - bodA.y;
@@ -116,6 +158,14 @@ public:
             ++d;
         }
 
+    }
+
+    void NakresliTrojrozmernouUsecku(Bod3d A, Bod3d B)
+    {
+        Bod2d Ap = kamera.Projekce(A);
+        Bod2d Bp = kamera.Projekce(B);
+
+        NakresliDvojrozmernouUsecku(Ap, Bp);
     }
 
     void Zobraz()
@@ -167,9 +217,14 @@ Bod2d Rotuj(Bod2d bod, double stupne, Bod2d S)
     return bod;
 }
 
-// 🚀 Nadefinujte abstraktni tridu Graficky Objekt
+class GrafickyObjekt
+{
+public:
+    virtual void Rotuj() = 0;
+    virtual void Nakresli(Platno& platno) const = 0;
+};
 
-class RovnostrannyTrojuhelnik
+class RovnostrannyTrojuhelnik : public GrafickyObjekt
 {
 private:
     double a;
@@ -188,12 +243,12 @@ public:
         zmenaUhlu = stupne;
     }
 
-    void Rotuj()
+    void Rotuj() override
     {
         uhelStupne += zmenaUhlu;
     }
 
-    void Nakresli(Platno& platno) const
+    void Nakresli(Platno& platno) const override
     {
         double R = (a * sqrt(3.0)) / 3;
         double r = R / 2.0;
@@ -207,15 +262,15 @@ public:
         B = ::Rotuj(B, uhelStupne, S);
         C = ::Rotuj(C, uhelStupne, S);
 
-        platno.NakresliUsecku(A, B);
-        platno.NakresliUsecku(B, C);
-        platno.NakresliUsecku(C, A);
+        platno.NakresliDvojrozmernouUsecku(A, B);
+        platno.NakresliDvojrozmernouUsecku(B, C);
+        platno.NakresliDvojrozmernouUsecku(C, A);
 
         platno.NakresliBod(S);
     }
 };
 
-class Ctverec
+class Ctverec : public GrafickyObjekt
 {
 private:
     double a;
@@ -234,12 +289,12 @@ public:
         zmenaUhlu = stupne;
     }
 
-    void Rotuj()
+    void Rotuj() override
     {
         uhelStupne += zmenaUhlu;
     }
 
-    void Nakresli(Platno& platno) const
+    void Nakresli(Platno& platno) const override
     {
         double aPul = a / 2;
 
@@ -254,14 +309,62 @@ public:
         C = ::Rotuj(C, uhelStupne, S);
         D = ::Rotuj(D, uhelStupne, S);
 
-        platno.NakresliUsecku(A, B);
-        platno.NakresliUsecku(B, C);
-        platno.NakresliUsecku(C, D);
-        platno.NakresliUsecku(D, A);
+        platno.NakresliDvojrozmernouUsecku(A, B);
+        platno.NakresliDvojrozmernouUsecku(B, C);
+        platno.NakresliDvojrozmernouUsecku(C, D);
+        platno.NakresliDvojrozmernouUsecku(D, A);
 
         platno.NakresliBod(S);
     }
 };
+
+class Krychle : public GrafickyObjekt
+{
+private:
+    double a;
+    Bod3d S;
+    double f;
+public:
+
+    Krychle(Bod3d S, double a, double f) : S(S), a(a), f(f)
+    {
+
+    }
+
+    void Rotuj() override
+    {
+
+    }
+
+    void Nakresli(Platno& platno) const override
+    {
+        Bod3d A(S.x - a / 2.0, S.y - a / 2.0, S.z - a / 2.0);
+        Bod3d B(S.x + a / 2.0, S.y - a / 2.0, S.z - a / 2.0);
+        Bod3d C(S.x + a / 2.0, S.y - a / 2.0, S.z + a / 2.0);
+        Bod3d D(S.x - a / 2.0, S.y - a / 2.0, S.z + a / 2.0);
+
+        Bod3d E(S.x - a / 2.0, S.y + a / 2.0, S.z - a / 2.0);
+        Bod3d F(S.x + a / 2.0, S.y + a / 2.0, S.z - a / 2.0);
+        Bod3d G(S.x + a / 2.0, S.y + a / 2.0, S.z + a / 2.0);
+        Bod3d H(S.x - a / 2.0, S.y + a / 2.0, S.z + a / 2.0);
+        
+        platno.NakresliTrojrozmernouUsecku(A, B);
+        platno.NakresliTrojrozmernouUsecku(B, C);
+        platno.NakresliTrojrozmernouUsecku(C, D);
+        platno.NakresliTrojrozmernouUsecku(D, A);
+
+        platno.NakresliTrojrozmernouUsecku(E, F);
+        platno.NakresliTrojrozmernouUsecku(F, G);
+        platno.NakresliTrojrozmernouUsecku(G, H);
+        platno.NakresliTrojrozmernouUsecku(H, E);
+
+        platno.NakresliTrojrozmernouUsecku(A, E);
+        platno.NakresliTrojrozmernouUsecku(B, F);
+        platno.NakresliTrojrozmernouUsecku(C, G);
+        platno.NakresliTrojrozmernouUsecku(D, H);
+    }
+};
+
 int main()
 {
     int columnCount = 30;
@@ -271,8 +374,9 @@ int main()
 
     RovnostrannyTrojuhelnik trojuhelnik(Bod2d(20.0, 16.0), 16, 0.1);
     Ctverec ctverec(Bod2d(10.0, 5.0), 10, -0.05);
+    Krychle krychle(Bod3d(20.0, 20, 40.0), 20.0, 10.0);
 
-    // 🍌Vlozte adresu na trojuhelnik a ctverec do dynamickeho pole vector
+    vector<GrafickyObjekt*> objekty = { /*&trojuhelnik, &ctverec,*/ &krychle};
 
     bool konec = false;
 
@@ -280,16 +384,36 @@ int main()
     {
         platno.Vymaz();
 
-        // 🐱‍👤Vypis a rotaci provedte v cyklu prvky dynamickeho pole
+        for (GrafickyObjekt* objekt : objekty)
+        {
+            objekt->Nakresli(platno);
+            objekt->Rotuj();
+        }
 
-        trojuhelnik.Nakresli(platno);
-        ctverec.Nakresli(platno);
         gotoxy(0, 0);
 
         platno.Zobraz();
 
-        trojuhelnik.Rotuj();
-        ctverec.Rotuj();
+        // 🐱‍👤 zde muzete detekovat stisk klaves
+
+        if (_kbhit())
+        {
+            char znak = _getch();
+
+            switch (znak)
+            {
+            case 'k':
+                konec = true;
+                break;
+            case 'w':
+                platno.kamera.z += 1.0;
+                break;
+            case 's':
+                platno.kamera.z -= 1.0;
+                break;
+            }
+        }
+
     } while (!konec);
 }
 ```

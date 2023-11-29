@@ -1,12 +1,3 @@
-# Cvičení: Pole grafických objektů
-
-Vytvořte dynamické pole grafických objektů, který vykreslíte v jednom cyklu.
-
-1) Vytvořte abstraktní rodičovskou třídu `GrafickyObjekt`, která bude mít pure virtual functions `Nakresli`, `Rotuj` a `ZmenaUhlu` s hlavičkami jako v třídách `RovnostrannyTrojuhelnik` a `Ctverec`. 
-2) Třídy `RovnostrannyTrojuhelnik` a `Ctverec` budou tyto funkce implementovat.
-3) S pomocí třídy `std::vector` z knihovny `#include <vector>` vytvořte dynamické pole grafických objektů, které pak vykreslíte na plátno pomocí `range base loop` (zjednodušený cyklus `for` pro procházení objektů). Do pole vložte jak ukazatel na rovnostranný trojúhelník tak na čtverec.
-
-```cpp
 #include <cstdio>
 #define _USE_MATH_DEFINES
 #include <cmath>
@@ -16,6 +7,7 @@ Vytvořte dynamické pole grafických objektů, který vykreslíte v jednom cykl
 #include <windows.h>
 
 // na CLion dat Emulovat terminal
+using namespace std;
 
 void gotoxy(int x, int y)
 {
@@ -30,6 +22,18 @@ struct Bod2d
     double y;
 
     Bod2d(double x, double y) : x(x), y(y)
+    {
+
+    }
+};
+
+struct Bod3d
+{
+    double x;
+    double y;
+    double z;
+
+    Bod3d(double x, double y, double z) : x(x), y(y), z(z)
     {
 
     }
@@ -167,9 +171,21 @@ Bod2d Rotuj(Bod2d bod, double stupne, Bod2d S)
     return bod;
 }
 
-// 🚀 Nadefinujte abstraktni tridu Graficky Objekt
+Bod2d Projekce(Bod3d bod, double f)
+{
+    Bod2d projekce = Bod2d(f * bod.x / bod.z, f * bod.y / bod.z);
 
-class RovnostrannyTrojuhelnik
+    return projekce;
+}
+
+class GrafickyObjekt
+{
+public:
+    virtual void Rotuj() = 0;
+    virtual void Nakresli(Platno& platno) const = 0;
+};
+
+class RovnostrannyTrojuhelnik : public GrafickyObjekt
 {
 private:
     double a;
@@ -188,12 +204,12 @@ public:
         zmenaUhlu = stupne;
     }
 
-    void Rotuj()
+    void Rotuj() override
     {
         uhelStupne += zmenaUhlu;
     }
 
-    void Nakresli(Platno& platno) const
+    void Nakresli(Platno& platno) const override
     {
         double R = (a * sqrt(3.0)) / 3;
         double r = R / 2.0;
@@ -215,7 +231,7 @@ public:
     }
 };
 
-class Ctverec
+class Ctverec : public GrafickyObjekt
 {
 private:
     double a;
@@ -234,12 +250,12 @@ public:
         zmenaUhlu = stupne;
     }
 
-    void Rotuj()
+    void Rotuj() override
     {
         uhelStupne += zmenaUhlu;
     }
 
-    void Nakresli(Platno& platno) const
+    void Nakresli(Platno& platno) const override
     {
         double aPul = a / 2;
 
@@ -262,6 +278,67 @@ public:
         platno.NakresliBod(S);
     }
 };
+
+// 🚀 doplnte implementaci metod
+
+class Krychle : public GrafickyObjekt
+{
+private:
+    double a;
+    Bod3d S;
+    double f;
+public:
+
+    Krychle(Bod3d S, double a, double f) : S(S), a(a), f(f)
+    {
+
+    }
+
+    void Rotuj() override
+    {
+
+    }
+
+    void Nakresli(Platno& platno) const override
+    {
+        // 🐱‍👤 urcit souradnice krychle
+        Bod3d A(S.x - a / 2.0, S.y - a / 2.0, S.z - a / 2.0);
+        Bod3d B(S.x + a / 2.0, S.y - a / 2.0, S.z - a / 2.0);
+        Bod3d C(S.x + a / 2.0, S.y - a / 2.0, S.z + a / 2.0);
+        Bod3d D(S.x - a / 2.0, S.y - a / 2.0, S.z + a / 2.0);
+
+        Bod3d E(S.x - a / 2.0, S.y + a / 2.0, S.z - a / 2.0);
+        Bod3d F(S.x + a / 2.0, S.y + a / 2.0, S.z - a / 2.0);
+        Bod3d G(S.x + a / 2.0, S.y + a / 2.0, S.z + a / 2.0);
+        Bod3d H(S.x - a / 2.0, S.y + a / 2.0, S.z + a / 2.0);
+
+        Bod2d Ap = Projekce(A, f);
+        Bod2d Bp = Projekce(B, f);
+        Bod2d Cp = Projekce(C, f);
+        Bod2d Dp = Projekce(D, f);
+
+        Bod2d Ep = Projekce(E, f);
+        Bod2d Fp = Projekce(F, f);
+        Bod2d Gp = Projekce(G, f);
+        Bod2d Hp = Projekce(H, f);
+
+        platno.NakresliUsecku(Ap, Bp);
+        platno.NakresliUsecku(Bp, Cp);
+        platno.NakresliUsecku(Cp, Dp);
+        platno.NakresliUsecku(Dp, Ap);
+
+        platno.NakresliUsecku(Ep, Fp);
+        platno.NakresliUsecku(Fp, Gp);
+        platno.NakresliUsecku(Gp, Hp);
+        platno.NakresliUsecku(Hp, Ep);
+
+        platno.NakresliUsecku(Ap, Ep);
+        platno.NakresliUsecku(Bp, Fp);
+        platno.NakresliUsecku(Cp, Gp);
+        platno.NakresliUsecku(Dp, Hp);
+    }
+};
+
 int main()
 {
     int columnCount = 30;
@@ -271,8 +348,9 @@ int main()
 
     RovnostrannyTrojuhelnik trojuhelnik(Bod2d(20.0, 16.0), 16, 0.1);
     Ctverec ctverec(Bod2d(10.0, 5.0), 10, -0.05);
+    Krychle krychle(Bod3d(20.0, 20, 40.0), 20.0, 10.0);
 
-    // 🍌Vlozte adresu na trojuhelnik a ctverec do dynamickeho pole vector
+    vector<GrafickyObjekt*> objekty = { /*&trojuhelnik, &ctverec,*/ &krychle};
 
     bool konec = false;
 
@@ -280,16 +358,15 @@ int main()
     {
         platno.Vymaz();
 
-        // 🐱‍👤Vypis a rotaci provedte v cyklu prvky dynamickeho pole
+        for (GrafickyObjekt* objekt : objekty)
+        {
+            objekt->Nakresli(platno);
+            objekt->Rotuj();
+        }
 
-        trojuhelnik.Nakresli(platno);
-        ctverec.Nakresli(platno);
         gotoxy(0, 0);
 
         platno.Zobraz();
 
-        trojuhelnik.Rotuj();
-        ctverec.Rotuj();
     } while (!konec);
 }
-```
