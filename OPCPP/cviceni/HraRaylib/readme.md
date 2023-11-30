@@ -8,3 +8,10 @@
 
 [Pong Game in C++ using Raylib library](https://github.com/educ8s/Cpp-Pong-Game-Raylib/tree/main)
 
+3. Změňte kód.
+
+- Zvětšete pálku hráče.
+- Zpomalte reakce protihráče.
+- Zpomalte balónek.
+- Změňte barvy.
+
