@@ -18,5 +18,6 @@
 - Zpomalte balónek.
 - Změňte barvy.
 
-4. Vytvořte hru breakout
+4. Hra Breakout.
+   
 Vytvořte hru Breakout dle příkladu ve videu [Breakout - (1976) - Arcade - gameplay HD](https://www.youtube.com/watch?v=AMUv8KvVt08).
