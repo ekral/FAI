@@ -43,7 +43,7 @@ namespace AvaloniaApplication3
     {
         private Vozidlo? vybraneVozidlo = null;
 
-        public ObservableCollection<Vozidlo> Vozidla { get; set; }
+        public ObservableCollection<Vozidlo> Vozidla { get; }
         public Vozidlo? VybraneVozidlo { get => vybraneVozidlo; set => SetProperty(ref vybraneVozidlo, value); }
         public KatalogVozidel()
         {
