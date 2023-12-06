@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34322.80
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AvaloniaListbox", "AvaloniaListbox.csproj", "{EAC5A4F6-3A64-47A4-81C3-4B1659119C30}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EAC5A4F6-3A64-47A4-81C3-4B1659119C30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAC5A4F6-3A64-47A4-81C3-4B1659119C30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAC5A4F6-3A64-47A4-81C3-4B1659119C30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAC5A4F6-3A64-47A4-81C3-4B1659119C30}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {07B57DC4-A537-48D8-B15F-89A09C0E5513}
+	EndGlobalSection
+EndGlobal
