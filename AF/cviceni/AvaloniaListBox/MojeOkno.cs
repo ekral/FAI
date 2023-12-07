@@ -8,14 +8,17 @@ namespace AvaloniaApplication3
 
     public class MojeOkno : Window
     {
-        public MojeOkno()
+         public MojeOkno()
         {
             DataContext = new KatalogVozidel();
 
-            ListBox listBox = new ListBox();
-            listBox.Bind(ListBox.ItemsSourceProperty, new Binding("Vozidla"));
-            listBox.Bind(ListBox.SelectedItemProperty, new Binding("VybraneVozidlo"));
+            Button buttonNoveVozidlo = new Button()
+            {
+                Content = "Pridej nove vozidlo"
+            };
 
+            ListBox listBox = new ListBox();
+           
             listBox.ItemTemplate = new FuncDataTemplate<Vozidlo>((vozidlo, scope) =>
             {
                 TextBlock textBlockNazev = new TextBlock()
@@ -37,22 +40,20 @@ namespace AvaloniaApplication3
 
             });
 
-            Button buttonNoveVozidlo = new Button()
-            {
-                Content = "Pridej nove vozidlo"
-            };
-
-            buttonNoveVozidlo.Bind(Button.CommandProperty, new Binding("Pridej"));
-
             TextBlock textBlockNazevVybraneho = new TextBlock();
-            textBlockNazevVybraneho.Bind(TextBlock.TextProperty, new Binding("VybraneVozidlo.Nazev"));
 
-            StackPanel panel = new StackPanel()
+            StackPanel stackPanel = new StackPanel()
             {
                 Children = { buttonNoveVozidlo, listBox, textBlockNazevVybraneho }
             };
 
-            Content = panel;
+            buttonNoveVozidlo.Bind(Button.CommandProperty, new Binding("Pridej"));
+            listBox.Bind(ListBox.ItemsSourceProperty, new Binding("Vozidla"));
+            listBox.Bind(ListBox.SelectedItemProperty, new Binding("VybraneVozidlo"));
+            textBlockNazevVybraneho.Bind(TextBlock.TextProperty, new Binding("VybraneVozidlo.Nazev"));
+
+
+            Content = stackPanel;
             
         }
     }
