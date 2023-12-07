@@ -42,15 +42,23 @@ namespace AvaloniaApplication3
 
             TextBlock textBlockNazevVybraneho = new TextBlock();
 
+            Image imageVybraneho = new Image()
+            {
+                 
+                MaxWidth = 500,
+                HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center
+            };
+
             StackPanel stackPanel = new StackPanel()
             {
-                Children = { buttonNoveVozidlo, listBox, textBlockNazevVybraneho }
+                Children = { buttonNoveVozidlo, listBox, textBlockNazevVybraneho, imageVybraneho }
             };
 
             buttonNoveVozidlo.Bind(Button.CommandProperty, new Binding("Pridej"));
             listBox.Bind(ListBox.ItemsSourceProperty, new Binding("Vozidla"));
             listBox.Bind(ListBox.SelectedItemProperty, new Binding("VybraneVozidlo"));
             textBlockNazevVybraneho.Bind(TextBlock.TextProperty, new Binding("VybraneVozidlo.Nazev"));
+            imageVybraneho.Bind(Image.SourceProperty, new Binding("VybraneVozidlo.ImageSource^"));
 
 
             Content = stackPanel;
