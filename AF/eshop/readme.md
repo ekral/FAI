@@ -69,7 +69,10 @@ class Buyer{
    + VerifyOrAddPaymentMehtod(CreditCardInfo creditcard) : PaymentMethod
 }
 
+class PaymentMethod{
 
+   
+}
 
 
 
