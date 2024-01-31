@@ -3,7 +3,8 @@
 Simplified UML Class diagram for Microsoft eShop Reference Application - "Northern Mountains":
 https://github.com/dotnet/eShop
 
-## Catalog 
+## Catalog API
+
 ```mermaid
 classDiagram
 
@@ -35,33 +36,42 @@ classDiagram
 
 ```
 
+## Basket API
+
 ```mermaid
 classDiagram
 
-   class CatalogItem{
-      Id
-      Name
-      Description
-      Price
-      CatalogTypeId
-      CatalogBrandId
-      AvailableStock
+   class CustomerBasket{
+      BuyerId
+      Items : ListBasketItem>
 
    }
 
-   class CatalogType{
+   class BasketItem{
       Id
-      Type : string
-      + RemoveStock(int quantityDesired) : int
-      + AddStock(int quantity) : int 
+      ProductId
+      ProductName
+      UnitPrice
+      OldUnitPrice
+      Quantity
    }
 
-   class CatalogBrand{
-      Id
-      Brand : string
-   }
+   CustomerBasket o -- BasketItem
+```
 
-   CatalogItem o -- CatalogType
-   CatalogItem o -- CatalogBrand
+# Ordering API
+
+```mermaid
+class Buyer{
+   Id
+   Name
+   PaymentsMethods : IEnumerable<PaymentMethod>
+   + VerifyOrAddPaymentMehtod(CreditCardInfo creditcard) : PaymentMethod
+}
+
+
+
+
+
 
 ```
