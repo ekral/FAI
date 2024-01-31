@@ -6,13 +6,22 @@ https://github.com/dotnet/eShop
 ```mermaid
 classDiagram
 
-   class OrderStatusType{
-      <<enumeration>>
-      Processing
-      Ready
-      Served,
-      Cancelled
+   class CatalogItem{
+      Id
+      Name
+      Description
+      Price
+      CatalogTypeId
+      CatalogBrandId
+      AvailableStock
+
    }
 
+   class CatalogType{
+      Id
+      Type : string
+      + RemoveStock(int quantityDesired) : int
+      + AddStock(int quantity) : int 
+   }
 ```
 
