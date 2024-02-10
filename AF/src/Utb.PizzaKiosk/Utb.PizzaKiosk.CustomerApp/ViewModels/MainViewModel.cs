@@ -1,4 +1,5 @@
 ﻿using ReactiveUI;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Reactive.Concurrency;
@@ -8,12 +9,12 @@ namespace Utb.PizzaKiosk.CustomerApp.ViewModels;
 
 public class MainViewModel : ViewModelBase
 {
-    private Pizza? _pizza;
+    private List<Pizza>? _pizzas;
 
-    public Pizza? Pizza
+    public List<Pizza>? Pizzas
     {
-        get => _pizza;
-        set => this.RaiseAndSetIfChanged(ref _pizza, value);
+        get => _pizzas;
+        set => this.RaiseAndSetIfChanged(ref _pizzas, value);
     }
 
     public MainViewModel()
@@ -23,11 +24,11 @@ public class MainViewModel : ViewModelBase
 
     private async void LoadPizza()
     {
-        Pizza? pizza = await App.Client.GetFromJsonAsync<Pizza>(@"https://localhost:7149/Pizza/2");
+        List<Pizza>? pizzas = await App.Client.GetFromJsonAsync<List<Pizza>>(@"https://localhost:7149/");
 
-        if(pizza is not null)
+        if(pizzas is not null)
         {
-            Pizza = pizza;
+            Pizzas = pizzas;
         }
     }
 }

@@ -11,6 +11,7 @@
          to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
     <vm:MainViewModel />
   </Design.DataContext>
-
-  <TextBlock Text="{Binding Pizza.Name}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+	<StackPanel>
+		<ItemsRepeater ItemsSource="{Binding Pizzas}"/>
+	</StackPanel>
 </UserControl>
