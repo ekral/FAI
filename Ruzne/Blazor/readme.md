@@ -34,6 +34,8 @@ A potom injektujeme závislost v razor souboru:
 
 Také ale můžeme použít ```AddHttpClient``` kdy serverový projekt referencuje frameworky ```Microsoft.AspNetCore.App``` (obsahující ```AddHttpClient```) a ```Microsoft.NETCore.App``` zatímco WebAssembly má referenci pouze na framework ```Microsoft.NETCore.App```.
 
+V následujicím příkladě používáme jednu z možností a to **Named clienta* a ```IHttpClientFactory```.
+
 ```csharp
 builder.Services.AddHttpClient("default", client => client.BaseAddress = new Uri("https://localhost:7047"));
 ```
@@ -51,3 +53,9 @@ A potom injektujeme závislost v razor souboru:
     }
 }
 ```
+
+---
+Více se dá zjistit v odkazech:
+
+1. [Call a web API from ASP.NET Core Blazor](https://learn.microsoft.com/en-us/aspnet/core/blazor/call-web-api?view=aspnetcore-8.0)
+2. [Make HTTP requests using IHttpClientFactory in ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/http-requests?view=aspnetcore-8.0)
