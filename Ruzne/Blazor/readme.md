@@ -1,6 +1,6 @@
 # Http klient v Blazor Webassemly
 
-Ve WebAssembly projektu (s příponou .Client) použijeme například následující kód:
+Pro použití třídy ```HttpClient``` ve WebAssembly projektu (s příponou .Client) použijeme například následující kód, který přidá třídu ```HttpClient``` do IoC kontejneru:
 
 ```csharp
 builder.Services.AddScoped(sp =>
@@ -9,17 +9,6 @@ builder.Services.AddScoped(sp =>
         BaseAddress = new Uri("https://localhost:5002")
     });
 ```
-
-Z důvodu prerenderingu, kdy je komponenta renderovaná nejprve na straně serveru a teprve poté ve WebAssembly, musí být ```HttpClient``` přidaný do IoC kontejneru v obou projektech. V serverovém projektu (bez přípony .Client) můžeme použít stejný způsob jako předchozí, tedy:
-
-```csharp
-builder.Services.AddScoped(sp =>
-    new HttpClient
-    {
-        BaseAddress = new Uri("https://localhost:5002")
-    });
-```
-
 A potom injektujeme závislost v razor souboru:
 
 ```razor
@@ -32,6 +21,10 @@ A potom injektujeme závislost v razor souboru:
     }
 }
 ```
+
+Z důvodu prerenderingu, kdy je komponenta renderovaná nejprve na straně serveru a teprve poté ve WebAssembly, musí být ```HttpClient``` přidaný do IoC kontejneru v obou projektech. V serverovém projektu (bez přípony .Client) můžeme použít předchozí kód včetně použití v razor souboru.
+
+## Named client v serverovém projektu
 
 Také ale můžeme použít metodu ```AddHttpClient``` kdy serverový projekt referencuje frameworky ```Microsoft.AspNetCore.App``` (obsahující ```AddHttpClient```) a ```Microsoft.NETCore.App``` zatímco WebAssembly má referenci pouze na framework ```Microsoft.NETCore.App```.
 
