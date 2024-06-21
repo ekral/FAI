@@ -42,7 +42,8 @@ builder.Services.AddHttpClient("default", client => client.BaseAddress = new Uri
 ```
 
 A potom injektujeme závislost v razor souboru:
-```razor
+
+```razor+csharp
 @inject IHttpClientFactory Factory
 
 @code {
