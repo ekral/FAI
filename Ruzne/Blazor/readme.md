@@ -15,7 +15,6 @@ A potom injektujeme závislost v razor souboru:
 @inject HttpClient HttpClient
 
 @code {
-
   protected override async Task OnInitializedAsync()
   {
     var forecasts = await HttpClient.GetFromJsonAsync<WeatherForecast[]>("weatherforecast");
@@ -41,7 +40,6 @@ A potom injektujeme závislost v razor souboru:
 @inject IHttpClientFactory Factory
 
 @code {
-
   protected override async Task OnInitializedAsync()
   {
     HttpClient httpClient = Factory.CreateClient("default");
