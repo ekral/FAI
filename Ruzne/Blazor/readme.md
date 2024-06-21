@@ -15,7 +15,6 @@ A potom injektujeme závislost v razor souboru:
 @inject HttpClient HttpClient
 
 @code {
-  private WeatherForecast[]? forecasts;
 
   protected override async Task OnInitializedAsync()
   {
@@ -42,7 +41,6 @@ A potom injektujeme závislost v razor souboru:
 @inject IHttpClientFactory Factory
 
 @code {
-  private WeatherForecast[]? forecasts;
 
   protected override async Task OnInitializedAsync()
   {
