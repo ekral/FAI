@@ -48,7 +48,7 @@ A potom injektujeme závislost v razor souboru:
   }
 }
 ```
-V předchozích příkladech jsme kvůli zjednodušení zadávali BaseAdress zadávali přímo v kódu, ale většinou jej ukládáme do souboru ```appsettings.json``` a nebo ```appsettings.Development.json```
+V předchozích příkladech jsme kvůli zjednodušení zadávali BaseAdress zadávali přímo v kódu, ale většinou jej ukládáme do souboru ```appsettings.json``` a nebo ```appsettings.Development.json```:
 
 ```json
 {
