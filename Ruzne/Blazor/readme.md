@@ -4,10 +4,10 @@ Pro použití třídy ```HttpClient``` ve WebAssembly projektu (s příponou .Cl
 
 ```csharp
 builder.Services.AddScoped(sp =>
-    new HttpClient
-    {
-        BaseAddress = new Uri("https://localhost:5002")
-    });
+  new HttpClient
+  {
+    BaseAddress = new Uri("https://localhost:5002")
+  });
 ```
 A potom injektujeme závislost v razor souboru:
 
@@ -15,10 +15,12 @@ A potom injektujeme závislost v razor souboru:
 @inject HttpClient HttpClient
 
 @code {
-    protected override async Task OnInitializedAsync()
-    {
-        var forecasts = await HttpClient.GetFromJsonAsync<WeatherForecast[]>("weatherforecast");
-    }
+  private WeatherForecast[]? forecasts;
+
+  protected override async Task OnInitializedAsync()
+  {
+    var forecasts = await HttpClient.GetFromJsonAsync<WeatherForecast[]>("weatherforecast");
+  }
 }
 ```
 
@@ -40,12 +42,14 @@ A potom injektujeme závislost v razor souboru:
 @inject IHttpClientFactory Factory
 
 @code {
-    protected override async Task OnInitializedAsync()
-    {
-        HttpClient httpClient = Factory.CreateClient("default");
+  private WeatherForecast[]? forecasts;
 
-        var forecasts = await httpClient.GetFromJsonAsync<WeatherForecast[]>("weatherforecast");
-    }
+  protected override async Task OnInitializedAsync()
+  {
+    HttpClient httpClient = Factory.CreateClient("default");
+
+    var forecasts = await httpClient.GetFromJsonAsync<WeatherForecast[]>("weatherforecast");
+  }
 }
 ```
 V předchozích příkladech jsme kvůli zjednodušení zadávali BaseAdress zadávali přímo v kódu, ale většinou jej ukládáme do souboru ```appsettings.json``` a nebo ```appsettings.Development.json```
