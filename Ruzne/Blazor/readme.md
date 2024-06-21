@@ -1,6 +1,6 @@
 # Http klient v Blazor Webassemly
 
-Pro použití třídy ```HttpClient``` ve WebAssembly projektu (s příponou .Client) použijeme například následující kód, který přidá třídu ```HttpClient``` do IoC kontejneru:
+Pro použití třídy ```HttpClient``` ve WebAssembly projektu (s příponou .Client) použijeme například následující kód, který přidá třídu ```HttpClient``` do IoC kontejneru a nakonfiguruje přitom```BaseAdress```:
 
 ```csharp
 builder.Services.AddScoped(sp =>
