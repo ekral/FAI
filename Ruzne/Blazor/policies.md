@@ -9,11 +9,13 @@ Použijeme dva způsoby, v prvním zadáme  ```ClaimType``` ```Yes``` nebo ```No
 | 1  |6655f799-8baf-4b03-95ca-521b5dc9affc | AgeOver21 | Yes        |
 | 2  |6655f799-8baf-4b03-95ca-521b5dc9affc | Age       | 21         |
 
-V kódu potom přidáme ```Policy``` následujím způsobem:
+V kódu v souboru *program.cs* potom přidáme ```Policy``` následujím způsobem:
 
+```csharp
 builder.Services.AddAuthorization(options =>
-    options.AddPolicy("Over21", policy => policy.RequireClaim("Age", "Over21"))
+    options.AddPolicy("Over21", policy => policy.RequireClaim("AgeOver21", "Yes"))
 );
+```
 
 A ```Policy`` potom použijeme obdobným způsobem jako roli:
 
