@@ -28,11 +28,14 @@ A přiřadíme uživateli role s pomocí tabulky **AspNetUserRoles**, napříkla
 
 V razor souboru potom můžeme použít následující atribut pro celou komponentu, který komponentu buď zpřístupní, nebo napíše text **Access denied** pokud uživatel není autorizovaný:
 
- ```@attribute [Authorize(Roles = "Administrator")]``` 
-
+```razor
+@attribute [Authorize(Roles = "Administrator")]
+```
 Můžeme také specifikovat více uživatelů:
 
- ```@attribute [Authorize(Roles = "Administrator, User")]``` 
+ ```razor
+ @attribute [Authorize(Roles = "Administrator, User")]
+ ``` 
 
 ## Komponenta AuthorizeView
 
