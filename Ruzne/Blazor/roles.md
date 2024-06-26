@@ -24,7 +24,7 @@ A přiřadíme uživateli role s pomocí tabulky **AspNetUserRoles**, napříkla
 |--------------------------------------|--------|
 | 6655f799-8baf-4b03-95ca-521b5dc9affc | 1      |
 
-### Authorize atribut
+## Authorize atribut
 
 V razor souboru potom můžeme použít následující atribut pro celou komponentu, který komponentu buď zpřístupní, nebo napíše text **Access denied** pokud uživatel není autorizovaný:
 
