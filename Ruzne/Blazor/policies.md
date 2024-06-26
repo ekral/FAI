@@ -7,7 +7,7 @@ Použijeme dva způsoby, v prvním zadáme  ```ClaimType``` ```Yes``` nebo ```No
 | Id | UserId                              | ClaimType | ClaimValue |
 |----|-------------------------------------|-----------|------------|
 | 1  |6655f799-8baf-4b03-95ca-521b5dc9affc | AgeOver21 | Yes        |
-| 2  |6655f799-8baf-4b03-95ca-521b5dc9affc | Age       | 21         |
+| 2  |6655f799-8baf-4b03-95ca-521b5dc9affc | Age       | 22         |
 
 V kódu v souboru *program.cs* potom přidáme ```Policy``` následujím způsobem s pomocí metody ```RequireClaim```:
 
