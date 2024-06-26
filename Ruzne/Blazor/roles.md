@@ -59,6 +59,7 @@ Také můžeme specifikovat zvlášť text pro autorizovaného uživate a jiný 
     </NotAuthorized>
 </AuthorizeView>
 ```
+## Informace o uživateli
 
 Pomocí fieldu ```user``` můžeme zobrazit informace o uživateli, například uživatelské jméno:
 
