@@ -17,7 +17,7 @@ builder.Services.AddAuthorization(options =>
 );
 ```
 
-A ```Policy``` potom použijeme v *razor* souboru obdobným způsobem jako roli:
+A ```Policy``` potom použijeme v *razor* souboru obdobným způsobem jako roli s tím rozdílem, že můžeme definovat jen jednu ```Policy```:
 
 ```razor
 <AuthorizeView Policy="Over21">
