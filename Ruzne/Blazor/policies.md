@@ -9,7 +9,7 @@ Použijeme dva způsoby, v prvním zadáme  ```ClaimType``` ```Yes``` nebo ```No
 | 1  |6655f799-8baf-4b03-95ca-521b5dc9affc | AgeOver21 | Yes        |
 | 2  |6655f799-8baf-4b03-95ca-521b5dc9affc | Age       | 21         |
 
-V kódu v souboru *program.cs* potom přidáme ```Policy``` následujím způsobem:
+V kódu v souboru *program.cs* potom přidáme ```Policy``` následujím způsobem s pomocí metody ```RequireClaim```:
 
 ```csharp
 builder.Services.AddAuthorization(options =>
@@ -30,3 +30,31 @@ A ```Policy`` potom použijeme obdobným způsobem jako roli:
 </AuthorizeView>
 ```
 
+Pokud je logika složitejší, tak můžeme použít metodu ```RequireAssertion```:
+
+```csharp
+builder.Services.AddAuthorization(options =>
+    options.AddPolicy("Over21", policy =>
+        policy.RequireAssertion(context =>
+        {
+            Claim? claim = context.User.Claims.FirstOrDefault(claim => claim.Type == "Age");
+
+            if (claim is null)
+            {
+                return false;
+            }
+
+            bool ok = int.TryParse(claim.Value, out int age);
+
+            if (!ok)
+            {
+                return false;
+            }
+
+            bool result = age > 21;
+
+            return result;
+        })));
+```
+
+Použití v *razor* souboru je potom stejné jako u předchozího kódu.
