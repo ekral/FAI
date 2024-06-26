@@ -61,7 +61,7 @@ Také můžeme specifikovat zvlášť text pro autorizovaného uživate a jiný 
 ```
 ## Informace o uživateli
 
-Pomocí fieldu ```user``` můžeme zobrazit informace o uživateli, například uživatelské jméno:
+Pomocí property ```context.User``` můžeme zobrazit informace o uživateli, například uživatelské jméno:
 
 ```razor
 <AuthorizeView Roles="Administrator">
