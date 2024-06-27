@@ -64,10 +64,23 @@ V předchozích příkladech jsme kvůli zjednodušení zadávali BaseAdress zad
 ```
 
 A v kódu jej pak můžeme použít následujícím způsobem:
+
 ```csharp
 string backedUrl = builder.Configuration["BackendUrl"] ?? "https://localhost:7047";
 
 builder.Services.AddHttpClient("default", client => client.BaseAddress = new Uri(backedUrl));
+```
+
+## HttpClient Content
+
+Pro http metody PUT, POST a PATCH, které vyžadují *body* používám třídy odvozené od třídy ```HttpContent```. Napříkld v následujícím kódu používáme StringContent pro metodu PUT.
+
+```csharp
+StringContent content = new StringContent(JsonSerializer.Serialize(server), Encoding.UTF8, "application/json");
+            
+var response = await client.PutAsync($"servers/{server.ServerId}.json", content);
+
+response.EnsureSuccessStatusCode();
 ```
 
 ---
@@ -75,3 +88,4 @@ Více se dá zjistit v odkazech:
 
 1. [Call a web API from ASP.NET Core Blazor](https://learn.microsoft.com/en-us/aspnet/core/blazor/call-web-api?view=aspnetcore-8.0)
 2. [Make HTTP requests using IHttpClientFactory in ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/http-requests?view=aspnetcore-8.0)
+3. [Make HTTP requests with the HttpClient class](https://learn.microsoft.com/en-us/dotnet/fundamentals/networking/http/httpclient#make-an-http-request)
