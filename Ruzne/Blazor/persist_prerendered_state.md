@@ -1,5 +1,9 @@
 # Persist Prerendered State
 
+Blazor používá z důvodu větší rychlosti odezvy a podpoře Search Engine Optimization (SEO) prerenderování. Znamená to, že nejprve vyrenderuje html stránku na straně serveru a odešle ji na klienta a teprve poté zprovozní SignalR kanál u ```InteractiveServer``` render módu a nebo nahraje do prohlížeče WebAssemly v případě ```InteractiveWebAssembly``` render módu.
+
+Prakticky to znamená, že se stránka vyrenderuje dvakrát a například metoda ```OnIntialized``` se zavolá také dvakrát. Následující příklad to demonstruje. V metodě OnInitialized vygeneruje dvakrát náhodné číslo pro čítač v ```InteractiveServer``` render mód. Pokud aplikaci spustíme, tak uvidíme, že na chvíli se zobrazí jedno náhodné číslo a potom druhé náhodné číslo.
+
 ```razor
 @page "/"
 @rendermode InteractiveServer
