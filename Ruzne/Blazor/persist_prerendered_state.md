@@ -33,7 +33,7 @@ Prakticky to znamená, že se stránka vyrenderuje dvakrát, nejprve na straně 
 
 V Blazoru máme možnost aplikační stav (například hodnotu proměnné ```currentCount```) serializovat na straně serveru a potom deserializovat na straně klienta. Výhodné je to také, pokud je inicializace náročná na zdroje, například provádí náročný dotaz do databáze.
 
-V následujícím příkladu injektujeme službu ```PersistentComponentState``` s pomocí které potom serializujeme a deserializujeme hodnotu proměnné ```currentCount```. Zápis ```PersistentComponentState.RegisterOnPersisting(PersistData)``` registruje metodu, která se má pro serializaci zavolat s tím, že referenci na tuto registraci si uložíme do fieldu ```PersistentComponentState``` tak abychom pak mohli zavolat metodu ```Dispose``` a nedoslo k memmory leaku.
+V následujícím příkladu injektujeme službu ```PersistentComponentState``` s pomocí které potom serializujeme a přenášíme na klienta ze serveru hodnotu proměnné ```currentCount``` a poté na straně klienta tuto hodnotu získáme, deserializujeme a použijeme. Zápis ```PersistentComponentState.RegisterOnPersisting(PersistData)``` registruje metodu, která se má pro serializaci a přenos zavolat s tím, že referenci na tuto registraci si uložíme do fieldu ```PersistentComponentState``` tak, abychom pak mohli zavolat metodu ```Dispose``` a nedoslo k memory leaku.
 
 ```razor
 @page "/"
