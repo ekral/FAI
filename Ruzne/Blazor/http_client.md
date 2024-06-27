@@ -73,7 +73,7 @@ builder.Services.AddHttpClient("default", client => client.BaseAddress = new Uri
 
 ## HttpClient Content
 
-Pro http metody PUT, POST a PATCH, které vyžadují *body* používám třídy odvozené od třídy ```HttpContent```. Napříkld v následujícím kódu používáme StringContent pro metodu PUT.
+Pro http metody PUT, POST a PATCH, které vyžadují *body* používáme třídy odvozené od třídy ```HttpContent```. Například v následujícím kódu používáme ```StringContent``` pro metodu PUT.
 
 ```csharp
 StringContent content = new StringContent(JsonSerializer.Serialize(server), Encoding.UTF8, "application/json");
