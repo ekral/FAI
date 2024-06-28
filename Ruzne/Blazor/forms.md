@@ -1,4 +1,48 @@
 # Formuláře
+```razor
+<h3>Bmi Calculator</h3>
+
+<EditForm FormName="BmiForm" Model="Data" OnValidSubmit="Submit" Enhance>
+    <div>
+        <label>
+            Height:
+            <br/>
+            <InputNumber @bind-Value="Data.Height" />
+        </label>
+    </div>
+    <div>
+        <label>
+            Mass:
+            <br />
+            <InputNumber @bind-Value="Data.Mass" />
+        </label>
+    </div>
+    <div>
+        <button type="submit">Submit</button>
+    </div>
+</EditForm>
+
+Bmi: @bmi.ToString("F2")
+
+@code {
+    [SupplyParameterFromForm]
+    public BmiInputData Data { get; set; } = new();
+
+    public double bmi = 0.0;
+
+    private void Submit()
+    {
+        double heightMeters = Data.Height / 100.0;
+
+        bmi = Data.Mass / (heightMeters * heightMeters);
+    }
+    public class BmiInputData
+    {
+        public double Height { get; set; } = 180.0;
+        public double Mass { get; set; } = 75.0;
+    }
+}
+```
 
 ```razor
 @using System.ComponentModel.DataAnnotations
