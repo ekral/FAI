@@ -2,7 +2,7 @@
 
 Data zadáváme pomocí formulářů, kdy můžeme použít jak HTML prvky, tak Blazor componenty což je běžnější. 
 
-V následujícím příkladu je ukázka formuláře pro výpočet BMI indexu s využitím Blazor componentů. První komponentou je ```EditForm```, který musí mít atributy ```FormName```tedy název formuláře, ```Model``` což je název property představující data formuláře a ```Submit```, která obsahuje název metody, která se má zavolat na serveru pro obsluhu daného formuláře. 
+V následujícím příkladu je ukázka formuláře pro výpočet BMI indexu s využitím Blazor componentů. První komponentou je ```EditForm```, který má atributy ```FormName```tedy název formuláře, ```Model``` což je název property představující data formuláře a ```Submit``` jehož hodnotou je název metody, která se má zavolat na serveru pro obsluhu daného formuláře. 
 
 ```EditForm``` potom obsahuje komponenty pro jednotlivé pole formuláře. Konkrétně dvě komponenty ```InputNumber```, které mají atribut ```@bind-Value="Data.Height"``` respektive ```@bind-Value="Data.Mass"``` představující obousměrné bindování na property. Znamená to, že se data jak zobrazují tak i mění.
 
@@ -54,9 +54,9 @@ Bmi: @bmi.ToString("F2")
 ```
 ## Validace dat
 
-Následující příklad představuje ukázku validace dat. Pro definování pravidel můžeme použít atributy, například atribut ```[Range(1.0, 300.0, ErrorMessage = "Height invalid (1-300).")]``` definuje povolený rozsah hodnot pro property.
+Následující příklad představuje ukázku validace dat. Pro definování pravidel můžeme použít atributy, například atribut ```[Range(1.0, 300.0, ErrorMessage = "Height invalid (1-300).")]``` který definuje povolený rozsah hodnot pro property.
 
-Do EditFormu potom přidáme komponentu  ```<DataAnnotationsValidator />``` a volitelně ```<ValidationSummary />``` představující seznam všech chyb při validaci. Také ale můžeme použít ```<ValidationMessage For="() => Data.Height" />``` která vypíše chyby pro jednotlivé položky formuláře.
+Do EditFormu potom přidáme komponentu  ```<DataAnnotationsValidator />``` a volitelně ```<ValidationSummary />``` představující seznam všech chyb při validaci. Také ale můžeme použít zápis ```<ValidationMessage For="() => Data.Height" />``` který vypíše chyby pro jednotlivé položky formuláře.
 
 ```razor
 @using System.ComponentModel.DataAnnotations
