@@ -1,8 +1,13 @@
 # Formuláře
+
+Data zadáváme pomocí formulářů, kdy můžeme použít jak HTML prvky, tak Blazor componenty. 
+
+V následujícím příkladu je ukázka formuláře pro výpočet BMI indexu Blazor componenty. První komponentou je ```EditForm```, který musí mít atributy název (```FormName```), ```Model``` což je název property představující data formuláře a referenci ```Submit```, která obsahuje název metody, která se má zavolat na serveru pro obsluhu daného formuláře. ```EditForm``` potom obsahuje 
+
 ```razor
 <h3>Bmi Calculator</h3>
 
-<EditForm FormName="BmiForm" Model="Data" OnValidSubmit="Submit" Enhance>
+<EditForm FormName="BmiForm" Model="Data" Submit="Submit" Enhance>
     <div>
         <label>
             Height:
