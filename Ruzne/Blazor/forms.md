@@ -2,7 +2,11 @@
 
 Data zadáváme pomocí formulářů, kdy můžeme použít jak HTML prvky, tak Blazor componenty. 
 
-V následujícím příkladu je ukázka formuláře pro výpočet BMI indexu Blazor componenty. První komponentou je ```EditForm```, který musí mít atributy název (```FormName```), ```Model``` což je název property představující data formuláře a referenci ```Submit```, která obsahuje název metody, která se má zavolat na serveru pro obsluhu daného formuláře. ```EditForm``` potom obsahuje komponenty pro jednotlivé pole formuláře. Konkrétně dvě komponenty ```InputNumber```, které mají atribut ```@bind-Value="Data.Height"``` respektive ```@bind-Value="Data.Mass"``` představující obousměrné bindování na property. Znamená to, že se data jak zobrazují tak i mění.
+V následujícím příkladu je ukázka formuláře pro výpočet BMI indexu Blazor componenty. První komponentou je ```EditForm```, který musí mít atributy ```FormName```tedy název formuláře, ```Model``` což je název property představující data formuláře a ```Submit```, která obsahuje název metody, která se má zavolat na serveru pro obsluhu daného formuláře. 
+
+```EditForm``` potom obsahuje komponenty pro jednotlivé pole formuláře. Konkrétně dvě komponenty ```InputNumber```, které mají atribut ```@bind-Value="Data.Height"``` respektive ```@bind-Value="Data.Mass"``` představující obousměrné bindování na property. Znamená to, že se data jak zobrazují tak i mění.
+
+Atribut ```Enhance``` zlepšuje uživatelský zážitek tak, že při odeslání formuláře nedojde k obnovení celé stránky ale pouze její části.
 
 ```razor
 <h3>Bmi Calculator</h3>
@@ -48,6 +52,11 @@ Bmi: @bmi.ToString("F2")
     }
 }
 ```
+## Validace dat
+
+Následující příklad představuje ukázku validace dat. Pro definování pravidel můžeme použít atributy, například atribut ```[Range(1.0, 300.0, ErrorMessage = "Height invalid (1-300).")]``` definuje povolený rozsah hodnot pro property.
+
+Do EditFormu potom přidáme komponentu  ```<DataAnnotationsValidator />``` a volitelně ```<ValidationSummary />``` představující seznam všech chyb při validaci. Také ale můžeme použít ```<ValidationMessage For="() => Data.Height" />``` která vypíše chyby pro jednotlivé položky formuláře.
 
 ```razor
 @using System.ComponentModel.DataAnnotations
@@ -55,10 +64,11 @@ Bmi: @bmi.ToString("F2")
 
 <EditForm FormName="BmiForm" Model="Data" OnValidSubmit="Submit" Enhance>
     <DataAnnotationsValidator />
+    <ValidationSummary />
     <div>
         <label>
             Height:
-            <br/>
+            <br />
             <ValidationMessage For="() => Data.Height" />
             <InputNumber @bind-Value="Data.Height" />
         </label>
@@ -92,14 +102,14 @@ Bmi: @bmi.ToString("F2")
     }
     public class BmiInputData
     {
-        [Range(10.0, 300.0, ErrorMessage = "Accommodation invalid (10-300).")]
+        [Range(1.0, 300.0, ErrorMessage = "Height invalid (1-300).")]
         public double Height { get; set; } = 180.0;
 
-        [Range(1.0, 500.0, ErrorMessage = "Accommodation invalid (1-500).")]
+        [Range(1.0, 500.0, ErrorMessage = "Mass invalid (1-500).")]
         public double Mass { get; set; } = 75.0;
     }
 }
 ```
 ---
-[ASP.NET Core Blazor forms overview](https://learn.microsoft.com/en-us/aspnet/core/blazor/forms/?view=aspnetcore-8.0)
-[ASP.NET Core Blazor input components](https://learn.microsoft.com/en-us/aspnet/core/blazor/forms/input-components?view=aspnetcore-8.0)
+1. [ASP.NET Core Blazor forms overview](https://learn.microsoft.com/en-us/aspnet/core/blazor/forms/?view=aspnetcore-8.0)
+2. [ASP.NET Core Blazor input components](https://learn.microsoft.com/en-us/aspnet/core/blazor/forms/input-components?view=aspnetcore-8.0)
