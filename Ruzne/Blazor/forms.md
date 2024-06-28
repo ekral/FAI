@@ -4,6 +4,8 @@ Data zadáváme pomocí formulářů, kdy můžeme použít jak HTML prvky, tak 
 
 V následujícím příkladu je ukázka formuláře pro výpočet BMI indexu s využitím Blazor componentů. První komponentou je ```EditForm```, který má atributy ```FormName```tedy název formuláře, ```Model``` což je název property představující data formuláře a ```Submit``` jehož hodnotou je název metody, která se má zavolat na serveru pro obsluhu daného formuláře. 
 
+Property představující data formuláře musí být označená atributem ```[SupplyParameterFromForm]```.
+
 ```EditForm``` potom obsahuje komponenty pro jednotlivé pole formuláře. Konkrétně dvě komponenty ```InputNumber```, které mají atribut ```@bind-Value="Data.Height"``` respektive ```@bind-Value="Data.Mass"``` představující obousměrné bindování na property. Znamená to, že se data jak zobrazují tak i mění.
 
 Atribut ```Enhance``` zlepšuje uživatelský zážitek tak, že při odeslání formuláře nedojde k obnovení celé stránky ale pouze její části.
