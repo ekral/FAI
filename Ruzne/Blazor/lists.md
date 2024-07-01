@@ -22,7 +22,7 @@ Kolekci dat můžeme zobrazit pomocí cyklu v jazyce C#, například ```foreach`
 
 Pokud bychom vkladali studenta jako prvního do kolekce, tak by se změnili hodnoty všech následujícíh položek a změnil by se HTML kód v DOM pro všechny html elementy. Místo kódu představující jednoho studenta by se tedy znovu vykreslili všichni studenti. Toto chování můžeme změnit tak, že použijeme @key atribut s pomocí kterého namapujeme element UI nebo componentu na konkrétní model, změna se potom bude kontrolovat dle Id a v DOMu se změní pouze HTML kód pro jednoho studenta.
 
-Následující příklad demonstruje použití atributu @key:
+Následující příklad demonstruje použití atributu ```@key```, vyzkoušejte si kód s použitím tohoto atributu a bez použití tohoto atributu s využitím vývojářských nástrojů v prohlížeči:
 
 ```razor
 @page "/students"
@@ -52,7 +52,7 @@ Následující příklad demonstruje použití atributu @key:
 }
 ```
 
-Pokud je ale počet prvků větší, tak je lepší použít virtualizaci, díky které se elementy uživatelského prostředí při stránkování nevytváří znova, ale zůstavají stejné a jen se mění jejich property.
+Pokud zobra, tak je lepší použít virtualizaci, díky které se elementy uživatelského prostředí při stránkování nevytváří znova, ale zůstavají stejné a jen se mění jejich property.
 
 ```razor
 @page "/students"
