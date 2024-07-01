@@ -21,7 +21,7 @@ Kolekci dat můžeme zobrazit pomocí cyklu v jazyce C#, například ```foreach`
 ```
 ## Atribut @key
 
-Pokud bychom vkladali studenta jako prvního do kolekce, tak by se změnili hodnoty všech následujícíh položek a změnil by se HTML kód v DOM pro všechny <li> tagy reprezentující jednotlivé studenty.Toto chování můžeme změnit tak, že použijeme ```@key``` atribut s pomocí kterého namapujeme element UI nebo componentu na konkrétní model, změna se potom bude kontrolovat dle hodnoty atributu ```@key``` a v DOMu se změní pouze <li> tag pro jednoho studenta.
+Pokud bychom vkladali studenta jako prvního do kolekce, tak by se změnili hodnoty všech následujícíh položek a změnil by se HTML kód v DOM pro všechny ```<li>``` tagy reprezentující jednotlivé studenty.Toto chování můžeme změnit tak, že použijeme ```@key``` atribut s pomocí kterého namapujeme element UI nebo componentu na konkrétní model, změna se potom bude kontrolovat dle hodnoty atributu ```@key``` a v DOMu se změní pouze ```<li>``` pro jednoho studenta.
 
 Následující příklad demonstruje použití atributu ```@key```, vyzkoušejte si kód s použitím tohoto atributu a bez použití tohoto atributu s využitím vývojářských nástrojů v prohlížeči:
 
@@ -56,7 +56,7 @@ Následující příklad demonstruje použití atributu ```@key```, vyzkoušejte
 
 Renderování velkého množství položek může být pomale. Proto je, lepší použít virtualizaci, kdy se elementy uživatelského prostředí při stránkování nevytváří znova, ale zůstavají stejné a jen se mění data které mají zobrazovat.
 
-V prvním příkladu není virtualizace použitá, pomocí vývojářských nástrojů se podívejte, že se vyrenderuje 2000 <li> tagů.
+V prvním příkladu není virtualizace použitá, pomocí vývojářských nástrojů se podívejte, že se vyrenderuje 2000 ```<li>``` tagů.
 
 ```razor
 @page "/students"
@@ -93,7 +93,7 @@ V prvním příkladu není virtualizace použitá, pomocí vývojářských nás
 }
 ```
 
-V následujícím příkladu je virtualizace použití, dle výšky řádku Blazor spočítá, kolik <li> tagů se vejde na obrazovku a zbytek doplní <div> tagem s výškou odpovídající výšce zbývajících <li> tagů. Při skrolování potom mění výšku <div> tagů před seznamem a <div> tagem za seznamem. Počet <li> tagů zůstává stejný, řádově jen desítky. Zjistěte konkrétní počet pomocí vývojářských nástrojů v prohlížeči.
+V následujícím příkladu je virtualizace použití, dle výšky řádku Blazor spočítá, kolik ``<li>`` tagů se vejde na obrazovku a zbytek doplní ```<div>``` tagem s výškou odpovídající výšce zbývajících ```<li>``` tagů. Při skrolování potom mění výšku ```<div>``` tagů před seznamem a ```<div>``` tagem za seznamem. Počet ```<li>``` tagů zůstává stejný, řádově jen desítky. Zjistěte konkrétní počet pomocí vývojářských nástrojů v prohlížeči.
 
 ```razor
 @page "/students"
@@ -128,3 +128,7 @@ V následujícím příkladu je virtualizace použití, dle výšky řádku Blaz
     record Student(int Id, string Name);
 }
 ```
+
+---
+[Retain element, component, and model relationships in ASP.NET Core Blazor](https://learn.microsoft.com/en-us/aspnet/core/blazor/components/element-component-model-relationships?view=aspnetcore-8.0)
+[ASP.NET Core Razor component virtualization](https://learn.microsoft.com/en-us/aspnet/core/blazor/components/virtualization?view=aspnetcore-8.0)
