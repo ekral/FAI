@@ -13,6 +13,7 @@ Kolekci dat můžeme zobrazit pomocí cyklu v jazyce C#, například ```foreach`
         <li>@student.Id : @student.Name</li>
     }
 </ul>
+
 @code {
     List<Student> Students { get; set; } = [new(1, "Alice"), new(2, "Peter"), new(3, "John")];
 
