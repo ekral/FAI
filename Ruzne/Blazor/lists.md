@@ -1,6 +1,6 @@
 # Zobrazování kolekcí
 
-Kolekci dat můžeme zobrazit pomocí cyklu v jazyce C#, například ```foreach``. V následujícím příkladu zobrazíme kolekci studentů:
+Kolekci dat můžeme zobrazit pomocí cyklu v jazyce C#, například ```foreach```. V následujícím příkladu zobrazíme kolekci studentů:
 
 ```razor
 @page "/students"
