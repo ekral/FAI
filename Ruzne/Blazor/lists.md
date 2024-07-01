@@ -54,7 +54,7 @@ Následující příklad demonstruje použití atributu ```@key```, vyzkoušejte
 ```
 ## Virtualizace 
 
-Renderování velkého množství položek může být pomale. Proto je, lepší použít virtualizaci, kdy se elementy uživatelského prostředí při stránkování nevytváří znova, ale zůstavají stejné a jen se mění data které mají zobrazovat.
+Renderování velkého množství položek může být pomalé. Proto je lepší použít virtualizaci, kdy se elementy uživatelského prostředí při stránkování nevytváří znova, ale zůstavají stejné a jen se mění data které mají zobrazovat.
 
 V prvním příkladu není virtualizace použitá, pomocí vývojářských nástrojů se podívejte, že se vyrenderuje 2000 ```<li>``` tagů.
 
@@ -93,7 +93,7 @@ V prvním příkladu není virtualizace použitá, pomocí vývojářských nás
 }
 ```
 
-V následujícím příkladu je virtualizace použití, dle výšky řádku Blazor spočítá, kolik ``<li>`` tagů se vejde na obrazovku a zbytek doplní ```<div>``` tagem s výškou odpovídající výšce zbývajících ```<li>``` tagů. Při skrolování potom mění výšku ```<div>``` tagů před seznamem a ```<div>``` tagem za seznamem. Počet ```<li>``` tagů zůstává stejný, řádově jen desítky. Zjistěte konkrétní počet pomocí vývojářských nástrojů v prohlížeči.
+V následujícím příkladu je virtualizace použitá. Blazor dle výšky řádku Blazor spočítá, kolik ``<li>`` tagů se vejde na obrazovku a zbytek doplní ```<div>``` tagem s výškou odpovídající výšce zbývajících ```<li>``` tagů. Při skrolování potom mění výšku ```<div>``` tagů před seznamem a ```<div>``` tagem za seznamem. Počet ```<li>``` tagů je řádově jen desítky. Zjistěte konkrétní počet pomocí vývojářských nástrojů v prohlížeči.
 
 ```razor
 @page "/students"
