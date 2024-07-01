@@ -22,7 +22,7 @@ Kolekci dat můžeme zobrazit pomocí cyklu v jazyce C#, například ```foreach`
 ```
 ## Atribut @key
 
-Pokud bychom vkladali nového studenta jako prvního do kolekce, tak by se změnili hodnoty všech následujícíh položek a změnil by se HTML kód v DOM pro všechny ```<li>``` tagy reprezentující jednotlivé studenty.Toto chování můžeme změnit tak, že použijeme ```@key``` atribut s pomocí kterého namapujeme element UI nebo componentu na konkrétní model, změna se potom bude kontrolovat dle hodnoty atributu ```@key``` a v DOMu se změní pouze ```<li>``` pro jednoho studenta.
+Pokud bychom vkladali nového studenta jako prvního do kolekce, tak by se změnili hodnoty všech následujícíh položek a změnil by se HTML kód v DOM pro všechny ```<li>``` tagy reprezentující jednotlivé studenty.Toto chování můžeme změnit tak, že použijeme ```@key``` atribut s pomocí kterého namapujeme element UI nebo componentu na konkrétní model. Změna se potom bude kontrolovat dle hodnoty atributu ```@key``` a v DOMu se změní pouze ```<li>``` pro jednoho studenta.
 
 Následující příklad demonstruje použití atributu ```@key```, vyzkoušejte si kód s použitím tohoto atributu a bez použití tohoto atributu s využitím vývojářských nástrojů v prohlížeči:
 
