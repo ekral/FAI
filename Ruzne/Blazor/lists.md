@@ -35,24 +35,25 @@ Následující příklad demonstruje použití atributu ```@key```, vyzkoušejte
 <ul>
     @foreach (Student student in Students)
     {
-        <li>@student.Id : @student.Name</li>
+        <li @key=student.Id >@student.Id : @student.Name</li>
     }
 </ul>
 
 <button @onclick="AddStudent">Add Student</button>
 
 @code {
-        List<Student> Students { get; set; } = [new(1, "Alice"), new(2, "Peter"), new(3, "John")];
+    List<Student> Students { get; set; } = [new(1, "Alice"), new(2, "Peter"), new(3, "John")];
 
-        public void AddStudent()
-        {
-            int id = Students.Max(s => s.Id) + 1;
-            Students.Insert(2, new Student(id, "Karel"));
-        }
+    public void AddStudent()
+    {
+        int id = Students.Max(s => s.Id) + 1;
+        Students.Insert(0, new Student(id, "Karel"));
+    }
 
-        record Student(int Id, string Name);
+    record Student(int Id, string Name);
 }
 ```
+
 ## Virtualizace 
 
 Renderování velkého množství položek může být pomalé. Proto je lepší použít virtualizaci, kdy se elementy uživatelského prostředí při stránkování nevytváří znova, ale zůstavají stejné a jen se mění data které mají zobrazovat.
