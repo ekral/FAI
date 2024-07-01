@@ -74,23 +74,17 @@ V prvním příkladu není virtualizace použitá, pomocí vývojářských nás
 </ul>
 
 @code {
-    List<Student> Students { get; set; } = new();
+    List<Student> Students { get; set; }
+
+    string[] names = ["Karl", "Alice", "John", "George", "Peter"];
 
     public StudentsPage()
     {
-        for (int i = 0; i < 2000; i++)
-        {
-            string name = Random.Shared.Next(4) switch
-            {
-                0 => "Karl",
-                1 => "Alice",
-                2 => "John",
-                _ => "George"
-            };
-
-            Students.Add(new(i, name));
-        }
+        Students = Enumerable.Range(0, 2000)
+                   .Select(x => new Student(x, names[Random.Shared.Next(names.Length)]))
+                   .ToList();
     }
+
     record Student(int Id, string Name);
 }
 ```
@@ -110,23 +104,17 @@ V následujícím příkladu je virtualizace použitá. Blazor dle výšky řád
 </ul>
 
 @code {
-    List<Student> Students { get; set; } = new();
+    List<Student> Students { get; set; }
+
+    string[] names = ["Karl", "Alice", "John", "George", "Peter"];
 
     public StudentsPage()
     {
-        for (int i = 0; i < 2000; i++)
-        {
-            string name = Random.Shared.Next(4) switch
-            {
-                0 => "Karl",
-                1 => "Alice",
-                2 => "John",
-                _ => "George"
-            };
-
-            Students.Add(new(i, name));
-        }
+        Students = Enumerable.Range(0, 2000)
+                   .Select(x => new Student(x, names[Random.Shared.Next(names.Length)]))
+                   .ToList();
     }
+
     record Student(int Id, string Name);
 }
 ```
