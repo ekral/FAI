@@ -56,7 +56,7 @@ Následující příklad demonstruje použití atributu ```@key```, vyzkoušejte
 
 ## Virtualizace 
 
-Renderování velkého množství položek na straně klienta (InteractiveServer nebo InteractiveWebassemlby) může být pomalé. Proto je lepší použít virtualizaci, kdy se elementy uživatelského prostředí na řádově stránce a půl při stránkování nevytváří znovu, ale zůstavají stejné a jen se mění data které mají zobrazovat.
+Renderování velkého množství položek na straně klienta (InteractiveServer nebo InteractiveWebassembly) může být pomalé. Proto je lepší použít virtualizaci, kdy se elementy uživatelského prostředí na řádově stránce a půl při stránkování nevytváří znovu, ale zůstavají stejné a jen se mění data které mají zobrazovat.
 
 V prvním příkladu není virtualizace použitá, pomocí vývojářských nástrojů se podívejte, že se vyrenderuje 2000 ```<li>``` tagů.
 
@@ -120,5 +120,5 @@ V následujícím příkladu je virtualizace použitá. Blazor dle výšky řád
 ```
 
 ---
-[Retain element, component, and model relationships in ASP.NET Core Blazor](https://learn.microsoft.com/en-us/aspnet/core/blazor/components/element-component-model-relationships?view=aspnetcore-8.0)
-[ASP.NET Core Razor component virtualization](https://learn.microsoft.com/en-us/aspnet/core/blazor/components/virtualization?view=aspnetcore-8.0)
+1. [Retain element, component, and model relationships in ASP.NET Core Blazor](https://learn.microsoft.com/en-us/aspnet/core/blazor/components/element-component-model-relationships?view=aspnetcore-8.0)
+2. [ASP.NET Core Razor component virtualization](https://learn.microsoft.com/en-us/aspnet/core/blazor/components/virtualization?view=aspnetcore-8.0)
