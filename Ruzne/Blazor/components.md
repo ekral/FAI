@@ -49,7 +49,7 @@ Použití komponenty s parametry je potom následující:
 ```
 ## Route Parameter
 
-Parametr může být zadaný i v cestě, následující příklad ukazuje routable komponentu Subject s route parametrem ```Id``` zadaným v cestě, kdy je specifikovaný i Route Constraint ```int```. Route parametr musí mít stejný název jako property označená atributem ```[Parametr]``` bez ohledu na velká a malá písmena. Parametry mohou být i volitelné, potom by se za názvem route parametru uvedl otazník, například ```@page "/subject/{id:int?}"```. Adresa následující komponenty včetně route parametru je potom například ```https://localhost:7299/subject/3```.
+Parametr může být zadaný i v cestě, následující příklad ukazuje routable komponentu Subject s route parametrem ```Id``` zadaným v cestě, kdy je specifikovaný i Route Constraint ```int```. Route parametr musí mít stejný název jako property označená atributem ```[Parametr]``` bez ohledu na velká a malá písmena. Query parametry mohou být i volitelné, potom by se za názvem route parametru uvedl otazník, například ```@page "/subject/{id:int?}"```. Adresa následující komponenty včetně route parametru je potom například ```https://localhost:7299/subject/3```.
 
 ```razor
 @page "/subject/{id:int}"
