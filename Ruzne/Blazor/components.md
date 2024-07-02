@@ -47,6 +47,7 @@ Použití komponenty s parametry je potom následující:
 
 <Student Id="1" Name="Karl"/>
 ```
+## Route Parameter
 
 Parametr může být zadaný i v cestě, následující příklad ukazuje routable komponentu Subject s route parametrem ```Id``` zadaným v cestě, kdy je specifikovaný i typ (Route Constraints). Route parametr musí mít stejný název jako property označená atributem ```[Parametr]``` bez ohledu na velká a malá písmena. Parametry mohou být i volitelné, potom by se za názvem route parametru uvedl otazník, například ```@page "/subject/{id:int?}"```. Adresa dané komponenty je například ```https://localhost:7299/subject/3```.
 
@@ -62,6 +63,29 @@ Parametr může být zadaný i v cestě, následující příklad ukazuje routab
 }
 ```
 
-- Parametry
-- Cascading parametry
-- SuplyParametersFromQuery
+## Query String Parameters
+
+Parametr může být zadaný i v dotazu, například ```https://localhost:7299/subject/1?Filter=English```. V následujícím kódu potom definujeme property Filter s atributem ```[SupplyParameterFromQuery]```.
+
+```razor
+@page "/subject/{id:int}"
+<h3>Subject</h3>
+
+@Id: @Filter
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    [SupplyParameterFromQuery]
+    public string? Filter { get; set; }
+}
+```
+
+## Cascading Parameters
+
+
+---
+1. [Razor Components](https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/?view=aspnetcore-8.0#razor-components)
+2. [Route Parameters](https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/routing?view=aspnetcore-8.0#route-parameters)
+3/ [Query Strings](https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/routing?view=aspnetcore-8.0#query-strings)
