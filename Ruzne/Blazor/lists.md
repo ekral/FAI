@@ -56,7 +56,7 @@ Následující příklad demonstruje použití atributu ```@key```, vyzkoušejte
 
 ## Virtualizace 
 
-Renderování velkého množství položek může být pomalé. Proto je lepší použít virtualizaci, kdy se elementy uživatelského prostředí při stránkování nevytváří znova, ale zůstavají stejné a jen se mění data které mají zobrazovat.
+Renderování velkého množství položek na straně klienta (InteractiveServer nebo InteractiveWebassemlby) může být pomalé. Proto je lepší použít virtualizaci, kdy se elementy uživatelského prostředí na řádově stránce a půl při stránkování nevytváří znovu, ale zůstavají stejné a jen se mění data které mají zobrazovat.
 
 V prvním příkladu není virtualizace použitá, pomocí vývojářských nástrojů se podívejte, že se vyrenderuje 2000 ```<li>``` tagů.
 
