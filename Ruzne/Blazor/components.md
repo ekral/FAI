@@ -84,7 +84,10 @@ Parametr může být zadaný i v dotazu, například ```https://localhost:7299/s
 
 ## Cascading Parameters
 
-Další typ parametru můžeme použív pokud máme hierarchii komponent a chceme mít parametr, který bude přístupný v celé hierarchii. V následujícím příkladu máme komponenty ```Home```, ```Component1```, ```Component2```, které jsou do sebe vnořené. 
+Další typ parametru můžeme použív pokud máme hierarchii komponent a chceme mít parametr, který bude přístupný v celé hierarchii. V následujícím příkladu máme komponenty ```Home```, ```Component1```, ```Component2```, které jsou do sebe vnořené.
+
+```CascadingValue``` se propojuje pomocí typu, v našem případě jde o typ ```School```:
+
 ```razor
     public class School
     {
@@ -129,7 +132,7 @@ V ```Home``` page definujeme ```CasadingValue``` ```School```:
 }
 ```
 
-V ```Component2``` použijeme ```CascadingValue``` s pomocí atributu ```[CascadingParameter]```. ```CascadingValue``` se propojuje pomocí typu, v nasem případě jde o typ ```School```:
+V ```Component2``` použijeme ```CascadingValue``` s pomocí atributu ```[CascadingParameter]```.
 
 ```razor
 <h3>Component2</h3>
