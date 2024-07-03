@@ -88,7 +88,7 @@ Další typ parametru můžeme použít pokud máme hierarchii komponent a chcem
 
 ```CascadingValue``` se propojuje pomocí typu, v našem případě jde o typ ```School```:
 
-```razor
+```csharp
     public class School
     {
         public int NumberOfStudents { get; set; }
