@@ -145,6 +145,47 @@ V ```Component2``` použijeme ```CascadingValue``` s pomocí atributu ```[Cascad
 }
 ```
 
+```CascadeParameter``` může být taky pojmenovaný, například ```<CascadingValue Value="@School" Name="CascadeParamSchool">```, tak jak je ukázané v následujícím kódu:
+
+```razor
+@page "/"
+@rendermode InteractiveServer
+
+<PageTitle>Home</PageTitle>
+
+<button @onclick="Zvys">Zvys</button>
+
+<CascadingValue Value="@School" Name="CascadeParamSchool">
+    <Component1/>
+</CascadingValue>
+
+@code {
+    public School? School { get; set; } = new() { NumberOfStudents = 5 };
+
+    public void Zvys()
+    {
+        if (School != null)
+        {
+            ++School.NumberOfStudents;
+        }
+    }
+}
+```
+
+Kdy jméno potom použijeme v atributu ```[CascadingParameter(Name = "CascadeParamSchool")]```:
+
+```razor
+<h3>Component2</h3>
+
+@SchoolParameter?.NumberOfStudents
+
+@code {
+    [CascadingParameter(Name = "CascadeParamSchool")]
+    public School? SchoolParameter {get; set; }
+}
+```
+
+
 ---
 1. [ASP.NET Core Razor components](https://learn.microsoft.com/en-us/aspnet/core/blazor/components/?view=aspnetcore-8.0)
 2. [Route Parameters](https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/routing?view=aspnetcore-8.0#route-parameters)
