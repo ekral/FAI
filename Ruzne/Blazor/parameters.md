@@ -47,7 +47,7 @@ Použití komponenty s parametry je potom následující:
 
 <Student Id="1" Name="Karl"/>
 ```
-## Route Parameter
+## Route Parameters
 
 Parametr může být zadaný i v cestě, následující příklad ukazuje routable komponentu Subject s route parametrem ```Id``` zadaným v cestě, kdy je specifikovaný i Route Constraint ```int```. Route parametr musí mít stejný název jako property označená atributem ```[Parametr]``` bez ohledu na velká a malá písmena. Route parametry mohou být i volitelné, potom by se za názvem route parametru uvedl otazník, například ```@page "/subject/{id:int?}"```. Adresa následující komponenty včetně route parametru je potom například ```https://localhost:7299/subject/3```.
 
@@ -84,7 +84,7 @@ Parametr může být zadaný i v dotazu, například ```https://localhost:7299/s
 
 ## Cascading Parameters
 
-Další typ parametru můžeme použív pokud máme hierarchii komponent a chceme mít parametr, který bude přístupný v celé hierarchii. V následujícím příkladu máme komponenty ```Home```, ```Component1```, ```Component2```, které jsou do sebe vnořené.
+Další typ parametru můžeme použít pokud máme hierarchii komponent a chceme mít parametr, který bude přístupný v celé hierarchii. V následujícím příkladu máme komponenty ```Home```, ```Component1```, ```Component2```, které jsou do sebe vnořené.
 
 ```CascadingValue``` se propojuje pomocí typu, v našem případě jde o typ ```School```:
 
