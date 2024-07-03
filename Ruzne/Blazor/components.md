@@ -84,6 +84,63 @@ Parametr může být zadaný i v dotazu, například ```https://localhost:7299/s
 
 ## Cascading Parameters
 
+Další typ parametru můžeme použív pokud máme hierarchii komponent a chceme mít parametr, který bude přístupný v celé hierarchii. V následujícím příkladu máme komponenty ```Home```, ```Component1```, ```Component2```, které jsou do sebe vnořené. 
+```razor
+    public class School
+    {
+        public int NumberOfStudents { get; set; }
+    }
+```
+V ```Home``` page definujeme ```CasadingValue``` ```School```:
+
+```razor
+@page "/"
+@rendermode InteractiveServer
+
+<PageTitle>Home</PageTitle>
+
+<button @onclick="Zvys">Zvys</button>
+
+<CascadingValue Value="@School">
+    <Component1/>
+</CascadingValue>
+
+@code {
+    public School? School { get; set; } = new() { NumberOfStudents = 5 };
+
+    public void Zvys()
+    {
+        if (School != null)
+        {
+            ++School.NumberOfStudents;
+        }
+    }
+}
+```
+```Component1``` používá ```Component2```:
+
+```razor
+<h3>Component1</h3>
+
+<Component2/>
+
+@code {
+ 
+}
+```
+
+V ```Component2``` použijeme ```CascadingValue``` s pomocí atributu ```[CascadingParameter]```. ```CascadingValue``` se propojuje pomocí typu, v nasem případě jde o typ ```School```:
+
+```razor
+<h3>Component2</h3>
+
+@SchoolParameter?.NumberOfStudents
+
+@code {
+    [CascadingParameter]
+    public School? SchoolParameter {get; set; }
+}
+```
 
 ---
 1. [ASP.NET Core Razor components](https://learn.microsoft.com/en-us/aspnet/core/blazor/components/?view=aspnetcore-8.0)
