@@ -1,4 +1,4 @@
-# Componenty
+# Component Parameters
 
 V Blazoru rozlišujeme routable a Non-routable komponenty. Routable komponenta má direktivu @page, zatímco non-routable tuto direktivu nemá. Non-routable komponenta se potom používá v jiných komponentách.
 
