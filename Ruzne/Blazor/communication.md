@@ -108,7 +108,7 @@ Komponenta ```Basket``` má potom parametr ```Orders``` představující počet 
 }
 ```
 
-Nadřazená komponenta ```Home``` potom nabinduje metodu ```ProductAdded``` na parametr ```OnOrdered``` a field ```order``` na parameter ```Order```:
+Nadřazená komponenta ```Home``` má field ```orders``` reprezentující počet objednávek. Metoda ```ProductAdded``` je nabindovaná na parametr ```OnOrdered``` a field ```orders``` je nabindovaný na parameter ```Orders```:
 
 ```razor
 @page "/"
@@ -117,7 +117,7 @@ Nadřazená komponenta ```Home``` potom nabinduje metodu ```ProductAdded``` na p
 <PageTitle>Home</PageTitle>
 
 <Catalog OnOrdered="ProductAdded" />
-<Basket Orders="@orders"/>
+<Basket Orders="orders"/>
 
 @code {
     int orders = 0;
