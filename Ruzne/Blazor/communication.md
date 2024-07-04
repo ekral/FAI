@@ -43,7 +43,7 @@ V komponentě ```Catalog``` potom injektujeme ```ProductService``` a vyvolávám
 }
 ```
 
-Ve komponentě ```Basket``` potom při inicializaci zaregistrujeme metodu ```ProductAdded``` k eventu pomocí příkazu ```ProductService.ProductAdded += ProductAdded``` a také implementujeme rozhraní ```IDisposable``` a v metodě ```Dispose``` metodu ```ProductAdded``` odregistrujeme ```ProductService.ProductAdded -= ProductAdded```:
+Ve komponentě ```Basket``` potom při inicializaci zaregistrujeme metodu ```ProductAdded``` k eventu pomocí příkazu ```ProductService.ProductAdded += ProductAdded``` a také implementujeme rozhraní ```IDisposable``` a v metodě ```Dispose``` metodu ```ProductAdded``` odregistrujeme ```ProductService.ProductAdded -= ProductAdded```. V metodě ```ProductAdded``` musíme zavolat metodu ```StatHasChanged``` aby se zaktualizovalo uživatelské rozhraní a protože metoda ```ProductAdded``` může být zavolána z jiného vlákna, tak je použita metoda ```InvokeAsync```.
 
 ```razor
 <h3>Basket</h3>
