@@ -18,7 +18,7 @@ public class ProductService
 }
 ```
 
-Kterou zaregistrujeme s lifetimem Scoped:
+Třídu ```ProductService``` zaregistrujeme do IoC kontejneru s lifetimem *Scoped*:
 
 ```csharp
 builder.Services.AddScoped<ProductService>();
