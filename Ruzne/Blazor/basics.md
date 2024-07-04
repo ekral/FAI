@@ -1,0 +1,3 @@
+- Render modes, v SSR jen formulare, lepsi zadavat az pri pouziti misto webassembly muzu dat server
+- Kdy se provadi refresh UI
+- implicitni a explicitni syntaxe, u if a foreach musi byt slozene zavorky
