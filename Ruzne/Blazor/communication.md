@@ -41,7 +41,7 @@ V komponentě ```Catalog``` potom injektujeme ```ProductService``` a vyvolávám
 }
 ```
 
-Ve komponentě Basket :
+Ve komponentě ```Basket``` potom při inicializaci zaregistrujeme metodu ```ProductAdded``` k eventu pomocí příkazu ```ProductService.ProductAdded += ProductAdded``` a také implementujeme rozhraní ```IDisposable``` a v metodě ```Dispose``` metodu ```ProductAdded``` odregistrujeme ```ProductService.ProductAdded -= ProductAdded```:
 
 ```razor
 <h3>Basket</h3>
@@ -73,4 +73,4 @@ orders: @orders
 ```
 
 ---
-[Need your Blazor sibling components to talk to each other?](https://jonhilton.net/blazor-sibling-communication/)
+1. [Need your Blazor sibling components to talk to each other?](https://jonhilton.net/blazor-sibling-communication/)
