@@ -2,6 +2,8 @@
 
 Někdy potřebujeme aby spolu vzájemně komunikovaly komponenty aniž by měli na sebe referenci. Příkladem může být například komponenta zobrazující produkty v eshopu pro objednání a komponenta reprezentující košík, která ukazuje počet objednávek v košíku.
 
+## Observer
+
 Komunikaci můžeme vyřešit pomocí třídy s eventem, kdy katalog vyvolává event a košík je k tomuto eventu zaregistrovaný. 
 
 Zde je ukázka třídy s eventem:
@@ -68,6 +70,61 @@ orders: @orders
     public void Dispose()
     {
         ProductService.ProductAdded -= ProductAdded;
+    }
+}
+```
+
+## Callback
+
+Pokud mají obě komponenty, jak ```Basket``` tak ```Catalog``` stejného předka a jsou na stejné úrovni v hirerachii komponent, tak můžeme použít i callback. Typ parametru pro callback je v Blazoru ```EventCallback``` jak můžeme vidět v kódu komponenty ```Katalog```:
+
+```razor
+<h3>Catalog</h3>
+
+<button @onclick="AddToBasket">Order Product</button>
+
+@code {
+    [Parameter]
+    public EventCallback OnOrdered { get; set; }
+
+    public void AddToBasket()
+    {
+        OnOrdered.InvokeAsync();
+    }
+}
+```
+
+Komponenta ```Basket``` má potom parametr Orders představující počet objednávek:
+
+```razor
+<h3>Basket</h3>
+
+@Orders
+<br/>
+
+@code {
+    [Parameter]
+    public int Orders { get; set; }
+}
+```
+
+Nadřazená komponenta Home potom nabinduje metodu na parametr ```OnOrdered``` a field ```order``` na parameter ```Order```:
+
+```razor
+@page "/"
+@rendermode InteractiveServer
+
+<PageTitle>Home</PageTitle>
+
+<Catalog OnOrdered="ProductAdded" />
+<Basket Orders="@orders"/>
+
+@code {
+    int orders = 0;
+
+    public void ProductAdded()
+    {
+        ++orders;
     }
 }
 ```
