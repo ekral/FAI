@@ -94,7 +94,7 @@ Pokud mají obě komponenty, jak ```Basket``` tak ```Catalog``` stejného předk
 }
 ```
 
-Komponenta ```Basket``` má potom parametr Orders představující počet objednávek:
+Komponenta ```Basket``` má potom parametr ```Orders``` představující počet objednávek:
 
 ```razor
 <h3>Basket</h3>
