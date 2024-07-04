@@ -108,7 +108,7 @@ Komponenta ```Basket``` má potom parametr ```Orders``` představující počet 
 }
 ```
 
-Nadřazená komponenta ```Home``` má field ```orders``` reprezentující počet objednávek. Metoda ```ProductAdded``` je nabindovaná na parametr ```OnOrdered``` a field ```orders``` je nabindovaný na parameter ```Orders```:
+Nadřazená komponenta ```Home``` má field ```orders``` reprezentující počet objednávek. Metoda ```ProductAdded``` je nabindovaná na parametr ```OnOrdered``` komponenty ```Catalog```. A field ```orders``` je nabindovaný na parameter ```Orders``` komponenty ```Basket```:
 
 ```razor
 @page "/"
