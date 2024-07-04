@@ -1,6 +1,6 @@
 # Komunikace mezi nezávislými komponentami
 
-Někdy potřebujeme aby spolu vzájemně komunikovaly komponenty aniž by měli na sebe referenci. Příkladem může být například komponenta zobrazující produkty pro obejednání a komponenta reprezentující košík, která ukazuje počet objednávek v košíku.
+Někdy potřebujeme aby spolu vzájemně komunikovaly komponenty aniž by měli na sebe referenci. Příkladem může být například komponenta zobrazující produkty v eshopu pro objednání a komponenta reprezentující košík, která ukazuje počet objednávek v košíku.
 
 Komunikaci můžeme vyřešit pomocí třídy s eventem, kdy katalog vyvolává event a košík je k tomuto eventu zaregistrovaný. 
 
