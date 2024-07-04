@@ -76,7 +76,7 @@ orders: @orders
 
 ## Callback
 
-Pokud mají obě komponenty, jak ```Basket``` tak ```Catalog``` stejného předka a jsou na stejné úrovni v hirerachii komponent, tak můžeme použít i callback. Typ parametru pro callback je v Blazoru ```EventCallback``` jak můžeme vidět v kódu komponenty ```Katalog```:
+Pokud mají obě komponenty, jak ```Basket``` tak ```Catalog``` stejného předka a jsou na stejné úrovni v hirerachii komponent, tak můžeme použít i callback. Typ parametru pro callback je v Blazoru ```EventCallback``` jak můžeme vidět v kódu komponenty ```Catalog```:
 
 ```razor
 <h3>Catalog</h3>
