@@ -89,3 +89,4 @@ Více se dá zjistit v odkazech:
 1. [Call a web API from ASP.NET Core Blazor](https://learn.microsoft.com/en-us/aspnet/core/blazor/call-web-api?view=aspnetcore-8.0)
 2. [Make HTTP requests using IHttpClientFactory in ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/http-requests?view=aspnetcore-8.0)
 3. [Make HTTP requests with the HttpClient class](https://learn.microsoft.com/en-us/dotnet/fundamentals/networking/http/httpclient#make-an-http-request)
+4. [Cookie-based request credentials](https://learn.microsoft.com/en-us/aspnet/core/blazor/call-web-api?view=aspnetcore-9.0&pivots=webassembly#cookie-based-request-credentials)
