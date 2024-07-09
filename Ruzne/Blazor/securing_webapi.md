@@ -95,5 +95,28 @@ app.MapGet("/weatherforecast", (HttpContext httpContext) =>
 
 Nyní můžeme aplikaci otestovat, nesmíme zapomenout vytvořit databází a pokud používáme OpenApi tak je potřeba zadat UseCokies.
 
+V Blazor WebAssemlby projektu nejprve přidáme třídu ```HttpClient``` do IoC kontejneru a to jak ve Webassembly projektu s příponou Client, tak do serverového projektu z důvodu prerenderingu:
+
+```csharp
+ builder.Services.AddScoped(sp => new HttpClient() { BaseAddress = new Uri("https://localhost:7125/") });
+```
+
+Poté přidáme kód pro Login do WebApi:
+
+```csharp
+    private async void Login()
+    {
+        string email = "ekral@utb.cz";
+        string password = "Passw0rd";
+
+        var resultLogin = await HttpClient.PostAsJsonAsync(
+        "login?useCookies=true", new
+        {
+            email,
+            password
+        });
+    }
+```
+
 ---
 1. [How to use Identity to secure a Web API backend for SPAs](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity-api-authorization?view=aspnetcore-8.0)
