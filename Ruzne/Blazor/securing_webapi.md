@@ -93,6 +93,10 @@ app.MapGet("/weatherforecast", (HttpContext httpContext) =>
 .WithOpenApi();
 ```
 
+## WebApi a Blazor Webassembly
+
+Pokud používáme Webassembly, tak musíme nastavit Cross
+
 Nyní můžeme aplikaci otestovat, nesmíme zapomenout vytvořit databází a pokud používáme OpenApi tak je potřeba zadat UseCokies.
 
 V Blazor WebAssemlby projektu nejprve přidáme třídu ```HttpClient``` do IoC kontejneru a to jak ve Webassembly projektu s příponou Client, tak do serverového projektu z důvodu prerenderingu:
@@ -120,3 +124,4 @@ Poté přidáme kód pro Login do WebApi:
 
 ---
 1. [How to use Identity to secure a Web API backend for SPAs](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity-api-authorization?view=aspnetcore-8.0)
+2. [Enable Cross-Origin Requests (CORS) in ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-8.0)
