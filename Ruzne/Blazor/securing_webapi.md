@@ -95,15 +95,47 @@ app.MapGet("/weatherforecast", (HttpContext httpContext) =>
 
 ## WebApi a Blazor Webassembly
 
-Pokud používáme Webassembly, tak musíme nastavit Cross
+Pokud používáme Webassembly, tak musíme ve WebAPI povolit Cross-origin resource sharing (CORS), z důvodu bezpečnosti je v prohlížeči zakázáno provádět dotazy na jinou doménu (nebo jiný port atd.) než je doména která vytvořila stránku ze které dotaz provádíme (origin). Pokud ale chceme volat WebApi z prohlíže tedy typicky volat jinou doménu, tak musíme CORS povolit. Konkrétně povolíme doménu od které dotaz přichází.
+
+Ve WebApi povolíme CORS následujícím způsobem, nejprve přidáme službu a nakonfigurujeme ji. V následujícím příkladu povolujeme i Credentials. Adresa ```https://localhost:7027``` představuje adresu na které běží Blazor Webassemly klient.
+
+```csharp
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "MyAllowSpecificOrigins",
+                      builder =>
+                      {
+                          builder.WithOrigins("https://localhost:7027")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials();
+                      });
+});
+```
+
+Potom tuto name policy použijeme, kdy ```UseCors``` musí být například volané dříve než ```UseResponseCaching```: 
+
+```csharp
+app.UseCors("MyAllowSpecificOrigins");
+```
 
 Nyní můžeme aplikaci otestovat, nesmíme zapomenout vytvořit databází a pokud používáme OpenApi tak je potřeba zadat UseCokies.
 
-V Blazor WebAssemlby projektu nejprve přidáme třídu ```HttpClient``` do IoC kontejneru a to jak ve Webassembly projektu s příponou Client, tak do serverového projektu z důvodu prerenderingu:
+V Blazor WebAssemlby projektu nejprve přidáme třídu ```HttpClient``` do IoC kontejneru a to jak ve Webassembly projektu s příponou Client, tak do serverového projektu z důvodu prerenderingu. 
+
+V serverovém projektu použijeme:
 
 ```csharp
  builder.Services.AddScoped(sp => new HttpClient() { BaseAddress = new Uri("https://localhost:7125/") });
 ```
+
+Pro WebAssembly klienta musíme nakonfigurovat ```CookieHandler```, abychom povolili ```BrowserRequestCredentials.Include```. Nestačí volat request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include); pro každý dotaz zvlášť, ale musíme použít zmíněný ```CookieHandler```:
+
+```csharp
+```
+
+
+
 
 Poté přidáme kód pro Login do WebApi:
 
