@@ -113,13 +113,13 @@ builder.Services.AddCors(options =>
 });
 ```
 
-Potom tuto name policy použijeme, kdy ```UseCors``` musí být například volané dříve než ```UseResponseCaching```: 
+Potom tuto pojmenovanou policy použijeme, kdy ```UseCors``` musí být volané v daném pořadí, například musí být volané dříve než ```UseResponseCaching```: 
 
 ```csharp
 app.UseCors("MyAllowSpecificOrigins");
 ```
 
-V Blazor WebAssemlby projektu nejprve přidáme třídu ```HttpClient``` do IoC kontejneru a to jak ve Webassembly projektu s příponou Client, tak do serverového projektu z důvodu prerenderingu. 
+V Blazor WebAssembly projektu nejprve přidáme třídu ```HttpClient``` do IoC kontejneru a to jak ve WebAssembly projektu s příponou Client, tak do serverového projektu z důvodu prerenderingu. 
 
 V serverovém projektu použijeme:
 
@@ -154,24 +154,31 @@ Který pak použijeme následujícím způsobem:
 
 Poznámka, alternativně lze handler použít příkazy ```builder.Services.AddTransient<CookieHandler>();``` a ```builder.Services.AddHttpClient(...).AddHttpMessageHandler<CookieHandler>();```.
 
+Nyní můžeme aplikaci otestovat, nesmíme ale předtím zapomenout vytvořit databází.
 
-Nyní můžeme aplikaci otestovat, nesmíme zapomenout vytvořit databází a pokud používáme OpenApi tak je potřeba zadat UseCokies.
-
-Poté přidáme kód pro Login do WebApi:
+Kód pro login je následující, kdy pro autorizaci pomocí cookies je potřeba zadat query parameter ```useCookies=true```:
 
 ```csharp
-    private async void Login()
-    {
-        string email = "ekral@utb.cz";
-        string password = "Passw0rd";
+string email = "ekral@utb.cz";
+string password = "Passw0rd";
 
-        var resultLogin = await HttpClient.PostAsJsonAsync(
-        "login?useCookies=true", new
-        {
-            email,
-            password
-        });
-    }
+var result = await HttpClient.PostAsJsonAsync(
+"login?useCookies=true", new
+{
+    email,
+    password
+});
+```
+
+A nakonec můžeme provést dotaz na zabezpečené WebApi:
+
+```csharp
+HttpResponseMessage? result = await HttpClient.GetAsync("weatherforecast");
+
+if (result.IsSuccessStatusCode)
+{
+    WeatherForecast[]? forecasts = await result.Content.ReadFromJsonAsync<WeatherForecast[]>();
+}
 ```
 
 ---
