@@ -162,7 +162,7 @@ Kód pro login je následující, kdy pro autorizaci pomocí cookies je potřeba
 string email = "ekral@utb.cz";
 string password = "Passw0rd";
 
-var result = await HttpClient.PostAsJsonAsync(
+HttpResponseMessage? response = await HttpClient.PostAsJsonAsync(
 "login?useCookies=true", new
 {
     email,
@@ -173,11 +173,11 @@ var result = await HttpClient.PostAsJsonAsync(
 A nakonec můžeme provést dotaz na zabezpečené WebApi:
 
 ```csharp
-HttpResponseMessage? result = await HttpClient.GetAsync("weatherforecast");
+HttpResponseMessage? response = await HttpClient.GetAsync("weatherforecast");
 
-if (result.IsSuccessStatusCode)
+if (response.IsSuccessStatusCode)
 {
-    WeatherForecast[]? forecasts = await result.Content.ReadFromJsonAsync<WeatherForecast[]>();
+    WeatherForecast[]? forecasts = await response.Content.ReadFromJsonAsync<WeatherForecast[]>();
 }
 ```
 
