@@ -95,7 +95,7 @@ app.MapGet("/weatherforecast", (HttpContext httpContext) =>
 
 ## WebApi a Blazor Webassembly
 
-Pokud používáme Webassembly, tak musíme ve WebAPI povolit Cross-origin resource sharing (CORS), z důvodu bezpečnosti je v prohlížeči zakázáno provádět dotazy na jinou doménu (nebo jiný port atd.) než je doména která vytvořila stránku ze které dotaz provádíme (origin). Pokud ale chceme volat WebApi z prohlíže tedy typicky volat jinou doménu, tak musíme CORS povolit. Konkrétně povolíme doménu od které dotaz přichází.
+Pokud používáme Webassembly, tak musíme ve WebAPI povolit Cross-origin resource sharing (CORS), z důvodu bezpečnosti je v prohlížeči zakázáno provádět dotazy na jinou doménu (nebo jiný port atd.) než je doména která vytvořila stránku ze které dotaz provádíme (origin). Pokud ale chceme volat WebApi z prohlížeče, tedy typicky volat jinou doménu, tak musíme CORS povolit. Konkrétně povolíme doménu od které dotaz přichází.
 
 Ve WebApi povolíme CORS následujícím způsobem, nejprve přidáme službu a nakonfigurujeme ji. V následujícím příkladu povolujeme i Credentials. Adresa ```https://localhost:7027``` představuje adresu na které běží Blazor Webassemly klient.
 
