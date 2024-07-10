@@ -119,8 +119,6 @@ Potom tuto name policy použijeme, kdy ```UseCors``` musí být například vola
 app.UseCors("MyAllowSpecificOrigins");
 ```
 
-Nyní můžeme aplikaci otestovat, nesmíme zapomenout vytvořit databází a pokud používáme OpenApi tak je potřeba zadat UseCokies.
-
 V Blazor WebAssemlby projektu nejprve přidáme třídu ```HttpClient``` do IoC kontejneru a to jak ve Webassembly projektu s příponou Client, tak do serverového projektu z důvodu prerenderingu. 
 
 V serverovém projektu použijeme:
@@ -148,16 +146,16 @@ public class CookieHandler : DelegatingHandler
 }
 ```
 
-Který pak použijeme například následujícím způsobem:
+Který pak použijeme následujícím způsobem:
 
 ```csharp
   builder.Services.AddScoped(sp => new HttpClient(new CookieHandler()) { BaseAddress = new Uri("https://localhost:7125/") });
 ```
 
-Poznámka, alternativně lze handler použít příkazem 
+Poznámka, alternativně lze handler použít příkazy ```builder.Services.AddTransient<CookieHandler>();``` a ```builder.Services.AddHttpClient(...).AddHttpMessageHandler<CookieHandler>();```.
 
 
-
+Nyní můžeme aplikaci otestovat, nesmíme zapomenout vytvořit databází a pokud používáme OpenApi tak je potřeba zadat UseCokies.
 
 Poté přidáme kód pro Login do WebApi:
 
