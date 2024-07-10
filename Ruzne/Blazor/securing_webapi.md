@@ -129,10 +129,32 @@ V serverovém projektu použijeme:
  builder.Services.AddScoped(sp => new HttpClient() { BaseAddress = new Uri("https://localhost:7125/") });
 ```
 
-Pro WebAssembly klienta musíme nakonfigurovat ```CookieHandler```, abychom povolili ```BrowserRequestCredentials.Include```. Nestačí volat request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include); pro každý dotaz zvlášť, ale musíme použít zmíněný ```CookieHandler```:
+Pro WebAssembly klienta musíme nakonfigurovat ```CookieHandler```, abychom povolili ```BrowserRequestCredentials.Include```. Nestačí volat ```request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);``` pro každý dotaz zvlášť, ale musíme použít zmíněný ```CookieHandler```:
 
 ```csharp
+public class CookieHandler : DelegatingHandler
+{
+    public CookieHandler()
+    {
+        InnerHandler = new HttpClientHandler();
+    }
+
+    protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+    {
+        request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+
+        return base.SendAsync(request, cancellationToken);
+    }
+}
 ```
+
+Který pak použijeme například následujícím způsobem:
+
+```csharp
+  builder.Services.AddScoped(sp => new HttpClient(new CookieHandler()) { BaseAddress = new Uri("https://localhost:7125/") });
+```
+
+Poznámka, alternativně lze handler použít příkazem 
 
 
 
