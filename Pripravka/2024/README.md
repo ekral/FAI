@@ -65,7 +65,7 @@ Poznámka: V pc učebně je funkční jen Visual Studio 2019, verze 2022 nefungu
 
 2. Úterý
 	- Opakování aritmetických výrazů.
-	- Booleanovské výrazy (relační operátory, operátor rovnosti).
+	- Booleanovské výrazy (relační operátory, operátor rovnosti, logické operátory).
 	- Podmíněný příkaz.
 
  	Příklady
