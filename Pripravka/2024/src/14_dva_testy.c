@@ -9,8 +9,19 @@ int main()
 
     // napiste kod, ktery vypise text 
     // "splnil" nebo "nesplnil"
-
+    // && je operator "a zaroven"
     if (test1 > 50 && test2 > 50)
+    {
+        puts("splnil");
+    }
+    else
+    {
+        puts("nesplnil");
+    }
+
+    // studentovi staci splnit jen jeden ze dvou testu
+    // || je operator "a nebo"
+    if (test1 > 50 || test2 > 50)
     {
         puts("splnil");
     }
