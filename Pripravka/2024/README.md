@@ -70,6 +70,7 @@ Poznámka: V pc učebně je funkční jen Visual Studio 2019, verze 2022 nefungu
 
  	Příklady
 	- Výpočet diskriminantu [07_diskriminant.c](src/07_diskriminant.c).
+ 	- Výpis konstanty M_PI [08_vypis_pi.c](src/08_vypis_pi.c)	 
    
 ## Základní typy a aritmetické operace
 
