@@ -22,9 +22,7 @@ heslo: **programatorskaPripravka2024**
 ## Vývojová prostředí
 
 - [Erik Král](https://fai.utb.cz/contacts/ing-et-ing-erik-kral-ph-d/) používá [Visual Studio Community](https://visualstudio.microsoft.com/vs/community/).
-- [Tomáš Dulík](https://fai.utb.cz/contacts/ing-tomas-dulik-ph-d/) používá Eclipse, [Codelite](https://codelite.org/) nebo [Clion](https://www.jetbrains.com/clion/).
-
-Poznámka: V pc učebně je funkční jen Visual Studio 2019, verze 2022 nefunguje.
+- [Tomáš Dulík](https://fai.utb.cz/contacts/ing-tomas-dulik-ph-d/) používá [Clion](https://www.jetbrains.com/clion/).
 
 ## Organizace kurzu
 
