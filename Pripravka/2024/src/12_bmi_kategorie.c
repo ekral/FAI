@@ -30,6 +30,28 @@ int main()
     {
         puts("Tezka podvyziva");
     }
-
-    // pokracujte s else if s dalsimi kategoriemi
+    else if (bmi <= 18.5)
+    {
+        puts("podvaha");
+    }
+    else if (bmi <= 25.0)
+    {
+        puts("idealni vaha");
+    }
+    else if (bmi <= 30.0)
+    {
+        puts("nadvaha");
+    }
+    else if (bmi <= 35.0)
+    {
+        puts("obezita prvniho stupne");
+    }
+    else if (bmi <= 40.0)
+    {
+        puts("obezita druheho stupne");
+    }
+    else
+    {
+        puts("morbidni obezita");
+    }
 }
