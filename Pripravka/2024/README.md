@@ -57,7 +57,7 @@ Poznámka: V pc učebně je funkční jen Visual Studio 2019, verze 2022 nefungu
 	- Adresa a délka proměnné [01_prvni](src/01_prvni.c).
 	- Výpočet bmi [02_bmi](src/02_bmi.c).
 	- Průměr tří čísel [03_prumer_tri_cisel.c](src/03_prumer_tri_cisel.c).
-	- Obsah a obvod čtverce [04_ctverec.c)](src/04_ctverec.c).
+	- Obsah a obvod čtverce [04_ctverec.c](src/04_ctverec.c).
 	- Obsah a obvod kruhu [05_kruh.c](src/05_kruh.c).
 	- Obsah a obvod trojúhelníka [05_trojuhelnik.c](src/05_trojuhelnik.c).
 	- Splátka hypotéky [06_splatka.c](src/06_splatka.c). 
