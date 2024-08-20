@@ -39,6 +39,25 @@ Poznámka: V pc učebně je funkční jen Visual Studio 2019, verze 2022 nefungu
 	- čtvrtá hodina.
 - 14:00 Konec.
 
+## Probraná témata
+
+1. Pondělí
+	- Historie jazyka C.
+	- Seznámení s vývojovým nástrojem.
+	- Program hello world.
+	- Aritmetické výrazy.
+	- Symbolická konstanta ```M_PI```.
+	- Funkce pro odmocninu ```sqrt```.
+	- Funkce pro mocninu ```pow```.
+
+	Příklady:	
+	- Adresa a délka proměnné [01_prvni](/src/01_prvni.c)
+
+
+2. Úterý
+	- Opakování aritmetických výrazů.
+	- Booleanovské výrazy (relační operátory, operátor rovnosti).
+	- Podmíněný příkaz.
 
 ## Základní typy a aritmetické operace
 
