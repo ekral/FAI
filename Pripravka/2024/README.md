@@ -45,6 +45,8 @@ Poznámka: V pc učebně je funkční jen Visual Studio 2019, verze 2022 nefungu
 	- Historie jazyka C.
 	- Seznámení s vývojovým nástrojem.
 	- Program hello world.
+	- Typy ```int``` a ```double```.
+	- Definice proměnné, adresa a velikost proměnné.
 	- Aritmetické výrazy.
 	- Druhá mocnina.
 	- Symbolická konstanta ```M_PI```.
