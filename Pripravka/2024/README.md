@@ -73,7 +73,8 @@ Poznámka: V pc učebně je funkční jen Visual Studio 2019, verze 2022 nefungu
  	- Výpis konstanty M_PI [08_vypis_pi.c](src/08_vypis_pi.c)
   	- Druhá mocnina a odmocnina [09_druha_mocnina_odmocnina.c](src/09_druha_mocnina_odmocnina.c).
    	- N-tá mocnina [10_nta_mocnina.c](src/10_nta_mocnina.c).
-   	- Kořeny kvadratické rovnice [11_koreny.c](src/11_koreny.c).	 
+   	- Kořeny kvadratické rovnice [11_koreny.c](src/11_koreny.c).
+   	- Bmi slovní kategorie [12_bmi_kategorie.c](src/12_bmi_kategorie.c).
    
 ## Základní typy a aritmetické operace
 
