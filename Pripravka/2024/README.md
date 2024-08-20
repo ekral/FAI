@@ -51,7 +51,7 @@ Poznámka: V pc učebně je funkční jen Visual Studio 2019, verze 2022 nefungu
 	- Funkce pro mocninu ```pow```.
 
 	Příklady:	
-	- Adresa a délka proměnné [01_prvni](/src/01_prvni.c)
+	- Adresa a délka proměnné [01_prvni](src/01_prvni.c)
 
 
 2. Úterý
