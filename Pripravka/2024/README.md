@@ -74,6 +74,7 @@ heslo: **programatorskaPripravka2024**
    	- Kořeny kvadratické rovnice [11_koreny.c](src/11_koreny.c).
    	- Bmi slovní kategorie [12_bmi_kategorie.c](src/12_bmi_kategorie.c).
    	- Existuje trojúhelník a je pravoúhlý [13_pravouhly_trojuhelnik.c](src/13_pravouhly_trojuhelnik.c).
+   	- Dva testy [14_dva_testy.c](src/14_dva_testy.c).
    
 ## Základní typy a aritmetické operace
 
