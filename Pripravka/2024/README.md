@@ -50,7 +50,7 @@ Poznámka: V pc učebně je funkční jen Visual Studio 2019, verze 2022 nefungu
 	- Aritmetické výrazy.
 	- Druhá mocnina.
 	- Symbolická konstanta ```M_PI```.
-	- Funkce pro odmocninu ```sqrt```.
+	- Funkce pro druhou odmocninu ```sqrt```.
 	- Funkce pro mocninu ```pow```.
 
 	Příklady:	
@@ -61,7 +61,6 @@ Poznámka: V pc učebně je funkční jen Visual Studio 2019, verze 2022 nefungu
 	- Obsah a obvod kruhu [05_kruh.c](src/05_kruh.c).
 	- Obsah a obvod trojúhelníka [05_trojuhelnik.c](src/05_trojuhelnik.c).
 	- Splátka hypotéky [06_splatka.c](src/06_splatka.c). 
-
 
 
 2. Úterý
