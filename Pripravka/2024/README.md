@@ -69,7 +69,7 @@ Poznámka: V pc učebně je funkční jen Visual Studio 2019, verze 2022 nefungu
 	- Podmíněný příkaz.
 
  	Příklady
-	- Výpočet diskriminantu [07_splatka.c](src/07_diskriminant.c).
+	- Výpočet diskriminantu [07_diskriminant.c](src/07_diskriminant.c).
    
 ## Základní typy a aritmetické operace
 
