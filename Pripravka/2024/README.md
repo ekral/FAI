@@ -68,6 +68,9 @@ Poznámka: V pc učebně je funkční jen Visual Studio 2019, verze 2022 nefungu
 	- Booleanovské výrazy (relační operátory, operátor rovnosti).
 	- Podmíněný příkaz.
 
+ 	Příklady
+	- Výpočet diskriminantu [07_splatka.c](src/07_diskriminant.c).
+   
 ## Základní typy a aritmetické operace
 
 - Typ ```int``` reprezenuje celé číslo se znaménkem, v jazyce C má minimálně dva bajty.
