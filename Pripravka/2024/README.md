@@ -76,6 +76,7 @@ heslo: **programatorskaPripravka2024**
    	- Existuje trojúhelník a je pravoúhlý [13_pravouhly_trojuhelnik.c](src/13_pravouhly_trojuhelnik.c).
    	- Dva testy [14_dva_testy.c](src/14_dva_testy.c).
    	- Tři testy [15_tri_testy.c](src/15_tri_testy.c).
+   	- Slovní zámka [16_slovni_znamka.c](src/16_slovni_znamka.c).
    
 ## Základní typy a aritmetické operace
 
