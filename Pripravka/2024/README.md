@@ -71,8 +71,8 @@ Poznámka: V pc učebně je funkční jen Visual Studio 2019, verze 2022 nefungu
  	Příklady
 	- Výpočet diskriminantu [07_diskriminant.c](src/07_diskriminant.c).
  	- Výpis konstanty M_PI [08_vypis_pi.c](src/08_vypis_pi.c)
-  	- Druhá mocnina a odmocnina [09_druha_mocnina_odmocnina.c(src/09_druha_mocnina_odmocnina.c).
-   	- N-tá mocnina [09_nta_mocnina.c](src/09_nta_mocnina.c).	 
+  	- Druhá mocnina a odmocnina [09_druha_mocnina_odmocnina.c](src/09_druha_mocnina_odmocnina.c).
+   	- N-tá mocnina [10_nta_mocnina.c](src/10_nta_mocnina.c).	 
    
 ## Základní typy a aritmetické operace
 
