@@ -82,7 +82,8 @@ heslo: **programatorskaPripravka2024**
  	- Pole.
 
  	Příklady
-	- Větší ze dvou čísel [17_vetsi_ze_dvou.c](src/17_vetsi_ze_dvou.c)
+	- Větší ze dvou čísel [17_vetsi_ze_dvou.c](src/17_vetsi_ze_dvou.c).
+ 	- Větší ze tří čísel [18_vetsi_ze_tri.c][src/18_vetsi_ze_tri.c].
 ## Základní typy a aritmetické operace
 
 - Typ ```int``` reprezenuje celé číslo se znaménkem, v jazyce C má minimálně dva bajty.
