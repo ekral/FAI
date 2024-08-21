@@ -79,6 +79,7 @@ heslo: **programatorskaPripravka2024**
    	- Slovní zámka [16_slovni_znamka.c](src/16_slovni_znamka.c).
 3. Středa
 	- Opakování logických operátorů.
+ 	- Cykly. 	
  	- Pole.
 
  	Příklady
