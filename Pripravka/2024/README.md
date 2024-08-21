@@ -77,7 +77,12 @@ heslo: **programatorskaPripravka2024**
    	- Dva testy [14_dva_testy.c](src/14_dva_testy.c).
    	- Tři testy [15_tri_testy.c](src/15_tri_testy.c).
    	- Slovní zámka [16_slovni_znamka.c](src/16_slovni_znamka.c).
-   
+3. Středa
+	- Opakování logických operátorů.
+ 	- Pole.
+
+ 	Příklady
+	- Větší ze dvou čísel [17_vetsi_ze_dvou.c](src/17_vetsi_ze_dvou.c)
 ## Základní typy a aritmetické operace
 
 - Typ ```int``` reprezenuje celé číslo se znaménkem, v jazyce C má minimálně dva bajty.
