@@ -84,7 +84,7 @@ heslo: **programatorskaPripravka2024**
 
  	Příklady
 	- Větší ze dvou čísel [17_vetsi_ze_dvou.c](src/17_vetsi_ze_dvou.c).
- 	- Větší ze tří čísel [18_vetsi_ze_tri.c][src/18_vetsi_ze_tri.c].
+ 	- Větší ze tří čísel [18_vetsi_ze_tri.c](src/18_vetsi_ze_tri.c).
   	- Druhé největší číslo ze tří čísel [19_druhe_nejvetsi.c](src/19_druhe_nejvetsi.c).
      
 ## Základní typy a aritmetické operace
