@@ -91,6 +91,7 @@ heslo: **programatorskaPripravka2024**
    	- Příkazy pro tvorbu cyklů. [22_cykly.c](src/22_cykly.c)
    	- Výpis mocnin dvou pomocí cyklů [23_cykly_vypis_mocnin.c](src/23_cykly_vypis_mocnin.c).
    	- Vylepšený papoušek pomocí while [24_vylepseny_papousek.c](src/24_vylepseny_papousek.c).
+   	- Průměr pole [25_prumer_pole.c](src/25_prumer_pole.c).
      
 ## Základní typy a aritmetické operace
 
