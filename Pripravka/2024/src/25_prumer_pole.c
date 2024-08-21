@@ -31,4 +31,20 @@ int main()
 
 	// spocitejte a vypiste kolik prvku v poli
 	// je vetsi nez prumer
+
+	int pocet = 0;
+
+	for (int i = 0; i < n; i++)
+	{
+		int prvek = pole[i];
+
+		// pokud je prvek vetsi nez prumer,
+		// tak zvysim hodnotu pocet o 1
+		if (prvek > prumer)
+		{
+			++pocet;
+		}
+	}
+
+	printf("pocet: %d\n", pocet);
 }
