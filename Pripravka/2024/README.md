@@ -88,7 +88,7 @@ heslo: **programatorskaPripravka2024**
   	- Druhé největší číslo ze tří čísel [19_druhe_nejvetsi.c](src/19_druhe_nejvetsi.c).
    	- Seřazení hodnot ve třech proměnných [20_serazeni_tri.c](src/20_serazeni_tri.c).
    	- Program "papoušek" [21_papousek.c](src/21_papousek.c).
-   	- Cykly [22_cykly.c](22_cykly.c)
+   	- Příkazy pro tvorbu cyklů. [22_cykly.c](src/22_cykly.c)
      
 ## Základní typy a aritmetické operace
 
