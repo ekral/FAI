@@ -2,7 +2,7 @@
 
 int main()
 {
-	char znak;
+	int znak;
 
 	do
 	{
