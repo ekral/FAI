@@ -2,14 +2,14 @@
 
 int main()
 {
-	char pole[32];
+	char znak;
 
 	do
 	{
-		gets_s(pole, 32);
-		puts(pole);
+		znak = getchar();
+		putchar(znak);
 
-	} while (pole[0] != 'x');
+	} while (znak != 'x');
 	
 	puts("konec");
 }
