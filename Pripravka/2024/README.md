@@ -93,7 +93,17 @@ heslo: **programatorskaPripravka2024**
    	- Vylepšený papoušek pomocí while [24_vylepseny_papousek.c](src/24_vylepseny_papousek.c).
    	- Průměr pole [25_prumer_pole.c](src/25_prumer_pole.c).
    	- Výpis prvků pole v opačném pořadí [26_vypis_opacne.c](src/26_vypis_opacne.c).
-     
+   	  
+4. Čtvrtek
+   	- opakování.
+   	- řetězce.
+   	- funkce.
+
+      	Příklady
+   	- Vykreslení trojúhelníku pomocí znaku * []().
+5. Pátek
+   	- ukazatele.
+   	- struktury.
 ## Základní typy a aritmetické operace
 
 - Typ ```int``` reprezenuje celé číslo se znaménkem, v jazyce C má minimálně dva bajty.
