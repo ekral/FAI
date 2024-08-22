@@ -102,6 +102,7 @@ heslo: **programatorskaPripravka2024**
       	Příklady
    	- Vykreslení trojúhelníku pomocí znaku * [17_hvezdicky.c](src/17_hvezdicky.c).
    	- Mzdová kalkulačka [27_mzdova_kalkulacka.c](src/27_mzdova_kalkulacka.c).
+   	- Splátkový kalendář [28_splatkovy_kalendar.c](src/28_splatkovy_kalendar.c).
 5. Pátek
    	- ukazatele.
    	- struktury.
