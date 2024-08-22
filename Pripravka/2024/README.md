@@ -105,6 +105,7 @@ heslo: **programatorskaPripravka2024**
    	- Výpis čísel od minima do maxima [30_min_max.c](src/30_min_max.c).
    	- Pyramida [31_pyramida.c](src/31_pyramida.c).
    	- Počet lichých [32_pocet_lichych.c](src/32_pocet_lichych.c).
+   	- Bubble sort [33_bubble_sort.c](src/33_bubble_sort.c).
 5. Pátek
    	- řetězce.
    	- funkce.
