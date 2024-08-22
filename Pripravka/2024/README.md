@@ -104,6 +104,7 @@ heslo: **programatorskaPripravka2024**
    	- Mzdová kalkulačka [27_mzdova_kalkulacka.c](src/27_mzdova_kalkulacka.c).
    	- Splátkový kalendář [28_splatkovy_kalendar.c](src/28_splatkovy_kalendar.c).
    	- Výpis hvězdiček [29_hvezdicky.c](src/29_hvezdicky.c).
+   	- Výpis čísel od minima do maxima [30_min_max.c](src/30_min_max.c).
 5. Pátek
    	- ukazatele.
    	- struktury.
