@@ -100,7 +100,7 @@ heslo: **programatorskaPripravka2024**
    	- funkce.
 
       	Příklady
-   	- Vykreslení trojúhelníku pomocí znaku * []().
+   	- Vykreslení trojúhelníku pomocí znaku * [17_hvezdicky.c](src/17_hvezdicky.c).
 5. Pátek
    	- ukazatele.
    	- struktury.
