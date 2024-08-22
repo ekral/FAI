@@ -104,6 +104,7 @@ heslo: **programatorskaPripravka2024**
    	- Výpis hvězdiček [29_hvezdicky.c](src/29_hvezdicky.c).
    	- Výpis čísel od minima do maxima [30_min_max.c](src/30_min_max.c).
    	- Pyramida [31_pyramida.c](src/31_pyramida.c).
+   	- Počet lichých [32_pocet_lichych.c](src/32_pocet_lichych.c).
 5. Pátek
    	- řetězce.
    	- funkce.
