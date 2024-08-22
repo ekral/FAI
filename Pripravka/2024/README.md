@@ -96,8 +96,6 @@ heslo: **programatorskaPripravka2024**
    	  
 4. Čtvrtek
    	- opakování.
-   	- řetězce.
-   	- funkce.
 
       	Příklady
    	- Vykreslení trojúhelníku pomocí znaku * [17_hvezdicky.c](src/17_hvezdicky.c).
@@ -105,7 +103,10 @@ heslo: **programatorskaPripravka2024**
    	- Splátkový kalendář [28_splatkovy_kalendar.c](src/28_splatkovy_kalendar.c).
    	- Výpis hvězdiček [29_hvezdicky.c](src/29_hvezdicky.c).
    	- Výpis čísel od minima do maxima [30_min_max.c](src/30_min_max.c).
+   	- Pyramida [31_pyramida.c](src/31_pyramida.c).
 5. Pátek
+   	- řetězce.
+   	- funkce.
    	- ukazatele.
    	- struktury.
 ## Základní typy a aritmetické operace
