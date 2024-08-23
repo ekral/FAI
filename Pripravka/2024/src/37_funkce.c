@@ -7,10 +7,26 @@ void prohod(int* x, int* y)
     *y = tmp;
 }
 
-void vypis(int pole[], int delka)
+void vypis(const int* pole, int delka)
 {
     // vypiste prvky pole na konzoli
+    for (int i = 0; i < delka; i++)
+    {
+        printf("%d ", pole[i]);
+    }
+
+    putchar('\n');
 }
+
+int max(const int* pole, int delka)
+{
+    int max = 0;
+
+    // najdete maximalni hodnotu prvku v poli
+
+    return max;
+}
+
 int main()
 {
     int x = 2;
@@ -30,4 +46,5 @@ int main()
 
     vypis(pole, n);
     
+    int m = max(pole, n);
 }
