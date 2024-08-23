@@ -36,7 +36,10 @@ int max(const int* pole, int delka)
 
 void reverse(int* pole, int delka)
 {
-    // prohodite prvky v poli tak aby byly v opacnem poradi
+    for (int i = 0; i < delka / 2; i++)
+    {
+        prohod(&pole[i], &pole[delka - (1 + i)]);
+    }
 }
 
 int main()
@@ -51,10 +54,7 @@ int main()
     
     vypis(pole, n);
 
-    for (int i = 0; i < n / 2; i++)
-    {
-        prohod(&pole[i], &pole[n - (1 + i)]);
-    }
+    reverse(pole, n);
 
     vypis(pole, n);
     
