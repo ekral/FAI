@@ -117,6 +117,7 @@ heslo: **programatorskaPripravka2024**
    	- Největší prvek v poli [35_max_prvek.c](src/35_max_prvek.c).
    	- Prvky pole v opačném pořadí [36_reverse_pole.c](src/36_reverse_pole.c).
    	- Funkce prohoď a výpis [37_funkce.c](src/37_funkce.c).
+   	- Vzdálenost dvou bodů [38_vzdalenost_bodu.c](src/38_vzdalenost_bodu.c).
    	    
 ## Základní typy a aritmetické operace
 
