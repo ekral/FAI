@@ -115,6 +115,7 @@ heslo: **programatorskaPripravka2024**
    	Příklady
    	- Výpis každého druhého prvku v poli [34_kazdy_druhy_prvek.c](src/34_kazdy_druhy_prvek.c).
    	- Největší prvek v poli [35_max_prvek.c](src/35_max_prvek.c).
+   	- Prvky pole v opačném pořadí [36_reverse_pole.c](src/36_reverse_pole.c).
    	  
 ## Základní typy a aritmetické operace
 
