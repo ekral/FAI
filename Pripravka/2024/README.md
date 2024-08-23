@@ -119,6 +119,7 @@ heslo: **programatorskaPripravka2024**
    	- Funkce prohoď a výpis [37_funkce.c](src/37_funkce.c).
    	- Vzdálenost dvou bodů [38_vzdalenost_bodu.c](src/38_vzdalenost_bodu.c).
    	- Výpis studentů, kteří splnili zápočet [39_studenti.c](src/39_studenti.c).
+   	- Nejlepší závodník [40_nejlepsi_zavodnik.c](src/40_nejlepsi_zavodnik.c).
    	    
 ## Základní typy a aritmetické operace
 
