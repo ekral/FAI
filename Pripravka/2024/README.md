@@ -107,7 +107,6 @@ heslo: **programatorskaPripravka2024**
    	- Počet lichých [32_pocet_lichych.c](src/32_pocet_lichych.c).
    	- Bubble sort [33_bubble_sort.c](src/33_bubble_sort.c).
 5. Pátek
-   	- řetězce.
    	- funkce.
    	- ukazatele.
    	- struktury.
