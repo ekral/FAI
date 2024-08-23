@@ -111,6 +111,10 @@ heslo: **programatorskaPripravka2024**
    	- funkce.
    	- ukazatele.
    	- struktury.
+  
+   	Příklady
+   	- Výpis každého druhého prvku v poli [34_kazdy_druhy_prvek.c](src/34_kazdy_druhy_prvek.c).
+   	- 
 ## Základní typy a aritmetické operace
 
 - Typ ```int``` reprezenuje celé číslo se znaménkem, v jazyce C má minimálně dva bajty.
