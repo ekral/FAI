@@ -114,7 +114,8 @@ heslo: **programatorskaPripravka2024**
   
    	Příklady
    	- Výpis každého druhého prvku v poli [34_kazdy_druhy_prvek.c](src/34_kazdy_druhy_prvek.c).
-   	- 
+   	- Největší prvek v poli [35_max_prvek.c](src/35_max_prvek.c).
+   	  
 ## Základní typy a aritmetické operace
 
 - Typ ```int``` reprezenuje celé číslo se znaménkem, v jazyce C má minimálně dva bajty.
