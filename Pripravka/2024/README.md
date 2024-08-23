@@ -118,6 +118,7 @@ heslo: **programatorskaPripravka2024**
    	- Prvky pole v opačném pořadí [36_reverse_pole.c](src/36_reverse_pole.c).
    	- Funkce prohoď a výpis [37_funkce.c](src/37_funkce.c).
    	- Vzdálenost dvou bodů [38_vzdalenost_bodu.c](src/38_vzdalenost_bodu.c).
+   	- Výpis studentů, kteří splnili zápočet [39_studenti.c](src/39_studenti.c).
    	    
 ## Základní typy a aritmetické operace
 
