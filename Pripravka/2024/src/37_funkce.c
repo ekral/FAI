@@ -22,9 +22,21 @@ int max(const int* pole, int delka)
 {
     int max = 0;
 
-    // najdete maximalni hodnotu prvku v poli
+    for (int i = 0; i < delka; i++)
+    {
+        int prvek = pole[i];
+        if (prvek > max)
+        {
+            max = prvek;
+        }
+    }
 
     return max;
+}
+
+void reverse(int* pole, int delka)
+{
+    // prohodite prvky v poli tak aby byly v opacnem poradi
 }
 
 int main()
@@ -46,5 +58,7 @@ int main()
 
     vypis(pole, n);
     
-    int m = max(pole, n);
+    int maximalni = max(pole, n);
+
+    printf("max: %d\n", maximalni);
 }
