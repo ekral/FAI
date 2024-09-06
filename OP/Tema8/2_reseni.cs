@@ -50,6 +50,6 @@ class Program
            .Label("[green bold underline]Vyskyt slov[/]")
            .CenterLabel()
            .AddItems(slovnik.OrderByDescending(p => p.Value), (item) => new BarChartItem(
-               item.Key, item.Value, palette[index = ++index % palette.Length])));;
+               item.Key, item.Value, palette[index = ++index % palette.Length])));
     }
 }
