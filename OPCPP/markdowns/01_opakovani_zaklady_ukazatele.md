@@ -1,4 +1,5 @@
 # 01 Opakování základů a ukazatelů
+
 **autor: Erik Král ekral@utb.cz**
 
 ---

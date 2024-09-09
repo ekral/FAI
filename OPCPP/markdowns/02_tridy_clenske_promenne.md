@@ -1,4 +1,5 @@
 # 02 Třídy a členské proměnné
+
 **autor: Erik Král ekral@utb.cz**
 
 ---

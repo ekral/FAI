@@ -1,4 +1,7 @@
-03 Třídy a konstruktor
+04 Třídy a konstruktor
+
+**autor: Erik Král ekral@utb.cz**
+
 ---
 Pro zvládnutí testu potřebujete vědět jak definovat a používat konstruktory. 
 

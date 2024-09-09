@@ -1,4 +1,5 @@
-# A2OPR Konstruktor member inicializer list
+# 05 Konstruktor member inicializer list
+
 **autor: Erik Král ekral@utb.cz**
 
 ---
