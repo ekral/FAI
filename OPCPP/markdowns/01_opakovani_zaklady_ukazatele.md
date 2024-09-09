@@ -1,4 +1,7 @@
-# Tema 1
+# 01 Opakování základů a ukazatelů
+**autor: Erik Král ekral@utb.cz**
+
+---
 
 Pro zvládnutí prvního testu budete potřebovat znát následující pojmy:
 

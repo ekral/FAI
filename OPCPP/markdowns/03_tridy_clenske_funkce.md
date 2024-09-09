@@ -1,0 +1,105 @@
+02 Třídy a členské funkce
+**autor: Erik Král ekral@utb.cz**
+
+---
+Pro zvládnutí testu potřebujete vědět jak definovat a používat členské funkce. 
+
+Na následujících příkladech si probereme jednotlivé příkazy. 
+
+*  Nejprve si definujeme třídu `Ctverec` pomocí klíčového slova `class`. Připomínám, že pokud chceme přistupovat k členským prvkům (členským proměnným i členským funkcím) mimo třídu, tak je musíme deklarovat jako `public` a za definicí třídy musí být uvedený středník `;`.
+```c++
+class Ctverec
+{
+public:
+	double n;
+};
+
+int main()
+{
+	Ctverec k1;
+	k1.n = 3.0;
+	printf("Ctverec ma delku strany %lf", k1.n);
+}
+```
+* Nyní si do třídy Ctverec přidáme funkci `Obsah`, která vrátí obsah čtverce. Každá funkce má jeden návratový typ, v tomto případě vracíme obsah jakou typ `double` a proto je hlavička funkce `double Obsah()`. Nemusíme předávat žádné parametry, protože členská proměnná `n` bude mít ve funkci takovou hodnotu jako v instanci třídy pro kterou funkci voláme.
+```cs 
+class Ctverec
+{
+public:
+	double n;
+
+	double Obsah()
+	{
+		return n * n;
+	}
+};
+```
+* Funkci potom zavoláme pomocí jejího názvu `k1.Obsah()` a návratovou hodnotu si můžeme přiřadit do jiné proměnné nebo ji přímo použít. Dejte si pozor abyste nezapoměli uvést kulaté závorky, protože zápis `k1.Obsah` by šel také přeložit, ale vrátil by ukazatel na funkci.
+```cs 
+double obsah = k1.Obsah();
+printf("Ctverec ma delku strany %f a obsah %f\n", k1.n, obsah);
+// nebo
+printf("Ctverec ma delku strany %f a obsah %f\n", k1.n, k1.Obsah());
+```
+* Funkci může mít i parametry, například v následujícím příkladu máme funkci `ZmenPolomer`, která změní hodnotu členské proměnné `n` na novou hodnotu. Funkce, která nevrací žádnou hodnotu má návratový typ `void`.
+
+```cs 
+class Ctverec
+{
+public:
+	double n;
+
+	double Obsah()
+	{
+		return n * n;
+	}
+
+	void ZmenPolomer(double novaHodnota)
+	{
+		n = novaHodnota;
+	}
+};
+```
+* Této funkci potom předáváme argument v kulatých závorkách, například `k1.ZmenPolomer(3.0)`:
+
+```cs 
+Ctverec k1;
+k1.ZmenPolomer(3.0);
+```
+* Parametr funkce může mít stejný název jako čleská proměnná, ale musíme je potom odlišit pomocí klíčového slovat `this` :
+
+```cs 
+void ZmenPolomer(double n)
+{
+	this->n = n;
+}
+```
+* Funkce může mít více parametrů které uvádíme v seznamu odděleném čárkou, například v následujícím příkladu máme funkci `ZmenRozmery` třídy `Obdelnik`, kde máme dva parametry:
+
+```cs 
+class Obdelnik
+{
+public:
+	double a;
+	double b;
+
+	double Obsah()
+	{
+		return a * b;
+	}
+	void ZmenRozmery(double a, double b)
+	{
+		this->a = a;
+		this->b = b;
+	}
+};
+```
+* Této funkci potom předáme dva argumenty zápisem `o1.ZmenRozmery(2.0, 3.0)`:
+
+```cs 
+Obdelnik o1;
+o1.ZmenRozmery(2.0, 3.0);
+printf("Obdelnik ma rozmery a: %f b: %f a obsah %f\n", o1.a, o1.b, o1.Obsah());
+```
+---
+Následují kompletní kódy.
