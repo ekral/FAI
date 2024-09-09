@@ -1,4 +1,4 @@
-A2OPR Test 3 třídy (konstruktor) - příprava
+03 Třídy a konstruktor
 ---
 Pro zvládnutí testu potřebujete vědět jak definovat a používat konstruktory. 
 
