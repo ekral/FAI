@@ -1,4 +1,5 @@
-02 Třídy a členské funkce
+03 Třídy a členské funkce
+
 **autor: Erik Král ekral@utb.cz**
 
 ---
