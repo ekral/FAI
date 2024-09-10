@@ -93,7 +93,7 @@ public:
 
 ### Upcasting
 
-Nyní můžeme prostřednictví ukazatele typu `Zviratko` nahradit pejska kočičkou a naopak. Této operaci, kdy převádíme potomka na rodiče říkáme **upcasting**.
+Nyní můžeme prostřednictví ukazatele (nebo reference) typu `Zviratko` nahradit pejska kočičkou a naopak. Této operaci, kdy převádíme potomka na rodiče říkáme **upcasting**.
 
 ```c++
 Pejsek rex;
@@ -128,3 +128,71 @@ for(Zviratko* zviratko : zviratka)
 V jazyce JavaScript, protože používá dynamic typing, se o tom, která metoda se zavolá rozhoduje až za běhu programu. Proto by se zavolali správně metody pejska a kočičky. Což je to co chceme. V kontextu OOP tomu říkáme **late binding**. Pokud je late bindig očekáváné chování, proč se v jazyce C++ a nebo jazyce C# nepoužívá jako výchozí? Nepoužívá se jako výchozí z důvodu výkonu, protože rozhodování o tom, která metoda se má zavolat až za běhu programu je pomalejší, než když se o tom rozhodne je jednou hned při překladu programu.
 
 V jazyce C++ a dalších z důvodu výkonu explicitně říkáme aby používali pomalejší late bindig jen ty metody u kterých to potřebujeme. V našem příkladu označíme metodu `Zvuk` v třídě `Zviratko` jako `virtual` a třídách `Pejsek` a `Kocicka` ji označíme klíčovým slovem `override`. Říkáme, že překrýváme virtuální metodu. Tímto zápisem potomu určíme, že se má pro metodu `Zvuk` použít late binding, tedy o tom, která metoda se zavolá se rozhodne až **za běhu programu dle typu objektu**.
+
+V následujícím kompletním příkladu máme překrytou vrituální metodu `Zvuk` a zvířátka v seznamu zvířátek už správně vypisují konkrétní zvuky, které dělají:
+
+```c++
+#include <cstdio>
+#include <vector>
+
+class Zviratko
+{
+public:
+    virtual void Zvuk()
+    {
+        puts("Jsem abstraktni zviratko a nedelam zadny konkretni zvuk");
+    }
+};
+
+class Pejsek : public Zviratko
+{
+public:
+    void Zvuk() override
+    {
+       puts("Haf haf");
+    }
+};
+
+class Kocicka : public Zviratko
+{
+public:
+    void Zvuk() override
+    {
+        puts("Mnau");
+    }
+};
+
+int main()
+{
+    Pejsek rex;
+    Kocicka micka;
+
+    std::vector<Zviratko*> zviratka;
+    zviratka.push_back(&rex);
+    zviratka.push_back(&micka);
+
+    for(Zviratko* zviratko : zviratka)
+    {
+        zviratko->Zvuk();
+    }
+}
+```
+
+### Downcasting
+
+Operaci, kdy přetypujeme potomka na rodiče říkáme upcasting. Vyjímečně ale můžeme i v kódu provést downcasting, kdy ale musíme být opatrní, protože ne každé zvířátko může být například kočička. Využíváme především příkaz `dynamic_cast<Kocicka*>(zviratko)` který používáme u tříd, které mají virtuální funkce:
+
+```c++
+for(Zviratko* zviratko : zviratka)
+{
+    Kocicka* k = dynamic_cast<Kocicka*>(zviratko);
+
+    if(k != NULL)
+    {
+        puts("Je to kocicka");
+    }
+}
+```
+
+---
+Důležité je si uvědomit, že výše zmíněné postupy se týkají především statically typed jazyků se zaměřením na výkon. Ve Smalltalku, který je dynamically typed, nebylo potřeba definovat virtuální funkce, protože všechny funkce byly jako výchozí late bind a nebylo nutné definovat rozhraní nebo rodičovskou třídu kvůli kompatibilitě objektů. Dá se říct, že OOP bylo ve smalltalku mnohem jednodušší a většina syntaxe kterou se teď učíme pochází z implementace OOP ve statically typed jazyce C++. 
