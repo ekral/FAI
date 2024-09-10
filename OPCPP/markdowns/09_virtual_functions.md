@@ -1,0 +1,2 @@
+# Virtuální funkce
+
