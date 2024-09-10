@@ -97,5 +97,35 @@ int main()
 ## Modifikátor přístupu protected
 
 - Modifikátor přístupu protected se používá pouze v souvislosti s dědičností.
-- K protected členským prvkům může vývojář přistupovat v třídě potomka, ale stejně jako u private k nim nemůže přistupovat mimo třídu rodiče nebo potomka. 
+- K protected členským prvkům může vývojář přistupovat v třídě potomka, ale stejně jako u private k nim nemůže přistupovat mimo třídu rodiče nebo potomka.
+
+```c++
+class Rodic
+{
+protected:
+    int x;
+};
+
+class Potomek : public Rodic
+{
+public:
+    int Vrat()
+    {
+        return x;
+    }
+};
+
+int main()
+{
+    Rodic r;
+    r.x = 3; // nepujde prelozit
+
+    Potomek p;
+    p.x = 3; // nepujde prelozit
+    
+    int t = p.Vrat();
+
+    return 0;
+}
+```
 
