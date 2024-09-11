@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32228.430
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tema7", "Tema7\Tema7.csproj", "{1FD2F35A-9707-400C-A40A-B3649AB692D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProjectTema7", "TestProjectTema7\TestProjectTema7.csproj", "{624CF011-F6FD-413E-8F2B-5F144B09B330}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1FD2F35A-9707-400C-A40A-B3649AB692D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FD2F35A-9707-400C-A40A-B3649AB692D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FD2F35A-9707-400C-A40A-B3649AB692D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FD2F35A-9707-400C-A40A-B3649AB692D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{624CF011-F6FD-413E-8F2B-5F144B09B330}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{624CF011-F6FD-413E-8F2B-5F144B09B330}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{624CF011-F6FD-413E-8F2B-5F144B09B330}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{624CF011-F6FD-413E-8F2B-5F144B09B330}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {661B6BA8-9154-4BF9-AEC4-F68DE02D08E8}
+	EndGlobalSection
+EndGlobal
