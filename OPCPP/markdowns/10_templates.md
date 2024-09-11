@@ -104,3 +104,27 @@ int main()
 
 Jedním z příkladů použití šablon v C++ jsou datové konteinery ze standardní knihovny. Jde o dynamické pole, do kterého můžeme přidávat prvky a z kterého můžeme prvky odebírat.
 
+```c++
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    vector<int> cisla; // na zacatku nema vector zadne prvky
+    cisla.push_back(1); // pridam 1 na konec, rychla operace
+    cisla.push_back(2);
+    cisla.push_back(3);
+    cisla.push_back(4);
+
+    cisla.pop_back(); // odeberu posledni
+
+    cisla.insert(cisla.begin() + 1, 7); // vlozim 7 mezi prvni a druhe cislo, pomalejsi operace
+
+    for(int cislo : cisla)
+    {
+        cout << cislo << endl;
+    }
+}
+```
