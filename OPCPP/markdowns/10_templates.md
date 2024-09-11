@@ -122,9 +122,14 @@ int main()
 
     cisla.insert(cisla.begin() + 1, 7); // vlozim 7 mezi prvni a druhe cislo, pomalejsi operace
 
+    cisla[0] = 9; // zmenim cislo s indexem 0
+
+    cout << cisla[2] << endl; // vypise cislo s indexem 2
+    
     for(int cislo : cisla)
     {
         cout << cislo << endl;
     }
 }
+
 ```
