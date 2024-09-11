@@ -193,6 +193,13 @@ for(Zviratko* zviratko : zviratka)
     }
 }
 ```
+## Pure virtual functions
+
+Pokud virtuální funkce nemá žádné smysluplné tělo, tak můžeme použít pure virtual function. Třída, která obsahuje nebo zdědí pure virtual function je abstraktní třída a nemůžeme vytvářet její instance. Můžou být pouze ukazatele a reference na tuto třídu.
+
+## Virtuální funkce a destruktor
+
+Pokud třída obsahuje virtuální funkci, tak musí být i destruktor virtuální, tak aby se zavolal správný destruktor při upcastingu.
 
 ---
 Důležité je si uvědomit, že výše zmíněné postupy se týkají především statically typed jazyků se zaměřením na výkon. Ve Smalltalku, který je dynamically typed, nebylo potřeba definovat virtuální funkce, protože všechny funkce byly jako výchozí late bind a nebylo nutné definovat rozhraní nebo rodičovskou třídu kvůli kompatibilitě objektů. Dá se říct, že OOP bylo ve smalltalku mnohem jednodušší a většina syntaxe kterou se teď učíme pochází z implementace OOP ve statically typed jazyce C++. 

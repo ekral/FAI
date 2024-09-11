@@ -1,4 +1,4 @@
-# Šablony (templates)
+# 10 Šablony (templates)
 
 **autor Erik Král ekral@utb.cz**
 
