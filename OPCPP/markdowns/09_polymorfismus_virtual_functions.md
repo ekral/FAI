@@ -252,7 +252,7 @@ int main()
 
 ## Virtuální funkce a destruktor
 
-Pokud třída obsahuje virtuální funkci, tak musí být i destruktor virtuální, tak aby se zavolal správný destruktor při upcastingu. POkud by v následujícím příkladu nebyl destruktor třídy `Rodic` virtuální, tak by se nezavolal.
+Pokud třída obsahuje virtuální funkci, tak musí být i destruktor virtuální, tak aby se zavolal správný destruktor při upcastingu. Kdyby by v následujícím příkladu nebyl destruktor třídy `Rodic` virtuální, tak by se nezavolal.
 
 ```c++
 #include <cstdio>
@@ -284,4 +284,4 @@ int main()
 ```
 
 ---
-Důležité je si uvědomit, že výše zmíněné postupy se týkají především statically typed jazyků se zaměřením na výkon. Ve Smalltalku, který je dynamically typed, nebylo potřeba definovat virtuální funkce, protože všechny funkce byly jako výchozí late bind a nebylo nutné definovat rozhraní nebo rodičovskou třídu kvůli kompatibilitě objektů. Dá se říct, že OOP bylo ve smalltalku mnohem jednodušší a většina syntaxe kterou se teď učíme pochází z implementace OOP ve statically typed jazyce C++. 
+Důležité je si uvědomit, že výše zmíněné postupy se týkají především statically typed jazyků se zaměřením na výkon. Ve Smalltalku, který je dynamically typed, nebylo potřeba definovat virtuální funkce, protože všechny funkce byly jako výchozí late bind a nebylo nutné definovat rozhraní nebo rodičovskou třídu kvůli kompatibilitě objektů. Dá se říct, že OOP bylo ve smalltalku mnohem jednodušší a většina syntaxe kterou se teď učíme pochází z implementace OOP ve statically typed jazyce. 
