@@ -117,19 +117,19 @@ int main()
     cisla.push_back(2);
     cisla.push_back(3);
     cisla.push_back(4);
+    cisla.push_back(5);
 
     cisla.pop_back(); // odeberu posledni
 
     cisla.insert(cisla.begin() + 1, 7); // vlozim 7 mezi prvni a druhe cislo, pomalejsi operace
-
+    cisla.erase(cisla.begin() + 2); // odstranim prvek s indexem 2 (treti prvek)
     cisla[0] = 9; // zmenim cislo s indexem 0
 
     cout << cisla[2] << endl; // vypise cislo s indexem 2
-    
-    for(int cislo : cisla)
+
+    for(const int cislo : cisla)
     {
         cout << cislo << endl;
     }
 }
-
 ```
