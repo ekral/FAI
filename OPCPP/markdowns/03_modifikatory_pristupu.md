@@ -4,7 +4,7 @@
 
 ---
 
-Pro zvládnutí příkladu potřebujete znát modifikátor přístupu `public` a `private` a umět jej používat s fieldy a metodami.
+Pro zvládnutí příkladu potřebujete znát modifikátor přístupu `public` a `private` a umět jej používat s členskými prvky.
 
 Na následujících příkladech si probereme jednotlivé příkazy. 
 
@@ -18,7 +18,7 @@ public:
 };
 ```
 
-Pokud je členský prvek `public` tak k němu můžeme přistupovat i v klientském kódu mimo členské funkce třídy (nebo struktury) ve které je prvek definovaný.
+Pokud je členský prvek `public` tak k němu můžeme přistupovat i v klientském kódu mimo členské funkce třídy (nebo struktury) ve které je prvek definovaný:
 
 ```c++
 int main()
@@ -67,7 +67,7 @@ int main()
 }
 ```
 
-Členské prvky skrýváme před vývojářem, abychom zabránili chybám v použití třídy v klienstkém kódu. V našem příkladu nechceme aby vývojář mohl například omylem nastavit záporný zůstatek. Ve funkcím Vloz a Vyber můžeme vyvolávat vyjímky a tím způsobem odhalit chyby z použití během vývoje aplikace.
+Členské prvky skrýváme před vývojářem, abychom zabránili chybám v použití třídy v klienstkém kódu. V našem příkladu nechceme aby vývojář mohl například omylem nastavit záporný zůstatek nebo vkládat a vybírat záporné nebo nulové částky. Ve funkcích `Vloz` a `Vyber` můžeme vyvolávat vyjímky a tím způsobem odhalit chyby z použití během vývoje aplikace:
 
 ```c++
 #include <cstdio>
