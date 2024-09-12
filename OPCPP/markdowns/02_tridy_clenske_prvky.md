@@ -86,7 +86,7 @@ printf("Ctverec ma delku strany %f a obsah %f\n", k1.n, obsah);
 printf("Ctverec ma delku strany %f a obsah %f\n", k1.n, k1.Obsah());
 ```
 
-* Funkci může mít i parametry, například v následujícím příkladu máme funkci `ZmenPolomer`, která změní hodnotu členské proměnné `n` na novou hodnotu. Funkce, která nevrací žádnou hodnotu má návratový typ `void`.
+* Funkce může mít i parametry, například v následujícím příkladu máme funkci `ZmenPolomer`, která změní hodnotu členské proměnné `n` na novou hodnotu. Funkce, která nevrací žádnou hodnotu má návratový typ `void`.
 
 ```c++ 
 class Ctverec
