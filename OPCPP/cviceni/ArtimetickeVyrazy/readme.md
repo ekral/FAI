@@ -66,7 +66,7 @@ Výchozí kód funkce **main**:
 int main()
 {
     double p = 6000000.0;
-    int rocniUrokProcenta = 6.0;
+    double rocniUrokProcenta = 6.0;
     int pocetLet = 30;
 
     double r = 0.0;
