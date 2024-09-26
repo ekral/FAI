@@ -1,13 +1,12 @@
 # Úkol prohození čísel
 
-Máme následující kód, změňte kód tak, aby kód šel přeložit a nespadnul díky příkazu assert. 
+Máme následující kód, změňte kód tak, aby kód šel přeložit a nespadnul díky příkazu assert.
 
-- Využijte:
-    - ukazatele,
-    - adresní operátor,
+- Najděte v kódu adresní operátor (také se mu říká operátor reference).
+- Využijte a komentářem označte:
+    - typ ukazatel,
     - operátor indirekce.
- 
--Kód funkce **main neměňte**.
+- Kód funkce **main neměňte**.
 
 ```cpp
 #include <assert.h>
