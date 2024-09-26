@@ -1,9 +1,9 @@
 # Úkol prohození čísel
 
-Máme následující kód, změňte kód tak, aby kód šel přeložit a nespadnul díky příkazu assert. 
+Máme následující kód, změňte kód tak, aby kód šel přeložit a nespadnul díky příkazu assert.
 
-- Využijte:
-    - ukazatele,
+- Využijte a komentářem označte:
+    - typ ukazatel,
     - adresní operátor,
     - operátor indirekce.
  
