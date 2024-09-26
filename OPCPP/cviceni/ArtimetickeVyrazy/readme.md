@@ -41,7 +41,7 @@ $$m = \frac{p \cdot r \cdot (1 + r)^n}{(1 + r)^n - 1}$$
 Kde:
 - *m* je měsíční splátka hypotéky.
 - *p* je výše půjčené částky (počáteční zůstatek půjčky).
-- *r* je měsíční desetinná úroková míra (roční úroková sazba v procentech (6%) dělená 12 měsíci (6 / 12) a převedená na desetinné číslo ( 6 / 12 / 100).
+- *r* je měsíční desetinná úroková míra (roční úroková míra v procentech (6%) dělená 12 měsíci (6 / 12) a převedená na desetinné číslo ( 6 / 12 / 100).
 - *n* je celkový počet měsíčních plateb (doba trvání půjčky v letech násobená 12).
 
 Pojmy:
