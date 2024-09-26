@@ -4,10 +4,9 @@ Máme následující kód, změňte kód tak, aby kód šel přeložit a nespadn
 
 - Využijte a komentářem označte:
     - typ ukazatel,
-    - adresní operátor,
     - operátor indirekce.
- 
--Kód funkce **main neměňte**.
+- Najděte v kódu adresní operátor (také se mu říká operátor reference).
+- Kód funkce **main neměňte**.
 
 ```cpp
 #include <assert.h>
