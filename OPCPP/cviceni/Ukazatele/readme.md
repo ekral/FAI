@@ -2,10 +2,10 @@
 
 Máme následující kód, změňte kód tak, aby kód šel přeložit a nespadnul díky příkazu assert.
 
+- Najděte v kódu adresní operátor (také se mu říká operátor reference).
 - Využijte a komentářem označte:
     - typ ukazatel,
     - operátor indirekce.
-- Najděte v kódu adresní operátor (také se mu říká operátor reference).
 - Kód funkce **main neměňte**.
 
 ```cpp
