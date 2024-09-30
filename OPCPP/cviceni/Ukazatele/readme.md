@@ -1,4 +1,6 @@
-# Úkol prohození čísel
+# Úkoly na ukazatele
+
+## 1) Prohození čísel
 
 Máme následující kód, změňte kód tak, aby kód šel přeložit a nespadnul díky příkazu assert. Kód funkce **main neměňte**.
 
@@ -33,3 +35,19 @@ int main()
 ```
 
 
+## 1) Funkce pro výpis pole
+
+Definujte a zavolejte funkci `vypis`, která vypíše prvky pole na terminal. Využijte ukazatel.
+
+
+```cpp
+#include <stdio.h>
+
+int main(void)
+{
+    int pole[] = { 7, 6, 4, 2, 7 };
+    const int delka =  sizeof(pole) / sizeof(int);
+
+    return 0;
+}
+```
