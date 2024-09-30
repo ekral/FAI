@@ -12,7 +12,7 @@ Naivní řešení:
 3) dmax = fmax(fabs(dx), fabs(dy)).
 4) stepx = dx / dmax a stepy = dy / dmax.
 5) Provádíme A + (stepx, stepy) dokud je hodnota přibližně rovna B (například můžeme počítat od 0.0 po 1.0 do dmax).
-6) 
+   
 ```c
 #include <stdio.h>
 
