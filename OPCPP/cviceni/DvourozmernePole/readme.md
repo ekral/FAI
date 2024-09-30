@@ -6,6 +6,7 @@ Doplnňte kód, který do matice vykreslí následující obrazce:
 
 1) Horní a dolní řádek
 
+```cpp
 xxxxxxxxxx
 ----------
 ----------
@@ -16,6 +17,7 @@ xxxxxxxxxx
 ----------
 ----------
 xxxxxxxxxx
+```
 
 2) Levý a pravý sloupec
 
