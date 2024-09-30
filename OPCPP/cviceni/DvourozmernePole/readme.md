@@ -1,6 +1,6 @@
 # Vykreslení úsečky
 
-Máme matici znaků reprezentvoanou jednorozměrným polem, kde jsou uloženy řádky ukončené znakem pro nový řádek. Díky tomu pak můžeme matici vypsat jedním příkazem.
+Máme matici znaků reprezentovanou jednorozměrným polem, kde jsou uloženy řádky ukončené znakem pro nový řádek. Díky tomu pak můžeme matici vypsat jedním příkazem.
 
 Doplnňte kód, který do matice vykreslí následující obrazce:
 
