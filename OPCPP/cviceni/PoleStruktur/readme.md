@@ -19,6 +19,7 @@ void vypis(const struct Student* const studenti, const int pocet)
         printf("%s test1: %lf test2: %lf\n", studenti[i].jmeno, studenti[i].test1, studenti[i].test2);
     }
 }
+
 int main(void)
 {
     const struct Student studenti[] =
