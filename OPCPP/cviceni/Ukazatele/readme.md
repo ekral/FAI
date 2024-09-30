@@ -35,7 +35,7 @@ int main()
 ```
 
 
-## 1) Funkce pro výpis pole
+## 2) Funkce pro výpis pole
 
 Definujte a zavolejte funkci `vypis`, která vypíše prvky pole na terminal. Využijte ukazatel.
 
