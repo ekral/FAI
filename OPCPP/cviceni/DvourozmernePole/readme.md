@@ -6,7 +6,7 @@ Doplnňte kód, který do matice vykreslí následující obrazce:
 
 1) Horní a dolní řádek
 
-```bash
+```
 xxxxxxxxxx
 ----------
 ----------
