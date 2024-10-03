@@ -92,7 +92,7 @@ int main(void)
 
     char pole[(ROZMER * (ROZMER + 1)) + 1];
 
-    inicializuj(pole); // "----\n----\n----\n----\n"
+    inicializuj(pole); // "----\n----\n----\n----\n\0"
 
     // vykreslete obrazec
 
