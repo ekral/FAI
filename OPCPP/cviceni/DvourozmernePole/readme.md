@@ -2,7 +2,7 @@
 
 Máme matici znaků reprezentovanou jednorozměrným polem, kde jsou uloženy řádky ukončené znakem pro nový řádek. Díky tomu pak můžeme matici vypsat jedním příkazem.
 
-Doplnňte kód, který do matice vykreslí následující obrazce:
+Doplňte kód, který do matice vykreslí následující obrazce:
 
 1) Horní a dolní řádek
 
