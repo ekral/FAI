@@ -67,7 +67,7 @@ xxxxxxxxxx
 ```c
 #include <stdio.h>
 
-#define ROZMER 10
+#define ROZMER 4
 
 void inicializuj(char* pole)
 {
@@ -83,13 +83,16 @@ void inicializuj(char* pole)
         pole[k] = '\n';
         ++k;
     }
+
+    pole[k] = '\0'; // ukonceni retezce
 }
 
 int main(void)
 {
-    char pole[ROZMER * (ROZMER + 1)];
 
-    inicializuj(pole);
+    char pole[(ROZMER * (ROZMER + 1)) + 1];
+
+    inicializuj(pole); // "----\n----\n----\n----\n"
 
     // vykreslete obrazec
 
