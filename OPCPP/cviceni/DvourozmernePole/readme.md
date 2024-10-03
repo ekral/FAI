@@ -67,7 +67,7 @@ xxxxxxxxxx
 ```c
 #include <stdio.h>
 
-#define ROZMER 4
+#define ROZMER 10
 
 void inicializuj(char* pole)
 {
