@@ -22,8 +22,6 @@ void vypis(const struct Student* const studenti, const int pocet)
     }
 }
 
-
-
 int main(void)
 {
     double vetsi = MAX(10, 5);
