@@ -5,6 +5,8 @@ Máme pole studentů, kdy každý student psal dva testy. Najděte a vypište jm
 ```c
 #include <stdio.h>
 
+#define MAX(a,b) (((a) > (b)) ? (a) : (b))
+
 struct Student
 {
     char* jmeno;
@@ -20,8 +22,12 @@ void vypis(const struct Student* const studenti, const int pocet)
     }
 }
 
+
+
 int main(void)
 {
+    double vetsi = MAX(10, 5);
+
     const struct Student studenti[] =
     {
         {"Karel", 70.0, 50.0},
@@ -33,8 +39,7 @@ int main(void)
     vypis(studenti, 4);
 
     // Najdete a vypiste jmeno studenta s nejlepsim vysledkem ze dvou testu
-    
+
     return 0;
 }
-
 ```
