@@ -1,4 +1,4 @@
-# Třídy a struktury
+# Členské funkce
 
 1) Definujte strukturu `Obdelnik` a doplňte členské funkce pro výpočet obvodu a obsahu.
 2) Definujte strukturu `Kruh` a doplňte členské funkce pro výpočet obvodu a obsahu.
