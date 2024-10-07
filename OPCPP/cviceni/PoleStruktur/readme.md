@@ -1,8 +1,6 @@
 # Pole struktur
 
-Máme pole studentů, kdy každý student psal dva testy. 
-1) Doplňte do struktury funkci, která vrátí větší hodnotu ze dvou testů.
-2) Najděte a vypište jméno studenta, který měl z prvního nebo druhého testu nejvíce bodů.
+Máme pole studentů, kdy každý student psal dva testy. Najděte a vypište jméno studenta, který měl z prvního nebo druhého testu nejvíce bodů.
 
 ```c
 #include <stdio.h>
