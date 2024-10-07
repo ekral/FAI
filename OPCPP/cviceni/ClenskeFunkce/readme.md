@@ -5,4 +5,4 @@
 3) Definujte strukturu `Komplexni` pro komplexní číslo a doplňte:
   - členskou funkci která vrátí absolutní hodnotu komplexního čísla.
   - členskou funkci, která vypíše hodnotu reálné a imaginární složky na terminál.
-5) Definujte třídu `Hypoteka` a doplňte členskou funkci, která vrátí výši splátky dle vzorce z minulého cvičení.
+4) Definujte třídu `Hypoteka` a doplňte členskou funkci, která vrátí výši splátky dle vzorce z minulého cvičení.
