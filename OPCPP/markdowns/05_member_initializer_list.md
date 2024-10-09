@@ -105,7 +105,7 @@ public:
 };
 ```
 
-* Tuto třídou `Souradnice` potom chceme použít v třídě `Obdelnik`. Pokud bychom nepoužili member initializer list, tak by kód nešel ani přeložit, protože třída `Souradnice` nemá východzí (default) konstruktor.
+* Tuto třídou `Souradnice` potom chceme použít v třídě `Obdelnik`. Pokud bychom nepoužili member initializer list, tak by kód nešel ani přeložit, protože třída `Souradnice` nemá výchozí (default) konstruktor.
 
 ```c++ 
 class Obdelnik
