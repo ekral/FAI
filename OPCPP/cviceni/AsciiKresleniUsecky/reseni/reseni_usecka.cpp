@@ -1,12 +1,17 @@
-#include <stdio.h>
-#include <math.h>
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <algorithm>
+#include <cmath>
+
+using namespace std;
 
 struct Bod2d
 {
     double x;
     double y;
 
-    Bod2d(double x, double y) : x(x), y(y)
+    Bod2d(const double x, const double y) : x(x), y(y)
     {
 
     }
@@ -15,116 +20,76 @@ struct Bod2d
 class Platno
 {
 private:
-    // static constexpr je moderni zpusob zadani konstanty zname v dobe prekladu
-    static constexpr int columnCount = 30;
-    static constexpr int rowCount = 20;
-    static constexpr int totalChars = columnCount * rowCount;
-    char pozadi;
-
-    char data[totalChars];
+    string data;
 public:
-    static constexpr int maxColumnIndex = columnCount - 1;
-    static constexpr int maxRowIndex = rowCount - 1;
+    const int sirka;
+    const int vyska;
 
-    char popredi;
 
-    Platno(char pozadi, char popredi) : pozadi(pozadi), popredi(popredi), data{ 0 }
+    Platno(const int sirka, const int vyska) : data((sirka + 1) * vyska, '-'), sirka(sirka), vyska(vyska)
     {
         Vymaz();
     }
 
     void Vymaz()
     {
-        for (int i = 0; i < totalChars; i++)
+        ranges::fill(data, '-');
+
+        for (int i = sirka; i < data.length(); i += sirka + 1)
         {
-            data[i] = pozadi;
+            data[i] = '\n';
         }
+
     }
 
-    void NakresliBod(double x, double y)
+    void Zobraz() const
     {
-        int pos = ((rowCount - round(y) - 1) * columnCount) + round(x);
-
-        data[pos] = popredi;
+        cout << data << endl;
     }
 
+    void Zapis(double x, double y)
+    {
+        const int pos = static_cast<int>(round((vyska - y - 1) * (sirka + 1) + x));
+
+        data[pos] = 'x';
+    }
     void NakresliUsecku(Bod2d bodA, Bod2d bodB)
     {
-        double dx = bodB.x - bodA.x;
-        double dy = bodB.y - bodA.y;
-
+        double dx = bodA.x - bodB.x;
+        double dy = bodA.y - bodB.y;
 
         double dmax = fmax(fabs(dx), fabs(dy));
 
-        double stepx = dx / dmax;
-        double stepy = dy / dmax;
+        double stepy = dy/dmax;
+        double stepx = dx/dmax;
 
-        Bod2d bod = bodA;
-
+        Bod2d bod = bodB;
         double d = 0;
-
-        while(d <= dmax)
-        {
-            NakresliBod(bod.x, bod.y);
-
+        while(d<dmax) {
+            Zapis(bod.x, bod.y);
             bod.x += stepx;
             bod.y += stepy;
 
-            ++d;
-        }
-
-    }
-
-    void Zobraz()
-    {
-        int pos = 0;
-
-        for (int i = 0; i < rowCount; i++)
-        {
-            for (int j = 0; j < columnCount; j++)
-            {
-                char znak = data[pos];
-                ++pos;
-
-                putchar(znak);
-            }
-
-            putchar('\n');
+            d = d+1;
         }
     }
-
 };
 
 int main()
 {
-    Bod2d bodA(2.0, 3.0);
-    Bod2d bodB(5.0, 6.0);
+    Platno platno(20, 10);
 
-    Platno platno('-', 'x');
+    platno.Vymaz();
 
-    bool konec = true;
+    Bod2d A(2.0, 3.0);
+    Bod2d B(7.0, 9.0);
 
-    do
-    {
-        platno.Vymaz();
-        platno.NakresliBod(2, 3);
+    //platno.Zapis(A.x, A.y);
+    //platno.Zapis(B.x, B.y);
 
-        platno.popredi = 'O';
-        platno.NakresliBod(0, 0);
+    platno.NakresliUsecku(A, B); // 🚀 Implementujte
 
-        platno.popredi = '1';
-        platno.NakresliBod(platno.maxColumnIndex, 0);
+    platno.Zobraz();
 
-        platno.popredi = '2';
-        platno.NakresliBod(platno.maxColumnIndex, platno.maxRowIndex);
-
-        platno.popredi = '3';
-        platno.NakresliBod(0, platno.maxRowIndex);
-
-        platno.popredi = 'A';
-        platno.NakresliUsecku(bodA, bodB);
-
-        platno.Zobraz();
-
-    } while (!konec);
+    return 0;
 }
