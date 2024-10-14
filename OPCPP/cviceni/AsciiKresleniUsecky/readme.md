@@ -67,7 +67,7 @@ public:
 
     void Zapis(double x, double y)
     {
-        const int pos = static_cast<int>(round(y * (sirka + 1) + x));
+        const int pos = static_cast<int>(round((vyska - y - 1) * (sirka + 1) + x));
 
         data[pos] = 'x';
     }
@@ -78,12 +78,12 @@ int main()
     Platno platno(20, 10);
 
     platno.Vymaz();
-    platno.Zapis(9, 4);
+    platno.Zapis(0, 0);
 
     Bod2d A(2.0, 3.0);
     Bod2d B(7.0, 9.0);
 
-    platno.NakresliUsecku(A, B); // 🚀 Implementujte
+    //platno.NakresliUsecku(A, B); // 🚀 Implementujte
 
     platno.Zobraz();
 
