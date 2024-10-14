@@ -26,23 +26,25 @@ using namespace std;
 
 struct Bod2d
 {
-	double x;
-	double y;
+    double x;
+    double y;
 
-	Bod2d(const double x, const double y) : x(x), y(y)
-	{
+    Bod2d(const double x, const double y) : x(x), y(y)
+    {
 
-	}
+    }
 };
 
 class Platno
 {
+private:
+    string data;
 public:
     const int sirka;
     const int vyska;
-    string data;
 
-    Platno(const int sirka, const int vyska) : sirka(sirka), vyska(vyska), data((sirka + 1) * vyska, '-')
+
+    Platno(const int sirka, const int vyska) : data((sirka + 1) * vyska, '-'), sirka(sirka), vyska(vyska)
     {
         Vymaz();
     }
@@ -66,6 +68,7 @@ public:
     void Zapis(double x, double y)
     {
         const int pos = static_cast<int>(round(y * (sirka + 1) + x));
+
         data[pos] = 'x';
     }
 };
@@ -80,7 +83,7 @@ int main()
     Bod2d A(2.0, 3.0);
     Bod2d B(7.0, 9.0);
 
-    platno.NakresliUsecku(A,B); // 🚀 Implementujte
+    platno.NakresliUsecku(A, B); // 🚀 Implementujte
 
     platno.Zobraz();
 
