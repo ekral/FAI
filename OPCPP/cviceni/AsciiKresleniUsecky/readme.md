@@ -13,124 +13,77 @@ Naivní řešení:
 4) stepx = dx / dmax a stepy = dy / dmax.
 5) Provádíme A + (stepx, stepy) dokud je hodnota přibližně rovna B (například můžeme počítat od 0.0 po 1.0 do dmax).
 
-Hlavičkové soubory:
-```cpp
-#include <stdio.h>
-#include <math.h>
-```
-
-Struktura `Bod2d`:
+Zdrojový kód:
 
 ```cpp
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <algorithm>
+#include <cmath>
+
+using namespace std;
+
 struct Bod2d
 {
 	double x;
 	double y;
 
-	Bod2d(double x, double y) : x(x), y(y)
+	Bod2d(const double x, const double y) : x(x), y(y)
 	{
-	
+
 	}
 };
-```
 
-
-A třída `Platno`:
-
-```cpp
 class Platno
 {
-private:
-	// static constexpr je moderni zpusob zadani konstanty zname v dobe prekladu
-	static constexpr int columnCount = 30;
-	static constexpr int rowCount = 20;
-	static constexpr int totalChars = columnCount * rowCount;
-	char pozadi;
-
-	char data[totalChars];
 public:
-	static constexpr int maxColumnIndex = columnCount - 1;
-	static constexpr int maxRowIndex = rowCount - 1;
+    const int sirka;
+    const int vyska;
+    string data;
 
-	char popredi;
+    Platno(const int sirka, const int vyska) : sirka(sirka), vyska(vyska), data((sirka + 1) * vyska, '-')
+    {
+        Vymaz();
+    }
 
-	Platno(char pozadi, char popredi) : pozadi(pozadi), popredi(popredi), data{ 0 }
-	{
-		Vymaz();
-	}
+    void Vymaz()
+    {
+        ranges::fill(data, '-');
 
-	void Vymaz()
-	{
-		for (int i = 0; i < totalChars; i++)
-		{
-			data[i] = pozadi;
-		}
-	}
+        for (int i = sirka; i < data.length(); i += sirka + 1)
+        {
+            data[i] = '\n';
+        }
 
-	void NakresliBod(double x, double y)
-	{
-		int pos = ((rowCount - round(y) - 1) * columnCount) + round(x);
+    }
 
-		data[pos] = popredi;
-	}
+    void Zobraz() const
+    {
+        cout << data << endl;
+    }
 
-	void Zobraz()
-	{
-		int pos = 0;
-
-		for (int i = 0; i < rowCount; i++)
-		{
-			for (int j = 0; j < columnCount; j++)
-			{
-				char znak = data[pos];
-				++pos;
-
-				putchar(znak);
-			}
-
-			putchar('\n');
-		}
-	}
-
+    void Zapis(double x, double y)
+    {
+        const int pos = static_cast<int>(round(y * (sirka + 1) + x));
+        data[pos] = 'x';
+    }
 };
-```
 
-Odpoznámkujte zapoznámkovanou funkci a jinak kód funkce main **neměňte**.
-
-```cpp
 int main()
 {
-	Bod2d bodA(2.0, 3.0);
-	Bod2d bodB(5.0, 6.0);
+    Platno platno(20, 10);
 
-	Platno platno('-', 'x');
+    platno.Vymaz();
+    platno.Zapis(9, 4);
 
-	bool konec = true;
+    Bod2d A(2.0, 3.0);
+    Bod2d B(7.0, 9.0);
 
-	do
-	{
-		platno.Vymaz();
-		platno.NakresliBod(2, 3);
+    platno.NakresliUsecku(A,B); // 🚀 Implementujte
 
-		platno.popredi = 'O';
-		platno.NakresliBod(0, 0);
+    platno.Zobraz();
 
-		platno.popredi = '1';
-		platno.NakresliBod(platno.maxColumnIndex, 0);
-
-		platno.popredi = '2';
-		platno.NakresliBod(platno.maxColumnIndex, platno.maxRowIndex);
-
-		platno.popredi = '3';
-		platno.NakresliBod(0, platno.maxRowIndex);
-
-		platno.popredi = 'A';
-
-		// Odpoznamkuje nasledujici radek a definujte nasledujici clenskou funkci
-		//platno.NakresliUsecku(bodA, bodB);
-
-		platno.Zobraz();
-
-	} while (!konec);
+    return 0;
 }
 ```
