@@ -6,7 +6,7 @@
 
 # Přetěžování funkcí
 
-Přetěžování funkcí znamená, že můžeme mít více funkcí se stejným názvem, pokud mají jiné parametry. V následujícím příkladu máme tři metody `Vypis`. První metoda má jeden parametr typu `int`, druhá dva parametry typu `int` a třetí má parametr typu `double`. Překladač potom podle typu argumentu zavolá správnou metodu `Vypis`.
+Přetěžování funkcí (function overloading) znamená, že můžeme mít více funkcí se stejným názvem, pokud mají jiné parametry. V následujícím příkladu máme tři metody `Vypis`. První metoda má jeden parametr typu `int`, druhá dva parametry typu `int` a třetí má parametr typu `double`. Překladač potom podle typu argumentu zavolá správnou metodu `Vypis`.
 
 ```cpp
 #include <cstdio>
@@ -42,7 +42,7 @@ Typ reference vzniknul kvůli přetěžování operátorů.
 
 # Přetěžování operátorů
 
-Přetěžování operátorů znamená, že kromě metod můžou třídy a struktury podporovat i operátory.
+Přetěžování operátorů (operator overloading) znamená, že kromě metod můžou třídy a struktury podporovat i operátory.
 
 https://en.cppreference.com/w/cpp/language/operators
 
