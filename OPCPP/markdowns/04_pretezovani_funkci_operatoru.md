@@ -38,7 +38,39 @@ int main()
 
 # Typ reference
 
-Typ reference vzniknul kvůli přetěžování operátorů. 
+Typ reference vzniknul kvůli přetěžování operátorů, kde nebylo možné použít ukazatel, ale bylo potřeba předávat referenci. Kromě přetížených operátorů se typ reference používá i pro předávání argumentů, typicky s klíčovým slovem `const`.
+
+```cpp
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Student
+{
+public:
+    string jmeno;
+    string prijmeni;
+    string skupina;
+};
+
+void Vypis(const Student& student)
+{
+    cout << student.jmeno << " " << student.prijmeni << " " << student.skupina << endl;
+}
+
+int main()
+{
+    Student s1;
+    s1.jmeno = "Alena";
+    s1.prijmeni = "Vesela";
+    s1.skupina = "SWI1";
+
+    Vypis(s1);
+    
+    return 0;
+}
+```
 
 # Přetěžování operátorů
 
