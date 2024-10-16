@@ -122,4 +122,83 @@ int main()
 
 Kopírovací a přesouvací konstruktor slouží k vytvoření hluboké kopie instance třídy respektive struktury.
 
-V n
+V následujícím příkladu má třída definovaný kopírovací konstruktor i operátor přiřazení. Ještě by měla mít definovaný `move` konstruktor a `move` operátor přiřazení, ale pro zjednodušení jsou vynechány.
+
+```cpp
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+class Trida
+{
+public:
+    int n;
+    int* data;
+
+    explicit Trida(const int n) :  n(n), data(new int[n])
+    {
+        fill_n(data, n, 0);
+    }
+
+    Trida(const Trida& other) : n(other.n), data(new int[n])
+    {
+        copy_n(other.data, n, data);
+    }
+
+    Trida& operator = (Trida other) noexcept
+    {
+        swap(*this, other);
+
+        return *this;
+    }
+
+    friend void swap(Trida& first, Trida& second) noexcept
+    {
+        using std::swap; // neni nutne
+
+        swap(first.data, second.data);
+        swap(first.n, second.n);
+    }
+
+    ~Trida()
+    {
+        delete[] data;
+    }
+};
+
+void Vypis(const Trida& trida)
+{
+    for (int i = 0; i < trida.n; i++)
+    {
+        cout << trida.data[i];
+    }
+
+    cout << endl;
+}
+
+int main()
+{
+    const Trida t1(4);
+
+    t1.data[0] = 1;
+    t1.data[1] = 2;
+    t1.data[2] = 3;
+    t1.data[3] = 4;
+
+    const Trida t2(t1);
+
+    Trida t3(7);
+    Vypis(t3);
+
+    t3 = t1;
+
+    Vypis(t1);
+    Vypis(t2);
+    Vypis(t3);
+
+    return 0;
+}
+```
+
+Probraná témata jsou pokročilá. Abychom nemuseli definovat kopírovací a přesouvací členské prvky, tak je nejjednoduší používat zabudované typy, jako je string, vector a chytré ukazatele a nepoužívat ["naked pointers"](https://stackoverflow.com/questions/9299489/whats-a-naked-pointer).
