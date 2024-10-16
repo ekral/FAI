@@ -1,4 +1,4 @@
-# Přetěžování funkcí a operátorů
+# 07 Přetěžování funkcí a operátorů
 
 **autor: Erik Král ekral@utb.cz**
 
