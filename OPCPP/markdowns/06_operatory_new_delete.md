@@ -1,4 +1,4 @@
-# 07 Operátory new a delete
+# 06 Operátory new a delete
 
 **autor: Erik Král ekral@utb.cz**
 
