@@ -1,4 +1,4 @@
-# Polymorfismus a virtuální funkce
+# 09 Polymorfismus a virtuální funkce
 
 **autor Erik Král ekral@utb.cz**
 
