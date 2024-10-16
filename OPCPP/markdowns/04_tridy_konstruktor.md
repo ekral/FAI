@@ -1,4 +1,4 @@
-# 04 Třída, konstruktor a member intializer list 
+# 04 Konstruktor třídy a member intializer list 
 
 **autor: Erik Král ekral@utb.cz**
 
