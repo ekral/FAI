@@ -203,4 +203,4 @@ int main()
 }
 ```
 
-Probraná témata jsou pokročilá. Abychom nemuseli definovat kopírovací a přesouvací členské prvky, tak je nejjednoduší používat zabudované typy, jako je string, vector a chytré ukazatele a nepoužívat ["naked pointers"](https://stackoverflow.com/questions/9299489/whats-a-naked-pointer).
+Probraná témata jsou pokročilá. Abychom nemuseli definovat kopírovací a přesouvací členské prvky, tak je nejjednoduší používat zabudované typy, jako je string, vector a chytré ukazatele a **nepoužívat ["naked pointers"](https://stackoverflow.com/questions/9299489/whats-a-naked-pointer)**.
