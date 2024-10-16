@@ -1,4 +1,4 @@
-# 06 Třídy a destruktor
+# 05 Třídy a destruktor
 
 **autor: Erik Král ekral@utb.cz**
 
