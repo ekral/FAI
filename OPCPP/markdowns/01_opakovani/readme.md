@@ -1,4 +1,4 @@
-# Opakování
+# 01 Opakování základy, proměnné, ukazatele
 ---
 
 - Základy C. [odkaz](01a_opakovani_promenne.md)
