@@ -124,6 +124,8 @@ Kopírovací a přesouvací konstruktor slouží k vytvoření hluboké kopie in
 
 V následujícím příkladu má třída definovaný kopírovací konstruktor i operátor přiřazení. Ještě by měla mít definovaný `move` konstruktor a `move` operátor přiřazení, ale pro zjednodušení jsou vynechány.
 
+V kódu je u přetíženého operátoru (`operator =`) použitý [copy-and-swap idiom](https://stackoverflow.com/questions/3279543/what-is-the-copy-and-swap-idiom). Kdy parametr je kopie argumentu a poté se prohodí členské prvky parametru s členskými prvky třídy. Díky tomu jsou potom uvolněné zdroje (které měla původně třída) na konci funkce, kdy přestane existovat argument a je zavolaný jeho destruktor. A ve třídě potom mají členské prvky hodnoty jaké měly v původním parametru.
+
 ```cpp
 #include <iostream>
 #include <algorithm>
