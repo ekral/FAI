@@ -38,7 +38,7 @@ int main()
 
 # Typ reference
 
-Typ reference vzniknul kvůli přetěžování operátorů, kde nebylo možné použít ukazatel, ale bylo potřeba předávat referenci. Kromě přetížených operátorů se typ reference používá i pro předávání argumentů, typicky s klíčovým slovem `const`.
+Typ reference vzniknul kvůli přetěžování operátorů, kde nebylo možné použít ukazatel, ale bylo potřeba předávat referenci. Typ refeence se zapisuje se znakem `&` za typem, například `int&` nebo `Student&`. Kromě přetížených operátorů se typ reference používá i pro předávání argumentů, typicky s klíčovým slovem `const`.
 
 ```cpp
 #include <iostream>
@@ -75,6 +75,8 @@ int main()
 # Přetěžování operátorů
 
 Přetěžování operátorů (operator overloading) znamená, že kromě metod můžou třídy a struktury podporovat i operátory.
+
+Následující kód definuje pro strukturu Bod unární operátor `+=` a binární operátor `+`. Příklad vychází z kód z odkazu:
 
 https://en.cppreference.com/w/cpp/language/operators
 
@@ -119,3 +121,5 @@ int main()
 # Kopírovací a přesouvací konstruktor
 
 Kopírovací a přesouvací konstruktor slouží k vytvoření hluboké kopie instance třídy respektive struktury.
+
+V n
