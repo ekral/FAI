@@ -1,4 +1,4 @@
-# Dedičnost kódu
+# 08 Dedičnost kódu
 
 **autor Erik Král ekral@utb.cz**
 
