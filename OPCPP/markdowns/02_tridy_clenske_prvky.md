@@ -6,7 +6,9 @@
 
 ## Členské proměnné
 
-Třídu definujeme pomocí klíčového slova `class`. Pokud chceme přistupovat k členským proměnným mimo třídu, tak je musíme deklarovat jako `public`. Následující příklad definuje třídu pro dvourozměrný bod s public členskými proměnnými `x` a `y`. Na rozdíl od ostatních jazyků, například Java, nebo C# musíme v jazyce C++ uvést za definicí třídy středník `;`.
+Třídu definujeme pomocí klíčového slova `class`. Pokud chceme přistupovat k členským proměnným mimo třídu, tak je musíme deklarovat jako `public`. Rozdíl mezi třídou a strukturou je v tom, že struktura má výchozí modifikátor `public` a třída má výchozí modifikátor `private`, což znamená, že pokud ve třídě neuvedeme žádný modifikátor, tak se použije `private`. 
+
+Následující příklad definuje třídu pro dvourozměrný bod s public členskými proměnnými `x` a `y`. Na rozdíl od ostatních jazyků, například Java, nebo C# musíme v jazyce C++ uvést za definicí třídy středník `;`.
 
 ```c++
 class Bod
