@@ -67,6 +67,11 @@ public:
 
     void Zapis(double x, double y)
     {
+        if(x < 0.0 || x >= sirka || y < 0.0 || y >= vyska)
+        {
+            puts("souradnice mimo platno");
+        }
+
         const int pos = static_cast<int>(round((vyska - y - 1) * (sirka + 1) + x));
 
         data[pos] = 'x';
