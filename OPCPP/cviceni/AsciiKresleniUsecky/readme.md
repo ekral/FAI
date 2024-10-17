@@ -65,14 +65,17 @@ public:
         cout << data << endl;
     }
 
-    void Zapis(double x, double y)
+    void NakresliBod(const double x, const double y)
     {
         if(x < 0.0 || x >= sirka || y < 0.0 || y >= vyska)
         {
-            puts("souradnice mimo platno");
+            return;
         }
 
-        const int pos = static_cast<int>((vyska - round(y) - 1) * (sirka + 1) + round(x));
+        const int ix = static_cast<int>(round(x));
+        const int iy = static_cast<int>(round(y));
+
+        const int pos = (vyska - iy - 1) * (sirka + 1) + ix;
 
         data[pos] = 'x';
     }
@@ -84,8 +87,11 @@ int main()
 
     platno.Vymaz();
 
-    Bod2d A(0.0, 0.0);
-    Bod2d B(19.0, 9.0);
+    const Bod2d A(0.0, 0.0);
+    const Bod2d B(19.0, 9.0);
+
+    platno.NakresliBod(A.x, A.y);
+    platno.NakresliBod(B.x, B.y);
 
     //platno.NakresliUsecku(A, B); // 🚀 Implementujte
 
