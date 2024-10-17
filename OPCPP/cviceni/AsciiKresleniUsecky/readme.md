@@ -72,7 +72,7 @@ public:
             puts("souradnice mimo platno");
         }
 
-        const int pos = static_cast<int>(round((vyska - y - 1) * (sirka + 1) + x));
+        const int pos = static_cast<int>((vyska - round(y) - 1) * (sirka + 1) + round(x));
 
         data[pos] = 'x';
     }
@@ -83,10 +83,9 @@ int main()
     Platno platno(20, 10);
 
     platno.Vymaz();
-    platno.Zapis(0, 0);
 
-    Bod2d A(2.0, 3.0);
-    Bod2d B(7.0, 9.0);
+    Bod2d A(0.0, 0.0);
+    Bod2d B(19.0, 9.0);
 
     //platno.NakresliUsecku(A, B); // 🚀 Implementujte
 
