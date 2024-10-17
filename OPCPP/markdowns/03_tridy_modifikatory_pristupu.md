@@ -115,3 +115,7 @@ int main()
     //ucet.Vyber(20000.0); // vyvola vyjimku
 }
 ```
+
+## Třída vs struktura
+
+Rozdíl mezi třídou a strukturou je v tom, že struktura má výchozí modifikátor `public` a třída má výchozí modifikátor `private`, což znamená, že pokud ve třídě neuvedeme žádný modifikátor, tak se použije `private`. Zatímco u struktury, pokud neuvedeme žádný modifikátor, tak se použije `public`.
