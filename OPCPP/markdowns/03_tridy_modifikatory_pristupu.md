@@ -119,3 +119,26 @@ int main()
 ## Třída vs struktura
 
 Rozdíl mezi třídou a strukturou je v tom, že struktura má výchozí modifikátor `public` a třída má výchozí modifikátor `private`, což znamená, že pokud ve třídě neuvedeme žádný modifikátor, tak se použije `private`. Zatímco u struktury, pokud neuvedeme žádný modifikátor, tak se použije `public`.
+
+```c++
+struct Struktura
+{
+    int x;
+};
+
+class Trida
+{
+    int x;
+};
+
+int main()
+{
+    Struktura s1;
+    s1.x = 1; // pujde prelozit
+
+    Trida t1;
+    // t1.x = 1; // nejde prelozit
+
+    return 0;
+}
+```
