@@ -23,15 +23,8 @@ Vyjděte z následujících zdrojových kódů:
 #include <algorithm>
 #include <cmath>
 #include <ranges>
-#include <windows.h>
 
 using namespace std;
-
-void gotoxy(int x, int y) {
-    COORD pos = {(short)x, (short)y};
-    HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleCursorPosition(output, pos);
-}
 
 struct Bod2d
 {
@@ -135,34 +128,20 @@ public:
     }
 };
 
-Bod2d rotace(Bod2d A, double uhelStupne)
-{
-    double uhelRadiany = (uhelStupne * M_PI) / 180;
-
-    double xt = A.x * cos(uhelRadiany) - A.y * sin(uhelRadiany);
-    double yt = A.x * sin(uhelRadiany) + A.y * cos(uhelRadiany);
-
-    Bod2d At(xt, yt);
-
-    return At;
-}
+// Zde nadefinujte funkci rotace 🍍
 
 int main()
 {
-    Platno platno(20, 10);
+    Platno platno(40, 20);
 
     platno.Vymaz();
 
-    const Bod2d A(10.0, 0.0);
-    const Bod2d pocatek(0.0, 0.0);
-    //platno.NakresliBod(A.x, A.y);
-   
-    // 1. rotujte bod A kolem pocatku
-
-    // 2. rotujte trojuhelnik kolem stredu
+    const Bod2d A(20.0, 0.0);
     
-    RovnostrannyTrojuhelnik trojuhelnik(stred, 10.0);
-    //trojuhelnik.Nakresli(&platno);
+    double uhel = 45.0;
+    // Bod2d At = rotace(A, uhel); // implementujte funkci rotace 🐤 
+
+    platno.NakresliBod(At.x, At.y);
 
     platno.Zobraz();
 
