@@ -3,15 +3,8 @@
 #include <algorithm>
 #include <cmath>
 #include <ranges>
-#include <windows.h>
 
 using namespace std;
-
-void gotoxy(int x, int y) {
-    COORD pos = {(short)x, (short)y};
-    HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleCursorPosition(output, pos);
-}
 
 struct Bod2d
 {
@@ -129,29 +122,17 @@ Bod2d rotace(Bod2d A, double uhelStupne)
 
 int main()
 {
-    Platno platno(20, 10);
+    Platno platno(40, 20);
 
     platno.Vymaz();
 
-    const Bod2d A(10.0, 0.0);
-    const Bod2d pocatek(0.0, 0.0);
-    //platno.NakresliBod(A.x, A.y);
-    for (double uhel = 0.0; uhel < 180.0; uhel += 0.001)
-    {
-        Bod2d At = rotace(A, uhel); // napiste funkci, ktera zarotuje bod
-        platno.Vymaz();
-        platno.NakresliUsecku(pocatek, At);
-        gotoxy(0,0);
-        platno.Zobraz();
-    }
+    const Bod2d A(20.0, 0.0);
 
-    //platno.NakresliUsecku(A, B);
+    // 1. rotujte bod A kolem pocatku
+    double uhel = 45.0;
+    Bod2d At = rotace(A, uhel);
 
-    const Bod2d stred(9.5, 4.5);
-   // platno.NakresliBod(stred.x, stred.y);
-
-    RovnostrannyTrojuhelnik trojuhelnik(stred, 10.0);
-    //trojuhelnik.Nakresli(&platno);
+    platno.NakresliBod(At.x, At.y);
 
     platno.Zobraz();
 
