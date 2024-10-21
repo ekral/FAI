@@ -11,15 +11,20 @@ S kódem pro ASCII kreslení úsečky vykreslete rovnostranný trojúhelník.
 3) Ve třídě `RovnostrannyTrojuhelnik` definujte členskou funkci `void Nakresli(Platno* platno)` ktera nakresli trojuhelnik na plátno.
 
 ```cpp
-#include <stdio.h>
-#include <math.h>
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <cmath>
+#include <ranges>
+
+using namespace std;
 
 struct Bod2d
 {
     double x;
     double y;
 
-    Bod2d(double x, double y) : x(x), y(y)
+    Bod2d(const double x, const double y) : x(x), y(y)
     {
 
     }
@@ -28,129 +33,91 @@ struct Bod2d
 class Platno
 {
 private:
-    // static constexpr je moderni zpusob zadani konstanty zname v dobe prekladu
-    static constexpr int columnCount = 30;
-    static constexpr int rowCount = 20;
-    static constexpr int totalChars = columnCount * rowCount;
-    char pozadi;
-
-    char data[totalChars];
+    string retezec;
 public:
-    const int maxColumnIndex = columnCount - 1;
-    const int maxRowIndex = rowCount - 1;
+    const int sirka;
+    const int vyska;
 
-    char popredi;
-
-    Platno(char pozadi, char popredi) : pozadi(pozadi), popredi(popredi), data{ 0 }
+    // pomoci member initializer listu volam konstruktor stringu
+    Platno(const int sirka, const int vyska) : retezec((sirka + 1) * vyska, '-'), sirka(sirka), vyska(vyska)
     {
         Vymaz();
     }
 
     void Vymaz()
     {
-        for (int i = 0; i < totalChars; i++)
+        fill(retezec.begin(), retezec.end(), '-');
+
+        for (int i = sirka; i < retezec.length(); i += sirka + 1)
         {
-            data[i] = pozadi;
+            retezec[i] = '\n';
         }
+
     }
 
-    void NakresliBod(double x, double y)
+    void Zobraz() const
     {
-        int pos = ((rowCount - round(y) - 1) * columnCount) + round(x);
-
-        data[pos] = popredi;
+        cout << retezec << endl;
     }
 
-    void NakresliUsecku(Bod2d bodA, Bod2d bodB)
+    void NakresliBod(const double x, const double y)
     {
-        double dx = bodB.x - bodA.x;
-        double dy = bodB.y - bodA.y;
+        if(x < 0.0 || x >= sirka || y < 0.0 || y >= vyska)
+        {
+            return;
+        }
 
+        const int ix = static_cast<int>(round(x));
+        const int iy = static_cast<int>(round(y));
 
-        double dmax = fmax(fabs(dx), fabs(dy));
+        const int pos = (vyska - iy - 1) * (sirka + 1) + ix;
+
+        retezec[pos] = 'x';
+    }
+
+    void NakresliUsecku(const Bod2d& A, const Bod2d& B)
+    {
+        double dx = B.x - A.x;
+        double dy = B.y - A.y;
+
+        double dmax = max(abs(dx), abs(dy));
 
         double stepx = dx / dmax;
         double stepy = dy / dmax;
 
-        Bod2d bod = bodA;
+        double x = A.x;
+        double y = A.y;
 
-        double d = 0;
-
-        while(d <= dmax)
+        for (double t = 0.0; t <= dmax; t += 1.0)
         {
-            NakresliBod(bod.x, bod.y);
+            NakresliBod(x, y);
 
-            bod.x += stepx;
-            bod.y += stepy;
-
-            ++d;
-        }
-
-    }
-
-    void Zobraz()
-    {
-        int pos = 0;
-
-        for (int i = 0; i < rowCount; i++)
-        {
-            for (int j = 0; j < columnCount; j++)
-            {
-                char znak = data[pos];
-                ++pos;
-
-                putchar(znak);
-            }
-
-            putchar('\n');
+            x += stepx;
+            y += stepy;
         }
     }
-
 };
 
-// Zde definujte tridu Trojuhelnik
-
+// Zde nadefinujte tridu 
 int main()
 {
-    Bod2d bodA(2.0, 3.0);
-    Bod2d bodB(5.0, 6.0);
+    Platno platno(20, 10);
 
-    Platno platno('-', 'x');
+    platno.Vymaz();
 
-    bool konec = true;
+    const Bod2d A(0.0, 0.0);
+    const Bod2d B(19.0, 9.0);
 
-    do
-    {
-        platno.Vymaz();
+    platno.NakresliBod(A.x, A.y);
+    platno.NakresliBod(B.x, B.y);
 
-        platno.NakresliBod(2, 3);
+    platno.NakresliUsecku(A, B); // 🚀 Implementujte
 
-        platno.popredi = 'O';
-        platno.NakresliBod(0, 0);
+    //RovnostrannyTrojuhelnik trojuhelnik(stred, 10.0);
+    //trojuhelnik.Nakresli(&platno);
 
-        platno.popredi = '1';
-        platno.NakresliBod(platno.maxColumnIndex, 0);
+    platno.Zobraz();
 
-        platno.popredi = '2';
-        platno.NakresliBod(platno.maxColumnIndex, platno.maxRowIndex);
-
-        platno.popredi = '3';
-        platno.NakresliBod(0, platno.maxRowIndex);
-
-        platno.popredi = 'A';
-        platno.NakresliUsecku(bodA, bodB);
-
-        platno.popredi = 'S';
-        Bod2d stred(10.0, 8.0);
-        platno.NakresliBod(stred.x, stred.y);
-
-        // Odpoznamkovat
-        //platno.popredi = 't';
-        //RovnostrannyTrojuhelnik trojuhelnik(stred, 10.0);
-        //trojuhelnik.Nakresli(&platno);
-
-        platno.Zobraz();
-
-    } while (!konec);
+    return 0;
 }
 ```
