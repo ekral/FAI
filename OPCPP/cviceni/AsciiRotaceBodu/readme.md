@@ -23,8 +23,15 @@ Vyjděte z následujících zdrojových kódů:
 #include <algorithm>
 #include <cmath>
 #include <ranges>
+#include <windows.h>
 
 using namespace std;
+
+void gotoxy(int x, int y) {
+    COORD pos = {(short)x, (short)y};
+    HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleCursorPosition(output, pos);
+}
 
 struct Bod2d
 {
@@ -128,6 +135,17 @@ public:
     }
 };
 
+Bod2d rotace(Bod2d A, double uhelStupne)
+{
+    double uhelRadiany = (uhelStupne * M_PI) / 180;
+
+    double xt = A.x * cos(uhelRadiany) - A.y * sin(uhelRadiany);
+    double yt = A.x * sin(uhelRadiany) + A.y * cos(uhelRadiany);
+
+    Bod2d At(xt, yt);
+
+    return At;
+}
 
 int main()
 {
@@ -135,19 +153,16 @@ int main()
 
     platno.Vymaz();
 
-    const Bod2d A(19.0, 0.0);
-    //Bod2d At = rotace(A, 10); // napiste funkci, ktera zarotuje bod
+    const Bod2d A(10.0, 0.0);
+    const Bod2d pocatek(0.0, 0.0);
+    //platno.NakresliBod(A.x, A.y);
+   
+    // 1. rotujte bod A kolem pocatku
+
+    // 2. rotujte trojuhelnik kolem stredu
     
-    platno.NakresliBod(A.x, A.y);
-    //platno.NakresliBod(At.x, At.y);
-
-    //platno.NakresliUsecku(A, B);
-
-    const Bod2d stred(9.5, 4.5);
-    platno.NakresliBod(stred.x, stred.y);
-
     RovnostrannyTrojuhelnik trojuhelnik(stred, 10.0);
-    trojuhelnik.Nakresli(&platno);
+    //trojuhelnik.Nakresli(&platno);
 
     platno.Zobraz();
 
