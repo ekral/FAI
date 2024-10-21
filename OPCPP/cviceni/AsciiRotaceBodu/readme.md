@@ -105,29 +105,6 @@ public:
     }
 };
 
-// Zde nadefinujte tridu RovnostrannyTrojuhelnik
-class RovnostrannyTrojuhelnik
-{
-private:
-    Bod2d S;
-    double a;
-public:
-    RovnostrannyTrojuhelnik(const Bod2d S, const double a) : S(S), a(a)
-    {
-    }
-
-    void Nakresli(Platno* platno) const
-    {
-        Bod2d A(S.x - a / 2, S.y - sqrt(3.0) * a / 6);
-        Bod2d B(S.x + a / 2, S.y - sqrt(3.0) * a / 6);
-        Bod2d C(S.x, S.y + sqrt(3.0) * a / 3);
-
-        platno->NakresliUsecku(A, B);
-        platno->NakresliUsecku(B, C);
-        platno->NakresliUsecku(C, A);
-    }
-};
-
 // Zde nadefinujte funkci rotace 🍍
 
 int main()
