@@ -98,7 +98,8 @@ public:
     }
 };
 
-// Zde nadefinujte tridu 
+// Zde nadefinujte tridu RovnostrannyTrojuhelnik
+
 int main()
 {
     Platno platno(20, 10);
@@ -113,9 +114,10 @@ int main()
 
     platno.NakresliUsecku(A, B); // 🚀 Implementujte
 
+    Bod2d stred(9.5, 4.5);
     //RovnostrannyTrojuhelnik trojuhelnik(stred, 10.0);
     //trojuhelnik.Nakresli(&platno);
-
+    
     platno.Zobraz();
 
     return 0;
