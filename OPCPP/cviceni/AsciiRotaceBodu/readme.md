@@ -105,7 +105,7 @@ public:
     }
 };
 
-// Zde nadefinujte funkci rotace 🍍
+// 🚀 Zde nadefinujte funkci rotace
 
 int main()
 {
@@ -116,9 +116,10 @@ int main()
     const Bod2d A(20.0, 0.0);
     
     double uhel = 45.0;
-    // Bod2d At = rotace(A, uhel); // implementujte funkci rotace 🐤 
 
-    platno.NakresliBod(At.x, At.y);
+    // 🚀 implementujte funkci rotace:
+    // Bod2d At = rotace(A, uhel); 
+    // platno.NakresliBod(At.x, At.y);
 
     platno.Zobraz();
 
