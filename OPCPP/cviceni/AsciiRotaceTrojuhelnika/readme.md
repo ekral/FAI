@@ -17,29 +17,19 @@ $$\begin{align*}
 
 
 ```cpp
-#include <cstdio>
-#define _USE_MATH_DEFINES
-#include <cmath>
-#include <vector>
 #include <iostream>
-#include <sstream>
-#include <windows.h>
+#include <string>
+#include <algorithm>
+#include <cmath>
 
-// na CLion dat Emulovat terminal
-
-void gotoxy(int x, int y)
-{
-    COORD pos = { (SHORT)x, (SHORT)y };
-    HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleCursorPosition(output, pos);
-}
+using namespace std;
 
 struct Bod2d
 {
     double x;
     double y;
 
-    Bod2d(double x, double y) : x(x), y(y)
+    Bod2d(const double x, const double y) : x(x), y(y)
     {
 
     }
@@ -48,201 +38,112 @@ struct Bod2d
 class Platno
 {
 private:
-    const int columnCount;
-    const int rowCount;
-    const int totalChars;
-    char pozadi;
-
-    std::vector<char> data;
+    string retezec;
 public:
-    const int maxColumnIndex;
-    const int maxRowIndex;
+    const int sirka;
+    const int vyska;
 
-    char popredi;
-
-    Platno(int columnCount, int rowCount, char pozadi, char popredi) :
-            columnCount(columnCount),
-            rowCount(rowCount),
-            pozadi(pozadi),
-            popredi(popredi),
-            totalChars(columnCount* rowCount),
-            maxColumnIndex(columnCount - 1),
-            maxRowIndex(rowCount - 1),
-            data(totalChars, 0)
+    Platno(const int sirka, const int vyska) : retezec((sirka + 1) * vyska, '-'), sirka(sirka), vyska(vyska)
     {
-
         Vymaz();
     }
 
     void Vymaz()
     {
-        for (int i = 0; i < totalChars; i++)
+        fill(retezec.begin(), retezec.end(), '-');
+
+        for (int i = sirka; i < retezec.length(); i += sirka + 1)
         {
-            data[i] = pozadi;
+            retezec[i] = '\n';
         }
+
     }
 
-    void NakresliBod(Bod2d bod)
+    void Zobraz() const
     {
-        NakresliBod(bod.x, bod.y);
+        cout << retezec << endl;
     }
 
-    void NakresliBod(double x, double y)
+    void NakresliBod(const double x, const double y)
     {
-        int rowIndex = (int)round(y);
-        int columnIndex = (int)round(x);
-
-        if ((rowIndex < 0) || (rowIndex > maxRowIndex) || (columnIndex < 0) || (columnIndex > maxColumnIndex))
+        if(x < 0.0 || x >= sirka || y < 0.0 || y >= vyska)
         {
             return;
         }
 
-        int pos = ((rowCount - rowIndex - 1) * columnCount) + columnIndex;
+        const int ix = static_cast<int>(round(x));
+        const int iy = static_cast<int>(round(y));
 
-        data[pos] = popredi;
+        const int pos = (vyska - iy - 1) * (sirka + 1) + ix;
+
+        retezec[pos] = 'x';
     }
 
-    void NakresliUsecku(Bod2d bodA, Bod2d bodB)
+    void NakresliUsecku(const Bod2d& A, const Bod2d& B)
     {
-        double dx = bodB.x - bodA.x;
-        double dy = bodB.y - bodA.y;
+        double dx = B.x - A.x;
+        double dy = B.y - A.y;
 
-        double dmax = fmax(fabs(dx), fabs(dy));
+        double dmax = max(abs(dx), abs(dy));
 
         double stepx = dx / dmax;
         double stepy = dy / dmax;
 
-        Bod2d bod = bodA;
+        double x = A.x;
+        double y = A.y;
 
-        double d = 0;
-
-        while (d <= dmax)
+        for (double t = 0.0; t <= dmax; t += 1.0)
         {
-            NakresliBod(bod.x, bod.y);
+            NakresliBod(x, y);
 
-            bod.x += stepx;
-            bod.y += stepy;
-
-            ++d;
+            x += stepx;
+            y += stepy;
         }
-
-    }
-
-    void Zobraz()
-    {
-        std::stringstream ss;
-
-        int pos = 0;
-
-        for (int i = 0; i < rowCount; i++)
-        {
-            for (int j = 0; j < columnCount; j++)
-            {
-                char znak = data[pos];
-                ++pos;
-
-                ss << znak;
-                ss << znak;
-            }
-
-            ss << '\n';
-        }
-
-        std::string retezec = ss.str();
-
-        std::cout << retezec;
-
-        //puts(retezec.c_str());
-    }
-
-};
-
-Bod2d Rotuj(Bod2d bod, double stupne)
-{
-    double uhelRadiany = (stupne * M_PI) / 180.0;
-
-    double xt = (bod.x * cos(uhelRadiany)) - (bod.y * sin(uhelRadiany));
-    double yt = (bod.x * sin(uhelRadiany)) + (bod.y * cos(uhelRadiany));
-
-    return Bod2d{ xt, yt };
-}
-
-Bod2d Rotuj(Bod2d bod, double stupne, Bod2d S)
-{
-    bod.x -= S.x;
-    bod.y -= S.y;
-
-    bod = Rotuj(bod, stupne);
-
-    bod.x += S.x;
-    bod.y += S.y;
-
-    return bod;
-}
-
-class RovnostrannyTrojuhelnik
-{
-private:
-    double a;
-    Bod2d S;
-    // 🐱‍👤 Pridejte uhel rotace
-
-public:
-    RovnostrannyTrojuhelnik(Bod2d S, int a) : S(S), a(a)
-    {
-
-    }
-
-    void Nakresli(Platno& platno) const
-    {
-        // spocitejte souradnice vrcholu trojuhelnika
-        double R = (a * sqrt(3.0)) / 3;
-        double r = R / 2.0;
-
-        Bod2d A(S.x - a / 2, S.y - r);
-        Bod2d B(S.x + a / 2, S.y - r);
-        Bod2d C(S.x, S.y + R);
-
-        // 🚀 Zarotujte body kolem stredu
-
-        platno.NakresliUsecku(A, B);
-        platno.NakresliUsecku(B, C);
-        platno.NakresliUsecku(C, A);
-
-        platno.NakresliBod(S);
     }
 };
 
+Bod2d rotace(const Bod2d A, const double uhelStupne)
+{
+    const double uhelRadiany = (uhelStupne * M_PI) / 180;
 
+    const double xt = A.x * cos(uhelRadiany) - A.y * sin(uhelRadiany);
+    const double yt = A.x * sin(uhelRadiany) + A.y * cos(uhelRadiany);
+
+    const Bod2d At(xt, yt);
+
+    return At;
+}
+
+Bod2d rotace(Bod2d A, const Bod2d S, const double uhelStupne)
+{
+    A.x -= S.x;
+    A.y -= S.y;
+
+    Bod2d At = rotace(A, uhelStupne);
+
+    At.x += S.x;
+    At.y += S.y;
+
+    return At;
+}
+
+//🚀 zde nadefinujte Trojuhelnik
 
 int main()
 {
-    int columnCount = 30;
-    int rowCount = 20;
+    Platno platno(40, 20);
 
-    Platno platno(columnCount, rowCount, '-', 'x');
+    platno.Vymaz();
 
-    RovnostrannyTrojuhelnik trojuhelnik(Bod2d(15.0, 10.0), 8);
+    Bod2d S(19, 9);
 
+    // 🚀 Implementujte
+    // RovnostrannyTrojuhelnik trojuhelnik(S, 10.0 );
+    // trojuhelnik.ZmenRotaci(15.0);
+    // trojuhelnik.Nakresli(&platno);
 
-    bool konec = true;
-    double uhelStupne = 0;
+    platno.Zobraz();
 
-    do
-    {
-        platno.Vymaz();
-
-        // 🍌 Odpoznamkujte nasledujici prikaz
-        // trojuhelnik.ZmenUhelRotace(uhelStupne);
-
-        trojuhelnik.Nakresli(platno);
-
-        gotoxy(0, 0);
-
-        platno.Zobraz();
-
-        uhelStupne += 0.1;
-
-    } while (uhelStupne < 20 * 360.0);
+    return 0;
 }
 ```
