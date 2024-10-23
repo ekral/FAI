@@ -18,17 +18,20 @@ $$\begin{align*}
 Vyjděte z následujících zdrojových kódů:
 
 ```cpp
-#include <stdio.h>
-#define _USE_MATH_DEFINES
-#include <math.h>
-#include <vector>
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <cmath>
+#include <ranges>
+
+using namespace std;
 
 struct Bod2d
 {
     double x;
     double y;
 
-    Bod2d(double x, double y) : x(x), y(y)
+    Bod2d(const double x, const double y) : x(x), y(y)
     {
 
     }
@@ -37,151 +40,89 @@ struct Bod2d
 class Platno
 {
 private:
-    // static constexpr je moderni zpusob zadani konstanty zname v dobe prekladu
-    const int columnCount;
-    const int rowCount;
-    const int totalChars;
-    char pozadi;
-
-    std::vector<char> data;
+    string retezec;
 public:
-    const int maxColumnIndex;
-    const int maxRowIndex;
+    const int sirka;
+    const int vyska;
 
-    char popredi;
-
-    Platno(int columnCount, int rowCount, char pozadi, char popredi) :
-        columnCount(columnCount),
-        rowCount(rowCount),
-        pozadi(pozadi),
-        popredi(popredi),
-        totalChars(columnCount* rowCount),
-        maxColumnIndex(columnCount - 1),
-        maxRowIndex(rowCount - 1),
-        data(totalChars, 0)
+    // pomoci member initializer listu volam konstruktor stringu
+    Platno(const int sirka, const int vyska) : retezec((sirka + 1) * vyska, '-'), sirka(sirka), vyska(vyska)
     {
-
         Vymaz();
     }
 
     void Vymaz()
     {
-        for (int i = 0; i < totalChars; i++)
+        fill(retezec.begin(), retezec.end(), '-');
+
+        for (int i = sirka; i < retezec.length(); i += sirka + 1)
         {
-            data[i] = pozadi;
+            retezec[i] = '\n';
         }
+
     }
 
-    void NakresliBod(double x, double y)
+    void Zobraz() const
     {
-        int rowIndex = (int)round(y);
-        int columnIndex = (int)round(x);
-        
-        int pos = ((rowCount - rowIndex - 1) * columnCount) + columnIndex;
-
-        data[pos] = popredi;
+        cout << retezec << endl;
     }
 
-    void NakresliUsecku(Bod2d bodA, Bod2d bodB)
+    void NakresliBod(const double x, const double y)
     {
-        double dx = bodB.x - bodA.x;
-        double dy = bodB.y - bodA.y;
+        if(x < 0.0 || x >= sirka || y < 0.0 || y >= vyska)
+        {
+            return;
+        }
 
+        const int ix = static_cast<int>(round(x));
+        const int iy = static_cast<int>(round(y));
 
-        double dmax = fmax(fabs(dx), fabs(dy));
+        const int pos = (vyska - iy - 1) * (sirka + 1) + ix;
+
+        retezec[pos] = 'x';
+    }
+
+    void NakresliUsecku(const Bod2d& A, const Bod2d& B)
+    {
+        double dx = B.x - A.x;
+        double dy = B.y - A.y;
+
+        double dmax = max(abs(dx), abs(dy));
 
         double stepx = dx / dmax;
         double stepy = dy / dmax;
 
-        Bod2d bod = bodA;
+        double x = A.x;
+        double y = A.y;
 
-        double d = 0;
-
-        while (d <= dmax)
+        for (double t = 0.0; t <= dmax; t += 1.0)
         {
-            NakresliBod(bod.x, bod.y);
+            NakresliBod(x, y);
 
-            bod.x += stepx;
-            bod.y += stepy;
-
-            ++d;
+            x += stepx;
+            y += stepy;
         }
-
-    }
-
-    void Zobraz()
-    {
-        int pos = 0;
-
-        for (int i = 0; i < rowCount; i++)
-        {
-            for (int j = 0; j < columnCount; j++)
-            {
-                char znak = data[pos];
-                ++pos;
-
-                putchar(znak);
-            }
-
-            putchar('\n');
-        }
-    }
-
-};
-
-class RovnostrannyTrojuhelnik
-{
-private:
-    double a;
-    Bod2d S;
-public:
-    RovnostrannyTrojuhelnik(Bod2d S, int a) : S(S), a(a)
-    {
-
-    }
-
-    void Nakresli(Platno* platno)
-    {
-        // spocitejte souradnice vrcholu trojuhelnika
-        double vp = (a * sqrt(3.0)) / 4;
-
-        Bod2d A(S.x - a / 2, S.y - vp);
-        Bod2d B(S.x + a / 2, S.y - vp);
-        Bod2d C(S.x, S.y + vp);
-
-        platno->NakresliUsecku(A, B);
-        platno->NakresliUsecku(B, C);
-        platno->NakresliUsecku(C, A);
     }
 };
 
-// Zde definujte globalni funkci 🚀
-
+// 🚀 Zde nadefinujte funkci rotace
 
 int main()
 {
-    int columnCount = 30;
-    int rowCount = 20;
+    Platno platno(40, 20);
 
-    Platno platno(columnCount, rowCount, '-', 'x');
+    platno.Vymaz();
 
-    bool konec = true;
-   
-    double stupne = 45.0;
+    const Bod2d A(20.0, 0.0);
+    
+    double uhel = 45.0;
 
-    do
-    {
-        platno.Vymaz();
+    // 🚀 implementujte funkci rotace:
+    // Bod2d At = rotace(A, uhel); 
+    // platno.NakresliBod(At.x, At.y);
 
-        Bod2d A(2.0, 3.0);
+    platno.Zobraz();
 
-        // 🍌
-        // Bod2d At = Rotuj(A, stupne);
-        // vykreslete usecku z bodu 0,0 do bodu At
-
-
-        platno.Zobraz();
-
-    } while (!konec);
+    return 0;
 }
 ```

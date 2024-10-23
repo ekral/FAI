@@ -18,7 +18,6 @@ Zdrojový kód:
 ```cpp
 #include <iostream>
 #include <string>
-#include <sstream>
 #include <algorithm>
 #include <cmath>
 
@@ -38,36 +37,36 @@ struct Bod2d
 class Platno
 {
 private:
-    string data;
+    string retezec;
 public:
     const int sirka;
     const int vyska;
 
-
-    Platno(const int sirka, const int vyska) : data((sirka + 1) * vyska, '-'), sirka(sirka), vyska(vyska)
+    // pomoci member initializer listu volam konstruktor stringu
+    Platno(const int sirka, const int vyska) : retezec((sirka + 1)* vyska, '-'), sirka(sirka), vyska(vyska)
     {
         Vymaz();
     }
 
     void Vymaz()
     {
-        ranges::fill(data, '-');
+        fill(retezec.begin(), retezec.end(), '-');
 
-        for (int i = sirka; i < data.length(); i += sirka + 1)
+        for (int i = sirka; i < retezec.length(); i += sirka + 1)
         {
-            data[i] = '\n';
+            retezec[i] = '\n';
         }
 
     }
 
     void Zobraz() const
     {
-        cout << data << endl;
+        cout << retezec << endl;
     }
 
     void NakresliBod(const double x, const double y)
     {
-        if(x < 0.0 || x >= sirka || y < 0.0 || y >= vyska)
+        if (x < 0.0 || x >= sirka || y < 0.0 || y >= vyska)
         {
             return;
         }
@@ -77,18 +76,18 @@ public:
 
         const int pos = (vyska - iy - 1) * (sirka + 1) + ix;
 
-        data[pos] = 'x';
+        retezec[pos] = 'x';
     }
 };
 
 int main()
 {
-    Platno platno(20, 10);
+    Platno platno(3, 2);
 
     platno.Vymaz();
 
     const Bod2d A(0.0, 0.0);
-    const Bod2d B(19.0, 9.0);
+    const Bod2d B(2.0, 1.0);
 
     platno.NakresliBod(A.x, A.y);
     platno.NakresliBod(B.x, B.y);
