@@ -114,19 +114,6 @@ Bod2d rotace(const Bod2d A, const double uhelStupne)
     return At;
 }
 
-Bod2d rotace(Bod2d A, const Bod2d S, const double uhelStupne)
-{
-    A.x -= S.x;
-    A.y -= S.y;
-
-    Bod2d At = rotace(A, uhelStupne);
-
-    At.x += S.x;
-    At.y += S.y;
-
-    return At;
-}
-
 //🚀 zde nadefinujte Trojuhelnik
 
 int main()
