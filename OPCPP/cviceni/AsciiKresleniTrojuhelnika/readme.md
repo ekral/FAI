@@ -38,7 +38,6 @@ public:
     const int sirka;
     const int vyska;
 
-    // pomoci member initializer listu volam konstruktor stringu
     Platno(const int sirka, const int vyska) : retezec((sirka + 1) * vyska, '-'), sirka(sirka), vyska(vyska)
     {
         Vymaz();
