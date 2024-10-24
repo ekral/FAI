@@ -49,10 +49,19 @@ public:
 
     void Zapis(double x, double y)
     {
-        const int pos = static_cast<int>(round((vyska - y - 1) * (sirka + 1) + x));
+        const int ix = static_cast<int>(round(x));
+        const int iy = static_cast<int>(round(y));
+
+        if(ix < 0.0 || ix >= sirka || iy < 0.0 || iy >= vyska)
+        {
+            return;
+        }
+
+        const int pos = (vyska - iy - 1) * (sirka + 1) + ix;
 
         data[pos] = 'x';
     }
+
     void NakresliUsecku(Bod2d bodA, Bod2d bodB)
     {
         double dx = bodA.x - bodB.x;
