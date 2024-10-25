@@ -106,14 +106,6 @@ int main()
 
     platno.Vymaz();
 
-    const Bod2d A(0.0, 0.0);
-    const Bod2d B(19.0, 9.0);
-
-    platno.NakresliBod(A.x, A.y);
-    platno.NakresliBod(B.x, B.y);
-
-    platno.NakresliUsecku(A, B); 
-
     Bod2d stred(9.5, 4.5);
 
     // 🚀 Implementujte:
