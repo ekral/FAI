@@ -12,7 +12,17 @@ Pro zvládnutí prvního testu budete potřebovat znát následující pojmy:
 - jak zjistit počet bajtů proměnné nebo typu.
 - Jaké jsou základní typy proměnných v jazyce C++.
 
+## Proměnná
 
+### Definice
+
+Následující definice vychází z knihy [A Tour of C++](https://www.stroustrup.com/tour3.html).
+
+- **Typ** definuje množinu možných hodnot a množinu operací (pro objekt).
+- **Hodnota** je množina bitů interpretovaná podle daného typu.
+- **Objekt** je paměť, která na dané **adrese** uchovává hodnotu daného typu.
+- **Proměnná** je pojmenovaný objekt.
+- **Ukazatel** je proměnná která uchovává adresu objektu daného typu.
 
 ## Základní typy 
 
