@@ -1,4 +1,4 @@
-# 07 Přetěžování funkcí a operátorů
+# 07 Přetěžování funkcí a operátorů, kopírovací konstruktor
 
 **autor: Erik Král ekral@utb.cz**
 
