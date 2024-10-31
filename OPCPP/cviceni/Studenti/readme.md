@@ -33,3 +33,21 @@ Cílem úkolu je pochopit a implementovat použití operátorů `new` a `delete`
 - Kód je přehledný a dobře strukturovaný.
 - Zpracování vstupu od uživatele.
 - Správná správa paměti a zabránění memory leaks.
+
+Ukázka načtení jména a věku z konzole v c++:
+
+```cpp
+#include <iostream>
+#include <string>
+
+int main()
+{
+    std::string jmeno;
+    std::cin >> jmeno; // nacte jmeno z konzole
+
+    int vek;
+    std::cin >> vek; // nacte vek z konzole
+    
+    return 0;
+}
+```
