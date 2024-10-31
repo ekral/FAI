@@ -27,8 +27,6 @@ Cílem úkolu je pochopit a implementovat použití operátorů `new` a `delete`
    - Přidejte metodu pro změnu jména a věku studenta.
    - Ukažte, jak funguje alokace paměti pro pole objektů (např. pole studentů) a jak správně uvolnit paměť pro celé pole.
 
-## Odevzdání:
-- Odevzdejte zdrojový kód jako .cpp soubor a krátký popis toho, co jste implementovali a jak to funguje.
 
 ## Kritéria hodnocení:
 - Správné použití operátorů `new` a `delete`.
