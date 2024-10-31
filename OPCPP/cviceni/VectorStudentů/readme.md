@@ -35,29 +35,37 @@ Cílem úkolu je pochopit a implementovat použití operátorů `new` a `delete`
 ```cpp
 #include <iostream>
 #include <string>
-#include <vector>
+
+using namespace std;
 
 class Student
 {
-    std::string name;
-    std::string age;
+public:
+    string name;
+    int age;
 
+    Student(string name, int age) : name(name), age(age)
+    {  }
 };
+
 int main()
 {
-    std::string jmeno;
-    std::cin >> jmeno; // nacte jmeno z konzole
+    cout << "Enter name:" << endl;
+    string name;
+    cin >> name;
 
-    int vek;
-    std::cin >> vek; // nacte vek z konzole
+    cout << "Enter age:" << endl;
+    int age;
+    cin >> age;
 
-    std::vector<Student*> students;
-    Student* student = new Student;
+    // instance na halde
+    Student* pStudent = new Student(name, age);
+    cout << "Entered student:" << endl;
+    cout << "Name:" << pStudent->name << endl;
+    cout << "Age:" << pStudent->age << endl;
 
-    students.push_back(student);
-
-    delete students[0];
-    
+    // az nebudeme studenta potrebovat, tak uvolnime pamet
+    delete pStudent;
     return 0;
 }
 ```
