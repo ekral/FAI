@@ -48,7 +48,14 @@ public:
         std::copy_n(other.data, n, data);
     }
 
-    void operator = (const Stack& other) = delete;
+    Stack& operator=(Stack other)
+    {
+        swap(n, other.n);
+        swap(data, other.data);
+        swap(pos, other.pos);
+
+        return *this;
+    }
 
     ~Stack()
     {
