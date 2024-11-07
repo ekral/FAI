@@ -11,13 +11,16 @@ public:
     explicit Stack(const int n) : n(n), data(new int[n]), pos(0)
     {
     }
-    
+
     // kopirovaci konstruktor
+    // typ reference
     Stack(const Stack& other) : n(other.n), data(new int[n]), pos(0)
     {
         std::copy_n(other.data, n, data);
     }
 
+    void operator = (const Stack& other) = delete;
+    
     ~Stack()
     {
         delete[] data;
@@ -50,6 +53,7 @@ public:
     }
 };
 
+// pouzity typ reference
 void print(const Stack& stack)
 {
     for(int i = 0; i < stack.count(); ++i)
@@ -57,7 +61,6 @@ void print(const Stack& stack)
         std::cout << stack[i] << std::endl;
     }
 }
-
 int main()
 {
     Stack stack(10);
@@ -66,7 +69,7 @@ int main()
     stack.push(3);
 
     Stack copy = stack;
-
+    
     print(stack);
 
     std::cout << stack.pop() << std::endl;
