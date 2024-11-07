@@ -22,8 +22,14 @@ Výstup: 32
 Použijte následující zásobník. 
 
 ```cpp
+#include <iostream>
 #include <assert.h>
 #include <algorithm>
+#include <string>
+#include <sstream>
+
+using namespace std;
+
 class Stack
 {
 private:
@@ -84,6 +90,31 @@ void print(const Stack& stack)
         std::cout << stack[i] << std::endl;
     }
 }
+
+int main()
+{
+    Stack stack(10);
+
+    string expression = "5 3 + 8 4 / *";
+    stringstream ss(expression);
+    string token;
+
+    while(ss >> token)
+    {
+        if(isdigit(token[0]))
+        {
+            int number = stoi(token);
+
+            stack.push(number);
+        } else
+        {
+            char oper = token[0];
+        }
+    }
+
+    return 0;
+}
+
 ```
 ---
 Vlastní typ pro zásobník používáme jen pro potřeby cvičení. V reálném kód bysme použili už hotový typ [std::stack](https://en.cppreference.com/w/cpp/container/stack).
