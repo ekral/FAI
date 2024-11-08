@@ -2,6 +2,7 @@
 
 Doplňte třídu Stack, tak aby byla jako zásobník implementovaný nad polem alokovaným na haldě.
 
+Jde o cvičení. V reálném kódu bychom použili [std::stack](https://en.cppreference.com/w/cpp/container/stack) ze standartní knihovny c++.
 
 ```cpp
 class Stack
