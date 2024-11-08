@@ -48,6 +48,9 @@ public:
         std::copy_n(other.data, n, data);
     }
 
+    Stack(Stack&&) noexcept = default;
+    Stack& operator=(Stack&& other) noexcept = default;
+
     Stack& operator=(Stack other)
     {
         swap(n, other.n);
@@ -121,7 +124,6 @@ int main()
 
     return 0;
 }
-
 ```
 ---
 Vlastní typ pro zásobník používáme jen pro potřeby cvičení. V reálném kód bysme použili už hotový typ [std::stack](https://en.cppreference.com/w/cpp/container/stack).
