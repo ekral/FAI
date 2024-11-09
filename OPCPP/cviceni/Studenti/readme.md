@@ -33,14 +33,18 @@ Cílem úkolu je pochopit a implementovat použití operátorů `new` a `delete`
 #include <iostream>
 #include <string>
 
+using namespace std;
+
 int main()
 {
-    std::string jmeno;
-    std::cin >> jmeno; // nacte jmeno z konzole
+    cout << "Zadej jmeno studenta:" << endl;
+    string jmeno;
+    cin >> jmeno; // nacte jmeno z konzole
 
+    cout << "Zadej vek studenta:" << endl;
     int vek;
-    std::cin >> vek; // nacte vek z konzole
-    
+    cin >> vek; // nacte vek z konzole
+
     return 0;
 }
 ```
