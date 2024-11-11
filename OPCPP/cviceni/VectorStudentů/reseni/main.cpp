@@ -10,67 +10,73 @@ public:
     string name;
     int age;
 
-    Student(const string& name, const int age) : name(name), age(age)
-    {  }
-
-    void print() const
+    Student(const string &name, const int age) : name(name), age(age)
     {
-        cout << "Student Name: " << name << endl;
-        cout << "Student Age: " << age << endl;
+    }
+
+    ~Student()
+    {
+        cout << "destroying student" << endl;
+    }
+
+    void Print() const
+    {
+        cout << "name: " << name << endl;
+        cout << "age: " << age << endl;
     }
 };
 
-int main()
-{
+int main() {
+
     vector<Student*> students;
 
     bool end = false;
 
     do {
-        cout << "Enter choice:" << endl;
+        cout << "Menu" << endl;
         cout << "1 Add new student." << endl;
-        cout << "2 Show all students." << endl;
-        cout << "3 End program." << endl;
+        cout << "2 Print all students." << endl;
+        cout << "3 Exit." << endl;
 
-        int choice = 0;
+        char choice = 0;
         cin >> choice;
 
-        switch (choice) {
-            case 1:
+        switch (choice)
+        {
+            case '1':
+            {
+                cout << "Enter student name:" << endl;
+                string name;
+                cin >> name;
+
+                cout << "Enter student age:" << endl;
+                int age;
+                cin >> age;
+
+                Student* pStudent = new Student(name, age);
+
+                students.push_back(pStudent);
+            }
+                break;
+            case '2':
+                for (const Student* pStudent : students)
                 {
-                    cout << "Enter name:" << endl;
-                    string name;
-                    cin >> name;
-
-                    cout << "Enter age:" << endl;
-                    int age;
-                    cin >> age;
-
-                    Student* student = new Student(name, age);
-
-                    students.push_back(student);
+                    pStudent->Print();
                 }
                 break;
-            case 2:
-                for(const Student* student : students)
-                {
-                    student->print();
-                }
-                break;
-            case 3:
-                for(const Student* student : students)
-                {
-                    delete student;
-                }
-
-                students.clear();
-
+            case '3':
                 end = true;
                 break;
         }
 
     } while (end == false);
 
-    cout << "program over." << endl;
+    for (const Student* pStudent : students)
+    {
+        delete pStudent;
+    }
+
+    students.clear();
+
     return 0;
 }
