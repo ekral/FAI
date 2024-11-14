@@ -1,4 +1,4 @@
-# Úkol: Reference, přetěžování operátorů a kopírovací konstruktor v C++
+# Úkol: Reference a přetěžování operátorů v C++
 
 ## Cíl úkolu:
 
