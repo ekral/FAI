@@ -9,10 +9,10 @@ Cílem tohoto úkolu je seznámit se s těmito základními koncepty v C++:
 
 ## Zadání:
 
-1. Struktura ComplexNumber
+1. Třída ComplexNumber
 
-- Vytvořte strukturu ComplexNumber, která bude reprezentovat komplexní číslo. Struktura by měla obsahovat:
-- Dva public členy: real (reálná část) a imaginary (imaginární část) typu double.
+- Vytvořte třídu ComplexNumber, která bude reprezentovat komplexní číslo. Třída by měla obsahovat:
+- Dva private členy: real (reálná část) a imaginary (imaginární část) typu double.
     - Konstruktory:
         - Výchozí konstruktor (nastaví oba členy na nulu).
         - Konstruktor s parametry pro inicializaci reálné a imaginární části.
