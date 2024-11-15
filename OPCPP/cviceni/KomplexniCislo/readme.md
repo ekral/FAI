@@ -12,7 +12,7 @@ Cílem tohoto úkolu je seznámit se s těmito základními koncepty v C++:
 1. Struktura ComplexNumber
 
 - Vytvořte strukturu ComplexNumber, která bude reprezentovat komplexní číslo. Struktura by měla obsahovat:
-- Dva privátní členy: real (reálná část) a imaginary (imaginární část) typu double.
+- Dva public členy: real (reálná část) a imaginary (imaginární část) typu double.
     - Konstruktory:
         - Výchozí konstruktor (nastaví oba členy na nulu).
         - Konstruktor s parametry pro inicializaci reálné a imaginární části.
