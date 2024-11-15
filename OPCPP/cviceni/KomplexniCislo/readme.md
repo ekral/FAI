@@ -23,7 +23,7 @@ Cílem tohoto úkolu je seznámit se s těmito základními koncepty v C++:
 
 - Implementujte následující operátory:
     - Operátor sčítání (+), který umožní sečítat dvě komplexní čísla.
-    - Operátor přiřazení (=), který správně přiřadí jedno komplexní číslo druhému.
+    - Operátor přiřazení (=), který správně přiřadí jedno komplexní číslo druhému. Poznámka: Operátor přiřazení nemusí být u této třídy implementovaný, stačí defaultní implementace.
     - Operátor rovnosti (==), který správně přiřadí jedno komplexní číslo druhému.
     - Operátor nerovnosti (!=), který správně přiřadí jedno komplexní číslo druhému.
     - Operátor výstupu (<<), který umožní vypsat komplexní číslo pomocí std::cout.
