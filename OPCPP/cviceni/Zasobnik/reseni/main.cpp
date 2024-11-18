@@ -16,7 +16,7 @@ public:
     // typ reference
     Stack(const Stack& other) : n(other.n), data(new int[n]), pos(0)
     {
-        std::copy_n(other.data, n, data);
+        std::copy_n(other.data, pos, data);
     }
 
     void operator = (const Stack& other) = delete;
