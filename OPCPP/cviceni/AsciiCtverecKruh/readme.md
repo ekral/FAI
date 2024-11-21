@@ -1,4 +1,4 @@
-# Příklad na dědičnost: Tvary rovnostranný trojuhelnik, kruh a čtverec
+# Příklad na dědičnost: Tvary rovnostranný trojuhelnik, čtverec a úsečka
 
 Cílem příkladu je procvičení dědičnosti kódu. 
 
