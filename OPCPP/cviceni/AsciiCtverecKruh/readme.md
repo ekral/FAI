@@ -4,7 +4,7 @@ Cílem příkladu je procvičení dědičnosti kódu.
 
 1. Třída Shape
 
-Definujte rodičovskou třídu `Shape`, která bude mít private členské prvky `S` (souřadnice středu) a `rotation` (úhel rotace kolem středu).
+Definujte rodičovskou třídu `Shape`, která bude mít `protected` členské prvky `S` (souřadnice středu) a `angle` (úhel rotace kolem středu).
 
 2. Potomci třídy Shape
 
@@ -44,7 +44,7 @@ struct Bod2d
     }
 };
 
-Bod2d rotace(const Bod2d A, const double uhelStupne)
+Bod2d rotate(const Bod2d A, const double uhelStupne)
 {
     const double uhelRadiany = (uhelStupne * M_PI) / 180;
 
@@ -56,7 +56,7 @@ Bod2d rotace(const Bod2d A, const double uhelStupne)
     return At;
 }
 
-Bod2d rotace(Bod2d A, const Bod2d S, const double uhelStupne)
+Bod2d rotate(Bod2d A, const Bod2d S, const double uhelStupne)
 {
     A.x -= S.x;
     A.y -= S.y;
