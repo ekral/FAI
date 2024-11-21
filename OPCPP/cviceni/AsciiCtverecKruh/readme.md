@@ -33,35 +33,35 @@ Výchozí kód:
 
 using namespace std;
 
-struct Bod2d
+struct Point2d
 {
     double x;
     double y;
 
-    Bod2d(const double x, const double y) : x(x), y(y)
+    Point2d(const double x, const double y) : x(x), y(y)
     {
 
     }
 };
 
-Bod2d rotate(const Bod2d A, const double uhelStupne)
+Point2d rotate(const Point2d A, const double angleDegrees)
 {
-    const double uhelRadiany = (uhelStupne * M_PI) / 180;
+    const double angleRadians = (angleDegrees * M_PI) / 180;
 
-    const double xt = A.x * cos(uhelRadiany) - A.y * sin(uhelRadiany);
-    const double yt = A.x * sin(uhelRadiany) + A.y * cos(uhelRadiany);
+    const double xt = A.x * cos(angleRadians) - A.y * sin(angleRadians);
+    const double yt = A.x * sin(angleRadians) + A.y * cos(angleRadians);
 
-    const Bod2d At(xt, yt);
+    const Point2d At(xt, yt);
 
     return At;
 }
 
-Bod2d rotate(Bod2d A, const Bod2d S, const double uhelStupne)
+Point2d rotate(Point2d A, const Point2d S, const double angleDegrees)
 {
     A.x -= S.x;
     A.y -= S.y;
 
-    Bod2d At = rotace(A, uhelStupne);
+    Point2d At = rotate(A, angleDegrees);
 
     At.x += S.x;
     At.y += S.y;
@@ -69,52 +69,51 @@ Bod2d rotate(Bod2d A, const Bod2d S, const double uhelStupne)
     return At;
 }
 
-class Platno
+class Canvas
 {
 private:
-    string retezec;
+    string data;
 public:
-    const int sirka;
-    const int vyska;
+    const int width;
+    const int height;
 
-    // pomoci member initializer listu volam konstruktor stringu
-    Platno(const int sirka, const int vyska) : retezec((sirka + 1) * vyska, '-'), sirka(sirka), vyska(vyska)
+    Canvas(const int width, const int height) : data((width + 1) * height, '-'), width(width), height(height)
     {
-        Vymaz();
+        Erase();
     }
 
-    void Vymaz()
+    void Erase()
     {
-        fill(retezec.begin(), retezec.end(), '-');
+        fill(data.begin(), data.end(), '-');
 
-        for (int i = sirka; i < retezec.length(); i += sirka + 1)
+        for (int i = width; i < data.length(); i += width + 1)
         {
-            retezec[i] = '\n';
+            data[i] = '\n';
         }
 
     }
 
-    void Zobraz() const
+    void Show() const
     {
-        cout << retezec << endl;
+        cout << data << endl;
     }
 
-    void NakresliBod(const double x, const double y)
+    void DrawPoint(const double x, const double y)
     {
         const int ix = static_cast<int>(round(x));
         const int iy = static_cast<int>(round(y));
 
-        if(ix < 0.0 || ix >= sirka || iy < 0.0 || iy >= vyska)
+        if(ix < 0.0 || ix >= width || iy < 0.0 || iy >= height)
         {
             return;
         }
 
-        const int pos = (vyska - iy - 1) * (sirka + 1) + ix;
+        const int pos = (height - iy - 1) * (width + 1) + ix;
 
-        retezec[pos] = 'x';
+        data[pos] = 'x';
     }
 
-    void NakresliUsecku(const Bod2d& A, const Bod2d& B)
+    void DrawLine(const Point2d& A, const Point2d& B)
     {
         double dx = B.x - A.x;
         double dy = B.y - A.y;
@@ -129,7 +128,7 @@ public:
 
         for (double t = 0.0; t <= dmax; t += 1.0)
         {
-            NakresliBod(x, y);
+            DrawPoint(x, y);
 
             x += stepx;
             y += stepy;
@@ -137,50 +136,42 @@ public:
     }
 };
 
-// Zde nadefinujte tridu RovnostrannyTrojuhelnik
-class RovnostrannyTrojuhelnik
+class Triangle
 {
 private:
-    Bod2d S;
+    Point2d S;
     double a;
 public:
-    RovnostrannyTrojuhelnik(const Bod2d S, const double a) : S(S), a(a)
+    Triangle(const Point2d S, const double a) : S(S), a(a)
     {
     }
 
-    void Nakresli(Platno* platno) const
+    void Draw(Canvas* canvas) const
     {
-        Bod2d A(S.x - a / 2, S.y - sqrt(3.0) * a / 6);
-        Bod2d B(S.x + a / 2, S.y - sqrt(3.0) * a / 6);
-        Bod2d C(S.x, S.y + sqrt(3.0) * a / 3);
+        Point2d A(S.x - a / 2, S.y - sqrt(3.0) * a / 6);
+        Point2d B(S.x + a / 2, S.y - sqrt(3.0) * a / 6);
+        Point2d C(S.x, S.y + sqrt(3.0) * a / 3);
 
-        platno->NakresliUsecku(A, B);
-        platno->NakresliUsecku(B, C);
-        platno->NakresliUsecku(C, A);
+        canvas->DrawLine(A, B);
+        canvas->DrawLine(B, C);
+        canvas->DrawLine(C, A);
     }
 };
 
 int main()
 {
-    Platno platno(20, 10);
+    Canvas canvas(60, 15);
 
-    platno.Vymaz();
+    canvas.Erase();
 
-    const Bod2d A(0.0, 0.0);
-    const Bod2d B(19.0, 9.0);
 
-    platno.NakresliBod(A.x, A.y);
-    platno.NakresliBod(B.x, B.y);
+    const Point2d center(9.5, 4.5);
+    canvas.DrawPoint(center.x, center.y);
 
-    //platno.NakresliUsecku(A, B);
+    Triangle triangle(center, 10.0);
+    triangle.Draw(&canvas);
 
-    const Bod2d stred(9.5, 4.5);
-    platno.NakresliBod(stred.x, stred.y);
-
-    RovnostrannyTrojuhelnik trojuhelnik(stred, 10.0);
-    trojuhelnik.Nakresli(&platno);
-
-    platno.Zobraz();
+    canvas.Show();
 
     return 0;
 }
