@@ -44,6 +44,31 @@ struct Bod2d
     }
 };
 
+Bod2d rotace(const Bod2d A, const double uhelStupne)
+{
+    const double uhelRadiany = (uhelStupne * M_PI) / 180;
+
+    const double xt = A.x * cos(uhelRadiany) - A.y * sin(uhelRadiany);
+    const double yt = A.x * sin(uhelRadiany) + A.y * cos(uhelRadiany);
+
+    const Bod2d At(xt, yt);
+
+    return At;
+}
+
+Bod2d rotace(Bod2d A, const Bod2d S, const double uhelStupne)
+{
+    A.x -= S.x;
+    A.y -= S.y;
+
+    Bod2d At = rotace(A, uhelStupne);
+
+    At.x += S.x;
+    At.y += S.y;
+
+    return At;
+}
+
 class Platno
 {
 private:
