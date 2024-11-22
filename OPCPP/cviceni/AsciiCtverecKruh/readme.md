@@ -6,8 +6,8 @@ Cílem příkladu je procvičení dědičnosti kódu.
 
 Definujte rodičovskou třídu `Shape`, která bude mít:
 
-    - členské prvky `protected` `S` (souřadnice středu) a `angle` (úhel rotace kolem středu).
-    - parametrický konstruktor `public` s parametry souřadnice středu a úhlem rotace.
+- členské prvky `protected` `S` (souřadnice středu) a `angle` (úhel rotace kolem středu).
+- parametrický konstruktor `public` s parametry souřadnice středu a úhlem rotace.
 
 2. Potomci třídy Shape
 
