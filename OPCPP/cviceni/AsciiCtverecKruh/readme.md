@@ -5,7 +5,8 @@ Cílem příkladu je procvičení dědičnosti kódu.
 1. Třída Shape
 
 Definujte rodičovskou třídu `Shape`, která bude mít:
-    - `protected` členské prvky `S` (souřadnice středu) a `angle` (úhel rotace kolem středu) .
+
+    - `protected` členské prvky `S` (souřadnice středu) a `angle` (úhel rotace kolem středu).
     - `public` parametrický konstruktor s parametry souřadnice středu a úhlem rotace.
 
 2. Potomci třídy Shape
@@ -14,7 +15,7 @@ Definujte rodičovskou třídu `Shape`, která bude mít:
     - třída `Rectangle` - obdelník zadaný délkami stran, středem a úhlem rotace kolem středu.
     - třída `Line` - úsečka zadaná delkou, středem a úhlem rotace kolem středu.
 
-3. Vyreslení obrazců na Ascii plátno.
+3. Vykreslení obrazců na Ascii plátno.
 
 Vytvořte menu:
 1. Create triangle.
