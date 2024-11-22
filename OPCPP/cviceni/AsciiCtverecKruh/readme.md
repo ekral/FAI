@@ -11,9 +11,9 @@ Definujte rodičovskou třídu `Shape`, která bude mít:
 
 2. Potomci třídy Shape
 
-    - třída `Triangle` - rovnostranný trojúhelník zadaný středem a délkou strany a úhlem rotace kolem středu.
-    - třída `Rectangle` - obdelník zadaný délkami stran, středem a úhlem rotace kolem středu.
-    - třída `Line` - úsečka zadaná delkou, středem a úhlem rotace kolem středu.
+- třída `Triangle` - rovnostranný trojúhelník zadaný středem a délkou strany a úhlem rotace kolem středu.
+- třída `Rectangle` - obdelník zadaný délkami stran, středem a úhlem rotace kolem středu.
+- třída `Line` - úsečka zadaná delkou, středem a úhlem rotace kolem středu.
 
 3. Vykreslení obrazců na Ascii plátno.
 
