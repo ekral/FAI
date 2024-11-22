@@ -17,6 +17,8 @@ Definujte rodičovskou třídu `Shape`, která bude mít:
 
 3. Vykreslení obrazců na Ascii plátno.
 
+4. Menu
+
 Vytvořte menu:
 1. Create triangle.
 2. Create rectangle.
