@@ -1,35 +1,3 @@
-# Příklad na dědičnost: Tvary rovnostranný trojuhelnik, čtverec a úsečka
-
-Cílem příkladu je procvičení dědičnosti kódu. 
-
-1. Třída Shape
-
-Definujte rodičovskou třídu `Shape`, která bude mít:
-
-- `protected` členské prvky  `S` (souřadnice středu) a `angle` (úhel rotace kolem středu).
-- `public` parametrický konstruktor  s parametry souřadnice středu a úhlem rotace.
-
-2. Potomci třídy Shape
-
-- třída `Triangle` - rovnostranný trojúhelník zadaný středem a délkou strany a úhlem rotace kolem středu.
-- třída `Rectangle` - obdelník zadaný délkami stran, středem a úhlem rotace kolem středu.
-- třída `Line` - úsečka zadaná delkou, středem a úhlem rotace kolem středu.
-
-3. Vykreslení obrazců na Ascii plátno.
-
-4. Menu
-
-Vytvořte menu:
-1. Create triangle.
-2. Create rectangle.
-3. Create line.
-4. Exit
-
-Po vytvoření obrazce jej vykreslete na Ascii plátno.
-
-Výchozí kód:
-
-```cpp
 #include <iostream>
 #include <string>
 #include <algorithm>
@@ -141,25 +109,88 @@ public:
     }
 };
 
-class Triangle
+class Shape {
+    protected:
+    Point2d S;
+    double angle;
+
+    public:
+    Shape (Point2d S, const double angle) : S(S), angle(angle){};
+
+
+
+
+};
+
+class Line : public Shape {
+private:
+    double length;
+    public:
+        Line(const Point2d S, const double lenght, const double angle) : Shape(S, angle), length(lenght){};
+        void Draw(Canvas& canvas) {
+            Point2d A(S.x - length / 2, S.y );
+            Point2d B(S.x + length / 2, S.y);
+
+            A = rotate(A, S, angle);
+            B = rotate(B, S, angle);
+
+            canvas.DrawLine(A, B);
+        }
+
+
+};
+
+class Triangle : public Shape
 {
 private:
-    Point2d S;
     double a;
 public:
-    Triangle(const Point2d S, const double a) : S(S), a(a)
+    Triangle(const Point2d S, const double a, const double angle) : Shape (S , angle), a(a)
     {
     }
 
-    void Draw(Canvas* canvas) const
+    void Draw(Canvas& canvas) const
     {
         Point2d A(S.x - a / 2, S.y - sqrt(3.0) * a / 6);
         Point2d B(S.x + a / 2, S.y - sqrt(3.0) * a / 6);
         Point2d C(S.x, S.y + sqrt(3.0) * a / 3);
 
-        canvas->DrawLine(A, B);
-        canvas->DrawLine(B, C);
-        canvas->DrawLine(C, A);
+        A = rotate (A, S, angle);
+        B = rotate (B, S, angle);
+        C = rotate (C, S, angle);
+
+        canvas.DrawLine(A, B);
+        canvas.DrawLine(B, C);
+        canvas.DrawLine(C, A);
+    }
+};
+
+class Rectangle : public Shape {
+private:
+    double width;
+    double height;
+public:
+    Rectangle(const double width, const double height, const Point2d S, const double angle) : Shape(S, angle), width(width), height(height) {
+
+    }
+
+    void Draw(Canvas& canvas) const
+    {
+        Point2d A(S.x - width / 2, S.y - height / 2);
+        Point2d B(S.x - width / 2, S.y + height / 2);
+        Point2d C(S.x + width / 2, S.y + height / 2);
+        Point2d D(S.x + width / 2, S.y - height / 2);
+
+
+        A = rotate (A, S, angle);
+        B = rotate (B, S, angle);
+        C = rotate (C, S, angle);
+        D = rotate (D, S, angle);
+
+        canvas.DrawLine(A, B);
+        canvas.DrawLine(B, C);
+        canvas.DrawLine(C, D);
+        canvas.DrawLine(D, A);
     }
 };
 
@@ -169,20 +200,19 @@ int main()
 
     canvas.Erase();
 
+    Line line(Point2d(20.0, 4.5), 10.0, 5.0);
+    line.Draw(canvas);
 
-    const Point2d center(9.5, 4.5);
+    Point2d center(9.5, 4.5);
     canvas.DrawPoint(center.x, center.y);
 
-    Triangle triangle(center, 10.0);
-    triangle.Draw(&canvas);
+    Triangle triangle(center, 10.0, 0.0);
+    triangle.Draw(canvas);
+
+    Rectangle rectangle(10.0, 8.0, center, 45.0);
+    rectangle.Draw(canvas);
 
     canvas.Show();
 
     return 0;
 }
-```
-
-
-
-
-
