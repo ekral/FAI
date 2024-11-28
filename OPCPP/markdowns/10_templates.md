@@ -133,3 +133,49 @@ int main()
     }
 }
 ```
+
+## Datový kontejner map
+
+Datový kontejner map představuje asociativní pole klíč a hodnota. Používáme jej, když chceme rychle hledat hodnoty dle klíče.
+
+```cpp
+#include <map>
+#include <string>
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    map<int, string> slovnik;
+
+    slovnik[10] = "Karel";
+    slovnik[12] = "Jiri";
+    slovnik[20] = "Alena";
+
+    cout << slovnik[12] << endl;
+
+    // c++17
+    for (const auto& [key, value] : slovnik)
+    {
+        cout << key << ": " << value << endl;
+
+    }
+
+    // C++11
+    for (const pair<int,string> zaznam : slovnik)
+    {
+        cout << zaznam.first << ": " << zaznam.second << endl;
+    }
+
+    cout << slovnik.contains(20) << endl;
+
+    slovnik.erase(20);
+
+    cout << slovnik.contains(20) << endl;
+
+    slovnik.clear();
+
+    return 0;
+}
+```
