@@ -6,9 +6,13 @@
     1. Create triangle.
     2. Create rectangle.
     3. Create line.
-    4. Change angle - zadá se id objektu a nový úhel rotace objektu.
+    4. Change angle - zadá se id objektu a nový úhel rotace objektu se zadaným id.
+    
+    Objekty vkládejte do vektoru `shapes` jako typ `Shape*`.
 
-    Objekty vkládejte do vektoru shapes jako typ `Shape*`.
+3. Vykreslete všechny objekty na plátno `canvas`.
+
+    
 
 ```cpp
 #include <iostream>
