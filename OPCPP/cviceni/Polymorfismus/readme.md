@@ -1,6 +1,14 @@
 # Polymorfismus - překrývání virtuálních funkcí
 
-1. Změnte funkci `draw` na překrytou (override) pure virtual function.
+1. Změnte funkci `Draw` na překrytou (override) pure virtual function.
+
+2. Vytvořte menu, pro každý objekt zadejte id a jeho parametry (například délku strany).
+    1. Create triangle.
+    2. Create rectangle.
+    3. Create line.
+    4. Change angle - zadá se id objektu a nový úhel rotace objektu.
+
+    Objekty vkládejte do vektoru shapes jako typ `Shape*`.
 
 ```cpp
 #include <iostream>
