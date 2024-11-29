@@ -144,19 +144,21 @@ class Shape {
 class Line : public Shape {
 private:
     double length;
-    public:
-        Line(const Point2d S, const double lenght, const double angle) : Shape(S, angle), length(lenght){};
-        void Draw(Canvas& canvas) {
-            Point2d A(S.x - length / 2, S.y );
-            Point2d B(S.x + length / 2, S.y);
+public:
+    Line(const Point2d S, const double lenght, const double angle) : Shape(S, angle), length(lenght)
+    {
+    };
 
-            A = rotate(A, S, angle);
-            B = rotate(B, S, angle);
+    void Draw(Canvas& canvas) const
+    {
+        Point2d A(S.x - length / 2, S.y );
+        Point2d B(S.x + length / 2, S.y);
 
-            canvas.DrawLine(A, B);
-        }
+        A = rotate(A, S, angle);
+        B = rotate(B, S, angle);
 
-
+        canvas.DrawLine(A, B);
+    }
 };
 
 class Triangle : public Shape
