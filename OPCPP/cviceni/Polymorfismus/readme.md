@@ -1,8 +1,10 @@
 # Polymorfismus - překrývání virtuálních funkcí
 
 1. Změnte funkci `Draw` na překrytou (override) pure virtual function.
+    - Přidejte pure virtual function `Draw` do třídy `Shape`.
+    - Přidejte klíčové slovo `override` k funcím `Draw` do tříd `Rectangle`, `Triangle` a `Line`.
 
-2. Vytvořte menu, pro každý objekt zadejte id a jeho parametry (například délku strany).
+3. Vytvořte menu, pro každý objekt zadejte id a jeho parametry (například délku strany).
     1. Create triangle.
     2. Create rectangle.
     3. Create line.
@@ -10,7 +12,7 @@
     
     Objekty vkládejte do vektoru `shapes` jako typ `Shape*`.
 
-3. Vykreslete všechny objekty na plátno `canvas`.
+4. Vykreslete všechny objekty na plátno `canvas`.
 
     
 
@@ -187,7 +189,7 @@ private:
     double width;
     double height;
 public:
-    Rectangle(const double width, const double height, const Point2d S, const double angle) : Shape(S, angle), width(width), height(height) {
+    Rectangle(const Point2d S, const double width, const double height, const double angle) : Shape(S, angle), width(width), height(height) {
 
     }
 
@@ -217,16 +219,13 @@ int main()
 
     canvas.Erase();
 
-    Line line(Point2d(20.0, 4.5), 10.0, 5.0);
+    Line line(Point2d(10.0, 7.5), 10.0, 5.0);
     line.Draw(canvas);
 
-    Point2d center(9.5, 4.5);
-    canvas.DrawPoint(center.x, center.y);
-
-    Triangle triangle(center, 10.0, 0.0);
+    Triangle triangle(Point2d(20, 7.5), 10.0, 0.0);
     triangle.Draw(canvas);
 
-    Rectangle rectangle(10.0, 8.0, center, 45.0);
+    Rectangle rectangle(Point2d(40, 7.5), 10.0, 8.0, 45.0);
     rectangle.Draw(canvas);
 
     canvas.Show();
