@@ -5,14 +5,17 @@
     - Přidejte klíčové slovo `override` k funcím `Draw` do tříd `Rectangle`, `Triangle` a `Line`.
 
 3. Vytvořte menu, pro každý objekt zadejte id a jeho parametry (například délku strany).
+
+   Objekty vkládejte do vektoru `shapes` jako typ `Shape*`.
+   
     1. Create triangle.
     2. Create rectangle.
     3. Create line.
     4. Change angle - zadá se id objektu a nový úhel rotace objektu se zadaným id.
     
-    Objekty vkládejte do vektoru `shapes` jako typ `Shape*`.
+    
 
-4. Vykreslete všechny objekty na plátno `canvas`.
+5. Vykreslete všechny objekty na plátno `canvas`.
 
     
 
