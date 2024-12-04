@@ -52,8 +52,8 @@ Pojmy:
 Dále vypište splátkový kalendář. Každý měsíc vypište výši úroku, úmoru a aktuálního dluhu:
 
 $n-krát$ zopakujte následující kroky:
-1) Nejprve spočítejte nominální výši úroku, tedy $r \cdot p$
-2) Úmor se potom rovná výše splátky - nominální výše úroku, tedy $m - (r \cdot p)$
+1) Nejprve spočítejte nominální výši úroku, tedy $urok = r \cdot p$
+2) Úmor se potom rovná výše splátky - nominální výše úroku, tedy $umor = m - urok$
 3) Snižte částku *p* o výši úmoru.
    
 Výchozí kód funkce **main**:
