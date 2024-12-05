@@ -5,18 +5,28 @@ Napište program, který spočítá a zobrazí četnost výskytu znaků v txt so
 1) Vypište znak a za ním četnost, například
 
 a: 1
+
 b: 2
+
 c: 4
+
 ...
+
 z: 1
+
 
 2) Pomocí asci znaku zobrazte procentualni četnost, maximum znaků bude 10.
 
 a: #
+
 b: ##
+
 c: ####
+
 ...
+
 z: #
+
 
 Příklad na práci s asociativní typem `map`:
 
