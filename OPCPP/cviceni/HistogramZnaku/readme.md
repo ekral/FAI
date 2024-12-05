@@ -29,3 +29,28 @@ int main()
     return 0;
 }
 ```
+
+Příklad na práci se souborem:
+
+```cpp
+#include <fstream>
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    ifstream file("C:\\Users\\ekral\\CLionProjects\\untitled17\\text.txt");
+    file >> std::noskipws;
+
+    if(file.is_open())
+    {
+        char ch;
+        while(file >> ch)
+        {
+            cout << ch;
+        }
+    }
+    return 0;
+}
+```
