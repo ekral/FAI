@@ -3,6 +3,11 @@
 Změńte třídu `Stack` na šablonu tak, aby byl validní kód ve funkci main.
 
 ```cpp
+#include <iostream>
+#include <string>
+
+using namespace std;
+
 class Stack
 {
 private:
