@@ -8,7 +8,7 @@ a: 1\
 b: 2\
 c: 4\
 ...\
-z: 1\
+z: 1
 
 2) Pomocí asci znaku zobrazte procentualni četnost, maximum znaků bude 10.
 
@@ -16,7 +16,7 @@ a: #\
 b: ##\
 c: ####\
 ...\
-z: #\
+z: #
 
 
 Příklad na práci s asociativní typem `map`:
