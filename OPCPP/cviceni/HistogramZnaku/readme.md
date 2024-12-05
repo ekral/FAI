@@ -10,7 +10,7 @@ c: 4\
 ...\
 z: 1
 
-2) Pomocí asci znaku zobrazte procentualni četnost, maximum znaků bude 10.
+2) Pomocí ASCI znaku zobrazte procentualni četnost, maximum znaků bude 10.
 
 a: #\
 b: ##\
