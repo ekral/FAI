@@ -67,7 +67,10 @@ int main()
         {
             cout << ch;
         }
+
+        file.close();
     }
+
     return 0;
 }
 ```
