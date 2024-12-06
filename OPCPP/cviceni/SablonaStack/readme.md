@@ -8,6 +8,8 @@ Změńte třídu `Stack` na šablonu tak, aby byl validní kód ve funkci main.
 
 using namespace std;
 
+// Zmente na template
+template<typename T>
 class Stack
 {
 private:
@@ -43,18 +45,19 @@ public:
 
     void push(const int x)
     {
-        assert(pos < n);
-
         data[pos] = x;
         ++pos;
     }
 
-    int pop()
+    int top()
     {
-        assert(pos > 0);
-
+        return data[pos - 1];
+    }
+    
+    void pop()
+    {
         --pos;
-        return data[pos];
+
     }
 
     int operator[] (const int i) const
@@ -71,11 +74,11 @@ public:
 int main()
 {
     Stack<int> stackCisla(10);
-    
+
     stackCisla.push(1);
     stackCisla.push(2);
     stackCisla.push(3);
-   
+
     for (int i = 0; i < stackCisla.count(); i++)
     {
         cout << stackCisla[i] << endl;
@@ -91,7 +94,7 @@ int main()
     stackCisla.pop();
 
     Stack<string> stackJmena(10);
-    
+
     stackJmena.push("Jiri");
     stackJmena.push("Karel");
     stackJmena.push("Alena");
