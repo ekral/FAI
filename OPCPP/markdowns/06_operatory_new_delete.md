@@ -54,3 +54,31 @@ int main()
 	return 1;
 }
 ```
+
+Na haldě můžeme alokovat i instace tříd. V následujícím příkladu alokujeme instanci třídy na haldě a poté ji uvolníme příkazem delete.
+
+```c++
+#include <string>
+
+using namespace std;
+
+class Student
+{
+public:
+    int id;
+    string jmeno;
+
+    Student(int id, string jmeno) : id(id), jmeno(jmeno)
+    {
+    }
+};
+
+int main()
+{
+    Student* student = new Student(1, "Jiri");
+
+    // dalsi kod
+
+    delete student;
+}
+```
