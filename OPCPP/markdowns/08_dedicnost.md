@@ -159,22 +159,20 @@ private:
 Pokud by objekt sdílel zahrnutý objekt s jinými objekty, tak by šlo o **agregaci**. U agregace mluvíme o tom, že objekt používá jiný objekt ale nevlastní ho. V následujícím příkladu sdílí `smsSender` více objednávek. Pojmy agregace a kompozice vycházejí z jazyka UML.
 
 ```cpp
-// ConsoleApplication28.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include <iostream>
 #include <string>
 #include <format>
+#include <print> // c++23
 
 using namespace std;
 
 class SmsSender
 {
-public: 
-    
+public:
+
     void PosliSms(string text)
     {
-        cout << "Posilam sms: " << text << endl;
+        println("Posilam sms: {}", text);
     }
 };
 
@@ -182,8 +180,9 @@ class Objednavka
 {
 private:
     SmsSender sender;
-public: 
-    
+
+public:
+
     int id;
 
     Objednavka(int id, SmsSender sender) : sender(sender), id(id)
@@ -198,7 +197,6 @@ public:
 
 int main()
 {
-    // klientsky kod
     SmsSender smsSender;
 
     Objednavka objednavka1(1, smsSender);
@@ -208,5 +206,51 @@ int main()
     objednavka2.Odeslat();
 }
 ```
+
+## Dědičnost vs kompozice
+
+Dědičnost kódu můžeme nahradit do určité míry kompozicí. V následujícím příkladu nepoužíváme dědičnost, ale třída `Student` si vytváří vlastní instanci třídy `Osoba`. Všimněte si, že mezdi třídami Osoba a Student pořád platí vztah, že Student je Osoba, což je možné u kompozice kde také platí vztah HAS-A. Ale u dědičnsoti musí jít vždy jen o vztah IS-A.
+
+```cpp
+#include <string>
+#include <print> // c++23
+
+using namespace std;
+
+class Osoba
+{
+public:
+    int cisloUctu;
+    string jmeno;
+
+    Osoba(int cisloUctu, string jmeno): cisloUctu(cisloUctu), jmeno(jmeno)
+    {
+    }
+};
+
+class Student
+{
+public:
+    Osoba osoba;
+    string skupina;
+
+    Student(int cisloUctu, string jmeno, string skupina) : osoba(cisloUctu, skupina), skupina(skupina)
+    {
+    }
+
+    void vypis()
+    {
+        println("osoba: {} {} skupina: {}", osoba.cisloUctu, osoba.jmeno, skupina);
+    }
+};
+
+int main()
+{
+    Student student(123, "Alena", "AXP1");
+    student.osoba.jmeno = "Tereza";
+    student.vypis();
+}
+```
+
 
 
