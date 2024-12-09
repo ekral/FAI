@@ -1,4 +1,4 @@
-# 08 Dedičnost kódu
+# 08 Dedičnost kódu a kompozice
 
 **autor Erik Král ekral@utb.cz**
 
@@ -128,4 +128,85 @@ int main()
     return 0;
 }
 ```
+
+## Kompozice
+
+Pokud jeden objekt zahrnuje druhý objekt, tak můžeme mluvit o vztahu HAS-A, tedy že jeden objekt má druhý objekt. V následujícím příkladu bude mít instance třídy `Motorka` reference na dvě instance třídy `Kola`. Protože objekt motorka objekty kola nesdílí s jinými objekty jde o kompozici. V tomto případě mluvíme o vlastnictví objektu, kdy vlastnictví objektu (ownership) v tomto kontextu znamená, že když zanikne objekt, tak s ním zaniknou i objekty, které vlastní.
+
+```cpp
+class Kolo
+{
+public:
+    int prumer;
+
+    Kolo(int prumer) : prumer(prumer)
+    {
+    }
+};
+
+class Motorka
+{
+private:
+    Kolo predni;
+    Kolo zadni;
+
+    Motorka() : predni(20), zadni(19)
+    {
+    }
+};
+```
+
+Pokud by objekt sdílel zahrnutý objekt s jinými objekty, tak by šlo o **agregaci**. U agregace mluvíme o tom, že objekt používá jiný objekt ale nevlastní ho. V následujícím příkladu sdílí `smsSender` více objednávek. Pojmy agregace a kompozice vycházejí z jazyka UML.
+
+```cpp
+// ConsoleApplication28.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
+
+#include <iostream>
+#include <string>
+#include <format>
+
+using namespace std;
+
+class SmsSender
+{
+public: 
+    
+    void PosliSms(string text)
+    {
+        cout << "Posilam sms: " << text << endl;
+    }
+};
+
+class Objednavka
+{
+private:
+    SmsSender sender;
+public: 
+    
+    int id;
+
+    Objednavka(int id, SmsSender sender) : sender(sender), id(id)
+    {
+    }
+
+    void Odeslat()
+    {
+        sender.PosliSms(format("Objednavka {} odeslana", id));
+    }
+};
+
+int main()
+{
+    // klientsky kod
+    SmsSender smsSender;
+
+    Objednavka objednavka1(1, smsSender);
+    Objednavka objednavka2(2, smsSender);
+
+    objednavka1.Odeslat();
+    objednavka2.Odeslat();
+}
+```
+
 
