@@ -97,6 +97,10 @@ public class StudentContext : DbContext
 }
 ```
 
+Alternativně můžeme předat `DbContextOptions<ApplicationDbContext>` v konstruktoru. Díky tomu, můžeme mimo třídu zvolit i jiného providera a tedy používat jinou databázi. To je výhodné například při testování.
+
+
+
 Dále přidáme metodu ```OnModelCreating```, kde můžeme zadat výchozí data v databází, ale také přesněji specifikovat primární klíče, cizí klíče a další.
 
 ```csharp
