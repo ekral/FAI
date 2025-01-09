@@ -1,0 +1,23 @@
+#!meta
+
+{"cells":[],"metadata":{"kernelspec":{"display_name":".NET (C#)","language":"C#","name":".net-csharp"},"language_info":{"name":"python"},"polyglot_notebook":{"kernelInfo":{"defaultKernelName":"csharp","items":[{"aliases":[],"name":"csharp"}]}}},"nbformat":4,"nbformat_minor":2,"indentAmount":" ","language_info":{"name":"polyglot-notebook"},"kernelInfo":{"defaultKernelName":null,"items":[{"name":"csharp","languageName":"C#","aliases":["c#","cs"]},{"name":"fsharp","languageName":"F#","aliases":["f#","fs"]},{"name":"pwsh","languageName":"PowerShell","aliases":["powershell"]},{"name":"javascript","languageName":"JavaScript","aliases":["js"]},{"name":"html","languageName":"HTML"},{"name":"sql","languageName":"SQL"},{"name":"kql","languageName":"KQL"},{"name":"mermaid","languageName":"Mermaid"},{"name":"http","languageName":"HTTP"},{"name":"value"}]}}
+
+#!markdown
+
+# 02 Migrace v Entity Frameworku
+
+**autor: Erik Král ekral@utb.cz**
+
+---
+
+#!csharp
+
+public class StudentContext : DbContext
+{
+    public DbSet<Student> Students { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseSqlite("Data Source=studenti.db");
+    }
+}
