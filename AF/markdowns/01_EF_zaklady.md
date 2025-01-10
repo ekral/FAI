@@ -64,7 +64,7 @@ public class StudentContext : DbContext
 }
 ```
 
-Alternativně můžeme předat `DbContextOptions<ApplicationDbContext>` v konstruktoru. Díky tomu, můžeme mimo třídu zvolit i jiného providera a tedy používat jinou databázi. To je výhodné například při testování.
+Alternativně můžeme předat `DbContextOptions<ApplicationDbContext>` v konstruktoru. Díky tomu můžeme mimo třídu zvolit i jiného providera a tedy používat jinou databázi. To je výhodné například při testování.
 
 ```csharp
 public class StudentContext : DbContext
@@ -77,7 +77,9 @@ public class StudentContext : DbContext
     }
 }
 
-DbContextOptions<StudentContext> options = new DbContextOptionsBuilder<StudentContext>().UseSqlite("Data Source=studenti.db").Options; 
+DbContextOptions<StudentContext> options = new DbContextOptionsBuilder<StudentContext>()
+                                                    .UseSqlite("Data Source=studenti.db")
+                                                    .Options; 
 
 using(StudentContext context = new StudentContext(options))
 {
