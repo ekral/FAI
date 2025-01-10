@@ -77,14 +77,9 @@ public class StudentContext : DbContext
     }
 }
 
-DbContextOptions<StudentContext> options = new DbContextOptionsBuilder<StudentContext>()
-                                                    .UseSqlite("Data Source=studenti.db")
-                                                    .Options; 
-
-using(StudentContext context = new StudentContext(options))
-{
-
-}
+using StudentContext context = new(new DbContextOptionsBuilder<StudentContext>()
+                                        .UseSqlite("Data Source=studenti.db")
+                                        .Options);
 ```
 
 ---
@@ -131,4 +126,17 @@ public class StudentContext : DbContext
 
 ### 3. Vytvoření databáze
 
-TODO
+Databázi vytvoříme buď příkazem `EnsureCreated`, což se používá pro vývoj. Pokud databáze neexistuje, tak příkaz databázi vytvoří.
+
+Vytvoření příkazu pomocí `EnsureCreated`:
+
+
+```csharp
+using StudentContext context = new(new DbContextOptionsBuilder<StudentContext>()
+                                        .UseSqlite("Data Source=studenti.db")
+                                        .Options);
+
+context.Database.EnsureCreated();
+```
+
+Na cvičení budeme používat tento postup, ale jinak můžeme databázi vytvořit i pomocí nástrojů pro příkazovou řádku, což probereme příště.
