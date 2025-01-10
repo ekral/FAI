@@ -6,11 +6,9 @@ namespace ConsoleAppEF
     {
         static void Main(string[] args)
         {
-            DbContextOptions<StudentContext> options = new DbContextOptionsBuilder<StudentContext>()
+            using StudentContext context = new(new DbContextOptionsBuilder<StudentContext>()
                                                     .UseSqlite("Data Source=studenti.db")
-                                                    .Options;
-
-            using StudentContext context = new(options);
+                                                    .Options);
 
             context.Database.EnsureCreated();
         }
