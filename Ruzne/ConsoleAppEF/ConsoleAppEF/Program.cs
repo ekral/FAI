@@ -11,6 +11,7 @@ namespace ConsoleAppEF
                                                     .Options);
 
             context.Database.EnsureCreated();
+
         }
     }
 }
