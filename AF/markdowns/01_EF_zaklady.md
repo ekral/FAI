@@ -140,3 +140,6 @@ context.Database.EnsureCreated();
 ```
 
 Na cvičení budeme používat tento postup, ale jinak můžeme databázi vytvořit i pomocí nástrojů pro příkazovou řádku, což probereme příště.
+
+### Práce s databází
+
