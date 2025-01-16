@@ -169,3 +169,32 @@ if (student is not null)
     Console.WriteLine($"{student.Id} {student.Jmeno} {student.Prijmeni}");
 }
 ```
+
+Následující příkaz vrátí všechny studenty s příjmením `"Vesely"`. Všimněte si návratového typu `IQueryable<Student>` na kterým můžeme definovat dotazy. Vlastní dotaz se provede až provedeme `foreach` nebo kdybychom zavolali příkaz `ToList` a podobné.
+
+```csharp
+IQueryable<Student> students = context.Students.Where(s => s.Prijmeni == "Vesely");
+
+foreach(Student student in students)
+{
+    Console.WriteLine($"{student.Id} {student.Jmeno} {student.Prijmeni}");
+}
+```
+
+Příkazy můžeme tedy zřetězit. Následující příkaz vrací jména studentů s příjmením `"Vesely"` seřazená vzestupně.
+
+```csharp
+IOrderedQueryable<string> jmena = context.Students
+    .Where(s => s.Prijmeni == "Vesely")
+    .Select(s => s.Jmeno)
+    .OrderDescending();
+```
+
+Protože návrazové typy můžou být složité, tak se často používá klíčové slovo `var`, předchozí příkaz s použitím `var` by vypadal následovně:
+
+```csharp
+var jmena = context.Students
+    .Where(s => s.Prijmeni == "Vesely")
+    .Select(s => s.Jmeno)
+    .OrderDescending();
+```
