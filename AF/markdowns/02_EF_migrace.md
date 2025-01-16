@@ -28,7 +28,7 @@ dotnet add package Microsoft.EntityFrameworkCore.Design
 
 Migrace představuje kód v jazyce C# který umí vytvářet nebo aktualizovat tabulky v databázi a případně i vložit výchozí data pro model. 
 
-Následující příkaz **dotnet ef** vytvoří novou migraci s názvem *VychoziMigrace*. 
+Následující příkaz **dotnet ef** vytvoří novou migraci s názvem *VychoziMigrace*.  V projektu příkaz vytvoří složku s názvem Migrations obsahující kód v jazyce C# představující migraci. Tento kód můžeme zkontrolovat a případně změnit.
 
 ```powershell
 dotnet ef migrations add VychoziMigrace
