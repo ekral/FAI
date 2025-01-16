@@ -213,7 +213,7 @@ IOrderedQueryable<string> jmena = context.Students
 
 Protože návrazové typy můžou být složité, tak se často používá klíčové slovo `var`, předchozí příkaz s použitím `var` by vypadal následovně:
 
-```csharp
+```c#
 var jmena = context.Students
     .Where(s => s.Prijmeni == "Vesely")
     .Select(s => s.Jmeno)
