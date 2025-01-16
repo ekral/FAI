@@ -141,6 +141,8 @@ Na cvičení budeme používat tento postup, ale jinak můžeme databázi vytvo�
 
 ## 4. Práce s databází
 
+[LINQ to Entities](https://learn.microsoft.com/en-us/dotnet/framework/data/adonet/ef/language-reference/linq-to-entities)
+
 ### Nový řádek databáze
 
 Následující kód představuje ukázku přidání nového řádku do tabulky studentů. Všimněte si, že když vytváříme instanci třídy `Student`, tak nezadáváme hodnotu property `Id` a ta bude mít tedy hodnotu `0`. Potom co vložíme nového studenta pomocí příkazu `context.Add(novy)` a zavoláme příkaz `context.SaveChanges()`, tak se property `novy.Id` nastaví na vygenerovanou hodnotu primárního klíče. Příkaz `context.SaveChanges()` také vrací počet změněných řádků, v tomto případě vrátí hodnotu `1` protože jsme změnili jeden řádek.
