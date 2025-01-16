@@ -141,7 +141,7 @@ Na cvičení budeme používat tento postup, ale jinak můžeme databázi vytvo�
 
 ## 4. Práce s databází
 
-[LINQ to Entities](https://learn.microsoft.com/en-us/dotnet/framework/data/adonet/ef/language-reference/linq-to-entities)
+S databází pracujeme pomocí  [LINQ to Entities](https://learn.microsoft.com/en-us/dotnet/framework/data/adonet/ef/language-reference/linq-to-entities).
 
 ### Nový řádek databáze
 
@@ -172,7 +172,7 @@ if (student is not null)
 }
 ```
 
-Následující příkaz vrátí všechny studenty s příjmením `"Vesely"`. Všimněte si návratového typu `IQueryable<Student>` na kterým můžeme definovat dotazy. Vlastní dotaz se provede až provedeme `foreach` nebo kdybychom zavolali příkaz `ToList` a podobné.
+Následující příkaz vrátí všechny studenty s příjmením `"Vesely"`. Všimněte si návratového typu `IQueryable<Student>` na kterým můžeme definovat dotazy. Vlastní dotaz se provede až po spuštění příkaz `foreach` nebo kdybychom zavolali příkaz `ToList` a podobně.
 
 ```csharp
 IQueryable<Student> students = context.Students.Where(s => s.Prijmeni == "Vesely");
