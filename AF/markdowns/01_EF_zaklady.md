@@ -143,7 +143,7 @@ Na cvičení budeme používat tento postup, ale jinak můžeme databázi vytvo�
 
 ### Nový řádek databáze
 
-Následující kód představuje ukázku vytvoření nového 
+Následující kód představuje ukázku přidání nového řádku do tabulky studentů. Všimněte si, že když vytváříme instanci třídy `Student`, tak nezadáváme hodnotu property `Id` a ta bude mít tedy hodnotu `0`. Potom co vložíme nového studenta pomocí příkazu `context.Add(novy)` a zavoláme příkaz `context.SaveChanges()`, tak se property `novy.Id` nastaví na vygenerovanou hodnotu primárního klíče. Příkaz `context.SaveChanges()` také vrací počet změněných řádků, v tomto případě vrátí hodnotu `1` protože jsme změnili jeden řádek.
 
 ```csharp
 Student novy = new Student() { Jmeno = "Jiri", Prijmeni = "Vesely" };
@@ -155,4 +155,17 @@ int number = context.SaveChanges();
 Console.WriteLine($"Pocet entit zapsanych do databaze: {number}");
 
 Console.WriteLine($"Vygenerovane Id: {novy.Id}");
+```
+
+Další příkaz vrátí studenta podle hodnoty primárního klíče.
+
+```csharp
+int id = 1;
+
+Student? student = context.Students.Find(id);
+
+if (student is not null)
+{
+    Console.WriteLine($"{student.Id} {student.Jmeno} {student.Prijmeni}");
+}
 ```
