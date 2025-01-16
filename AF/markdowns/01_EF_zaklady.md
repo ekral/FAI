@@ -187,7 +187,7 @@ if (studentByPrijmeni is not null)
 }
 ```
 
-### Nový řádek databáze
+### Filtrování prvků
 
 Následující příkaz vrátí všechny studenty s příjmením `"Vesely"`. Všimněte si návratového typu `IQueryable<Student>` na kterým můžeme definovat dotazy. Vlastní dotaz se provede až po spuštění příkaz `foreach` nebo kdybychom zavolali příkaz `ToList` a podobně.
 
@@ -200,7 +200,9 @@ foreach(Student student in students)
 }
 ```
 
-Příkazy můžeme tedy zřetězit. Následující příkaz vrací jména studentů s příjmením `"Vesely"` seřazená vzestupně.
+### Projekce a řazení prvků
+
+Následující příkaz vrací jména studentů s příjmením `"Vesely"` (filtruje) seřazená vzestupně. Zároveň jsme funkce zřetězili.
 
 ```csharp
 IOrderedQueryable<string> jmena = context.Students
