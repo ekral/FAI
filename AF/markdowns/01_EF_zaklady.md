@@ -159,7 +159,9 @@ Console.WriteLine($"Pocet entit zapsanych do databaze: {number}");
 Console.WriteLine($"Vygenerovane Id: {novy.Id}");
 ```
 
-Další příkaz vrátí studenta podle hodnoty primárního klíče.
+### Nalezení prvku podle primárního klíče
+
+Následující příkaz vrátí studenta podle hodnoty primárního klíče.
 
 ```csharp
 int id = 1;
@@ -171,6 +173,21 @@ if (student is not null)
     Console.WriteLine($"{student.Id} {student.Jmeno} {student.Prijmeni}");
 }
 ```
+
+### Nalezení prvního prvku splňující podmínku
+
+Následující příkaz vrátí studenta jehož jméno začíná na `"Nov"`. Pokud žádný záznam podmínku nesplní, tak příkaz vrátí `null`.
+
+```csharp
+Student? studentByPrijmeni = context.Students.FirstOrDefault(s => s.Prijmeni.StartsWith("Nov"));
+
+if (studentByPrijmeni is not null)
+{
+    Console.WriteLine($"{studentByPrijmeni.Id} {studentByPrijmeni.Jmeno} {studentByPrijmeni.Prijmeni}");
+}
+```
+
+### Nový řádek databáze
 
 Následující příkaz vrátí všechny studenty s příjmením `"Vesely"`. Všimněte si návratového typu `IQueryable<Student>` na kterým můžeme definovat dotazy. Vlastní dotaz se provede až po spuštění příkaz `foreach` nebo kdybychom zavolali příkaz `ToList` a podobně.
 

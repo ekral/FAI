@@ -24,15 +24,21 @@ namespace ConsoleAppEF
             Console.WriteLine($"Vygenerovane Id: {novy.Id}");
 
 
-            //int id = 1;
+            int id = 1;
 
-            //Student? student = context.Students.Find(id);
+            Student? studentById = context.Students.Find(id);
 
-            //if (student is not null)
-            //{
-            //    Console.WriteLine($"{student.Id} {student.Jmeno} {student.Prijmeni}");
-            //}
+            if (studentById is not null)
+            {
+                Console.WriteLine($"{studentById.Id} {studentById.Jmeno} {studentById.Prijmeni}");
+            }
 
+            Student? studentByPrijmeni = context.Students.FirstOrDefault(s => s.Prijmeni.StartsWith("Nov"));
+
+            if (studentByPrijmeni is not null)
+            {
+                Console.WriteLine($"{studentByPrijmeni.Id} {studentByPrijmeni.Jmeno} {studentByPrijmeni.Prijmeni}");
+            }
 
             IQueryable<Student> students = context.Students.Where(s => s.Prijmeni == "Vesely");
 
@@ -40,6 +46,12 @@ namespace ConsoleAppEF
             {
                 Console.WriteLine($"{student.Id} {student.Jmeno} {student.Prijmeni}");
             }
+
+            var jmena = context.Students
+                .Where(s => s.Prijmeni == "Vesely")
+                .Select(s => s.Jmeno)
+                .OrderDescending();
+
         }
     }
 }
