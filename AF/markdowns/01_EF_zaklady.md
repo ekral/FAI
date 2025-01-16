@@ -8,11 +8,9 @@ Entity Framework (EF) slouží k objektově relačnímu mapování. Což znamen�
 
 Návod pro Entity Framework: [Getting Started with EF Core](https://learn.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=netcore-cli).
 
-## Příklad
-
 V následujícím příkladu definujeme třídu Student a pomocí migrací vytvoříme Sqlite databázi.
 
-### 1. Definice entity student Student
+## 1. Definice entity student Student
 
 Nejprve si nadefinujeme třídu `Student`. Ve třídě nechceme mít parametrický konstruktor, což by nám mohlo komplikovat práci s Entity Frameworkem. Property představují sloupce tabulky a ```Id``` je dle jmenných konvencí primární klíč. Jako alternativu pro parametrický konstruktor v příkladu použiváme klíčové slovo ```required```, které říká, že ```Jmeno``` a ```Prijmeni``` musi mit přiřazenou hodnotu nejpozději v Object Initializeru.
 
@@ -31,7 +29,7 @@ Student student = new()
 };
 ```
 
-### 2. Definice DbContextu
+## 2. Definice DbContextu
 
 Pokud chceme používat konkrétní databázi s Entity Frameworkem, tak musím do projektu přidat **database provider** pro tuto databázi. Database provider je knihovna distribuovaná jako nuget balíček. 
 
@@ -124,7 +122,7 @@ public class StudentContext : DbContext
 }
 ```
 
-### 3. Vytvoření databáze
+## 3. Vytvoření databáze
 
 Databázi vytvoříme buď příkazem `EnsureCreated`, což se používá pro vývoj. Pokud databáze neexistuje, tak příkaz databázi vytvoří.
 
@@ -141,5 +139,20 @@ context.Database.EnsureCreated();
 
 Na cvičení budeme používat tento postup, ale jinak můžeme databázi vytvořit i pomocí nástrojů pro příkazovou řádku, což probereme příště.
 
-### Práce s databází
+## 4. Práce s databází
 
+### Nový řádek databáze
+
+Následující kód představuje ukázku vytvoření nového 
+
+```csharp
+Student novy = new Student() { Jmeno = "Jiri", Prijmeni = "Vesely" };
+
+context.Add(novy);
+
+int number = context.SaveChanges();
+
+Console.WriteLine($"Pocet entit zapsanych do databaze: {number}");
+
+Console.WriteLine($"Vygenerovane Id: {novy.Id}");
+```

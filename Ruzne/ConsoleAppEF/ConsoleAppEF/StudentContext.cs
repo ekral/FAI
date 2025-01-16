@@ -8,7 +8,6 @@ namespace ConsoleAppEF
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity?
             modelBuilder.Entity<Student>().HasData(
                 new Student() { Id = 1, Jmeno = "Andrea", Prijmeni = "Nova" },
                 new Student() { Id = 2, Jmeno = "Jiri", Prijmeni = "Novotny" },
