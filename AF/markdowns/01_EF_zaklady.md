@@ -159,6 +159,17 @@ Console.WriteLine($"Pocet entit zapsanych do databaze: {number}");
 Console.WriteLine($"Vygenerovane Id: {novy.Id}");
 ```
 
+### Změna řádku tabulky
+
+Následující kód změní řádek tabulky (entitu) v databázi. Konkrétně změní řádek studenta s `Id` `1`.
+
+```csharp
+Student studentUpdate = new Student() { Id = 1, Jmeno = "Karel", Prijmeni = "Jiny" };
+context.Students.Update(studentUpdate);
+
+context.SaveChanges();
+```
+
 ### Nalezení prvku podle primárního klíče
 
 Následující příkaz vrátí studenta podle hodnoty primárního klíče.

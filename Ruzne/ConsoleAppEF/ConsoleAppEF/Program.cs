@@ -23,6 +23,10 @@ namespace ConsoleAppEF
             
             Console.WriteLine($"Vygenerovane Id: {novy.Id}");
 
+            Student studentUpdate = new Student() { Id = 1, Jmeno = "Karel", Prijmeni = "Jiny" };
+            context.Students.Update(studentUpdate);
+
+            context.SaveChanges();
 
             int id = 1;
 
