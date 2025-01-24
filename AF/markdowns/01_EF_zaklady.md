@@ -172,7 +172,7 @@ context.SaveChanges();
 
 ### Získání všech řádků tabulky
 
-Všechny řádky tabulky získám tak, že například použiji `foreach` nebo metody `ToList` nebo `ToArray`. Při provedení těchto příkazů se provede dotaz do databáze.
+Všechny řádky tabulky získám tak, že například použiji `foreach` nebo metodu `ToList` nebo `ToArray`. Při provedení těchto příkazů se provede dotaz do databáze.
 
 ```csharp
 foreach (Student student in context.Students)

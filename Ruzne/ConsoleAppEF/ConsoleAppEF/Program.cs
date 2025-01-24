@@ -24,7 +24,7 @@ namespace ConsoleAppEF
             
             Console.WriteLine($"Vygenerovane Id: {novy.Id}");
 
-            Student studentUpdate = new Student() { Id = 1, Jmeno = "Karel", Prijmeni = "Jiny" };
+            Student studentUpdate = new Student() { Id = 1, Jmeno = "Dusan", Prijmeni = "Jiny" };
             context.Students.Update(studentUpdate);
 
             context.SaveChanges();
@@ -66,7 +66,11 @@ namespace ConsoleAppEF
             {
                 Console.WriteLine(jmeno);
             }
-            
+
+            IOrderedQueryable<Student> serazeniStudentiDleKliceVzestupne = context.Students.Order();
+            IOrderedQueryable<Student> serazeniStudentiDleKliceSestupne = context.Students.OrderDescending();
+            IOrderedQueryable<Student> serazeniStudentiPodlePrijmeniVzestupne = context.Students.OrderBy(s => s.Prijmeni);
+
             var serazenaJmena = context.Students
                 .Where(s => s.Prijmeni == "Vesely")
                 .Select(s => s.Jmeno)
