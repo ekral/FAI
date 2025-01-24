@@ -238,6 +238,15 @@ foreach (string jmeno in jmena)
 }
 ```
 
+### Řazení
+
+Entity můžeme řadit vzestupně nebo sestupně a to buď pomocí výchozího řazení nebo pomocí vlastního řazení.
+
+```csharp
+IOrderedQueryable<Student> serazeniStudentiDleKliceVzestupne = context.Students.Order();
+IOrderedQueryable<Student> serazeniStudentiDleKliceSestupne = context.Students.OrderDescending();
+IOrderedQueryable<Student> serazeniStudentiPodlePrijmeniVzestupne = context.Students.OrderBy(s => s.Prijmeni);
+```
 ### Kombinace metod
 
 Následující příkaz vrací jména studentů s příjmením `"Vesely"` (filtruje) seřazená vzestupně. Zároveň jsme funkce zřetězili.
