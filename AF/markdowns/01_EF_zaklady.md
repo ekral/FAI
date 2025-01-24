@@ -46,7 +46,7 @@ public class StudentContext : DbContext
 }
 ```
 
-Pomocí přetížené metody OnConfiguring potom nakonfigurujeme databázi, konrétně zadáme connection string. 
+Pomocí přetížené metody `OnConfiguring` potom nakonfigurujeme databázi, konrétně zadáme connection string. 
 
 Jednoduchý zápis:
 
