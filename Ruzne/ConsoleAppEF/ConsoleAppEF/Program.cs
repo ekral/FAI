@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Immutable;
 
 namespace ConsoleAppEF
 {
@@ -33,6 +34,9 @@ namespace ConsoleAppEF
                 Console.WriteLine($"{student.Id} {student.Jmeno} {student.Prijmeni}");
             }
 
+            List<Student> studentiList = context.Students.ToList();
+            Student[] studentiArray = context.Students.ToArray();
+
             int id = 1;
 
             Student? studentById = context.Students.Find(id);
@@ -56,7 +60,14 @@ namespace ConsoleAppEF
                 Console.WriteLine($"{student.Id} {student.Jmeno} {student.Prijmeni}");
             }
 
-            var jmena = context.Students
+            IQueryable<string> jmena = context.Students.Select(s => s.Jmeno);
+
+            foreach (string jmeno in jmena)
+            {
+                Console.WriteLine(jmeno);
+            }
+            
+            var serazenaJmena = context.Students
                 .Where(s => s.Prijmeni == "Vesely")
                 .Select(s => s.Jmeno)
                 .OrderDescending();

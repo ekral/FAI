@@ -186,7 +186,7 @@ Student[] studentiArray = context.Students.ToArray();
 
 ### Filtrování prvků
 
-Následující příkaz vrátí všechny studenty s příjmením `"Vesely"`. Všimněte si návratového typu `IQueryable<Student>` nad kterým můžeme definovat dotazy. Vlastní dotaz se provede až po spuštění příkaz `foreach` nebo kdybychom zavolali příkaz `ToList` a podobně.
+Následující příkaz vrátí všechny studenty s příjmením `"Vesely"`. Všimněte si návratového typu `IQueryable<Student>` nad kterým můžeme definovat dotazy. Vlastní dotaz se provede až po spuštění příkazu `foreach` nebo kdybychom zavolali příkaz `ToList` a podobně.
 
 ```csharp
 IQueryable<Student> students = context.Students.Where(s => s.Prijmeni == "Vesely");
@@ -225,7 +225,20 @@ if (studentByPrijmeni is not null)
 }
 ```
 
-### Projekce a řazení prvků
+### Projekce
+
+Projekce představuje změnu typu než je orignální typ entity v databázi. Například následující příkaz vrátí jen jména studentů. Místo typu `Student` tedy vrací `string`. Metoda opět vrací IQueryable, což znamená, že se dotaz do databáze se neprovede hned, ale teprve až provedeme například `foreach`.
+
+```csharp
+IQueryable<string> jmena = context.Students.Select(s => s.Jmeno);
+
+foreach (string jmeno in jmena)
+{
+    Console.WriteLine(jmeno);
+}
+```
+
+### Kombinace metod
 
 Následující příkaz vrací jména studentů s příjmením `"Vesely"` (filtruje) seřazená vzestupně. Zároveň jsme funkce zřetězili.
 
