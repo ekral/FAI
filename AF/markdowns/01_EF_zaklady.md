@@ -240,7 +240,7 @@ foreach (string jmeno in jmena)
 
 ### Řazení
 
-Entity můžeme řadit vzestupně nebo sestupně a to buď pomocí výchozího řazení nebo pomocí vlastního řazení.
+Entity můžeme řadit vzestupně nebo sestupně a to buď pomocí výchozího řazení dle klíče nebo pomocí vlastního řazení. První příkaz seřadí studenty dle klíče vzestupně, druhý příkaz seřadí studenty dle klíče sestupně. A třetí příkaz seřadí studenty dle příjmení vzestupně. Všimněte si, že návratový typ je tentokrát `IOrderedQueryable`.
 
 ```csharp
 IOrderedQueryable<Student> serazeniStudentiDleKliceVzestupne = context.Students.Order();
@@ -249,7 +249,7 @@ IOrderedQueryable<Student> serazeniStudentiPodlePrijmeniVzestupne = context.Stud
 ```
 ### Kombinace metod
 
-Následující příkaz vrací jména studentů s příjmením `"Vesely"` (filtruje) seřazená vzestupně. Zároveň jsme funkce zřetězili.
+Metody můžeme kombinovat. Následující příkaz vrací jména studentů s příjmením `"Vesely"` (filtruje) seřazená vzestupně. Dotaz se opět neprovede hned, ale až bychom provedli například příkaz `foreach` nebo `ToList`.
 
 ```csharp
 IOrderedQueryable<string> jmena = context.Students
