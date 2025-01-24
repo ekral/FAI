@@ -28,6 +28,11 @@ namespace ConsoleAppEF
 
             context.SaveChanges();
 
+            foreach (Student student in context.Students)
+            {
+                Console.WriteLine($"{student.Id} {student.Jmeno} {student.Prijmeni}");
+            }
+
             int id = 1;
 
             Student? studentById = context.Students.Find(id);

@@ -170,6 +170,33 @@ context.Students.Update(studentUpdate);
 context.SaveChanges();
 ```
 
+### Získání všech řádků tabulky
+
+Všechny řádky tabulky získám tak, že například použiji `foreach` nebo metody `ToList` nebo `ToArray`. Při provedení těchto příkazů se provede dotaz do databáze.
+
+```csharp
+foreach (Student student in context.Students)
+{
+    Console.WriteLine($"{student.Id} {student.Jmeno} {student.Prijmeni}");
+}
+
+List<Student> studentiList = context.Students.ToList();
+Student[] studentiArray = context.Students.ToArray();
+```
+
+### Filtrování prvků
+
+Následující příkaz vrátí všechny studenty s příjmením `"Vesely"`. Všimněte si návratového typu `IQueryable<Student>` na kterým můžeme definovat dotazy. Vlastní dotaz se provede až po spuštění příkaz `foreach` nebo kdybychom zavolali příkaz `ToList` a podobně.
+
+```csharp
+IQueryable<Student> students = context.Students.Where(s => s.Prijmeni == "Vesely");
+
+foreach(Student student in students)
+{
+    Console.WriteLine($"{student.Id} {student.Jmeno} {student.Prijmeni}");
+}
+```
+
 ### Nalezení prvku podle primárního klíče
 
 Následující příkaz vrátí studenta podle hodnoty primárního klíče.
@@ -195,19 +222,6 @@ Student? studentByPrijmeni = context.Students.FirstOrDefault(s => s.Prijmeni.Sta
 if (studentByPrijmeni is not null)
 {
     Console.WriteLine($"{studentByPrijmeni.Id} {studentByPrijmeni.Jmeno} {studentByPrijmeni.Prijmeni}");
-}
-```
-
-### Filtrování prvků
-
-Následující příkaz vrátí všechny studenty s příjmením `"Vesely"`. Všimněte si návratového typu `IQueryable<Student>` na kterým můžeme definovat dotazy. Vlastní dotaz se provede až po spuštění příkaz `foreach` nebo kdybychom zavolali příkaz `ToList` a podobně.
-
-```csharp
-IQueryable<Student> students = context.Students.Where(s => s.Prijmeni == "Vesely");
-
-foreach(Student student in students)
-{
-    Console.WriteLine($"{student.Id} {student.Jmeno} {student.Prijmeni}");
 }
 ```
 
