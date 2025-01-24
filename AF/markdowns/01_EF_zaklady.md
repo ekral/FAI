@@ -186,7 +186,7 @@ Student[] studentiArray = context.Students.ToArray();
 
 ### Filtrování prvků
 
-Následující příkaz vrátí všechny studenty s příjmením `"Vesely"`. Všimněte si návratového typu `IQueryable<Student>` na kterým můžeme definovat dotazy. Vlastní dotaz se provede až po spuštění příkaz `foreach` nebo kdybychom zavolali příkaz `ToList` a podobně.
+Následující příkaz vrátí všechny studenty s příjmením `"Vesely"`. Všimněte si návratového typu `IQueryable<Student>` nad kterým můžeme definovat dotazy. Vlastní dotaz se provede až po spuštění příkaz `foreach` nebo kdybychom zavolali příkaz `ToList` a podobně.
 
 ```csharp
 IQueryable<Student> students = context.Students.Where(s => s.Prijmeni == "Vesely");
