@@ -5,6 +5,7 @@ namespace ConsoleAppEF
 {
     internal class Program
     {
+        static void 
 
         static void Main(string[] args)
         {
@@ -22,16 +23,16 @@ namespace ConsoleAppEF
 
             Console.WriteLine($"Pocet entit zapsanych do databaze: {number}");
             
-            Console.WriteLine($"Vygenerovane Id: {novy.Id}");
+            Console.WriteLine($"Vygenerovane Id: {novy.StudentId}");
 
-            Student studentUpdate = new Student() { Id = 1, Jmeno = "Dusan", Prijmeni = "Jiny" };
+            Student studentUpdate = new Student() { StudentId = 1, Jmeno = "Dusan", Prijmeni = "Jiny" };
             context.Students.Update(studentUpdate);
 
             context.SaveChanges();
 
             foreach (Student student in context.Students)
             {
-                Console.WriteLine($"{student.Id} {student.Jmeno} {student.Prijmeni}");
+                Console.WriteLine($"{student.StudentId} {student.Jmeno} {student.Prijmeni}");
             }
 
             List<Student> studentiList = context.Students.ToList();
@@ -43,21 +44,21 @@ namespace ConsoleAppEF
 
             if (studentById is not null)
             {
-                Console.WriteLine($"{studentById.Id} {studentById.Jmeno} {studentById.Prijmeni}");
+                Console.WriteLine($"{studentById.StudentId} {studentById.Jmeno} {studentById.Prijmeni}");
             }
 
             Student? studentByPrijmeni = context.Students.FirstOrDefault(s => s.Prijmeni.StartsWith("Nov"));
 
             if (studentByPrijmeni is not null)
             {
-                Console.WriteLine($"{studentByPrijmeni.Id} {studentByPrijmeni.Jmeno} {studentByPrijmeni.Prijmeni}");
+                Console.WriteLine($"{studentByPrijmeni.StudentId} {studentByPrijmeni.Jmeno} {studentByPrijmeni.Prijmeni}");
             }
 
             IQueryable<Student> students = context.Students.Where(s => s.Prijmeni == "Vesely");
 
             foreach(Student student in students)
             {
-                Console.WriteLine($"{student.Id} {student.Jmeno} {student.Prijmeni}");
+                Console.WriteLine($"{student.StudentId} {student.Jmeno} {student.Prijmeni}");
             }
 
             IQueryable<string> jmena = context.Students.Select(s => s.Jmeno);

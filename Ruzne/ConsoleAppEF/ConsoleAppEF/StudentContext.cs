@@ -9,9 +9,9 @@ namespace ConsoleAppEF
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Student>().HasData(
-                new Student() { Id = 1, Jmeno = "Andrea", Prijmeni = "Nova" },
-                new Student() { Id = 2, Jmeno = "Jiri", Prijmeni = "Novotny" },
-                new Student() { Id = 3, Jmeno = "Karel", Prijmeni = "Vesely" }
+                new Student() { StudentId = 1, Jmeno = "Andrea", Prijmeni = "Nova" },
+                new Student() { StudentId = 2, Jmeno = "Jiri", Prijmeni = "Novotny" },
+                new Student() { StudentId = 3, Jmeno = "Karel", Prijmeni = "Vesely" }
             );
         }
     }

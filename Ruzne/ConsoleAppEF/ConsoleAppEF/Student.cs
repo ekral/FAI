@@ -8,9 +8,19 @@ namespace ConsoleAppEF
 {
     public class Student
     {
-        public int Id { get; set; } // Primární klíč dle jmenných konvencí
+        public int StudentId { get; set; } // Primární klíč dle jmenných konvencí
         public required string Jmeno { get; set; }
         public required string Prijmeni { get; set; }
+        public int SkupinaId { get; set; }
+        public Skupina? Skupina { get; set; } // Navigation Property
+    }
+
+    public class Skupina
+    {
+        public int SkupinaId { get; set; }
+        public required string Nazev { get; set; } 
+
+        ICollection<Student>? Studenti { get; set; } // Navigation Property
     }
 
 }
