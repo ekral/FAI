@@ -139,6 +139,8 @@ context.Database.EnsureCreated();
 
 Na cvičení budeme používat tento postup, ale jinak můžeme databázi vytvořit i pomocí nástrojů pro příkazovou řádku, což probereme příště.
 
+Databázi (soubor studenti.db) si můžeme prohlédnout například v [SQLite Viewer Web App](https://sqliteviewer.app).
+
 ## 4. Práce s databází
 
 S databází pracujeme pomocí  [LINQ to Entities](https://learn.microsoft.com/en-us/dotnet/framework/data/adonet/ef/language-reference/linq-to-entities).

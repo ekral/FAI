@@ -19,8 +19,7 @@ namespace ConsoleAppEF
     {
         public int SkupinaId { get; set; }
         public required string Nazev { get; set; } 
-
-        ICollection<Student>? Studenti { get; set; } // Navigation Property
+        public ICollection<Student>? Studenti { get; set; } // Navigation Property
     }
 
 }
