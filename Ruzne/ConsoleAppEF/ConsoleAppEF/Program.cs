@@ -76,17 +76,77 @@ namespace ConsoleAppEF
                 .OrderDescending();
         }
 
-        static void Relace()
+        static void Relace1()
         {
             using StudentContext context = CreateContext();
 
-            Skupina skupina = new Skupina() { SkupinaId = 1, Nazev = "SWI1" };
-            Student student = new Student() { StudentId = 1, SkupinaId = 1, Jmeno = "Jiri", Prijmeni = "Pokorny" };
+          
+            var skupiny = context.Skupiny;
 
-            context.Skupiny.Add(skupina);
-            context.Studenti.Add(student);
+            foreach(Skupina skupina in skupiny)
+            {
+                // skupina.Studenti bude null
+            }
 
-            context.SaveChanges();
+            var skupinySeStudenty = context.Skupiny.Include(skupina => skupina.Studenti);
+
+            foreach (Skupina skupina in skupiny)
+            {
+                Console.WriteLine($"Skupina {skupina.SkupinaId}: {skupina.Nazev}");
+
+                if (skupina.Studenti is not null)
+                {
+                    foreach (Student student in skupina.Studenti)
+                    {
+                        Console.WriteLine($"Student {student.StudentId}: {student.Jmeno} {student.Prijmeni}");
+                    }
+                }
+            }
+
+
+            
+
+        }
+
+        static void Relace2()
+        {
+            using StudentContext context = CreateContext();
+
+            Skupina skupina = context.Skupiny.Single(s => s.SkupinaId == 1);
+
+            if (skupina.Studenti is null)
+            {
+                Console.WriteLine("Studenti jsou zatím null.");
+            }
+
+            context.Entry(skupina).Collection(skupina => skupina.Studenti).Load();
+
+            if (skupina.Studenti is not null)
+            {
+                foreach (Student student in skupina.Studenti)
+                {
+                    Console.WriteLine($"Student {student.StudentId}: {student.Jmeno} {student.Prijmeni}");
+                }
+            }
+        }
+
+        static void Relace3()
+        {
+            using StudentContext context = CreateContext();
+
+            Student student = context.Studenti.Single(student => student.StudentId == 1);
+
+            if(student.Skupina is null)
+            {
+                Console.WriteLine("Skupina je zatím null.");
+            }
+
+            context.Entry(student).Reference(student => student.Skupina).Load();
+
+            if (student.Skupina is not null)
+            {
+                Console.WriteLine($"Skupina {student.Skupina.SkupinaId}: {student.Skupina.Nazev}");
+            }
         }
 
         static StudentContext CreateContext()
@@ -100,9 +160,20 @@ namespace ConsoleAppEF
         {
             using StudentContext context = CreateContext();
 
-            context.Database.EnsureCreated();
+            if (context.Database.EnsureCreated())
+            {
+                Skupina skupina1 = new Skupina() { SkupinaId = 1, Nazev = "SWI1" };
+                Student student1 = new Student() { StudentId = 1, SkupinaId = 1, Jmeno = "Jiri", Prijmeni = "Pokorny" };
+                Student student2 = new Student() { StudentId = 2, SkupinaId = 1, Jmeno = "Alena", Prijmeni = "Dulikova" };
 
-            Relace();
+                context.Skupiny.Add(skupina1);
+                context.Studenti.AddRange(student1, student2);
+
+                context.SaveChanges();
+            }
+
+            Relace2();
+            Relace3();
 
         }
     }

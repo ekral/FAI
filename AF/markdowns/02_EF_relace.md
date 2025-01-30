@@ -12,6 +12,8 @@ V následujícím příkladu budeme předpokládat, že student může být zaps
 
 Třída `Skupina` potom obsahuje jen navigační property `Studenti`. Tato properta opět slouží pro procházení dat.
 
+Všimněte si, že navigační property `Skupina` i `Studenti` jsou **nullable**. Jejich hodnota tedy může být null a to napříkad, když budeme vytvářet nové řádky tabulek. Jako alternativu pro ostatní property kromě primárního klíče potom použijeme klíčové slovo `required`.
+
 
 ```csharp
 public class Student
@@ -19,7 +21,7 @@ public class Student
     public int StudentId { get; set; } // Primární klíč dle jmenných konvencí
     public required string Jmeno { get; set; }
     public required string Prijmeni { get; set; }
-    public int SkupinaId { get; set; }
+    public int SkupinaId { get; set; } // Cizí klíč
     public Skupina? Skupina { get; set; } // Navigation Property
 }
 
@@ -32,6 +34,7 @@ public class Skupina
 ```
 
 Dále si vytvoříme DbContext:
+
 ```csharp
 public class StudentContext(DbContextOptions<StudentContext> options) : DbContext(options)
 {
@@ -40,12 +43,119 @@ public class StudentContext(DbContextOptions<StudentContext> options) : DbContex
 }
 ```
 
-Nyní si projdeme vytváření a načítání dat.
+V následujících příklad si probereme vytvoření řádku s relacemi a načtení dat pomocí dvou ruzných způsobů. Aby byl kód přehlednější, tak si nadefinujeme pomocnou metodu pro vytváření DbContextu:
+
+```csharp
+static StudentContext CreateContext()
+{
+    StudentContext context = new(new DbContextOptionsBuilder<StudentContext>()
+                                            .UseSqlite("Data Source=studenti.db")
+                                            .Options);
+    return context;
+}
+```
 
 ### Nový řádek databáze
 
+Následující kód představuje ukázku naplnění databáze výchozími daty. Vytvoříme jednu skupinu, do které přidáme dva studenty. Všimněte si, že zadáváme rovnou hodnoty primárních klíčů. Co je důležité z hlediska relací, tak že zadáváme hodnotu cizího klíče `SkupinaId` a nezadáváme hodnoty navigačních property, které slouží pouze pro čtení a při vytváření nových řádků nemají žádný význam.
 
 
+```csharp
+using StudentContext context = CreateContext();
 
+Skupina skupina = new Skupina() { SkupinaId = 1, Nazev = "SWI1" };
+Student student1 = new Student() { StudentId = 1, SkupinaId = 1, Jmeno = "Jiri", Prijmeni = "Pokorny" };
+Student student2 = new Student() { StudentId = 2, SkupinaId = 1, Jmeno = "Alena", Prijmeni = "Dulikova" };
 
-[Create Model](https://learn.microsoft.com/en-us/ef/core/modeling/)
+context.Skupiny.Add(skupina);
+context.Studenti.AddRange(student1, student2);
+
+context.SaveChanges();
+```
+
+### Načtení dat
+
+Při načtení dat můžeme načíst entity bez navigačních propert a nebo navigační property načíst přičemž máme [tři možnosti](https://learn.microsoft.com/en-us/ef/core/querying/related-data/):
+
+#### 1. Eager loading
+
+Pomocí metody `Include` v dotazu říkáme, která navigační property se má načíst.
+
+Pokud bychom načetli skupinu následujícím způsobem, tak navigační property `skupina.Studenti` by byla `null`.
+
+```csharp
+var skupiny = context.Skupiny;
+
+foreach(Skupina skupina in skupiny)
+{
+    // skupina.Studenti bude null
+}
+```
+
+Když ale použijeme metodu `Include`, tak se v dotazu zahrne dotaz i na studenty a načtou se všichni studenti pro každou skupinu.
+
+```csharp
+var skupinySeStudenty = context.Skupiny.Include(skupina => skupina.Studenti);
+
+foreach (Skupina skupina in skupiny)
+{
+    Console.WriteLine($"Skupina {skupina.SkupinaId}: {skupina.Nazev}");
+
+    if (skupina.Studenti is not null)
+    {
+        foreach (Student student in skupina.Studenti)
+        {
+            Console.WriteLine($"Student {student.StudentId}: {student.Jmeno} {student.Prijmeni}");
+        }
+    }
+}
+```
+
+Pokud chceme načíst navigation property pro includovanou property, tak můžeme použít metodu [ThenInclude](https://learn.microsoft.com/en-us/ef/core/querying/related-data/eager#including-multiple-levels). Entity framework dále podporuje [filtrování entit](https://learn.microsoft.com/en-us/ef/core/querying/related-data/eager#filtered-include), která načítáme v metodě `Include`. Dále můžeme nakonfigurovat context s pomocí [AutoInclude](https://learn.microsoft.com/en-us/ef/core/querying/related-data/eager#model-configuration-for-auto-including-navigations) tak, aby se navigační property načítaly automaticky.
+
+Je potředa si ale uvědomit, že Eager loading může mít **negativní vliv** na výkon. Kdy objem načtených dat při každém dalším vnoření může růst exponenciálně. 
+
+#### 2. Explicit Loading
+
+U [Explicit Loading](https://learn.microsoft.com/en-us/ef/core/querying/related-data/explicit#explicit-loading) najprve provedeme dotaz a teprvé potom dodatečně načteme související navigation property. Konkrétně použijeme metody `DbContext.Entry(...)` API, kokrétně metody Collection jak je ukázáno v následujícím příkladu, kdy navigation property `skupina.Studenti` je kolekce.
+
+```csharp
+Skupina skupina = context.Skupiny.Single(s => s.SkupinaId == 1);
+
+if (skupina.Studenti is null)
+{
+    Console.WriteLine("Studenti jsou zatím null");
+}
+
+context.Entry(skupina).Collection(skupina => skupina.Studenti).Load();
+
+if (skupina.Studenti is not null)
+{
+    foreach (Student student in skupina.Studenti)
+    {
+        Console.WriteLine($"Student {student.StudentId}: {student.Jmeno} {student.Prijmeni}");
+    }
+}
+```
+
+A nebo metodu `Reference`, kdy navigation property `Student.Skupina` není kolekce, ale reference na jedn Skupinu.
+
+```csharp
+Student student = context.Studenti.Single(student => student.StudentId == 1);
+
+if(student.Skupina is null)
+{
+    Console.WriteLine("Skupina je zatím null.");
+}
+
+context.Entry(student).Reference(student => student.Skupina).Load();
+
+if (student.Skupina is not null)
+{
+    Console.WriteLine($"Skupina {student.Skupina.SkupinaId}: {student.Skupina.Nazev}");
+}
+```
+
+#### 2. Lazy Loading
+
+Contex je možné taky nakonfigurovat, aby využíval [Lazy Loading](https://learn.microsoft.com/en-us/ef/core/querying/related-data/lazy) a načítal data automaticky, když k nim přistupujem. 

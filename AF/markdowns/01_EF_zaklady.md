@@ -6,7 +6,7 @@
 
 Entity Framework (EF) slouží k objektově relačnímu mapování. Což znamená, že můžeme pracovat s objekty v paměti a EF nám vygeneruje příkazy pro databází. Díky tomu také nejsme závislí na konkrétním typu databáze. S pomocí technologie **LINQ to Entities** (entita je třída reprezentující řádek tabulky v databázi) potom pracujeme s databází obdobným způsobem jako s objekty pomocí **LINQ to objects**.
 
-Návod pro Entity Framework: [Getting Started with EF Core](https://learn.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=netcore-cli).
+Návod pro začátečníky Entity Framework: [Getting Started with EF Core](https://learn.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=netcore-cli) a podrobný přehled: [Creating and Configuring a Model](https://learn.microsoft.com/en-us/ef/core/modeling/)
 
 V následujícím příkladu definujeme třídu Student a pomocí migrací vytvoříme Sqlite databázi.
 
