@@ -4,7 +4,60 @@
 
 ---
 
-V tomto materiálu probereme relace one to many (1 : n) a many to many (n : m).
+V tomto materiálu probereme relace one to one (1 : 1), one to many (1 : n) a many to many (n : m).
+
+## Relace One to One
+
+V následujícím příkladu si ukážeme příklad na relaci one to one. Budeme mít třídu Student a StudentCart, kdy student může mít jen jednu studentskou kartu a studentská karta bude patřit jen jednomu studentovi.
+
+V příkladu bude `Student` hlavní entita a `StudentCart` závislá entita.
+
+```csharp
+public class Student
+{
+    public int StudentId { get; set; }
+    public required string Name { get; set; } 
+    public StudentCart? StudentCart { get; set; } // Navigation Property to dependent
+
+}
+public class StudentCart
+{
+    public int StudentCartId { get; set; }
+    public required DateTime PlatnostDo { get; set; }
+    public required int StudentId { get; set; } // Cizí klíč s unique indexem
+    public Student? Student { get; set; }
+}
+```
+
+Data kontext bude vypadat následovně. Vše se nakonfiguruje s pomocí jmenných konvencí. StudentId bude cizí klíč a unique index (`CREATE UNIQUE INDEX "IX_Carts_StudentId" ON "Carts" ("StudentId")`).
+
+```csharp
+class StudentContext : DbContext
+{
+    public DbSet<Student> Students { get; set; }
+    public DbSet<StudentCart> Carts { get; set; }
+
+    public StudentContext(DbContextOptions<StudentContext> options) : base(options)
+    {
+        
+    }
+}
+```
+
+V tomto případě to není nutné, ale pro větší názornost si ukážeme jak bychom nakonfigurovali relace dle pomocí fluent API:
+
+```csharp
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<Student>()
+        .HasOne(s => s.StudentCart)
+        .WithOne(sc => sc.Student)
+        .HasForeignKey<StudentCart>(sc => sc.StudentId)
+        .IsRequired();
+
+    modelBuilder.Entity<StudentCart>().HasIndex(sc => sc.StudentId).IsUnique();
+}
+```
 
 ## Relace One to Many
 

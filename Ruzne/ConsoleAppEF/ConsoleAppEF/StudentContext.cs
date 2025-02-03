@@ -6,6 +6,8 @@ namespace ConsoleAppEF
     {
         public DbSet<Student> Studenti { get; set; }
         public DbSet<Skupina> Skupiny { get; set; }
+
+        public DbSet< MyProperty { get; set; }
     }
 
 }

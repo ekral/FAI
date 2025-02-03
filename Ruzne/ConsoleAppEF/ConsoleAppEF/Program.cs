@@ -149,6 +149,12 @@ namespace ConsoleAppEF
             }
         }
 
+        
+        static void Relace4()
+        {
+
+        }
+
         static StudentContext CreateContext()
         {
             StudentContext context = new(new DbContextOptionsBuilder<StudentContext>()

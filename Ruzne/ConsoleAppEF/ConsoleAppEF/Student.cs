@@ -21,4 +21,6 @@ namespace ConsoleAppEF
         public required string Nazev { get; set; } 
         public ICollection<Student>? Studenti { get; set; } // Navigation Property
     }
+
+
 }

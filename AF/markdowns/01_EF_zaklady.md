@@ -268,3 +268,11 @@ var jmena = context.Students
     .Select(s => s.Jmeno)
     .OrderDescending();
 ```
+
+
+---
+Úkoly:
+
+1) Vytvořte vlastní příklad na One to One relation.
+2) Vytvořte vlastní příklad na One to Many relation.
+3) Vytvořte vlastní příklad na Many to Many relation.
