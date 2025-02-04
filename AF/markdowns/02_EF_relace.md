@@ -51,7 +51,7 @@ class StudentContext : DbContext
 }
 ```
 
-V tomto případě to není nutné, ale pro větší názornost si ukážeme jak bychom nakonfigurovali relace dle pomocí fluent API:
+V tomto případě to není nutné, ale pro větší názornost si ukážeme jak bychom nakonfigurovali relace pomocí fluent API:
 
 ```csharp
 protected override void OnModelCreating(ModelBuilder modelBuilder)
