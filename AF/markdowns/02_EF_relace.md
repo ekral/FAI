@@ -12,6 +12,13 @@ V následujícím příkladu si ukážeme příklad na relaci one to one. Budeme
 
 V příkladu bude `Student` hlavní entita a `StudentCart` závislá entita.
 
+`Student` má
+- Navigation property `StudentCart`.
+
+`StudentCart`má
+- Cizí klíč `StudentId`.
+- Navigation property `Student`.
+
 ```csharp
 public class Student
 {
