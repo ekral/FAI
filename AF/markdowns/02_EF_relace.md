@@ -59,6 +59,8 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 }
 ```
 
+Poznámka: Předchozí příklad by šel vyřešit i pomocí sdíleného primárního klíče.
+
 ## Relace One to Many
 
 V následujícím příkladu budeme předpokládat, že student může být zapsaný jen v jedné studijní skupině. Student obsahuje cizí klíč `SkupinaId` a navigační property Skupina. Navigační property slouží čistě pro procházení dat a nepoužívá se pro přidání nového řádku nebo aktualizaci řádku. Pro přidání řádku nebo aktualizaci se používá cizí klíč.
