@@ -29,7 +29,7 @@ public class StudentCart
 }
 ```
 
-Vše se nakonfiguruje s pomocí jmenných konvencí. StudentId bude cizí klíč a unique index (`CREATE UNIQUE INDEX "IX_Carts_StudentId" ON "Carts" ("StudentId")`). Data kontext bude vypadat následovně:
+Vše se nakonfiguruje s pomocí jmenných konvencí. Property `StudentId` bude cizí klíč a unique index (`CREATE UNIQUE INDEX "IX_Carts_StudentId" ON "Carts" ("StudentId")`). Data kontext bude vypadat následovně:
 
 ```csharp
 class StudentContext : DbContext
