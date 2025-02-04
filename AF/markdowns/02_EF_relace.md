@@ -32,7 +32,7 @@ public class StudentCart
     public int StudentCartId { get; set; }
     public required DateTime PlatnostDo { get; set; }
     public required int StudentId { get; set; } // Cizí klíč s unique indexem
-    public Student? Student { get; set; }
+    public Student? Student { get; set; } // Navigation Property to principal entity
 }
 ```
 
