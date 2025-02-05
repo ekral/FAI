@@ -243,5 +243,13 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
     modelBuilder.Entity<StudentCart>().HasIndex(sc => sc.StudentId).IsUnique();
 }
 ```
+Poznámka: Předchozí příklad by šel vyřešit i pomocí sdíleného primárního klíče.
+
+## Relace Many to Many
+
+Relaci Many to Many si ukážeme na příkladů studntů a předmětů, kdy student má více předmětů 
 
 Poznámka: Předchozí příklad by šel vyřešit i pomocí sdíleného primárního klíče.
+
+[Basic many-to-many](https://learn.microsoft.com/en-us/ef/core/modeling/relationships/many-to-many#basic-many-to-many)
+[Many-to-many with named join table](https://learn.microsoft.com/en-us/ef/core/modeling/relationships/many-to-many#many-to-many-with-named-join-table)
