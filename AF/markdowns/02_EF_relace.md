@@ -25,7 +25,6 @@ Třída `Skupina` potom obsahuje:
 
 Jako alternativu pro konstruktor použijeme klíčové slovo `required`. Všimněte si, že navigační property `Skupina` i `Studenti` jsou **nullable**, jejich hodnota tedy může být null.
 
-
 ```csharp
 public class Student
 {
@@ -54,6 +53,19 @@ public class StudentContext(DbContextOptions<StudentContext> options) : DbContex
 }
 ```
 
+Vše se nakonfiguruje pomocí jmenných konvencí.
+
+V tomto případě to tedy není nutné, ale pro větší názornost si ukažeme jak bychom nakonfigurovali relace pomocí fluent API:
+
+```csharp
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<Student>().HasOne(s => s.Skupina).WithMany(sk => sk.Studenti).HasForeignKey(s => s.SkupinaId);
+}
+```
+
+### Nový řádek databáze
+
 V následujících příkladech probereme vytvoření řádku s relacemi a načtení dat pomocí dvou ruzných způsobů. Aby byl kód přehlednější, tak si nadefinujeme pomocnou metodu pro vytváření DbContextu:
 
 ```csharp
@@ -66,10 +78,7 @@ static StudentContext CreateContext()
 }
 ```
 
-### Nový řádek databáze
-
 V následujícím kódu vytvoříme jednu skupinu, do které přidáme dva studenty. Všimněte si, že zadáváme rovnou hodnoty primárních klíčů. Důležité z hlediska relací je, že zadáváme hodnotu cizího klíče `SkupinaId`. Hodnoty navigačních propert nezadáváme.
-
 
 ```csharp
 using StudentContext context = CreateContext();
@@ -171,18 +180,18 @@ if (student.Skupina is not null)
 
 #### 2. Lazy Loading
 
-Contex je možné taky nakonfigurovat, aby využíval [Lazy Loading](https://learn.microsoft.com/en-us/ef/core/querying/related-data/lazy) a načítal data automaticky, když k nim přistupujem. 
+Contex je možné taky nakonfigurovat, aby využíval [Lazy Loading](https://learn.microsoft.com/en-us/ef/core/querying/related-data/lazy) a načítal data automaticky, když k nim přistupujeme. 
 
 ## Relace One to One
 
-V následujícím příkladu si ukážeme příklad na relaci one to one. Budeme mít třídu Student a StudentCart, kdy student může mít jen jednu studentskou kartu a studentská karta bude patřit jen jednomu studentovi.
+V následujícím příkladu si ukážeme příklad na relaci one to one. Budeme mít třídu `Student` a `StudentCart`, kdy student může mít jen jednu studentskou kartu a studentská karta může patřit jen jednomu studentovi.
 
 V příkladu bude `Student` hlavní entita a `StudentCart` závislá entita.
 
 `Student` má
 - Navigation property `StudentCart`.
 
-`StudentCart`má
+`StudentCart` má
 - Cizí klíč `StudentId`.
 - Navigation property `Student`.
 
@@ -203,8 +212,6 @@ public class StudentCart
 }
 ```
 
-Vše se nakonfiguruje s pomocí jmenných konvencí. Property `StudentId` bude cizí klíč a unique index (`CREATE UNIQUE INDEX "IX_Carts_StudentId" ON "Carts" ("StudentId")`). 
-
 Data kontext bude vypadat následovně:
 
 ```csharp
@@ -220,7 +227,9 @@ class StudentContext : DbContext
 }
 ```
 
-V tomto případě to není nutné, ale pro větší názornost si ukážeme jak bychom nakonfigurovali relace pomocí fluent API:
+Vše se nakonfiguruje s pomocí jmenných konvencí. Property `StudentId` bude cizí klíč a unique index (`CREATE UNIQUE INDEX "IX_Carts_StudentId" ON "Carts" ("StudentId")`). 
+
+V tomto případě to tedy není nutné, ale pro větší názornost si opět ukažeme jak bychom nakonfigurovali relace pomocí fluent API:
 
 ```csharp
 protected override void OnModelCreating(ModelBuilder modelBuilder)
