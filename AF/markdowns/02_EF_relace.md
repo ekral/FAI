@@ -367,3 +367,19 @@ class StudentContext : DbContext
 
 Použití je potom následující:
 
+```csharp
+using StudentContext context = CreateContext();
+
+if (context.Database.EnsureCreated())
+{
+    Student student = new Student() { StudentId = 1, Jmeno = "Karl" };
+    Subject subject = new Subject() { SubjectId = 1, Name = "Math" };
+    StudentSubject studentSubject = new StudentSubject() { StudentId = 1, SubjectId = 1 };                    
+    
+    context.Add(student);
+    context.Add(subject);
+    context.Add(studentSubject);
+
+    int count = context.SaveChanges();
+}
+```
