@@ -314,11 +314,53 @@ if (context.Database.EnsureCreated())
 }
 ```
 
-### Many-to-many with named join table
+### Many-to-many with class for join entity
 
-U varianty [many-to-many with named join table](https://learn.microsoft.com/en-us/ef/core/modeling/relationships/many-to-many#many-to-many-with-named-join-table) si přímo nadefinujeme propojovací třídu `StudentSubject` a označíme ji pomocí Fluent API. Výhodou je, že můžeme snadněji zadávat její hodnoty.
+U varianty [Many-to-many with class for join entity](https://learn.microsoft.com/en-us/ef/core/modeling/relationships/many-to-many#many-to-many-with-class-for-join-entity) si přímo nadefinujeme propojovací třídu `StudentSubject` a označíme ji pomocí Fluent API. Výhodou je, že můžeme snadněji zadávat její hodnoty.
 
 Budeme mít tedy následující třídy, kdy proti předchozímu příkladu přibyla třída `StudentSubject`.
 
 ```csharp
+class Student
+{
+    public int StudentId { get; set; }
+    public required string Jmeno { get; set; }
+    public List<Subject>? Subjects { get; set; }
+}
+
+class Subject
+{
+    public int SubjectId { get; set; }
+    public required string Name { get; set; }
+    public List<Student>? Students { get; set; }
+}
+
+class StudentSubject
+{
+    public int StudentId { get; set; }
+    public int SubjectId { get; set; }
+}
+```
+
+DbContext potom bude vypadat následovně. Propojovací join entita je definována metodou UsingEntity<StudentSubject>().
+
+```csharp
+class StudentContext : DbContext
+{
+    public DbSet<Student> Studenti { get; set; }
+    public DbSet<Subject> Subjects { get; set; }
+
+    public StudentContext(DbContextOptions<StudentContext> options) : base(options)
+    {
+        
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Student>()
+            .HasMany(student => student.Subjects)
+            .WithMany(skupina => skupina.Students)
+            .UsingEntity<StudentSubject>();
+    }
+}
 ```
