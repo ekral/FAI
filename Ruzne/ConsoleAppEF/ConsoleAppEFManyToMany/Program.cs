@@ -13,7 +13,6 @@ namespace ConsoleAppEFManyToMany
     {
         public int SubjectId { get; set; }
         public required string Name { get; set; }
-
         public List<Student>? Students { get; set; }
     }
 
@@ -54,11 +53,9 @@ namespace ConsoleAppEFManyToMany
                 Student student = new Student() { StudentId = 1, Jmeno = "Karl" };
                 Subject subject = new Subject() { SubjectId = 1, Name = "Math" };
 
-                context.Add(student);
-                context.Add(subject);
-
                 student.Subjects = [subject];
-                subject.Students = [student];
+                
+                context.Add(student);
 
                 int count = context.SaveChanges();
             }
