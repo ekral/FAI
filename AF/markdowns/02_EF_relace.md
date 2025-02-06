@@ -254,7 +254,7 @@ Relaci many to many si ukážeme na příkladů studentů a předmětů, kdy stu
 
 ### Basic many to many
 
-Nejprve si ukážeme variantu [Basic many-to-many](https://learn.microsoft.com/en-us/ef/core/modeling/relationships/many-to-many#basic-many-to-many)
+Nejprve si ukážeme variantu [basic many-to-many](https://learn.microsoft.com/en-us/ef/core/modeling/relationships/many-to-many#basic-many-to-many).
 
 Definujeme si třídy `Student` a `Subject`. 
 
@@ -294,7 +294,7 @@ class StudentContext : DbContext
     }
 }
 ```
-A to je vše co potřebujeme, dle jmenných konvencí vytvoří entity framework vytvoří propojovací tabulku `StudentSubject` v databázi automaticky.
+A to je vše co potřebujeme. Entity framework dle jmenných konvencí vytvoří v databází propojovací tabulku `StudentSubject` automaticky.
 
 Nový záznam vytoříme například následujícím způsobem. Všimněte si, že subject nepřidáváme do tabulky, ale jen do navigation property `student.Subjects`, ale i tak se subject přidá do tabulky `Subjects` a také se přidá záznam do tabulky `StudentSubject`. 
 
@@ -316,7 +316,7 @@ if (context.Database.EnsureCreated())
 
 ### Many-to-many with class for join entity
 
-U varianty [Many-to-many with class for join entity](https://learn.microsoft.com/en-us/ef/core/modeling/relationships/many-to-many#many-to-many-with-class-for-join-entity) si přímo nadefinujeme propojovací třídu `StudentSubject` a označíme ji pomocí Fluent API. Výhodou je, že můžeme snadněji zadávat její hodnoty.
+U varianty [many-to-many with class for join entity](https://learn.microsoft.com/en-us/ef/core/modeling/relationships/many-to-many#many-to-many-with-class-for-join-entity) si přímo nadefinujeme propojovací třídu `StudentSubject` a označíme ji pomocí Fluent API. Výhodou je, že můžeme snadněji zadávat její hodnoty.
 
 Budeme mít tedy následující třídy, kdy proti předchozímu příkladu přibyla třída `StudentSubject`.
 
@@ -342,7 +342,7 @@ class StudentSubject
 }
 ```
 
-DbContext potom bude vypadat následovně. Propojovací join entita je definována metodou UsingEntity<StudentSubject>().
+DbContext potom bude vypadat následovně. Propojovací join entita je definována metodou `UsingEntity<StudentSubject>()`.
 
 ```csharp
 class StudentContext : DbContext
@@ -364,3 +364,6 @@ class StudentContext : DbContext
     }
 }
 ```
+
+Použití je potom následující:
+

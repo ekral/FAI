@@ -31,8 +31,15 @@ namespace ConsoleAppEFManyToMany
         {
             
         }
-    }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Student>()
+                .HasMany(student => student.Subjects)
+                .WithMany(skupina => skupina.Students)
+                .UsingEntity<StudentSubject>();
+        }
+    }
 
     internal class Program
     {
@@ -52,10 +59,11 @@ namespace ConsoleAppEFManyToMany
             {
                 Student student = new Student() { StudentId = 1, Jmeno = "Karl" };
                 Subject subject = new Subject() { SubjectId = 1, Name = "Math" };
-
-                student.Subjects = [subject];
+                StudentSubject studentSubject = new StudentSubject() { StudentId = 1, SubjectId = 1 };                    
                 
                 context.Add(student);
+                context.Add(subject);
+                context.Add(studentSubject);
 
                 int count = context.SaveChanges();
             }
