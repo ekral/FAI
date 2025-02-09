@@ -1,0 +1,43 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:Avalonia.FormApp"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Avalonia.FormApp.MainWindow"
+        x:DataType="vm:MainWindow"
+        Title="Avalonia.FormApp">
+    <Border BorderBrush="Blue" BorderThickness="1">
+        <Grid RowDefinitions="Auto, Auto, Auto, *" 
+              ColumnDefinitions="Auto, *" >
+            <TextBox Grid.Row="0" Grid.Column="0" 
+                     x:Name="textBoxName"
+                     MinWidth="256"
+                     Text="William" />
+            <TextBox Grid.Row="0" Grid.Column="1" 
+                     x:Name="textBoxSurname"
+                     MinWidth="256"
+                     HorizontalAlignment="Left"
+                     Text="O'Neill" />
+            <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                       x:Name="textBlockSelected"
+                       MinHeight="20" />
+            <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                    Content="Add"
+                    Click="Button_OnClick"/>
+            <ListBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                     SelectionChanged="SelectingItemsControl_OnSelectionChanged"
+                     Items="{CompiledBinding Students}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{CompiledBinding Name}"/>
+                            <TextBlock Text="{CompiledBinding Surname}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+    </Border>
+        
+</Window>

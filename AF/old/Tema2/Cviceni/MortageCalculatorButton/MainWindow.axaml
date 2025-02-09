@@ -1,0 +1,27 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:dd="clr-namespace:Avalonia.MortageCalculatorButton"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Avalonia.MortageCalculatorButton.MainWindow"
+        Title="Avalonia.MortageCalculatorButton">
+    <Design.DataContext>
+        <dd:ViewModel/>
+    </Design.DataContext>
+    
+    <StackPanel>
+        <TextBlock Text="Loan Amount"/>
+        <NumericUpDown Value="{Binding LoanAmount}"/>
+        
+        <TextBlock Text="Interest Rate"/>
+        <NumericUpDown Value="{Binding InterestRate}"/>
+        
+        <TextBlock Text="Loan Term"/>
+        <NumericUpDown Value="{Binding LoanTerm}"/>
+        
+        <Button Content="Calculate" Command="{Binding Calculate}"/>
+        
+        <TextBlock Text="{Binding MonthlyPayment, StringFormat='Monthly Payment: {0:C2}'}"/>
+    </StackPanel>
+</Window>
