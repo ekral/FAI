@@ -10,9 +10,9 @@ V tomto materiálu probereme relace one to many (1 : n), one to one (1 : 1),  a 
 U relací v Entity Frameworku rozlišujeme:
 
 - **Cizí klíč** který slouží pro definici relace a ukládá se do databáze.
-- **Navigační property** a to buď jako referenci nebo kolekci referencí, která slouží pro procházení objektů v paměti a neukládá se do databáze.
+- **Navigační property** a to buď jako referenci nebo kolekci referencí, která slouží především pro procházení objektů v paměti.
 
-## Relace One to Many
+## Relace one to many
 
 V následujícím příkladu budeme mít studenty a studijní skupiny a budeme předpokládat, že student může být zapsaný jen v jedné studijní skupině. 
 
@@ -60,7 +60,10 @@ V tomto případě to tedy není nutné, ale pro větší názornost si ukažeme
 ```csharp
 protected override void OnModelCreating(ModelBuilder modelBuilder)
 {
-    modelBuilder.Entity<Student>().HasOne(s => s.Skupina).WithMany(sk => sk.Studenti).HasForeignKey(s => s.SkupinaId);
+    modelBuilder.Entity<Student>()
+                .HasOne(s => s.Skupina)
+                .WithMany(sk => sk.Studenti)
+                .HasForeignKey(s => s.SkupinaId);
 }
 ```
 
@@ -178,11 +181,11 @@ if (student.Skupina is not null)
 }
 ```
 
-#### 2. Lazy Loading
+#### 2. Lazy loading
 
 Contex je možné taky nakonfigurovat, aby využíval [Lazy Loading](https://learn.microsoft.com/en-us/ef/core/querying/related-data/lazy) a načítal data automaticky, když k nim přistupujeme. 
 
-## Relace One to One
+## Relace one to one
 
 V následujícím příkladu si ukážeme příklad na relaci one to one. Budeme mít třídu `Student` a `StudentCart`, kdy student může mít jen jednu studentskou kartu a studentská karta může patřit jen jednomu studentovi.
 
@@ -245,11 +248,138 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 ```
 Poznámka: Předchozí příklad by šel vyřešit i pomocí sdíleného primárního klíče.
 
-## Relace Many to Many
+## Relace many to many
 
-Relaci Many to Many si ukážeme na příkladů studntů a předmětů, kdy student má více předmětů 
+Relaci many to many si ukážeme na příkladů studentů a předmětů, kdy student má více předmětů a předmět může mít více studentů.
 
-Poznámka: Předchozí příklad by šel vyřešit i pomocí sdíleného primárního klíče.
+### Basic many to many
 
-[Basic many-to-many](https://learn.microsoft.com/en-us/ef/core/modeling/relationships/many-to-many#basic-many-to-many)
-[Many-to-many with named join table](https://learn.microsoft.com/en-us/ef/core/modeling/relationships/many-to-many#many-to-many-with-named-join-table)
+Nejprve si ukážeme variantu [basic many-to-many](https://learn.microsoft.com/en-us/ef/core/modeling/relationships/many-to-many#basic-many-to-many).
+
+Definujeme si třídy `Student` a `Subject`. 
+
+`Student` má:
+- Collection navigation property `Subjects`.
+
+`Subject` má:
+- Collection navigation property `Students`.
+
+
+```csharp
+class Student
+{
+    public int StudentId { get; set; }
+    public required string Jmeno { get; set; }
+    public List<Subject>? Subjects { get; set; }
+}
+
+class Subject
+{
+    public int SubjectId { get; set; }
+    public required string Name { get; set; }
+    public List<Student>? Students { get; set; }
+}
+```
+DbContext bud vypadat následovně:
+
+```csharp
+class StudentContext : DbContext
+{
+    public DbSet<Student> Studenti { get; set; }
+    public DbSet<Subject> Subjects { get; set; }
+
+    public StudentContext(DbContextOptions<StudentContext> options) : base(options)
+    {
+        
+    }
+}
+```
+A to je vše co potřebujeme. Entity framework dle jmenných konvencí vytvoří v databází propojovací tabulku `StudentSubject` automaticky.
+
+Nový záznam vytoříme například následujícím způsobem. Všimněte si, že subject nepřidáváme do tabulky, ale jen do navigation property `student.Subjects`, ale i tak se subject přidá do tabulky `Subjects` a také se přidá záznam do tabulky `StudentSubject`. 
+
+```csharp
+using StudentContext context = CreateContext();
+
+if (context.Database.EnsureCreated())
+{
+    Student student = new Student() { StudentId = 1, Jmeno = "Karl" };
+    Subject subject = new Subject() { SubjectId = 1, Name = "Math" };
+
+    student.Subjects = [subject];
+    
+    context.Add(student);
+
+    int count = context.SaveChanges();
+}
+```
+
+### Many-to-many with class for join entity
+
+U varianty [many-to-many with class for join entity](https://learn.microsoft.com/en-us/ef/core/modeling/relationships/many-to-many#many-to-many-with-class-for-join-entity) si přímo nadefinujeme propojovací třídu `StudentSubject` a označíme ji pomocí Fluent API. Výhodou je, že můžeme snadněji zadávat její hodnoty.
+
+Budeme mít tedy následující třídy, kdy proti předchozímu příkladu přibyla třída `StudentSubject`.
+
+```csharp
+class Student
+{
+    public int StudentId { get; set; }
+    public required string Jmeno { get; set; }
+    public List<Subject>? Subjects { get; set; }
+}
+
+class Subject
+{
+    public int SubjectId { get; set; }
+    public required string Name { get; set; }
+    public List<Student>? Students { get; set; }
+}
+
+class StudentSubject
+{
+    public int StudentId { get; set; }
+    public int SubjectId { get; set; }
+}
+```
+
+DbContext potom bude vypadat následovně. Propojovací join entita je definována metodou `UsingEntity<StudentSubject>()`.
+
+```csharp
+class StudentContext : DbContext
+{
+    public DbSet<Student> Studenti { get; set; }
+    public DbSet<Subject> Subjects { get; set; }
+
+    public StudentContext(DbContextOptions<StudentContext> options) : base(options)
+    {
+        
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Student>()
+            .HasMany(student => student.Subjects)
+            .WithMany(skupina => skupina.Students)
+            .UsingEntity<StudentSubject>();
+    }
+}
+```
+
+Použití je potom následující:
+
+```csharp
+using StudentContext context = CreateContext();
+
+if (context.Database.EnsureCreated())
+{
+    Student student = new Student() { StudentId = 1, Jmeno = "Karl" };
+    Subject subject = new Subject() { SubjectId = 1, Name = "Math" };
+    StudentSubject studentSubject = new StudentSubject() { StudentId = 1, SubjectId = 1 };                    
+    
+    context.Add(student);
+    context.Add(subject);
+    context.Add(studentSubject);
+
+    int count = context.SaveChanges();
+}
+```
