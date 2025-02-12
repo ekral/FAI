@@ -159,6 +159,7 @@ namespace ConsoleAppEF
         {
             StudentContext context = new(new DbContextOptionsBuilder<StudentContext>()
                                                     .UseSqlite("Data Source=studenti.db")
+                                                    .LogTo(Console.WriteLine)
                                                     .Options);
             return context;
         }

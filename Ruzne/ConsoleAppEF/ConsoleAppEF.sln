@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppEF", "ConsoleAppEF\ConsoleAppEF.csproj", "{EB3583CC-E9FA-4547-B231-690EB9989079}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppEFOneToMany", "ConsoleAppEF\ConsoleAppEFOneToMany.csproj", "{EB3583CC-E9FA-4547-B231-690EB9989079}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppEFOneToOne", "ConsoleAppEF2\ConsoleAppEFOneToOne.csproj", "{26006445-BDF9-4090-86D6-B9E0A987C497}"
 EndProject
