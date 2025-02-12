@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppEFOneToOne", "Con
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppEFManyToMany", "ConsoleAppEFManyToMany\ConsoleAppEFManyToMany.csproj", "{94397220-B258-4403-B750-8E9A071567F1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppAdoNet", "ConsoleAppAdoNet\ConsoleAppAdoNet.csproj", "{19B8BFA2-BD79-4636-9844-A958DF227833}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{94397220-B258-4403-B750-8E9A071567F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{94397220-B258-4403-B750-8E9A071567F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{94397220-B258-4403-B750-8E9A071567F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19B8BFA2-BD79-4636-9844-A958DF227833}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19B8BFA2-BD79-4636-9844-A958DF227833}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19B8BFA2-BD79-4636-9844-A958DF227833}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19B8BFA2-BD79-4636-9844-A958DF227833}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
