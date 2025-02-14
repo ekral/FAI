@@ -1,6 +1,6 @@
 # Načítání vtipů
 
-Vytvořte program v jayzce C#, který 
+Vytvořte konzolovou aplikaci v jazyce C#, která
 
 1) Stáhne vtip z web API, umožní uživateli ho ohodnotit 1-5 a uloží vtip a hodnocení do souboru.
 2) Uživatel zvolí hodnocení vtipů. A program načte vtipy ze souboru dle zvoleného hodnocení.
