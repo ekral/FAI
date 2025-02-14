@@ -5,18 +5,14 @@ namespace MojePrvniAplikace
         // Zadavani hodnoceni jako metodu
         static int ZadejHodnoceni()
         {
-            Console.WriteLine("Zadej hodnocení 1-5:");
-            string? hodnoceniRetezec = Console.ReadLine();
-
-            if (int.TryParse(hodnoceniRetezec, out int hodnoceni))
+            int hodnoceni;
+        
+            while(!int.TryParse(Console.ReadLine(), out hodnoceni) || hodnoceni < 1 || hodnoceni > 5)
             {
-                if (hodnoceni > 0 && hodnoceni <= 5)
-                {
-                    return hodnoceni;
-                } 
+                Console.WriteLine("Zadej cislo 1 az 5");
             }
-
-            return -1;
+        
+            return hodnoceni;
         }
 
         static async Task Main(string[] args)
