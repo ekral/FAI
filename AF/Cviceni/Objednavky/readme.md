@@ -16,4 +16,5 @@ Vytvořte následující menu:
 2. Vloz noveho zakaznika.
 3. Vloz novou objednavku.
 4. Vypis objednavky vcetne jmena zakaznika.
+
 k. konec.
