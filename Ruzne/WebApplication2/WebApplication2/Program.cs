@@ -1,3 +1,19 @@
+using Microsoft.EntityFrameworkCore;
+
+public class Student
+{
+    public int StudentId { get; set; }
+}
+
+public class StudentContext : DbContext
+{
+    public DbSet<Student> Studenti { get; set; }
+
+    //public StudentContext(DbContextOptions<StudentContext> options) : base(options)
+    //{
+
+    //}
+}
 
 namespace WebApplication2
 {
@@ -9,10 +25,11 @@ namespace WebApplication2
 
             // Add services to the container.
             builder.Services.AddAuthorization();
+            builder.Services.AddDbContext<StudentContext>(op => op.UseSqlite(""));
 
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
-
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
