@@ -59,6 +59,7 @@ namespace WebApplication2
             })
             .WithName("GetWeatherForecast");
 
+            IResult
             app.Run();
         }
     }
