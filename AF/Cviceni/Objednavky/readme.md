@@ -12,7 +12,7 @@ Vytvořte konzolovou aplikaci pro tvorbu objednávek. Použijte raw SQL příkaz
  
 Vytvořte následující menu:
   
-1 Vytvor databazi.
+1 Vytvor databazi a tabulky.
 
 2 Vloz noveho zakaznika.
 
