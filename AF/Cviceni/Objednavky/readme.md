@@ -14,9 +14,9 @@ Vytvořte následující menu:
   
 1 Vytvor databazi a tabulky.
 
-2 Vloz noveho zakaznika.
+2 Pridej noveho zakaznika.
 
-3 Vloz novou objednavku.
+3 Pridej novou objednavku.
 
 4 Vypis objednavky vcetne jmena zakaznika.
 
