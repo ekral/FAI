@@ -21,20 +21,20 @@ namespace Students.WebAPI
 
             var app = builder.Build();
 
-            using (var scope = app.Services.CreateScope())
-            {
-                var context = scope.ServiceProvider.GetRequiredService<StudentContext>();
+            //using (var scope = app.Services.CreateScope())
+            //{
+            //    var context = scope.ServiceProvider.GetRequiredService<StudentContext>();
            
-                if (context is not null && await context.Database.EnsureCreatedAsync())
-                {
-                    await context.AddRangeAsync(
-                        new Student() { Jmeno = "Jiri", Studuje = true },
-                        new Student() { Jmeno = "Karel", Studuje = false },
-                        new Student() { Jmeno = "Alena", Studuje = true });
+            //    if (context is not null && await context.Database.EnsureCreatedAsync())
+            //    {
+            //        await context.AddRangeAsync(
+            //            new Student() { Jmeno = "Jiri", Studuje = true },
+            //            new Student() { Jmeno = "Karel", Studuje = false },
+            //            new Student() { Jmeno = "Alena", Studuje = true });
 
-                    await context.SaveChangesAsync();
-                }
-            }
+            //        await context.SaveChangesAsync();
+            //    }
+            //}
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
