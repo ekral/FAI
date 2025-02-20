@@ -16,6 +16,7 @@ https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/response
 
 https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/parameter-binding?view=aspnetcore-9.0
 
+https://localhost:7042/openapi/v1.json
 
 Následující kód vrátí na metodu GET text "Hello World". Představuje nejjednodušší program v Minimal Web API.
 
@@ -24,13 +25,10 @@ var builder = WebApplication.CreateBuilder();
 
 var app = builder.Build();
 
-app.MapGet("/", () => $"Hello World.");
+app.MapGet("/", () => "Hello World.");
 
 app.Run();
 ```
-
-
-
 
 ```csharp
 public class Student
@@ -40,3 +38,5 @@ public class Student
     public required bool Studuje {get;set;}
 }
 ```
+
+
