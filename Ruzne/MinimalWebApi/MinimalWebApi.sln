@@ -1,11 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35806.99 d17.13
+VisualStudioVersion = 17.13.35806.99
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinimalWebApi", "MinimalWebApi\MinimalWebApi.csproj", "{7288026B-E99C-4365-8D64-C73B29A17DF4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleClient", "ConsoleClient\ConsoleClient.csproj", "{BE34DC29-6326-4CD9-9183-D2F7EA82898B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Studenti.Models", "Studenti.Models\Studenti.Models.csproj", "{15D422A1-496F-44A1-87C7-4E0AFBA6D97E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Studenti.Seeder", "Studenti.Seeder\Studenti.Seeder.csproj", "{3FA2BCCE-F576-4F4B-B82B-F08FF58E03C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{BE34DC29-6326-4CD9-9183-D2F7EA82898B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE34DC29-6326-4CD9-9183-D2F7EA82898B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE34DC29-6326-4CD9-9183-D2F7EA82898B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15D422A1-496F-44A1-87C7-4E0AFBA6D97E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15D422A1-496F-44A1-87C7-4E0AFBA6D97E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15D422A1-496F-44A1-87C7-4E0AFBA6D97E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15D422A1-496F-44A1-87C7-4E0AFBA6D97E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FA2BCCE-F576-4F4B-B82B-F08FF58E03C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FA2BCCE-F576-4F4B-B82B-F08FF58E03C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FA2BCCE-F576-4F4B-B82B-F08FF58E03C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FA2BCCE-F576-4F4B-B82B-F08FF58E03C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
