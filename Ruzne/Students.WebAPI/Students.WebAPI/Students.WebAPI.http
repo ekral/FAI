@@ -20,7 +20,7 @@ POST {{Students.WebAPI_HostAddress}}/
 Content-Type: application/json
 
 {
-  "studentId": 1,
+  "studentId": 0,
   "jmeno": "Lenka",
   "studuje": true
 }
