@@ -1,3 +1,4 @@
+
 using Microsoft.Data.Sqlite;
 using System.Runtime.InteropServices;
 
@@ -162,12 +163,17 @@ namespace MojeDruhaAplikace
                         await VytvorDatabaziAsync();
                         break;
                     case "2":
-                        Console.WriteLine("Zadej jmeno");
-                        string? jmeno = Console.ReadLine();
-                        if (jmeno != null)
+                        Console.WriteLine("Zadej jmeno:");
+                        
+                        string? jmeno;
+                        
+                        while((jmeno = Console.ReadLine()) is null || string.IsNullOrWhiteSpace(jmeno))
                         {
-                            await PridejZakaznika(jmeno);
+                            Console.WriteLine("Neplatny format jmena");
                         }
+
+                        await PridejZakaznika(jmeno);
+                        
                         break;
                     case "3":
                         Console.WriteLine("Zadej cenu:");
