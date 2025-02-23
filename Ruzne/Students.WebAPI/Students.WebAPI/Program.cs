@@ -46,7 +46,13 @@ namespace Students.WebAPI
 
             app.UseAuthorization();
 
-            app.MapGet("/", WebApiVersion1.GetAllStudents);
+            app.MapPost("/Seed", WebApiVersion1.Seed);
+            app.MapGet("/getallstudents", WebApiVersion1.GetAllStudents);
+            app.MapGet("/getactiveStudents", WebApiVersion1.GetActiveStudents);
+            app.MapGet("/getstudent/{id}", WebApiVersion1.GetStudent);
+            app.MapPost("/", WebApiVersion1.CreateStudent);
+            app.MapPut("/{id}", WebApiVersion1.UpdateTodo);
+            app.MapDelete("/{id}", WebApiVersion1.DeleteStudent);
 
             app.Run();
         }
@@ -54,7 +60,7 @@ namespace Students.WebAPI
 
     public static class WebApiVersion1
     {
-        public static async Task<IResult> Init(StudentContext context)
+        public static async Task<IResult> Seed(StudentContext context)
         {
             if (await context.Database.EnsureCreatedAsync())
             {
@@ -73,5 +79,65 @@ namespace Students.WebAPI
         {
             return TypedResults.Ok(await context.Studenti.ToArrayAsync());
         }
+
+        public static async Task<Ok<Student[]>> GetActiveStudents(StudentContext context)
+        {
+            return TypedResults.Ok(await context.Studenti.Where(s => s.Studuje).ToArrayAsync());
+        }
+
+        public static async Task<Results<Ok<Student>, NotFound>> GetStudent(int id, StudentContext context)
+        {
+            Student? student = await context.Studenti.FindAsync(id);
+
+            if(student is not null)
+            {
+                return TypedResults.Ok(student);
+            }
+            else
+            {
+                return TypedResults.NotFound();
+            }
+        }
+
+        public static async Task<Created<Student>> CreateStudent(Student student, StudentContext context)
+        {
+            context.Add(student);
+
+            await context.SaveChangesAsync();
+
+            return TypedResults.Created($"/getstudent/{student.StudentId}", student);
+        }
+        
+        public static async Task<Results<NotFound, NoContent>> UpdateTodo(int id, Student inputStudent, StudentContext context)
+        {
+            Student? student = await context.Studenti.FindAsync(id);
+
+            if(student is null)
+            {
+                return TypedResults.NotFound();
+            }
+
+            student.Jmeno = inputStudent.Jmeno;
+            student.Studuje = inputStudent.Studuje;
+
+            await context.SaveChangesAsync();
+
+            return TypedResults.NoContent();
+        }
+
+        public static async Task<IResult> DeleteStudent(int id, StudentContext context)
+        {
+            if(await context.Studenti.FindAsync(id) is Student student)
+            {
+                context.Remove(student);
+
+                await context.SaveChangesAsync();
+
+                return TypedResults.NoContent();
+            }
+
+            return TypedResults.NotFound();
+        }
+
     }
 }

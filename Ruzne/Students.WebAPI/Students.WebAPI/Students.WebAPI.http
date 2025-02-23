@@ -1,6 +1,42 @@
-@Students.WebAPI_HostAddress = http://localhost:5062
+@Students.WebAPI_HostAddress = https://localhost:7042
 
-GET {{Students.WebAPI_HostAddress}}/weatherforecast/
-Accept: application/json
+POST {{Students.WebAPI_HostAddress}}/Seed
+
+###
+
+GET {{Students.WebAPI_HostAddress}}/GetAllStudents
+
+###
+
+GET {{Students.WebAPI_HostAddress}}/GetActiveStudents
+
+###
+
+GET {{Students.WebAPI_HostAddress}}/GetStudent/1
+
+###
+
+POST {{Students.WebAPI_HostAddress}}/
+Content-Type: application/json
+
+{
+  "studentId": 1,
+  "jmeno": "Lenka",
+  "studuje": true
+}
+
+###
+
+PUT {{Students.WebAPI_HostAddress}}/1
+Content-Type: application/json
+
+{
+  "studentId": 0,
+  "jmeno": "Novy",
+  "studuje": true
+}
+###
+
+DELETE {{Students.WebAPI_HostAddress}}/1
 
 ###
