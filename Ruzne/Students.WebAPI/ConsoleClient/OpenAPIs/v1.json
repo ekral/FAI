@@ -1,0 +1,35 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Students.WebAPI | v1",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://localhost:7042"
+    },
+    {
+      "url": "http://localhost:5062"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": [
+          "WebApiVersion1"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": { },
+  "tags": [
+    {
+      "name": "WebApiVersion1"
+    }
+  ]
+}

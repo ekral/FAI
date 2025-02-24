@@ -1,49 +1,46 @@
-using Microsoft.Data.Sqlite;
-using System.Numerics;
-using System.Runtime.InteropServices.Marshalling;
 
-namespace MujPatyProjekt
+using Microsoft.Data.Sqlite;
+using System.Runtime.InteropServices;
+
+namespace MojeDruhaAplikace
 {
     internal class Program
     {
         static string GetConnectionString()
         {
-            return "Data Source=objednavky.db";
+            return "DataSource=databaze.db";
         }
 
         static async Task VytvorDatabaziAsync()
         {
-            await using (SqliteConnection connection = new SqliteConnection(GetConnectionString()))
+            using (SqliteConnection connection = new SqliteConnection(GetConnectionString()))
             {
                 await connection.OpenAsync();
-
                 SqliteTransaction transaction = connection.BeginTransaction();
 
-                await using (SqliteCommand command = connection.CreateCommand())
+                using (SqliteCommand command = connection.CreateCommand())
                 {
-                    command.Transaction = transaction;
-
                     try
                     {
+                        command.Transaction = transaction;
+
                         command.CommandText = @"
-                        CREATE TABLE Zakaznik
-                        (
+                        CREATE TABLE Zakaznik(
                             ZakaznikId INTEGER PRIMARY KEY,
                             Jmeno TEXT
                         )
-                    ";
+                        ";
 
-                        int count = await command.ExecuteNonQueryAsync();
+                        await command.ExecuteNonQueryAsync();
 
                         command.CommandText = @"
-                        CREATE TABLE Objednavka
-                        (
+                        CREATE TABLE Objednavka(
                             ObjednavkaId INTEGER PRIMARY KEY,
-                            ZakaznikId INTEGER,
                             Cena REAL,
+                            ZakaznikId INTEGER,
                             FOREIGN KEY (ZakaznikId) REFERENCES Zakaznik(ZakaznikId)
                         )
-                    ";
+                        ";
 
                         await command.ExecuteNonQueryAsync();
 
@@ -52,27 +49,28 @@ namespace MujPatyProjekt
                     catch (Exception ex)
                     {
                         Console.WriteLine(ex.Message);
+
                         await transaction.RollbackAsync();
                     }
-
-
                 }
             }
         }
+
         static async Task PridejZakaznika(string jmeno)
         {
             await using (SqliteConnection connection = new SqliteConnection(GetConnectionString()))
             {
                 await connection.OpenAsync();
 
+
                 await using (SqliteCommand command = connection.CreateCommand())
                 {
                     command.CommandText =
                     @"
-                        INSERT INTO Zakaznik (Jmeno) 
-                        VALUES (@Jmeno) 
-                        RETURNING ZakaznikId
-                    ";
+                INSERT INTO Zakaznik (Jmeno) 
+                VALUES (@Jmeno) 
+                RETURNING ZakaznikId
+            ";
 
                     command.Parameters.Add("@Jmeno", SqliteType.Integer).Value = jmeno;
 
@@ -82,10 +80,12 @@ namespace MujPatyProjekt
                     {
                         Console.WriteLine($"ZakaznikId: {majitelId}");
                     }
+
                 }
             }
         }
-        static async Task PridejObjednavku(double cena, int id)
+
+        static async Task PridejObjednavkuAsync(double cena, int zakaznikId)
         {
             await using (SqliteConnection connection = new SqliteConnection(GetConnectionString()))
             {
@@ -95,25 +95,25 @@ namespace MujPatyProjekt
                 {
                     command.CommandText =
                     @"
-                        INSERT INTO Objednavka (ZakaznikId, Cena) 
-                        VALUES (@Id, @Cena) 
+                        INSERT INTO Objednavka (Cena, ZakaznikId) 
+                        VALUES (@Cena, @ZakaznikId) 
                         RETURNING ObjednavkaId
-                    ";
+                        ";
 
                     command.Parameters.Add("@Cena", SqliteType.Real).Value = cena;
-                    command.Parameters.Add("@Id", SqliteType.Integer).Value = id;
+                    command.Parameters.Add("@ZakaznikId", SqliteType.Integer).Value = zakaznikId;
 
                     object? result = await command.ExecuteScalarAsync();
 
-                    if (result is Int64 majitelId)
+                    if (result is Int64 objednavkaId)
                     {
-                        Console.WriteLine($"ObjednavkaId: {majitelId}");
+                        Console.WriteLine($"ObjednavkaId: {objednavkaId}");
                     }
                 }
             }
         }
 
-        static async Task VypisDatabazi()
+        public static async Task VypisObjednavkyAsync()
         {
             await using (SqliteConnection connection = new SqliteConnection(GetConnectionString()))
             {
@@ -123,68 +123,82 @@ namespace MujPatyProjekt
                 {
                     command.CommandText =
                     @"
-                        SELECT Objednavka.ObjednavkaId, Zakaznik.Jmeno, Objednavka.Cena
+                        SELECT Objednavka.Cena, Zakaznik.Jmeno
                         FROM Objednavka
                         INNER JOIN Zakaznik ON Objednavka.ZakaznikId=Zakaznik.ZakaznikId
                     ";
-
-                    SqliteDataReader reader = await command.ExecuteReaderAsync();
+                    var reader = await command.ExecuteReaderAsync();
 
                     if (reader.HasRows)
                     {
                         while (await reader.ReadAsync())
                         {
-                            int objednavkaId = reader.GetInt32(0);
-                            string jmeno = reader.GetString(1);
-                            double cena = reader.GetDouble(2);
+                            var cena = reader.GetInt32(0);
+                            var jmeno = reader.GetString(1);
 
-                            Console.WriteLine($"{objednavkaId} {jmeno} {cena}");
+                            Console.WriteLine($"Objednavka | Cena: {cena} | Zakaznik: {jmeno}");
                         }
                     }
                 }
             }
+
         }
         static async Task Main(string[] args)
         {
             bool konec = false;
-
             do
             {
-                Console.WriteLine("Menu:");
-                Console.WriteLine("1 - Vytvor databazi");
-                Console.WriteLine("2 - Vloz noveho zakaznika");
-                Console.WriteLine("3 - Vloz novou objednavku");
-                Console.WriteLine("4 - Vypis objednavky vcetne jmena zakaznika");
-                Console.WriteLine("k - konec");
+                Console.WriteLine("1 Vytvořit databazi");
+                Console.WriteLine("2 Přidej nového zakaznika");
+                Console.WriteLine("3 Přidej novou objednávku");
+                Console.WriteLine("4 Vypis objednavky vcetne jmena zakaznika.");
+                Console.WriteLine("k konec");
 
                 string? volba = Console.ReadLine();
-                
+
+
                 switch (volba)
                 {
                     case "1":
                         await VytvorDatabaziAsync();
                         break;
                     case "2":
-                        Console.WriteLine("Zadej jmeno");
-                        string? jmeno = Console.ReadLine();
-
-                        if (jmeno is not null)
+                        Console.WriteLine("Zadej jmeno:");
+                        
+                        string? jmeno;
+                        
+                        while((jmeno = Console.ReadLine()) is null || string.IsNullOrWhiteSpace(jmeno))
                         {
-                            await PridejZakaznika(jmeno);
+                            Console.WriteLine("Neplatny format jmena");
                         }
-                        break;
-                    case "3":
-                        Console.WriteLine("Zadej cenu");
-                        double cena = double.Parse(Console.ReadLine());
-                        Console.WriteLine("Zadej id zakaznika");
-                        int id = int.Parse(Console.ReadLine());
 
-                        await PridejObjednavku(cena,id);
+                        await PridejZakaznika(jmeno);
                         
                         break;
-                    case "4":
-                        await VypisDatabazi();
+                    case "3":
+                        Console.WriteLine("Zadej cenu:");
 
+                        double cena;
+                            
+                        while(!double.TryParse(Console.ReadLine(), out cena))
+                        {
+                            Console.WriteLine("Neplatny format ceny");
+                        }
+
+                        Console.WriteLine("Zadej id Zakaznika:");
+
+                        int zakaznikId;
+                        
+                        while(!int.TryParse(Console.ReadLine(), out zakaznikId))
+                        {
+                            Console.WriteLine("Neplatny format id");
+                        }
+
+                        await PridejObjednavkuAsync(cena, zakaznikId);
+
+                        break;
+                    case "4":
+                        await VypisObjednavkyAsync();
                         break;
                     case "k":
                         konec = true;
@@ -193,8 +207,9 @@ namespace MujPatyProjekt
                         Console.WriteLine("Neplatna volba");
                         break;
                 }
-            }
-            while (!konec);
+
+            } while (!konec);
         }
     }
 }
+    
