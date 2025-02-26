@@ -46,13 +46,15 @@ namespace Students.WebAPI
 
             app.UseAuthorization();
 
-            app.MapPost("/Seed", WebApiVersion1.Seed);
-            app.MapGet("/getallstudents", WebApiVersion1.GetAllStudents);
-            app.MapGet("/getactiveStudents", WebApiVersion1.GetActiveStudents);
-            app.MapGet("/getstudent/{id}", WebApiVersion1.GetStudent);
-            app.MapPost("/", WebApiVersion1.CreateStudent);
-            app.MapPut("/{id}", WebApiVersion1.UpdateTodo);
-            app.MapDelete("/{id}", WebApiVersion1.DeleteStudent);
+            var studentItems = app.MapGroup("/Students");
+
+            studentItems.MapPost("/Seed", WebApiVersion1.Seed);
+            studentItems.MapGet("/GetAllStudents", WebApiVersion1.GetAllStudents);
+            studentItems.MapGet("/GetActiveStudents", WebApiVersion1.GetActiveStudents);
+            studentItems.MapGet("/GetStudent/{id}", WebApiVersion1.GetStudent);
+            studentItems.MapPost("/", WebApiVersion1.CreateStudent);
+            studentItems.MapPut("/{id}", WebApiVersion1.UpdateTodo);
+            studentItems.MapDelete("/{id}", WebApiVersion1.DeleteStudent);
 
             app.Run();
         }
@@ -60,8 +62,10 @@ namespace Students.WebAPI
 
     public static class WebApiVersion1
     {
-        public static async Task<IResult> Seed(StudentContext context)
+        public static async Task<Created> Seed(StudentContext context)
         {
+            await context.Database.EnsureDeletedAsync();
+
             if (await context.Database.EnsureCreatedAsync())
             {
                 await context.AddRangeAsync(
@@ -72,7 +76,7 @@ namespace Students.WebAPI
                 await context.SaveChangesAsync();
             }
 
-            return TypedResults.NoContent();
+            return TypedResults.Created();
         }
 
         public static async Task<Ok<Student[]>> GetAllStudents(StudentContext context)
@@ -105,7 +109,7 @@ namespace Students.WebAPI
 
             await context.SaveChangesAsync();
 
-            return TypedResults.Created($"/getstudent/{student.StudentId}", student);
+            return TypedResults.Created($"/Students/GetStudent/{student.StudentId}", student);
         }
         
         public static async Task<Results<NotFound, NoContent>> UpdateTodo(int id, Student inputStudent, StudentContext context)
