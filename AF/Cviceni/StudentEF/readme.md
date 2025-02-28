@@ -11,9 +11,10 @@ Student bude mít sloupce:
 
 Vytvořte metody pro:
 - Seed databáze - vytvoří databází a vloží výchozí studenty.
+- AddStudent - vloží nového studenta do databáze a vypíše jeho přiřazený primární klíč.
 - GetAllStudents - vrátí všechny studenty.
 - GetActiveStudents - vrátí studenty, kteří mají Studuje true.
-- AddStudent - vloží nového studenta do databáze a vypíše jeho přiřazený primární klíč.
+- GetStudentById - vrátí studenta podle id.
 - UpdateStudent - změní studenta dle id v databází.
 - DeleteStudent - odstraní studenta dle id.
 
