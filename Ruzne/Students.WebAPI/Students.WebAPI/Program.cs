@@ -126,6 +126,5 @@ namespace Students.WebAPI
 
             return TypedResults.NotFound();
         }
-
     }
 }
