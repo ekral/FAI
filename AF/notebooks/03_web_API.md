@@ -18,6 +18,10 @@ https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/paramete
 
 https://localhost:7042/openapi/v1.json
 
+https://www.radzen.com/blazor-components/
+
+https://www.youtube.com/watch?v=EqSgqm4qWjo
+
 Následující kód vrátí na metodu GET text "Hello World". Představuje nejjednodušší program v Minimal Web API.
 
 ```csharp
