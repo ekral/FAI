@@ -22,6 +22,8 @@ https://www.radzen.com/blazor-components/
 
 https://www.youtube.com/watch?v=EqSgqm4qWjo
 
+https://www.youtube.com/watch?v=wCxg9oe_CtI
+
 Následující kód vrátí na metodu GET text "Hello World". Představuje nejjednodušší program v Minimal Web API.
 
 ```csharp

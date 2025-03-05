@@ -1,0 +1,20 @@
+﻿@page "/studenti"
+
+@using BlazorAppStaticSSR.Data
+@using BlazorAppStaticSSR.Models
+@using Microsoft.EntityFrameworkCore;
+
+@inject StudentContext context
+
+<PageTitle>Studenti</PageTitle>
+
+<h3>Studenti</h3>
+
+@code {
+    List<Student> studenti = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        studenti = await context.Studenti.ToListAsync();
+    }
+}
