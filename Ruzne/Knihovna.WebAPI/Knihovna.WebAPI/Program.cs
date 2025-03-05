@@ -33,18 +33,17 @@ namespace Knihovna.WebAPI
 
             app.UseAuthorization();
 
-            app.RegisterEndpoints();
+            app.MapPost("/seed", WebApiVersion1.Seed);
+
+            var bookItems = app.MapGroup("books");
+
+            bookItems.MapGet("/", WebApiVersion1.GetAllBooks);
+            bookItems.MapGet("/{id:int}", WebApiVersion1.GetBook);
+            bookItems.MapPost("/", WebApiVersion1.CreateBook);
+            bookItems.MapPut("/{id:int}", WebApiVersion1.UpdateBook);
+            bookItems.MapDelete("/{id:int}", WebApiVersion1.DeleteBook);
 
             app.Run();
-        }
-    }
-
-    static class EndpointDefinitions
-    {
-        public static void RegisterEndpoints(this WebApplication app)
-        {
-            app.MapPost("/Books/Seed", WebApiVersion1.Seed);
-            app.MapGet("/Books/GetAllBooks", WebApiVersion1.GetAllBooks);
         }
     }
 
@@ -80,5 +79,59 @@ namespace Knihovna.WebAPI
         {
             return TypedResults.Ok(await context.Knihy.ToArrayAsync());
         }
+
+        public static async Task<Results<Ok<Kniha>,NotFound>> GetBook(int id, KnihovnaContext context)
+        {
+            if(await context.Knihy.FindAsync(id) is Kniha kniha)
+            {
+                return TypedResults.Ok(kniha);
+            }
+            else
+            {
+                return TypedResults.NotFound();
+            }
+        }
+
+        public static async Task<Created<Kniha>> CreateBook(Kniha kniha, KnihovnaContext context)
+        {
+            await context.AddAsync(kniha);
+
+            await context.SaveChangesAsync();
+
+            return TypedResults.Created($"/books/{kniha.KnihaId}", kniha);
+        }
+
+        public static async Task<Results<NotFound, NoContent>> UpdateBook(int id, Kniha input, KnihovnaContext context)
+        {
+            if (await context.Knihy.FindAsync(id) is Kniha kniha)
+            {
+                kniha.Nazev = input.Nazev;
+
+                await context.SaveChangesAsync();
+
+                return TypedResults.NoContent();
+            }
+            else
+            {
+                return TypedResults.NotFound();
+            }
+        }
+
+        public static async Task<Results<NotFound, NoContent>> DeleteBook(int id, KnihovnaContext context)
+        {
+            if (await context.Knihy.FindAsync(id) is Kniha kniha)
+            {
+                context.Remove(kniha);
+
+                await context.SaveChangesAsync();
+
+                return TypedResults.NoContent();
+            }
+            else
+            {
+                return TypedResults.NotFound();
+            }
+        }
+            
     }
 }

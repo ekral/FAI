@@ -1,11 +1,37 @@
 @Knihovna.WebAPI_HostAddress = https://localhost:7219
 
-
-
-GET {{Knihovna.WebAPI_HostAddress}}/Books/GetAllBooks
+POST {{Knihovna.WebAPI_HostAddress}}/Seed
 
 ###
 
-POST {{Knihovna.WebAPI_HostAddress}}/Books/Seed
+GET {{Knihovna.WebAPI_HostAddress}}/books
+
+###
+
+GET {{Knihovna.WebAPI_HostAddress}}/books/1
+
+###
+
+POST {{Knihovna.WebAPI_HostAddress}}/books
+Content-Type: application/json
+
+{
+  "knihaId": 0,
+  "nazev": "Vojna a mir"
+}
+
+###
+
+PUT {{Knihovna.WebAPI_HostAddress}}/books/1
+Content-Type: application/json
+
+{
+  "knihaId": 0,
+  "nazev": "Zlocin a trest"
+}
+
+###
+
+DELETE {{Knihovna.WebAPI_HostAddress}}/books/1
 
 ###
