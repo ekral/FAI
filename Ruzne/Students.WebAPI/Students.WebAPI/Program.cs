@@ -3,6 +3,21 @@ using Microsoft.EntityFrameworkCore;
 using Students.WebAPI.Data;
 using Students.WebAPI.Models;
 
+//using (var scope = app.Services.CreateScope())
+//{
+//    var context = scope.ServiceProvider.GetRequiredService<StudentContext>();
+
+//    if (context is not null && await context.Database.EnsureCreatedAsync())
+//    {
+//        await context.AddRangeAsync(
+//            new Student() { Jmeno = "Jiri", Studuje = true },
+//            new Student() { Jmeno = "Karel", Studuje = false },
+//            new Student() { Jmeno = "Alena", Studuje = true });
+
+//        await context.SaveChangesAsync();
+//    }
+//}
+
 namespace Students.WebAPI
 {
     public class Program
@@ -13,46 +28,17 @@ namespace Students.WebAPI
 
             builder.Services.AddDbContext<StudentContext>(opt => opt.UseSqlite("DataSource=studenti.db"));
 
-            // Add services to the container.
-            builder.Services.AddAuthorization();
-
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-            builder.Services.AddOpenApi();
-
             var app = builder.Build();
 
-            //using (var scope = app.Services.CreateScope())
-            //{
-            //    var context = scope.ServiceProvider.GetRequiredService<StudentContext>();
-           
-            //    if (context is not null && await context.Database.EnsureCreatedAsync())
-            //    {
-            //        await context.AddRangeAsync(
-            //            new Student() { Jmeno = "Jiri", Studuje = true },
-            //            new Student() { Jmeno = "Karel", Studuje = false },
-            //            new Student() { Jmeno = "Alena", Studuje = true });
+            var studentItems = app.MapGroup("/Students");
 
-            //        await context.SaveChangesAsync();
-            //    }
-            //}
-
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.MapOpenApi();
-            }
-
-            app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
-            app.MapPost("/Seed", WebApiVersion1.Seed);
-            app.MapGet("/getallstudents", WebApiVersion1.GetAllStudents);
-            app.MapGet("/getactiveStudents", WebApiVersion1.GetActiveStudents);
-            app.MapGet("/getstudent/{id}", WebApiVersion1.GetStudent);
-            app.MapPost("/", WebApiVersion1.CreateStudent);
-            app.MapPut("/{id}", WebApiVersion1.UpdateTodo);
-            app.MapDelete("/{id}", WebApiVersion1.DeleteStudent);
+            studentItems.MapPost("/Seed", WebApiVersion1.Seed);
+            studentItems.MapGet("/GetAllStudents", WebApiVersion1.GetAllStudents);
+            studentItems.MapGet("/GetActiveStudents", WebApiVersion1.GetActiveStudents);
+            studentItems.MapGet("/GetStudent/{id}", WebApiVersion1.GetStudent);
+            studentItems.MapPost("/", WebApiVersion1.CreateStudent);
+            studentItems.MapPut("/{id}", WebApiVersion1.UpdateTodo);
+            studentItems.MapDelete("/{id}", WebApiVersion1.DeleteStudent);
 
             app.Run();
         }
@@ -60,8 +46,10 @@ namespace Students.WebAPI
 
     public static class WebApiVersion1
     {
-        public static async Task<IResult> Seed(StudentContext context)
+        public static async Task<Created> Seed(StudentContext context)
         {
+            await context.Database.EnsureDeletedAsync();
+
             if (await context.Database.EnsureCreatedAsync())
             {
                 await context.AddRangeAsync(
@@ -72,7 +60,7 @@ namespace Students.WebAPI
                 await context.SaveChangesAsync();
             }
 
-            return TypedResults.NoContent();
+            return TypedResults.Created();
         }
 
         public static async Task<Ok<Student[]>> GetAllStudents(StudentContext context)
@@ -105,7 +93,7 @@ namespace Students.WebAPI
 
             await context.SaveChangesAsync();
 
-            return TypedResults.Created($"/getstudent/{student.StudentId}", student);
+            return TypedResults.Created($"/Students/GetStudent/{student.StudentId}", student);
         }
         
         public static async Task<Results<NotFound, NoContent>> UpdateTodo(int id, Student inputStudent, StudentContext context)
@@ -138,6 +126,5 @@ namespace Students.WebAPI
 
             return TypedResults.NotFound();
         }
-
     }
 }
