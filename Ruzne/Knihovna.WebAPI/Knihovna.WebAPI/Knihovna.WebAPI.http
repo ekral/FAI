@@ -1,0 +1,11 @@
+@Knihovna.WebAPI_HostAddress = https://localhost:7219
+
+
+
+GET {{Knihovna.WebAPI_HostAddress}}/Books/GetAllBooks
+
+###
+
+POST {{Knihovna.WebAPI_HostAddress}}/Books/Seed
+
+###
