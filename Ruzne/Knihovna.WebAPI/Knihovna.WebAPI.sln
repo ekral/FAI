@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35825.156 d17.13
+VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Knihovna.WebAPI", "Knihovna.WebAPI\Knihovna.WebAPI.csproj", "{0BEC3DAD-0F16-4F15-BC12-EA632592752D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Knihovna.Tests", "Knihovna.Tests\Knihovna.Tests.csproj", "{94CB4059-F613-4AF0-9F88-9FD3E78C4B9E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{0BEC3DAD-0F16-4F15-BC12-EA632592752D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BEC3DAD-0F16-4F15-BC12-EA632592752D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0BEC3DAD-0F16-4F15-BC12-EA632592752D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94CB4059-F613-4AF0-9F88-9FD3E78C4B9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94CB4059-F613-4AF0-9F88-9FD3E78C4B9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94CB4059-F613-4AF0-9F88-9FD3E78C4B9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94CB4059-F613-4AF0-9F88-9FD3E78C4B9E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

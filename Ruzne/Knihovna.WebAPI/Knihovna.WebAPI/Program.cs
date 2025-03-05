@@ -47,7 +47,7 @@ namespace Knihovna.WebAPI
         }
     }
 
-    static class WebApiVersion1
+    public static class WebApiVersion1
     {
         public static async Task<Created> Seed(KnihovnaContext context)
         {
