@@ -228,7 +228,7 @@ DELETE {{Students.WebAPI_HostAddress}}/students/1
 
 ```
 
-### Group
+## Group
 
 Předcházející kód můžeme vylepšit, všimněte si, že v mapování se opakuje cesta "students". Abychom ji nemuseli pořád opakovat, tak můžeme využít metodu `MapGroup`:
 
@@ -243,5 +243,45 @@ studentItems.MapPut("/{id}", WebApiVersion1.UpdateStudent);
 studentItems.MapDelete("/{id}", WebApiVersion1.DeleteStudent);
 ```
 
-### OpenApi
+## Extension metoda
 
+Aby neměla metoda Main moc řádků a byla přehlednější, tak se často mapování endpointů přesouvá do [extension metody](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/extension-methods).
+
+Následující kód definuje extension metodu:
+
+```csharp
+public static IEndpointRouteBuilder MapStudentsApi(this IEndpointRouteBuilder app)
+{
+    app.MapPost("/seed", Seed);
+
+    var studentItems = app.MapGroup("/students");
+
+    studentItems.MapGet("/", GetAllStudents);
+    studentItems.MapGet("/active", GetActiveStudents);
+    studentItems.MapGet("/{id}", GetStudent);
+    studentItems.MapPost("/", CreateStudent);
+    studentItems.MapPut("/{id}", UpdateStudent);
+    studentItems.MapDelete("/{id}", DeleteStudent);
+
+    return app;
+}
+```
+
+A metoda Main bude vypadat následovně:
+
+```csharp
+public static void Main(string[] args)
+{
+    var builder = WebApplication.CreateBuilder(args);
+
+    builder.Services.AddDbContext<StudentContext>(opt => opt.UseSqlite("DataSource=studenti.db"));
+
+    WebApplication app = builder.Build();
+
+    app.MapStudentsApi();
+
+    app.Run();
+}
+```
+
+## OpenAPI
