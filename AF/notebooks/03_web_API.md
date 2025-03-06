@@ -298,7 +298,7 @@ public static void Main(string[] args)
     var builder = WebApplication.CreateBuilder(args);
 
     // Pridany radek
-    builder.Services.AddOpenApi(); // // Document name is v1
+    builder.Services.AddOpenApi(); // Document name is v1
 
     builder.Services.AddDbContext<StudentContext>(opt => opt.UseSqlite("DataSource=studenti.db"));
 
