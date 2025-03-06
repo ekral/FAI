@@ -331,4 +331,4 @@ studentItems.MapGet("/", GetAllStudents).WithName("GetAllStudents");
  ### Autentikace a autorizace
 
  https://www.youtube.com/watch?v=6DWJIyipxzw
- 
+ https://www.youtube.com/watch?v=6EEltKS8AwA
