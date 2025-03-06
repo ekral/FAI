@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using Students.WebAPI.Apis;
 using Students.WebAPI.Data;
 using Students.WebAPI.Models;
 
@@ -28,15 +29,9 @@ namespace Students.WebAPI
 
             builder.Services.AddDbContext<StudentContext>(opt => opt.UseSqlite("DataSource=studenti.db"));
 
-            var app = builder.Build();
+            WebApplication app = builder.Build();
 
-            app.MapPost("/seed", WebApiVersion1.Seed);
-            app.MapGet("/students/", WebApiVersion1.GetAllStudents);
-            app.MapGet("/students/active", WebApiVersion1.GetActiveStudents);
-            app.MapGet("/students/{id}", WebApiVersion1.GetStudent);
-            app.MapPost("/students/", WebApiVersion1.CreateStudent);
-            app.MapPut("/students/{id}", WebApiVersion1.UpdateStudent);
-            app.MapDelete("/students/{id}", WebApiVersion1.DeleteStudent);
+            app.MapStudentsApi();
 
             app.Run();
         }
