@@ -321,3 +321,9 @@ Na adrese endpointu `https://localhost:<port>/openapi/v1.json` potom najdeme vyg
  ```csharp
  builder.Services.AddOpenApi("nazev");
  ```
+
+ Také můžeme pomocí atributů, nebo pomocí fluent api zadávat další metadata pro dokumentaci. Například id Endpointu zadáme pomocí fuent api metody `WithName`:
+
+ ```csharp
+studentItems.MapGet("/", GetAllStudents).WithName("GetAllStudents");
+ ```

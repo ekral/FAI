@@ -37,7 +37,7 @@ namespace Knihovna.WebAPI
 
             var bookItems = app.MapGroup("books");
 
-            bookItems.MapGet("/", WebApiVersion1.GetAllBooks);
+            bookItems.MapGet("/", WebApiVersion1.GetAllBooks).WithName("GetAllBooks");
             bookItems.MapGet("/{id:int}", WebApiVersion1.GetBook);
             bookItems.MapPost("/", WebApiVersion1.CreateBook);
             bookItems.MapPut("/{id:int}", WebApiVersion1.UpdateBook);

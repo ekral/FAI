@@ -13,7 +13,7 @@ namespace Students.WebAPI.Apis
 
             var studentItems = app.MapGroup("/students");
 
-            studentItems.MapGet("/", GetAllStudents);
+            studentItems.MapGet("/", GetAllStudents).WithName("GetAllStudents");
             studentItems.MapGet("/active", GetActiveStudents);
             studentItems.MapGet("/{id}", GetStudent);
             studentItems.MapPost("/", CreateStudent);
