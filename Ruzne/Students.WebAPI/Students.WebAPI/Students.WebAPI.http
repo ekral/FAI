@@ -1,6 +1,18 @@
 @Students.WebAPI_HostAddress = https://localhost:7042
 
-POST {{Students.WebAPI_HostAddress}}/Students/Seed
+POST {{Students.WebAPI_HostAddress}}/Seed
+
+###
+
+GET {{Students.WebAPI_HostAddress}}/Students/
+
+###
+
+GET {{Students.WebAPI_HostAddress}}/Students/Active
+
+###
+
+GET {{Students.WebAPI_HostAddress}}/students/1
 
 ###
 
@@ -15,10 +27,4 @@ Content-Type: application/json
 
 ###
 
-GET {{Students.WebAPI_HostAddress}}/Students/GetActiveStudents
 
-###
-
-GET {{Students.WebAPI_HostAddress}}/Students/GetAllStudents
-
-###
