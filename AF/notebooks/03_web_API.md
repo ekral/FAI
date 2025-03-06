@@ -298,7 +298,7 @@ public static void Main(string[] args)
     var builder = WebApplication.CreateBuilder(args);
 
     // Pridany radek
-    builder.Services.AddOpenApi(); 
+    builder.Services.AddOpenApi(); // // Document name is v1
 
     builder.Services.AddDbContext<StudentContext>(opt => opt.UseSqlite("DataSource=studenti.db"));
 
@@ -316,4 +316,8 @@ public static void Main(string[] args)
 }
 ```
 
-Na adrese endpointu `https://localhost:<port>/openapi/v1.json` potom najdeme vygenerovanou dokumentaci. 
+Na adrese endpointu `https://localhost:<port>/openapi/v1.json` potom najdeme vygenerovanou dokumentaci. Název v1 je výchozí, mohli bychom ho změnit předáním stringového argumentu metodě AddOpenApi. Adresa by potom byla `https://localhost:<port>/openapi/nazev.json`.
+
+ ```csharp
+ builder.Services.AddOpenApi("nazev");
+ ```
