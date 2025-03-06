@@ -31,15 +31,12 @@ namespace Students.WebAPI
             var app = builder.Build();
 
             app.MapPost("/seed", WebApiVersion1.Seed);
-
-            var studentItems = app.MapGroup("/students");
-
-            studentItems.MapGet("/", WebApiVersion1.GetAllStudents);
-            studentItems.MapGet("/active", WebApiVersion1.GetActiveStudents);
-            studentItems.MapGet("/{id}", WebApiVersion1.GetStudent);
-            studentItems.MapPost("/", WebApiVersion1.CreateStudent);
-            studentItems.MapPut("/{id}", WebApiVersion1.UpdateStudent);
-            studentItems.MapDelete("/{id}", WebApiVersion1.DeleteStudent);
+            app.MapGet("/students/", WebApiVersion1.GetAllStudents);
+            app.MapGet("/students/active", WebApiVersion1.GetActiveStudents);
+            app.MapGet("/students/{id}", WebApiVersion1.GetStudent);
+            app.MapPost("/students/", WebApiVersion1.CreateStudent);
+            app.MapPut("/students/{id}", WebApiVersion1.UpdateStudent);
+            app.MapDelete("/students/{id}", WebApiVersion1.DeleteStudent);
 
             app.Run();
         }

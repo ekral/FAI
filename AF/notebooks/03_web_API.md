@@ -58,7 +58,7 @@ public class StudentContext(DbContextOptions<StudentContext> options) : DbContex
 }
 ```
 
-`DbContext` potom použijeme ve web API s pomocí následujícího příkazu, který zaregistruje `StudentContext` do Inversion of Control containeru s lifetimem Scoped. Což znamená, že pro každý web request se nám vytvoří nová instance třídy `StudentContext`.
+`DbContext` potom použijeme ve web API s pomocí následujícího příkazu, který zaregistruje `StudentContext` do Inversion of Control containeru s lifetimem `Scoped`. Což znamená, že pro každý web request se nám vytvoří nová instance třídy `StudentContext`.
 
 ```csharp
 builder.Services.AddDbContext<StudentContext>(opt => opt.UseSqlite("DataSource=studenti.db"));
@@ -67,111 +67,181 @@ builder.Services.AddDbContext<StudentContext>(opt => opt.UseSqlite("DataSource=s
 Celý kód potom bude vypadat následovně:
 
 ```csharp
-public class Program
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
+using Students.WebAPI.Data;
+using Students.WebAPI.Models;
+
+namespace Students.WebAPI
 {
-    public static async Task Main(string[] args)
+    public class Program
     {
-        var builder = WebApplication.CreateBuilder(args);
-
-        builder.Services.AddDbContext<StudentContext>(opt => opt.UseSqlite("DataSource=studenti.db"));
-
-        var app = builder.Build();
-
-        var studentItems = app.MapGroup("/Students");
-
-        studentItems.MapPost("/Seed", WebApiVersion1.Seed);
-        studentItems.MapGet("/GetAllStudents", WebApiVersion1.GetAllStudents);
-        studentItems.MapGet("/GetActiveStudents", WebApiVersion1.GetActiveStudents);
-        studentItems.MapGet("/GetStudent/{id}", WebApiVersion1.GetStudent);
-        studentItems.MapPost("/", WebApiVersion1.CreateStudent);
-        studentItems.MapPut("/{id}", WebApiVersion1.UpdateTodo);
-        studentItems.MapDelete("/{id}", WebApiVersion1.DeleteStudent);
-
-        app.Run();
-    }
-}
-
-public static class WebApiVersion1
-{
-    public static async Task<Created> Seed(StudentContext context)
-    {
-        await context.Database.EnsureDeletedAsync();
-
-        if (await context.Database.EnsureCreatedAsync())
+        public static void Main(string[] args)
         {
-            await context.AddRangeAsync(
-                new Student() { Jmeno = "Jiri", Studuje = true },
-                new Student() { Jmeno = "Karel", Studuje = false },
-                new Student() { Jmeno = "Alena", Studuje = true });
+            var builder = WebApplication.CreateBuilder(args);
 
-            await context.SaveChangesAsync();
-        }
+            builder.Services.AddDbContext<StudentContext>(opt => opt.UseSqlite("DataSource=studenti.db"));
 
-        return TypedResults.Created();
-    }
+            var app = builder.Build();
 
-    public static async Task<Ok<Student[]>> GetAllStudents(StudentContext context)
-    {
-        return TypedResults.Ok(await context.Studenti.ToArrayAsync());
-    }
+            app.MapPost("/seed", WebApiVersion1.Seed);
+            app.MapGet("/students/", WebApiVersion1.GetAllStudents);
+            app.MapGet("/students/active", WebApiVersion1.GetActiveStudents);
+            app.MapGet("/students/{id}", WebApiVersion1.GetStudent);
+            app.MapPost("/students/", WebApiVersion1.CreateStudent);
+            app.MapPut("/students/{id}", WebApiVersion1.UpdateStudent);
+            app.MapDelete("/students/{id}", WebApiVersion1.DeleteStudent);
 
-    public static async Task<Ok<Student[]>> GetActiveStudents(StudentContext context)
-    {
-        return TypedResults.Ok(await context.Studenti.Where(s => s.Studuje).ToArrayAsync());
-    }
-
-    public static async Task<Results<Ok<Student>, NotFound>> GetStudent(int id, StudentContext context)
-    {
-        Student? student = await context.Studenti.FindAsync(id);
-
-        if(student is not null)
-        {
-            return TypedResults.Ok(student);
-        }
-        else
-        {
-            return TypedResults.NotFound();
+            app.Run();
         }
     }
 
-    public static async Task<Created<Student>> CreateStudent(Student student, StudentContext context)
+    public static class WebApiVersion1
     {
-        context.Add(student);
-
-        await context.SaveChangesAsync();
-
-        return TypedResults.Created($"/Students/GetStudent/{student.StudentId}", student);
-    }
-    
-    public static async Task<Results<NotFound, NoContent>> UpdateTodo(int id, Student inputStudent, StudentContext context)
-    {
-        Student? student = await context.Studenti.FindAsync(id);
-
-        if(student is null)
+        public static async Task<Created> Seed(StudentContext context)
         {
-            return TypedResults.NotFound();
+            await context.Database.EnsureDeletedAsync();
+
+            if (await context.Database.EnsureCreatedAsync())
+            {
+                await context.AddRangeAsync(
+                    new Student() { Jmeno = "Jiri", Studuje = true },
+                    new Student() { Jmeno = "Karel", Studuje = false },
+                    new Student() { Jmeno = "Alena", Studuje = true });
+
+                await context.SaveChangesAsync();
+            }
+
+            return TypedResults.Created();
         }
 
-        student.Jmeno = inputStudent.Jmeno;
-        student.Studuje = inputStudent.Studuje;
-
-        await context.SaveChangesAsync();
-
-        return TypedResults.NoContent();
-    }
-
-    public static async Task<IResult> DeleteStudent(int id, StudentContext context)
-    {
-        if(await context.Studenti.FindAsync(id) is Student student)
+        public static async Task<Ok<Student[]>> GetAllStudents(StudentContext context)
         {
-            context.Remove(student);
+            return TypedResults.Ok(await context.Studenti.ToArrayAsync());
+        }
+
+        public static async Task<Ok<Student[]>> GetActiveStudents(StudentContext context)
+        {
+            return TypedResults.Ok(await context.Studenti.Where(s => s.Studuje).ToArrayAsync());
+        }
+
+        public static async Task<Results<Ok<Student>, NotFound>> GetStudent(int id, StudentContext context)
+        {
+            if (await context.Studenti.FindAsync(id) is Student student)
+            {
+                return TypedResults.Ok(student);
+            }
+            else
+            {
+                return TypedResults.NotFound();
+            }
+        }
+
+        public static async Task<Created<Student>> CreateStudent(Student student, StudentContext context)
+        {
+            context.Add(student);
 
             await context.SaveChangesAsync();
 
-            return TypedResults.NoContent();
+            return TypedResults.Created($"/Students/GetStudent/{student.StudentId}", student);
+        }
+        
+        public static async Task<Results<NoContent, NotFound>> UpdateStudent(int id, Student inputStudent, StudentContext context)
+        {
+            if (await context.Studenti.FindAsync(id) is Student student)
+            {
+                student.Jmeno = inputStudent.Jmeno;
+                student.Studuje = inputStudent.Studuje;
+
+                await context.SaveChangesAsync();
+
+                return TypedResults.NoContent();
+            }
+
+            return TypedResults.NotFound();
         }
 
-        return TypedResults.NotFound();
+        public static async Task<Results<NoContent, NotFound>> DeleteStudent(int id, StudentContext context)
+        {
+            if(await context.Studenti.FindAsync(id) is Student student)
+            {
+                context.Remove(student);
+
+                await context.SaveChangesAsync();
+
+                return TypedResults.NoContent();
+            }
+
+            return TypedResults.NotFound();
+        }
     }
 }
 ```
+
+Předcházející metody můžeme ve Visual Studiu zavolat pomocí souboru s příponou `.http`. V JetBrains Rideru můžeme použít [plugin HTTP Client﻿](https://www.jetbrains.com/help/rider/Http_client_in__product__code_editor.html).
+
+Obsah souboru vypadá následovně:
+
+```
+@Students.WebAPI_HostAddress = https://localhost:7042
+
+POST {{Students.WebAPI_HostAddress}}/Seed
+
+###
+
+GET {{Students.WebAPI_HostAddress}}/Students/
+
+###
+
+GET {{Students.WebAPI_HostAddress}}/Students/Active
+
+###
+
+GET {{Students.WebAPI_HostAddress}}/students/1
+
+###
+
+POST {{Students.WebAPI_HostAddress}}/Students
+Content-Type: application/json
+
+{
+  "studentId": 0,
+  "jmeno": "Lenka",
+  "studuje": true
+}
+
+###
+
+PUT {{Students.WebAPI_HostAddress}}/students/1
+Content-Type: application/json
+
+{
+  "studentId": 1,
+  "jmeno": "Novotna",
+  "studuje": true
+}
+###
+
+DELETE {{Students.WebAPI_HostAddress}}/students/1
+
+###
+
+```
+
+### Group
+
+Předcházející kód můžeme vylepšit, všimněte si, že v mapování se opakuje cesta "students". Abychom ji nemuseli pořád opakovat, tak můžeme využít metodu `MapGroup`:
+
+```csharp
+var studentItems = app.MapGroup("/students");
+
+studentItems.MapGet("/", WebApiVersion1.GetAllStudents);
+studentItems.MapGet("/active", WebApiVersion1.GetActiveStudents);
+studentItems.MapGet("/{id}", WebApiVersion1.GetStudent);
+studentItems.MapPost("/", WebApiVersion1.CreateStudent);
+studentItems.MapPut("/{id}", WebApiVersion1.UpdateStudent);
+studentItems.MapDelete("/{id}", WebApiVersion1.DeleteStudent);
+```
+
+### OpenApi
+

@@ -27,4 +27,16 @@ Content-Type: application/json
 
 ###
 
+PUT {{Students.WebAPI_HostAddress}}/students/1
+Content-Type: application/json
 
+{
+  "studentId": 1,
+  "jmeno": "Novotna",
+  "studuje": true
+}
+###
+
+DELETE {{Students.WebAPI_HostAddress}}/students/1
+
+###
