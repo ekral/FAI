@@ -27,9 +27,16 @@ namespace Students.WebAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddOpenApi();
+
             builder.Services.AddDbContext<StudentContext>(opt => opt.UseSqlite("DataSource=studenti.db"));
 
             WebApplication app = builder.Build();
+
+            if (app.Environment.IsDevelopment())
+            {
+                app.MapOpenApi();
+            }
 
             app.MapStudentsApi();
 

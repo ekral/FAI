@@ -182,7 +182,7 @@ Předcházející metody můžeme ve Visual Studiu zavolat pomocí souboru s př
 
 Obsah souboru vypadá následovně:
 
-```
+```json
 @Students.WebAPI_HostAddress = https://localhost:7042
 
 POST {{Students.WebAPI_HostAddress}}/Seed
@@ -285,3 +285,35 @@ public static void Main(string[] args)
 ```
 
 ## OpenAPI
+
+[OpenApi](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/openapi/overview?view=aspnetcore-9.0) je standard pro dokumentaci HTTP aplikačních rozhraní nezávisle na programovacím jazyku.
+
+Projekt musí mít referenci na nuget balíček [Microsoft.AspNetCore.OpenApi](https://www.nuget.org/packages/Microsoft.AspNetCore.OpenApi). 
+
+V metodě main potom přidáme označené řádky 
+
+```csharp
+public static void Main(string[] args)
+{
+    var builder = WebApplication.CreateBuilder(args);
+
+    // Pridany radek
+    builder.Services.AddOpenApi(); 
+
+    builder.Services.AddDbContext<StudentContext>(opt => opt.UseSqlite("DataSource=studenti.db"));
+
+    WebApplication app = builder.Build();
+
+    // Pridany blok
+    if (app.Environment.IsDevelopment())
+    {
+        app.MapOpenApi();
+    }
+
+    app.MapStudentsApi();
+
+    app.Run();
+}
+```
+
+Na adrese endpointu `https://localhost:<port>/openapi/v1.json` potom najdeme vygenerovanou dokumentaci. 

@@ -40,3 +40,7 @@ Content-Type: application/json
 DELETE {{Students.WebAPI_HostAddress}}/students/1
 
 ###
+
+GET {{Students.WebAPI_HostAddress}}/openapi/v1.json
+
+###
