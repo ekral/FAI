@@ -327,3 +327,8 @@ Na adrese endpointu `https://localhost:<port>/openapi/v1.json` potom najdeme vyg
  ```csharp
 studentItems.MapGet("/", GetAllStudents).WithName("GetAllStudents");
  ```
+
+ ### Autentikace a autorizace
+
+ https://www.youtube.com/watch?v=6DWJIyipxzw
+ 
