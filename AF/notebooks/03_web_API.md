@@ -8,21 +8,7 @@ V tomto materiálu si probereme práci s webovými službami s pomocí Minimal W
 
 Web API (Web Application Programming Interface) je sada pravidel a protokolů umožňující komunikovat programům prostřednictvím internetu. REST (Representation State Transfer) je druh Web API a představuj architektonický styl použivající standartní HTTP metody (GET, POST, PUT a DELETE) zpřístpňující endpoity identifikvané pomocí URI. Pro přenos dat využívá přitom především format JSON.
 
-Minimal Web API je zjednodušený způsob tvorby HTTP API pomocí ASP.NET Core.
-
-https://learn.microsoft.com/en-us/aspnet/core/tutorials/min-web-api
-
-https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/responses?view=aspnetcore-9.0#typedresults-vs-results
-
-https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/parameter-binding?view=aspnetcore-9.0
-
-https://localhost:7042/openapi/v1.json
-
-https://www.radzen.com/blazor-components/
-
-https://www.youtube.com/watch?v=EqSgqm4qWjo
-
-https://www.youtube.com/watch?v=wCxg9oe_CtI
+[Minimal Web API](https://learn.microsoft.com/en-us/aspnet/core/tutorials/min-web-api) je zjednodušený způsob tvorby HTTP API pomocí ASP.NET Core.
 
 Následující kód vrátí na metodu GET text "Hello World". Představuje nejjednodušší program v Minimal Web API.
 
@@ -328,7 +314,4 @@ Na adrese endpointu `https://localhost:<port>/openapi/v1.json` potom najdeme vyg
 studentItems.MapGet("/", GetAllStudents).WithName("GetAllStudents");
  ```
 
- ### Autentikace a autorizace
 
- https://www.youtube.com/watch?v=6DWJIyipxzw
- https://www.youtube.com/watch?v=6EEltKS8AwA
