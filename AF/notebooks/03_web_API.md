@@ -6,7 +6,7 @@
 
 V tomto materiálu si probereme práci s webovými službami s pomocí Minimal Web API.
 
-Web API (Web Application Programming Interface) je sada pravidel a protokolů umožňující komunikovat programům prostřednictvím internetu. REST (Representation State Transfer) je druh Web API a představuj architektonický styl použivající standartní HTTP metody (GET, POST, PUT PATCH a DELETE) zpřístupňující endpoity identifikvané pomocí URI. Pro přenos dat využívá přitom především format JSON.
+Web API (Web Application Programming Interface) je sada pravidel a protokolů umožňující komunikovat programům prostřednictvím internetu. REST (Representation State Transfer) je druh Web API a představuj architektonický styl použivající standartní HTTP metody (GET, POST, PUT, PATCH a DELETE) zpřístupňující endpoity identifikvané pomocí URI. Pro přenos dat využívá přitom především format JSON.
 
 [Minimal Web API](https://learn.microsoft.com/en-us/aspnet/core/tutorials/min-web-api) je zjednodušený způsob tvorby HTTP API pomocí ASP.NET Core.
 
