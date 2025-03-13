@@ -1,4 +1,4 @@
-# 04 Unit testy Minimal Web API
+# 04 Testování Minimal Web API
 
 **autor: Erik Král ekral@utb.cz**
 
