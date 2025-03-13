@@ -18,9 +18,7 @@ public class Kniha
 
 public class KnihovnaContext(DbContextOptions<KnihovnaContext> options) : DbContext(options)
 {
-    public DbSet<Ctenar> Ctenari { get; set; }
     public DbSet<Kniha> Knihy { get; set; }
-    public DbSet<Vypujcka> Vypujcky { get; set; }
 }
 ```
 
