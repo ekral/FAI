@@ -1,0 +1,47 @@
+﻿@WebApplicationWebApi_HostAddress = https://localhost:7200
+
+GET {{WebApplicationWebApi_HostAddress}}/seed
+
+###
+
+GET {{WebApplicationWebApi_HostAddress}}/students
+
+###
+
+GET {{WebApplicationWebApi_HostAddress}}/students/active
+
+###
+
+GET {{WebApplicationWebApi_HostAddress}}/students/999
+
+###
+
+POST {{WebApplicationWebApi_HostAddress}}/students
+Content-Type: application/json
+
+{
+  "studentId" : 0,
+  "jmeno" : "Novy",
+  "studuje" : true
+}
+
+###
+
+
+PUT {{WebApplicationWebApi_HostAddress}}/students/1
+Content-Type: application/json
+
+{
+  "studentId" : 1,
+  "jmeno" : "Jiny",
+  "studuje" : false
+}
+###
+
+PATCH {{WebApplicationWebApi_HostAddress}}/students/3
+
+###
+
+DELETE {{WebApplicationWebApi_HostAddress}}/students/{id}
+
+###
