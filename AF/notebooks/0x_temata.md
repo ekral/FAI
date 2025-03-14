@@ -1,75 +1,65 @@
 
 # Application Frameworks with .NET and Microsoft Technology Stack
 
-## 1. Introduction to the Microsoft Technology Stack and .NET Ecosystem
-- Overview of Microsoft's development environment.
-- Evolution of .NET (from .NET Framework to .NET Core and .NET 5/6/7+).
-- Key components and tools available for developers.
+# Application Frameworks with .NET and Microsoft Technology Stack
 
-## 2. Building Web Applications with ASP.NET Core
-- Fundamentals of ASP.NET Core architecture.
-- Setting up and configuring an ASP.NET Core project.
-- Middleware, routing, and request handling.
+Each topic is structured with a 1-hour lecture followed by a 2-hour lesson that includes hands-on exercises.
 
-## 3. Developing RESTful APIs with ASP.NET Core
-- Designing RESTful services using ASP.NET Core Web API.
-- Handling HTTP requests, responses, and error management.
-- Integrating Swagger/OpenAPI for documentation.
+## 1. Introduction to the Microsoft Tech Stack and .NET Ecosystem
+- **Lecture (1 Hour):** Overview of Microsoft’s development environment, .NET evolution (Framework to .NET 7+), and key tools.
+- **Lesson (2 Hours):** Explore Visual Studio, review sample projects, and set up a simple .NET project.
+
+## 2. ASP.NET Core Fundamentals
+- **Lecture (1 Hour):** Introduction to ASP.NET Core architecture, middleware, and routing concepts.
+- **Lesson (2 Hours):** Create and configure a basic ASP.NET Core web project with routing and middleware.
+
+## 3. Building RESTful APIs with ASP.NET Core
+- **Lecture (1 Hour):** Key concepts of REST API design, HTTP methods, and error handling.
+- **Lesson (2 Hours):** Develop a CRUD-based Web API project and integrate Swagger/OpenAPI documentation.
 
 ## 4. Client-Side Development with Blazor
-- Introduction to Blazor (Server and WebAssembly).
-- Building interactive web UIs with C# instead of JavaScript.
-- Component-based architecture and state management.
+- **Lecture (1 Hour):** Overview of Blazor (Server & WebAssembly) and component-based UI design.
+- **Lesson (2 Hours):** Build a simple interactive Blazor component and manage state.
 
-## 5. Desktop Application Development with WPF and Windows Forms
-- Overview of desktop UI frameworks in .NET.
-- Building modern interfaces using WPF (Windows Presentation Foundation).
-- Comparison and migration strategies from Windows Forms.
+## 5. Desktop Application Development with WPF
+- **Lecture (1 Hour):** Introduction to Windows Presentation Foundation (WPF) vs. Windows Forms.
+- **Lesson (2 Hours):** Create a basic WPF application with a user-friendly interface.
 
 ## 6. Cross-Platform Mobile Development with .NET MAUI
-- Introduction to .NET MAUI for mobile app development.
-- Designing and deploying cross-platform applications.
-- Integrating native device features with .NET MAUI.
+- **Lecture (1 Hour):** Overview of .NET MAUI for cross-platform mobile and desktop development.
+- **Lesson (2 Hours):** Set up a multi-platform .NET MAUI project and explore device integration.
 
 ## 7. Microservices Architecture with .NET
-- Principles and benefits of microservices.
-- Building microservices with ASP.NET Core and Docker.
-- Communication patterns, such as REST and gRPC.
+- **Lecture (1 Hour):** Principles of microservices, benefits of decoupled services, and containerization.
+- **Lesson (2 Hours):** Explore a simple .NET microservice project using Docker for containerization.
 
 ## 8. Data Access and ORM with Entity Framework Core
-- Overview of ORM and its benefits.
-- Using Entity Framework Core for data modeling and querying.
-- Migrations, performance tuning, and best practices.
+- **Lecture (1 Hour):** Understanding ORM, database-first vs. code-first approaches, and EF Core basics.
+- **Lesson (2 Hours):** Design a basic data model and perform CRUD operations with EF Core.
 
-## 9. Dependency Injection and Inversion of Control (IoC) in .NET
-- Understanding Dependency Injection fundamentals.
-- Implementing IoC containers in ASP.NET Core.
-- Advanced scenarios with Autofac or SimpleInjector.
+## 9. Dependency Injection and IoC in .NET
+- **Lecture (1 Hour):** Core concepts of Dependency Injection (DI) and Inversion of Control (IoC).
+- **Lesson (2 Hours):** Implement DI in a sample ASP.NET Core project using Microsoft.Extensions.DependencyInjection.
 
 ## 10. Security and Identity Management in ASP.NET Core
-- Authentication and authorization techniques.
-- Integrating IdentityServer for token-based security.
-- Secure coding practices and data protection.
+- **Lecture (1 Hour):** Fundamentals of authentication, authorization, and token-based security.
+- **Lesson (2 Hours):** Integrate simple authentication and authorization into an ASP.NET Core application.
 
-## 11. Azure Integration: Cloud Services and Deployment
-- Deploying .NET applications to Azure App Services.
-- Introduction to Azure Functions and serverless computing.
-- Scaling, monitoring, and managing applications in the cloud.
+## 11. Azure Cloud Integration and Deployment
+- **Lecture (1 Hour):** Overview of deploying .NET applications to Azure, including App Services and Azure Functions.
+- **Lesson (2 Hours):** Deploy a sample project to Azure App Service and review basic scaling and monitoring.
 
-## 12. Modern UI/UX Design with XAML and WinUI
-- Designing user interfaces using XAML for WPF and UWP.
-- Introduction to WinUI for modern Windows apps.
-- Best practices in UI/UX design and accessibility.
+## 12. Modern UI Design with XAML and WinUI
+- **Lecture (1 Hour):** Introduction to modern UI design using XAML, WinUI, and best practices for accessibility.
+- **Lesson (2 Hours):** Develop a simple UI using XAML, exploring controls and data binding.
 
 ## 13. Testing and Quality Assurance in .NET Applications
-- Unit testing fundamentals with xUnit or NUnit.
-- Integration and end-to-end testing strategies.
-- Tools for automated testing and continuous integration.
+- **Lecture (1 Hour):** Overview of testing strategies: unit, integration, and end-to-end testing.
+- **Lesson (2 Hours):** Write unit tests using xUnit, run tests, and integrate them into the development process.
 
 ## 14. DevOps and Continuous Delivery for .NET Projects
-- Overview of CI/CD pipelines using Azure DevOps and GitHub Actions.
-- Automating build, test, and deployment processes.
-- Best practices for version control and release management.
+- **Lecture (1 Hour):** Introduction to CI/CD concepts and tools, with a focus on GitHub Actions and Azure DevOps.
+- **Lesson (2 Hours):** Set up a basic CI/CD pipeline to automate builds, tests, and deployments for a .NET application.
 
 
 
