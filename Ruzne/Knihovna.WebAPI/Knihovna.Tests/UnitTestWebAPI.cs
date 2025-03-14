@@ -3,7 +3,6 @@ using Knihovna.WebAPI.Data;
 using Knihovna.WebAPI.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 // https://learn.microsoft.com/en-us/ef/core/testing/testing-with-the-database
 
