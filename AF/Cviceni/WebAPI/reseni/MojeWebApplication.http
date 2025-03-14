@@ -1,0 +1,46 @@
+﻿@MojeWebApplication_HostAddress = https://localhost:7096
+
+GET {{MojeWebApplication_HostAddress}}/seed
+
+###
+
+GET {{MojeWebApplication_HostAddress}}/students
+
+###
+
+GET {{MojeWebApplication_HostAddress}}/students/studying
+
+###
+
+GET {{MojeWebApplication_HostAddress}}/students/2
+
+###
+
+POST {{MojeWebApplication_HostAddress}}/students
+Content-Type: application/json
+
+{
+  "studentId" : 0,
+  "jmeno" : "Novy",
+  "studuje" : true
+}
+
+###
+
+PUT {{MojeWebApplication_HostAddress}}/students/1
+Content-Type: application/json
+
+{
+  "studentId" : 1,
+  "jmeno" : "Jiny",
+  "studuje" : true
+}
+###
+
+PATCH {{MojeWebApplication_HostAddress}}/students/1
+
+###
+
+DELETE {{MojeWebApplication_HostAddress}}/students/3
+
+###
