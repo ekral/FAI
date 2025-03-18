@@ -1,0 +1,41 @@
+﻿@page "/"
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject HttpClient Client
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+@if(knihy is not null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nazev</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(Kniha kniha in knihy)
+            {   
+                <tr>
+                    <td>@kniha.KnihaId</td>
+                    <td>@kniha.Nazev</td>
+                </tr>
+            }
+        </tbody>     
+    </table>
+
+
+    <QuickGrid Items="Knihy">
+        <PropertyColumn Property="@(p => p.KnihaId)" Sortable="true" />
+        <PropertyColumn Property="@(p => p.Nazev)" Sortable="true" />
+    </QuickGrid>
+
+
+}
+
+
+

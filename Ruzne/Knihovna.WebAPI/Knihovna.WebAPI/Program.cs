@@ -19,7 +19,7 @@ namespace Knihovna.WebAPI
 
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
-
+            builder.Services.AddCors();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -29,8 +29,11 @@ namespace Knihovna.WebAPI
             }
 
             app.UseHttpsRedirection();
+            
+            app.UseCors(p => p.WithOrigins("https://localhost:7074").AllowCredentials().AllowAnyMethod().AllowAnyHeader());
 
             app.UseAuthorization();
+
 
             app.MapPost("/seed", WebApiVersion1.Seed);
 
