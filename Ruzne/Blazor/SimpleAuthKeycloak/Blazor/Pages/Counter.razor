@@ -1,0 +1,38 @@
+﻿@page "/counter"
+
+@inject ClientWrapper Service;
+
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+
+<p role="status">Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+<Microsoft.AspNetCore.Components.Authorization.AuthorizeView>
+    <NotAuthorized>
+        <p>You must login to see content</p>
+        <button @onclick="Service.Login">Login</button>
+    </NotAuthorized>
+    <Authorized>
+        <p>User name: @context.User.Identity?.Name</p>
+        <button @onclick="GetData">Do request</button>
+    </Authorized>
+</Microsoft.AspNetCore.Components.Authorization.AuthorizeView>
+
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+
+    private async Task GetData()
+    {
+        var data = await Service.GetData();
+        Console.WriteLine($"Data: {data}");
+    }
+}
