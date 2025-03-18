@@ -22,7 +22,98 @@ public class KnihovnaContext(DbContextOptions<KnihovnaContext> options) : DbCont
 }
 ```
 
-Dále si do projektu přidáme nový projekt s názvem "xUnit Test Project" a v tomto novém projektu přidáme referenci na projekt obsahující entity a DbContext. 
+A dále si nadefinujeme následující WebAPI metody:
+
+```csharp
+public static class WebApiVersion1
+{
+    public static async Task<Created> Seed(KnihovnaContext context)
+    {
+        await context.Database.EnsureDeletedAsync();
+        await context.Database.EnsureCreatedAsync();
+
+        await context.Knihy.AddRangeAsync(
+            new Kniha() { KnihaId = 1, Nazev = "Svejk"},
+            new Kniha() { KnihaId = 2, Nazev = "Temno"},
+            new Kniha() { KnihaId = 3, Nazev = "Pan prstenu"}
+            );
+
+        await context.Ctenari.AddRangeAsync(
+            new Ctenar() { CtenarId = 1, Jmeno = "Petr"},
+            new Ctenar() { CtenarId = 2, Jmeno = "Erik"},
+            new Ctenar() { CtenarId = 3, Jmeno = "Alena"}
+            );
+
+        await context.Vypujcky.AddRangeAsync(
+            new Vypujcka() { VypujckaId = 1, KnihaId = 1, CtenarId = 1, DatumVypujcky = DateOnly.FromDateTime(DateTime.Now)}
+            );
+       
+        await context.SaveChangesAsync();
+
+        return TypedResults.Created();
+    }
+
+    public static async Task<Ok<Kniha[]>> GetAllBooks(KnihovnaContext context)
+    {
+        return TypedResults.Ok(await context.Knihy.ToArrayAsync());
+    }
+
+    public static async Task<Results<Ok<Kniha>,NotFound>> GetBook(int id, KnihovnaContext context)
+    {
+        if(await context.Knihy.FindAsync(id) is Kniha kniha)
+        {
+            return TypedResults.Ok(kniha);
+        }
+        else
+        {
+            return TypedResults.NotFound();
+        }
+    }
+
+    public static async Task<Created<Kniha>> CreateBook(Kniha kniha, KnihovnaContext context)
+    {
+        await context.AddAsync(kniha);
+
+        await context.SaveChangesAsync();
+
+        return TypedResults.Created($"/books/{kniha.KnihaId}", kniha);
+    }
+
+    public static async Task<Results<NotFound, NoContent>> UpdateBook(int id, Kniha input, KnihovnaContext context)
+    {
+        if (await context.Knihy.FindAsync(id) is Kniha kniha)
+        {
+            kniha.Nazev = input.Nazev;
+
+            await context.SaveChangesAsync();
+
+            return TypedResults.NoContent();
+        }
+        else
+        {
+            return TypedResults.NotFound();
+        }
+    }
+
+    public static async Task<Results<NotFound, NoContent>> DeleteBook(int id, KnihovnaContext context)
+    {
+        if (await context.Knihy.FindAsync(id) is Kniha kniha)
+        {
+            context.Remove(kniha);
+
+            await context.SaveChangesAsync();
+
+            return TypedResults.NoContent();
+        }
+        else
+        {
+            return TypedResults.NotFound();
+        }
+    }     
+}
+```
+
+Nyní si do projektu přidáme nový projekt s názvem "xUnit Test Project" a v tomto novém projektu přidáme referenci na projekt obsahující entity a DbContext. 
 
 Nástroj xUnit organizuje testovací metody do tříd, kdy testovací metody ve třídě se spouští sekvenčně a testy v různých třídách se potom pouští souběžně. My budeme pracovat s produkční databází, tedy s typem databáze kterou budeme používat v produkci. Aby se testy vzájemně neovlivňovaly, tak by si teoreticky mohla každá testovací metoda vytvořit vlastní databázi. Prakticky by to ale výrazně zpomalilo provádění testů. Proto si vytvoříme jen jednu databázi, kterou budeme sdílet mezi všemi testovacími metodami. 
 
