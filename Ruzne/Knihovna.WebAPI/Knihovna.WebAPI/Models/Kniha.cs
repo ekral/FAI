@@ -4,6 +4,6 @@
     {
         public int KnihaId { get; set; }
         public required string Nazev { get; set; }
-        public Vypujcka? Vypujcka { get; set; }
+        public List<Vypujcka> Vypujcky { get; set; } = [];
     }
 }

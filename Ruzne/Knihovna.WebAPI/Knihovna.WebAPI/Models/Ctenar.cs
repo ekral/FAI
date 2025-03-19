@@ -4,6 +4,6 @@
     {
         public int CtenarId { get; set; }
         public required string Jmeno { get; set; }
-        public List<Vypujcka>? Vypujcky { get; set; }
+        public List<Vypujcka> Vypujcky { get; set; } = [];
     }
 }

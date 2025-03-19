@@ -22,32 +22,6 @@ namespace Knihovna.WebAPI.Apis
 
         }
 
-        public static async Task<Created> Seed(KnihovnaContext context)
-        {
-            await context.Database.EnsureDeletedAsync();
-            await context.Database.EnsureCreatedAsync();
-
-            await context.Knihy.AddRangeAsync(
-                new Kniha() { KnihaId = 1, Nazev = "Svejk" },
-                new Kniha() { KnihaId = 2, Nazev = "Temno" },
-                new Kniha() { KnihaId = 3, Nazev = "Pan prstenu" }
-                );
-
-            await context.Ctenari.AddRangeAsync(
-                new Ctenar() { CtenarId = 1, Jmeno = "Petr" },
-                new Ctenar() { CtenarId = 2, Jmeno = "Erik" },
-                new Ctenar() { CtenarId = 3, Jmeno = "Alena" }
-                );
-
-            await context.Vypujcky.AddRangeAsync(
-                new Vypujcka() { VypujckaId = 1, KnihaId = 1, CtenarId = 1, DatumVypujcky = DateOnly.FromDateTime(DateTime.Now) }
-                );
-
-            await context.SaveChangesAsync();
-
-            return TypedResults.Created();
-        }
-
         public static async Task<Ok<Kniha[]>> GetAllBooks(KnihovnaContext context)
         {
             return TypedResults.Ok(await context.Knihy.ToArrayAsync());
