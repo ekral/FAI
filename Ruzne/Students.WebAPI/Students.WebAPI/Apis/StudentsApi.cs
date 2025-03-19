@@ -19,6 +19,7 @@ namespace Students.WebAPI.Apis
             studentItems.MapPost("/", CreateStudent);
             studentItems.MapPut("/{id}", UpdateStudent);
             studentItems.MapDelete("/{id}", DeleteStudent);
+            studentItems.MapPatch("/{id}", FinishStudies);
 
             return app;
         }
@@ -91,6 +92,20 @@ namespace Students.WebAPI.Apis
             if (await context.Studenti.FindAsync(id) is Student student)
             {
                 context.Remove(student);
+
+                await context.SaveChangesAsync();
+
+                return TypedResults.NoContent();
+            }
+
+            return TypedResults.NotFound();
+        }
+
+        public static async Task<Results<NoContent, NotFound>> FinishStudies(int id, StudentContext context)
+        {
+            if (await context.Studenti.FindAsync(id) is Student student)
+            {
+                student.Studuje = false;
 
                 await context.SaveChangesAsync();
 

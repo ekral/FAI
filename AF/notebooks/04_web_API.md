@@ -77,6 +77,7 @@ namespace Students.WebAPI
             app.MapPost("/students/", WebApiVersion1.CreateStudent);
             app.MapPut("/students/{id}", WebApiVersion1.UpdateStudent);
             app.MapDelete("/students/{id}", WebApiVersion1.DeleteStudent);
+            app.MapPatch("/students/{id}", FinishStudies);
 
             app.Run();
         }
@@ -160,6 +161,20 @@ namespace Students.WebAPI
 
             return TypedResults.NotFound();
         }
+
+        public static async Task<Results<NoContent, NotFound>> FinishStudies(int id, StudentContext context)
+        {
+            if (await context.Studenti.FindAsync(id) is Student student)
+            {
+                student.Studuje = false;
+
+                await context.SaveChangesAsync();
+
+                return TypedResults.NoContent();
+            }
+
+            return TypedResults.NotFound();
+        }
     }
 }
 ```
@@ -212,6 +227,9 @@ DELETE {{Students.WebAPI_HostAddress}}/students/1
 
 ###
 
+PATCH {{Students.WebAPI_HostAddress}}/students/1
+
+###
 ```
 
 ## Group
@@ -227,6 +245,7 @@ studentItems.MapGet("/{id}", WebApiVersion1.GetStudent);
 studentItems.MapPost("/", WebApiVersion1.CreateStudent);
 studentItems.MapPut("/{id}", WebApiVersion1.UpdateStudent);
 studentItems.MapDelete("/{id}", WebApiVersion1.DeleteStudent);
+studentItems.MapPatch("/{id}", FinishStudies);
 ```
 
 ## Extension metoda
@@ -248,6 +267,7 @@ public static IEndpointRouteBuilder MapStudentsApi(this IEndpointRouteBuilder ap
     studentItems.MapPost("/", CreateStudent);
     studentItems.MapPut("/{id}", UpdateStudent);
     studentItems.MapDelete("/{id}", DeleteStudent);
+    studentItems.MapPatch("/{id}", FinishStudies);
 
     return app;
 }
