@@ -1,4 +1,5 @@
 ﻿using Knihovna.WebAPI;
+using Knihovna.WebAPI.Apis;
 using Knihovna.WebAPI.Data;
 using Knihovna.WebAPI.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -64,7 +65,7 @@ namespace Knihovna.Tests
             using KnihovnaContext context = Fixture.CreateContext();
 
             // Act
-            var result = await WebApiVersion1.GetAllBooks(context);
+            var result = await BookApis.GetAllBooks(context);
 
             // Assert
             Assert.Equal(3, result.Value?.Length);
@@ -77,7 +78,7 @@ namespace Knihovna.Tests
             using KnihovnaContext context = Fixture.CreateContext();
 
             // Act
-            var result = await WebApiVersion1.GetBook(1, context);
+            var result = await BookApis.GetBook(1, context);
 
             // Assert
             Ok<Kniha> okKniha = Assert.IsType<Ok<Kniha>>(result.Result);
@@ -92,7 +93,7 @@ namespace Knihovna.Tests
             using KnihovnaContext context = Fixture.CreateContext();
 
             // Act
-            var result = await WebApiVersion1.GetBook(999, context);
+            var result = await BookApis.GetBook(999, context);
 
             // Assert
             Assert.IsType<NotFound>(result.Result);
@@ -109,7 +110,7 @@ namespace Knihovna.Tests
             var newBook = new Kniha { KnihaId = 4, Nazev = "New Book" };
 
             // Act
-            _ = await WebApiVersion1.CreateBook(newBook, context);
+            _ = await BookApis.CreateBook(newBook, context);
 
             context.ChangeTracker.Clear();
 
@@ -131,7 +132,7 @@ namespace Knihovna.Tests
             var updatedBook = new Kniha { Nazev = "Updated Book" };
 
             // Act
-            var result = await WebApiVersion1.UpdateBook(1, updatedBook, context);
+            var result = await BookApis.UpdateBook(1, updatedBook, context);
 
             context.ChangeTracker.Clear();
 
@@ -153,7 +154,7 @@ namespace Knihovna.Tests
             var updatedBook = new Kniha { Nazev = "Updated Book" };
 
             // Act
-            var result = await WebApiVersion1.UpdateBook(999, updatedBook, context);
+            var result = await BookApis.UpdateBook(999, updatedBook, context);
 
             // Assert
             Assert.IsType<NotFound>(result.Result);
@@ -168,7 +169,7 @@ namespace Knihovna.Tests
             context.Database.BeginTransaction(); // nechci ukladat zmeny do databaze
 
             // Act
-            var result = await WebApiVersion1.DeleteBook(1, context);
+            var result = await BookApis.DeleteBook(1, context);
 
             context.ChangeTracker.Clear();
 
@@ -186,7 +187,7 @@ namespace Knihovna.Tests
             context.Database.BeginTransaction(); // nechci ukladat zmeny do databaze
 
             // Act
-            var result = await WebApiVersion1.DeleteBook(999, context);
+            var result = await BookApis.DeleteBook(999, context);
 
             // Assert
             Assert.IsType<NotFound>(result.Result);
