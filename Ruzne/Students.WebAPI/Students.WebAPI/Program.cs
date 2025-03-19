@@ -38,7 +38,7 @@ namespace Students.WebAPI
                 app.MapOpenApi();
             }
 
-            app.MapStudentsApi();
+            app.MapStudentApi();
 
             app.Run();
         }

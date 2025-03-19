@@ -5,9 +5,9 @@ using Students.WebAPI.Models;
 
 namespace Students.WebAPI.Apis
 {
-    public static class StudentsApi 
+    public static class StudentApi 
     {
-        public static IEndpointRouteBuilder MapStudentsApi(this IEndpointRouteBuilder app)
+        public static IEndpointRouteBuilder MapStudentApi(this IEndpointRouteBuilder app)
         {
             app.MapPost("/seed", Seed);
 
