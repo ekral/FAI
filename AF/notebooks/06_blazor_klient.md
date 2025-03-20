@@ -76,5 +76,62 @@ V projektu máme zaregistrovaného HttpClienta jako službu s lifetimem Scoped, 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7042") });
 ```
 
+Do projektu si přidáme novou Razor Componentu Studenti.razor
 
+```razor
+@page "/students"
 
+<PageTitle>Studenti</PageTitle>
+
+<h3>Studenti</h3>
+
+@if(studenti is not null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Jmeno</th>
+                <th>Studuje</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(Student student in studenti)
+            {
+                <tr>
+                    <td>@student.StudentId</td>
+                    <td>@student.Jmeno</td>
+                    <td>@student.Studuje</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+```
+
+A v kódu na pozadí načteme studenty:
+
+```cs
+using System.Net.Http.Json;
+
+namespace Students.BlazorApp.Pages
+{
+    public class Student
+    {
+        public int StudentId { get; set; }
+        public required string Jmeno { get; set; }
+        public required bool Studuje { get; set; }
+    }
+
+    public partial class Studenti(HttpClient client)
+    {
+        private readonly HttpClient client = client;
+        private Student[]? studenti;
+
+        protected override async Task OnInitializedAsync()
+        {
+            studenti = await client.GetFromJsonAsync<Student[]>("/students");
+        }
+    }
+}
+```

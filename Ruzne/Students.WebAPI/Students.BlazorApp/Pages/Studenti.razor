@@ -1,0 +1,30 @@
+﻿@page "/students"
+
+<PageTitle>Studenti</PageTitle>
+
+<h3>Studenti</h3>
+
+@if(studenti is not null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Jmeno</th>
+                <th>Studuje</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(Student student in studenti)
+            {
+                <tr>
+                    <td>@student.StudentId</td>
+                    <td>@student.Jmeno</td>
+                    <td>@student.Studuje</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+

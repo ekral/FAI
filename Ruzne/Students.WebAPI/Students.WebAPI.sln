@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35806.99 d17.13
+VisualStudioVersion = 17.13.35806.99
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Students.WebAPI", "Students.WebAPI\Students.WebAPI.csproj", "{09A76682-0A4A-4461-95C1-630FF3121CC5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleClient", "ConsoleClient\ConsoleClient.csproj", "{43DD3393-0794-4992-B8A6-0505C92FCA7C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Students.BlazorApp", "Students.BlazorApp\Students.BlazorApp.csproj", "{434A518F-513E-441C-A22F-B3383E14D068}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{43DD3393-0794-4992-B8A6-0505C92FCA7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43DD3393-0794-4992-B8A6-0505C92FCA7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43DD3393-0794-4992-B8A6-0505C92FCA7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{434A518F-513E-441C-A22F-B3383E14D068}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{434A518F-513E-441C-A22F-B3383E14D068}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{434A518F-513E-441C-A22F-B3383E14D068}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{434A518F-513E-441C-A22F-B3383E14D068}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

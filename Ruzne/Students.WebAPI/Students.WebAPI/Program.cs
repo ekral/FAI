@@ -31,12 +31,16 @@ namespace Students.WebAPI
 
             builder.Services.AddDbContext<StudentContext>(opt => opt.UseSqlite("DataSource=studenti.db"));
 
+            builder.Services.AddCors(); // CORS 
+
             WebApplication app = builder.Build();
 
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
             }
+
+            app.UseCors(p => p.WithOrigins("https://localhost:7215").AllowCredentials().AllowAnyMethod().AllowAnyHeader()); // CORS 
 
             app.MapStudentApi();
 
