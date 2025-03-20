@@ -40,8 +40,13 @@ public static async Task<Ok<Student[]>> GetAllStudents(StudentContext context)
 
 ##  Blazor WebAssembly
 
-Nyní vytvoříme projekt "Blazor Standalone" využívající render mód Interactive WebAssembly.
+Nyní vytvoříme projekt "Blazor WebAssembly Standalone App" využívající render mód Interactive WebAssembly.
 
+V projektu máme zaregistrovaného HttpClienta jako službu s lifetimem Scoped, pro každý request se tedy vytvoří nový HttpClient. Adresa "https://localhost:7042" představuje adresu našeho WebAPI.
+
+```csharp
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7042") });
+```
 
 
 
