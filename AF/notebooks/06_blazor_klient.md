@@ -38,7 +38,7 @@ public static async Task<Ok<Student[]>> GetAllStudents(StudentContext context)
 }
 ```
 
-Co je ale velmi důležité, tak do configurace a middlewaru musíme přidat podporu CORS (Cross-origin resource sharing), kde adresa "https://localhost:7074" je adresa Blazor aplikace, kterou zadáme až tuto aplikaci vytvoříme. CORS musíme povolit proto, že Blazor a WebAPI budou běží na jiném portu což znamená, že běží na jiné doméně a prohlížeč může blokovat dotaz z klienta na jinou doménu, než na které běží.
+Co je ale velmi důležité, tak do konfigurace a middlewaru musíme přidat podporu CORS (Cross-origin resource sharing), kde adresa "https://localhost:7074" je adresa Blazor aplikace, kterou zadáme až tuto aplikaci vytvoříme. CORS musíme povolit proto, že Blazor a WebAPI budou běžet na jiném portu. To znamená že jde o jinou doménu a prohlížeč může blokovat dotaz z klienta na jinou doménu, než na které běží.
 
 ```csharp
 public static void Main(string[] args)
