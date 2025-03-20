@@ -35,7 +35,6 @@ namespace Knihovna.WebAPI
 
             app.UseAuthorization();
 
-
             app.MapPost("/seed", Seed);
 
             app.MapBookApis();
