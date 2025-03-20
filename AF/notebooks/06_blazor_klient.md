@@ -38,6 +38,34 @@ public static async Task<Ok<Student[]>> GetAllStudents(StudentContext context)
 }
 ```
 
+Co je ale velmi důležité, tak do configurace a middlewaru musíme přidat podporu CORS (Cross-origin resource sharing), kde adresa "https://localhost:7074" je adresa Blazor aplikace, kterou zadáme až tuto aplikaci vytvoříme. CORS musíme povolit proto, že Blazor a WebAPI budou běží na jiném portu což znamená, že běží na jiné doméně a prohlížeč může blokovat dotaz z klienta na jinou doménu, než na které běží.
+
+```csharp
+public static void Main(string[] args)
+{
+    var builder = WebApplication.CreateBuilder(args);
+
+    builder.Services.AddOpenApi();
+
+    builder.Services.AddDbContext<StudentContext>(opt => opt.UseSqlite("DataSource=studenti.db"));
+
+    builder.Services.AddCors(); // CORS 
+
+    WebApplication app = builder.Build();
+
+    if (app.Environment.IsDevelopment())
+    {
+        app.MapOpenApi();
+    }
+
+    app.UseCors(p => p.WithOrigins("https://localhost:7074").AllowCredentials().AllowAnyMethod().AllowAnyHeader()); // CORS 
+
+    app.MapGet("/", GetAllStudents).WithName("GetAllStudents");
+
+    app.Run();
+}
+```
+
 ##  Blazor WebAssembly
 
 Nyní vytvoříme projekt "Blazor WebAssembly Standalone App" využívající render mód Interactive WebAssembly.
