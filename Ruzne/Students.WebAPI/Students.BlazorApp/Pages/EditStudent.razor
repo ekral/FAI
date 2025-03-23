@@ -1,0 +1,27 @@
+﻿@page "/students/edit/{StudentId:int}"
+
+<h3>Edit Student</h3>
+
+@if (Student is null)
+{
+    <p><em>Loading</em></p>
+}
+else
+{
+    <EditForm Model="Student" FormName="EditStudent" OnValidSubmit="ValidSubmit" Enhance>
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="mb-3">
+            <label for="Jmeno" class="form-label" >Jmeno</label>
+            <InputText id="Jmeno" class="form-control" @bind-Value="Student.Jmeno" />
+        </div>
+        <div class="mb-3">
+            <InputCheckbox id="Studuje" class="form-check-input" @bind-Value="Student.Studuje" />
+            <label for="Studuje" class="form-check-label">Studuje</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+        <NavLink class="btn btn-secondary" href="students">Cancel</NavLink>
+    </EditForm>
+}
+
+

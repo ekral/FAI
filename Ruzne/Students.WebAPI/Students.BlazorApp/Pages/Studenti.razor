@@ -12,6 +12,7 @@
                 <th>Id</th>
                 <th>Jmeno</th>
                 <th>Studuje</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -21,6 +22,7 @@
                     <td>@student.StudentId</td>
                     <td>@student.Jmeno</td>
                     <td>@student.Studuje</td>
+                    <td><NavLink class="btn btn-secondary" href="@($"students/edit/{@student.StudentId}")">Edit</NavLink></td>
                 </tr>
             }
         </tbody>
