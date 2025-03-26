@@ -8,7 +8,7 @@ V tomto materiálu si probereme jak vytvořit jednoduchého [Blazor](https://dot
 
 ## WebAPI
 
-Nejprve si vytvoříme WebAPI, kde budeme mít následující entitu a DbContext. Dále máme namapované následující endpointy. První endpoint vytvoří databází a druhý endpoint vrátí všechny studenty v databázi. Také přidáme `StudentContext` do Services (IoC kontejneru). 
+Nejprve si vytvoříme WebAPI, kde budeme mít entitu `Student`  a `StudentContext`. Dále máme namapované následující endpointy. První endpoint vytvoří databází a druhý endpoint vrátí všechny studenty v databázi. Také přidáme `StudentContext` do Services (IoC kontejneru). 
 
 Co je ale velmi důležité a nové pro Blazor projekt, tak do konfigurace a middlewaru přidáme podporu CORS (Cross-origin resource sharing), kde adresa "https://localhost:7074" je adresa Blazor aplikace, kterou zadáme až tuto aplikaci vytvoříme. CORS musíme povolit proto, že Blazor a WebAPI budou běžet na jiném portu. To znamená že jde o jinou doménu a prohlížeč může blokovat dotaz z klienta na jinou doménu, než na které běží.
 
