@@ -16,12 +16,12 @@ Vytvořte konzolovou aplikaci pro tvorbu objednávek. Použijte raw SQL příkaz
  
 Vytvořte následující menu:
   
-1 Vytvor databazi a tabulky.
+1. Vytvor databazi a tabulky.
 
-2 Pridej noveho zakaznika.
+2. Pridej noveho zakaznika.
 
-3 Pridej novou objednavku.
+3. Pridej novou objednavku.
 
-4 Vypis objednavky vcetne jmena zakaznika.
+4. Vypis objednavky vcetne jmena zakaznika.
 
-k. konec.
+5. konec.
