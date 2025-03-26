@@ -4,6 +4,8 @@
 
 ---
 
+[Studijní materiál](https://github.com/ekral/FAI/blob/master/AF/notebooks/06_blazor_klient.md)
+
 ## Webová služba (WebAPI)
 
 1) Definujte třídu `Student`, která bude mít vlastnosti `StudentId`, `Jmeno` a `Studuje`.
@@ -21,8 +23,6 @@
 6) Poznamenejte si URL adresu vytvořeného WebAPI.
 
 ## Webový klient
-
-[Studijní materiál](https://github.com/ekral/FAI/blob/master/AF/notebooks/06_blazor_klient.md)
 
 1) Vytvořte webového klienta s pomocí Blazor WebAssembly klienta a zkopírujte jeho URL adresu.
 
