@@ -26,7 +26,7 @@ public class StudentContext(DbContextOptions<StudentContext> options) : DbContex
 }
 ```
 
-A dále máme namapovaný následující endpointy. První endpoint vytvoří databází a druhý endpoint vrátí všechny studenty v databázi.
+A dále máme namapované následující endpointy. První endpoint vytvoří databází a druhý endpoint vrátí všechny studenty v databázi.
 
 ```csharp
 app.MapGet("/seed", WebApiVersion1.Seed);
