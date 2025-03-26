@@ -29,7 +29,7 @@ public class StudentContext(DbContextOptions<StudentContext> options) : DbContex
 A dále máme namapovaný následující endpoint, který vrátí všechny studenty v databázi.
 
 ```csharp
-app.MapGet("/students", GetAllStudents).WithName("GetAllStudents");
+app.MapGet("/students", GetAllStudents);
 
 
 public static async Task<Ok<Student[]>> GetAllStudents(StudentContext context)
@@ -53,7 +53,7 @@ public static void Main(string[] args)
 
     app.UseCors(p => p.WithOrigins("https://localhost:7074").AllowCredentials().AllowAnyMethod().AllowAnyHeader()); // CORS 
 
-    app.MapGet("/students", GetAllStudents).WithName("GetAllStudents");
+    app.MapGet("/students", GetAllStudents);
 
     app.Run();
 }
