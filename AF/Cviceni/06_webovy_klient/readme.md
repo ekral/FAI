@@ -10,13 +10,15 @@
 
 2) Vložte nuget balíček `Microsoft.EntityFrameworkCore.Sqlite Definujte` `StudentContext` s jednou tabulkou `Studenti`. 
 
-3) Definujte metody a namapujte endpointy:
+3) Zaregistrujte `StudentContext` do IoC kontejneru (Services).
+
+4) Definujte metody a namapujte endpointy:
    - endpoint `/seed` vytvoří databázi a vloží do ní tři studenty.
    - endpoint `/students` vrátí všechny studenty.
 
-4) Připojte se k endpointu `/seed` a vytvořte tím databázi.
+5) Připojte se k endpointu `/seed` a vytvořte tím databázi.
 
-5) Poznamenejte si URL adresu vytvořeného WebAPI.
+6) Poznamenejte si URL adresu vytvořeného WebAPI.
 
 ## Webový klient
 
