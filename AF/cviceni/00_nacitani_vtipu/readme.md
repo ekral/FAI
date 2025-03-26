@@ -1,4 +1,8 @@
-# Načítání vtipů
+# 00 Opakování, načítání vtipů z webové služby
+
+**autor: Erik Král ekral@utb.cz**
+
+---
 
 Vytvořte konzolovou aplikaci v jazyce C#, která
 
