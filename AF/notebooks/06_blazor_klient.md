@@ -45,18 +45,11 @@ public static void Main(string[] args)
 {
     var builder = WebApplication.CreateBuilder(args);
 
-    builder.Services.AddOpenApi();
-
     builder.Services.AddDbContext<StudentContext>(opt => opt.UseSqlite("DataSource=studenti.db"));
 
     builder.Services.AddCors(); // CORS 
 
     WebApplication app = builder.Build();
-
-    if (app.Environment.IsDevelopment())
-    {
-        app.MapOpenApi();
-    }
 
     app.UseCors(p => p.WithOrigins("https://localhost:7074").AllowCredentials().AllowAnyMethod().AllowAnyHeader()); // CORS 
 
