@@ -20,4 +20,8 @@
 
 ## Webový klient
 
-Vytvořte webového klienta s pomocí Standalone WebAssembly Blazor klienta.
+[Studijní materiál](https://github.com/ekral/FAI/blob/master/AF/notebooks/06_blazor_klient.md)
+
+1) Vytvořte webového klienta s pomocí Blazor WebAssembly klienta a zkopírujte jeho URL adresu.
+
+2) Vložte do webové služby konfiguraci CORS a použijte URL adresu Blazor klienta.
