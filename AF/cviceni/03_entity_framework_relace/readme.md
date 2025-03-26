@@ -16,3 +16,6 @@ Vytvořte funkce pro
 - VypisSkupinyEager - vypíše skupiny a studenty a zůstatek na kartě  ve skupině pomocí Eager Loading.
 - VypisSkupinyExplicit - vypíše skupiny a studenty ve skupině pomocí Explicit Loading .
 - VypisPredmetuStudentu - vypíše studenty a jejich předměty pomocí Eager Loading.
+
+Vytvořte konzolovou aplikaci umožňující spustit vytvořené metody.
+
