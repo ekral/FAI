@@ -1,4 +1,8 @@
-# Databáze objednávek pomocí ADO.NET
+# 01 Databáze objednávek pomocí ADO.NET
+
+**autor: Erik Král ekral@utb.cz**
+
+---
 
 Vytvořte konzolovou aplikaci pro tvorbu objednávek. Použijte raw SQL příkazy ADO.NET. Databáze SQLite bude obsahovat tabulky:
 

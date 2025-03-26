@@ -1,8 +1,12 @@
-# Databáze studentů v Entity Frameworku
+# 02 Databáze studentů v Entity Frameworku
+
+**autor: Erik Král ekral@utb.cz**
+
+---
 
 ## Databáze studentů
 
-Vytvořte databázi studentů v Entity Frameworku, kde
+Vytvořte databázi studentů v Entity Frameworku a konzolovou aplikaci, kde
 
 Student bude mít sloupce:
 - StudentId

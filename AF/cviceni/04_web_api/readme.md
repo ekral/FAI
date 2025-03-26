@@ -1,4 +1,8 @@
-# CRUD operace ve WebAPI
+# 04 CRUD operace ve webové službě (studenti)
+
+**autor: Erik Král ekral@utb.cz**
+
+---
 
 Vytvořte WebAPI s Entity Frameworkem, kde budou metody
 

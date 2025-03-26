@@ -1,4 +1,8 @@
-# Entity framework relace
+# 03 Entity framework relace studentů
+
+**autor: Erik Král ekral@utb.cz**
+
+---
 
 Vytvořte následující relace:
 
