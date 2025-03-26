@@ -26,11 +26,28 @@ public class StudentContext(DbContextOptions<StudentContext> options) : DbContex
 }
 ```
 
-A dále máme namapovaný následující endpoint, který vrátí všechny studenty v databázi.
+A dále máme namapovaný následující endpointy. První endpoint vytvoří databází a druhý endpoint vrátí všechny studenty v databázi.
 
 ```csharp
+app.MapGet("/seed", WebApiVersion1.Seed);
 app.MapGet("/students", GetAllStudents);
 
+public static async Task<Created> Seed(StudentContext context)
+{
+    await context.Database.EnsureDeletedAsync();
+
+    if (await context.Database.EnsureCreatedAsync())
+    {
+        await context.AddRangeAsync(
+            new Student() { Jmeno = "Jiri", Studuje = true },
+            new Student() { Jmeno = "Karel", Studuje = false },
+            new Student() { Jmeno = "Alena", Studuje = true });
+
+        await context.SaveChangesAsync();
+    }
+
+    return TypedResults.Created();
+}
 
 public static async Task<Ok<Student[]>> GetAllStudents(StudentContext context)
 {
