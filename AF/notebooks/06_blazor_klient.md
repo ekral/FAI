@@ -54,6 +54,11 @@ public static async Task<Ok<Student[]>> GetAllStudents(StudentContext context)
     return TypedResults.Ok(await context.Studenti.ToArrayAsync());
 }
 ```
+Nezpomeňme přidat `StudentContext` do Services:
+
+```csharp
+builder.Services.AddDbContext<StudentContext>(opt => opt.UseSqlite("DataSource=studenti.db"));
+```
 
 Co je ale velmi důležité, tak do konfigurace a middlewaru musíme přidat podporu CORS (Cross-origin resource sharing), kde adresa "https://localhost:7074" je adresa Blazor aplikace, kterou zadáme až tuto aplikaci vytvoříme. CORS musíme povolit proto, že Blazor a WebAPI budou běžet na jiném portu. To znamená že jde o jinou doménu a prohlížeč může blokovat dotaz z klienta na jinou doménu, než na které běží.
 
@@ -70,6 +75,7 @@ public static void Main(string[] args)
 
     app.UseCors(p => p.WithOrigins("https://localhost:7074").AllowCredentials().AllowAnyMethod().AllowAnyHeader()); // CORS 
 
+    app.MapGet("/seed", WebApiVersion1.Seed);
     app.MapGet("/students", GetAllStudents);
 
     app.Run();
