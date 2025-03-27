@@ -1,0 +1,13 @@
+﻿@Studenti.WebAPI_HostAddress = https://localhost:7266
+
+GET {{Studenti.WebAPI_HostAddress}}/seed
+
+###
+
+GET {{Studenti.WebAPI_HostAddress}}/students
+
+###
+
+GET {{Studenti.WebAPI_HostAddress}}/students/1
+
+###
