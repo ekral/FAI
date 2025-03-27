@@ -15,56 +15,65 @@ Co je ale velmi důležité a nové pro Blazor projekt, tak do konfigurace a mid
 Nezpomeňte do projektu vložit nuget balíček `Microsoft.EntityFrameworkCore.Sqlite`.
 
 ```csharp
-public class Student
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
+
+namespace Studenti.WebAPI
 {
-    public int StudentId { get; set; }
-    public required string Jmeno { get; set; }
-    public required bool Studuje { get; set; }
-}
-
-public class StudentContext(DbContextOptions<StudentContext> options) : DbContext(options)
-{
-    public DbSet<Student> Studenti { get; set; }
-}
-
-public static void Main(string[] args)
-{
-    var builder = WebApplication.CreateBuilder(args);
-
-    builder.Services.AddDbContext<StudentContext>(opt => opt.UseSqlite("DataSource=studenti.db"));
-
-    builder.Services.AddCors(); // CORS 
-
-    WebApplication app = builder.Build();
-
-    app.UseCors(p => p.WithOrigins("https://localhost:7074").AllowCredentials().AllowAnyMethod().AllowAnyHeader()); // CORS 
-
-    app.MapGet("/seed", WebApiVersion1.Seed);
-    app.MapGet("/students", GetAllStudents);
-
-    app.Run();
-}
-
-public static async Task<Created> Seed(StudentContext context)
-{
-    await context.Database.EnsureDeletedAsync();
-
-    if (await context.Database.EnsureCreatedAsync())
+    public class Student
     {
-        await context.AddRangeAsync(
-            new Student() { Jmeno = "Jiri", Studuje = true },
-            new Student() { Jmeno = "Karel", Studuje = false },
-            new Student() { Jmeno = "Alena", Studuje = true });
-
-        await context.SaveChangesAsync();
+        public int StudentId { get; set; }
+        public required string Jmeno { get; set; }
+        public required bool Studuje { get; set; }
     }
 
-    return TypedResults.Created();
-}
+    public class StudentContext(DbContextOptions<StudentContext> options) : DbContext(options)
+    {
+        public DbSet<Student> Studenti { get; set; }
+    }
 
-public static async Task<Ok<Student[]>> GetAllStudents(StudentContext context)
-{
-    return TypedResults.Ok(await context.Studenti.ToArrayAsync());
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddDbContext<StudentContext>(opt => opt.UseSqlite("DataSource=studenti.db"));
+
+            builder.Services.AddCors(); // CORS 
+
+            WebApplication app = builder.Build();
+
+            app.UseCors(p => p.WithOrigins("https://localhost:7074").AllowCredentials().AllowAnyMethod().AllowAnyHeader()); // CORS 
+
+            app.MapGet("/seed", Seed);
+            app.MapGet("/students", GetAllStudents);
+
+            app.Run();
+        }
+
+        public static async Task<Created> Seed(StudentContext context)
+        {
+            await context.Database.EnsureDeletedAsync();
+
+            if (await context.Database.EnsureCreatedAsync())
+            {
+                await context.AddRangeAsync(
+                    new Student() { Jmeno = "Jiri", Studuje = true },
+                    new Student() { Jmeno = "Karel", Studuje = false },
+                    new Student() { Jmeno = "Alena", Studuje = true });
+
+                await context.SaveChangesAsync();
+            }
+
+            return TypedResults.Created();
+        }
+
+        public static async Task<Ok<Student[]>> GetAllStudents(StudentContext context)
+        {
+            return TypedResults.Ok(await context.Studenti.ToArrayAsync());
+        }
+    }
 }
 ```
 
