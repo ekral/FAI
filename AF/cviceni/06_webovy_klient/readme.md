@@ -8,19 +8,21 @@
 
 ## Webová služba (WebAPI)
 
-1) Definujte třídu `Student`, která bude mít vlastnosti `StudentId`, `Jmeno` a `Studuje`.
+1) Vložte nuget balíček `Microsoft.EntityFrameworkCore.Sqlite`.
+ 
+2) Definujte třídu `Student`, která bude mít vlastnosti `StudentId`, `Jmeno` a `Studuje`.
 
-2) Vložte nuget balíček `Microsoft.EntityFrameworkCore.Sqlite Definujte` `StudentContext` s jednou tabulkou `Studenti`. 
+3) Definujte `StudentContext` s jednou tabulkou `Studenti`. 
 
-3) Zaregistrujte `StudentContext` do IoC kontejneru (Services).
+4) Zaregistrujte `StudentContext` do IoC kontejneru (Services).
 
-4) Definujte metody a namapujte endpointy:
+5) Definujte metody a namapujte endpointy:
    - endpoint `/seed` vytvoří databázi a vloží do ní tři studenty.
    - endpoint `/students` vrátí všechny studenty.
 
-5) Připojte se k endpointu `/seed` a vytvořte tím databázi.
+6) Připojte se k endpointu `/seed` a vytvořte tím databázi.
 
-6) Poznamenejte si URL adresu vytvořeného WebAPI.
+7) Poznamenejte si URL adresu vytvořeného WebAPI.
 
 ## Webový klient
 
