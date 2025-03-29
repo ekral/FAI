@@ -1,4 +1,4 @@
-# 05 Blazor klient
+# 06 Blazor klient
 
 **autor: Erik Král ekral@utb.cz**
 
