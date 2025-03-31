@@ -11,3 +11,13 @@ GET {{Studenti.WebAPI_HostAddress}}/students
 GET {{Studenti.WebAPI_HostAddress}}/students/1
 
 ###
+
+PUT {{Studenti.WebAPI_HostAddress}}/students/1
+Content-Type: application/json
+
+{
+  "studentId": 1,
+  "jmeno": "Novotna",
+  "studuje": true
+}
+###
