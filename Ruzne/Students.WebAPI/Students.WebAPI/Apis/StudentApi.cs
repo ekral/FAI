@@ -15,6 +15,7 @@ namespace Students.WebAPI.Apis
 
             studentItems.MapGet("/", GetAllStudents).WithName("GetAllStudents");
             studentItems.MapGet("/active", GetActiveStudents);
+            studentItems.MapGet("/page", GetStudentsPage);
             studentItems.MapGet("/{id}", GetStudent);
             studentItems.MapPost("/", CreateStudent);
             studentItems.MapPut("/{id}", UpdateStudent);
@@ -30,10 +31,15 @@ namespace Students.WebAPI.Apis
 
             if (await context.Database.EnsureCreatedAsync())
             {
-                await context.AddRangeAsync(
-                    new Student() { Jmeno = "Jiri", Studuje = true },
-                    new Student() { Jmeno = "Karel", Studuje = false },
-                    new Student() { Jmeno = "Alena", Studuje = true });
+                string[] jmena = ["Jiri", "Karel", "Tereza", "Alena", "Matej", "Marko", "Pavlina", "David", "Adam", "Radko", "Filip", "Michal", "Martin", "Erik", "Petr", "Tomas"];
+
+                for (int i = 0; i < 100; i++)
+                {
+                    string jmeno = jmena[Random.Shared.Next(jmena.Length - 1)];
+                    bool studuje = Random.Shared.NextDouble() >= 0.5;
+
+                    await context.AddAsync(new Student() { Jmeno = jmeno, Studuje = studuje });
+                }
 
                 await context.SaveChangesAsync();
             }
@@ -44,6 +50,11 @@ namespace Students.WebAPI.Apis
         public static async Task<Ok<Student[]>> GetAllStudents(StudentContext context)
         {
             return TypedResults.Ok(await context.Studenti.ToArrayAsync());
+        }
+
+        public static async Task<Ok<Student[]>> GetStudentsPage(int startIndex, int count, StudentContext context)
+        {
+            return TypedResults.Ok(await context.Studenti.Skip(startIndex).Take(count).ToArrayAsync());
         }
 
         public static async Task<Ok<Student[]>> GetActiveStudents(StudentContext context)

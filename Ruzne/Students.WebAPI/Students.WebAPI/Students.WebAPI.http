@@ -48,3 +48,7 @@ GET {{Students.WebAPI_HostAddress}}/openapi/v1.json
 PATCH {{Students.WebAPI_HostAddress}}/students/1
 
 ###
+
+GET {{Students.WebAPI_HostAddress}}/students/page?startIndex=0&count=10
+
+###
