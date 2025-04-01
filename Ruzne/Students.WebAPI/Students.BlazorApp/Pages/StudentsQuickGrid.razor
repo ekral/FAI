@@ -1,5 +1,7 @@
 ﻿@page "/quickgrid"
 @inject HttpClient Http
+@inject NavigationManager Navigation
+
 @using Microsoft.AspNetCore.Components.QuickGrid
 
 <h3>Students QuickGrid</h3>
@@ -10,21 +12,45 @@
 }
 else
 {
-    <QuickGrid Items="studenti" Pagination="pagination">
+    @* <QuickGrid Items="studenti" Pagination="pagination">
         <PropertyColumn Property="@(s => s.StudentId)" Title="Id" Sortable="true"/>
         <PropertyColumn Property="@(s => s.Jmeno)" Title="Jmeno" Sortable="true"/>
         <PropertyColumn Property="@(s => s.Studuje)" Title="Studuje" Sortable="true"/>
     </QuickGrid>
 
-    <Paginator State="pagination"/>
+    <Paginator State="pagination"/> *@
+
+    <div class="grid" tabindex="-1">
+        <QuickGrid ItemsProvider="gridItemsProvider" Pagination="pagination">
+            <PropertyColumn Property="@(s => s.StudentId)" Title="Id" Sortable="true" />
+            <PropertyColumn Property="@(s => s.Jmeno)" Title="Jmeno" Sortable="true" />
+            <PropertyColumn Property="@(s => s.Studuje)" Title="Studuje" Sortable="true" />
+        </QuickGrid>
+
+        <Paginator State="pagination" />
+    </div>
+
 }
-    
+
 @code {
     PaginationState pagination = new PaginationState() { ItemsPerPage = 10 };
     IQueryable<Student>? studenti;
 
+    GridItemsProvider<Student>? gridItemsProvider;
+
     protected override async Task OnInitializedAsync()
     {
         studenti = (await Http.GetFromJsonAsync<Student[]>("/students"))?.AsQueryable();
+
+        gridItemsProvider = async req =>
+        {
+            string url = $"/students/page?startIndex={req.StartIndex}&count={req.Count ?? 10}";
+
+            PaginationResult? result = await Http.GetFromJsonAsync<PaginationResult>(url);
+
+            return GridItemsProviderResult.From(result.Students, result.Total);
+        };
     }
+
+    public record PaginationResult(Student[] Students, int Total);
 }

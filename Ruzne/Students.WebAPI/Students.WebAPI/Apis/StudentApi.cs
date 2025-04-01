@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Students.WebAPI.Data;
+using Students.WebAPI.DTOs;
 using Students.WebAPI.Models;
 
 namespace Students.WebAPI.Apis
@@ -52,9 +53,14 @@ namespace Students.WebAPI.Apis
             return TypedResults.Ok(await context.Studenti.ToArrayAsync());
         }
 
-        public static async Task<Ok<Student[]>> GetStudentsPage(int startIndex, int count, StudentContext context)
+        public static async Task<Ok<PaginationResult>> GetStudentsPage(int startIndex, int count, StudentContext context)
         {
-            return TypedResults.Ok(await context.Studenti.Skip(startIndex).Take(count).ToArrayAsync());
+            Student[] students = await context.Studenti.Skip(startIndex).Take(count).ToArrayAsync();
+            int total = await context.Studenti.CountAsync();
+
+            var result = new PaginationResult(students, total);
+
+            return TypedResults.Ok(result);
         }
 
         public static async Task<Ok<Student[]>> GetActiveStudents(StudentContext context)
