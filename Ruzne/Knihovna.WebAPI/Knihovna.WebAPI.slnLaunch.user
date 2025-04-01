@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "Knihovna.WebAPI\\Knihovna.WebAPI.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "Knihovna.BlazorApp\\Knihovna.BlazorApp.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]
