@@ -22,6 +22,7 @@ namespace Studenti.WebAPI
             app.MapGet("/seed", Seed);
             app.MapGet("/students", GetAllStudents);
             app.MapGet("/students/{id}", GetStudentById);
+            app.MapPut("/students/{id}", UpdateStudent);
 
             app.Run();
         }
@@ -54,6 +55,23 @@ namespace Studenti.WebAPI
             if (await context.Studenti.FindAsync(id) is Student student)
             {
                 return TypedResults.Ok(student);
+            }
+            else
+            {
+                return TypedResults.NotFound();
+            }
+        }
+
+        public static async Task<Results<NoContent, NotFound>> UpdateStudent(int id, Student input, StudentContext context)
+        {
+            if (await context.Studenti.FindAsync(id) is Student student)
+            {
+                student.Jmeno = input.Jmeno;
+                student.Studuje = input.Studuje;
+        
+                await context.SaveChangesAsync();
+        
+                return TypedResults.NoContent();
             }
             else
             {
