@@ -6,22 +6,16 @@
 
 <h3>Students QuickGrid</h3>
 
-@if (studenti is null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <div class="grid" tabindex="-1">
-        <QuickGrid ItemsProvider="gridItemsProvider" Pagination="pagination">
-            <PropertyColumn Property="@(s => s.StudentId)" Title="Id" Sortable="true" />
-            <PropertyColumn Property="@(s => s.Jmeno)" Title="Jmeno" Sortable="true" />
-            <PropertyColumn Property="@(s => s.Studuje)" Title="Studuje" Sortable="true" />
-        </QuickGrid>
+<div class="grid" tabindex="-1">
+    <QuickGrid ItemsProvider="gridItemsProvider" Pagination="pagination">
+        <PropertyColumn Property="@(s => s.StudentId)" Title="Id" Sortable="true" />
+        <PropertyColumn Property="@(s => s.Jmeno)" Title="Jmeno" Sortable="true" />
+        <PropertyColumn Property="@(s => s.Studuje)" Title="Studuje" Sortable="true" />
+    </QuickGrid>
 
-        <Paginator State="pagination" />
-    </div>
-}
+    <Paginator State="pagination" />
+</div>
+
 
 @code {
     PaginationState pagination = new PaginationState() { ItemsPerPage = 10 };
@@ -32,18 +26,25 @@ else
     {
         gridItemsProvider = async req =>
         {
-            var property = req.GetSortByProperties().FirstOrDefault();
+            string url = $"/students/page?startIndex={req.StartIndex}&count={req.Count ?? 10}";
 
-            string url = $"/students/page?startIndex={req.StartIndex}&count={req.Count ?? 10}&";
+            var properties = req.GetSortByProperties();
+
+            if(properties.Count > 0)
+            {
+                var property = properties.First();
+
+                url += $"&sortBy={property.PropertyName}&direction={property.Direction}";
+            }
 
             PaginationResult? result = await Http.GetFromJsonAsync<PaginationResult>(url);
 
-            if (result is not null)
+            if (result is null)
             {
-                return GridItemsProviderResult.From(result.Students, result.Total);
+                return GridItemsProviderResult.From<Student>([], 0);
             }
-            
-            return GridItemsProviderResult.From<Student>([], 0);
+
+            return GridItemsProviderResult.From(result.Students, result.Total);
         };
     }
 

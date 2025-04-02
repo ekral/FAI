@@ -52,3 +52,7 @@ PATCH {{Students.WebAPI_HostAddress}}/students/1
 GET {{Students.WebAPI_HostAddress}}/students/page?startIndex=0&count=10
 
 ###
+
+GET {{Students.WebAPI_HostAddress}}/students/page?startIndex=0&count=10&sortBy=Jmeno&direction=Ascending
+
+###

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Students.WebAPI.Data;
 using Students.WebAPI.DTOs;
 using Students.WebAPI.Models;
@@ -53,9 +54,36 @@ namespace Students.WebAPI.Apis
             return TypedResults.Ok(await context.Studenti.ToArrayAsync());
         }
 
-        public static async Task<Ok<PaginationResult>> GetStudentsPage(int startIndex, int count, StudentContext context)
+        public static async Task<Ok<PaginationResult>> GetStudentsPage(StudentContext context, int startIndex, int count, string? sortBy = null, string? direction = null)
         {
-            Student[] students = await context.Studenti.Skip(startIndex).Take(count).ToArrayAsync();
+            IQueryable<Student> query = context.Studenti;
+
+            if(sortBy is not null && direction is not null)
+            {
+                switch(direction)
+                {
+                    case "Ascending":
+                        query = sortBy switch
+                        {
+                            "StudentId" => query.OrderBy(s => s.StudentId),
+                            "Jmeno" => query.OrderBy(s => s.Jmeno),
+                            "Studuje" => query.OrderBy(s => s.Studuje),
+                            _ => query
+                        };
+                        break;
+                    case "Descending":
+                        query = sortBy switch
+                        {
+                            "StudentId" => query.OrderByDescending(s => s.StudentId),
+                            "Jmeno" => query.OrderByDescending(s => s.Jmeno),
+                            "Studuje" => query.OrderByDescending(s => s.Studuje),
+                            _ => query
+                        };
+                        break;
+                }
+            }
+
+            Student[] students = await query.Skip(startIndex).Take(count).ToArrayAsync();
             int total = await context.Studenti.CountAsync();
 
             var result = new PaginationResult(students, total);
