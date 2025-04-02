@@ -1,4 +1,4 @@
-# Úkol 07 Blazor WebAssembly webový formulář
+# Úkol 07: Blazor WebAssembly webový formulář
 
 **autor: Erik Král ekral@utb.cz**
 
