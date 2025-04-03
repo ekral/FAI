@@ -4,12 +4,13 @@
 
 <h3>StudentsQuickGridMemory</h3>
 
-<QuickGrid Items="studenti">
-    <PropertyColumn Property="@(s => s.StudentId)" Title="Id" />
-    <PropertyColumn Property="@(s => s.Jmeno)" Title="Jméno" />
-    <PropertyColumn Property="@(s => s.Studuje)" Title="Studuje" />
-</QuickGrid>
-
+<div class="grid">
+    <QuickGrid Items="studenti">
+        <PropertyColumn Property="@(s => s.StudentId)" Title="Id" />
+        <PropertyColumn Property="@(s => s.Jmeno)" Title="Jméno" />
+        <PropertyColumn Property="@(s => s.Studuje)" Title="Studuje" />
+    </QuickGrid>
+</div>
 @code {
     private IQueryable<Student>? studenti;
 

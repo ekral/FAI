@@ -10,7 +10,22 @@ V následujícím příkladu použijeme QuickGrid pro zobrazení studentů, kdy 
 
 Nejprive si musíme do projektu vložit nuget balíček `Microsoft.AspNetCore.Components.QuickGrid`.
 
+QuickGrid může zobrazovat následující zdroje:
+
+- In-memmory IQeryable - objekty v paměti, `IEnumerable` (List, pole, atd.) jde převést na `IQueryable` pomocí metody `AsQueryable()`. Pro menší počet objektů-
+- Entity Framework IQueryable - query EF, automatické filtrování a řazení.
+- Libovolná vzdálená data, například WebAPI - řazení a filtrování musí podporovat zdroj dat, například endpoint.
+
 Použití potom bude následující, kdy zobrazíme všechny studenty v databázi, studentů můžou být stovky až tisíce.
+
+Pomocí CSS omezíme velikost gridu:
+
+```css
+.grid {
+    height: 25rem;
+    overflow-y: auto;
+}
+```
 
 ```razor
 @page "/quickgridmemory"
@@ -19,11 +34,13 @@ Použití potom bude následující, kdy zobrazíme všechny studenty v databáz
 
 <h3>StudentsQuickGridMemory</h3>
 
-<QuickGrid Items="studenti">
-    <PropertyColumn Property="@(s => s.StudentId)" Title="Id" />
-    <PropertyColumn Property="@(s => s.Jmeno)" Title="Jméno" />
-    <PropertyColumn Property="@(s => s.Studuje)" Title="Studuje" />
-</QuickGrid>
+<div class="grid">
+    <QuickGrid Items="studenti">
+        <PropertyColumn Property="@(s => s.StudentId)" Title="Id" />
+        <PropertyColumn Property="@(s => s.Jmeno)" Title="Jméno" />
+        <PropertyColumn Property="@(s => s.Studuje)" Title="Studuje" />
+    </QuickGrid>
+</div>
 
 @code {
     private IQueryable<Student>? studenti;
