@@ -1,0 +1,21 @@
+﻿@page "/quickgridmemory"
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject HttpClient Http
+
+<h3>StudentsQuickGridMemory</h3>
+
+<QuickGrid Items="studenti">
+    <PropertyColumn Property="@(s => s.StudentId)" Title="Id" />
+    <PropertyColumn Property="@(s => s.Jmeno)" Title="Jméno" />
+    <PropertyColumn Property="@(s => s.Studuje)" Title="Studuje" />
+</QuickGrid>
+
+@code {
+    private IQueryable<Student>? studenti;
+
+    protected override async Task OnInitializedAsync()
+    {
+        studenti = (await Http.GetFromJsonAsync<Student[]>("students"))?.AsQueryable();
+    }
+
+}
