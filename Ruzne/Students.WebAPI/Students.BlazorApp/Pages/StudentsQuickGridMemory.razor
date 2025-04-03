@@ -5,18 +5,28 @@
 <h3>StudentsQuickGridMemory</h3>
 
 <div class="grid">
-    <QuickGrid Items="studenti">
-        <PropertyColumn Property="@(s => s.StudentId)" Title="Id" />
-        <PropertyColumn Property="@(s => s.Jmeno)" Title="Jméno" />
-        <PropertyColumn Property="@(s => s.Studuje)" Title="Studuje" />
+    <QuickGrid Items="studenti" Virtualize="true">
+        <PropertyColumn Property="@(s => s.StudentId)" Title="Id" Sortable="true" />
+        <PropertyColumn Property="@(s => s.Jmeno)" Title="Jméno" Sortable="true">
+            <ColumnOptions>
+                <div class="search-box">
+                    <input type="text" class="form-control" autofocus @bind="nameFilter" @bind:event="oninput" placeholder="Jméno..." />
+                </div>
+            </ColumnOptions>
+        </PropertyColumn>
+        <PropertyColumn Property="@(s => s.Studuje)" Title="Studuje" Sortable="true" />
+        <TemplateColumn>
+            <NavLink class="btn btn-success" href="@($"students/edit/{@context.StudentId}")">Edit</NavLink>
+        </TemplateColumn>
     </QuickGrid>
 </div>
+
 @code {
     private IQueryable<Student>? studenti;
+    string nameFilter = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
         studenti = (await Http.GetFromJsonAsync<Student[]>("students"))?.AsQueryable();
     }
-
 }
