@@ -8,7 +8,7 @@ V této části probereme jak zobrazit velké množství dat pomocí componenty 
 
 V následujícím příkladu použijeme QuickGrid pro zobrazení studentů, kdy v paměti budeme mít načtené všechny studenty.
 
-Nejprive si musíme do projektu vložit nuget balíček `Microsoft.AspNetCore.Components.QuickGrid`.
+Nejprive si musíme do projektu vložit nuget balíček [Microsoft.AspNetCore.Components.QuickGrid](https://www.nuget.org/packages/Microsoft.AspNetCore.Components.QuickGrid).
 
 QuickGrid může zobrazovat následující zdroje:
 
