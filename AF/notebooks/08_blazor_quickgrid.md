@@ -16,7 +16,7 @@ QuickGrid může zobrazovat následující zdroje:
 - Entity Framework IQueryable - query EF, automatické filtrování a řazení.
 - Libovolná vzdálená data, například WebAPI - řazení a filtrování musí podporovat zdroj dat, například endpoint.
 
-Pro 
+Pro všechny zdroje můžeme zapnout stránkování (nebo virtualizaci). 
 
 Použití potom bude následující, kdy zobrazíme všechny studenty v databázi, studentů můžou být stovky až tisíce.
 
