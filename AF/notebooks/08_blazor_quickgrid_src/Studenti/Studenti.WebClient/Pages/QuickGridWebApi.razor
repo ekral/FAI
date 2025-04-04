@@ -5,20 +5,22 @@
 
 <h3>QuickGridWebApi</h3>
 
-<QuickGrid ItemsProvider="gridItemsProvider" Pagination="pagination">
-    <PropertyColumn Property="@(s => s.StudentId)" Sortable="true" />
-    <PropertyColumn Property="@(s => s.Jmeno)" Sortable="true">
-        <ColumnOptions>
-            <div>
-                <input type="search" class="form-control-plaintext" autofocus @bind="nameFilter" @bind:event="oninput" placeholder="Jméno..." />
-            </div>
-        </ColumnOptions>
-    </PropertyColumn>
-    <PropertyColumn Property="@(s => s.Studuje)" Sortable="true" />
-    <TemplateColumn>
-        <NavLink class="btn btn-primary" href="@($"students/edit/{context.StudentId}")">Edit</NavLink>
-    </TemplateColumn>
-</QuickGrid>
+<div class="grid">
+    <QuickGrid ItemsProvider="gridItemsProvider" Pagination="pagination">
+        <PropertyColumn Property="@(s => s.StudentId)" Sortable="true" />
+        <PropertyColumn Property="@(s => s.Jmeno)" Sortable="true">
+            <ColumnOptions>
+                <div>
+                    <input type="search" class="form-control-plaintext" autofocus @bind="nameFilter" @bind:event="oninput" placeholder="Jméno..." />
+                </div>
+            </ColumnOptions>
+        </PropertyColumn>
+        <PropertyColumn Property="@(s => s.Studuje)" Sortable="true" />
+        <TemplateColumn>
+            <NavLink class="btn btn-primary" href="@($"students/edit/{context.StudentId}")">Edit</NavLink>
+        </TemplateColumn>
+    </QuickGrid>
+</div>
 
 <Paginator State="pagination" />
 

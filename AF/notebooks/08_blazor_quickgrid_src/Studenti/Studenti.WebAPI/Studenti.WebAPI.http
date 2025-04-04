@@ -21,3 +21,7 @@ Content-Type: application/json
   "studuje": true
 }
 ###
+
+GET {{Studenti.WebAPI_HostAddress}}/students/page?startIndex=0&count=10&sortBy=Jmeno&direction=Ascending
+
+###

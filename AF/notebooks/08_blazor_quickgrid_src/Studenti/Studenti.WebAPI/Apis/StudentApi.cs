@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Studenti.WebAPI.Data;
+using Studenti.WebAPI.DTOs;
 using Studenti.WebAPI.Models;
 
 namespace Studenti.WebAPI.Apis
@@ -11,6 +12,7 @@ namespace Studenti.WebAPI.Apis
         {
             app.MapGet("/seed", Seed);
             app.MapGet("/students", GetAllStudents);
+            app.MapGet("/students/page", GetStudentsPage);
             app.MapGet("/students/{id}", GetStudentById);
             app.MapPut("/students/{id}", UpdateStudent);
 
@@ -46,6 +48,42 @@ namespace Studenti.WebAPI.Apis
             return TypedResults.Ok(await context.Studenti.ToArrayAsync());
         }
 
+        public static async Task<Ok<PaginationResult>> GetStudentsPage(StudentContext context, int startIndex, int count, string? sortBy = null, string? direction = null)
+        {
+            IQueryable<Student> query = context.Studenti;
+
+            if (sortBy is not null && direction is not null)
+            {
+                switch (direction)
+                {
+                    case "Ascending":
+                        query = sortBy switch
+                        {
+                            "StudentId" => query.OrderBy(s => s.StudentId),
+                            "Jmeno" => query.OrderBy(s => s.Jmeno),
+                            "Studuje" => query.OrderBy(s => s.Studuje),
+                            _ => query
+                        };
+                        break;
+                    case "Descending":
+                        query = sortBy switch
+                        {
+                            "StudentId" => query.OrderByDescending(s => s.StudentId),
+                            "Jmeno" => query.OrderByDescending(s => s.Jmeno),
+                            "Studuje" => query.OrderByDescending(s => s.Studuje),
+                            _ => query
+                        };
+                        break;
+                }
+            }
+
+            Student[] students = await query.Skip(startIndex).Take(count).ToArrayAsync();
+            int total = await context.Studenti.CountAsync();
+
+            var result = new PaginationResult(students, total);
+
+            return TypedResults.Ok(result);
+        }
 
         public static async Task<Results<Ok<Student>, NotFound>> GetStudentById(int id, StudentContext context)
         {
