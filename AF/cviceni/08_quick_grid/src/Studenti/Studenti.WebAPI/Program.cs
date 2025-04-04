@@ -33,10 +33,17 @@ namespace Studenti.WebAPI
 
             if (await context.Database.EnsureCreatedAsync())
             {
-                await context.AddRangeAsync(
-                    new Student() { Jmeno = "Jiri", Studuje = true },
-                    new Student() { Jmeno = "Karel", Studuje = false },
-                    new Student() { Jmeno = "Alena", Studuje = true });
+                string[] names = ["Jiri", "Karel", "Alena", "Petr", "Samuel", "Tereza", "Marko", "David", "Jan", "Filip", "Martin", "Erik", "Jana", "Ondrej"];
+
+                for (int i = 0; i < 128; i++)
+                {
+                    string jmeno = names[Random.Shared.Next(names.Length - 1)];
+                    bool studuje = Random.Shared.NextDouble() >= 0.5;
+
+                    Student novy = new Student() { Jmeno = jmeno, Studuje = studuje };
+
+                    await context.AddAsync(novy);
+                }
 
                 await context.SaveChangesAsync();
             }
