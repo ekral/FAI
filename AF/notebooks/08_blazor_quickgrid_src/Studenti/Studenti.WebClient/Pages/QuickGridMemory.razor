@@ -1,0 +1,48 @@
+﻿@page "/quickgrid1"
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject HttpClient Http
+
+<h3>QuickGrid Memory Simple</h3>
+
+@if(students is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="grid">
+        <QuickGrid Items="Students">
+            <PropertyColumn Property="@(s => s.StudentId)" Sortable="true" />
+            <PropertyColumn Property="@(s => s.Jmeno)" Sortable="true">
+                <ColumnOptions>
+                    <div>
+                        <input type="search" class="form-control-plaintext" autofocus @bind="nameFilter" @bind:event="oninput" placeholder="Jméno..." />
+                    </div>
+                </ColumnOptions>
+            </PropertyColumn>
+            <PropertyColumn Property="@(s => s.Studuje)" Sortable="true" />
+            <TemplateColumn>
+                <NavLink class="btn btn-primary" href="@($"students/edit/{context.StudentId}")">Edit</NavLink>
+            </TemplateColumn>
+        </QuickGrid>
+    </div>
+}
+
+@code {
+    private IQueryable<Student>? Students 
+    { 
+        get
+        {
+
+            return students?.Where(s => s.Jmeno.Contains(nameFilter, StringComparison.InvariantCultureIgnoreCase)).AsQueryable();
+        } 
+    }
+
+    private List<Student>? students;
+    private string nameFilter = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        students = await Http.GetFromJsonAsync<List<Student>>("/students");
+    }
+}

@@ -1,0 +1,11 @@
+﻿.grid {
+    height: 25.0rem;
+    overflow-y: auto;
+}
+
+/* Sticky header while scrolling */
+::deep thead {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+}
