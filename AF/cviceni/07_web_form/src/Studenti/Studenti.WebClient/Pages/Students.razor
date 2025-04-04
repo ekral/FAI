@@ -5,7 +5,11 @@
 
 <h3>Studenti</h3>
 
-@if (students is not null)
+@if (students is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
 {
     <table class="table table-striped">
         <thead>
