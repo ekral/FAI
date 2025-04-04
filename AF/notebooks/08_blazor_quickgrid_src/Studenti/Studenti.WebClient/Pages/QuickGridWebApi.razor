@@ -1,0 +1,58 @@
+﻿@page "/quickgrid3"
+
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject HttpClient Http
+
+<h3>QuickGridWebApi</h3>
+
+<QuickGrid ItemsProvider="gridItemsProvider" Pagination="pagination">
+    <PropertyColumn Property="@(s => s.StudentId)" Sortable="true" />
+    <PropertyColumn Property="@(s => s.Jmeno)" Sortable="true">
+        <ColumnOptions>
+            <div>
+                <input type="search" class="form-control-plaintext" autofocus @bind="nameFilter" @bind:event="oninput" placeholder="Jméno..." />
+            </div>
+        </ColumnOptions>
+    </PropertyColumn>
+    <PropertyColumn Property="@(s => s.Studuje)" Sortable="true" />
+    <TemplateColumn>
+        <NavLink class="btn btn-primary" href="@($"students/edit/{context.StudentId}")">Edit</NavLink>
+    </TemplateColumn>
+</QuickGrid>
+
+<Paginator State="pagination" />
+
+@code {
+    PaginationState pagination = new PaginationState() { ItemsPerPage = 10 };
+
+    GridItemsProvider<Student>? gridItemsProvider;
+    private string nameFilter = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        gridItemsProvider = async req =>
+        {
+            string url = $"/students/page?startIndex={req.StartIndex}&count={req.Count ?? 10}";
+
+            var properties = req.GetSortByProperties();
+
+            if (properties.Count > 0)
+            {
+                var property = properties.First();
+
+                url += $"&sortBy={property.PropertyName}&direction={property.Direction}";
+            }
+
+            PaginationResult? result = await Http.GetFromJsonAsync<PaginationResult>(url);
+
+            if (result is null)
+            {
+                return GridItemsProviderResult.From<Student>([], 0);
+            }
+
+            return GridItemsProviderResult.From(result.Students, result.Total);
+        };
+    }
+
+    public record PaginationResult(Student[] Students, int Total);
+}
