@@ -218,7 +218,7 @@ Dále máme následující css:
 
 A nakonec razor kód:
 
-```
+```razor
 @page "/quickgrid3"
 
 @using Microsoft.AspNetCore.Components.QuickGrid
