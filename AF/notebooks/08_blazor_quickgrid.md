@@ -6,8 +6,6 @@
 
 V této části probereme jak zobrazit velké množství dat pomocí componenty [QuickGrid](https://aspnet.github.io/quickgridsamples/).
 
-V následujícím příkladu použijeme QuickGrid pro zobrazení studentů, kdy v paměti budeme mít načtené všechny studenty.
-
 Nejprive si musíme do projektu vložit nuget balíček [Microsoft.AspNetCore.Components.QuickGrid](https://www.nuget.org/packages/Microsoft.AspNetCore.Components.QuickGrid).
 
 QuickGrid může zobrazovat následující zdroje:
@@ -18,39 +16,146 @@ QuickGrid může zobrazovat následující zdroje:
 
 Pro všechny zdroje můžeme zapnout stránkování (nebo virtualizaci). 
 
-Použití potom bude následující, kdy zobrazíme všechny studenty v databázi, studentů můžou být stovky až tisíce.
+## Zobrazení objektů v paměti
+
+V prvním příkladu použijeme QuickGrid pro zobrazení studentů, kdy v paměti budeme mít načtené všechny studenty.
 
 Pomocí CSS omezíme velikost gridu:
 
 ```css
 .grid {
-    height: 25rem;
+    height: 25.0rem;
+    overflow-y: auto;
+}
+
+/* Sticky header while scrolling */
+::deep thead {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+}
+```
+
+```razor
+@page "/quickgrid1"
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject HttpClient Http
+
+<h3>QuickGrid Memory Simple</h3>
+
+@if(students is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="grid">
+        <QuickGrid Items="Students">
+            <PropertyColumn Property="@(s => s.StudentId)" Sortable="true" />
+            <PropertyColumn Property="@(s => s.Jmeno)" Sortable="true">
+                <ColumnOptions>
+                    <div>
+                        <input type="search" class="form-control-plaintext" autofocus @bind="nameFilter" @bind:event="oninput" placeholder="Jméno..." />
+                    </div>
+                </ColumnOptions>
+            </PropertyColumn>
+            <PropertyColumn Property="@(s => s.Studuje)" Sortable="true" />
+            <TemplateColumn>
+                <NavLink class="btn btn-primary" href="@($"students/edit/{context.StudentId}")">Edit</NavLink>
+            </TemplateColumn>
+        </QuickGrid>
+    </div>
+}
+
+@code {
+    private IQueryable<Student>? Students 
+    { 
+        get
+        {
+
+            return students?.Where(s => s.Jmeno.Contains(nameFilter, StringComparison.InvariantCultureIgnoreCase)).AsQueryable();
+        } 
+    }
+
+    private List<Student>? students;
+    private string nameFilter = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        students = await Http.GetFromJsonAsync<List<Student>>("/students");
+    }
+}
+```
+
+## Stránkování objektů v paměti
+
+V druhém příkladu použijeme stránkování. Stav stránkování ukládáme do proměnné `PaginationState pagination` a pro UI stránkování používáme komponentu `<Paginator State="pagination" />`. Mohli bychom si ale vytvořit vlastní UI.
+
+
+```css
+.grid {
+    height: 28.0rem;
     overflow-y: auto;
 }
 ```
 
 ```razor
-@page "/quickgridmemory"
+@page "/quickgrid2"
 @using Microsoft.AspNetCore.Components.QuickGrid
 @inject HttpClient Http
 
-<h3>StudentsQuickGridMemory</h3>
+<h3>QuickGrid Memory Pagination</h3>
 
-<div class="grid">
-    <QuickGrid Items="studenti">
-        <PropertyColumn Property="@(s => s.StudentId)" Title="Id" />
-        <PropertyColumn Property="@(s => s.Jmeno)" Title="Jméno" />
-        <PropertyColumn Property="@(s => s.Studuje)" Title="Studuje" />
-    </QuickGrid>
-</div>
+@if (students is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="grid">
+        <QuickGrid Items="Students" Pagination="pagination">
+            <PropertyColumn Property="@(s => s.StudentId)" Sortable="true" />
+            <PropertyColumn Property="@(s => s.Jmeno)" Sortable="true">
+                <ColumnOptions>
+                    <div>
+                        <input type="search" class="form-control-plaintext" autofocus @bind="nameFilter" @bind:event="oninput" placeholder="Jméno..." />
+                    </div>
+                </ColumnOptions>
+            </PropertyColumn>
+            <PropertyColumn Property="@(s => s.Studuje)" Sortable="true" />
+            <TemplateColumn>
+                <NavLink class="btn btn-primary" href="@($"students/edit/{context.StudentId}")">Edit</NavLink>
+            </TemplateColumn>
+        </QuickGrid>
+    </div>
+
+    <Paginator State="pagination" />
+}
 
 @code {
-    private IQueryable<Student>? studenti;
+    private IQueryable<Student>? Students
+    {
+        get
+        {
+
+            return students?.Where(s => s.Jmeno.Contains(nameFilter, StringComparison.InvariantCultureIgnoreCase)).AsQueryable();
+        }
+    }
+
+    private List<Student>? students;
+    private string nameFilter = string.Empty;
+    PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
     protected override async Task OnInitializedAsync()
     {
-        studenti = (await Http.GetFromJsonAsync<Student[]>("students"))?.AsQueryable();
+        students = await Http.GetFromJsonAsync<List<Student>>("/students");
     }
-
 }
+
 ```
+
+##
+
+Předchozí postup by byl pomalý pokud bychom zobrazovali tisíce studentů, tak by to zpomalilo prohlížeč.
+
+## Data provider a zobrazení dat z WebApi

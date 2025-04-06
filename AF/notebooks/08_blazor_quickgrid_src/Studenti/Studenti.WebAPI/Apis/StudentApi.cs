@@ -48,9 +48,14 @@ namespace Studenti.WebAPI.Apis
             return TypedResults.Ok(await context.Studenti.ToArrayAsync());
         }
 
-        public static async Task<Ok<PaginationResult>> GetStudentsPage(StudentContext context, int startIndex, int count, string? sortBy = null, string? direction = null)
+        public static async Task<Ok<PaginationResult>> GetStudentsPage(StudentContext context, int startIndex, int count, string? sortBy = null, string? direction = null, string? nameFilter = null)
         {
             IQueryable<Student> query = context.Studenti;
+
+            if(nameFilter is not null)
+            {
+                query = query.Where(s => s.Jmeno.ToLower().Contains(nameFilter.ToLower()));
+            }
 
             if (sortBy is not null && direction is not null)
             {
