@@ -151,7 +151,6 @@ else
         students = await Http.GetFromJsonAsync<List<Student>>("/students");
     }
 }
-
 ```
 
 ##
@@ -159,3 +158,143 @@ else
 Předchozí postup by byl pomalý pokud bychom zobrazovali tisíce studentů, tak by to zpomalilo prohlížeč.
 
 ## Data provider a zobrazení dat z WebApi
+
+Poslední příklad používá `ItemsProvider`, kdy pro každou stránku provedeme dotaz na WebAPI. Stejně tak provádíme dotaz na WebAPI pokud se změní property `NameFilter`.
+
+Nejprve si ukážeme aktualizovanou metodu WebAPI:
+
+```csharp
+public static async Task<Ok<PaginationResult>> GetStudentsPage(StudentContext context, int startIndex, int count, string? sortBy = null, string? direction = null, string? nameFilter = null)
+{
+    IQueryable<Student> query = context.Studenti;
+
+    if(nameFilter is not null)
+    {
+        query = query.Where(s => s.Jmeno.ToLower().Contains(nameFilter.ToLower()));
+    }
+
+    if (sortBy is not null && direction is not null)
+    {
+        switch (direction)
+        {
+            case "Ascending":
+                query = sortBy switch
+                {
+                    "StudentId" => query.OrderBy(s => s.StudentId),
+                    "Jmeno" => query.OrderBy(s => s.Jmeno),
+                    "Studuje" => query.OrderBy(s => s.Studuje),
+                    _ => query
+                };
+                break;
+            case "Descending":
+                query = sortBy switch
+                {
+                    "StudentId" => query.OrderByDescending(s => s.StudentId),
+                    "Jmeno" => query.OrderByDescending(s => s.Jmeno),
+                    "Studuje" => query.OrderByDescending(s => s.Studuje),
+                    _ => query
+                };
+                break;
+        }
+    }
+
+    Student[] students = await query.Skip(startIndex).Take(count).ToArrayAsync();
+    int total = await context.Studenti.CountAsync();
+
+    var result = new PaginationResult(students, total);
+
+    return TypedResults.Ok(result);
+}
+```
+
+Dále máme následující css:
+
+```css
+.grid {
+    height: 28.0rem;
+    overflow-y: auto;
+}
+```
+
+A nakonec razor kód:
+
+```
+@page "/quickgrid3"
+
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject HttpClient Http
+
+<h3>QuickGridWebApi</h3>
+
+<div class="grid">
+    <QuickGrid ItemsProvider="gridItemsProvider" Pagination="pagination" @ref="grid">
+        <PropertyColumn Property="@(s => s.StudentId)" Sortable="true" />
+        <PropertyColumn Property="@(s => s.Jmeno)" Sortable="true">
+            <ColumnOptions>
+                <div>
+                    <input type="search" class="form-control-plaintext" autofocus @bind="NameFilter" @bind:event="oninput" placeholder="Jméno..." />
+                </div>
+            </ColumnOptions>
+        </PropertyColumn>
+        <PropertyColumn Property="@(s => s.Studuje)" Sortable="true" />
+        <TemplateColumn>
+            <NavLink class="btn btn-primary" href="@($"students/edit/{context.StudentId}")">Edit</NavLink>
+        </TemplateColumn>
+    </QuickGrid>
+</div>
+
+<Paginator State="pagination" />
+
+@code {
+    QuickGrid<Student>? grid;
+    PaginationState pagination = new PaginationState() { ItemsPerPage = 10 };
+
+    GridItemsProvider<Student>? gridItemsProvider;
+
+    private string nameFilter = string.Empty;
+    
+    private string NameFilter
+    {
+        get => nameFilter;
+        set
+        {
+            nameFilter = value;
+
+            grid?.RefreshDataAsync();
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        gridItemsProvider = async req =>
+        {
+            string url = $"/students/page?startIndex={req.StartIndex}&count={req.Count ?? 10}";
+
+            var properties = req.GetSortByProperties();
+
+            if (properties.Count > 0)
+            {
+                var property = properties.First();
+
+                url += $"&sortBy={property.PropertyName}&direction={property.Direction}";
+            }
+
+            if(!string.IsNullOrWhiteSpace(NameFilter))
+            {
+                url += $"&nameFilter={NameFilter}";
+            }
+
+            PaginationResult? result = await Http.GetFromJsonAsync<PaginationResult>(url);
+
+            if (result is null)
+            {
+                return GridItemsProviderResult.From<Student>([], 0);
+            }
+
+            return GridItemsProviderResult.From(result.Students, result.Total);
+        };
+    }
+
+    public record PaginationResult(Student[] Students, int Total);
+}
+```
