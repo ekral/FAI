@@ -22,6 +22,6 @@ Content-Type: application/json
 }
 ###
 
-GET {{Studenti.WebAPI_HostAddress}}/students/page?startIndex=0&count=10&sortBy=Jmeno&direction=Ascending
+GET {{Studenti.WebAPI_HostAddress}}/students/page?startIndex=0&count=10&sortBy=Jmeno&descending=true&nameFilter=er
 
 ###
