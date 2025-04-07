@@ -48,7 +48,7 @@ namespace Studenti.WebAPI.Apis
             return TypedResults.Ok(await context.Studenti.ToArrayAsync());
         }
 
-        public static async Task<Ok<PaginationResult>> GetStudentsPage(StudentContext context, int startIndex, int count, string? sortBy = null, string? direction = null, string? nameFilter = null)
+        public static async Task<Ok<PaginationResult>> GetStudentsPage(StudentContext context, int startIndex, int count, string? sortBy = null, bool? descending = false, string? nameFilter = null)
         {
             IQueryable<Student> query = context.Studenti;
 
@@ -57,29 +57,30 @@ namespace Studenti.WebAPI.Apis
                 query = query.Where(s => s.Jmeno.ToLower().Contains(nameFilter.ToLower()));
             }
 
-            if (sortBy is not null && direction is not null)
+            if (sortBy is not null && descending is not null)
             {
-                switch (direction)
+
+                if (descending == false)
                 {
-                    case "Ascending":
-                        query = sortBy switch
-                        {
-                            "StudentId" => query.OrderBy(s => s.StudentId),
-                            "Jmeno" => query.OrderBy(s => s.Jmeno),
-                            "Studuje" => query.OrderBy(s => s.Studuje),
-                            _ => query
-                        };
-                        break;
-                    case "Descending":
-                        query = sortBy switch
-                        {
-                            "StudentId" => query.OrderByDescending(s => s.StudentId),
-                            "Jmeno" => query.OrderByDescending(s => s.Jmeno),
-                            "Studuje" => query.OrderByDescending(s => s.Studuje),
-                            _ => query
-                        };
-                        break;
+                    query = sortBy switch
+                    {
+                        "StudentId" => query.OrderBy(s => s.StudentId),
+                        "Jmeno" => query.OrderBy(s => s.Jmeno),
+                        "Studuje" => query.OrderBy(s => s.Studuje),
+                        _ => query
+                    };
                 }
+                else
+                {
+                    query = sortBy switch
+                    {
+                        "StudentId" => query.OrderByDescending(s => s.StudentId),
+                        "Jmeno" => query.OrderByDescending(s => s.Jmeno),
+                        "Studuje" => query.OrderByDescending(s => s.Studuje),
+                        _ => query
+                    };
+                }
+                
             }
 
             Student[] students = await query.Skip(startIndex).Take(count).ToArrayAsync();

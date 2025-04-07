@@ -55,7 +55,8 @@
             {
                 var property = properties.First();
 
-                url += $"&sortBy={property.PropertyName}&direction={property.Direction}";
+                bool descending = property.Direction == SortDirection.Descending ? true : false;
+                url += $"&sortBy={property.PropertyName}&descending={descending}";
             }
 
             if(!string.IsNullOrWhiteSpace(NameFilter))
