@@ -1,6 +1,8 @@
 ﻿@page "/quickgrid3"
 
 @using Microsoft.AspNetCore.Components.QuickGrid
+@using Microsoft.AspNetCore.WebUtilities
+
 @inject HttpClient Http
 
 <h3>QuickGridWebApi</h3>
@@ -47,7 +49,10 @@
     {
         gridItemsProvider = async req =>
         {
-            string url = $"/students/page?startIndex={req.StartIndex}&count={req.Count ?? 10}";
+            string uri = "/students/page";
+
+            uri = QueryHelpers.AddQueryString(uri, "startIndex", req.StartIndex.ToString());
+            uri = QueryHelpers.AddQueryString(uri, "count", (req.Count ?? 10).ToString());
 
             var properties = req.GetSortByProperties();
 
@@ -56,15 +61,17 @@
                 var property = properties.First();
 
                 bool descending = property.Direction == SortDirection.Descending ? true : false;
-                url += $"&sortBy={property.PropertyName}&descending={descending}";
+
+                uri = QueryHelpers.AddQueryString(uri, "sortBy", property.PropertyName);
+                uri = QueryHelpers.AddQueryString(uri, "descending", descending.ToString());
             }
 
             if(!string.IsNullOrWhiteSpace(NameFilter))
             {
-                url += $"&nameFilter={NameFilter}";
+                uri = QueryHelpers.AddQueryString(uri, "nameFilter", NameFilter);
             }
 
-            PaginationResult? result = await Http.GetFromJsonAsync<PaginationResult>(url);
+            PaginationResult? result = await Http.GetFromJsonAsync<PaginationResult>(uri);
 
             if (result is null)
             {
