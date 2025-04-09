@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleClient", "ConsoleCli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Students.BlazorApp", "Students.BlazorApp\Students.BlazorApp.csproj", "{434A518F-513E-441C-A22F-B3383E14D068}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Students.AvaloniaApp", "Students.AvaloniaApp\Students.AvaloniaApp.csproj", "{A24F7943-06B4-5FC9-B850-BB080768CB41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Students.AvaloniaApp.Desktop", "Students.AvaloniaApp.Desktop\Students.AvaloniaApp.Desktop.csproj", "{CEDF542A-A759-CBEF-2E69-23CBF676C3C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{434A518F-513E-441C-A22F-B3383E14D068}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{434A518F-513E-441C-A22F-B3383E14D068}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{434A518F-513E-441C-A22F-B3383E14D068}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A24F7943-06B4-5FC9-B850-BB080768CB41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A24F7943-06B4-5FC9-B850-BB080768CB41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A24F7943-06B4-5FC9-B850-BB080768CB41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A24F7943-06B4-5FC9-B850-BB080768CB41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEDF542A-A759-CBEF-2E69-23CBF676C3C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEDF542A-A759-CBEF-2E69-23CBF676C3C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEDF542A-A759-CBEF-2E69-23CBF676C3C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEDF542A-A759-CBEF-2E69-23CBF676C3C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

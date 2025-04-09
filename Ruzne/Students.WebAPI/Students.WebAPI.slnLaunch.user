@@ -9,6 +9,10 @@
       {
         "Path": "Students.BlazorApp\\Students.BlazorApp.csproj",
         "Action": "Start"
+      },
+      {
+        "Path": "Students.AvaloniaApp.Desktop\\Students.AvaloniaApp.Desktop.csproj",
+        "Action": "Start"
       }
     ]
   }
