@@ -1,6 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Students.AvaloniaApp.DTOs;
-using System;
 using System.Linq;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -10,10 +8,10 @@ namespace Students.AvaloniaApp.ViewModels;
 public partial class MainViewModel : ViewModelBase
 {
     [ObservableProperty]
-    private Student[]? students;
+    private StudentViewModel[]? students;
 
     [ObservableProperty]
-    private Student? selectedStudent;
+    private StudentViewModel? selectedStudent;
 
     public string Greeting => "Welcome to Avalonia!";
 
@@ -24,7 +22,7 @@ public partial class MainViewModel : ViewModelBase
     }
     private async Task ExampleAsyncMethod()
     {
-        Students = await App.sharedClient.GetFromJsonAsync<Student[]>("/students");
+        Students = await App.sharedClient.GetFromJsonAsync<StudentViewModel[]>("/students");
         SelectedStudent = Students?.First();
     }
 

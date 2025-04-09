@@ -23,6 +23,6 @@
 		<TextBlock Text="{Binding SelectedStudent.StudentId}" HorizontalAlignment="Center"/>
 		<TextBox Text="{Binding SelectedStudent.Jmeno}" HorizontalAlignment="Center"/>
 		<CheckBox IsChecked="{Binding SelectedStudent.Studuje}" HorizontalAlignment="Center"/>
-		<Button Command="{Binding Save}" HorizontalAlignment="Center">Save</Button>
+		<Button Command="{Binding Save}" HorizontalAlignment="Center">Save</Button>			
 	</StackPanel>  
 </UserControl>

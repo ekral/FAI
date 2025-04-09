@@ -1,8 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Students.AvaloniaApp.DTOs
+namespace Students.AvaloniaApp.ViewModels
 {
-    public partial class Student : ObservableObject
+
+    public partial class StudentViewModel : ObservableObject
     {
         public int StudentId { get; set; }
         [ObservableProperty]
@@ -10,3 +11,4 @@ namespace Students.AvaloniaApp.DTOs
         public required bool Studuje { get; set; }
     }
 }
+
