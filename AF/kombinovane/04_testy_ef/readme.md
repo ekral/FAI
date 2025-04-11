@@ -1,1 +1,1 @@
-Projekt stáhnete [zde](https://download-directory.github.io/?url=https%3A%2F%2Fgithub.com%2Fekral%2FFAI%2Ftree%2Fmaster%2FAF%2Fkombinovane%2F04_testy_ef%2Fsrc)
+Celý solution stáhnete [zde](https://download-directory.github.io/?url=https%3A%2F%2Fgithub.com%2Fekral%2FFAI%2Ftree%2Fmaster%2FAF%2Fkombinovane%2F04_testy_ef%2Fsrc)
