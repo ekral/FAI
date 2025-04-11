@@ -1,0 +1,36 @@
+﻿@page "/weather"
+@inject HttpClient Http
+
+<PageTitle>Studenti</PageTitle>
+
+<h1>Studenti</h1>
+
+@if(studenti is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <ul>
+        @foreach(Student student in studenti)
+        {
+            <li>@student.Jmeno</li>
+        }
+    </ul>
+}
+
+@code {
+    Student[]? studenti;
+
+    protected override async Task OnInitializedAsync()
+    {
+        studenti = await Http.GetFromJsonAsync<Student[]>("students");
+    }
+
+    public class Student
+    {
+        public int StudentId { get; set; }
+        public required string Jmeno { get; set; }
+        public required bool Studuje { get; set; }
+    }
+}
