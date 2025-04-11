@@ -1,0 +1,32 @@
+﻿@Studenti.WebAPI_HostAddress = https://localhost:7266
+
+GET {{Studenti.WebAPI_HostAddress}}/seed
+
+###
+
+GET {{Studenti.WebAPI_HostAddress}}/students
+
+###
+
+GET {{Studenti.WebAPI_HostAddress}}/students/1
+
+###
+
+PUT {{Studenti.WebAPI_HostAddress}}/students/1
+Content-Type: application/json
+
+{
+  "studentId": 1,
+  "jmeno": "Novotna",
+  "studuje": true
+}
+###
+
+GET {{Studenti.WebAPI_HostAddress}}/students/page?startIndex=10&count=10
+
+###
+
+
+GET {{Studenti.WebAPI_HostAddress}}/students/page?startIndex=10&count=10&sortBy=Jmeno&descending=true
+
+###
