@@ -1,4 +1,4 @@
-# 07 Blazor Web Forms
+# Materiál 08: QuickGrid
 
 **autor: Erik Král ekral@utb.cz**
 
