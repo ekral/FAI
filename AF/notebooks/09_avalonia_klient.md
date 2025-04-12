@@ -34,3 +34,91 @@ Dalšími frameworky jsou:
 
 ## Desktopový klient pro studenty
 
+Vytvoříme jednoduché uživatelské rozhraní, které v ComboBoxu zobrazí jména všech studentů a od ComboBoxem zobrazí TextBox umožňující editovat jméno studenta, CheckBox editující zda student studuje a tlačítko Save pro uložení změn.
+
+Nejprve si nadefinujeme ViewModel. Atribut `[ObservableProperty]` z MVVM Toolkitu způsobí vygenerování property, například pro field `students` vygeneruje následující property, která pomocí volání metody `SetProperty` vyvolá event `PropertyChanged` pro tuto propertu. `MainViewModel` dědí od ViewModelBase, který dědí od třídy `ObservableObject`.
+
+```c#
+public string? Students
+{
+    get => students;
+    set => SetProperty(ref students, value);
+}
+``
+
+```csharp
+public partial class MainViewModel : ViewModelBase
+{
+    [ObservableProperty]
+    private StudentViewModel[]? students;
+
+    [ObservableProperty]
+    private StudentViewModel? selectedStudent;
+
+    public string Greeting => "Welcome to Avalonia!";
+
+
+    public MainViewModel()
+    {
+        Task.Run(LoadStudentAsync);
+    }
+    private async Task LoadStudentAsync()
+    {
+        Students = await App.sharedClient.GetFromJsonAsync<StudentViewModel[]>("/students");
+        SelectedStudent = Students?.First();
+    }
+
+    public async Task Save()
+    {
+        if (SelectedStudent is not null)
+        {
+            await App.sharedClient.PutAsJsonAsync($"/students/{SelectedStudent.StudentId}", SelectedStudent);
+        }
+    }
+}
+```
+
+StudentViewModel vypadá následovně:
+
+```csharp
+public partial class StudentViewModel : ObservableObject
+{
+    public int StudentId { get; set; }
+
+    [ObservableProperty]
+    public string jmeno;
+
+    public required bool Studuje { get; set; }
+}
+```
+
+A poté View:
+
+```xaml
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:Students.AvaloniaApp.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Students.AvaloniaApp.Views.MainView"
+             x:DataType="vm:MainViewModel">
+  <Design.DataContext>
+    <vm:MainViewModel />
+  </Design.DataContext>
+	<StackPanel>
+        <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" />
+		<ComboBox ItemsSource="{Binding Students}" SelectedItem="{Binding SelectedStudent}" HorizontalAlignment="Center">
+			<ComboBox.ItemTemplate>
+				<DataTemplate>
+					<TextBlock Text="{Binding Jmeno}"/>
+				</DataTemplate>
+			</ComboBox.ItemTemplate>
+		</ComboBox>
+		<TextBlock Text="{Binding SelectedStudent.StudentId}" HorizontalAlignment="Center"/>
+		<TextBox Text="{Binding SelectedStudent.Jmeno}" HorizontalAlignment="Center"/>
+		<CheckBox IsChecked="{Binding SelectedStudent.Studuje}" HorizontalAlignment="Center"/>
+		<Button Command="{Binding Save}" HorizontalAlignment="Center">Save</Button>			
+	</StackPanel>  
+</UserControl>
+```
