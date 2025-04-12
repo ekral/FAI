@@ -1,4 +1,8 @@
-# Serializace
+# Materiál 10: Serializace
+
+**autor: Erik Král ekral@utb.cz**
+
+---
 
 Dokumentace: [Serialization in .NET](https://learn.microsoft.com/en-us/dotnet/standard/serialization/)
 

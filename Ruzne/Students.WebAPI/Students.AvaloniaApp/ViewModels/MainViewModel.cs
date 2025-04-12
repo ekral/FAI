@@ -18,9 +18,9 @@ public partial class MainViewModel : ViewModelBase
 
     public MainViewModel()
     {
-        Task.Run(ExampleAsyncMethod);
+        Task.Run(LoadStudentAsync);
     }
-    private async Task ExampleAsyncMethod()
+    private async Task LoadStudentAsync()
     {
         Students = await App.sharedClient.GetFromJsonAsync<StudentViewModel[]>("/students");
         SelectedStudent = Students?.First();
