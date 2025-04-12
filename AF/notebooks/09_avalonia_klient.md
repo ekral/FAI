@@ -23,4 +23,14 @@ CommunityToolkit.Mvvm
 
 ## Avalonia 
 
-[Avalonia](https://avaloniaui.net/) je multiplatformní framework pro tvorbu především desktopových aplikací. Je jedním z mnoha frameworků využívající jazyk XAML pro popis uživatelského rozhraní a pattern MVVM
+[Avalonia](https://avaloniaui.net/) je multiplatformní framework pro tvorbu především desktopových aplikací. Je jedním z mnoha frameworků využívající jazyk XAML pro popis uživatelského rozhraní a pattern MVVM.
+
+Dalšími frameworky jsou:
+
+- [WPF](https://learn.microsoft.com/en-us/dotnet/desktop/wpf/?view=netdesktop-9.0)
+- [WinUI](https://learn.microsoft.com/en-us/windows/apps/winui/winui3/) 
+- [NoesisGUI](https://www.noesisengine.com/)
+- [Uno platform](https://platform.uno)
+
+## Desktopový klient pro studenty
+
