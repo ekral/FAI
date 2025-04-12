@@ -38,13 +38,13 @@ Vytvoříme jednoduché uživatelské rozhraní, které v ComboBoxu zobrazí jm�
 
 Nejprve si nadefinujeme ViewModel. Atribut `[ObservableProperty]` z MVVM Toolkitu způsobí vygenerování property, například pro field `students` vygeneruje následující property, která pomocí volání metody `SetProperty` vyvolá event `PropertyChanged` pro tuto propertu. `MainViewModel` dědí od ViewModelBase, který dědí od třídy `ObservableObject`.
 
-```c#
+```csharp
 public string? Students
 {
     get => students;
     set => SetProperty(ref students, value);
 }
-``
+```
 
 ```csharp
 public partial class MainViewModel : ViewModelBase
