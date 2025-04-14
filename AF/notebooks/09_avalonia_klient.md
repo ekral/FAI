@@ -27,10 +27,11 @@ CommunityToolkit.Mvvm
 
 Dalšími frameworky jsou:
 
-- [WPF](https://learn.microsoft.com/en-us/dotnet/desktop/wpf/?view=netdesktop-9.0)
-- [WinUI](https://learn.microsoft.com/en-us/windows/apps/winui/winui3/) 
-- [NoesisGUI](https://www.noesisengine.com/)
-- [Uno platform](https://platform.uno)
+- [WPF](https://learn.microsoft.com/en-us/dotnet/desktop/wpf/?view=netdesktop-9.0) - starší framework pro tvorbu nativních aplikací pro Windows. 
+- [WinUI](https://learn.microsoft.com/en-us/windows/apps/winui/winui3/) - moderní framework pro tvorbu nativních aplikací pro Windows.
+- [.NET MAUI](https://dotnet.microsoft.com/en-us/apps/maui) - multiplatformní framework pro tvorbu aplikací pro iOS a Android, ale také Windows a macOS.
+- [NoesisGUI](https://www.noesisengine.com/) - framework pro tvorbu herního UI. Kvalitní grafický editor UI.
+- [Uno platform](https://platform.uno) - multiplatformní framework pro tvorbu desktopových, ale i mobilních aplikací.
 
 ## Desktopový klient pro studenty
 
