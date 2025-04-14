@@ -6,7 +6,11 @@
 
 V této části probereme jak zobrazit velké množství dat pomocí componenty [QuickGrid](https://aspnet.github.io/quickgridsamples/).
 
-Nejprive si musíme do projektu vložit nuget balíček [Microsoft.AspNetCore.Components.QuickGrid](https://www.nuget.org/packages/Microsoft.AspNetCore.Components.QuickGrid).
+Nejprive si musíme do projektu vložit nuget balíček:
+
+```
+Microsoft.AspNetCore.Components.QuickGrid
+```
 
 QuickGrid může zobrazovat následující zdroje:
 
@@ -159,7 +163,13 @@ Předchozí postup by byl pomalý pokud bychom zobrazovali tisíce studentů, ta
 
 ## Data provider a zobrazení dat z WebApi
 
-Poslední příklad používá `ItemsProvider`, kdy pro každou stránku provedeme dotaz na WebAPI. Stejně tak provádíme dotaz na WebAPI pokud se změní property `NameFilter`.
+Poslední příklad používá `ItemsProvider`, kdy pro každou stránku provedeme dotaz na WebAPI. Stejně tak provádíme dotaz na WebAPI pokud se změní property `NameFilter`. 
+
+Pro sestavení URI používáme nuget balíček:
+
+```
+    Microsoft.AspNetCore.WebUtilities
+```
 
 Nejprve si ukážeme aktualizovanou metodu WebAPI:
 
@@ -222,6 +232,8 @@ A nakonec razor kód:
 @page "/quickgrid3"
 
 @using Microsoft.AspNetCore.Components.QuickGrid
+@using Microsoft.AspNetCore.WebUtilities
+
 @inject HttpClient Http
 
 <h3>QuickGridWebApi</h3>
@@ -268,7 +280,10 @@ A nakonec razor kód:
     {
         gridItemsProvider = async req =>
         {
-            string url = $"/students/page?startIndex={req.StartIndex}&count={req.Count ?? 10}";
+            string uri = "/students/page";
+
+            uri = QueryHelpers.AddQueryString(uri, "startIndex", req.StartIndex.ToString());
+            uri = QueryHelpers.AddQueryString(uri, "count", (req.Count ?? 10).ToString());
 
             var properties = req.GetSortByProperties();
 
@@ -276,15 +291,18 @@ A nakonec razor kód:
             {
                 var property = properties.First();
 
-                url += $"&sortBy={property.PropertyName}&direction={property.Direction}";
+                bool descending = property.Direction == SortDirection.Descending ? true : false;
+
+                uri = QueryHelpers.AddQueryString(uri, "sortBy", property.PropertyName);
+                uri = QueryHelpers.AddQueryString(uri, "descending", descending.ToString());
             }
 
             if(!string.IsNullOrWhiteSpace(NameFilter))
             {
-                url += $"&nameFilter={NameFilter}";
+                uri = QueryHelpers.AddQueryString(uri, "nameFilter", NameFilter);
             }
 
-            PaginationResult? result = await Http.GetFromJsonAsync<PaginationResult>(url);
+            PaginationResult? result = await Http.GetFromJsonAsync<PaginationResult>(uri);
 
             if (result is null)
             {
