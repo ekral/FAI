@@ -10,17 +10,19 @@
     <vm:MainViewModel />
   </Design.DataContext>
 	<StackPanel>
-        <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" />
-		<ComboBox ItemsSource="{Binding Students}" SelectedItem="{Binding SelectedStudent}" HorizontalAlignment="Center">
+		<ComboBox ItemsSource="{Binding Students}" MinWidth="128" SelectedItem="{Binding SelectedStudent}" HorizontalAlignment="Center">
 			<ComboBox.ItemTemplate>
 				<DataTemplate>
-					<TextBlock Text="{Binding Jmeno}"/>
+						<TextBlock Text="{Binding Jmeno}"/>
 				</DataTemplate>
 			</ComboBox.ItemTemplate>
 		</ComboBox>
+		<Button Content="Export" Click="ExportFileButton_Clicked" HorizontalAlignment="Center"/>
 		<TextBlock Text="{Binding SelectedStudent.StudentId}" HorizontalAlignment="Center"/>
 		<TextBox Text="{Binding SelectedStudent.Jmeno}" HorizontalAlignment="Center"/>
-		<CheckBox IsChecked="{Binding SelectedStudent.Studuje}" HorizontalAlignment="Center"/>
-		<Button Command="{Binding Save}" HorizontalAlignment="Center">Save</Button>			
+		<CheckBox Content="Studuje" IsChecked="{Binding SelectedStudent.Studuje}" HorizontalAlignment="Center"/>
+		<Button Command="{Binding Save}" HorizontalAlignment="Center">Save</Button>
+		
+		
 	</StackPanel>  
 </UserControl>
