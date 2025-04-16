@@ -11,7 +11,7 @@
 - **Model** představuje aplikační logiku aplikace. Například složitý výpočet parametrů životního pojištění. Model pracuje z hlediska logiky aplikace a vůbec s nezajímá o uživatelské rozhraní.
 - Event **PropertyChanged** používá ViewModel k tomu aby infomoval (notifikoval) View o změnách ve svých propertách. Je součástí rozhraní ```INotifyPropertyChanged```.
 
-Použití MVVM je ve frameworku Avalonia, ale i dalších dobrovolné a nemusíme jej používat. Cílem je mít modulární návrh aplikace, tak abychom mohli jednoduše měnit ViewModel například za testovací verzi a také vyvíjet uživatelské rozhran nezávisle na vývoji ViewModelu.
+Použití MVVM je ve frameworku Avalonia, ale i dalších dobrovolné a nemusíme jej používat. Cílem je mít modulární návrh aplikace, tak abychom mohli jednoduše měnit ViewModel například za testovací verzi a také vyvíjet uživatelské rozhraní nezávisle na vývoji ViewModelu.
 
 ## MVVM Community Toolkit
 
