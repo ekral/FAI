@@ -17,7 +17,7 @@
 				</DataTemplate>
 			</ComboBox.ItemTemplate>
 		</ComboBox>
-		<Button Content="Export" Click="ExportFileButton_Clicked" HorizontalAlignment="Center"/>
+		<Button Content="Export" Command="{Binding ExportToJson}" HorizontalAlignment="Center"/>
 		<TextBlock Text="{Binding SelectedStudent.StudentId}" HorizontalAlignment="Center"/>
 		<TextBox Text="{Binding SelectedStudent.Jmeno}" HorizontalAlignment="Center"/>
 		<CheckBox Content="Studuje" IsChecked="{Binding SelectedStudent.Studuje}" HorizontalAlignment="Center"/>

@@ -3,6 +3,7 @@ using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Students.AvaloniaApp.ViewModels;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Students.AvaloniaApp.Views;
 
@@ -14,27 +15,21 @@ public partial class MainView : UserControl
         InitializeComponent();
     }
 
-    private async void ExportFileButton_Clicked(object sender, RoutedEventArgs args)
+    protected override void OnLoaded(RoutedEventArgs e)
     {
-        if (DataContext is not IExportable viewModel)
+        if (DataContext is MainViewModel viewModel)
         {
-            return;
+            viewModel.Interaction += GetFile;
         }
+    }
 
-        viewModel.ExportToJson();
-
-        string? json = viewModel.Json;
-
-        if (json is null)
-        {
-            return;
-        }
-
+    private async Task<IStorageFile?> GetFile()
+    {
         TopLevel? topLevel = TopLevel.GetTopLevel(this);
 
         if (topLevel is null)
         {
-            return;
+            return null;
         }
 
         var jsonFileType = new FilePickerFileType("JSON File")
@@ -50,19 +45,6 @@ public partial class MainView : UserControl
             FileTypeChoices = [jsonFileType]
         });
 
-        if (file is null)
-        {
-            return;
-        }
-
-        await using var stream = await file.OpenWriteAsync();
-
-        using var streamWriter = new StreamWriter(stream);
-
-        await streamWriter.WriteAsync(viewModel.Json);
-    }
-
-    private void Button_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
+        return file;
     }
 }

@@ -1,4 +1,7 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Avalonia.Platform.Storage;
+using CommunityToolkit.Mvvm.ComponentModel;
+using System;
+using System.IO;
 using System.Linq;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -6,7 +9,24 @@ using System.Threading.Tasks;
 
 namespace Students.AvaloniaApp.ViewModels;
 
-public partial class MainViewModel : ViewModelBase, IExportable
+public interface IFileService
+{
+    Task Save(IStorageFile file, string json);
+}
+
+public class FileService : IFileService
+{
+    public async Task Save(IStorageFile file, string json)
+    {
+        await using var stream = await file.OpenWriteAsync();
+
+        using var streamWriter = new StreamWriter(stream);
+
+        await streamWriter.WriteAsync(json);
+    }
+}
+
+public partial class MainViewModel : ViewModelBase
 {
     [ObservableProperty]
     private StudentViewModel[]? students;
@@ -14,11 +34,14 @@ public partial class MainViewModel : ViewModelBase, IExportable
     [ObservableProperty]
     private StudentViewModel? selectedStudent;
 
-    public string? Json { get; private set; }
+    public event Func<Task<IStorageFile?>>? Interaction;
 
-    public MainViewModel()
+    private readonly IFileService fileService;
+
+    public MainViewModel(IFileService fileService)
     {
         Task.Run(LoadStudentAsync);
+        this.fileService = fileService;
     }
 
     private async Task LoadStudentAsync()
@@ -35,9 +58,25 @@ public partial class MainViewModel : ViewModelBase, IExportable
         }
     }
 
-    public void ExportToJson()
+    public async Task ExportToJson()
     {
-        Json = JsonSerializer.Serialize(Students);
+        Task<IStorageFile?>? task = Interaction?.Invoke();
+       
+        if (task is null)
+        {
+            return;
+        }
+
+        IStorageFile? file = await task;
+
+        if(file is null)
+        {
+            return;
+        }
+
+        string json = JsonSerializer.Serialize(Students);
+
+        await fileService.Save(file, json);
     }
 }
 
