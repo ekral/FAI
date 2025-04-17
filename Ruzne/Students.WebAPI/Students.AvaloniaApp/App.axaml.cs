@@ -6,6 +6,7 @@ using Students.AvaloniaApp.ViewModels;
 using Students.AvaloniaApp.Views;
 using System.Net.Http;
 using System;
+using Avalonia.Controls;
 
 namespace Students.AvaloniaApp;
 
@@ -33,6 +34,8 @@ public partial class App : Application
             {
                 DataContext = new MainViewModel(new FileService())
             };
+
+            TopLevel? topLevel = TopLevel.GetTopLevel(desktop.MainWindow);
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
@@ -40,6 +43,8 @@ public partial class App : Application
             {
                 DataContext = new MainViewModel(new FileService())
             };
+
+            TopLevel? topLevel = TopLevel.GetTopLevel(singleViewPlatform.MainView); // OK
         }
 
         base.OnFrameworkInitializationCompleted();

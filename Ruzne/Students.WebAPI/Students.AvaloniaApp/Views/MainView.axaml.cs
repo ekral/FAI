@@ -1,11 +1,17 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
+using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 using Students.AvaloniaApp.ViewModels;
 using System.IO;
 using System.Threading.Tasks;
 
 namespace Students.AvaloniaApp.Views;
+
+public class Message : RequestMessage<Task<IStorageFile?>>
+{
+}
 
 public partial class MainView : UserControl
 {
@@ -13,38 +19,30 @@ public partial class MainView : UserControl
     public MainView()
     {
         InitializeComponent();
-    }
 
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        if (DataContext is MainViewModel viewModel)
+        WeakReferenceMessenger.Default.Register<MainView, Message>(this, async (r, m) =>
         {
-            viewModel.Interaction += GetFile;
-        }
-    }
+            TopLevel? topLevel = TopLevel.GetTopLevel(this);
 
-    private async Task<IStorageFile?> GetFile()
-    {
-        TopLevel? topLevel = TopLevel.GetTopLevel(this);
+            var jsonFileType = new FilePickerFileType("JSON File")
+            {
+                Patterns = ["*.json"],
+                MimeTypes = ["application/json"]
+            };
 
-        if (topLevel is null)
-        {
-            return null;
-        }
+            Task<IStorageFile?> file = topLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+            {
+                Title = "Save export file",
+                DefaultExtension = "json",
+                FileTypeChoices = [jsonFileType]
+            });
 
-        var jsonFileType = new FilePickerFileType("JSON File")
-        {
-            Patterns = ["*.json"],
-            MimeTypes = ["application/json"]
-        };
-
-        IStorageFile? file = await topLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
-        {
-            Title = "Save export file",
-            DefaultExtension = "json",
-            FileTypeChoices = [jsonFileType]
+            // Assume that "CurrentUser" is a private member in our viewmodel.
+            // As before, we're accessing it through the recipient passed as
+            // input to the handler, to avoid capturing "this" in the delegate.
+            m.Reply(file);
         });
-
-        return file;
     }
+
+    
 }

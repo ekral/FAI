@@ -1,5 +1,7 @@
 ﻿using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
+using Students.AvaloniaApp.Views;
 using System;
 using System.IO;
 using System.Linq;
@@ -34,8 +36,6 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty]
     private StudentViewModel? selectedStudent;
 
-    public event Func<Task<IStorageFile?>>? Interaction;
-
     private readonly IFileService fileService;
 
     public MainViewModel(IFileService fileService)
@@ -60,22 +60,16 @@ public partial class MainViewModel : ViewModelBase
 
     public async Task ExportToJson()
     {
-        Task<IStorageFile?>? task = Interaction?.Invoke();
-       
-        if (task is null)
-        {
-            return;
-        }
+        Message? message = WeakReferenceMessenger.Default.Send<Message>();
 
-        IStorageFile? file = await task;
-
-        if(file is null)
+        if (message is null)
         {
             return;
         }
 
         string json = JsonSerializer.Serialize(Students);
 
+        IStorageFile? file = await message.Response;
         await fileService.Save(file, json);
     }
 }
