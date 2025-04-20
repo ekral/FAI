@@ -29,13 +29,15 @@ public partial class App : Application
         // Without this line you will get duplicate validations from both Avalonia and CT
         BindingPlugins.DataValidators.RemoveAt(0);
 
+        StudentService studentService = new StudentService(sharedClient);
+
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow = new MainWindow();
             
             TopLevel topLevel = TopLevel.GetTopLevel(desktop.MainWindow) ?? throw new NullReferenceException();
 
-            desktop.MainWindow.DataContext = new MainViewModel(new SaveDialogService(topLevel), new FileService());
+            desktop.MainWindow.DataContext = new MainViewModel(studentService, new SaveDialogService(topLevel), new FileService());
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
@@ -43,7 +45,7 @@ public partial class App : Application
 
             TopLevel topLevel = TopLevel.GetTopLevel(singleViewPlatform.MainView) ?? throw new NullReferenceException();
 
-            singleViewPlatform.MainView.DataContext = new MainViewModel(new SaveDialogService(topLevel), new FileService());
+            singleViewPlatform.MainView.DataContext = new MainViewModel(studentService, new SaveDialogService(topLevel), new FileService());
         }
 
         base.OnFrameworkInitializationCompleted();

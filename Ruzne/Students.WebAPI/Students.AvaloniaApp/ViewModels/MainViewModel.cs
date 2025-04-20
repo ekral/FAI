@@ -1,9 +1,6 @@
 ﻿using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Messaging;
 using Students.AvaloniaApp.Services;
-using Students.AvaloniaApp.Views;
-using System;
 using System.Linq;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -19,19 +16,22 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty]
     private StudentViewModel? selectedStudent;
 
+    private readonly IStudentService studentService;
     private readonly ISaveDialogService saveDialog;
     private readonly IFileService fileService;
 
-    public MainViewModel(ISaveDialogService saveDialog, IFileService fileService)
+    public MainViewModel(IStudentService studentService, ISaveDialogService saveDialog, IFileService fileService)
     {
         Task.Run(LoadStudentAsync);
+        this.studentService = studentService;
         this.saveDialog = saveDialog;
         this.fileService = fileService;
     }
 
     private async Task LoadStudentAsync()
     {
-        Students = await App.sharedClient.GetFromJsonAsync<StudentViewModel[]>("/students");
+        Students = await studentService.GetAllStudentsAsync();
+
         SelectedStudent = Students?.First();
     }
 
@@ -39,7 +39,7 @@ public partial class MainViewModel : ViewModelBase
     {
         if (SelectedStudent is not null)
         {
-            await App.sharedClient.PutAsJsonAsync($"/students/{SelectedStudent.StudentId}", SelectedStudent);
+            await studentService.UpdateStudentAsync(SelectedStudent);
         }
     }
 
