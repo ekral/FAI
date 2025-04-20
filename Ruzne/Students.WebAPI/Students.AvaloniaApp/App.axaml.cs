@@ -7,6 +7,7 @@ using Students.AvaloniaApp.Views;
 using System.Net.Http;
 using System;
 using Avalonia.Controls;
+using Students.AvaloniaApp.Services;
 
 namespace Students.AvaloniaApp;
 
@@ -30,21 +31,19 @@ public partial class App : Application
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new MainWindow
-            {
-                DataContext = new MainViewModel(new FileService())
-            };
+            desktop.MainWindow = new MainWindow();
+            
+            TopLevel topLevel = TopLevel.GetTopLevel(desktop.MainWindow) ?? throw new NullReferenceException();
 
-            TopLevel? topLevel = TopLevel.GetTopLevel(desktop.MainWindow);
+            desktop.MainWindow.DataContext = new MainViewModel(new SaveDialogService(topLevel), new FileService());
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
-            singleViewPlatform.MainView = new MainView
-            {
-                DataContext = new MainViewModel(new FileService())
-            };
+            singleViewPlatform.MainView = new MainView();
 
-            TopLevel? topLevel = TopLevel.GetTopLevel(singleViewPlatform.MainView); // OK
+            TopLevel topLevel = TopLevel.GetTopLevel(singleViewPlatform.MainView) ?? throw new NullReferenceException();
+
+            singleViewPlatform.MainView.DataContext = new MainViewModel(new SaveDialogService(topLevel), new FileService());
         }
 
         base.OnFrameworkInitializationCompleted();

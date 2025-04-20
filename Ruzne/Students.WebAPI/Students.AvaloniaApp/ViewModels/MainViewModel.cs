@@ -1,32 +1,15 @@
 ﻿using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
+using Students.AvaloniaApp.Services;
 using Students.AvaloniaApp.Views;
 using System;
-using System.IO;
 using System.Linq;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Students.AvaloniaApp.ViewModels;
-
-public interface IFileService
-{
-    Task Save(IStorageFile file, string json);
-}
-
-public class FileService : IFileService
-{
-    public async Task Save(IStorageFile file, string json)
-    {
-        await using var stream = await file.OpenWriteAsync();
-
-        using var streamWriter = new StreamWriter(stream);
-
-        await streamWriter.WriteAsync(json);
-    }
-}
 
 public partial class MainViewModel : ViewModelBase
 {
@@ -36,11 +19,13 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty]
     private StudentViewModel? selectedStudent;
 
+    private readonly ISaveDialogService saveDialog;
     private readonly IFileService fileService;
 
-    public MainViewModel(IFileService fileService)
+    public MainViewModel(ISaveDialogService saveDialog, IFileService fileService)
     {
         Task.Run(LoadStudentAsync);
+        this.saveDialog = saveDialog;
         this.fileService = fileService;
     }
 
@@ -60,17 +45,14 @@ public partial class MainViewModel : ViewModelBase
 
     public async Task ExportToJson()
     {
-        Message? message = WeakReferenceMessenger.Default.Send<Message>();
+        IStorageFile? storageFile = await saveDialog.ShowAsync();
 
-        if (message is null)
+        if (storageFile is not null)
         {
-            return;
+            string json = JsonSerializer.Serialize(Students);
+
+            await fileService.SaveAsync(storageFile, json);
         }
-
-        string json = JsonSerializer.Serialize(Students);
-
-        IStorageFile? file = await message.Response;
-        await fileService.Save(file, json);
     }
 }
 
