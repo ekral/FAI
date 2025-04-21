@@ -1,0 +1,55 @@
+﻿@page "/students"
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using Microsoft.AspNetCore.WebUtilities
+@inject HttpClient Http
+
+<PageTitle>Studenti</PageTitle>
+
+<h3>Studenti</h3>
+
+<QuickGrid ItemsProvider="itemsProvider" Pagination="paginationState">
+    <PropertyColumn Property="@(s => s.StudentId)" Title="Id" Sortable="true"/>
+    <PropertyColumn Property="@(s => s.Jmeno)" Title="Jméno" Sortable="true"/>
+    <PropertyColumn Property="@(s => s.Studuje)" Sortable="true"/>
+    <TemplateColumn>
+        <NavLink class="btn btn-primary" href="@($"students/edit/{context.StudentId}")">Edit</NavLink>
+    </TemplateColumn>
+</QuickGrid>
+
+<Paginator State="paginationState"/>
+
+@code {
+    GridItemsProvider<Student>? itemsProvider;
+    PaginationState paginationState = new() { ItemsPerPage = 10 };
+
+    protected override void OnInitialized()
+    {
+        itemsProvider = async req =>
+        {
+            string uri = "students/page";
+            uri = QueryHelpers.AddQueryString(uri, "startIndex", req.StartIndex.ToString());
+            uri = QueryHelpers.AddQueryString(uri, "count", (req.Count ?? 10).ToString());
+
+            var properties = req.GetSortByProperties();
+            if(properties.Count > 0)
+            {
+                var property = properties.First();
+
+                uri = QueryHelpers.AddQueryString(uri, "sortBy", property.PropertyName);
+                bool descending = property.Direction == SortDirection.Descending;
+                uri = QueryHelpers.AddQueryString(uri, "descending", descending.ToString());
+            }
+            PaginatedResult? result = await Http.GetFromJsonAsync<PaginatedResult>(uri);
+
+            
+            if (result is null)
+            {
+                return GridItemsProviderResult.From<Student>([], 0);
+            }
+
+            return GridItemsProviderResult.From(result.Students, result.Total);
+        };
+    }
+
+    public record PaginatedResult(Student[] Students, int Total);
+}
