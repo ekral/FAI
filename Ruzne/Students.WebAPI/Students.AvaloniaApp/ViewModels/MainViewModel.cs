@@ -32,7 +32,7 @@ public partial class MainViewModel : ViewModelBase
     {
         Students = await studentService.GetAllStudentsAsync();
 
-        SelectedStudent = Students?.First();
+        SelectedStudent = Students?.FirstOrDefault();
     }
 
     public async Task Save()

@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Studenti.WebAPI", "Studenti
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Studenti.WebClient", "Studenti.WebClient\Studenti.WebClient.csproj", "{D3A65133-EEF7-40CD-B7DC-BC26378EF455}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Studenti.AvaloniaClient", "Studenti.AvaloniaClient\Studenti.AvaloniaClient.csproj", "{49A8AC4B-E176-9818-10FA-71B93373254E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Studenti.AvaloniaClient.Desktop", "Studenti.AvaloniaClient.Desktop\Studenti.AvaloniaClient.Desktop.csproj", "{7C4FF156-9A94-EB70-933E-24D3D555245F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{D3A65133-EEF7-40CD-B7DC-BC26378EF455}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3A65133-EEF7-40CD-B7DC-BC26378EF455}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3A65133-EEF7-40CD-B7DC-BC26378EF455}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49A8AC4B-E176-9818-10FA-71B93373254E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49A8AC4B-E176-9818-10FA-71B93373254E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49A8AC4B-E176-9818-10FA-71B93373254E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49A8AC4B-E176-9818-10FA-71B93373254E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C4FF156-9A94-EB70-933E-24D3D555245F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C4FF156-9A94-EB70-933E-24D3D555245F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C4FF156-9A94-EB70-933E-24D3D555245F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C4FF156-9A94-EB70-933E-24D3D555245F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
