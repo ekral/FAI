@@ -1,4 +1,4 @@
-# Materiál 10: Serializace
+# Materiál 10: Avalonia serializace a ukládání do souboru
 
 **autor: Erik Král ekral@utb.cz**
 
