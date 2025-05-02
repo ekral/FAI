@@ -5,7 +5,7 @@ namespace Studenti.Tests
 {
     class MockStudentService : IStudentService
     {
-        private Student[]? Students { get; } =
+        public Student[]? Students { get; } =
         [
             new Student() { StudentId = 1, Jmeno = "Jiri", Studuje = true },
             new Student() { StudentId = 2, Jmeno = "Alena", Studuje = false },
@@ -46,11 +46,12 @@ namespace Studenti.Tests
     public class UnitTestMainViewModel
     {
         [Fact]
-        public async Task Test1()
+        public async Task ExportStudents_ShouldExportStudents()
         {
+            MockStudentService studentService = new();
             FakeSaveDialogService saveDialog = new();
 
-            MainViewModel viewModel = new(new MockStudentService(), saveDialog);
+            MainViewModel viewModel = new(studentService, saveDialog);
             
             await viewModel.LoadStudentAsync();
 
@@ -60,5 +61,29 @@ namespace Studenti.Tests
             
             Assert.Equal(expected, saveDialog.Json);
         }
+
+        [Fact]
+        public async Task UpdateStudent_ShouldUpdateStudentDetails()
+        {
+            MockStudentService studentService = new();
+            FakeSaveDialogService saveDialog = new();
+
+            MainViewModel viewModel = new(studentService, saveDialog);
+
+            await viewModel.LoadStudentAsync();
+
+            Assert.NotNull(viewModel.SelectedStudent);
+            Assert.NotNull(studentService.Students);
+
+            viewModel.SelectedStudent.Jmeno = "UpdatedName";
+            viewModel.SelectedStudent.Studuje = false;
+
+            await viewModel.Save();
+
+            Student updatedStudent = studentService.Students.First(s => s.StudentId == viewModel.SelectedStudent.StudentId);
+            Assert.Equal("UpdatedName", updatedStudent.Jmeno);
+            Assert.False(updatedStudent.Studuje);
+        }
+
     }
 }
