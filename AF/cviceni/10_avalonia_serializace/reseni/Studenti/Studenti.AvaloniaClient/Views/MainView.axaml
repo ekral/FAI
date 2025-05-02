@@ -1,0 +1,30 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:Studenti.AvaloniaClient.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Studenti.AvaloniaClient.Views.MainView"
+             x:DataType="vm:MainViewModel">
+  <Design.DataContext>
+    <!-- This only sets the DataContext for the previewer in an IDE,
+         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+   
+  </Design.DataContext>
+
+  <StackPanel>
+		<ComboBox ItemsSource="{Binding Students}" MinWidth="128" SelectedItem="{Binding SelectedStudent}" HorizontalAlignment="Center">
+			<ComboBox.ItemTemplate>
+				<DataTemplate>
+						<TextBlock Text="{Binding Jmeno}"/>
+				</DataTemplate>
+			</ComboBox.ItemTemplate>
+		</ComboBox>
+		<TextBlock Text="{Binding SelectedStudent.StudentId}" HorizontalAlignment="Center"/>
+		<TextBox Text="{Binding SelectedStudent.Jmeno}" HorizontalAlignment="Center"/>
+		<CheckBox Content="Studuje" IsChecked="{Binding SelectedStudent.Studuje}" HorizontalAlignment="Center"/>
+		<Button Command="{Binding Save}" HorizontalAlignment="Center">Save</Button>
+		<Button Command="{Binding Export}" HorizontalAlignment="Center">Export</Button>
+		
+	</StackPanel>  
+</UserControl>
