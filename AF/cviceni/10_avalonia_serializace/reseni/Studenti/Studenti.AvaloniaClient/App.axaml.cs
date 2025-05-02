@@ -40,7 +40,7 @@ public partial class App : Application
 
             desktop.MainWindow.DataContext = vm;
 
-            Task.Run(vm.LoadStudentAsync);
+            desktop.MainWindow.Loaded += async (sender, e) => await vm.LoadStudentAsync();
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
@@ -53,8 +53,12 @@ public partial class App : Application
             singleViewPlatform.MainView.DataContext = vm;
 
             Task.Run(vm.LoadStudentAsync);
+
+            singleViewPlatform.MainView.Loaded += async (sender, e) => await vm.LoadStudentAsync();
         }
 
         base.OnFrameworkInitializationCompleted();
     }
+
+    
 }
