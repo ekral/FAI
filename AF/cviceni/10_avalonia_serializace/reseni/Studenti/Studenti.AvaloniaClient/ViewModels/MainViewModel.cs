@@ -15,17 +15,20 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty]
     private Student? selectedStudent;
 
+    private readonly IStudentService studentService;
     private readonly ISaveDialogService saveDialog;
 
-    public MainViewModel(ISaveDialogService saveDialog)
+    public MainViewModel(IStudentService studentService, ISaveDialogService saveDialog)
     {
-        Task.Run(LoadStudentAsync);
+        this.studentService = studentService;
         this.saveDialog = saveDialog;
+
+        Task.Run(LoadStudentAsync);
     }
 
     private async Task LoadStudentAsync()
     {
-        Students = await App.sharedClient.GetFromJsonAsync<Student[]>("/students"); 
+        Students = await studentService.GetAllStudentsAsync(); 
 
         SelectedStudent = Students?.FirstOrDefault();
     }
@@ -34,7 +37,7 @@ public partial class MainViewModel : ViewModelBase
     {
         if (SelectedStudent is not null)
         {
-            await App.sharedClient.PutAsJsonAsync($"/students/{SelectedStudent.StudentId}", SelectedStudent);
+            await studentService.UpdateStudentAsync(SelectedStudent);
         }
     }
 

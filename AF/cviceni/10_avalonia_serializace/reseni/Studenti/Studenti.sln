@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Studenti.AvaloniaClient", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Studenti.AvaloniaClient.Desktop", "Studenti.AvaloniaClient.Desktop\Studenti.AvaloniaClient.Desktop.csproj", "{7C4FF156-9A94-EB70-933E-24D3D555245F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Studenti.Tests", "Studenti.Tests\Studenti.Tests.csproj", "{038C853F-431D-4B25-8E7F-DBCFE174739D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{7C4FF156-9A94-EB70-933E-24D3D555245F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C4FF156-9A94-EB70-933E-24D3D555245F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C4FF156-9A94-EB70-933E-24D3D555245F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{038C853F-431D-4B25-8E7F-DBCFE174739D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{038C853F-431D-4B25-8E7F-DBCFE174739D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{038C853F-431D-4B25-8E7F-DBCFE174739D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{038C853F-431D-4B25-8E7F-DBCFE174739D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -8,6 +8,7 @@ using System.Net.Http;
 using System;
 using Avalonia.Controls;
 using Students.AvaloniaApp.Services;
+using System.Threading.Tasks;
 
 namespace Students.AvaloniaApp;
 
@@ -37,7 +38,11 @@ public partial class App : Application
             
             TopLevel topLevel = TopLevel.GetTopLevel(desktop.MainWindow) ?? throw new NullReferenceException();
 
-            desktop.MainWindow.DataContext = new MainViewModel(studentService, new SaveDialogService(topLevel), new FileService());
+            MainViewModel vm = new(studentService, new SaveDialogService(topLevel), new FileService());
+
+            desktop.MainWindow.DataContext = vm;
+
+            Task.Run(vm.LoadStudentAsync);
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
@@ -45,7 +50,11 @@ public partial class App : Application
 
             TopLevel topLevel = TopLevel.GetTopLevel(singleViewPlatform.MainView) ?? throw new NullReferenceException();
 
-            singleViewPlatform.MainView.DataContext = new MainViewModel(studentService, new SaveDialogService(topLevel), new FileService());
+            MainViewModel vm = new(studentService, new SaveDialogService(topLevel), new FileService());
+            
+            singleViewPlatform.MainView.DataContext = vm;
+
+            Task.Run(vm.LoadStudentAsync);
         }
 
         base.OnFrameworkInitializationCompleted();

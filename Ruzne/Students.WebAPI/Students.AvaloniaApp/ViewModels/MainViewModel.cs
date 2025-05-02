@@ -22,13 +22,12 @@ public partial class MainViewModel : ViewModelBase
 
     public MainViewModel(IStudentService studentService, ISaveDialogService saveDialog, IFileService fileService)
     {
-        Task.Run(LoadStudentAsync);
         this.studentService = studentService;
         this.saveDialog = saveDialog;
         this.fileService = fileService;
     }
 
-    private async Task LoadStudentAsync()
+    public async Task LoadStudentAsync()
     {
         Students = await studentService.GetAllStudentsAsync();
 

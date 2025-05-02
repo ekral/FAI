@@ -35,7 +35,7 @@ public partial class App : Application
 
             TopLevel topLevel = TopLevel.GetTopLevel(desktop.MainWindow) ?? throw new NullReferenceException();
 
-            desktop.MainWindow.DataContext = new MainViewModel(new SaveDialogService(topLevel));
+            desktop.MainWindow.DataContext = new MainViewModel(new StudentService(sharedClient), new SaveDialogService(topLevel));
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
@@ -43,7 +43,7 @@ public partial class App : Application
 
             TopLevel topLevel = TopLevel.GetTopLevel(singleViewPlatform.MainView) ?? throw new NullReferenceException();
 
-            singleViewPlatform.MainView.DataContext = new MainViewModel(new SaveDialogService(topLevel));
+            singleViewPlatform.MainView.DataContext = new MainViewModel(new StudentService(sharedClient), new SaveDialogService(topLevel));
         }
 
         base.OnFrameworkInitializationCompleted();
