@@ -46,11 +46,19 @@ namespace Studenti.Tests
     public class UnitTestMainViewModel
     {
         [Fact]
-        public void Test1()
+        public async Task Test1()
         {
-            MainViewModel viewModel = new MainViewModel(new MockStudentService(), new FakeSaveDialogService());
+            FakeSaveDialogService saveDialog = new();
 
+            MainViewModel viewModel = new(new MockStudentService(), saveDialog);
             
+            await viewModel.LoadStudentAsync();
+
+            await viewModel.Export();
+
+            string expected = """[{"StudentId":1,"Studuje":true,"Jmeno":"Jiri"},{"StudentId":2,"Studuje":false,"Jmeno":"Alena"},{"StudentId":3,"Studuje":true,"Jmeno":"Samuel"}]""";
+            
+            Assert.Equal(expected, saveDialog.Json);
         }
     }
 }

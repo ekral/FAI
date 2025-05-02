@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Studenti.AvaloniaClient.Services;
 using System.Linq;
-using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -22,11 +21,9 @@ public partial class MainViewModel : ViewModelBase
     {
         this.studentService = studentService;
         this.saveDialog = saveDialog;
-
-        Task.Run(LoadStudentAsync);
     }
 
-    private async Task LoadStudentAsync()
+    public async Task LoadStudentAsync()
     {
         Students = await studentService.GetAllStudentsAsync(); 
 
