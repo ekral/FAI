@@ -30,7 +30,7 @@ public partial class MainViewModel : ViewModelBase
         SelectedStudent = Students?.FirstOrDefault();
     }
 
-    public async Task Save()
+    public async Task SaveAsync()
     {
         if (SelectedStudent is not null)
         {
@@ -38,7 +38,7 @@ public partial class MainViewModel : ViewModelBase
         }
     }
 
-    public async Task Export()
+    public async Task ExportAsync()
     {
         if (Students is not null)
         {

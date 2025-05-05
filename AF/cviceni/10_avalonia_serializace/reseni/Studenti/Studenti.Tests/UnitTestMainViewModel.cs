@@ -1,11 +1,12 @@
 ﻿using Studenti.AvaloniaClient.Services;
 using Studenti.AvaloniaClient.ViewModels;
+using System.Text.Json;
 
 namespace Studenti.Tests
 {
     class MockStudentService : IStudentService
     {
-        public Student[]? Students { get; } =
+        public Student[] Students { get; } =
         [
             new Student() { StudentId = 1, Jmeno = "Jiri", Studuje = true },
             new Student() { StudentId = 2, Jmeno = "Alena", Studuje = false },
@@ -14,7 +15,7 @@ namespace Studenti.Tests
 
         public Task<Student[]?> GetAllStudentsAsync()
         {
-            return Task.FromResult(Students);
+            return Task.FromResult(Students)!;
         }
 
         public Task UpdateStudentAsync(Student student)
@@ -49,17 +50,20 @@ namespace Studenti.Tests
         public async Task ExportStudents_ShouldExportStudents()
         {
             MockStudentService studentService = new();
-            FakeSaveDialogService saveDialog = new();
+            FakeSaveDialogService dialogService = new();
 
-            MainViewModel viewModel = new(studentService, saveDialog);
+            MainViewModel viewModel = new(studentService, dialogService);
             
             await viewModel.LoadStudentAsync();
 
-            await viewModel.Export();
+            Assert.NotNull(viewModel.Students);
+            Assert.NotNull(viewModel.SelectedStudent);
 
-            string expected = """[{"StudentId":1,"Studuje":true,"Jmeno":"Jiri"},{"StudentId":2,"Studuje":false,"Jmeno":"Alena"},{"StudentId":3,"Studuje":true,"Jmeno":"Samuel"}]""";
+            await viewModel.ExportAsync();
+
+            string expected = JsonSerializer.Serialize(studentService.Students);
             
-            Assert.Equal(expected, saveDialog.Json);
+            Assert.Equal(expected, dialogService.Json);
         }
 
         [Fact]
@@ -72,15 +76,18 @@ namespace Studenti.Tests
 
             await viewModel.LoadStudentAsync();
 
+            Assert.NotNull(viewModel.Students);
             Assert.NotNull(viewModel.SelectedStudent);
-            Assert.NotNull(studentService.Students);
 
             viewModel.SelectedStudent.Jmeno = "UpdatedName";
             viewModel.SelectedStudent.Studuje = false;
 
-            await viewModel.Save();
+            await viewModel.SaveAsync();
 
-            Student updatedStudent = studentService.Students.First(s => s.StudentId == viewModel.SelectedStudent.StudentId);
+            Student? updatedStudent = studentService.Students.FirstOrDefault(s => s.StudentId == viewModel.SelectedStudent.StudentId);
+
+            Assert.NotNull(updatedStudent);
+
             Assert.Equal("UpdatedName", updatedStudent.Jmeno);
             Assert.False(updatedStudent.Studuje);
         }
