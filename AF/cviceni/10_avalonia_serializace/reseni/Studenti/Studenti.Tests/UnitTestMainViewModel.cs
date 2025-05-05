@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace Studenti.Tests
 {
-    class MockStudentService : IStudentService
+    class FakeStudentService : IStudentService
     {
         public Student[] Students { get; } =
         [
@@ -49,7 +49,7 @@ namespace Studenti.Tests
         [Fact]
         public async Task ExportStudents_ShouldExportStudents()
         {
-            MockStudentService studentService = new();
+            FakeStudentService studentService = new();
             FakeSaveDialogService dialogService = new();
 
             MainViewModel viewModel = new(studentService, dialogService);
@@ -69,7 +69,7 @@ namespace Studenti.Tests
         [Fact]
         public async Task UpdateStudent_ShouldUpdateStudentDetails()
         {
-            MockStudentService studentService = new();
+            FakeStudentService studentService = new();
             FakeSaveDialogService saveDialog = new();
 
             MainViewModel viewModel = new(studentService, saveDialog);
