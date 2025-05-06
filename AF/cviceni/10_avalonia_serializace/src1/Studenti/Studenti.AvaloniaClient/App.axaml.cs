@@ -30,17 +30,25 @@ public partial class App : Application
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
+            MainViewModel vm = new(); 
+
             desktop.MainWindow = new MainWindow
             {
-                DataContext = new MainViewModel()
+                DataContext = vm
             };
+
+            desktop.MainWindow.Loaded += async (sender, e) => await vm.LoadStudentAsync();
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
+            MainViewModel vm = new();
+
             singleViewPlatform.MainView = new MainView
             {
-                DataContext = new MainViewModel()
+                DataContext = vm
             };
+
+            singleViewPlatform.MainView.Loaded += async (sender, e) => await vm.LoadStudentAsync();
         }
 
         base.OnFrameworkInitializationCompleted();

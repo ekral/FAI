@@ -16,17 +16,17 @@ public partial class MainViewModel : ViewModelBase
 
     public MainViewModel()
     {
-        Task.Run(LoadStudentAsync);
+        
     }
 
-    private async Task LoadStudentAsync()
+    public async Task LoadStudentAsync()
     {
         Students = await App.sharedClient.GetFromJsonAsync<Student[]>("/students"); 
 
         SelectedStudent = Students?.FirstOrDefault();
     }
 
-    public async Task Save()
+    public async Task SaveAsync()
     {
         if (SelectedStudent is not null)
         {
