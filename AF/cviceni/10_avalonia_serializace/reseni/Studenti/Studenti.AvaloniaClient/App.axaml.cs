@@ -52,8 +52,6 @@ public partial class App : Application
 
             singleViewPlatform.MainView.DataContext = vm;
 
-            Task.Run(vm.LoadStudentAsync);
-
             singleViewPlatform.MainView.Loaded += async (sender, e) => await vm.LoadStudentAsync();
         }
 
