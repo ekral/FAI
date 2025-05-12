@@ -28,7 +28,7 @@ namespace Studenti.Tests
             Assert.NotNull(viewModel.Students);
             Assert.NotNull(viewModel.SelectedStudent);
 
-            await dialogService.Received().SaveAsync(expected);
+            await dialogService.Received().SaveAsync(expected); // Otestuje, ze se zavola metoda SaveAsync s danym argumentem
         }
 
         [Fact]
