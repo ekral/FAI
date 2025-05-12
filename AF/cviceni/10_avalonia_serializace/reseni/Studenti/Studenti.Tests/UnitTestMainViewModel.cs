@@ -1,78 +1,50 @@
-﻿using Studenti.AvaloniaClient.Services;
+﻿using NSubstitute;
+using Studenti.AvaloniaClient.Services;
 using Studenti.AvaloniaClient.ViewModels;
 using System.Text.Json;
 
 namespace Studenti.Tests
 {
-    class FakeStudentService : IStudentService
-    {
-        public Student[] Students { get; } =
-        [
-            new Student() { StudentId = 1, Jmeno = "Jiri", Studuje = true },
-            new Student() { StudentId = 2, Jmeno = "Alena", Studuje = false },
-            new Student() { StudentId = 3, Jmeno = "Samuel", Studuje = true }
-        ];
-
-        public Task<Student[]?> GetAllStudentsAsync()
-        {
-            return Task.FromResult(Students)!;
-        }
-
-        public Task UpdateStudentAsync(Student student)
-        {
-            Student? studentToChange = Students?.FirstOrDefault(s => s.StudentId == student.StudentId);
-
-            if (studentToChange is not null)
-            {
-                studentToChange.Jmeno = student.Jmeno;
-                studentToChange.Studuje = student.Studuje;
-            }
-
-            return Task.CompletedTask;
-        }
-    }
-
-    class FakeSaveDialogService : ISaveDialogService
-    {
-        public string? Json { get; private set; }
-        
-        public Task SaveAsync(string json)
-        {
-            Json = json;
-
-            return Task.CompletedTask;
-        }
-    }
-
     public class UnitTestMainViewModel
     {
         [Fact]
         public async Task ExportStudents_ShouldExportStudents()
         {
-            FakeStudentService studentService = new();
-            FakeSaveDialogService dialogService = new();
+            Student[] data = [new Student() { StudentId = 1, Jmeno = "Jiri", Studuje = false }, new Student() { StudentId = 2, Jmeno = "Karel", Studuje = true }];
+
+            IStudentService studentService = Substitute.For<IStudentService>();
+            studentService.GetAllStudentsAsync().Returns(data);
+
+            var dialogService = Substitute.For<ISaveDialogService>();
+            dialogService.SaveAsync(Arg.Any<string>()).Returns(Task.CompletedTask);
 
             MainViewModel viewModel = new(studentService, dialogService);
-            
-            await viewModel.LoadStudentAsync();
 
+            await viewModel.LoadStudentAsync();
+            await viewModel.ExportAsync();
+
+            string expected = JsonSerializer.Serialize(data);
+            
             Assert.NotNull(viewModel.Students);
             Assert.NotNull(viewModel.SelectedStudent);
 
-            await viewModel.ExportAsync();
-
-            string expected = JsonSerializer.Serialize(studentService.Students);
-            
-            Assert.Equal(expected, dialogService.Json);
+            await dialogService.Received().SaveAsync(expected);
         }
 
         [Fact]
         public async Task UpdateStudent_ShouldUpdateStudentDetails()
         {
-            FakeStudentService studentService = new();
-            FakeSaveDialogService saveDialog = new();
+            Student[] data = [new Student() { StudentId = 1, Jmeno = "Jiri", Studuje = false }, new Student() { StudentId = 2, Jmeno = "Karel", Studuje = true }];
 
-            MainViewModel viewModel = new(studentService, saveDialog);
+            IStudentService studentService = Substitute.For<IStudentService>();
+
+            studentService.GetAllStudentsAsync().Returns(data);
+            Student? updatedStudent = null;
+            studentService.UpdateStudentAsync(Arg.Do<Student>(student => updatedStudent = student)).Returns(Task.CompletedTask);
+
+            var dialogService = Substitute.For<ISaveDialogService>();
+
+            MainViewModel viewModel = new(studentService, dialogService);
 
             await viewModel.LoadStudentAsync();
 
@@ -84,13 +56,10 @@ namespace Studenti.Tests
 
             await viewModel.SaveAsync();
 
-            Student? updatedStudent = studentService.Students.FirstOrDefault(s => s.StudentId == viewModel.SelectedStudent.StudentId);
-
             Assert.NotNull(updatedStudent);
 
             Assert.Equal("UpdatedName", updatedStudent.Jmeno);
             Assert.False(updatedStudent.Studuje);
         }
-
     }
 }

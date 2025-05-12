@@ -7,7 +7,7 @@ namespace Studenti.AvaloniaClient.ViewModels
         public int StudentId { get; set; }
 
         [ObservableProperty]
-        public string jmeno;
+        private string jmeno;
 
         public required bool Studuje { get; set; }
     }
