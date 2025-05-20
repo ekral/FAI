@@ -24,6 +24,29 @@ A následující příkaz přídá do projektu nuget balíček **Microsoft.Entit
 dotnet add package Microsoft.EntityFrameworkCore.Design
 ```
 
+## DbContext Lifetime, Configuration, and Initialization
+
+[odkaz](https://learn.microsoft.com/en-us/ef/core/cli/dbcontext-creation?tabs=dotnet-core-cli)
+
+Nástroj pro migraci musí mít k dispozici v projektu nakonfigurovaný DbContext.
+
+1) Nakonfigurovaný jako služba v dependency injection.
+2) DbContext s bezparametrickým konstruktorem nakonfigurovaný v metodě 'OnConfiguring'.
+3) Pomocí design-time factory.
+
+```csharp
+public class BloggingContextFactory : IDesignTimeDbContextFactory<BloggingContext>
+{
+    public BloggingContext CreateDbContext(string[] args)
+    {
+        var optionsBuilder = new DbContextOptionsBuilder<BloggingContext>();
+        optionsBuilder.UseSqlite("Data Source=blog.db");
+
+        return new BloggingContext(optionsBuilder.Options);
+    }
+}
+```
+
 ## Vytváření a spuštění migrací
 
 Migrace představuje kód v jazyce C# který umí vytvářet nebo aktualizovat tabulky v databázi a případně i vložit výchozí data pro model. 
