@@ -4,6 +4,8 @@
 
 int main()
 {
+	// http://www.aristoteles.cz/matematika/financni_matematika/hypoteka-vypocet.php
+	
 	double x = pow(2.0, 8.0); // 2^8 = 256.0
 
 	double D = 6100000;
