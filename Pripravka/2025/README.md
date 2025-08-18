@@ -1,4 +1,4 @@
-# Letní programátorská přípravka 2024
+# Letní programátorská přípravka 2025
 
 
 ## Online reference
