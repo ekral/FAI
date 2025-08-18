@@ -2,11 +2,21 @@
 
 int main()
 {
-	// = je operator prirazeni
-	double hmotnost = 96.0;
-	double vyska = 1.86;
+	double vyska_cm = 0.0;
+
+	printf("Zadej vysku v cm: ");
+	scanf_s("%lF", &vyska_cm);
+
+	double vyska = vyska_cm / 100.0;
+
+	double hmotnost = 0.0;
+
+	printf("Zadej hmotnost v kg: ");
+	scanf_s("%lF", &hmotnost);
 
 	double bmi = hmotnost / (vyska * vyska);
+
+	puts("=============================");
 
 	printf("vyska: %.2lF cm\n", vyska * 100);
 	printf("hmotnost: %.2lF kg\n", hmotnost);
