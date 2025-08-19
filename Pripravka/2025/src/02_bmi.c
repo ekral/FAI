@@ -22,6 +22,37 @@ int main()
 	printf("hmotnost: %.2lF kg\n", hmotnost);
 	printf("bmi: %.2lF\n", bmi);
 
+	// kategorie
+
+	if (bmi > 40.0)
+	{
+		puts("morbidni obezita");
+	}
+	else if (bmi > 35.0)
+	{
+		puts("obezita druheho stupne");
+	}
+	else if (bmi > 30.0)
+	{
+		puts("obezita prvniho stupne");
+	}
+	else if (bmi > 25.0)
+	{
+		puts("nadvaha");
+	}
+	else if (bmi > 18.5)
+	{
+		puts("zdrava vaha");
+	}
+	else if (bmi > 16.5)
+	{
+		puts("podvaha");
+	}
+	else
+	{
+		puts("tezka podvyziva");
+	}
+
 	// spocitejte nejmensi a nejvetsi doporucenou
 	// doporucenou hmotnost dle vysky
 
@@ -40,10 +71,25 @@ int main()
 	// vypiste o kolik kilogramu by mela osoba zhubnout
 	// pokud vazi mene tak vypise zaporne cislo
 
-	// - je operator odcitani
-	double rozdil = hmotnost - max_hmotnost;
+	// Pokud je hmotnost vetsi nez maximalni zdrava hmotnost, tak vypise kolik ma zhubnout
+	// Pokud je hmotnost mensi nez minimalni zdrava hmotnost, tak napise kolik ma pribrat
+	// Jinak napise: "gratuluji mas idealni vahu".
 
-	printf("Mel by jsi zhubnout: %.2lF\n", rozdil);
+	if (hmotnost > max_hmotnost)
+	{
+		double rozdil = hmotnost - max_hmotnost;
+		printf("Mel by jsi zhubnout %.2lF kg\n", rozdil);
+	}
+	else if (hmotnost < min_hmotnost)
+	{
+		double rozdil = min_hmotnost - hmotnost;
+		printf("Mel by jsi pribrat %.2lF kg\n", rozdil);
+	}
+	else
+	{
+		puts("gratuluji mas idealni vahu");
+	}
+
 
 	return 0;
 }
