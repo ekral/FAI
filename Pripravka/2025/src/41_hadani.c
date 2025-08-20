@@ -10,16 +10,38 @@ int main()
 
 	puts("Ja pocitac si myslim cislo, zkus ho uhodnout.");
 
-	int konec = false;
+	char pokracovat = 'n';
+
 	do
 	{
-		int tip = 0;
-		printf("Zadej cislo: ");
-		scanf_s("%d", &tip);
+		int konec = false;
+		do
+		{
+			int tip = 0;
+			printf("Zadej cislo: ");
+			scanf_s("%d", &tip);
 
-		konec = true; // az uhodne cislo
+			if (tip == cislo)
+			{
+				puts("Gratuluji, uhodnul jsi cislo :)");
+				konec = true; // az uhodne cislo
+			}
+			else if (tip < cislo)
+			{
+				puts("cislo je vetsi");
+			}
+			else
+			{
+				puts("cislo je mensi");
+			}
 
-	} while (!konec);
+		} while (!konec);
+
+		puts("Pokracovat? a/n");
+
+		// TODO nacteni retezce do pole
+
+	} while (pokracovat == 'a');
 
 	// ! je negace, z pravdy je nepravda a naopak
 }
