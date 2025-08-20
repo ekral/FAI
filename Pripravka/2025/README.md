@@ -93,6 +93,7 @@ heslo: **VyvojJeFAIn-25**
    	- Vylepšený papoušek pomocí while [24_vylepseny_papousek.c](src/24_vylepseny_papousek.c).
    	- Průměr pole [25_prumer_pole.c](src/25_prumer_pole.c).
    	- Výpis prvků pole v opačném pořadí [26_vypis_opacne.c](src/26_vypis_opacne.c).
+   	- Hádej číslo, které si myslí počítač [41_hadani.c](src/41_hadani.c).
    	  
 4. Čtvrtek
    	- opakování.
