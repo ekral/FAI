@@ -107,6 +107,7 @@ heslo: **VyvojJeFAIn-25**
    	- Pyramida [31_pyramida.c](src/31_pyramida.c).
    	- Počet lichých [32_pocet_lichych.c](src/32_pocet_lichych.c).
    	- Bubble sort [33_bubble_sort.c](src/33_bubble_sort.c).
+   	- Magický kotlík [42_kotlik.c](src/42_kotlik.c).
 5. Pátek
    	- funkce.
    	- ukazatele.
