@@ -10,6 +10,10 @@ int main()
 	puts("Magicky kotel");
 	puts("=============");
 
+	// 1) Ukoncete program pokud je kotlik plny a 
+	//    napiste na konzoli "magicky kotlik je plny"
+	// 2) Napiste na konzoli "prisada se nevejde do kotle", 
+	//    pokud se prisada nevejde a nepridavejte ji
 	do
 	{
 		printf("Zadej prisadu do kotle: ");
@@ -23,8 +27,16 @@ int main()
 		}
 		else if (prisada > 0)
 		{
-			puts("platna prisada");
-			kotel += prisada; // pricte prisadu ke kotli
+			if (prisada + kotel > kapacita)
+			{
+				puts("prisada se nevejde do kotle");
+				continue;
+			}
+			else
+			{
+				puts("platna prisada");
+				kotel += prisada; // pricte prisadu ke kotli
+			}
 		}
 		else if (prisada < 0)
 		{
@@ -54,6 +66,10 @@ int main()
 		
 		putchar('\n');
 
-	} while (prisada != 0);
+	} while (prisada != 0 && kotel < kapacita);
 
+	if (kotel == kapacita)
+	{
+		puts("magicky kotlik je plny.");
+	}
 }
