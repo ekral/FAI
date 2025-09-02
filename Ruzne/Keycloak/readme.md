@@ -52,3 +52,8 @@ https://learn.microsoft.com/en-us/aspnet/core/blazor/security/webassembly/standa
 ```
 
 https://learn.microsoft.com/en-us/aspnet/core/blazor/security/webassembly/additional-scenarios?view=aspnetcore-9.0#custom-authorizationmessagehandler-class
+
+
+Console configurace
+
+- V keycloaku povolit Client authentication a Service account
