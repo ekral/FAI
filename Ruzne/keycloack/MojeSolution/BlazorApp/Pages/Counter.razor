@@ -1,0 +1,46 @@
+﻿@page "/counter"
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@inject NavigationManager NavigationManager 
+@inject AuthenticationStateProvider StateProvider
+@inject HttpClient HttpClient
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+
+<Microsoft.AspNetCore.Components.Authorization.AuthorizeView>
+    <NotAuthorized>
+        <p>Musis se prihlasit abys to videl</p>
+        <button @onclick="Login">Login</button>
+    </NotAuthorized>
+    <Authorized>
+        <p>Jupii, jsi tu</p>
+        <p>User name: @(context.User.Identity?.Name ?? "je null")</p>
+        <button @onclick="GetMessageAsync">Nacti data</button>
+        <p>@message</p>
+    </Authorized>
+</Microsoft.AspNetCore.Components.Authorization.AuthorizeView>
+
+@code {
+
+    private string message;
+
+    private async Task GetMessageAsync()
+    {
+        string message = await HttpClient.GetStringAsync("/data");
+
+        this.message = message;
+    }
+
+    private void Login()
+    {
+        NavigationManager.NavigateToLogin("authentication/login");
+    }
+
+    private async Task<string> GetName()
+    {
+        var state = await StateProvider.GetAuthenticationStateAsync();
+        return state.User.Identity?.Name ?? "null";
+    }
+}
