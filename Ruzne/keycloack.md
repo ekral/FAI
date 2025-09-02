@@ -42,3 +42,13 @@ app.MapGet("/data", () => "joo").RequireAuthorization();
 TODO:
 
 Zjistit rozdil mezi standart a implicit flow
+
+Blazor:
+
+https://learn.microsoft.com/en-us/aspnet/core/blazor/security/webassembly/standalone-with-authentication-library?view=aspnetcore-9.0&tabs=visual-studio
+
+```html
+<script src="_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js"></script>
+```
+
+https://learn.microsoft.com/en-us/aspnet/core/blazor/security/webassembly/additional-scenarios?view=aspnetcore-9.0#custom-authorizationmessagehandler-class
