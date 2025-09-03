@@ -8,7 +8,7 @@ internal class Program
     static async Task<string> GetToken()
     {
         using var client = new HttpClient();
-        var resp = await client.SendAsync(new HttpRequestMessage(HttpMethod.Post, "http://127.0.0.1:8080/realms/mujrealm/protocol/openid-connect/token")
+        var resp = await client.SendAsync(new HttpRequestMessage(HttpMethod.Post, "http://127.0.0.1:8080/realms/myrealm/protocol/openid-connect/token")
         {
             Content = new FormUrlEncodedContent([
                 new KeyValuePair<string,string>("client_id","myclient"),

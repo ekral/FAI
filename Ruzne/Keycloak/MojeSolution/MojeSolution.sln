@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorApp", "BlazorApp\Blaz
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "ConsoleApp\ConsoleApp.csproj", "{3B38540F-5353-403D-8E55-724C0CD34EFB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppDeviceAuthorization", "ConsoleAppDeviceAuthorization\ConsoleAppDeviceAuthorization.csproj", "{A101A526-3160-4F36-88DE-9FC92BDFDA0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppDirectAccessGrants", "ConsoleAppDirectAccessGrants\ConsoleAppDirectAccessGrants.csproj", "{6C068BA9-E3B3-4FA4-99C9-DF457EC86F42}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{3B38540F-5353-403D-8E55-724C0CD34EFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B38540F-5353-403D-8E55-724C0CD34EFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B38540F-5353-403D-8E55-724C0CD34EFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A101A526-3160-4F36-88DE-9FC92BDFDA0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A101A526-3160-4F36-88DE-9FC92BDFDA0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A101A526-3160-4F36-88DE-9FC92BDFDA0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A101A526-3160-4F36-88DE-9FC92BDFDA0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C068BA9-E3B3-4FA4-99C9-DF457EC86F42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C068BA9-E3B3-4FA4-99C9-DF457EC86F42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C068BA9-E3B3-4FA4-99C9-DF457EC86F42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C068BA9-E3B3-4FA4-99C9-DF457EC86F42}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

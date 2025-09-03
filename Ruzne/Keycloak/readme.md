@@ -1,12 +1,16 @@
 Docker
 
-Nazev docker instance:
+Nazev docker instance (`--name`). Adresa musi byt stejna, nesmí se psát localhost místo 127.0.0.1.
 
 ```powershell
---name nazev
+docker run --name keycloak -p 127.0.0.1:8080:8080 -e KC_BOOTSTRAP_ADMIN_USERNAME=admin -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:26.3.3 start-dev
 ```
 
-Nastavit implicit flow.
+- Nastavit Standard flow
+- Pro konzoli nastavit OAuth 2.0 Device Authorization Grant
+- Pokud by jedna webova sluzba chtela volat jinou, tak povolit Client Authentication a Service account roles
+- Nastavit Valid redirect URIs na adresu Blazoru
+- Nastavit Web origins url na adresu Blazoru
 
 
 1) Pridat cors.

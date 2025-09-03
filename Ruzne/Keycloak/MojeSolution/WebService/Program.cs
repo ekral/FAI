@@ -11,9 +11,10 @@ namespace WebService
             
             builder.Services.AddAuthentication().AddJwtBearer(c =>
             {
-                c.Authority = "http://127.0.0.1:8080/realms/mujrealm";
+                c.Authority = "http://127.0.0.1:8080/realms/myrealm";
                 c.Audience = "account";
                 c.RequireHttpsMetadata = false;
+                //c.TokenValidationParameters.ValidateAudience = false;
             });
 
             builder.Services.AddCors();
