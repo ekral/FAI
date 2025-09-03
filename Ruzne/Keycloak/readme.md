@@ -63,3 +63,7 @@ Poznámky:
 - Microsoft Identity je zastřešující pojem, ale především se tím myslí Microsoft Identity Platform.
 - Microsoft Identity Platform je Entra.
 - [Asp.net identity](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-9.0&tabs=visual-studio) jsou individual accounts a [identity API pro web API](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity-api-authorization?view=aspnetcore-9.0).
+
+https://learn.microsoft.com/en-us/aspnet/core/security/authentication/configure-oidc-web-authentication?view=aspnetcore-9.0
+
+https://learn.microsoft.com/en-us/aspnet/core/blazor/security/blazor-web-app-with-oidc?view=aspnetcore-9.0&pivots=non-bff-pattern
