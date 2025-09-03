@@ -7,8 +7,8 @@ docker run --name keycloak -p 127.0.0.1:8080:8080 -e KC_BOOTSTRAP_ADMIN_USERNAME
 ```
 
 - Nastavit Standard flow
-- Pro konzoli nastavit OAuth 2.0 Device Authorization Grant
 - Pokud by jedna webova sluzba chtela volat jinou, tak povolit Client Authentication a Service account roles
+- Nastavit OAuth 2.0 Device Authorization Grant pokud chci generovat URL pro přihlášení.
 - Nastavit Valid redirect URIs na adresu Blazoru
 - Nastavit Web origins url na adresu Blazoru
 
@@ -58,10 +58,8 @@ https://learn.microsoft.com/en-us/aspnet/core/blazor/security/webassembly/standa
 https://learn.microsoft.com/en-us/aspnet/core/blazor/security/webassembly/additional-scenarios?view=aspnetcore-9.0#custom-authorizationmessagehandler-class
 
 
-Console configurace
-
-- V keycloaku povolit Client authentication a Service account
 
 Poznámky:
-- Microsoft Identity Platform je Entra
-- [Asp.net identity](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-9.0&tabs=visual-studio) jsou individual accounts a [identity API pro web API](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity-api-authorization?view=aspnetcore-9.0)
+- Microsoft Identity je zastřešující pojem, ale především se tím myslí Microsoft Identity Platform.
+- Microsoft Identity Platform je Entra.
+- [Asp.net identity](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-9.0&tabs=visual-studio) jsou individual accounts a [identity API pro web API](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity-api-authorization?view=aspnetcore-9.0).
