@@ -64,4 +64,4 @@ Console configurace
 
 Poznámky:
 - Microsoft Identity Platform je Entra
-- Asp.net identity jsou individual accounts a [identity API pro web API](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity-api-authorization?view=aspnetcore-9.0)
+- [Asp.net identity](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-9.0&tabs=visual-studio) jsou individual accounts a [identity API pro web API](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity-api-authorization?view=aspnetcore-9.0)
