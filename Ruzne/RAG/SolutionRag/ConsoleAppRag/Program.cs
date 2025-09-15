@@ -90,7 +90,7 @@ namespace ConsoleAppRag
             Microsoft.Extensions.Configuration.ConfigurationBuilder builder = new();
             builder.AddUserSecrets("b6aaee32-2170-4564-b3d9-1926f7dd3188");
             var configuration = builder.Build();
-            string apiKey = configuration["ApiKey"] ?? throw new InvalidOperationException();
+            string key = configuration["ApiKey"] ?? throw new InvalidOperationException();
 
             Console.WriteLine("1 Create db");
             Console.WriteLine("2 Seed data");
@@ -109,10 +109,10 @@ namespace ConsoleAppRag
                         await CreateDbAsync();
                         break;
                     case "2":
-                        await SeedAsync(apiKey);
+                        await SeedAsync(key);
                         break;
                     case "3":
-                        await TestQueryAsync(apiKey);
+                        await TestQueryAsync(key);
                         break;
                 }
 
