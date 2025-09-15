@@ -17,7 +17,7 @@ internal class Program
         {
             ClientId = "myclient",
             UserName = "ekral",
-            Password = "Svit8888",
+            Password = "heslo",
             Address = document.TokenEndpoint,
         });
         return resp.AccessToken!;
