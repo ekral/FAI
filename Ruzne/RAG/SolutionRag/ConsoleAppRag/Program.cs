@@ -48,11 +48,11 @@ namespace ConsoleAppRag
             await context.Database.EnsureCreatedAsync();
         }
 
-        static async Task SeedAsync(string apiKey)
+        static async Task SeedAsync(string key)
         {
             using MyDbContext context = new();
 
-            var client = new OpenAI.OpenAIClient(apiKey);
+            var client = new OpenAI.OpenAIClient(key);
 
             using var embeddingGenerator = client.GetEmbeddingClient("text-embedding-3-small").AsIEmbeddingGenerator();
 
@@ -78,10 +78,10 @@ namespace ConsoleAppRag
             int count = await context.SaveChangesAsync();
         }
 
-        static async Task TestQueryAsync(string apiKey)
+        static async Task TestQueryAsync(string key)
         {
             using MyDbContext context = new();
-            var client = new OpenAI.OpenAIClient(apiKey);
+            var client = new OpenAI.OpenAIClient(key);
 
         }
 
