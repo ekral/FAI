@@ -48,11 +48,11 @@ namespace ConsoleAppRag
             await context.Database.EnsureCreatedAsync();
         }
 
-        static async Task SeedAsync(string token)
+        static async Task SeedAsync(string neco)
         {
             using MyDbContext context = new();
 
-            var client = new OpenAI.OpenAIClient(token);
+            var client = new OpenAI.OpenAIClient(neco);
 
             using var embeddingGenerator = client.GetEmbeddingClient("text-embedding-3-small").AsIEmbeddingGenerator();
 
