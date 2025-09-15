@@ -26,4 +26,9 @@ https://learn.microsoft.com/en-us/dotnet/ai/microsoft-extensions-ai
 nuget Microsoft.Extensions.AI.OpenAI
 
 
+## Příklad na hybrid search v postgreSQL
+https://github.com/pgvector/pgvector-dotnet/blob/master/examples/Hybrid/Program.cs
 
+
+
+Metody pro re-rank
