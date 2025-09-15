@@ -131,7 +131,7 @@ namespace ConsoleAppRag
         {
             var client = new OpenAI.OpenAIClient(key);
 
-            using var chatClient = client.GetChatClient("gpt-5").AsIChatClient().AsBuilder().UseFunctionInvocation().Build();
+            using var chatClient = client.GetChatClient("gpt-5-mini").AsIChatClient().AsBuilder().UseFunctionInvocation().Build();
             
             Console.WriteLine("Zadejte dotaz:");
             string question = Console.ReadLine() ?? "";
