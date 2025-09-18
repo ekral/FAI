@@ -27,12 +27,11 @@ namespace BlazorApp
                 return new HttpClient(handler) { BaseAddress = new Uri("https://localhost:7274") };
             });
             
-
             builder.Services.AddOidcAuthentication(c =>
             {
-                c.ProviderOptions.Authority = "http://127.0.0.1:8080/realms/mujrealm";
+                c.ProviderOptions.Authority = "http://127.0.0.1:8080/realms/myrealm";
                 c.ProviderOptions.ClientId = "myclient";
-                c.ProviderOptions.ResponseType = "id_token token";
+                c.ProviderOptions.ResponseType = "code";
                 //c.ProviderOptions.RedirectUri = "https://localhost:7221";
 
             });

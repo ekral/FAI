@@ -1,12 +1,16 @@
 Docker
 
-Nazev docker instance:
+Nazev docker instance (`--name`). Adresa musi byt stejna, nesmí se psát localhost místo 127.0.0.1.
 
 ```powershell
---name nazev
+docker run --name keycloak -p 127.0.0.1:8080:8080 -e KC_BOOTSTRAP_ADMIN_USERNAME=admin -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:26.3.3 start-dev
 ```
 
-Nastavit implicit flow.
+- Nastavit Standard flow
+- Pokud by jedna webova sluzba chtela volat jinou, tak povolit Client Authentication a Service account roles
+- Nastavit OAuth 2.0 Device Authorization Grant pokud chci generovat URL pro přihlášení.
+- Nastavit Valid redirect URIs na adresu Blazoru
+- Nastavit Web origins url na adresu Blazoru
 
 
 1) Pridat cors.
@@ -54,6 +58,12 @@ https://learn.microsoft.com/en-us/aspnet/core/blazor/security/webassembly/standa
 https://learn.microsoft.com/en-us/aspnet/core/blazor/security/webassembly/additional-scenarios?view=aspnetcore-9.0#custom-authorizationmessagehandler-class
 
 
-Console configurace
 
-- V keycloaku povolit Client authentication a Service account
+Poznámky:
+- Microsoft Identity je zastřešující pojem, ale především se tím myslí Microsoft Identity Platform.
+- Microsoft Identity Platform je Entra.
+- [Asp.net identity](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-9.0&tabs=visual-studio) jsou individual accounts a [identity API pro web API](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity-api-authorization?view=aspnetcore-9.0).
+
+https://learn.microsoft.com/en-us/aspnet/core/security/authentication/configure-oidc-web-authentication?view=aspnetcore-9.0
+
+https://learn.microsoft.com/en-us/aspnet/core/blazor/security/blazor-web-app-with-oidc?view=aspnetcore-9.0&pivots=non-bff-pattern
