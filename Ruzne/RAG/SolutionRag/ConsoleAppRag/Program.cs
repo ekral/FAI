@@ -2,6 +2,7 @@
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
+using OllamaSharp;
 using Pgvector;
 using Pgvector.EntityFrameworkCore;
 
@@ -43,7 +44,7 @@ namespace ConsoleAppRag
             .HasStorageParameter("ef_construction", 64);
 
             // velikost kterou vraci openAI embedding model
-            modelBuilder.Entity<Recept>().Property(p => p.Embeddings).HasColumnType("vector(1536)");
+            modelBuilder.Entity<Recept>().Property(p => p.Embeddings).HasColumnType("vector(1536)"); // OpenAI 1536, Gemma 768
         }
     }
 
@@ -57,13 +58,9 @@ namespace ConsoleAppRag
             await context.Database.EnsureCreatedAsync();
         }
 
-        static async Task SeedAsync(string key)
+        static async Task SeedAsync(IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator)
         {
             using MyDbContext context = new();
-
-            var client = new OpenAI.OpenAIClient(key);
-
-            using var embeddingGenerator = client.GetEmbeddingClient("text-embedding-3-small").AsIEmbeddingGenerator();
 
             string text1 = "Recept na vyrobu koláčku: mouka vejce voda cukr, vše smícháme, necháme vykynout a pak upečeme";
             ReadOnlyMemory<float> embedding1 = await embeddingGenerator.GenerateVectorAsync(text1);
@@ -86,13 +83,10 @@ namespace ConsoleAppRag
 
             int count = await context.SaveChangesAsync();
         }
-
-        static async Task TestQueryAsync(string key)
+        
+        static async Task TestQueryAsync(IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator)
         {
             using MyDbContext context = new();
-            var client = new OpenAI.OpenAIClient(key);
-
-            using var embeddingGenerator = client.GetEmbeddingClient("text-embedding-3-small").AsIEmbeddingGenerator();
 
             Console.WriteLine("Zadejte dotaz:");
             string question = Console.ReadLine() ?? "";
@@ -108,16 +102,11 @@ namespace ConsoleAppRag
             }
         }
 
-        static string? key;
-
-        static async Task<string[]> DatabazeReceptu(string question)
+        static async Task<string[]> DatabazeReceptu(IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator, string question)
         {
             Console.WriteLine($"Tool byl zavolany: {question}");
 
             using MyDbContext context = new();
-            var client = new OpenAI.OpenAIClient(key);
-
-            using var embeddingGenerator = client.GetEmbeddingClient("text-embedding-3-small").AsIEmbeddingGenerator();
 
             ReadOnlyMemory<float> embedding = await embeddingGenerator.GenerateVectorAsync(question);
             Vector vector = new(embedding);
@@ -127,19 +116,15 @@ namespace ConsoleAppRag
             return results;
         }
 
-        static async Task TestChatAsync(string api)
+        static async Task TestChatAsync(IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator, IChatClient chatClient)
         {
-            var client = new OpenAI.OpenAIClient(key);
-
-            using var chatClient = client.GetChatClient("gpt-5-mini").AsIChatClient().AsBuilder().UseFunctionInvocation().Build();
-            
             Console.WriteLine("Zadejte dotaz:");
-            string question = Console.ReadLine() ?? "";
+            string question = Console.ReadLine() ?? string.Empty;
 
             string systemPrompt = "Jsi asistent pro vyhledavani v databazi receptu. Na zaklade dotazu uzivatele vyhledej nejvhodnejsi recepty a odpovez na dotaz uzivatele. Pokud dotaz nesouvisi s recepty, odpovez ze se muze ptat jen na recepty. Recepty jsou v ceskem jazyce. Recepty si nevymyslej, vzdy volej tool a pouzij vraceny popis receptu z tohoto toolu.";
             string toolDescription = "Funkce pro vyhledani v databazi receptu. Vstupem je dotaz uzivatele, vystupem jsou nejvhodnejsi recepty. Pouzij pouze pokud se uzivatel ptal na nejaky recept.";
 
-            ChatResponse chatResponse = await chatClient.GetResponseAsync([new ChatMessage(ChatRole.System, systemPrompt), new ChatMessage(ChatRole.User, question)], new ChatOptions() { Tools = [AIFunctionFactory.Create(DatabazeReceptu, description: toolDescription)] });
+            ChatResponse chatResponse = await chatClient.GetResponseAsync([new ChatMessage(ChatRole.System, systemPrompt), new ChatMessage(ChatRole.User, question)], new ChatOptions() { Tools = [AIFunctionFactory.Create(async (string question) => await DatabazeReceptu(embeddingGenerator, question), description: toolDescription)] });
             
             Console.WriteLine(chatResponse.Text);
         }
@@ -149,10 +134,24 @@ namespace ConsoleAppRag
             ConfigurationBuilder builder = new();
             builder.AddUserSecrets("b6aaee32-2170-4564-b3d9-1926f7dd3188");
             IConfigurationRoot configuration = builder.Build();
-            key = configuration["ApiKey"] ?? throw new InvalidOperationException();
+            string key = configuration["ApiKey"] ?? throw new InvalidOperationException();
 
             string choice;
 
+
+            Console.WriteLine("1 OpenAIClient");
+            Console.WriteLine("2 OllamaClient");
+
+            choice = Console.ReadLine() ?? string.Empty;
+
+            (IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator, IChatClient chatClient) = choice switch
+            {
+                "1" => new OpenAI.OpenAIClient(key) is OpenAI.OpenAIClient cli ? (cli.GetEmbeddingClient("text-embedding-3-small").AsIEmbeddingGenerator(), cli.GetChatClient("gpt-5-mini").AsIChatClient().AsBuilder().UseFunctionInvocation().Build()) : throw new InvalidOperationException(),
+                "2" => new OllamaApiClient("http://localhost:11434", "embeddinggemma") is OllamaApiClient cli ? (cli, new ChatClientBuilder(cli).UseFunctionInvocation().Build()) : throw new InvalidOperationException(),
+                _ => throw new InvalidOperationException()
+            };
+
+     
             do
             {
                 Console.WriteLine("1 Create db");
@@ -161,7 +160,7 @@ namespace ConsoleAppRag
                 Console.WriteLine("4 Chat");
                 Console.WriteLine("0 exit");
 
-                choice = Console.ReadLine() ?? "0";
+                choice = Console.ReadLine() ?? string.Empty;
 
                 switch (choice)
                 {
@@ -169,13 +168,13 @@ namespace ConsoleAppRag
                         await CreateDbAsync();
                         break;
                     case "2":
-                        await SeedAsync(key);
+                        await SeedAsync(embeddingGenerator);
                         break;
                     case "3":
-                        await TestQueryAsync(key);
+                        await TestQueryAsync(embeddingGenerator);
                         break;
                     case "4":
-                        await TestChatAsync(key);
+                        await TestChatAsync(embeddingGenerator, chatClient);
                         break;
                 }
 
