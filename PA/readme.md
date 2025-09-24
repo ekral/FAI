@@ -30,3 +30,4 @@ TODO:
 - Sloučit logické výrazy a podmíněný příkaz do jednoho tématu.
 - Vyřadit QuickSort.
 - Vyřadit zarážku z hledání.
+- Místo projektu pro uznání docházky dát možnost předčasného testu.
