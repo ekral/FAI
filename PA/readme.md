@@ -31,3 +31,4 @@ TODO:
 - Vyřadit QuickSort.
 - Vyřadit zarážku z hledání.
 - Místo projektu pro uznání docházky dát možnost předčasného testu (pokud neuspěje v testu, tak projekt navíc).
+- Přidat téma práce s řetězci (string a StringBuilder), soubory a formátování řetězce na čísla.
