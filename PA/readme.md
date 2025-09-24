@@ -25,3 +25,7 @@ Kurz s 1 hodinovou přednáškou a 2 hodinovými cvičeními, přičemž seminá
 7. **Příprava na hodnocení**: Simulované testy, ústní otázky nebo řešení minulých úloh pod vedením učitele.
 
 ---
+
+TODO:
+- Sloučit logické výrazy a podmíněný příkaz do jednoho tématu.
+- Vyřadit QuickSort.
