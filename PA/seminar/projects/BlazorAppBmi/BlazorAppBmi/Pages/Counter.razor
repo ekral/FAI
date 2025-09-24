@@ -5,13 +5,13 @@
 <h1>Body Mass Index</h1>
 
 <div class="mb-3">
-    <label class="form-label">Váha v kilogramech</label>
-    <input class="form-control" @bind-value="vahaKilogramy" @bind-value:after="SpocitejBmi" type="number"/>
+    <label class="form-label" for="controlVaha">Váha v kilogramech</label>
+    <input class="form-control" id="controlVaha" @bind-value="vahaKilogramy" @bind-value:after="SpocitejBmi" type="number" />
 </div>
 
 <div class="mb-3">
-    <label class="form-label">Výška v centimetrech</label>
-    <input class="form-control" @bind-value="vyskaCentimentry" @bind-value:after="SpocitejBmi" type="number" />
+    <label class="form-label" for="controlVyska">Výška v centimetrech</label>
+    <input class="form-control" id="controlVyska" @bind-value="vyskaCentimentry" @bind-value:after="SpocitejBmi" type="number" />
 </div>
 
 <p role="status">Bmi: @bmi.ToString("F2")</p>
