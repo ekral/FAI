@@ -1,0 +1,46 @@
+﻿@page "/bmi"
+
+<PageTitle>Bmi</PageTitle>
+
+<h1>Body Mass Index</h1>
+
+<div class="mb-3">
+    <label class="form-label">Váha v kilogramech</label>
+    <input class="form-control" @bind-value="vahaKilogramy" @bind-value:after="SpocitejBmi" type="number"/>
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Výška v centimetrech</label>
+    <input class="form-control" @bind="vyskaCentimentry" @bind:after="SpocitejBmi" type="number" />
+</div>
+
+<p role="status">Bmi: @bmi.ToString("F2")</p>
+<p role="status">Zhubnout: @zhubnout</p>
+<p role="status">Zdrava vaha: @zdravaVaha</p>
+<p role="status">Nezdrava vaha: @nezdravaVaha</p>
+
+@* <button class="btn btn-primary" @onclick="SpocitejBmi">Spočitej Bmi</button> *@
+
+@code {
+    private double vahaKilogramy = 77.0;
+    private double vyskaCentimentry = 186.0;
+    private double bmi = 0.0;
+    private bool zhubnout = false;
+    private bool zdravaVaha = false;
+    private bool nezdravaVaha = false;
+
+    protected override void OnInitialized()
+    {
+        SpocitejBmi();
+    }
+
+    private void SpocitejBmi()
+    {
+        double vyskaMetry = vyskaCentimentry / 100.0;
+        bmi = vahaKilogramy / (vyskaMetry * vyskaMetry);
+        zhubnout = bmi > 24.9;
+        zdravaVaha = bmi > 18.5 && bmi <= 24.9;
+        nezdravaVaha = !zdravaVaha;
+        // nezdravaVaha = bmi <= 18.5 || bmi > 24.9;
+    }
+}
