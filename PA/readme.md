@@ -29,3 +29,4 @@ Kurz s 1 hodinovou přednáškou a 2 hodinovými cvičeními, přičemž seminá
 TODO:
 - Sloučit logické výrazy a podmíněný příkaz do jednoho tématu.
 - Vyřadit QuickSort.
+- Vyřadit zarážku z hledání.
