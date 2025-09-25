@@ -2,19 +2,19 @@
 
 Máme pole studentů, kdy každý student psal dva testy. Najděte a vypište jméno studenta, který měl z prvního nebo druhého testu nejvíce bodů.
 
-```c
+```cpp
 #include <stdio.h>
 
 #define MAX(a,b) (((a) > (b)) ? (a) : (b))
 
 struct Student
 {
-    char* jmeno;
+    const char* jmeno;
     double test1;
     double test2;
 };
 
-void vypis(const struct Student* const studenti, const int pocet)
+void vypis(struct Student* studenti, int pocet)
 {
     for (int i = 0; i < pocet; i++)
     {
@@ -26,7 +26,7 @@ int main(void)
 {
     double vetsi = MAX(10, 5);
 
-    const struct Student studenti[] =
+    struct Student studenti[] =
     {
         {"Karel", 70.0, 50.0},
         {"Jiri", 30.0, 50.0},
