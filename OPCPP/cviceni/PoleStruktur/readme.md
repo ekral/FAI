@@ -14,7 +14,7 @@ struct Student
     double test2;
 };
 
-void vypis(struct Student* studenti, int pocet)
+void vypis(Student* studenti, int pocet)
 {
     for (int i = 0; i < pocet; i++)
     {
@@ -26,7 +26,7 @@ int main(void)
 {
     double vetsi = MAX(10, 5);
 
-    struct Student studenti[] =
+    Student studenti[] =
     {
         {"Karel", 70.0, 50.0},
         {"Jiri", 30.0, 50.0},
