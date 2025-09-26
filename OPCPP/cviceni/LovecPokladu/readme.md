@@ -79,6 +79,14 @@ int main()
         5. (Bonus navíc) Simulujte „cestu lovce“.
     */
 
+    int* p_poklad = arr;
+    int* p_past = arr;
+
+    for (int* p = arr + 1; p < arr + SIZE; p++)
+    {
+
+    }
+
     return 0;
 }
 ```
