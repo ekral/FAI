@@ -42,18 +42,21 @@ Výchozí kód:
 
 #define SIZE 20
 
-int main() {
+int main() 
+{
     int arr[SIZE];
-    srand((unsigned) time(NULL));
+    srand((unsigned)time(NULL));
 
     // naplnění pole náhodnými čísly 1–100
-    for (int i = 0; i < SIZE; i++) {
+    for (int i = 0; i < SIZE; i++) 
+    {
         arr[i] = rand() % 100 + 1;
     }
 
     // výpis pole pro kontrolu
     printf("Pole hodnot:\n");
-    for (int i = 0; i < SIZE; i++) {
+    for (int i = 0; i < SIZE; i++) 
+    {
         printf("%d ", arr[i]);
     }
     printf("\n");
