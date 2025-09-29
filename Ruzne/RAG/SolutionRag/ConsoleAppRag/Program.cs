@@ -138,7 +138,6 @@ namespace ConsoleAppRag
 
             string choice;
 
-
             Console.WriteLine("1 OpenAIClient");
             Console.WriteLine("2 OllamaClient");
 

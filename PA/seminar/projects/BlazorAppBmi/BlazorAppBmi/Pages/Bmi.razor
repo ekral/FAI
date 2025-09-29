@@ -6,12 +6,12 @@
 
 <div class="mb-3">
     <label class="form-label" for="controlVaha">Váha v kilogramech</label>
-    <input class="form-control" id="controlVaha" @bind-value="vahaKilogramy" @bind-value:after="SpocitejBmi" type="number" />
+    <input class="form-control" min="1" max="500" id="controlVaha" @bind-value="vahaKilogramy" @bind-value:after="SpocitejBmi" type="number" />
 </div>
 
 <div class="mb-3">
     <label class="form-label" for="controlVyska">Výška v centimetrech</label>
-    <input class="form-control" id="controlVyska" @bind-value="vyskaCentimentry" @bind-value:after="SpocitejBmi" type="number" />
+    <input class="form-control" min="10" max="300" id="controlVyska" @bind-value="vyskaCentimetry" @bind-value:after="SpocitejBmi" type="number" />
 </div>
 
 <p role="status">Bmi: @bmi.ToString("F2")</p>
@@ -23,7 +23,7 @@
 
 @code {
     private double vahaKilogramy = 77.0;
-    private double vyskaCentimentry = 186.0;
+    private double vyskaCentimetry = 186.0;
     private double bmi = 0.0;
     private bool zhubnout = false;
     private bool zdravaVaha = false;
@@ -36,7 +36,8 @@
 
     private void SpocitejBmi()
     {
-        double vyskaMetry = vyskaCentimentry / 100.0;
+        double vyskaMetry = vyskaCentimetry / 100.0;
+        
         bmi = vahaKilogramy / (vyskaMetry * vyskaMetry);
         zhubnout = bmi > 24.9;
         zdravaVaha = bmi > 18.5 && bmi <= 24.9;
