@@ -38,7 +38,8 @@ namespace ConsoleAppAssesmentEvaluation
                     - zda má zdravou váhu a 
                     - zda má nezdravou váhu.
                 - Program má být interaktivní a zobrazuje výsledky hned po zadání vstupních hodnot.
-                - Program by měl mít ošetřené vstupy, aby nedošlo k chybě při zadání nečíselných hodnot nebo například aby nedošlo k dělení nulou.
+                - Program by měl mít ošetřené vstupy buď v uživatelském rozhraní (html atributy) nebo v kódu tak, aby nedošlo k chybě při zadání nečíselných hodnot nebo například aby nedošlo k dělení nulou. Stačí pouze jedno z nich.
+                - Program je vytvořen jako Blazor Webassembly aplikace.
                 """;
 
             string path = @"C:\Users\erik\source\repos\FAI\PA\seminar\projects\BlazorAppBmi";
