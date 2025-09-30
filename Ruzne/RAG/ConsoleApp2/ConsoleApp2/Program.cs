@@ -3,7 +3,7 @@
 
     internal class Program
     {
-        static void Zmen(int[] pole)
+        static void Zmen(out int[] pole)
         {
             pole = [0];
         }
@@ -11,7 +11,7 @@
         static void Main(string[] args)
         {
             int[] pole = [1, 2, 3];
-            Zmen(pole);    
+            Zmen(out pole);    
 
             System.Console.WriteLine(string.Join(",", pole));
         }
