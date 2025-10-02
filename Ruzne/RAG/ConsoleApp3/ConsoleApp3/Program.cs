@@ -1,25 +1,24 @@
 ﻿namespace ConsoleApp3
 {
-    struct Trida
+    class MujTyp
     {
         public int x;
     }
 
     internal class Program
     {
-        static void Zmen(Trida t)
+        static void Zmen(int[] pole)
         {
-            t.x = 0;        
+            pole = [0];        
         }
 
         static void Main(string[] args)
         {
-            Trida t = new Trida();
-            t.x = 7;
+            int[] pole = [1, 2, 3];
 
-            Zmen(t);
+            Zmen(pole);
 
-            Console.WriteLine(t.x);
+            Console.WriteLine(string.Join(",", pole));
         }
     }
 }
