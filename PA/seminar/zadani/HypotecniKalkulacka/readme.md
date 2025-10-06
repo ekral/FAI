@@ -32,8 +32,8 @@ Výchozí kód funkce **main**:
 <h1>Hypoteční kalkulačka</h1>
 
 <div class="mb-3">
-    <label class="form-label" for="vaha">Výše půjčky</label>
-    <input class="form-control" type="number" step="100000" min="100000" id="vaha" @bind-value="pujcka" @bind-value:after="SpocitejSplatku" />
+    <label class="form-label" for="pujcka">Výše půjčky</label>
+    <input class="form-control" type="number" step="100000" min="100000" id="pujcka" @bind-value="pujcka" @bind-value:after="SpocitejSplatku" />
 </div>
 
 <p role="status">Splátka: @splatka.ToString("F1")</p>
