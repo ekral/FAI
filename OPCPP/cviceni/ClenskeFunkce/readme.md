@@ -7,4 +7,5 @@ V jazyce C++
    - Členskou funkci `AbsolutniHodnota`, která vrátí absolutní hodnotu komplexního čísla.
    - Členskou funkci `Vypis`, která vypíše hodnotu reálné a imaginární složky a absolutní hodnotu na terminál.
    - Členskou funkci `Zmen`, která změní reálnou a imaginární část.
-4) Definujte třídu `Hypoteka` a doplňte členskou funkci, která vrátí výši splátky dle vzorce z minulého cvičení. Zadejte vstupní parametry a vypište hodnotu splátky.
+4) Definujte třídu `Hypoteka` a doplňte členskou funkci, která vrátí výši splátky dle vzorce z minulého cvičení. Zadejte na konzoli vstupní parametry pro dvě hypotéky a vypište hodnotu splátky.
+
