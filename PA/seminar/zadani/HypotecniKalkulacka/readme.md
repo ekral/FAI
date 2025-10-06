@@ -38,13 +38,16 @@ Výchozí kód funkce **main**:
 
 <p role="status">Splátka: @splatka.ToString("F1")</p>
 
-@* Zobrazit splatkovy kalendar *@
+<h2>Splátkový kalendář</h2>
+@* Zobrazit splatkovy kalendar*@
 
 @code {
     private double pujcka = 6000000.0;
     private double urokProcenta = 4.0;
     private int pocetLet = 30;
-    private double splatka = 0.0;
+    private double splatka;
+    double r;
+    int n;
 
     protected override void OnInitialized()
     {
@@ -53,10 +56,10 @@ Výchozí kód funkce **main**:
 
     private void SpocitejSplatku()
     {
-        double r = urokProcenta / 12.0 / 100.0;
-        int n = pocetLet * 12;
+        r = urokProcenta / 12.0 / 100.0;
+        n = pocetLet * 12;
 
-        // Výpočet splátky podle vzorce
+        // Spocitani splatky podle vzorce
     }
 }
 ```

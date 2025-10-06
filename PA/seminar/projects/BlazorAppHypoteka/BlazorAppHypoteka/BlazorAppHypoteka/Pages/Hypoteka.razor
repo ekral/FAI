@@ -11,13 +11,47 @@
 
 <p role="status">Splátka: @splatka.ToString("F1")</p>
 
-@* Zobrazit splatkovy kalendar *@
+<h2>Splátkový kalendář</h2>
 
+<table class="table">
+    <thead>
+        <tr>
+            <th>Měsíc</th>
+            <th>Úrok</th>
+            <th>Úmor</th>
+            <th>Zůstatek</th>
+        </tr>
+    </thead>
+
+    <tbody>
+    @{
+        double zustatek = pujcka;
+
+        for(int i = 0; i < n; i++)
+        {
+            double urok = zustatek * r;
+            double umor = splatka - urok;
+
+            zustatek -= umor;
+
+            <tr>
+                <td>@(i + 1)</td>
+                <td>@urok.ToString("F2")</td>
+                <td>@umor.ToString("F2")</td>
+                <td>@zustatek.ToString("F1")</td>
+            
+            </tr>
+        }
+    }
+    </tbody>
+</table>
 @code {
     private double pujcka = 6000000.0;
     private double urokProcenta = 4.0;
     private int pocetLet = 30;
-    private double splatka = 0.0;
+    private double splatka;
+    double r;
+    int n;
 
     protected override void OnInitialized()
     {
@@ -26,9 +60,9 @@
 
     private void SpocitejSplatku()
     {
-        double r = urokProcenta / 12.0 / 100.0;
-        int n = pocetLet * 12;
+        r = urokProcenta / 12.0 / 100.0;
+        n = pocetLet * 12;
 
-        // Výpočet splátky podle vzorce
+        splatka = pujcka * r * Math.Pow(1 + r, n) / (Math.Pow(1 + r, n) - 1);
     }
 }
