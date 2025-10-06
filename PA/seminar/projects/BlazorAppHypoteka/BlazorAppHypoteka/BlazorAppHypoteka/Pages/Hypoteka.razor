@@ -5,8 +5,18 @@
 <h1>Hypoteční kalkulačka</h1>
 
 <div class="mb-3">
-    <label class="form-label" for="vaha">Výše půjčky</label>
-    <input class="form-control" type="number" step="100000" min="100000" id="vaha" @bind-value="pujcka" @bind-value:after="SpocitejSplatku" />
+    <label class="form-label" for="pujcka">Výše půjčky</label>
+    <input class="form-control" type="number" step="200000.0" min="200000.0" id="pujcka" @bind-value="pujcka" @bind-value:after="SpocitejSplatku" />
+</div>
+
+<div class="mb-3">
+    <label class="form-label" for="urok">Roční úrok v procentech</label>
+    <input class="form-control" type="number" step="0.1" min="0.1" id="urok" @bind-value="urokProcenta" @bind-value:after="SpocitejSplatku" />
+</div>
+
+<div class="mb-3">
+    <label class="form-label" for="pocet">Počet let</label>
+    <input class="form-control" type="number" step="5" min="5" id="pocet" @bind-value="pocetLet" @bind-value:after="SpocitejSplatku" />
 </div>
 
 <p role="status">Splátka: @splatka.ToString("F1")</p>
