@@ -1,18 +1,32 @@
 ﻿@page "/hypoteka"
 
-<PageTitle>Counter</PageTitle>
+<PageTitle>Hypotéka</PageTitle>
 
-<h1>Counter</h1>
+<h1>Hypoteční kalkulačka</h1>
 
-<p role="status">Current count: @currentCount</p>
+<div class="mb-3">
+    <label class="form-label" for="vaha">Výše půjčky</label>
+    <input class="form-control" step="100000" min="100000" id="vaha" @bind-value="p" @bind-value:after="SpocitejSplatku" type="number" />
+</div>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<p role="status">Splátka: @splatka.ToString("F1")</p>
 
 @code {
-    private int currentCount = 0;
+    private double p = 6000000.0;
+    private double urokProcenta = 4.0;
+    private int pocetLet = 30;
+    private double splatka = 0.0;
 
-    private void IncrementCount()
+    protected override void OnInitialized()
     {
-        currentCount++;
+        SpocitejSplatku();
+    }
+
+    private void SpocitejSplatku()
+    {
+        double r = urokProcenta / 12.0 / 100.0;
+        int n = pocetLet * 12;
+
+        // Výpočet splátky podle vzorce
     }
 }
