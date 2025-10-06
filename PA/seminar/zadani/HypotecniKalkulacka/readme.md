@@ -33,7 +33,7 @@ Výchozí kód funkce **main**:
 
 <div class="mb-3">
     <label class="form-label" for="vaha">Výše půjčky</label>
-    <input class="form-control" step="100000" min="100000" id="vaha" @bind-value="p" @bind-value:after="SpocitejSplatku" type="number" />
+    <input class="form-control" type="number" step="100000" min="100000" id="vaha" @bind-value="pujcka" @bind-value:after="SpocitejSplatku" />
 </div>
 
 <p role="status">Splátka: @splatka.ToString("F1")</p>
@@ -41,7 +41,7 @@ Výchozí kód funkce **main**:
 @* Zobrazit splatkovy kalendar *@
 
 @code {
-    private double p = 6000000.0;
+    private double pujcka = 6000000.0;
     private double urokProcenta = 4.0;
     private int pocetLet = 30;
     private double splatka = 0.0;
@@ -59,5 +59,4 @@ Výchozí kód funkce **main**:
         // Výpočet splátky podle vzorce
     }
 }
-
 ```
