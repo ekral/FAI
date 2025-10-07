@@ -36,10 +36,13 @@ Výchozí kód funkce **main**:
     <input class="form-control" type="number" step="100000" min="100000" id="pujcka" @bind-value="pujcka" @bind-value:after="SpocitejSplatku" />
 </div>
 
+@* 2. Pridat input pro urokProcenta a pocetLet *@
+
 <p role="status">Splátka: @splatka.ToString("F1")</p>
 
 <h2>Splátkový kalendář</h2>
-@* Zobrazit splatkovy kalendar*@
+
+@* 3. Zobrazit splatkovy kalendar*@
 
 @code {
     private double pujcka = 6000000.0;
@@ -59,7 +62,7 @@ Výchozí kód funkce **main**:
         r = urokProcenta / 12.0 / 100.0;
         n = pocetLet * 12;
 
-        // Spocitani splatky podle vzorce
+        // 1. Spocitani splatky podle vzorce
     }
 }
 ```
