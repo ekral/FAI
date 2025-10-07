@@ -44,6 +44,22 @@ Výchozí kód funkce **main**:
 
 @* 3. Zobrazit splatkovy kalendar*@
 
+<div class="form-check form-switch">
+    <InputCheckbox class="form-check-input" type="checkbox" role="switch" @bind-Value="zobrazitRoky" id="roky" />
+    <label class="form-check-label" for="roky">
+        Zobrazit po letech
+    </label>
+</div>
+
+@if(zobrazitRoky)
+{
+    <p>Zobrazuji po letech</p>
+}
+else
+{
+    <p>Zobrazuji po mesicich</p>
+}
+
 @code {
     private double pujcka = 6000000.0;
     private double urokProcenta = 4.0;
@@ -51,6 +67,7 @@ Výchozí kód funkce **main**:
     private double splatka;
     double r;
     int n;
+    bool zobrazitRoky = true;
 
     protected override void OnInitialized()
     {
