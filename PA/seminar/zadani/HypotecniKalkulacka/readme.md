@@ -1,3 +1,30 @@
+# Výpočet splátky hypotéky
+
+Spočítejte a vypište výši měsíční spátky hypotéky dle vzorce:
+
+$$m = \frac{p \cdot r \cdot (1 + r)^n}{(1 + r)^n - 1}$$
+
+Kde:
+- *m* je měsíční splátka hypotéky.
+- *p* je výše půjčené částky (počáteční zůstatek půjčky).
+- *r* je měsíční desetinná úroková míra (roční úroková míra v procentech (6%) dělená 12 měsíci (6 / 12) a převedená na desetinné číslo ( 6 / 12 / 100).
+- *n* je celkový počet měsíčních plateb (doba trvání půjčky v letech násobená 12).
+
+Pojmy:
+- **Úrok**: nominální částka, například 5000,- Kč.
+- **Úroková míra**:  úrok vyjádřený v procentech z částky, například 6 %.
+- **Desetinná úroková míra**: úrok vyjádřený jako desetinné číslo pro výpočet v matematických operacích, například 0.06.
+
+Dále vypište splátkový kalendář. Každý měsíc vypište výši úroku, úmoru a aktuálního dluhu:
+
+$n-krát$ zopakujte následující kroky:
+1) Nejprve spočítejte nominální výši úroku, tedy $urok = r \cdot p$
+2) Úmor se potom rovná výše splátky - nominální výše úroku, tedy $umor = m - urok$
+3) Snižte částku *p* o výši úmoru, tedy $p = p - umor$.
+   
+Výchozí kód stránky:
+
+```razor
 @page "/hypoteka"
 
 <PageTitle>Hypotéka</PageTitle>
@@ -56,3 +83,4 @@ else
 
     }
 }
+```
