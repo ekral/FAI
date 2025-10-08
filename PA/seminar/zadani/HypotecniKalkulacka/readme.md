@@ -22,7 +22,7 @@ $n-krát$ zopakujte následující kroky:
 2) Úmor se potom rovná výše splátky - nominální výše úroku, tedy $umor = m - urok$
 3) Snižte částku *p* o výši úmoru, tedy $p = p - umor$.
    
-Výchozí kód funkce **main**:
+Výchozí kód stránky:
 
 ```razor
 @page "/hypoteka"
@@ -33,7 +33,7 @@ Výchozí kód funkce **main**:
 
 <div class="mb-3">
     <label class="form-label" for="pujcka">Výše půjčky</label>
-    <input class="form-control" type="number" step="100000" min="100000" id="pujcka" @bind-value="pujcka" @bind-value:after="SpocitejSplatku" />
+    <input class="form-control" id="pujcka" type="number" step="200000" min="200000" @bind-value="pujcka" @bind-value:after="SpocitejSplatku" />
 </div>
 
 @* 2. Pridat input pro urokProcenta a pocetLet *@
@@ -42,7 +42,7 @@ Výchozí kód funkce **main**:
 
 <h2>Splátkový kalendář</h2>
 
-@* 3. Zobrazit splatkovy kalendar*@
+@* 3. Zobrazit splatkovy kalendar *@
 
 <div class="form-check form-switch">
     <InputCheckbox class="form-check-input" type="checkbox" role="switch" @bind-Value="zobrazitRoky" id="roky" />
@@ -51,7 +51,7 @@ Výchozí kód funkce **main**:
     </label>
 </div>
 
-@if(zobrazitRoky)
+@if (zobrazitRoky)
 {
     <p>Zobrazuji po letech</p>
 }
@@ -80,6 +80,7 @@ else
         n = pocetLet * 12;
 
         // 1. Spocitani splatky podle vzorce
+
     }
 }
 ```

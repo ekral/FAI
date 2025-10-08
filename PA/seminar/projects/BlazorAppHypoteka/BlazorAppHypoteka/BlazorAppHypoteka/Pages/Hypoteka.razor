@@ -6,20 +6,20 @@
 
 <div class="mb-3">
     <label class="form-label" for="pujcka">Výše půjčky</label>
-    <input class="form-control" type="number" step="200000" min="200000" id="pujcka" @bind-value="pujcka" @bind-value:after="SpocitejSplatku" />
+    <input class="form-control" id="pujcka" type="number" step="200000" min="200000" @bind-value="pujcka" @bind-value:after="SpocitejSplatku" />
 </div>
 
 <div class="mb-3">
-    <label class="form-label" for="urok">Úrok v procentech</label>
+    <label class="form-label" for="urok">Výše půjčky</label>
     <input class="form-control" id="urok" type="number" step="0.2" min="0.2" @bind-value="urokProcenta" @bind-value:after="SpocitejSplatku" />
 </div>
 
 <div class="mb-3">
-    <label class="form-label" for="pocet">Úrok v procentech</label>
-    <input class="form-control" id="pocet" type="number" step="5" min="5" max="40" @bind-value="pocetLet" @bind-value:after="SpocitejSplatku" />
+    <label class="form-label" for="pocet">Výše půjčky</label>
+    <input class="form-control" id="pocet" type="number" step="5" min="5" @bind-value="pocetLet" @bind-value:after="SpocitejSplatku" />
 </div>
 
-@* 2. Pridat input pro urokProcenta a pocetLet*@
+@* 2. Pridat input pro urokProcenta a pocetLet *@
 
 <p role="status">Splátka: @splatka.ToString("F1")</p>
 
@@ -34,55 +34,51 @@
     </label>
 </div>
 
-@if(zobrazitRoky)
+@if (zobrazitRoky)
 {
-    double dluh = pujcka;
-
-    <table class="table table-striped table-hover">
+    <table class="table">
         <thead>
             <tr>
                 <th>Rok</th>
-                <th>Úrok</th>
-                <th>Úmor</th>
+                <th>Úroky</th>
+                <th>Úmory</th>
                 <th>Dluh</th>
             </tr>
         </thead>
-
         <tbody>
-            @* Misto po mesicich, zobrazte sumu uroku a umoru a aktualni stav dluhu po letech *@
-            @* Poznamka: muzete pouzit dva vnorene cykly for *@
-
-            @for(int j = 0; j < pocetLet; j++)
-            {
-                double sumaUroku = 0.0;
-                double sumaUmoru = 0.0;
-
-                for (int i = 0; i < 12; i++)
+            @{
+                double dluh = pujcka;
+                
+                for (int j = 0; j < pocetLet; j++)
                 {
-                    double urok = dluh * r;
-                    double umor = splatka - urok;
+                    double sumaUroku = 0.0;
+                    double sumaUmoru = 0.0;
 
-                    dluh -= umor;
+                    for (int i = 0; i < 12; i++)
+                    {
+                        double urok = r * dluh;
+                        double umor = splatka - urok;
 
-                    sumaUroku += urok;
-                    sumaUmoru += umor;
+                        sumaUroku += urok;
+                        sumaUmoru += umor;
+
+                        dluh -= umor;
+                    }
+
+                    <tr>
+                        <td>@(j + 1)</td>
+                        <td>@sumaUroku.ToString("F2")</td>
+                        <td>@sumaUmoru.ToString("F2")</td>
+                        <td>@dluh.ToString("F1")</td>
+                    </tr>
                 }
-
-                <tr>
-                    <td>@(j + 1)</td>
-                    <td>@sumaUroku.ToString("F2")</td>
-                    <td>@sumaUmoru.ToString("F2")</td>
-                    <td>@dluh.ToString("F1")</td>
-                </tr>
             }
         </tbody>
     </table>
 }
 else
 {
-    double dluh = pujcka;
-
-    <table class="table table-striped table-hover">
+    <table class="table">
         <thead>
             <tr>
                 <th>Měsíc</th>
@@ -91,27 +87,26 @@ else
                 <th>Dluh</th>
             </tr>
         </thead>
-
         <tbody>
-            @* Misto po mesicich, zobrazte sumu uroku a umoru a aktualni stav dluhu po letech *@
-            @* Poznamka: muzete pouzit dva vnorene cykly for *@
+            @{
+                double dluh = pujcka;
 
-            @for(int i = 0; i < n; i++)
-            {
-                double urok = dluh * r;
-                double umor = splatka - urok;
+                for (int i = 0; i < n; i++)
+                {
+                    double urok = r * dluh;
+                    double umor = splatka - urok;
+                    dluh -= umor;
 
-                dluh -= umor;
-
-                <tr>
-                    <td>@(i + 1)</td>
-                    <td>@urok.ToString("F2")</td>
-                    <td>@umor.ToString("F2")</td>
-                    <td>@dluh.ToString("F1")</td>
-                </tr>
+                    <tr>
+                        <td>@(i + 1)</td>
+                        <td>@urok.ToString("F2")</td>
+                        <td>@umor.ToString("F2")</td>
+                        <td>@dluh.ToString("F1")</td>
+                    </tr>
+                }
             }
         </tbody>
-    </table> 
+    </table>
 }
 
 @code {
@@ -133,6 +128,14 @@ else
         r = urokProcenta / 12.0 / 100.0;
         n = pocetLet * 12;
 
-        splatka = pujcka * r * Math.Pow(1 + r, n) / (Math.Pow(1 + r, n) - 1);
+        // 1. Spocitani splatky podle vzorce
+        if (n > 0 && r > 0 && pujcka > 0)
+        {
+            splatka = pujcka * r * Math.Pow(1 + r, n) / (Math.Pow(1 + r, n) - 1);
+        }
+        else
+        {
+            splatka = 0.0;
+        }
     }
 }
