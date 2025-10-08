@@ -22,7 +22,7 @@ $n-krát$ zopakujte následující kroky:
 2) Úmor se potom rovná výše splátky - nominální výše úroku, tedy $umor = m - urok$
 3) Snižte částku *p* o výši úmoru, tedy $p = p - umor$.
    
-Výchozí kód funkce **main**:
+Výchozí kód stránky:
 
 ```razor
 @page "/hypoteka"
