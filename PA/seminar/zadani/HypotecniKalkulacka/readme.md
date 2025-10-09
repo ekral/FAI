@@ -22,7 +22,7 @@ $n-krát$ zopakujte následující kroky:
 2) Úmor se potom rovná výše splátky - nominální výše úroku, tedy $umor = m - urok$
 3) Snižte částku *p* o výši úmoru, tedy $p = p - umor$.
    
-Výchozí kód funkce **main**:
+Výchozí kód stránky:
 
 ```razor
 @page "/hypoteka"
@@ -33,13 +33,32 @@ Výchozí kód funkce **main**:
 
 <div class="mb-3">
     <label class="form-label" for="pujcka">Výše půjčky</label>
-    <input class="form-control" type="number" step="100000" min="100000" id="pujcka" @bind-value="pujcka" @bind-value:after="SpocitejSplatku" />
+    <input class="form-control" id="pujcka" type="number" step="200000" min="200000" @bind-value="pujcka" @bind-value:after="SpocitejSplatku" />
 </div>
+
+@* 2. Pridat input pro urokProcenta a pocetLet *@
 
 <p role="status">Splátka: @splatka.ToString("F1")</p>
 
 <h2>Splátkový kalendář</h2>
-@* Zobrazit splatkovy kalendar*@
+
+@* 3. Zobrazit splatkovy kalendar *@
+
+<div class="form-check form-switch">
+    <InputCheckbox class="form-check-input" type="checkbox" role="switch" @bind-Value="zobrazitRoky" id="roky" />
+    <label class="form-check-label" for="roky">
+        Zobrazit po letech
+    </label>
+</div>
+
+@if (zobrazitRoky)
+{
+    <p>Zobrazuji po letech</p>
+}
+else
+{
+    <p>Zobrazuji po mesicich</p>
+}
 
 @code {
     private double pujcka = 6000000.0;
@@ -48,6 +67,7 @@ Výchozí kód funkce **main**:
     private double splatka;
     double r;
     int n;
+    bool zobrazitRoky = true;
 
     protected override void OnInitialized()
     {
@@ -59,7 +79,8 @@ Výchozí kód funkce **main**:
         r = urokProcenta / 12.0 / 100.0;
         n = pocetLet * 12;
 
-        // Spocitani splatky podle vzorce
+        // 1. Spocitani splatky podle vzorce
+
     }
 }
 ```
