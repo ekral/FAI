@@ -179,19 +179,19 @@ public:
 class Objednavka
 {
 private:
-    SmsSender sender;
+    SmsSender* sender;
 
 public:
 
     int id;
 
-    Objednavka(int id, SmsSender sender) : sender(sender), id(id)
+    Objednavka(int id, SmsSender* sender) : sender(sender), id(id)
     {
     }
 
     void Odeslat()
     {
-        sender.PosliSms(format("Objednavka {} odeslana", id));
+        sender->PosliSms(format("Objednavka {} odeslana", id));
     }
 };
 
@@ -199,8 +199,8 @@ int main()
 {
     SmsSender smsSender;
 
-    Objednavka objednavka1(1, smsSender);
-    Objednavka objednavka2(2, smsSender);
+    Objednavka objednavka1(1, &smsSender);
+    Objednavka objednavka2(2, &smsSender);
 
     objednavka1.Odeslat();
     objednavka2.Odeslat();
