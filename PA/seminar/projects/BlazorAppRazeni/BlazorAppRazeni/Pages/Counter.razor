@@ -5,62 +5,42 @@
 @* https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout/Basic_concepts_of_grid_layout *@
 
 <div class="d-flex gap-3 mb-3">
-    @foreach(int cislo in poleA)
+    @for (int i = 0; i < pole.Length; i++)
     {
-        <div class="fs-1">@cislo</div>
-    }
-</div>
-
-<div class="d-flex gap-3 mb-3">
-    @for(int i = 0; i < poleB.Length; i++)
-    {
-        if(poleA[i] == poleB[i])
+        if (i == index || i == index + 1)
         {
-            if(i == index)
-            {
-                <div class="fs-1 text-info">@poleB[i]</div>
-            }
-            else
-            {
-                <div class="fs-1">@poleB[i]</div>
-            }
+            <div class="fs-1 border-bottom pb-1">@pole[i]</div>
         }
         else
         {
-            <div class="fs-1 text-danger">@poleB[i]</div>
+            <div class="fs-1">@pole[i]</div>
         }
     }
 </div>
+
 
 <button class="btn btn-primary" @onclick="DalsiIterace">Next Iteration</button>
 
 @code {
-    private int[] poleA = [4, 3, 2, 1, 5];
-    private int[] poleB = [4, 3, 2, 1, 5];
+    private int[] pole = [4, 3, 2, 1, 5];
 
     int index = 0;
 
     void DalsiIterace()
     {
-        if (!poleA.SequenceEqual(poleB))
+       
+        if(pole[index] > pole[index + 1])
         {
-            Array.Copy(poleB, poleA, poleA.Length);
+            int temp = pole[index];
+            pole[index] = pole[index + 1];
+            pole[index + 1] = temp;
         }
-        else
+
+        ++index;
+
+        if(index > pole.Length - 2)
         {
-            if(poleB[index] > poleB[index + 1])
-            {
-                int temp = poleB[index];
-                poleB[index] = poleB[index + 1];
-                poleB[index + 1] = temp;
-            }
-
-            ++index;
-
-            if(index > poleB.Length - 2)
-            {
-                index = 0;
-            }
+            index = 0;
         }
     }
 }
