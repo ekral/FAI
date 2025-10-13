@@ -7,9 +7,9 @@
 <div class="d-flex gap-3 mb-3">
     @for (int i = 0; i < pole.Length; i++)
     {
-        if (i == index || i == index + 1)
+        if (i == index)
         {
-            <div class="fs-1 border-bottom pb-1">@pole[i]</div>
+            <div class="fs-1 border-bottom border-3 pb-1">@pole[i]</div>
         }
         else
         {
@@ -18,13 +18,35 @@
     }
 </div>
 
-
 <button class="btn btn-primary" @onclick="DalsiIterace">Next Iteration</button>
 
-@code {
-    private int[] pole = [4, 3, 2, 1, 5];
+<div class="rz-p-0 rz-p-md-12">
+    <RadzenChart>
+        <RadzenColumnSeries Data="@Data" CategoryProperty="Caption" ValueProperty="Data">
+            <RadzenSeriesDataLabels Visible="true" />
+        </RadzenColumnSeries>
+        <RadzenLegend Visible="false" />
+    </RadzenChart>
+</div>
 
-    int index = 0;
+@code {
+    DataItem[] Data => pole.Select((x, i) => new DataItem((i == index) ? $">{i + 1}<" : $"{i + 1}", x)).ToArray();
+
+    int[] pole = Enumerable.Range(1, 7).ToArray();
+
+    int index;
+
+    protected override void OnInitialized()
+    {
+        Random.Shared.Shuffle(pole);
+
+        Inicializace();
+    }
+
+    void Inicializace()
+    {
+        index = 0;
+    }
 
     void DalsiIterace()
     {
@@ -39,7 +61,7 @@
 
         if(index > pole.Length - 2)
         {
-            index = 0;
+            Inicializace();
         }
     }
 }
