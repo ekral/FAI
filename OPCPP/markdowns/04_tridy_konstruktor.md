@@ -42,7 +42,7 @@ public:
 };
 ```
 
-* Když teď vytvoříme instanci třídy `Ctverec`, tak se automaticky zavolá konstruktor a nastaví hondotu proměnné `n` na `0`.
+* Když teď vytvoříme instanci třídy `Ctverec`, tak se automaticky zavolá konstruktor a nastaví hodnotu proměnné `n` na `0`.
 
 ```c++ 
 Ctverec c1; // n bude mit hodnotu 0.0
