@@ -1,8 +1,7 @@
-#include <iostream>
+#include <stdio.h>
 #include <string>
-#include <sstream>
 #include <algorithm>
-#include <cmath>
+#include <math.h>
 
 using namespace std;
 
@@ -11,94 +10,108 @@ struct Bod2d
     double x;
     double y;
 
-    Bod2d(const double x, const double y) : x(x), y(y)
+    Bod2d()
     {
+        x = 0;
+        y = 0;
+    }
 
+    Bod2d(double x, double y)
+    {
+        this->x = x;
+        this->y = y;
     }
 };
 
 class Platno
 {
 private:
-    string data;
+    string retezec;
 public:
-    const int sirka;
-    const int vyska;
+    int vyska;
+    int sirka;
 
-
-    Platno(const int sirka, const int vyska) : data((sirka + 1) * vyska, '-'), sirka(sirka), vyska(vyska)
+    Platno(int vyska, int sirka) : retezec(vyska* (sirka + 1), ' ')
     {
+        this->vyska = vyska;
+        this->sirka = sirka;
+
         Vymaz();
     }
 
     void Vymaz()
     {
-        ranges::fill(data, '-');
+        fill(retezec.begin(), retezec.end(), '-');
 
-        for (int i = sirka; i < data.length(); i += sirka + 1)
+        int index = sirka;
+
+        for (int i = 0; i < vyska; i++)
         {
-            data[i] = '\n';
+            retezec[index] = '\n';
+
+            index += sirka + 1;
         }
-
     }
 
-    void Zobraz() const
+    void NakresliBod(Bod2d bod, char znak)
     {
-        cout << data << endl;
+        NakresliBod(bod.x, bod.y, znak);
     }
 
-    void Zapis(double x, double y)
+    void NakresliBod(double x, double y, char znak)
     {
-        const int ix = static_cast<int>(round(x));
-        const int iy = static_cast<int>(round(y));
+        int ix = (int)round(x);
+        int iy = (int)round(y);
 
-        if(ix < 0.0 || ix >= sirka || iy < 0.0 || iy >= vyska)
+        if (ix < 0 || ix >= sirka || iy < 0 || iy >= vyska)
         {
             return;
         }
 
-        const int pos = (vyska - iy - 1) * (sirka + 1) + ix;
+        int index = ix + (vyska - iy - 1) * (sirka + 1);
 
-        data[pos] = 'x';
+        retezec[index] = znak;
+    }
+    
+    void NakresliUsecku(Bod2d a, Bod2d b, char znak)
+    {
+        double dx = b.x - a.x;
+        double dy = b.y - a.y;
+
+        double max = std::max(abs(dx), abs(dy));
+
+        double stepx = dx / max;
+        double stepy = dy / max;
+
+        double x = a.x;
+        double y = a.y;
+
+        for (int i = 0; i <= max; i++)
+        {
+            NakresliBod(x, y, znak);
+
+            x += stepx;
+            y += stepy;
+        }
     }
 
-    void NakresliUsecku(Bod2d bodA, Bod2d bodB)
+    void Zobraz()
     {
-        double dx = bodA.x - bodB.x;
-        double dy = bodA.y - bodB.y;
-
-        double dmax = fmax(fabs(dx), fabs(dy));
-
-        double stepy = dy/dmax;
-        double stepx = dx/dmax;
-
-        Bod2d bod = bodB;
-        double d = 0;
-        while(d<dmax) {
-            Zapis(bod.x, bod.y);
-            bod.x += stepx;
-            bod.y += stepy;
-
-            d = d+1;
-        }
+        puts(retezec.c_str());
     }
 };
 
 int main()
 {
-    Platno platno(20, 10);
+    Platno platno(20, 30);
 
-    platno.Vymaz();
+    platno.NakresliBod(5, 3, 'x');
 
-    Bod2d A(2.0, 3.0);
-    Bod2d B(7.0, 9.0);
+    Bod2d b1(10, 12);
+    platno.NakresliBod(b1, 'o');
 
-    //platno.Zapis(A.x, A.y);
-    //platno.Zapis(B.x, B.y);
-
-    platno.NakresliUsecku(A, B); // 🚀 Implementujte
+    platno.NakresliUsecku(Bod2d(0, 0), Bod2d(10, 0), '1');
 
     platno.Zobraz();
 
-    return 0;
 }
