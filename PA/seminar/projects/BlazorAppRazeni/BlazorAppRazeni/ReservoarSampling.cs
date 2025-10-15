@@ -4,6 +4,11 @@
     {
         public static int[] Generate(int n, int max)
         {
+            if(n > max)
+            {
+                throw new ArgumentException("n must be less than or equal to max");
+            }
+
             int[] pole = new int[n];
 
             for (int i = 0; i < max; ++i)
@@ -22,6 +27,8 @@
                     }
                 }
             }
+
+            Random.Shared.Shuffle(pole);
 
             return pole;
         }
