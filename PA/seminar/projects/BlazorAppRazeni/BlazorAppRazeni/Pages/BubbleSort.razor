@@ -32,33 +32,12 @@
 @code {
     DataItem[] Data => pole.Select((x, i) => new DataItem((i == index) ? $">{i + 1}<" : $"{i + 1}", x)).ToArray();
 
-    int[] pole = [];
+    int[] pole = ReservoarSampling.Generate(5, 9);
 
     int index;
 
     protected override void OnInitialized()
     {
-        int k = 5;
-
-        pole = new int[k];
-
-        for(int i = 0; i < 9; ++i)
-        {
-            if (i < k)
-            {
-                pole[i] = i + 1;
-            }
-            else
-            {
-                int randomIndex = Random.Shared.Next(0, i + 1);
-
-                if (randomIndex < k)
-                {
-                    pole[randomIndex] = i + 1;
-                }
-            }
-        }
-
         Random.Shared.Shuffle(pole);
 
         Inicializace();
