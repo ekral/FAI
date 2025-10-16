@@ -65,17 +65,10 @@
             // Place the element in its correct position
             pole[j] = prvek;
 
-            if (index < pole.Length - 2)
-            {
-                ++index;
+            index = (index + 1) % (pole.Length - 2);
 
-                j = index + 1;
-                prvek = pole[j];
-            }
-            else
-            {
-                Inicializace();
-            }
+            j = index + 1;
+            prvek = pole[j];
         }
     }
 }
