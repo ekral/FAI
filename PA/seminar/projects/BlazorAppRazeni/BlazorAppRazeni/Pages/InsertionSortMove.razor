@@ -1,6 +1,6 @@
-﻿@page "/insertion2"
+﻿@page "/insertion-move"
 
-<PageTitle>Insertion Sort 2</PageTitle>
+<PageTitle>Insertion Sort Move</PageTitle>
 
 @* https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout/Basic_concepts_of_grid_layout *@
 
@@ -9,7 +9,7 @@
     {
         if (i == j)
         {
-            <div class="fs-1 text-primary-emphasis border-bottom border-3 pb-1">@pole[i]</div>
+            <div class="fs-1 border-bottom border-3">@pole[i]</div>
         }
         else
         {
@@ -18,7 +18,7 @@
     }
 </div>
 
-<div class="fs-1">prvek @prvek</div>
+<div class="fs-1 mb-3">prvek @prvek</div>
 
 <button class="btn btn-primary" @onclick="DalsiIterace">Next Iteration</button>
 
@@ -65,7 +65,7 @@
             // Place the element in its correct position
             pole[j] = prvek;
 
-            index = (index + 1) % (pole.Length - 2);
+            index = (index + 1) % (pole.Length - 1);
 
             j = index + 1;
             prvek = pole[j];

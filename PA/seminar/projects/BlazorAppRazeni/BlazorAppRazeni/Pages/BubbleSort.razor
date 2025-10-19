@@ -1,6 +1,6 @@
 ﻿@page "/bubble"
 
-<PageTitle>Sort</PageTitle>
+<PageTitle>Bubble Sort</PageTitle>
 
 @* https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout/Basic_concepts_of_grid_layout *@
 
@@ -32,7 +32,7 @@
 @code {
     DataItem[] Data => pole.Select((x, i) => new DataItem((i == index) ? $">{i + 1}<" : $"{i + 1}", x)).ToArray();
 
-    int[] pole = ReservoarSampling.Generate(5, 9);
+    int[] pole = ReservoarSampling.Generate(9, 9);
 
     int index;
 
