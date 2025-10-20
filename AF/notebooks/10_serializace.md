@@ -1,4 +1,4 @@
-# Materiál 10: Serializace
+# Materiál 10: Avalonia serializace a ukládání do souboru
 
 **autor: Erik Král ekral@utb.cz**
 
@@ -63,22 +63,22 @@ Pro serializaci a deserialici volíme jednoduché objekty obsahují ideálně po
 
 V následujícím příkladu si ukážeme jak vytvořit Save File Dialog ve frameworku Avalonia. V příkladu využijeme techniky Dependency Injection. Cílem je abychom mohli ViewModel testovat pomocí unit testů.
 
-Nejprve si definujme rozhraní a service pro zobrazení dialogu:
+Nejprve si definujme rozhraní a service pro zobrazení dialogu a uložení řetězce do souboru:
 
 ```csharp
 public interface ISaveDialogService
 {
-    Task<IStorageFile?> ShowAsync();
+    Task SaveAsync(string json);
 }
 ```
 
 
 ```csharp
-public class SaveDialogService(TopLevel topLevel) : ISaveDialogService
+public class SaveDialogService(TopLevel level) : ISaveDialogService
 {
-    private readonly TopLevel topLevel = topLevel;
+    private readonly TopLevel level = level;
 
-    public Task<IStorageFile?> ShowAsync()
+    public async Task SaveAsync(string json)
     {
         var jsonFileType = new FilePickerFileType("JSON File")
         {
@@ -86,41 +86,25 @@ public class SaveDialogService(TopLevel topLevel) : ISaveDialogService
             MimeTypes = ["application/json"]
         };
 
-        Task<IStorageFile?> file = topLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+        var options = new FilePickerSaveOptions
         {
             Title = "Save export file",
             DefaultExtension = "json",
             FileTypeChoices = [jsonFileType]
-        });
+        };
 
-        return file;
+        IStorageFile? file = await level.StorageProvider.SaveFilePickerAsync(options);
+
+        if (file is not null)
+        {
+            await using var stream = await file.OpenWriteAsync();
+            using var streamWriter = new StreamWriter(stream);
+            await streamWriter.WriteAsync(json);
+        }
     }
 }
 ```
 
-A potom si nadefinujeme rozhraní a service pro ukládání řetězce do souboru.
-
-```csharp
-public interface IFileService
-{
-    Task SaveAsync(IStorageFile file, string json);
-}
-```
-
-
-```csharp
-public class FileService : IFileService
-{
-    public async Task SaveAsync(IStorageFile file, string json)
-    {
-        await using var stream = await file.OpenWriteAsync();
-
-        using var streamWriter = new StreamWriter(stream);
-
-        await streamWriter.WriteAsync(json);
-    }
-}
-```
 
 Pro to, aby byl VieModel testovatelný, tak si vytvoříme service i pro studenty, i když to nesouvisí se serializací a ukládáním do souboru.
 
@@ -159,31 +143,28 @@ ViewModel bude vypadat následovně, kde důležitá je metoda `ExportToJson`.
 public partial class MainViewModel : ViewModelBase
 {
     [ObservableProperty]
-    private StudentViewModel[]? students;
+    private Student[]? students;
 
     [ObservableProperty]
-    private StudentViewModel? selectedStudent;
+    private Student? selectedStudent;
 
     private readonly IStudentService studentService;
     private readonly ISaveDialogService saveDialog;
-    private readonly IFileService fileService;
 
-    public MainViewModel(IStudentService studentService, ISaveDialogService saveDialog, IFileService fileService)
+    public MainViewModel(IStudentService studentService, ISaveDialogService saveDialog)
     {
-        Task.Run(LoadStudentAsync);
         this.studentService = studentService;
         this.saveDialog = saveDialog;
-        this.fileService = fileService;
     }
 
-    private async Task LoadStudentAsync()
+    public async Task LoadStudentAsync()
     {
-        Students = await studentService.GetAllStudentsAsync();
+        Students = await studentService.GetAllStudentsAsync(); 
 
-        SelectedStudent = Students?.First();
+        SelectedStudent = Students?.FirstOrDefault();
     }
 
-    public async Task Save()
+    public async Task SaveAsync()
     {
         if (SelectedStudent is not null)
         {
@@ -191,15 +172,13 @@ public partial class MainViewModel : ViewModelBase
         }
     }
 
-    public async Task ExportToJson()
+    public async Task ExportAsync()
     {
-        IStorageFile? storageFile = await saveDialog.ShowAsync();
-
-        if (storageFile is not null)
+        if (Students is not null)
         {
             string json = JsonSerializer.Serialize(Students);
 
-            await fileService.SaveAsync(storageFile, json);
+            await saveDialog.SaveAsync(json);
         }
     }
 }
@@ -212,7 +191,7 @@ public partial class App : Application
 {
     public static HttpClient sharedClient = new()
     {
-        BaseAddress = new Uri("https://localhost:7042")
+        BaseAddress = new Uri("https://localhost:7266")
     };
 
     public override void Initialize()
@@ -226,15 +205,17 @@ public partial class App : Application
         // Without this line you will get duplicate validations from both Avalonia and CT
         BindingPlugins.DataValidators.RemoveAt(0);
 
-        StudentService studentService = new StudentService(sharedClient);
-
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow = new MainWindow();
-            
+
             TopLevel topLevel = TopLevel.GetTopLevel(desktop.MainWindow) ?? throw new NullReferenceException();
 
-            desktop.MainWindow.DataContext = new MainViewModel(studentService, new SaveDialogService(topLevel), new FileService());
+            MainViewModel vm = new(new StudentService(sharedClient), new SaveDialogService(topLevel));
+
+            desktop.MainWindow.DataContext = vm;
+
+            desktop.MainWindow.Loaded += async (sender, e) => await vm.LoadStudentAsync();
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
@@ -242,7 +223,11 @@ public partial class App : Application
 
             TopLevel topLevel = TopLevel.GetTopLevel(singleViewPlatform.MainView) ?? throw new NullReferenceException();
 
-            singleViewPlatform.MainView.DataContext = new MainViewModel(studentService, new SaveDialogService(topLevel), new FileService());
+            MainViewModel vm = new(new StudentService(sharedClient), new SaveDialogService(topLevel));
+
+            singleViewPlatform.MainView.DataContext = vm;
+
+            singleViewPlatform.MainView.Loaded += async (sender, e) => await vm.LoadStudentAsync();
         }
 
         base.OnFrameworkInitializationCompleted();

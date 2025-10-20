@@ -1,4 +1,4 @@
-# Materiál 09: Avalonia dektopový klient
+# Materiál 09: Avalonia desktopový klient
 
 **autor: Erik Král ekral@utb.cz**
 

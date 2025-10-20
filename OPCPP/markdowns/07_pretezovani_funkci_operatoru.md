@@ -100,7 +100,7 @@ struct Bod
     {
         lhs += rhs;
 
-        return lhs;;
+        return lhs;
     }
 };
 

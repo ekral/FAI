@@ -1,0 +1,141 @@
+@page "/hypoteka"
+
+<PageTitle>Hypotéka</PageTitle>
+
+<h1>Hypoteční kalkulačka</h1>
+
+<div class="mb-3">
+    <label class="form-label" for="pujcka">Výše půjčky</label>
+    <input class="form-control" id="pujcka" type="number" step="200000" min="200000" @bind-value="pujcka" @bind-value:after="SpocitejSplatku" />
+</div>
+
+<div class="mb-3">
+    <label class="form-label" for="urok">Výše půjčky</label>
+    <input class="form-control" id="urok" type="number" step="0.2" min="0.2" @bind-value="urokProcenta" @bind-value:after="SpocitejSplatku" />
+</div>
+
+<div class="mb-3">
+    <label class="form-label" for="pocet">Výše půjčky</label>
+    <input class="form-control" id="pocet" type="number" step="5" min="5" @bind-value="pocetLet" @bind-value:after="SpocitejSplatku" />
+</div>
+
+@* 2. Pridat input pro urokProcenta a pocetLet *@
+
+<p role="status">Splátka: @splatka.ToString("F1")</p>
+
+<h2>Splátkový kalendář</h2>
+
+@* 3. Zobrazit splatkovy kalendar *@
+
+<div class="form-check form-switch">
+    <InputCheckbox class="form-check-input" type="checkbox" role="switch" @bind-Value="zobrazitRoky" id="roky" />
+    <label class="form-check-label" for="roky">
+        Zobrazit po letech
+    </label>
+</div>
+
+@if (zobrazitRoky)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Rok</th>
+                <th>Úroky</th>
+                <th>Úmory</th>
+                <th>Dluh</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                double dluh = pujcka;
+                
+                for (int j = 0; j < pocetLet; j++)
+                {
+                    double sumaUroku = 0.0;
+                    double sumaUmoru = 0.0;
+
+                    for (int i = 0; i < 12; i++)
+                    {
+                        double urok = r * dluh;
+                        double umor = splatka - urok;
+
+                        sumaUroku += urok;
+                        sumaUmoru += umor;
+
+                        dluh -= umor;
+                    }
+
+                    <tr>
+                        <td>@(j + 1)</td>
+                        <td>@sumaUroku.ToString("F2")</td>
+                        <td>@sumaUmoru.ToString("F2")</td>
+                        <td>@dluh.ToString("F1")</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Měsíc</th>
+                <th>Úrok</th>
+                <th>Úmor</th>
+                <th>Dluh</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                double dluh = pujcka;
+
+                for (int i = 0; i < n; i++)
+                {
+                    double urok = r * dluh;
+                    double umor = splatka - urok;
+                    dluh -= umor;
+
+                    <tr>
+                        <td>@(i + 1)</td>
+                        <td>@urok.ToString("F2")</td>
+                        <td>@umor.ToString("F2")</td>
+                        <td>@dluh.ToString("F1")</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private double pujcka = 6000000.0;
+    private double urokProcenta = 4.0;
+    private int pocetLet = 30;
+    private double splatka;
+    double r;
+    int n;
+    bool zobrazitRoky = true;
+
+    protected override void OnInitialized()
+    {
+        SpocitejSplatku();
+    }
+
+    private void SpocitejSplatku()
+    {
+        r = urokProcenta / 12.0 / 100.0;
+        n = pocetLet * 12;
+
+        // 1. Spocitani splatky podle vzorce
+        if (n > 0 && r > 0 && pujcka > 0)
+        {
+            splatka = pujcka * r * Math.Pow(1 + r, n) / (Math.Pow(1 + r, n) - 1);
+        }
+        else
+        {
+            splatka = 0.0;
+        }
+    }
+}

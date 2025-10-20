@@ -6,7 +6,7 @@
 
 Šablony v C++ nebo Generika (C#, Java) umožňují odložit přesnou definici použitého datového typu v rámci datového typu, například třídy nebo rozhraní. V jazyce C se pro podobné účely používá příkaz textového preprocecoru #define.
 
-Šablony poskytují vetší znovu použitelnost kódu.. Nejčastější aplikace je v rámci kolekcí.
+Šablony poskytují vetší znovu použitelnost kódu. Nejčastější aplikace je v rámci kolekcí.
 
 V následujícím příkladu je ukázka definice třídy sklad, který představuje zásobník s pevnou délkou.
 

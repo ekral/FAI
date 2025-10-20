@@ -1,0 +1,67 @@
+﻿@page "/bubble"
+
+<PageTitle>Bubble Sort</PageTitle>
+
+@* https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout/Basic_concepts_of_grid_layout *@
+
+<div class="d-flex gap-3 mb-3">
+    @for (int i = 0; i < pole.Length; i++)
+    {
+        if (i == index)
+        {
+            <div class="fs-1 border-bottom border-3 pb-1">@pole[i]</div>
+        }
+        else
+        {
+            <div class="fs-1">@pole[i]</div>
+        }
+    }
+</div>
+
+<button class="btn btn-primary" @onclick="DalsiIterace">Next Iteration</button>
+
+<div class="rz-p-0 rz-p-md-12">
+    <RadzenChart>
+        <RadzenColumnSeries Data="@Data" CategoryProperty="Caption" ValueProperty="Data">
+            <RadzenSeriesDataLabels Visible="true" />
+        </RadzenColumnSeries>
+        <RadzenLegend Visible="false" />
+    </RadzenChart>
+</div>
+
+@code {
+    DataItem[] Data => pole.Select((x, i) => new DataItem((i == index) ? $">{i + 1}<" : $"{i + 1}", x)).ToArray();
+
+    int[] pole = ReservoarSampling.Generate(9, 9);
+
+    int index;
+
+    protected override void OnInitialized()
+    {
+        
+
+        Inicializace();
+    }
+
+    void Inicializace()
+    {
+        index = 0;
+    }
+
+    void DalsiIterace()
+    {
+        if(pole[index] > pole[index + 1])
+        {
+            int temp = pole[index];
+            pole[index] = pole[index + 1];
+            pole[index + 1] = temp;
+        }
+
+        ++index;
+
+        if(index > pole.Length - 2)
+        {
+            Inicializace();
+        }
+    }
+}
