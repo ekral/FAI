@@ -5,17 +5,19 @@
 <div class="d-flex gap-3 mb-3">
     @for (int i = 0; i < pole.Length; i++)
     {
+        string textColor = (i >= low && i <= high) ? "text-primary" : "text-secondary";
+        
         if (i == this.i)
         {
-            <div class="fs-1 border-bottom border-primary border-3">@pole[i]</div>
+            <div class="fs-1 @textColor border-bottom border-primary border-3">@pole[i]</div>
         }
         else if (i == this.j)
         {
-            <div class="fs-1 border-bottom border-secondary border-3">@pole[i]</div>
+            <div class="fs-1 @textColor border-bottom border-secondary border-3">@pole[i]</div>
         }
         else
         {
-            <div class="fs-1">@pole[i]</div>
+            <div class="fs-1 @textColor">@pole[i]</div>
         }
     }
 </div>
@@ -34,6 +36,20 @@
 </div>
 
 @code {
+    class Partition
+    {
+        public int low;
+        public int high;  
+
+        public Partition(int low, int high)
+        {
+            this.low = low;
+            this.high = high;
+        }
+    }
+
+    Queue<Partition> partitions = new Queue<Partition>();
+
     int low;
     int high;
     int pivot;
@@ -55,8 +71,8 @@
         low = 0;
         high = pole.Length - 1;
         pivot = pole[high];
-        i = low;
-        j = low;
+        i = 0;
+        j = 0;
     }
 
     void DalsiIterace()
@@ -80,7 +96,34 @@
             pole[i] = pole[j];
             pole[j] = tmp;
 
-            Inicializace();
+            Partition left = new Partition(low, i - 1);
+            Partition right = new Partition(i + 1, high);
+
+            if (left.low < left.high)
+            {
+                partitions.Enqueue(left);
+            }
+
+            if (right.low < right.high)
+            {
+                partitions.Enqueue(right);
+            }
+
+            if(partitions.Count > 0)
+            {
+                Partition partition = partitions.Dequeue();
+
+                low = partition.low;
+                high = partition.high;
+                pivot = pole[high];
+                i = low;
+                j = low;
+            }
+            else
+            {
+                Inicializace();
+            }
+
         }
     }
 }
