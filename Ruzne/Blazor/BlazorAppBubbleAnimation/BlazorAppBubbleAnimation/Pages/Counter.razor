@@ -1,0 +1,161 @@
+﻿@page "/counter"
+
+<PageTitle>Counter</PageTitle>
+
+<input @bind-value="Index1" />
+<input @bind-value="Index2" />
+<button class="btn btn-primary" @onclick="Calc">Compare and swap</button>
+<br />
+
+<div>
+    @for (int i = 0; i < Data.Count; i++)
+    {
+        <span class="circle" style=@GetAnimationCss(i)>@Data[i]</span>
+    }
+</div>
+<span class="compare-symbol" style=@GetCompareCss()>&lt;</span>
+
+<style>
+    .circle {
+        display: inline-flex;
+        width: 50px;
+        align-items: center;
+        justify-content: center;
+        aspect-ratio: 1 / 1;
+        border-radius: 50%;
+        border: 2px solid #666;
+    }
+
+    @@keyframes swap-anim-left {
+        25% {
+            translate: 0px 60px;
+        }
+
+        75% {
+            translate: var(--pathX) 60px;
+        }
+
+        100% {
+            translate: var(--pathX) 0px;
+        }
+    }
+
+    @@keyframes swap-anim-right {
+        25% {
+            translate: 0px -60px;
+        }
+
+        75% {
+            translate: var(--pathX) -60px;
+        }
+
+        100% {
+            translate: var(--pathX) 0px;
+        }
+    }
+
+    @@keyframes compare-anim {
+        25% {
+            translate: 0px 60px;
+            border-color: limegreen;
+        }
+
+        75% {
+            translate: 0px 60px;
+            border-color: var(--targetColor);
+            color: var(--targetColor);
+        }
+
+        100% {
+            translate: 0px 0px;
+        }
+    }
+
+    .compare-symbol{
+        position: relative;
+        font-size: 32pt;
+    }
+
+</style>
+
+@code {
+    private const int AnimDuration = 2;
+
+    private List<int> swap = new();
+
+    private List<int> compare = new();
+
+    private List<int> Data { get; set; } = Enumerable.Range(1, 10).ToList();
+
+    private int Index1 { get; set; } = 1;
+    private int Index2 { get; set; } = 2;
+
+
+    private async Task Calc()
+    {
+        await DoCompare(Index1, Index2);
+        await DoSwap(Index1, Index2);
+    }
+
+    private async Task DoSwap(int ix, int iy)
+    {
+        swap = new() { ix, iy };
+        StateHasChanged();
+        await Task.Delay(AnimDuration * 1000);
+        swap = new();
+
+        var tmp = Data[ix];
+        Data[ix] = Data[iy];
+        Data[iy] = tmp;
+    }
+
+    private async Task DoCompare(int ix, int iy)
+    {
+        compare = new() { ix, iy };
+        StateHasChanged();
+        await Task.Delay(AnimDuration * 1000);
+        compare = new();
+    }
+
+    public string GetAnimationCss(int index)
+    {
+        if (swap.Count == 2)
+        {
+            var pathX = Math.Abs(swap[0] - swap[1]) * 50;
+
+            if (index == swap[0])
+            {
+                return $"--pathX: {pathX}px ; animation: {AnimDuration}s ease-in-out forwards swap-anim-left";
+            }
+
+            if (index == swap[1])
+            {
+                return $"--pathX: -{pathX}px ; animation: {AnimDuration}s ease-in-out forwards swap-anim-right";
+            }
+        }
+
+        if (compare.Count == 2)
+        {
+
+            if (compare.Contains(index))
+            {
+                bool isOk = Data[compare[0]] <= Data[compare[1]];
+                return $"--targetColor:{(isOk ? "green" : "red")}; animation: {AnimDuration}s ease-in-out forwards compare-anim";
+            }
+        }
+
+        return "";
+    }
+
+    public string GetCompareCss()
+    {
+        if (compare.Count == 2)
+        {
+            var offsetX = (int)(Math.Abs((compare[0] + compare[1]) / 2.0) * 50) + 12;
+            bool isOk = Data[compare[0]] <= Data[compare[1]];
+            return $"--targetColor:{(isOk ? "green" : "red")};visibility: visible; left: {offsetX}px; animation: {AnimDuration}s ease-in-out forwards compare-anim";
+        }
+
+        return "visibility: collapse";
+    }
+}

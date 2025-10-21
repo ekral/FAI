@@ -1,6 +1,6 @@
 ﻿@page "/"
 
-<PageTitle>Insertion Sort</PageTitle>
+<PageTitle>Insertion Sort Swap</PageTitle>
 
 @* https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout/Basic_concepts_of_grid_layout *@
 
@@ -32,7 +32,7 @@
 @code {
     DataItem[] Data => pole.Select((x, i) => new DataItem((i == j) ? $">{i + 1}<" : $"{i + 1}", x)).ToArray();
 
-    private int[] pole = Enumerable.Range(1, 7).ToArray();
+    private int[] pole = ReservoarSampling.Generate(9, 9);
 
     int index;
     int j;
@@ -40,8 +40,6 @@
 
     protected override void OnInitialized()
     {
-        Random.Shared.Shuffle(pole);
-
         Inicializace();
     }
 

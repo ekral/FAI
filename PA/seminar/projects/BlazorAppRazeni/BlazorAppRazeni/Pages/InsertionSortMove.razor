@@ -1,15 +1,15 @@
-﻿@page "/bubble"
+﻿@page "/insertion-move"
 
-<PageTitle>Bubble Sort</PageTitle>
+<PageTitle>Insertion Sort Move</PageTitle>
 
 @* https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout/Basic_concepts_of_grid_layout *@
 
 <div class="d-flex gap-3 mb-3">
     @for (int i = 0; i < pole.Length; i++)
     {
-        if (i == index)
+        if (i == j)
         {
-            <div class="fs-1 border-bottom border-3 pb-1">@pole[i]</div>
+            <div class="fs-1 border-bottom border-3">@pole[i]</div>
         }
         else
         {
@@ -17,6 +17,8 @@
         }
     }
 </div>
+
+<div class="fs-1 mb-3">prvek @prvek</div>
 
 <button class="btn btn-primary" @onclick="DalsiIterace">Next Iteration</button>
 
@@ -30,38 +32,43 @@
 </div>
 
 @code {
-    DataItem[] Data => pole.Select((x, i) => new DataItem((i == index) ? $">{i + 1}<" : $"{i + 1}", x)).ToArray();
+    DataItem[] Data => pole.Select((x, i) => new DataItem((i == j) ? $">{i + 1}<" : $"{i + 1}", x)).ToArray();
 
-    int[] pole = ReservoarSampling.Generate(9, 9);
+    private int[] pole = ReservoarSampling.Generate(9, 9);
 
     int index;
+    int j;
+    int prvek;
 
     protected override void OnInitialized()
     {
-        
-
         Inicializace();
     }
 
     void Inicializace()
     {
         index = 0;
+        j = index + 1;
+        prvek = pole[j];
     }
 
     void DalsiIterace()
     {
-        if(pole[index] > pole[index + 1])
+        // Shift element to the right
+        if ((j > 0) && prvek < pole[j - 1])
         {
-            int temp = pole[index];
-            pole[index] = pole[index + 1];
-            pole[index + 1] = temp;
+            pole[j] = pole[j - 1];
+            j--;
         }
-
-        ++index;
-
-        if(index > pole.Length - 2)
+        else
         {
-            Inicializace();
+            // Place the element in its correct position
+            pole[j] = prvek;
+
+            index = (index + 1) % (pole.Length - 1);
+
+            j = index + 1;
+            prvek = pole[j];
         }
     }
 }
