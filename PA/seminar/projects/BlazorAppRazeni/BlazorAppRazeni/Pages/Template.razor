@@ -1,6 +1,6 @@
-﻿@page "/select"
+﻿@page "/template"
 
-<PageTitle>Select Sort</PageTitle>
+<PageTitle>Sort</PageTitle>
 
 <div class="d-flex gap-3 mb-3">
     @for (int i = 0; i < pole.Length; i++)
@@ -24,23 +24,15 @@
 
 <button class="btn btn-primary" @onclick="DalsiIterace">Next Iteration</button>
 
-<div class="rz-p-0 rz-p-md-12">
-    <RadzenChart>
-        <RadzenColumnSeries Data="@Data" CategoryProperty="Caption" ValueProperty="Data">
-            <RadzenSeriesDataLabels Visible="true" />
-        </RadzenColumnSeries>
-        <RadzenLegend Visible="false" />
-    </RadzenChart>
-</div>
 
 @code {
-    DataItem[] Data => pole.Select((x, i) => new DataItem((i == j) ? $">{i + 1}<" : $"{i + 1}", x)).ToArray();
 
-    private int[] pole = ReservoarSampling.Generate(9, 9);
+    private int[] pole = GenerujCisla(9, 9);
 
     int index;
-    int j;
     int min_index;
+    int j;
+
 
     protected override void OnInitialized()
     {
@@ -56,24 +48,50 @@
 
     void DalsiIterace()
     {
-        if (j < pole.Length - 1)
+        if(j < pole.Length - 1)
         {
             ++j;
 
-            if (pole[j] < pole[min_index])
-            {
-                min_index = j;
-            }
+
         }
         else
         {
-            int tmp = pole[index];
-            pole[index] = pole[min_index];
-            pole[min_index] = tmp;
+
 
             index = (index + 1) % (pole.Length - 2);
-            min_index = index;
             j = index;
-        } 
+            min_index = index;
+        }
+    }
+
+    public static int[] GenerujCisla(int n, int max)
+    {
+        if (n > max)
+        {
+            throw new ArgumentException("n must be less than or equal to max");
+        }
+
+        int[] pole = new int[n];
+
+        for (int i = 0; i < max; ++i)
+        {
+            if (i < n)
+            {
+                pole[i] = i + 1;
+            }
+            else
+            {
+                int randomIndex = Random.Shared.Next(0, i + 1);
+
+                if (randomIndex < n)
+                {
+                    pole[randomIndex] = i + 1;
+                }
+            }
+        }
+
+        Random.Shared.Shuffle(pole);
+
+        return pole;
     }
 }
