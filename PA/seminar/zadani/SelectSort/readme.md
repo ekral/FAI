@@ -142,7 +142,7 @@ Výchozí kód stránky:
         {
 
 
-            index = (index + 1) % (pole.Length - 2);
+            index = (index + 1) % (pole.Length - 1);
             j = index;
             min_index = index;
         }
