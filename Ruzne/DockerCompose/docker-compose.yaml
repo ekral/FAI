@@ -1,0 +1,17 @@
+name: muj-projekt
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server
+    environment:
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: YourStrong!Passw0rd
+    ports:
+      - "1433:1433"
+  keycloack:
+    image: quay.io/keycloak/keycloak:26.4.1
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+    command: start-dev
+    ports:
+      - "8080:8080"
