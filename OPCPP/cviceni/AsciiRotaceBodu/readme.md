@@ -1,6 +1,6 @@
 # Ascii Rotace bodu
 
-S využitím kódu z úkolu uvedenéno níže vytvořte program, který:
+S využitím kódu uvedenéno níže vytvořte program, který:
 
 Zarotuje bod (x,y) kolem počátku souřadnic (0,0) a vykreslete úsečku z počátku souřadnic do zarotovaného bodu (x', y'). Použijte vzorec:
 
@@ -21,8 +21,8 @@ Vyjděte z následujících zdrojových kódů:
 #include <iostream>
 #include <string>
 #include <algorithm>
-#include <cmath>
-#include <ranges>
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 using namespace std;
 
@@ -126,3 +126,5 @@ int main()
     return 0;
 }
 ```
+
+
