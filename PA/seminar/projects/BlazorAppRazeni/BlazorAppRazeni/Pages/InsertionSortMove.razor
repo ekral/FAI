@@ -1,15 +1,17 @@
 ﻿@page "/insertion-move"
 
-<PageTitle>Insertion Sort Move</PageTitle>
-
-@* https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout/Basic_concepts_of_grid_layout *@
+<PageTitle>Insertion Sort</PageTitle>
 
 <div class="d-flex gap-3 mb-3">
     @for (int i = 0; i < pole.Length; i++)
     {
-        if (i == j)
+        if (i == index)
         {
-            <div class="fs-1 border-bottom border-3">@pole[i]</div>
+            <div class="fs-1 border-bottom border-primary border-3">@pole[i]</div>
+        }
+        else if (i == j)
+        {
+            <div class="fs-1 border-bottom border-secondary border-3">@pole[i]</div>
         }
         else
         {
@@ -47,8 +49,8 @@
 
     void Inicializace()
     {
-        index = 0;
-        j = index + 1;
+        index = 1;
+        j = index;
         prvek = pole[j];
     }
 
@@ -65,9 +67,9 @@
             // Place the element in its correct position
             pole[j] = prvek;
 
-            index = (index + 1) % (pole.Length - 1);
+            index = (index + 1) % pole.Length;
 
-            j = index + 1;
+            j = index;
             prvek = pole[j];
         }
     }
