@@ -21,8 +21,8 @@ Vyjděte z následujících zdrojových kódů:
 #include <iostream>
 #include <string>
 #include <algorithm>
-#include <cmath>
-#include <ranges>
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 using namespace std;
 
@@ -126,4 +126,5 @@ int main()
     return 0;
 }
 ```
+
 
