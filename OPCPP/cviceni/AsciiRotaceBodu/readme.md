@@ -109,7 +109,7 @@ public:
 
 int main()
 {
-    Platno platno(40, 20);
+    Platno platno(40, 25);
 
     platno.Vymaz();
 
@@ -126,5 +126,6 @@ int main()
     return 0;
 }
 ```
+
 
 
