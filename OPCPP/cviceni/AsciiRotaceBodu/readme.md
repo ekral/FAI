@@ -115,10 +115,10 @@ int main()
 
     const Bod2d A(20.0, 0.0);
     
-    double uhel = 45.0;
+    double uhelStupne = 45.0;
 
     // 🚀 implementujte funkci rotace:
-    // Bod2d At = rotace(A, uhel); 
+    // Bod2d At = rotace(A, uhelStupne); 
     // platno.NakresliBod(At.x, At.y);
 
     platno.Zobraz();
@@ -126,6 +126,7 @@ int main()
     return 0;
 }
 ```
+
 
 
 
