@@ -55,25 +55,6 @@ using System;
 
 class QuickSortExample
 {
-    static void Main()
-    {
-        int[] arr = { 9, 3, 7, 1, 8, 2, 5 };
-        QuickSort(arr, 0, arr.Length - 1);
-
-        Console.WriteLine("Seřazené pole:");
-        Console.WriteLine(string.Join(", ", arr));
-    }
-
-    static void QuickSort(int[] arr, int low, int high)
-    {
-        if (low < high)
-        {
-            int p = Partition(arr, low, high);
-            QuickSort(arr, low, p - 1);
-            QuickSort(arr, p + 1, high);
-        }
-    }
-
     // Upravený Lomuto partitioning – i začíná na "low"
     static int Partition(int[] arr, int low, int high)
     {
@@ -92,13 +73,6 @@ class QuickSortExample
         // Umístění pivotu na správné místo
         Swap(arr, i, high);
         return i;
-    }
-
-    static void Swap(int[] arr, int i, int j)
-    {
-        int temp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = temp;
     }
 }
 ```
