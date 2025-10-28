@@ -77,7 +77,7 @@ class QuickSortExample
 }
 ```
 
-## Zadání
+## 🧠 Zadání
 
 S pomocí kódu stránky níže implementuje algoritmus Lomuto Partitioning, tak aby se na stisk tlačítka provedla jen **jedna iterace** a mohli jsme interaktivně sledovat průběh algoritmu.
 
