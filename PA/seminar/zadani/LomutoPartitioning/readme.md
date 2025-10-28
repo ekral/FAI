@@ -105,7 +105,7 @@ class QuickSortExample
 
 ## Zadání
 
-S pomocí kódu stránky níže implementuje algoritmus Selection Sort, tak aby se na stisk tlačítka provedla jen **jedna iterace** a mohli jsme interaktivně sledovat průběh algoritmu.
+S pomocí kódu stránky níže implementuje algoritmus Lomuto Partitioning, tak aby se na stisk tlačítka provedla jen **jedna iterace** a mohli jsme interaktivně sledovat průběh algoritmu.
 
 Výchozí kód stránky:
 

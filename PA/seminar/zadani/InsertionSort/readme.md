@@ -4,7 +4,8 @@
 
 **Insertion Sort** (Třídění vkládáním) je jednoduchý algoritmus pro třídění, který postupně vkládá každý prvek na správné místo do již seřazené části seznamu.
 
-Algoritmus funguje takto:
+## 🔄 Průběh algoritmu krok za krokem
+
 1. Začíná od druhého prvku (první prvek je považován za již seřazený).
 2. Tento prvek porovná s předchozími prvky a pokud je menší než některý z nich, posune je o jednu pozici doprava.
 3. Poté tento prvek vloží na správné místo.
@@ -15,7 +16,7 @@ Algoritmus funguje takto:
 - **Průměrný a nejhorší případ:** O(n²), kde n je počet prvků v seznamu.
 - **Prostorová složitost:** O(1), protože algoritmus třídí seznam na místě.
 
-## Ukázka kódu v C#
+## 💻 Ukázkový kód v C#
 
 ```csharp
 using System;
@@ -72,7 +73,7 @@ class Program
 
 ## Zadání
 
-S pomocí kódu stránky níže implementuje algoritmus Selection Sort, tak aby se na stisk tlačítka provedla jen **jedna iterace** a mohli jsme interaktivně sledovat průběh algoritmu.
+S pomocí kódu stránky níže implementuje algoritmus Insertion Sort, tak aby se na stisk tlačítka provedla jen **jedna iterace** a mohli jsme interaktivně sledovat průběh algoritmu.
 
 Výchozí kód stránky:
 
@@ -131,11 +132,12 @@ Výchozí kód stránky:
         {
             ++j;
 
-
+            // 💻
         }
         else
         {
 
+            // 💻
 
             index = (index + 1) % (pole.Length - 1);
             j = index;
