@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Sdk Name="Aspire.AppHost.Sdk" Version="9.5.0" />
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>  
+    <UserSecretsId>70ef6c15-6407-4b65-b78c-349b6cf0dc6c</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.AppHost" />
+    <PackageReference Include="Aspire.Hosting.SqlServer" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Knihovna.Api\Knihovna.Api.csproj" />
+    <ProjectReference Include="..\Knihovna.Seeder\Knihovna.Seeder.csproj" />
+  </ItemGroup>
+
+</Project>

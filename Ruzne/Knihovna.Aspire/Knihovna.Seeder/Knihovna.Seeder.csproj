@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Microsoft.EntityFrameworkCore.SqlServer" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Knihovna.Aspire.ServiceDefaults\Knihovna.Aspire.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\Knihovna.Data\Knihovna.Data.csproj" />
+  </ItemGroup>
+
+</Project>
