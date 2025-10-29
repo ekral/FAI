@@ -78,9 +78,9 @@ S pomocí kódu stránky níže implementuje algoritmus Insertion Sort, tak aby 
 Výchozí kód stránky:
 
 ```csharp
-@page "/insertion"
+@page "/template"
 
-<PageTitle>Sort</PageTitle>
+<PageTitle>Insertion Sort</PageTitle>
 
 <div class="d-flex gap-3 mb-3">
     @for (int i = 0; i < pole.Length; i++)
@@ -104,15 +104,23 @@ Výchozí kód stránky:
 
 <button class="btn btn-primary" @onclick="DalsiIterace">Next Iteration</button>
 
+<div class="rz-p-0 rz-p-md-12">
+    <RadzenChart>
+        <RadzenColumnSeries Data="@Data" CategoryProperty="Caption" ValueProperty="Data">
+            <RadzenSeriesDataLabels Visible="true" />
+        </RadzenColumnSeries>
+        <RadzenLegend Visible="false" />
+    </RadzenChart>
+</div>
 
 @code {
+    DataItem[] Data => pole.Select((x, i) => new DataItem((i == j) ? $">{i + 1}<" : $"{i + 1}", x)).ToArray();
 
-    private int[] pole = GenerujCisla(9, 9);
+    private int[] pole = ReservoarSampling.Generate(9, 9);
 
     int index;
-    int prvek;
     int j;
-
+    int prvek;
 
     protected override void OnInitialized()
     {
@@ -122,65 +130,34 @@ Výchozí kód stránky:
     void Inicializace()
     {
         index = 1;
-        j = 0;
-        prvek = pole[index];
+        j = 1;
+        prvek = pole[j];
     }
 
     void DalsiIterace()
     {
-        if (j >= 0 /* 💻 test jestli je prvek mensi */)
+
+        if ((j > 0) /* 💻 test jestli je prvek mensi */)
         {
+
             // 💻 posun prvku v poli
-            
-            --j;
+
+            j--;
         }
         else
         {
             // 💻 umisteni prvku
 
-            j = index;
             ++index;
 
-            if (index < pole.Length)
+            if (index >= pole.Length)
             {
-                prvek = pole[index];
+                index = 1;
             }
-            else
-            {
-                Inicializace();
-            }
+      
+            j = index;
+            prvek = pole[j];
         }
-    }
-
-    public static int[] GenerujCisla(int n, int max)
-    {
-        if (n > max)
-        {
-            throw new ArgumentException("n must be less than or equal to max");
-        }
-
-        int[] pole = new int[n];
-
-        for (int i = 0; i < max; ++i)
-        {
-            if (i < n)
-            {
-                pole[i] = i + 1;
-            }
-            else
-            {
-                int randomIndex = Random.Shared.Next(0, i + 1);
-
-                if (randomIndex < n)
-                {
-                    pole[randomIndex] = i + 1;
-                }
-            }
-        }
-
-        Random.Shared.Shuffle(pole);
-
-        return pole;
     }
 }
 ```
