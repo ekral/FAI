@@ -128,7 +128,7 @@ Výchozí kód stránky:
 
     void DalsiIterace()
     {
-        if (j > 0)
+        if (j > 0 /* 💻 test jestli je prvek mensi */)
         {
             --j;
 
@@ -136,15 +136,16 @@ Výchozí kód stránky:
         }
         else
         {
-
             // 💻 umisteni prvku
 
             j = index;
             ++index;
 
-            prvek = pole[index];
-
-            if (index > pole.Length - 1)
+            if (index < pole.Length)
+            {
+                prvek = pole[index];
+            }
+            else
             {
                 Inicializace();
             }
