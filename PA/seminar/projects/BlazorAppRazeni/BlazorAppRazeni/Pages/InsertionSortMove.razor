@@ -67,7 +67,12 @@
             // Place the element in its correct position
             pole[j] = prvek;
 
-            index = (index + 1) % pole.Length;
+            ++index;
+
+            if (index >= pole.Length)
+            {
+                index = 1;
+            }
 
             j = index;
             prvek = pole[j];
