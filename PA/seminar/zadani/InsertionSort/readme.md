@@ -122,7 +122,7 @@ Výchozí kód stránky:
     void Inicializace()
     {
         index = 1;
-        j = 1;
+        j = 0;
         prvek = pole[index];
     }
 
@@ -130,9 +130,9 @@ Výchozí kód stránky:
     {
         if (j > 0 /* 💻 test jestli je prvek mensi */)
         {
-            --j;
+            // 💻 posun prvku v poli
 
-            // 💻 posun prvku
+            --j;
         }
         else
         {
