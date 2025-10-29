@@ -128,10 +128,10 @@ Výchozí kód stránky:
 
     void DalsiIterace()
     {
-        if (j > 0 /* 💻 test jestli je prvek mensi */)
+        if (j >= 0 /* 💻 test jestli je prvek mensi */)
         {
             // 💻 posun prvku v poli
-
+            
             --j;
         }
         else
