@@ -78,7 +78,7 @@ S pomocí kódu stránky níže implementuje algoritmus Insertion Sort, tak aby 
 Výchozí kód stránky:
 
 ```csharp
-@page "/template"
+@page "/insertion"
 
 <PageTitle>Sort</PageTitle>
 
@@ -89,7 +89,7 @@ Výchozí kód stránky:
         {
             <div class="fs-1 border-bottom border-primary border-3">@pole[i]</div>
         }
-        else if(i == j)
+        else if (i == j)
         {
             <div class="fs-1 border-bottom border-secondary border-3">@pole[i]</div>
         }
@@ -100,7 +100,7 @@ Výchozí kód stránky:
     }
 </div>
 
-<div class="fs-1 mb-3">minimum @pole[min_index]</div>
+<div class="fs-1 mb-3">prvek @prvek</div>
 
 <button class="btn btn-primary" @onclick="DalsiIterace">Next Iteration</button>
 
@@ -110,7 +110,7 @@ Výchozí kód stránky:
     private int[] pole = GenerujCisla(9, 9);
 
     int index;
-    int min_index;
+    int prvek;
     int j;
 
 
@@ -121,27 +121,33 @@ Výchozí kód stránky:
 
     void Inicializace()
     {
-        index = 0;
-        min_index = 0;
-        j = 0;
+        index = 1;
+        j = 1;
+        prvek = pole[index];
     }
 
     void DalsiIterace()
     {
-        if(j < pole.Length - 1)
+        if (j > 0)
         {
-            ++j;
+            --j;
 
-            // 💻
+            // 💻 posun prvku
         }
         else
         {
 
-            // 💻
+            // 💻 umisteni prvku
 
-            index = (index + 1) % (pole.Length - 1);
             j = index;
-            min_index = index;
+            ++index;
+
+            prvek = pole[index];
+
+            if (index > pole.Length - 1)
+            {
+                Inicializace();
+            }
         }
     }
 
