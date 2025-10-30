@@ -7,9 +7,13 @@
 <div class="d-flex gap-3 mb-3">
     @for (int i = 0; i < pole.Length; i++)
     {
-        if(i == j)
+        if (i == index)
         {
-            <div class="fs-1 text-primary-emphasis border-bottom border-3 pb-1">@pole[i]</div>
+            <div class="fs-1 border-bottom border-primary border-3">@pole[i]</div>
+        }
+        else if (i == j - 1)
+        {
+            <div class="fs-1 border-bottom border-secondary border-3">@pole[i]</div>
         }
         else
         {
@@ -45,8 +49,8 @@
 
     void Inicializace()
     {
-        index = 0;
-        j = index + 1;
+        index = 1;
+        j = index;
         prvek = pole[j];
     }
 
@@ -65,11 +69,11 @@
         // If we are done or prvek is greater than or equal to previous element, prepare for the next iteration
         if (j <= 0 || prvek >= pole[j - 1])
         {
-            if (index < pole.Length - 2)
+            if (index < pole.Length - 1)
             {
                 ++index;
 
-                j = index + 1;
+                j = index;
                 prvek = pole[j];
             }
             else
