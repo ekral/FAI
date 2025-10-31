@@ -32,12 +32,18 @@ struct Bod2d
         return *this;
     }
 
+    // 🚀 vytvorte operator -=
     Bod2d& operator -= (const Bod2d& other)
     {
         x -= other.x;
         y -= other.y;
 
         return *this;
+    }
+
+    friend Bod2d operator - (const Bod2d& A, const Bod2d& B)
+    {
+        return Bod2d(A.x - B.x, A.y - B.y);
     }
 };
 
@@ -121,47 +127,38 @@ Bod2d rotace(const Bod2d A, const double uhelStupne)
 }
 
 // 🚀 Zde nadefinujte Usecku
-class Usecka {
+class Usecka
+{
 public:
     Bod2d A;
     Bod2d B;
-    double stupne;
+    double uhelStupne;
 
-    Usecka(Bod2d A, Bod2d B) : A(A), B(B), stupne(0.0)
+    Usecka(Bod2d A, Bod2d B): A(A), B(B), uhelStupne(0.0)
     {
-
     }
 
-    void ZmenRotaci(double stupne) 
+    void ZmenRotaci(double novyUhel) 
     {
-        this->stupne = stupne;
+        uhelStupne = novyUhel;
     }
 
-    void Nakresli(Platno* platno)
+    void Nakresli(Platno* platno) 
     {
-        // 1) Spocitat bod stred
-        double x = A.x + ((B.x - A.x) / 2.0);
-        double y = A.y + ((B.y - A.y) / 2.0);
+        Bod2d stred((A.x + B.x) / 2, (A.y + B.y) / 2);
 
-        Bod2d S(x, y);
+        Bod2d At = A - stred;
+        Bod2d Bt = B - stred;
 
-        // 2) Odecist stred S od A a B
-        A -= S;
-        B -= S;
+        At = rotace(At, uhelStupne);
+        Bt = rotace(Bt, uhelStupne);
 
-        // 3) Zarotovat A a B podle stredu souradnic
-        Bod2d At = rotace(A, stupne);
-        Bod2d Bt = rotace(B, stupne);
-        
-        // 4) Pricist stred S k At a Bt
-        At += S;
-        Bt += S;
+        At += stred;
+        Bt += stred;
 
-        // 5) Nakreslit na platno usecku z bodu At do bodu Bt 
         platno->NakresliUsecku(At, Bt);
-    }         
+    }
 };
-    
 int main()
 {
     Platno platno(40, 20);
@@ -169,20 +166,22 @@ int main()
     const Bod2d A(10.0, 10.0);
     const Bod2d B(30.0, 10.0);
 
-    double stupne = 0.0;
+    Usecka usecka(A,B);
 
-    // 🚀 implementujte Usecku
+    double stupne = 0.0;
 
     while (true)
     {
-        Usecka usecka(A, B);
         usecka.ZmenRotaci(stupne);
 
-        stupne += 0.1;
+        stupne += 0.02;
 
         platno.Vymaz();
+
         usecka.Nakresli(&platno);
+
         gotoxy(0, 0);
+
         platno.Zobraz();
     }
 
