@@ -1,9 +1,18 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
-#include <cmath>
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include <Windows.h>
 
 using namespace std;
+
+void gotoxy(int x, int y)
+{
+    const COORD pos = { static_cast<short>(x), static_cast<short>(y) };
+    const HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleCursorPosition(output, pos);
+}
 
 struct Bod2d
 {
@@ -13,6 +22,22 @@ struct Bod2d
     Bod2d(const double x, const double y) : x(x), y(y)
     {
 
+    }
+
+    Bod2d& operator += (const Bod2d& other)
+    {
+        x += other.x;
+        y += other.y;
+
+        return *this;
+    }
+
+    Bod2d& operator -= (const Bod2d& other)
+    {
+        x -= other.x;
+        y -= other.y;
+
+        return *this;
     }
 };
 
@@ -24,7 +49,7 @@ public:
     const int sirka;
     const int vyska;
 
-    Platno(const int sirka, const int vyska) : retezec((sirka + 1) * vyska, '-'), sirka(sirka), vyska(vyska)
+    Platno(const int sirka, const int vyska) : retezec((sirka + 1)* vyska, '-'), sirka(sirka), vyska(vyska)
     {
         Vymaz();
     }
@@ -50,7 +75,7 @@ public:
         const int ix = static_cast<int>(round(x));
         const int iy = static_cast<int>(round(y));
 
-        if(ix < 0.0 || ix >= sirka || iy < 0.0 || iy >= vyska)
+        if (ix < 0.0 || ix >= sirka || iy < 0.0 || iy >= vyska)
         {
             return;
         }
@@ -95,63 +120,71 @@ Bod2d rotace(const Bod2d A, const double uhelStupne)
     return At;
 }
 
-Bod2d rotace(Bod2d A, const Bod2d S, const double uhelStupne)
-{
-    A.x -= S.x;
-    A.y -= S.y;
-
-    Bod2d At = rotace(A, uhelStupne);
-
-    At.x += S.x;
-    At.y += S.y;
-
-    return At;
-}
-
-class Usecka
-{
-private:
+// 🚀 Zde nadefinujte Usecku
+class Usecka {
+public:
     Bod2d A;
     Bod2d B;
-    Bod2d S;
+    double stupne;
 
-    double uhel;
-
-public:
-    Usecka(const Bod2d A, const Bod2d B) : A(A), B(B), S(A.x + (B.x - A.x) / 2.0, A.y + (B.y - A.y) / 2.0), uhel(0.0)
+    Usecka(Bod2d A, Bod2d B) : A(A), B(B), stupne(0.0)
     {
 
     }
 
-    void ZmenRotaci(const double uhel)
+    void ZmenRotaci(double stupne) 
     {
-        this->uhel = uhel;
-
-        A = rotace(A, S, uhel);
-        B = rotace(B, S, uhel);
+        this->stupne = stupne;
     }
 
-    void Nakresli(Platno* platno) const
+    void Nakresli(Platno* platno)
     {
-        platno->NakresliUsecku(A, B);
-    }
+        // 1) Spocitat bod stred
+        double x = A.x + ((B.x - A.x) / 2.0);
+        double y = A.y + ((B.y - A.y) / 2.0);
+
+        Bod2d S(x, y);
+
+        // 2) Odecist stred S od A a B
+        A -= S;
+        B -= S;
+
+        // 3) Zarotovat A a B podle stredu souradnic
+        Bod2d At = rotace(A, stupne);
+        Bod2d Bt = rotace(B, stupne);
+        
+        // 4) Pricist stred S k At a Bt
+        At += S;
+        Bt += S;
+
+        // 5) Nakreslit na platno usecku z bodu At do bodu Bt 
+        platno->NakresliUsecku(At, Bt);
+    }         
 };
-
+    
 int main()
 {
     Platno platno(40, 20);
 
-    platno.Vymaz();
-
     const Bod2d A(10.0, 10.0);
     const Bod2d B(30.0, 10.0);
 
-    Usecka usecka(A,B);
-    usecka.ZmenRotaci(1.0);
+    double stupne = 0.0;
 
-    usecka.Nakresli(&platno);
+    // 🚀 implementujte Usecku
 
-    platno.Zobraz();
+    while (true)
+    {
+        Usecka usecka(A, B);
+        usecka.ZmenRotaci(stupne);
+
+        stupne += 0.1;
+
+        platno.Vymaz();
+        usecka.Nakresli(&platno);
+        gotoxy(0, 0);
+        platno.Zobraz();
+    }
 
     return 0;
 }
