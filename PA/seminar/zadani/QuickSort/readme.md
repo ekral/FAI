@@ -109,9 +109,9 @@ S pomocí kódu stránky níže implementuje algoritmus QuickSort, tak aby se na
 Výchozí kód stránky:
 
 ```csharp
-@page "/lomuto"
+@page "/quick"
 
-<PageTitle>Lomuto Partitioning</PageTitle>
+<PageTitle>Quick Sort</PageTitle>
 
 <div class="d-flex gap-3 mb-3">
     @for (int i = 0; i < pole.Length; i++)
@@ -137,15 +137,38 @@ Výchozí kód stránky:
 
 <button class="btn btn-primary" @onclick="DalsiIterace">Next Iteration</button>
 
+<div class="fs-1 mb-3">
+    @foreach(var partition in partitions)
+    {
+        <div class="fs-1">@partition.low : @partition.high</div>
+    }
+</div>
+
 @code {
-  
+    class Partition
+    {
+        public int low;
+        public int high;
+
+        public Partition(int low, int high)
+        {
+            this.low = low;
+            this.high = high;
+        }
+    }
+
+    Queue<Partition> partitions = [];
+
     int low;
     int high;
     int pivot;
     int j;
     int i;
 
-    private int[] pole = ReservoarSampling.Generate(9, 9);
+    DataItem[] Data => pole.Select((x, i) => new DataItem((i == j) ? $">{i + 1}<" : $"{i + 1}", x)).ToArray();
+
+    private int[] pole = ReservoarSampling.Generate(20, 20);
+
 
     protected override void OnInitialized()
     {
@@ -163,18 +186,38 @@ Výchozí kód stránky:
 
     void DalsiIterace()
     {
-        if (j < high)
+        // Lomuto partitioning
+
+        if (j <= high - 1)
         {
-           
-            // 💻
+            if (pole[j] <= pivot)
+            {
+                int tmp = pole[i];
+                pole[i] = pole[j];
+                pole[j] = tmp;
+
+                ++i;
+            }
 
             ++j;
         }
         else
         {
-            // 💻
+            int tmp = pole[i];
+            pole[i] = pole[j];
+            pole[j] = tmp;
 
-            Inicializace();
+            // 💻 Vytvorit dve nove partition a pridat je do fronty
+
+            if (partitions.Count > 0)
+            {
+                // 💻 Vybrat z fronty prvni partition a nastavit podle ni hodnoty
+            }
+            else
+            {
+                Inicializace();
+            }
+
         }
     }
 }

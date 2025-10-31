@@ -1,46 +1,63 @@
 ﻿@page "/template"
 
-<PageTitle>Insertion Sort</PageTitle>
+<PageTitle>Quick Sort</PageTitle>
 
 <div class="d-flex gap-3 mb-3">
     @for (int i = 0; i < pole.Length; i++)
     {
-        if (i == index)
+        string textColor = (i >= low && i <= high) ? "text-primary" : "text-secondary";
+
+        if (i == this.i)
         {
-            <div class="fs-1 border-bottom border-primary border-3">@pole[i]</div>
+            <div class="fs-1 @textColor border-bottom border-primary border-3">@pole[i]</div>
         }
-        else if (i == j)
+        else if (i == this.j)
         {
-            <div class="fs-1 border-bottom border-secondary border-3">@pole[i]</div>
+            <div class="fs-1 @textColor border-bottom border-secondary border-3">@pole[i]</div>
         }
         else
         {
-            <div class="fs-1">@pole[i]</div>
+            <div class="fs-1 @textColor">@pole[i]</div>
         }
     }
 </div>
 
-<div class="fs-1 mb-3">prvek @prvek</div>
+<div class="fs-1 mb-3">pivot @pivot</div>
 
 <button class="btn btn-primary" @onclick="DalsiIterace">Next Iteration</button>
 
-<div class="rz-p-0 rz-p-md-12">
-    <RadzenChart>
-        <RadzenColumnSeries Data="@Data" CategoryProperty="Caption" ValueProperty="Data">
-            <RadzenSeriesDataLabels Visible="true" />
-        </RadzenColumnSeries>
-        <RadzenLegend Visible="false" />
-    </RadzenChart>
+<div class="fs-1 mb-3">
+    @foreach(var partition in partitions)
+    {
+        <div class="fs-1">@partition.low : @partition.high</div>
+    }
 </div>
 
 @code {
+    class Partition
+    {
+        public int low;
+        public int high;
+
+        public Partition(int low, int high)
+        {
+            this.low = low;
+            this.high = high;
+        }
+    }
+
+    Queue<Partition> partitions = [];
+
+    int low;
+    int high;
+    int pivot;
+    int j;
+    int i;
+
     DataItem[] Data => pole.Select((x, i) => new DataItem((i == j) ? $">{i + 1}<" : $"{i + 1}", x)).ToArray();
 
-    private int[] pole = ReservoarSampling.Generate(9, 9);
+    private int[] pole = ReservoarSampling.Generate(20, 20);
 
-    int index;
-    int j;
-    int prvek;
 
     protected override void OnInitialized()
     {
@@ -49,34 +66,47 @@
 
     void Inicializace()
     {
-        index = 1;
-        j = 1;
-        prvek = pole[j];
+        low = 0;
+        high = pole.Length - 1;
+        pivot = pole[high];
+        i = 0;
+        j = 0;
     }
 
     void DalsiIterace()
     {
+        // Lomuto partitioning
 
-        if ((j > 0) /* 💻 test jestli je prvek mensi */)
+        if (j <= high - 1)
         {
+            if (pole[j] <= pivot)
+            {
+                int tmp = pole[i];
+                pole[i] = pole[j];
+                pole[j] = tmp;
 
-            // 💻 posun prvku v poli
+                ++i;
+            }
 
-            j--;
+            ++j;
         }
         else
         {
-            // 💻 umisteni prvku
+            int tmp = pole[i];
+            pole[i] = pole[j];
+            pole[j] = tmp;
 
-            ++index;
+            // 💻 Vytvorit dve nove partition a pridat je do fronty
 
-            if (index >= pole.Length)
+            if (partitions.Count > 0)
             {
-                index = 1;
+                // 💻 Vybrat z fronty prvni partition a nastavit podle ni hodnoty
             }
-      
-            j = index;
-            prvek = pole[j];
+            else
+            {
+                Inicializace();
+            }
+
         }
     }
 }
