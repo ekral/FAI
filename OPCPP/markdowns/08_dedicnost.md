@@ -17,9 +17,10 @@ Třída, která dědí je (synonyma):
 - Podtřída (subclass).
 
 Říkáme, že odvozená třída dědí od základní třídy. Ale také můžeme říct:
-- Odvozená třída je specializací  (Specialization) základní třídy.
-- Základní třída je zobecněním (Generalization) odvozené třídy.
-- Odvozená třída rozšířuje (Extends) základní třídu.
+- Odvozená třída je **specializací**  (Specialization) základní třídy.
+- Základní třída je **zobecněním** (Generalization) odvozené třídy.
+- Odvozená třída **rozšířuje** (Extends) základní třídu.
+- Odvozená třída **je (IS A)** základní třída. Například Student **je** osoba.
 
 V následujícím příkladu máme rodičovskou třídu Osoba. Od třídy osoba potom dědí dva potomci, třídy `Student` a `Ucitel`. Součástí tříd `Student` a `Ucitel` se stane kód třídy `Osoba`.
 

@@ -84,7 +84,7 @@ Výchozí kód stránky:
 ```csharp
 @page "/template"
 
-<PageTitle>Sort</PageTitle>
+<PageTitle>Selection Sort</PageTitle>
 
 <div class="d-flex gap-3 mb-3">
     @for (int i = 0; i < pole.Length; i++)
