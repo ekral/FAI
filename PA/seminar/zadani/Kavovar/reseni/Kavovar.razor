@@ -1,0 +1,83 @@
+@page "/counter"
+
+<PageTitle>Automat na kávu</PageTitle>
+
+<h1>Automat na kávu</h1>
+
+<p role="status">Stav vody: @kavovar.stavVody ml</p>
+<p role="status">Stav kávy: @kavovar.stavKavy mg</p>
+
+@if (@kavovar.ok)
+{
+    <p role="status">Status: @kavovar.message</p>
+}
+else
+{
+    <p class="text-danger" role="status">Status: @kavovar.message</p>
+}
+
+<button class="btn btn-primary" @onclick="UvarKavu">Uvař kávu</button>
+<button class="btn btn-secondary" @onclick="DoplnVodu">Doplň vodu</button>
+<button class="btn btn-secondary" @onclick="DoplnKavu">Doplň kávu</button>
+
+@code {
+    class Kavovar
+    {
+        private const int davkaVody = 200;
+        private const int davkaKavy = 15;
+        public int stavVody = 1000; // ml
+        public int stavKavy = 200;  // g
+        public string message = string.Empty;
+        public bool ok = true;
+
+        public void UvarKavu()
+        {
+            if(stavVody < davkaVody)
+            {
+                message = "Malo vody";
+                ok = false;
+
+                return;
+            }
+
+            if(stavKavy < davkaKavy)
+            {
+                message = "Malo kavy";
+                ok = false;
+
+                return;
+            }
+
+            message = "Kava uvarena";
+
+            stavVody -= davkaVody;
+            stavKavy -= davkaKavy;
+
+            ok = true;
+        }
+
+        void PridejVodu(int mnozstvi)
+        {
+            
+        }
+    }
+
+    Kavovar kavovar = new Kavovar();
+
+    private void UvarKavu()
+    {
+        kavovar.UvarKavu();
+    }
+
+    private void DoplnVodu()
+    {
+        // TODO osetrit maximalni stav vody
+        kavovar.stavVody += 1000; // priste zapouzdrime
+    }
+
+    private void DoplnKavu()
+    {
+        // TODO osetrit maximalni hmotnost kavy
+        kavovar.stavKavy += 200; // priste zapouzdrime
+    }
+}
