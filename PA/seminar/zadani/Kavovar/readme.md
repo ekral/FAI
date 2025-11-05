@@ -4,7 +4,7 @@
 
 Máte kávovar který má zásobník na vodu a na kávu. Pokaždé, když dáme uvařit kávu, tak ze zásobníku ubude voda a káva dle zadaných konstant. 
 
-Program bude zobrazovat stav vody, stav kávy a zprávu zda byla káva uvařena, nebo jinou barvou že došla voda respektive káva.
+Program bude zobrazovat počet uvařených káv, stav vody, stav kávy a zprávu zda byla káva uvařena, nebo jinou barvou že došla voda respektive káva.
 
 ## 🚀 Úkoly
 
