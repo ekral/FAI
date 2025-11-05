@@ -1,4 +1,4 @@
-# Úkol kávovar
+# Kávovar
 
 Máte kávovar který má zásobník na vodu a na kávu. Pokaždé, když dáme uvařit kávu, tak ze zásobníku ubude voda a káva dle zadaných konstant. 
 
