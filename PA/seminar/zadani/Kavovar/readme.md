@@ -38,7 +38,6 @@ else
 
 @code {
 
-
     class Kavovar
     {
         private const int davkaVody = 200;
