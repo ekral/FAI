@@ -1,9 +1,10 @@
-@page "/counter"
+@page "/kavovar"
 
 <PageTitle>Automat na kávu</PageTitle>
 
 <h1>Automat na kávu</h1>
 
+<p role="status">Počet káv: @kavovar.pocet</p>
 <p role="status">Stav vody: @kavovar.stavVody ml</p>
 <p role="status">Stav kávy: @kavovar.stavKavy mg</p>
 
@@ -17,14 +18,15 @@ else
 }
 
 <button class="btn btn-primary" @onclick="UvarKavu">Uvař kávu</button>
-<button class="btn btn-secondary" @onclick="DoplnVodu">Doplň vodu</button>
-<button class="btn btn-secondary" @onclick="DoplnKavu">Doplň kávu</button>
+<button class="btn btn-success" @onclick="DoplnVodu">Doplň vodu</button>
+<button class="btn btn-success" @onclick="DoplnKavu">Doplň kávu</button>
 
 @code {
     class Kavovar
     {
         private const int davkaVody = 200;
         private const int davkaKavy = 15;
+        public int pocet = 0;
         public int stavVody = 1000; // ml
         public int stavKavy = 200;  // g
         public string message = string.Empty;
@@ -32,7 +34,7 @@ else
 
         public void UvarKavu()
         {
-            if(stavVody < davkaVody)
+            if (stavVody < davkaVody)
             {
                 message = "Malo vody";
                 ok = false;
@@ -40,7 +42,7 @@ else
                 return;
             }
 
-            if(stavKavy < davkaKavy)
+            if (stavKavy < davkaKavy)
             {
                 message = "Malo kavy";
                 ok = false;
@@ -53,12 +55,23 @@ else
             stavVody -= davkaVody;
             stavKavy -= davkaKavy;
 
+            ++pocet;
+
             ok = true;
         }
 
-        void PridejVodu(int mnozstvi)
+        public void DoplnVodu(int mnozstvi)
         {
-            
+            stavVody += mnozstvi;
+
+            // TODO osetrit maximalni stav vody
+        }
+
+        public void DoplnKavu(int mnozstvi)
+        {
+            stavKavy += mnozstvi;
+
+            // TODO osetrit maximalni stav kavy
         }
     }
 
@@ -71,13 +84,13 @@ else
 
     private void DoplnVodu()
     {
-        // TODO osetrit maximalni stav vody
-        kavovar.stavVody += 1000; // priste zapouzdrime
+        
+        kavovar.DoplnVodu(1000); 
     }
 
     private void DoplnKavu()
     {
         // TODO osetrit maximalni hmotnost kavy
-        kavovar.stavKavy += 200; // priste zapouzdrime
+        kavovar.DoplnKavu(200);
     }
 }
