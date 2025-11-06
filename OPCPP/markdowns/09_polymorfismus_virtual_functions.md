@@ -6,7 +6,7 @@
 
 ## Polymorfismus
 
-Polymorfismem (mnohotvarost) rozumíme statický polymorfismus jako přetěžování metod, přetěžování operátorů a dynamický polyformismus, kdy chceme za běhu programu nahrazazovat objekt jiným kompatibilním objektem. Runtime čistě objektového jazyka smalltalk dokonce umožnoval pozastavit běžící program u zákazníka, vyměnit aktuální objekt za jiný, zaktualizovat reference a pokračovat v programu ve stejném stavu v jakém jsme ho přerušili.
+Polymorfismem (mnohotvarost) rozumíme statický polymorfismus jako přetěžování metod, přetěžování operátorů a dynamický polyformismus, kdy chceme za běhu programu nahrazovat objekt jiným kompatibilním objektem. Runtime čistě objektového jazyka smalltalk dokonce umožnoval pozastavit běžící program u zákazníka, vyměnit aktuální objekt za jiný, zaktualizovat reference a pokračovat v programu ve stejném stavu v jakém jsme ho přerušili.
 
 ### Polymorfismus a statická typová kontrola
 
