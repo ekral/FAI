@@ -20,9 +20,18 @@ $$\begin{align*}
 #include <iostream>
 #include <string>
 #include <algorithm>
-#include <cmath>
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include <Windows.h>
 
 using namespace std;
+
+void gotoxy(int x, int y)
+{
+    const COORD pos = { static_cast<short>(x), static_cast<short>(y) };
+    const HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleCursorPosition(output, pos);
+}
 
 struct Bod2d
 {
@@ -32,6 +41,28 @@ struct Bod2d
     Bod2d(const double x, const double y) : x(x), y(y)
     {
 
+    }
+
+    Bod2d& operator += (const Bod2d& other)
+    {
+        x += other.x;
+        y += other.y;
+
+        return *this;
+    }
+
+    // 🚀 vytvorte operator -=
+    Bod2d& operator -= (const Bod2d& other)
+    {
+        x -= other.x;
+        y -= other.y;
+
+        return *this;
+    }
+
+    friend Bod2d operator - (const Bod2d& A, const Bod2d& B)
+    {
+        return Bod2d(A.x - B.x, A.y - B.y);
     }
 };
 
@@ -43,7 +74,7 @@ public:
     const int sirka;
     const int vyska;
 
-    Platno(const int sirka, const int vyska) : retezec((sirka + 1) * vyska, '-'), sirka(sirka), vyska(vyska)
+    Platno(const int sirka, const int vyska) : retezec((sirka + 1)* vyska, '-'), sirka(sirka), vyska(vyska)
     {
         Vymaz();
     }
@@ -69,7 +100,7 @@ public:
         const int ix = static_cast<int>(round(x));
         const int iy = static_cast<int>(round(y));
 
-        if(ix < 0.0 || ix >= sirka || iy < 0.0 || iy >= vyska)
+        if (ix < 0.0 || ix >= sirka || iy < 0.0 || iy >= vyska)
         {
             return;
         }
@@ -114,23 +145,66 @@ Bod2d rotace(const Bod2d A, const double uhelStupne)
     return At;
 }
 
-//🚀 zde nadefinujte Trojuhelnik
+// 🚀 Zde nadefinujte Usecku
+class Usecka
+{
+public:
+    Bod2d A;
+    Bod2d B;
+    double uhelStupne;
 
+    Usecka(Bod2d A, Bod2d B): A(A), B(B), uhelStupne(0.0)
+    {
+    }
+
+    void ZmenRotaci(double novyUhel) 
+    {
+        uhelStupne = novyUhel;
+    }
+
+    void Nakresli(Platno* platno) 
+    {
+        Bod2d stred((A.x + B.x) / 2, (A.y + B.y) / 2);
+
+        Bod2d At = A - stred;
+        Bod2d Bt = B - stred;
+
+        At = rotace(At, uhelStupne);
+        Bt = rotace(Bt, uhelStupne);
+
+        At += stred;
+        Bt += stred;
+
+        platno->NakresliUsecku(At, Bt);
+    }
+};
 int main()
 {
     Platno platno(40, 20);
 
-    platno.Vymaz();
+    const Bod2d A(10.0, 10.0);
+    const Bod2d B(30.0, 10.0);
 
-    Bod2d S(19, 9);
+    Usecka usecka(A,B);
 
-    // 🚀 Implementujte
-    // RovnostrannyTrojuhelnik trojuhelnik(S, 10.0 );
-    // trojuhelnik.ZmenRotaci(15.0);
-    // trojuhelnik.Nakresli(&platno);
+    double stupne = 0.0;
 
-    platno.Zobraz();
+    while (true)
+    {
+        usecka.ZmenRotaci(stupne);
+
+        stupne += 0.02;
+
+        platno.Vymaz();
+
+        usecka.Nakresli(&platno);
+
+        gotoxy(0, 0);
+
+        platno.Zobraz();
+    }
 
     return 0;
 }
 ```
+
