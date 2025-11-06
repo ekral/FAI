@@ -1,9 +1,19 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
-#include <cmath>
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include <Windows.h>
+#include <vector>
 
 using namespace std;
+
+void gotoxy(int x, int y)
+{
+    const COORD pos = { static_cast<short>(x), static_cast<short>(y) };
+    const HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleCursorPosition(output, pos);
+}
 
 struct Bod2d
 {
@@ -13,6 +23,27 @@ struct Bod2d
     Bod2d(const double x, const double y) : x(x), y(y)
     {
 
+    }
+
+    Bod2d& operator += (const Bod2d& other)
+    {
+        x += other.x;
+        y += other.y;
+
+        return *this;
+    }
+
+    Bod2d& operator -= (const Bod2d& other)
+    {
+        x -= other.x;
+        y -= other.y;
+
+        return *this;
+    }
+
+    friend Bod2d operator - (const Bod2d& A, const Bod2d& B)
+    {
+        return Bod2d(A.x - B.x, A.y - B.y);
     }
 };
 
@@ -24,7 +55,7 @@ public:
     const int sirka;
     const int vyska;
 
-    Platno(const int sirka, const int vyska) : retezec((sirka + 1) * vyska, '-'), sirka(sirka), vyska(vyska)
+    Platno(const int sirka, const int vyska) : retezec((sirka + 1)* vyska, '-'), sirka(sirka), vyska(vyska)
     {
         Vymaz();
     }
@@ -50,7 +81,7 @@ public:
         const int ix = static_cast<int>(round(x));
         const int iy = static_cast<int>(round(y));
 
-        if(ix < 0.0 || ix >= sirka || iy < 0.0 || iy >= vyska)
+        if (ix < 0.0 || ix >= sirka || iy < 0.0 || iy >= vyska)
         {
             return;
         }
@@ -95,53 +126,79 @@ Bod2d rotace(const Bod2d A, const double uhelStupne)
     return At;
 }
 
-Bod2d rotace(Bod2d A, const Bod2d S, const double uhelStupne)
+class GrafickyObjekt
 {
-    A.x -= S.x;
-    A.y -= S.y;
+public:
+    Bod2d S;
+    double uhelStupne;
 
-    Bod2d At = rotace(A, uhelStupne);
+    GrafickyObjekt(Bod2d S, double uhelStupne) : S(S), uhelStupne(uhelStupne)
+    {
 
-    At.x += S.x;
-    At.y += S.y;
+    }
 
-    return At;
-}
+    void ZmenRotaci(double novyUhel)
+    {
+        uhelStupne = novyUhel;
+    }
 
-class RovnostrannyTrojuhelnik
+    virtual void Nakresli(Platno* platno) = 0 ;
+};
+
+class Usecka : public GrafickyObjekt
+{
+public:
+    double delka;
+
+    Usecka(Bod2d S, double delka) : GrafickyObjekt(S, 0.0), delka(delka)
+    {
+    }
+
+    void Nakresli(Platno* platno) override
+    {
+        Bod2d A(S.x - delka/2, S.y);
+        Bod2d B(S.x + delka / 2, S.y);
+
+        Bod2d At = A - S;
+        Bod2d Bt = B - S;
+
+        At = rotace(At, uhelStupne);
+        Bt = rotace(Bt, uhelStupne);
+
+        At += S;
+        Bt += S;
+
+        platno->NakresliUsecku(At, Bt);
+    }
+};
+
+class RovnostrannyTrojuhelnik : public GrafickyObjekt
 {
 private:
-    Bod2d S;
     double a;
 
-    Bod2d A;
-    Bod2d B;
-    Bod2d C;
-
-    double uhel;
-
 public:
-    RovnostrannyTrojuhelnik(const Bod2d S, const double a) :
-        S(S),
-        a(a),
-        A(S.x - a / 2, S.y - sqrt(3.0) * a / 6),
-        B(S.x + a / 2, S.y - sqrt(3.0) * a / 6),
-        C(S.x, S.y + sqrt(3.0) * a / 3),
-        uhel(0.0)
+    RovnostrannyTrojuhelnik(const Bod2d S, const double a) : GrafickyObjekt(S, 0.0), a(a)
     {
-
     }
 
-    void ZmenRotaci(const double uhel)
+    void Nakresli(Platno* platno) override
     {
-        this->uhel = uhel;
-    }
+        Bod2d A(S.x - a / 2, S.y - sqrt(3.0) * a / 6);
+        Bod2d B(S.x + a / 2, S.y - sqrt(3.0) * a / 6);
+        Bod2d C(S.x, S.y + sqrt(3.0) * a / 3);
 
-    void Nakresli(Platno* platno) const
-    {
-        const Bod2d At = rotace(A, S, uhel);
-        const Bod2d Bt = rotace(B, S, uhel);
-        const Bod2d Ct = rotace(C, S, uhel);
+        Bod2d At = A - S;
+        Bod2d Bt = B - S;
+        Bod2d Ct = C - S;
+
+        At = rotace(At, uhelStupne);
+        Bt = rotace(Bt, uhelStupne);
+        Ct = rotace(Ct, uhelStupne);
+
+        At += S;
+        Bt += S;
+        Ct += S;
 
         platno->NakresliUsecku(At, Bt);
         platno->NakresliUsecku(Bt, Ct);
@@ -153,17 +210,37 @@ int main()
 {
     Platno platno(40, 20);
 
-    platno.Vymaz();
+    Bod2d stred(12.0, 10.0);
+    double delkaStrany = 10.0;
 
-    Bod2d S(19, 9);
+    RovnostrannyTrojuhelnik trojuhelnik(stred, delkaStrany);
 
-    RovnostrannyTrojuhelnik trojuhelnik(S, 10.0 );
+    Usecka usecka(Bod2d(28.0, 10.0), 10.0);
 
-    trojuhelnik.ZmenRotaci(15.0);
+    double stupne = 0.0;
 
-    trojuhelnik.Nakresli(&platno);
+    vector<GrafickyObjekt*> objekty = {&trojuhelnik, &usecka};
 
-    platno.Zobraz();
+    while (true)
+    {
+        for (GrafickyObjekt* objekt : objekty)
+        {
+            objekt->ZmenRotaci(stupne);
+        }
+
+        stupne += 0.02;
+
+        platno.Vymaz();
+
+        for (GrafickyObjekt* objekt : objekty)
+        {
+            objekt->Nakresli(&platno);
+        }
+
+        gotoxy(0, 0);
+
+        platno.Zobraz();
+    }
 
     return 0;
 }
