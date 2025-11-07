@@ -1,10 +1,18 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
-#include <cmath>
-#include <windows.h>
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include <Windows.h>
 
 using namespace std;
+
+void gotoxy(int x, int y)
+{
+    const COORD pos = { static_cast<short>(x), static_cast<short>(y) };
+    const HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleCursorPosition(output, pos);
+}
 
 struct Bod2d
 {
@@ -14,6 +22,33 @@ struct Bod2d
     Bod2d(const double x, const double y) : x(x), y(y)
     {
 
+    }
+
+    Bod2d& operator += (const Bod2d& other)
+    {
+        x += other.x;
+        y += other.y;
+
+        return *this;
+    }
+
+    // 🚀 vytvorte operator -=
+    Bod2d& operator -= (const Bod2d& other)
+    {
+        x -= other.x;
+        y -= other.y;
+
+        return *this;
+    }
+
+    friend Bod2d operator - (const Bod2d& A, const Bod2d& B)
+    {
+        return Bod2d(A.x - B.x, A.y - B.y);
+    }
+
+    friend Bod2d operator + (const Bod2d& A, const Bod2d& B)
+    {
+        return Bod2d(A.x + B.x, A.y + B.y);
     }
 };
 
@@ -25,7 +60,7 @@ public:
     const int sirka;
     const int vyska;
 
-    Platno(const int sirka, const int vyska) : retezec((sirka + 1) * vyska, '-'), sirka(sirka), vyska(vyska)
+    Platno(const int sirka, const int vyska) : retezec((sirka + 1)* vyska, '-'), sirka(sirka), vyska(vyska)
     {
         Vymaz();
     }
@@ -48,13 +83,13 @@ public:
 
     void NakresliBod(const double x, const double y)
     {
-        if(x < 0.0 || x >= sirka || y < 0.0 || y >= vyska)
+        const int ix = static_cast<int>(round(x));
+        const int iy = static_cast<int>(round(y));
+
+        if (ix < 0.0 || ix >= sirka || iy < 0.0 || iy >= vyska)
         {
             return;
         }
-
-        const int ix = static_cast<int>(round(x));
-        const int iy = static_cast<int>(round(y));
 
         const int pos = (vyska - iy - 1) * (sirka + 1) + ix;
 
@@ -96,53 +131,72 @@ Bod2d rotace(const Bod2d A, const double uhelStupne)
     return At;
 }
 
-Bod2d rotace(Bod2d A, const Bod2d S, const double uhelStupne)
+// 🚀 Přepracujte úsečku
+// Tak že zadáme souřadnici středu úsečky, délku úsečky
+// a výchozí úhel bude 0.0
+
+class Usecka
 {
-    A.x -= S.x;
-    A.y -= S.y;
+public:
+    Bod2d S;
+    double delka;
+    double uhelStupne;
 
-    Bod2d At = rotace(A, uhelStupne);
+    Usecka(Bod2d S, double delka) : S(S), delka(delka), uhelStupne(0.0)
+    {
+    }
 
-    At.x += S.x;
-    At.y += S.y;
+    void ZmenRotaci(double novyUhel)
+    {
+        uhelStupne = novyUhel;
+    }
 
-    return At;
-}
+    void Nakresli(Platno* platno)
+    {
+        Bod2d A (S.x - delka / 2, S.y);
+        Bod2d B(S.x + delka / 2, S.y);
+
+        Bod2d At = A - S;
+        Bod2d Bt = B - S;
+
+        At = rotace(At, uhelStupne);
+        Bt = rotace(Bt, uhelStupne);
+
+        At += S;
+        Bt += S;
+
+        platno->NakresliUsecku(At, Bt);
+    }
+};
+
+// 1. Přepracujte trojuhelník aby rotoval obdobným způsobem jako Usecka.
+// Poznámka: úsečka i trojúhleník budou rotovat různou rychlostí i směrem
 
 class RovnostrannyTrojuhelnik
 {
 private:
     Bod2d S;
     double a;
-
-    Bod2d A;
-    Bod2d B;
-    Bod2d C;
-
-    double uhel;
-
+    double uhel_rotace;
 public:
-    RovnostrannyTrojuhelnik(const Bod2d S, const double a) :
-        S(S),
-        a(a),
-        A(S.x - a / 2, S.y - sqrt(3.0) * a / 6),
-        B(S.x + a / 2, S.y - sqrt(3.0) * a / 6),
-        C(S.x, S.y + sqrt(3.0) * a / 3),
-        uhel(0.0)
+    RovnostrannyTrojuhelnik(const Bod2d S, const double a) : S(S), a(a), uhel_rotace(0.0)
     {
-
     }
 
-    void ZmenRotaci(const double uhel)
+    void ZmenRotaci(double novyUhel)
     {
-        this->uhel = uhel;
+        uhel_rotace = novyUhel;
     }
 
     void Nakresli(Platno* platno) const
     {
-        const Bod2d At = rotace(A, S, uhel);
-        const Bod2d Bt = rotace(B, S, uhel);
-        const Bod2d Ct = rotace(C, S, uhel);
+        Bod2d A(S.x - a / 2, S.y - sqrt(3.0) * a / 6);
+        Bod2d B(S.x + a / 2, S.y - sqrt(3.0) * a / 6);
+        Bod2d C(S.x, S.y + sqrt(3.0) * a / 3);
+
+        Bod2d At = rotace(A - S, uhel_rotace) + S;
+        Bod2d Bt = rotace(B - S, uhel_rotace) + S;
+        Bod2d Ct = rotace(C - S, uhel_rotace) + S;
 
         platno->NakresliUsecku(At, Bt);
         platno->NakresliUsecku(Bt, Ct);
@@ -150,37 +204,36 @@ public:
     }
 };
 
-void gotoxy(int x, int y)
-{
-    const COORD pos = {static_cast<short>(x), static_cast<short>(y)};
-    const HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleCursorPosition(output, pos);
-}
 
 int main()
 {
-    // Kod pouze pro Windows
-    // ⚡️ V Clionu dejte EditConfigurations -> Run in external console
-
     Platno platno(40, 20);
-    double uhel = 0.0;
 
-    for (int i = 1; i <= 10000; i++)
+    Bod2d S(20.0, 10.0);
+
+    Usecka usecka(S, 5.0);
+    // Definujte trojuhelnik a v cyklu while ho zarotujte
+    RovnostrannyTrojuhelnik trojuhelnik(Bod2d(10.0,5.0), 8.0);
+    double stupne = 0.0;
+    double stupne_op = 0.0;
+    while (true)
     {
+        trojuhelnik.ZmenRotaci(stupne_op);
+        usecka.ZmenRotaci(stupne);
+
+        stupne += 0.02;
+        stupne_op -= 0.1;
+
+        
+
         platno.Vymaz();
 
-        const Bod2d S(19, 9);
-
-        RovnostrannyTrojuhelnik trojuhelnik(S, 10.0 );
-
-        trojuhelnik.ZmenRotaci(uhel);
-
         trojuhelnik.Nakresli(&platno);
+        usecka.Nakresli(&platno);
 
         gotoxy(0, 0);
-        platno.Zobraz();
 
-        uhel += 0.1;
+        platno.Zobraz();
     }
 
     return 0;
