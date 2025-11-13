@@ -15,8 +15,7 @@ Cílem úkolu je pochopit a implementovat použití operátorů `new` a `delete`
 
 2. **Dynamická alokace**:
    - Vytvořte program, který:
-     - Požádá uživatele o vstup jména a věku studenta.
-     - Pomocí operátoru `new` vytvoří instanci třídy `Student` a inicializuje ji zadanými hodnotami.
+     - Požádá uživatele o vstup jména a věku studenta. Pomocí operátoru `new` vytvoří instanci třídy `Student` a inicializuje ji zadanými hodnotami.
      - Vypíše informace o studentovi (jméno a věk).
    
 3. **Uvolnění paměti**:
@@ -53,3 +52,4 @@ int main()
 - Kód je přehledný a dobře strukturovaný.
 - Zpracování vstupu od uživatele.
 - Správná správa paměti a zabránění memory leaks.
+
