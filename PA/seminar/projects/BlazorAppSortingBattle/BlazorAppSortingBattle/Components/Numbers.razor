@@ -1,25 +1,36 @@
-﻿<h3>Numbers</h3>
-
-<div class="d-flex gap-3 mb-3">
+﻿<div class="d-flex gap-3 mb-3">
     @for (int i = 0; i < Array.Length; i++)
     {
+        string textColor = "text-primary";
+
         if(IsSorted)
         {
-            <div class="fs-1 text-success">@Array[i]</div>
+            textColor = "text-success";
         }
-        else if (i == FirstPosition)
+        else if (i >= HighlightFrom && i <= HighlightTo)
         {
-            <div class="fs-1 border-bottom border-primary border-3">@Array[i]</div>
+            textColor = "text-secondary";
+        }
+
+        if (i == FirstPosition)
+        {
+            <div class="fs-1 @textColor border-bottom border-primary border-3">@Array[i]</div>
         }
         else if (i == SecondPosition)
         {
-            <div class="fs-1 border-bottom border-secondary border-3">@Array[i]</div>
+            <div class="fs-1 @textColor border-bottom border-secondary border-3">@Array[i]</div>
         }
         else
         {
-            <div class="fs-1">@Array[i]</div>
+            <div class="fs-1 @textColor">@Array[i]</div>
         }
     }
+
+    @if (IsSorted)
+    {
+        <div>✅</div>
+    }
+
 </div>
 
 @code {
@@ -34,4 +45,12 @@
 
     [Parameter]
     public int SecondPosition { get; set; }
+
+    [Parameter]
+    public int HighlightFrom { get; set; }
+
+    [Parameter]
+    public int HighlightTo { get; set; }
+
+
 }

@@ -4,7 +4,13 @@
 
 <h1>Battle</h1>
 
-<Numbers Array="bubbleSort.Array" IsSorted="bubbleSort.IsSorted" FirstPosition="bubbleSort.CurrentIndex" SecondPosition="@(bubbleSort.CurrentIndex + 1)"  />
+<Numbers Array="bubbleSort.Array" 
+         IsSorted="bubbleSort.IsSorted" 
+         FirstPosition="bubbleSort.CurrentIndex" 
+         SecondPosition="@(bubbleSort.CurrentIndex + 1)"
+         HighlightFrom="bubbleSort.Array.Length - bubbleSort.SortedCount"
+         HighlightTo="bubbleSort.Array.Length"/>
+
 
 <button class="btn btn-primary" @onclick="NextIteration">Next Iteration</button>
 
