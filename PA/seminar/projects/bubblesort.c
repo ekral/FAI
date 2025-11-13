@@ -64,7 +64,6 @@ namespace BlazorAppSortingBattle.Algorithms
         /// Performs one step of bubble sort on the array.
         /// </summary>
         /// <param name="array">The array to perform one iteration on.</param>
-        /// <returns>True if the sorting is complete; otherwise, false.</returns>
         public void NextIteration(int[] array)
         {
             if(IsSorted)
