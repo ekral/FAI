@@ -1,0 +1,20 @@
+﻿@page "/counter"
+
+<PageTitle>Battle</PageTitle>
+
+<h1>Battle</h1>
+
+<Numbers Array="array" FirstPosition="bubbleSort.CurrentIndex" SecondPosition="@(bubbleSort.CurrentIndex + 1)"  />
+
+<button class="btn btn-primary" @onclick="NextIteration">Next Iteration</button>
+
+@code {
+    private int[] array = Tools.GenerateNumbers(9, 9);
+
+    private BubbleSort bubbleSort = new BubbleSort();
+
+    private void NextIteration()
+    {
+        bubbleSort.NextIteration(array);
+    }
+}
