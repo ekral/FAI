@@ -7,6 +7,8 @@
     /// </summary>
     public class BubbleSort
     {
+        public int[] Array { get; private set; }
+
         /// <summary>
         /// Gets a value indicating whether the array is fully sorted.
         /// </summary>
@@ -32,18 +34,26 @@
         public BubbleSort()
         {
             // Initialize the state when the object is created.
-            Reset();
+            Reset([]);
         }
 
         /// <summary>
         /// Resets the internal state to begin sorting a new or modified array from scratch.
         /// </summary>
-        public void Reset()
+        public void Reset(int[] array)
         {
+            Array = array;
             CurrentIndex = 0;
             SortedCount = 0;
             IsSorted = false;
             swappedInPass = false;
+
+            // 2. Handle trivial case: array with less than 2 elements is always sorted.
+
+            if (Array.Length < 2)
+            {
+                IsSorted = true;
+            }
         }
 
         /// <summary>
@@ -51,7 +61,7 @@
         /// </summary>
         /// <param name="array">The array to perform one iteration on.</param>
         /// <returns>True if more iterations are required; False if the array is fully sorted.</returns>
-        public bool NextIteration(int[] array)
+        public bool NextIteration()
         {
             // 1. Check if sorting is already complete (from a previous call).
             if (IsSorted)
@@ -59,24 +69,22 @@
                 return false;
             }
 
-            // 2. Handle trivial case: array with less than 2 elements is always sorted.
-            if (array.Length < 2)
+            // 5. Perform the single comparison/swap step.
+            if (Array[CurrentIndex] > Array[CurrentIndex + 1])
             {
-                IsSorted = true;
-                return false;
+                // Swap two array members.
+                Tools.Swap(Array, CurrentIndex, CurrentIndex + 1);
+
+                // Mark that a swap occurred in this pass.
+                swappedInPass = true;
             }
 
-            // 3. Termination Check (Worst-Case Guarantee): 
-            // Check if the maximum number of passes required (array.Length - 1) has been completed.
-            if (SortedCount >= array.Length - 1)
-            {
-                IsSorted = true;
-                return false;
-            }
+            // 6. Advance the current index for the next iteration call.
+            ++CurrentIndex;
 
             // 4. Check if the current pass (loop) has finished.
             // The comparison index has moved past the last element in the unsorted section.
-            if (CurrentIndex > array.Length - 2 - SortedCount)
+            if (CurrentIndex > Array.Length - 2 - SortedCount)
             {
                 // --- Early Exit Optimization Check (The second termination point) ---
                 // If no swaps occurred during the *just completed* pass, the array is sorted.
@@ -92,18 +100,13 @@
                 swappedInPass = false;   // Reset swap flag for the new pass.
             }
 
-            // 5. Perform the single comparison/swap step.
-            if (array[CurrentIndex] > array[CurrentIndex + 1])
+            // 3. Termination Check (Worst-Case Guarantee): 
+            // Check if the maximum number of passes required (array.Length - 1) has been completed.
+            if (SortedCount >= Array.Length - 1)
             {
-                // The Tools.Swap is an assumed utility method.
-                Tools.Swap(array, CurrentIndex, CurrentIndex + 1);
-
-                // Mark that a swap occurred in this pass.
-                swappedInPass = true;
+                IsSorted = true;
+                return false;
             }
-
-            // 6. Advance the current index for the next iteration call.
-            ++CurrentIndex;
 
             // 7. Return true to signal that a step was executed. 
             // The sort completion check (if needed) will occur on the *next* call to NextIteration (in step 3 or 4).
