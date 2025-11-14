@@ -11,19 +11,30 @@
          HighlightFrom="bubbleSort.Array.Length - bubbleSort.SortedCount"
          HighlightTo="bubbleSort.Array.Length"/>
 
+<Numbers Array="insertionSort.Array"
+         IsSorted="insertionSort.IsSorted"
+         FirstPosition="insertionSort.CurrentIndex"
+         SecondPosition="insertionSort.ElementPosition"
+         HighlightFrom="0"
+         HighlightTo="insertionSort.CurrentIndex" />
 
 <button class="btn btn-primary" @onclick="NextIteration">Next Iteration</button>
 
 @code {
     private BubbleSort bubbleSort = new BubbleSort();
+    private InsertionSort insertionSort;
 
     protected override void OnInitialized()
     {
-        bubbleSort.Reset(Tools.GenerateNumbers(9, 9));
+        int[] array = Tools.GenerateNumbers(9, 9);
+
+        bubbleSort.Reset(array.ToArray());
+        insertionSort = new InsertionSort(array.ToArray());
     }
 
     private void NextIteration()
     {
         bubbleSort.NextIteration();
+        insertionSort.NextIteration();
     }
 }
