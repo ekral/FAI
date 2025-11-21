@@ -34,6 +34,7 @@ struct Bod2d
         return *this;
     }
 
+    // 🚀 vytvorte operator -=
     Bod2d& operator -= (const Bod2d& other)
     {
         x -= other.x;
@@ -132,34 +133,35 @@ Bod2d rotace(const Bod2d A, const double uhelStupne)
     return At;
 }
 
+// 🚀 Vytvorte rodicovskou tridu GrafickyObjekt,
+// která bude obsahovat to co mají
+// Usecka a Trojuhelnik spolecneho
+// Usecka a Trojuhelnik budou potomci teto tridy.
 class GrafickyObjekt 
 {
 public:
     Bod2d S;
     double uhelStupne;
-
-    GrafickyObjekt(Bod2d S, double uhelStupne) : S(S), uhelStupne(0.0) 
+    GrafickyObjekt (const Bod2d S) : S(S), uhelStupne(0.0) 
     {
     }
-
     virtual ~GrafickyObjekt() = default;
-
-    virtual void ZmenRotaci(double novyUhel) = 0;
     virtual void Nakresli(Platno* platno) = 0;
+    virtual void ZmenRotaci(double novyUhel) = 0;
 };
-
+    
 class Usecka : public GrafickyObjekt
 {
-public:
+public:    
     double delka;
     
-    Usecka(Bod2d S, double delka) :GrafickyObjekt(S,0.0), delka(delka)
+    Usecka(Bod2d S, double delka) : GrafickyObjekt(S), delka(delka)
     {
     }
 
     ~Usecka()
     {
-        cout << "Destruuji Usecku" << endl;
+        cout << "Destruuji usecku" << endl;
     }
 
     void ZmenRotaci(double novyUhel) override
@@ -189,14 +191,15 @@ class Trojuhelnik : public GrafickyObjekt
 {
 private:
     double a;
+
 public:
-    Trojuhelnik(const Bod2d S, const double a) : GrafickyObjekt(S, 0.0), a(a)
+    Trojuhelnik(const Bod2d S, const double a) : GrafickyObjekt(S), a(a)
     {
     }
 
     ~Trojuhelnik()
     {
-        cout << "Destruuji Trojuhelnik" << endl;
+        cout << "Destruuji trojuhelnik" << endl;
     }
 
     void ZmenRotaci(double novyUhel) override
@@ -220,6 +223,7 @@ public:
     }
 };
 
+
 int main()
 {
     Platno platno(40, 20);
@@ -227,9 +231,8 @@ int main()
     vector<GrafickyObjekt*> objekty;
 
     double stupne = 0.0;
-
     bool konec = false;
-
+    
     while (!konec)
     {
         if (_kbhit())
@@ -242,25 +245,26 @@ int main()
                 konec = true;
                 break;
             case 't':
-                {
-                    system("cls");
+            {
+                system("cls");
+                cout << "Novy trojuhelnik" << endl;
+                cout << "zadej x: ";
+                int x;
+                cin >> x;
 
-                    cout << "Zadej souradnici x stredu: ";
-                    int x;
-                    cin >> x;
+                cout << "zadej y: ";
+                int y;
+                cin >> y;
 
-                    cout << "Zadej souradnici y stredu: ";
-                    int y;
-                    cin >> y;
+                cout << "zadej a: ";
+                int a;
+                cin >> a;
 
-                    cout << "Zadej delku strany: ";
-                    int a;
-                    cin >> a;
-
-                    Trojuhelnik* trojuhelnik = new Trojuhelnik(Bod2d(x, y), a);
-
-                    objekty.push_back(trojuhelnik);
-                }
+                Trojuhelnik* trojuhelnik = new Trojuhelnik(Bod2d(x, y), a);
+                objekty.push_back(trojuhelnik);
+            }
+                break;
+            default:
                 break;
             }
         }
@@ -272,12 +276,12 @@ int main()
             objekt->ZmenRotaci(stupne);
             objekt->Nakresli(&platno);
         }
-        
-        stupne += 0.02;
 
         gotoxy(0, 0);
 
         platno.Zobraz();
+
+        stupne += 0.02;
     }
 
     for (GrafickyObjekt* objekt : objekty)
@@ -286,6 +290,8 @@ int main()
     }
 
     objekty.clear();
+
+    cout << "Konec programu" << endl;
 
     return 0;
 }
