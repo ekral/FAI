@@ -1,4 +1,4 @@
-# Code Clash: Battle of algorithms
+# Code Clash: Battle of algorithms 1
 
 1. Bubble Sort
-2. Componenta Numbers
+2. Komponenta Numbers
