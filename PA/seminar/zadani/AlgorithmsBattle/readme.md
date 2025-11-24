@@ -1,4 +1,4 @@
-# Code Clash: Battle of algorithms 2
+# Code Clash 2: Battle of Algorithms
 
 1) 🚀 Na základě přiloženého kódu dokončete algoritmus Bubblesort a vizualizaci.
     a) Upravte BubbleSort tak aby už neřadil již seřazené prvky na konci poli.
