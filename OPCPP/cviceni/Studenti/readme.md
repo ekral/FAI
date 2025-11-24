@@ -6,10 +6,10 @@ Cílem úkolu je pochopit a implementovat použití operátorů `new` a `delete`
 ## Zadání:
 1. **Vytvořte třídu**:
    - Název třídy: `Student`
-   - Atributy: 
+   - Členské proměnné: 
      - `std::string name` (jméno studenta)
      - `int age` (věk studenta)
-   - Metody:
+   - Členské funkce:
      - Konstruktor s parametry pro inicializaci jména a věku.
      - Destruktor, který vypíše zprávu o zničení objektu.
 
@@ -53,5 +53,6 @@ int main()
 - Kód je přehledný a dobře strukturovaný.
 - Zpracování vstupu od uživatele.
 - Správná správa paměti a zabránění memory leaks.
+
 
 
