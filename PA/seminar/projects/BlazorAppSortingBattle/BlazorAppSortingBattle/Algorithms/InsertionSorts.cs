@@ -59,6 +59,7 @@ namespace BlazorAppSortingBattle.Algorithms
                 if (CurrentIndex >= Array.Length)
                 {
                     CurrentIndex = 1;
+                    ElementPosition = 1;
 
                     IsSorted = true;
 
