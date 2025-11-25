@@ -6,7 +6,6 @@
     c) Přidejte do BubbleSortu property IsSorted, která bude `true` pokud je už pole seřazeno, jinak bude `false`.
     d) Do komponenty Numbers přidejte parametr `SecondPosition` který bude zobrazovat index s jinou barvou podtržení.
     e) Do komponenty Numbers přidejte parametry `HighlightFrom` a `HighlightTo`, které budou označovat část pole jinou barvou písma.
-    e) Do komponenty Number přidejte parametr `IsSorted`, kdy pokud bude true, tak zobrazí text jinou barvou a přidá na konec čísel znak signalizující dokončení seřazení.
+    f) Do komponenty Number přidejte parametr `IsSorted`, kdy pokud bude true, tak zobrazí text jinou barvou a přidá na konec čísel znak signalizující dokončení seřazení.
 
 2) 🚀 Podle vzoru BubbleSortu doplňte algoritmy **InsertionSort**, **SelectionSort** a **QuickSort**.
-
