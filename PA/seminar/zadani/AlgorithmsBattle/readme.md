@@ -1,4 +1,4 @@
-# Code Clash 2: Battle of Algorithms
+# Code Clash 2: Optimize Bubble Sort
 
 1) 🚀 Na základě přiloženého kódu dokončete algoritmus Bubblesort a vizualizaci.
     1) Pokud u BubbleSortu dojde Index na konec, tak jej nastavte zpět na 0 aby prošel pole znovu.

@@ -1,0 +1,36 @@
+﻿<div class="d-flex gap-3 mb-3">
+
+    @for (int i = 0; i < Array.Length; i++)
+    {
+        string textColor = i >= HighlightFrom && i <= HighlightTo
+                         ? "text-success"
+                         : "text-primary";
+
+        if (i == FirstIndex)
+        {
+            <div class="fs-1 @textColor border-bottom border-primary border-3">@Array[i]</div>
+        }
+        else if(i == SecondIndex)
+        {
+            <div class="fs-1 @textColor border-bottom border-secondary border-3">@Array[i]</div>
+        }
+        else
+        {
+            <div class="fs-1 @textColor">@Array[i]</div>
+        }
+    }
+
+</div>
+
+@code {
+    [Parameter]
+    public int[] Array { get; set; } = [];
+    [Parameter]
+    public int FirstIndex { get; set; }
+    [Parameter]
+    public int SecondIndex { get; set; }
+    [Parameter]
+    public int HighlightFrom { get; set; }
+    [Parameter]
+    public int HighlightTo { get; set; }
+}
