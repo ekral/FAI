@@ -137,24 +137,24 @@ Bod2d rotace(const Bod2d A, const double uhelStupne)
 // která bude obsahovat to co mají
 // Usecka a Trojuhelnik spolecneho
 // Usecka a Trojuhelnik budou potomci teto tridy.
-class GrafickyObjekt 
+class GrafickyObjekt
 {
 public:
     Bod2d S;
     double uhelStupne;
-    GrafickyObjekt (const Bod2d S) : S(S), uhelStupne(0.0) 
+    GrafickyObjekt(const Bod2d S) : S(S), uhelStupne(0.0)
     {
     }
     virtual ~GrafickyObjekt() = default;
     virtual void Nakresli(Platno* platno) = 0;
     virtual void ZmenRotaci(double novyUhel) = 0;
 };
-    
+
 class Usecka : public GrafickyObjekt
 {
-public:    
+public:
     double delka;
-    
+
     Usecka(Bod2d S, double delka) : GrafickyObjekt(S), delka(delka)
     {
     }
@@ -223,6 +223,47 @@ public:
     }
 };
 
+class Ctverec : public GrafickyObjekt
+{
+private:
+    double a; //dlzka strany
+
+public:
+    Ctverec(const Bod2d S, const double a) : GrafickyObjekt(S), a(a)
+    {
+    }
+
+    ~Ctverec()
+    {
+        cout << "Destruuji ctverec" << endl;
+    }
+
+    void ZmenRotaci(double novyUhel) override
+    {
+        uhelStupne = novyUhel;
+    }
+
+    void Nakresli(Platno* platno) override
+    {
+        Bod2d A(S.x - a / 2, S.y - a/2);
+        Bod2d B(S.x + a / 2, S.y - a/2);
+        Bod2d C(S.x + a / 2, S.y + a/2);
+        Bod2d D(S.x - a / 2, S.y + a/2);
+
+        Bod2d At = rotace(A - S, uhelStupne) + S;
+        Bod2d Bt = rotace(B - S, uhelStupne) + S;
+        Bod2d Ct = rotace(C - S, uhelStupne) + S;
+        Bod2d Dt = rotace(D - S, uhelStupne) + S;
+
+        platno->NakresliUsecku(At, Bt);
+        platno->NakresliUsecku(Bt, Ct);
+        platno->NakresliUsecku(Ct, Dt);
+        platno->NakresliUsecku(Dt, At);
+    }
+};
+
+// 1. Vytvorte menu, ktere prida usecku do pole grafickych objektu.
+// 2. Vytvorte tridu Ctverec a menu, ktere prida ctverec do grafickych objektu.
 
 int main()
 {
@@ -232,7 +273,7 @@ int main()
 
     double stupne = 0.0;
     bool konec = false;
-    
+
     while (!konec)
     {
         if (_kbhit())
@@ -263,7 +304,50 @@ int main()
                 Trojuhelnik* trojuhelnik = new Trojuhelnik(Bod2d(x, y), a);
                 objekty.push_back(trojuhelnik);
             }
-                break;
+            break;
+
+            case 'u':
+            {
+                system("cls");
+                cout << "Nova usecka" << endl;
+                cout << "zadej x: ";
+                int x;
+                cin >> x;
+
+                cout << "zadej y: ";
+                int y;
+                cin >> y;
+
+                cout << "zadej a: ";
+                int a;
+                cin >> a;
+
+                Usecka* usecka = new Usecka(Bod2d(x, y), a);
+                objekty.push_back(usecka);
+            }
+
+            break;
+            case 'c':
+            {
+                system("cls");
+                cout << "Novy ctvrec" << endl;
+                cout << "zadej x: ";
+                int x;
+                cin >> x;
+
+                cout << "zadej y: ";
+                int y;
+                cin >> y;
+
+                cout << "zadej a: ";
+                int a;
+                cin >> a;
+
+                Ctverec* ctverec = new Ctverec(Bod2d(x, y), a);
+                objekty.push_back(ctverec);
+            }
+
+            break;
             default:
                 break;
             }
