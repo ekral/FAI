@@ -22,7 +22,21 @@
 
     @if(IsSorted)
     {
-        <div class="fs-1 text-danger">poradi: @Rank</div>
+        switch(Rank)
+        {
+            case 1:
+                <div class="fs-1">🥇🏆</div>
+                break;
+            case 2:
+                <div class="fs-1">🥈</div>
+                break;
+            case 3:
+                <div class="fs-1">🥉</div>
+                break;
+            default:
+                <div class="fs-1">@Rank.</div>
+                break;
+        }
     }
 
 </div>

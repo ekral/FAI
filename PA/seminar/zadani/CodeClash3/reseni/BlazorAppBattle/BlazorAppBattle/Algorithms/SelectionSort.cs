@@ -4,19 +4,20 @@
     {
         public int Rank { get; set; }
         public int[] Array { get; private set; }
+        public bool IsSorted { get; private set; }
         public int CurrentIndex { get; private set; }
         public int ElementIndex { get; private set; }
-        public bool IsSorted { get; private set; }
 
         private int minIndex;
 
         public SelectionSort(int[] array)
         {
+            Rank = 0;
             Array = array;
+            IsSorted = false;
             CurrentIndex = 0;
             minIndex = 0;
             ElementIndex = 1;
-            IsSorted = false;
 
             if (Array.Length < 2)
             {
@@ -31,29 +32,28 @@
 
             if (ElementIndex < Array.Length)
             {
-                if(Array[ElementIndex] < Array[minIndex])
+                if (Array[ElementIndex] < Array[minIndex])
                 {
                     minIndex = ElementIndex;
                 }
 
                 ++ElementIndex;
             }
-            else
+            
+            if(ElementIndex > Array.Length - 1)
             {
                 Tools.Swap(Array, CurrentIndex, minIndex);
 
-                ++CurrentIndex;
-                
-                if(CurrentIndex >  Array.Length - 2)
+                if(CurrentIndex >= Array.Length - 2)
                 {
                     IsSorted = true;
                     return;
                 }
 
+                ++CurrentIndex;
                 minIndex = CurrentIndex;
                 ElementIndex = CurrentIndex + 1;
             }
-
         }
     }
 }

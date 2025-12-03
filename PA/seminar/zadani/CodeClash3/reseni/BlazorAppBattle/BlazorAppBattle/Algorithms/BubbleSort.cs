@@ -16,6 +16,7 @@
 
         public BubbleSort(int[] array)
         {
+            Rank = 0;
             Array = array;
             Index = 0;
             SortedCount = 0;
