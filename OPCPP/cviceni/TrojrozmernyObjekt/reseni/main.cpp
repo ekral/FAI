@@ -60,7 +60,8 @@ struct Bod3d
     double y;
     double z;
 
-    Bod3d(const double x, const double y, const double z) : x(x), y(y), z(z)
+    Bod3d(const double x, const double y, const double z) 
+        : x(x), y(y), z(z)
     {
 
     }
@@ -173,41 +174,49 @@ Bod2d rotace(const Bod2d A, const double uhelStupne)
     return At;
 }
 
-Bod3d rotace(const Bod3d A, const double uhelStupne)
+Bod3d rotaceY(const Bod3d A, const double uhelStupne)
 {
     const double uhelRadiany = (uhelStupne * M_PI) / 180;
 
     double c = cos(uhelRadiany);
     double s = sin(uhelRadiany);
 
-    const double xt = A.x * c + A.z * s;
-    const double yt = A.y;
-    const double zt = ((-A.x) * s) + A.z * c;
+    double xt = A.x * c + A.z * s;
+    double yt = A.y;
+    double zt = (-A.x) * s + A.z * c;
 
     const Bod3d At(xt, yt, zt);
 
     return At;
 }
 
+// 🚀 Vytvorte rodicovskou tridu GrafickyObjekt,
+// která bude obsahovat to co mají
+// Usecka a Trojuhelnik spolecneho
+// Usecka a Trojuhelnik budou potomci teto tridy.
 class GrafickyObjekt
 {
-public:
-    Bod2d S;
+public:   
     double uhelStupne;
-    GrafickyObjekt(const Bod2d S) : S(S), uhelStupne(0.0)
+    GrafickyObjekt() : uhelStupne(0.0)
     {
     }
     virtual ~GrafickyObjekt() = default;
     virtual void Nakresli(Platno* platno) = 0;
-    virtual void ZmenRotaci(double novyUhel) = 0;
+
+    void ZmenRotaci(double novyUhel)
+    {
+        uhelStupne = novyUhel;
+    }
 };
 
 class Usecka : public GrafickyObjekt
 {
 public:
+    Bod2d S;
     double delka;
 
-    Usecka(Bod2d S, double delka) : GrafickyObjekt(S), delka(delka)
+    Usecka(Bod2d S, double delka) : S(S), delka(delka)
     {
     }
 
@@ -216,10 +225,7 @@ public:
         cout << "Destruuji usecku" << endl;
     }
 
-    void ZmenRotaci(double novyUhel) override
-    {
-        uhelStupne = novyUhel;
-    }
+    
 
     void Nakresli(Platno* platno) override
     {
@@ -242,21 +248,17 @@ public:
 class Trojuhelnik : public GrafickyObjekt
 {
 private:
+    Bod2d S;
     double a;
 
 public:
-    Trojuhelnik(const Bod2d S, const double a) : GrafickyObjekt(S), a(a)
+    Trojuhelnik(const Bod2d S, const double a) : S(S), a(a)
     {
     }
 
     ~Trojuhelnik()
     {
         cout << "Destruuji trojuhelnik" << endl;
-    }
-
-    void ZmenRotaci(double novyUhel) override
-    {
-        uhelStupne = novyUhel;
     }
 
     void Nakresli(Platno* platno) override
@@ -278,21 +280,17 @@ public:
 class Ctverec : public GrafickyObjekt
 {
 private:
+    Bod2d S;
     double a; //dlzka strany
 
 public:
-    Ctverec(const Bod2d S, const double a) : GrafickyObjekt(S), a(a)
+    Ctverec(const Bod2d S, const double a) : S(S), a(a)
     {
     }
 
     ~Ctverec()
     {
         cout << "Destruuji ctverec" << endl;
-    }
-
-    void ZmenRotaci(double novyUhel) override
-    {
-        uhelStupne = novyUhel;
     }
 
     void Nakresli(Platno* platno) override
@@ -317,13 +315,11 @@ public:
 class Jehlan : public GrafickyObjekt
 {
 private:
+    Bod3d S;
     double a;
-    Bod3d stred;
-
 public:
-    // TODO odstranit stred z Grafickeho Objektu
-    Jehlan(const Bod3d stred, const double a) : GrafickyObjekt(Bod2d(0,0)), stred(stred), a(a)
-    {
+    Jehlan(Bod3d S, double a) : S(S), a(a)
+    { 
     }
 
     ~Jehlan()
@@ -331,35 +327,27 @@ public:
         cout << "Destruuji jehlan" << endl;
     }
 
-    void ZmenRotaci(double novyUhel) override
-    {
-        uhelStupne = novyUhel;
-    }
-
     void Nakresli(Platno* platno) override
     {
-        Bod3d S = stred;
-
         Bod3d A(S.x - a / 2, S.y - a / 2, S.z + a / 2);
         Bod3d B(S.x + a / 2, S.y - a / 2, S.z + a / 2);
         Bod3d C(S.x + a / 2, S.y + a / 2, S.z + a / 2);
         Bod3d D(S.x - a / 2, S.y + a / 2, S.z + a / 2);
         Bod3d V(S.x, S.y, S.z - a / 2);
-           
-        Bod3d At = rotace(A - S, uhelStupne) + S;
-        Bod3d Bt = rotace(B - S, uhelStupne) + S;
-        Bod3d Ct = rotace(C - S, uhelStupne) + S;
-        Bod3d Dt = rotace(D - S, uhelStupne) + S;
-        Bod3d Vt = rotace(V - S, uhelStupne) + S;
 
-        double f = 30.0;
+        Bod3d At = rotaceY(A - S, uhelStupne) + S;
+        Bod3d Bt = rotaceY(B - S, uhelStupne) + S;
+        Bod3d Ct = rotaceY(C - S, uhelStupne) + S;
+        Bod3d Dt = rotaceY(D - S, uhelStupne) + S;
+        Bod3d Vt = rotaceY(V - S, uhelStupne) + S;
 
+        double f = 10;
         Bod2d Ap = Bod2d(f * At.x / (At.z + f), f * At.y / (At.z + f));
         Bod2d Bp = Bod2d(f * Bt.x / (Bt.z + f), f * Bt.y / (Bt.z + f));
         Bod2d Cp = Bod2d(f * Ct.x / (Ct.z + f), f * Ct.y / (Ct.z + f));
         Bod2d Dp = Bod2d(f * Dt.x / (Dt.z + f), f * Dt.y / (Dt.z + f));
         Bod2d Vp = Bod2d(f * Vt.x / (Vt.z + f), f * Vt.y / (Vt.z + f));
-
+        
         platno->NakresliUsecku(Ap, Bp);
         platno->NakresliUsecku(Bp, Cp);
         platno->NakresliUsecku(Cp, Dp);
@@ -370,7 +358,6 @@ public:
         platno->NakresliUsecku(Dp, Vp);
     }
 };
-
 
 int main()
 {
@@ -412,8 +399,8 @@ int main()
                 int a;
                 cin >> a;
 
-                Jehlan* trojuhelnik = new Jehlan(Bod3d(x, y, z), a);
-                objekty.push_back(trojuhelnik);
+                Jehlan* jehlan = new Jehlan(Bod3d(x, y, z), a);
+                objekty.push_back(jehlan);
             }
             break;
             case 't':
