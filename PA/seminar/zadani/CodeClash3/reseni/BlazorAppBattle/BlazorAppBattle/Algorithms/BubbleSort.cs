@@ -2,25 +2,21 @@
 {
     public class BubbleSort
     {
-        public int Rank { get; set; }
-
         public int[] Array { get; private set; }
-
-        public int Index { get; private set; }
-
-        public int SortedCount { get; private set; }
-        
         public bool IsSorted { get; private set; }
+        public int Rank { get; set; }
+        public int Index { get; private set; }
+        public int SortedCount { get; private set; }
 
         private bool swapped;
 
         public BubbleSort(int[] array)
         {
-            Rank = 0;
             Array = array;
+            IsSorted = false;
+            Rank = 0;
             Index = 0;
             SortedCount = 0;
-            IsSorted = false;
             swapped = false;
 
             if(Array.Length < 2)
@@ -41,22 +37,24 @@
                 swapped = true;
             }
 
-            ++Index;
-
-            if(Index > Array.Length - 2 - SortedCount)
+            if(Index < Array.Length - 2 - SortedCount)
             {
-                Index = 0;
-                 
-                if(!swapped)
+                ++Index;
+            }
+            else
+            {
+                if (!swapped)
                 {
                     IsSorted = true;
-                }
-                else
-                {
-                    ++SortedCount;
 
-                    swapped = false;
+                    return;
                 }
+
+                ++SortedCount;
+
+                swapped = false;
+
+                Index = 0;
             }
         }
     }
