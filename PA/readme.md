@@ -27,6 +27,7 @@ Kurz s 1 hodinovou přednáškou a 2 hodinovými cvičeními, přičemž seminá
 ---
 
 TODO:
+- Semestrální projekt - primárně se bude probírat na semináři, skupiny po dvou studentech.
 - Sloučit logické výrazy a podmíněný příkaz do jednoho tématu.
 - Vyřadit zarážku z hledání.
 - Místo projektu pro uznání docházky dát možnost předčasného testu (pokud neuspěje v testu, tak projekt navíc).
