@@ -48,6 +48,7 @@
                 if (CurrentIndex >= Array.Length - 2)
                 {
                     IsSorted = true;
+
                     return;
                 }
 
