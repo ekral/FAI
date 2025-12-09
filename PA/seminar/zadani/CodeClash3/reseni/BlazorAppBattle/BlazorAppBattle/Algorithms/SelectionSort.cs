@@ -53,6 +53,7 @@
                 }
 
                 ++CurrentIndex;
+
                 minIndex = CurrentIndex;
                 ElementIndex = CurrentIndex + 1;
             }

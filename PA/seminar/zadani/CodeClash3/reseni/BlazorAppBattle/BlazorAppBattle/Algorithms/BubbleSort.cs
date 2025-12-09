@@ -45,7 +45,7 @@
             }
             else
             {
-                if (!swapped)
+                if (!swapped || SortedCount >= Array.Length - 1)
                 {
                     IsSorted = true;
 
