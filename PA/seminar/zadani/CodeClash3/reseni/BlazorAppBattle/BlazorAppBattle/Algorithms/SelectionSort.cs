@@ -28,23 +28,24 @@
         public void NextIteration()
         {
             if (IsSorted)
-                return;
-
-            if (ElementIndex < Array.Length)
             {
-                if (Array[ElementIndex] < Array[minIndex])
-                {
-                    minIndex = ElementIndex;
-                }
+                return;
+            }
+         
+            if (Array[ElementIndex] < Array[minIndex])
+            {
+                minIndex = ElementIndex;
+            }
 
+            if (ElementIndex < Array.Length - 1)
+            {
                 ++ElementIndex;
             }
-            
-            if(ElementIndex > Array.Length - 1)
+            else
             {
                 Tools.Swap(Array, CurrentIndex, minIndex);
 
-                if(CurrentIndex >= Array.Length - 2)
+                if (CurrentIndex >= Array.Length - 2)
                 {
                     IsSorted = true;
                     return;

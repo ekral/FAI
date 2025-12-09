@@ -28,7 +28,9 @@
         public void NextIteration()
         {
             if (IsSorted)
+            {
                 return;
+            }
 
             if (Array[Index] > Array[Index + 1])
             {
