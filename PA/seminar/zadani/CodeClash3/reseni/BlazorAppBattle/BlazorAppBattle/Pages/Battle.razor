@@ -40,8 +40,7 @@
 
     protected override void OnInitialized()
     {
-        //int[] array = Tools.Generate(9, 9);
-        int[] array = [9, 8, 7, 6, 5, 4, 3, 2, 1];
+        int[] array = Tools.Generate(9, 9);
 
         bubbleSort = new BubbleSort(array.ToArray());    
         selectionSort = new SelectionSort(array.ToArray());
