@@ -48,21 +48,30 @@
 
     private void NextIteration()
     {
-        bubbleSort?.NextIteration();
-        selectionSort?.NextIteration();
-
         bool incrementRank = false;
 
-        if(bubbleSort is not null && bubbleSort.IsSorted == true && bubbleSort.Rank == 0)
+        if(bubbleSort is not null)
         {
-            bubbleSort.Rank = rank;
-            incrementRank = true;
+            bubbleSort.NextIteration();
+
+            if (bubbleSort.IsSorted == true && bubbleSort.Rank == 0)
+            {
+                bubbleSort.Rank = rank;
+
+                incrementRank = true;
+            }
         }
 
-        if (selectionSort is not null && selectionSort.IsSorted == true && selectionSort.Rank == 0)
+        if (selectionSort is not null)
         {
-            selectionSort.Rank = rank;
-            incrementRank = true;
+            selectionSort.NextIteration();
+
+            if (selectionSort.IsSorted == true && selectionSort.Rank == 0)
+            {
+                selectionSort.Rank = rank;
+
+                incrementRank = true;
+            }
         }
 
         if(incrementRank)
