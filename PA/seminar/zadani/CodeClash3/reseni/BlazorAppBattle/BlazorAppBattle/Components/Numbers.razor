@@ -6,11 +6,11 @@
                          ? "text-success"
                          : "text-primary";
 
-        if (i == FirstIndex)
+        if (i == PrimaryIndex)
         {
             <div class="fs-1 @textColor border-bottom border-primary border-3">@Array[i]</div>
         }
-        else if(i == SecondIndex)
+        else if(i == SecondaryIndex)
         {
             <div class="fs-1 @textColor border-bottom border-secondary border-3">@Array[i]</div>
         }
@@ -45,9 +45,9 @@
     [Parameter]
     public int[] Array { get; set; } = [];
     [Parameter]
-    public int FirstIndex { get; set; }
+    public int PrimaryIndex { get; set; }
     [Parameter]
-    public int SecondIndex { get; set; }
+    public int SecondaryIndex { get; set; }
     [Parameter]
     public int HighlightFrom { get; set; }
     [Parameter]

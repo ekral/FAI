@@ -9,8 +9,8 @@
 @if(bubbleSort is not null)
 {
     <Numbers Array="bubbleSort.Array" 
-             FirstIndex="bubbleSort.Index"
-             SecondIndex="bubbleSort.Index + 1"
+             PrimaryIndex="bubbleSort.Index"
+             SecondaryIndex="bubbleSort.Index + 1"
              HighlightFrom="bubbleSort.Array.Length - bubbleSort.SortedCount"
              HighlightTo="bubbleSort.Array.Length - 1"
              IsSorted="bubbleSort.IsSorted"
@@ -23,8 +23,8 @@
 @if (selectionSort is not null)
 {
     <Numbers Array="selectionSort.Array"
-             FirstIndex="selectionSort.CurrentIndex"
-             SecondIndex="selectionSort.ElementIndex"
+             PrimaryIndex="selectionSort.CurrentIndex"
+             SecondaryIndex="selectionSort.ElementIndex"
              HighlightFrom="0"
              HighlightTo="selectionSort.CurrentIndex - 1"
              IsSorted="selectionSort.IsSorted"
@@ -39,8 +39,8 @@
 {
 
     <Numbers Array="insertionSort.Array"
-             FirstIndex="insertionSort.CurrentIndex"
-             SecondIndex="insertionSort.PlacementIndex"
+             PrimaryIndex="insertionSort.CurrentIndex"
+             SecondaryIndex="insertionSort.PlacementIndex"
              HighlightFrom="0"
              HighlightTo="insertionSort.CurrentIndex - 1"
              IsSorted="insertionSort.IsSorted"
