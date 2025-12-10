@@ -7,8 +7,7 @@
         public bool IsSorted { get; private set; }
         public int CurrentIndex { get; private set; }
         public int ElementIndex { get; private set; }
-
-        private int minIndex;
+        public int MinIndex { get; private set; }
 
         public SelectionSort(int[] array)
         {
@@ -16,7 +15,7 @@
             Array = array;
             IsSorted = false;
             CurrentIndex = 0;
-            minIndex = 0;
+            MinIndex = 0;
             ElementIndex = 1;
 
             if (Array.Length < 2)
@@ -32,9 +31,9 @@
                 return;
             }
          
-            if (Array[ElementIndex] < Array[minIndex])
+            if (Array[ElementIndex] < Array[MinIndex])
             {
-                minIndex = ElementIndex;
+                MinIndex = ElementIndex;
             }
 
             if (ElementIndex < Array.Length - 1)
@@ -43,7 +42,7 @@
             }
             else
             {
-                Tools.Swap(Array, CurrentIndex, minIndex);
+                Tools.Swap(Array, CurrentIndex, MinIndex);
 
                 if (CurrentIndex >= Array.Length - 2)
                 {
@@ -54,7 +53,7 @@
 
                 ++CurrentIndex;
 
-                minIndex = CurrentIndex;
+                MinIndex = CurrentIndex;
                 ElementIndex = CurrentIndex + 1;
             }
         }

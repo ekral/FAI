@@ -22,6 +22,8 @@
 
 @if (selectionSort is not null)
 {
+    <p class="fs-1">Minimum: @selectionSort.Array[selectionSort.MinIndex]</p>
+
     <Numbers Array="selectionSort.Array"
              FirstIndex="selectionSort.CurrentIndex"
              SecondIndex="selectionSort.ElementIndex"
@@ -31,12 +33,28 @@
              Rank="selectionSort.Rank" />
 }
 
+<h1>Insertion Sort</h1>
+
+@if (insertionSort is not null)
+{
+    <p class="fs-1">Number: @insertionSort.Number</p>
+
+    <Numbers Array="insertionSort.Array"
+             FirstIndex="insertionSort.CurrentIndex"
+             SecondIndex="insertionSort.PlacementIndex"
+             HighlightFrom="0"
+             HighlightTo="insertionSort.CurrentIndex - 1"
+             IsSorted="insertionSort.IsSorted"
+             Rank="insertionSort.Rank" />
+}
+
 <button class="btn btn-primary" @onclick="NextIteration">Next Iteration</button>
 
 @code {
     int rank = 1;
     BubbleSort? bubbleSort;
     SelectionSort? selectionSort;
+    InsertionSort? insertionSort;
 
     protected override void OnInitialized()
     {
@@ -44,6 +62,7 @@
 
         bubbleSort = new BubbleSort(array.ToArray());    
         selectionSort = new SelectionSort(array.ToArray());
+        insertionSort = new InsertionSort(array.ToArray());
     }
 
     private void NextIteration()
@@ -69,6 +88,18 @@
             if (selectionSort.IsSorted == true && selectionSort.Rank == 0)
             {
                 selectionSort.Rank = rank;
+
+                incrementRank = true;
+            }
+        }
+
+        if (insertionSort is not null)
+        {
+            insertionSort.NextIteration();
+
+            if (insertionSort.IsSorted == true && insertionSort.Rank == 0)
+            {
+                insertionSort.Rank = rank;
 
                 incrementRank = true;
             }
