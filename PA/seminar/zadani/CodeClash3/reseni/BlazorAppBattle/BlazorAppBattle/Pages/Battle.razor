@@ -22,8 +22,6 @@
 
 @if (selectionSort is not null)
 {
-    <p class="fs-1">Minimum: @selectionSort.Array[selectionSort.MinIndex]</p>
-
     <Numbers Array="selectionSort.Array"
              FirstIndex="selectionSort.CurrentIndex"
              SecondIndex="selectionSort.ElementIndex"
@@ -31,13 +29,14 @@
              HighlightTo="selectionSort.CurrentIndex - 1"
              IsSorted="selectionSort.IsSorted"
              Rank="selectionSort.Rank" />
+
+    <p class="fs-3">Minimum: @selectionSort.Array[selectionSort.MinIndex]</p>
 }
 
 <h1>Insertion Sort</h1>
 
 @if (insertionSort is not null)
 {
-    <p class="fs-1">Number: @insertionSort.Number</p>
 
     <Numbers Array="insertionSort.Array"
              FirstIndex="insertionSort.CurrentIndex"
@@ -46,6 +45,8 @@
              HighlightTo="insertionSort.CurrentIndex - 1"
              IsSorted="insertionSort.IsSorted"
              Rank="insertionSort.Rank" />
+
+    <p class="fs-3">Number: @insertionSort.Number</p>
 }
 
 <button class="btn btn-primary" @onclick="NextIteration">Next Iteration</button>

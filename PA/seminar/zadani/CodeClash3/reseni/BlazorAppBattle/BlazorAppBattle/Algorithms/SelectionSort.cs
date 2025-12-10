@@ -31,11 +31,6 @@
                 return;
             }
          
-            if (Array[ElementIndex] < Array[MinIndex])
-            {
-                MinIndex = ElementIndex;
-            }
-
             if (ElementIndex < Array.Length - 1)
             {
                 ++ElementIndex;
@@ -55,6 +50,11 @@
 
                 MinIndex = CurrentIndex;
                 ElementIndex = CurrentIndex + 1;
+            }
+
+            if (Array[ElementIndex] < Array[MinIndex])
+            {
+                MinIndex = ElementIndex;
             }
         }
     }
