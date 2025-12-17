@@ -4,10 +4,10 @@
 
 <PageTitle>Code Clash: Battle of Algorithms</PageTitle>
 
-<h1>Bubble Sort</h1>
-
 @if(bubbleSort is not null)
 {
+    <h1>Bubble Sort</h1>
+
     <Numbers Array="bubbleSort.Array" 
              PrimaryIndex="bubbleSort.Index"
              SecondaryIndex="bubbleSort.Index + 1"
@@ -18,10 +18,10 @@
              />
 }
 
-<h1>Selection Sort</h1>
-
 @if (selectionSort is not null)
 {
+    <h1>Selection Sort</h1>
+
     <Numbers Array="selectionSort.Array"
              PrimaryIndex="selectionSort.CurrentIndex"
              SecondaryIndex="selectionSort.ElementIndex"
@@ -33,10 +33,9 @@
     <p class="fs-3 text-muted">Minimum: @selectionSort.Array[selectionSort.MinIndex]</p>
 }
 
-<h1>Insertion Sort</h1>
-
 @if (insertionSort is not null)
 {
+    <h1>Insertion Sort</h1>
 
     <Numbers Array="insertionSort.Array"
              PrimaryIndex="insertionSort.CurrentIndex"
@@ -49,6 +48,28 @@
     <p class="fs-3 text-muted">Number: @insertionSort.Number</p>
 }
 
+@if (quickSort is not null)
+{
+    <h1>Quick Sort</h1>
+
+    <Numbers Array="quickSort.Array"
+             PrimaryIndex="quickSort.CurrentIndex"
+             SecondaryIndex="quickSort.PlacementIndex"
+             HighlightFrom="quickSort.Low"
+             HighlightTo="quickSort.High"
+             IsSorted="quickSort.IsSorted"
+             Rank="quickSort.Rank" />
+
+    <p class="fs-3 text-muted">
+        Pivot: @quickSort.Pivot Partitions: 
+        
+        @foreach (var partition in quickSort.Partitions)
+        {
+            <text>(@partition.Low : @partition.High)</text>
+        }
+    </p>
+}
+
 <button class="btn btn-primary" @onclick="NextIteration">Next Iteration</button>
 
 @code {
@@ -56,14 +77,16 @@
     BubbleSort? bubbleSort;
     SelectionSort? selectionSort;
     InsertionSort? insertionSort;
+    QuickSort? quickSort;
 
     protected override void OnInitialized()
     {
-        int[] array = Tools.Generate(9, 9);
+        int[] array = Tools.Generate(20, 20);
 
         bubbleSort = new BubbleSort(array.ToArray());    
         selectionSort = new SelectionSort(array.ToArray());
         insertionSort = new InsertionSort(array.ToArray());
+        quickSort = new QuickSort(array.ToArray());
     }
 
     private void NextIteration()
@@ -101,6 +124,18 @@
             if (insertionSort.IsSorted == true && insertionSort.Rank == 0)
             {
                 insertionSort.Rank = rank;
+
+                incrementRank = true;
+            }
+        }
+
+        if (quickSort is not null && !quickSort.IsSorted)
+        {
+            quickSort.NextIteration();
+
+            if (quickSort.IsSorted == true && quickSort.Rank == 0)
+            {
+                quickSort.Rank = rank;
 
                 incrementRank = true;
             }
