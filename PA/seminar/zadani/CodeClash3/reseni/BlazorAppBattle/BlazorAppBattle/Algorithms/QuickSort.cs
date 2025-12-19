@@ -14,6 +14,7 @@ namespace BlazorAppBattle.Algorithms
         public int[] Array { get; private set; }
         public bool IsSorted { get; private set; }
         public int CurrentIndex { get; private set; }
+        public int PlacementIndex { get; private set; }
         public int Low { get; private set; }
         public int High { get; private set; }
         public int Pivot { get; private set; }
@@ -35,12 +36,7 @@ namespace BlazorAppBattle.Algorithms
                 return;
             }
 
-            Low = 0;
             High = Array.Length - 1;
-
-            CurrentIndex = 0;
-            SmallerElementIndex = 0;
-
             Pivot = Array[High];
         }
 
@@ -55,30 +51,37 @@ namespace BlazorAppBattle.Algorithms
             {
                 if (Array[CurrentIndex] <= Pivot)
                 {
+                    Tools.Swap(Array, CurrentIndex, PlacementIndex);
 
+                    ++PlacementIndex;
                 }
 
                 ++CurrentIndex;
             }
             else
-            {   
+            {
+                Tools.Swap(Array, CurrentIndex, PlacementIndex);
 
-
+                if(Low < PlacementIndex - 1)
                 {
                     Partition left = new(Low, PlacementIndex - 1);
 
                     Partitions.Enqueue(left);
                 }
 
+                if (PlacementIndex + 1 < High)
                 {
                     Partition right = new(PlacementIndex + 1, High);
 
                     Partitions.Enqueue(right);
                 }
 
+                if(Partitions.Count > 0)
                 {
                     Partition partition = Partitions.Dequeue();
 
+                    Low = partition.Low;
+                    High = partition.High;
                     CurrentIndex = Low;
                     PlacementIndex = Low;
                     Pivot = Array[High];

@@ -48,29 +48,6 @@
     <p class="fs-1 text-muted">Number: @insertionSort.Number</p>
 }
 
-
-
-@if (quickSort is not null)
-{
-    <h1>QuickSort Sort</h1>
-
-    <Numbers Array="quickSort.Array"
-             PrimaryIndex="quickSort.CurrentIndex"
-             SecondaryIndex="quickSort.SmallerElementIndex"
-             HighlightFrom="quickSort.Low"
-             HighlightTo="quickSort.High"
-             IsSorted="quickSort.IsSorted"
-             Rank="quickSort.Rank" />
-
-    <p class="fs-1 text-muted">Pivot: @quickSort.Pivot</p>
-    <p class ="fs-1 text-muted">Partitions:
-        @foreach(var partition in quickSort.Partitions)
-        {
-            <Text>(@partition.low : @partition.high) </Text>
-        }
-    </p>
-}
-
 @if (quickSort is not null)
 {
     <h1>Quick Sort</h1>
@@ -151,6 +128,19 @@
                 incrementRank = true;
             }
         }
+
+        if (quickSort is not null)
+        {
+            quickSort.NextIteration();
+
+            if (quickSort.IsSorted == true && quickSort.Rank == 0)
+            {
+                quickSort.Rank = rank;
+
+                incrementRank = true;
+            }
+        }
+
 
         if(incrementRank)
         {
