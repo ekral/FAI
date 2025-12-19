@@ -28,13 +28,13 @@ Kurz s 1 hodinovou přednáškou a 2 hodinovými cvičeními, přičemž seminá
 
 TODO:
 - Semestrální projekt - primárně se bude probírat na semináři, skupiny po dvou studentech.
-- Sloučit logické výrazy a podmíněný příkaz do jednoho tématu.
-- Vyřadit zarážku z hledání.
 - Místo projektu pro uznání docházky dát možnost předčasného testu (pokud neuspěje v testu, tak projekt navíc).
+- Vyřadit zarážku z hledání.
 - Přidat téma práce s řetězci (string a StringBuilder), soubory a formátování řetězce na čísla.
 - Deset otázek do každého testu ve všech předmětech (hlavně AP3OP).
-- Sloučit Třidy + Metody + Konstruktory
-- Sloučit Zapouzdření + property
-- Přidat téma řadící algoritmy + test
-- Přidat téma linq + test
-- Přidat test na Exceptions
+- Sloučit logické výrazy a podmíněný příkaz do jednoho tématu.
+- Sloučit Třidy + Metody + Konstruktory.
+- Sloučit Zapouzdření + property.
+- Přidat téma řadící algoritmy + test.
+- Přidat téma linq + test.
+- Přidat test na Exceptions.
