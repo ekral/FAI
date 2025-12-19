@@ -6,15 +6,14 @@ namespace BlazorAppBattle.Algorithms
     {
         public struct Partition(int low, int high)
         {
-            public int low = low;
-            public int high = high;
+            public int Low = low;
+            public int High = high;
         }
 
         public int Rank { get; set; }
         public int[] Array { get; private set; }
         public bool IsSorted { get; private set; }
         public int CurrentIndex { get; private set; }
-        public int SmallerElementIndex { get; private set; }
         public int Low { get; private set; }
         public int High { get; private set; }
         public int Pivot { get; private set; }
@@ -22,8 +21,12 @@ namespace BlazorAppBattle.Algorithms
 
         public QuickSort(int[] array)
         {
+            Rank = 0;
             Array = array;
             IsSorted = false;
+            CurrentIndex = 0;
+            PlacementIndex = 0;
+            Low = 0;
 
             if (Array.Length < 2)
             {
@@ -52,39 +55,33 @@ namespace BlazorAppBattle.Algorithms
             {
                 if (Array[CurrentIndex] <= Pivot)
                 {
-                    Tools.Swap(Array, SmallerElementIndex, CurrentIndex);
 
-                    ++SmallerElementIndex;
                 }
 
                 ++CurrentIndex;
             }
             else
-            {
-                Tools.Swap(Array, SmallerElementIndex, CurrentIndex);
+            {   
 
-                Partition left = new(Low, SmallerElementIndex - 1);
-                Partition right = new(SmallerElementIndex + 1, High);
 
-                if (left.low < left.high)
                 {
+                    Partition left = new(Low, PlacementIndex - 1);
+
                     Partitions.Enqueue(left);
                 }
 
-                if (right.low < right.high)
                 {
+                    Partition right = new(PlacementIndex + 1, High);
+
                     Partitions.Enqueue(right);
                 }
 
-                if (Partitions.Count > 0)
                 {
                     Partition partition = Partitions.Dequeue();
 
-                    Low = partition.low;
-                    High = partition.high;
-                    Pivot = Array[High];
-                    SmallerElementIndex = Low;
                     CurrentIndex = Low;
+                    PlacementIndex = Low;
+                    Pivot = Array[High];
                 }
                 else
                 {

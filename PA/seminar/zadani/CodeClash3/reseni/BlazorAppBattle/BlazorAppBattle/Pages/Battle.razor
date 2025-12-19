@@ -71,6 +71,28 @@
     </p>
 }
 
+@if (quickSort is not null)
+{
+    <h1>Quick Sort</h1>
+
+    <Numbers Array="quickSort.Array"
+             PrimaryIndex="quickSort.CurrentIndex"
+             SecondaryIndex="quickSort.PlacementIndex"
+             HighlightFrom="quickSort.Low"
+             HighlightTo="quickSort.High"
+             IsSorted="quickSort.IsSorted"
+             Rank="quickSort.Rank" />
+
+    <p class="fs-3 text-muted">
+        Pivot: @quickSort.Pivot Partitions: 
+        
+        @foreach (var partition in quickSort.Partitions)
+        {
+            <text>(@partition.Low : @partition.High)</text>
+        }
+    </p>
+}
+
 <button class="btn btn-primary" @onclick="NextIteration">Next Iteration</button>
 
 @code {
@@ -125,18 +147,6 @@
             if (insertionSort.IsSorted == true && insertionSort.Rank == 0)
             {
                 insertionSort.Rank = rank;
-
-                incrementRank = true;
-            }
-        }
-
-        if (quickSort is not null)
-        {
-            quickSort.NextIteration();
-
-            if (quickSort.IsSorted == true && quickSort.Rank == 0)
-            {
-                quickSort.Rank = rank;
 
                 incrementRank = true;
             }
