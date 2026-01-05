@@ -1,0 +1,16 @@
+OrderId,CustomerName,OrderDate,OrderPrice,TotalItems,ItemList,IsExpressShipping,CustomerTier,DiscountApplied
+1,John Smith,2024-03-15,124.50,3,"Wireless Headphones,Laptop Stand,Bluetooth Speaker",true,Gold,0.15
+2,Emily Johnson,2024-03-16,45.99,1,"Ergonomic Mouse",false,Silver,0.05
+3,Michael Chen,2024-03-16,287.40,4,"4K Monitor,HDMI Cable,Keyboard,Mouse Pad",true,Platinum,0.20
+4,Sarah Rodriguez,2024-03-17,62.75,2,"Noise-Cancelling Earbuds,Phone Charger",false,Bronze,0.00
+5,David Kim,2024-03-17,199.99,1,"Gaming Laptop",true,Gold,0.10
+6,Jessica Martinez,2024-03-18,88.50,3,"Fitness Tracker,Water Bottle,Wireless Charger",false,Silver,0.05
+7,Robert Taylor,2024-03-18,456.75,2,"Gaming Monitor,Mechanical Keyboard",true,Platinum,0.25
+8,Amanda White,2024-03-19,34.25,1,"Portable Speaker",false,Bronze,0.00
+9,Carlos Gomez,2024-03-19,212.60,3,"External SSD,USB Hub,Webcam",true,Gold,0.15
+10,Lauren Brown,2024-03-20,67.90,2,"Bluetooth Headset,Laptop Sleeve",false,Silver,0.05
+11,Thomas Lee,2024-03-20,345.25,1,"Professional Camera",true,Platinum,0.20
+12,Rachel Green,2024-03-21,52.40,2,"Wireless Mouse,Desk Lamp",false,Bronze,0.00
+13,Alex Wong,2024-03-21,189.75,3,"Smart Watch,Fitness Armband,Wireless Earphones",true,Gold,0.10
+14,Emma Davis,2024-03-22,76.60,2,"Portable Charger,Phone Stand",false,Silver,0.05
+15,Daniel Park,2024-03-22,412.30,2,"High-End Speakers,Sound Mixer",true,Platinum,0.25

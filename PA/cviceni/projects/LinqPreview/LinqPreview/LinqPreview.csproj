@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Spectre.Console" Version="0.49.2-preview.0.67" />
+      <PackageReference Include="TinyCsvParser" Version="2.7.0" />
+      <PackageReference Include="TinyCsvParser.Enums" Version="1.0.1-alpha" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="eshop-order-database.csv">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+</Project>
