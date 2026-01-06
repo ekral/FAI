@@ -1,16 +1,18 @@
-# 01 pizza party
+# 01 Pizza Party
+
+## 🔢 Popis úkolu
 
 Představte si, že organizujete pizza party pro své kamarády a potřebujete spočítat různé náklady a množství, aby bylo všeho dostatek
 a nikomu nepochybělo, ale aby po akci nezůstalo nespotřebované jídlo a pití.
 Pro práci na úkolu použijte přiložený soubor Program.cs, který obsahuje základ aplikace, do kterého následně přidáte další kód, 
 podle zadání.
 
-
 Odevzdejte jak soubor Program.cs, tak .pdf soubor s vypracovaným protokolem k zadání.
 (Úvod, Postup práce včetně zdrojů ze kterých jste čerpal(a) inspiraci a Závěr, kde shrnete své pocity a trable z vypracovávání úkolu).
 
+⌛ Celková náročnost úkolu = cca 2 hodiny
 
-Celková náročnost úkolu = cca 2 hodiny
+## 🚀 Výchozí kód v C# se zadáním úkolů
 
 ```csharp
 /*

@@ -1,16 +1,18 @@
 # Adventure Game Decision Maker
 
+## 🔢 Popis úkolu
+
 Představte si, že vytváříte konzolovou "hru", ve které vytvoříte postavu pomocí odpovídání na vstupní otázky a program vypočítá,
 co všechno vaše dokáže a v čem naopak selže.
 Pro práci na úkolu použijte přiložený soubor Program.cs, který obsahuje základ aplikace, do kterého následně přidáte další kód, 
 podle zadání.
 
-
 Odevzdejte jak soubor Program.cs, tak .pdf soubor s vypracovaným protokolem k zadání.
 (Úvod, Postup práce včetně zdrojů ze kterých jste čerpal(a) inspiraci a Závěr, kde shrnete své pocity a trable z vypracovávání úkolu).
 
+⌛ Celková náročnost úkolu = cca 2 hodiny
 
-Celková náročnost úkolu = cca 2 hodiny
+## 🚀 Výchozí kód v C# se zadáním úkolů
 
 ```csharp
 /*
