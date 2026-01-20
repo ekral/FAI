@@ -1,18 +1,20 @@
 
-# Canteen Ordering System – Project Structure & Dependencies
+# MinuteMeal – Project Structure & Dependencies
+
+MinuteMeal is the UTB system for made-to-order meals
 
 ## 1️⃣ Solution Structure
 
 ```text
 Canteen.Ordering.sln
 │
-├── Canteen.Ordering.Domain
-├── Canteen.Ordering.Persistence
-├── Canteen.Ordering.Infrastructure
-├── Canteen.Ordering.Contracts
-├── Canteen.Ordering.Seeder
-├── Canteen.Ordering.Api          ← Minimal APIs
-└── Canteen.Ordering.BlazorClient ← Blazor WASM
+├── UTB.MinuteMeal.Domain
+├── UTB.MinuteMeal.Persistence
+├── UTB.MinuteMeal.Infrastructure
+├── UTB.MinuteMeal.Contracts
+├── UTB.MinuteMeal.Seeder
+├── UTB.MinuteMeal.Api          ← Minimal APIs
+└── UTB.MinuteMeal.BlazorClient ← Blazor WASM
 ```
 ---
 
@@ -110,13 +112,13 @@ Forbidden Dependencies:
 
 ```text
 ┌──────────────────────────────────────┐
-│   Canteen.Ordering.BlazorClient      │
+│   UTB.MinuteMeal.BlazorClient        │
 │   (Blazor WASM)                      │
 └──────────────▲───────────────────────┘
                │ HTTP
 ┌──────────────┴───────────────────────┐
-│        Canteen.Ordering.Api           │
-│        (Minimal APIs)                 │
+│        UTB.MinuteMeal.Api            │
+│        (Minimal APIs)                │
 └───────▲──────────────▲───────────────┘
         │              │
 ┌───────┴───────┐ ┌────┴────────────────┐
