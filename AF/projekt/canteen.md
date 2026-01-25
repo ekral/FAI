@@ -27,34 +27,36 @@ The goal of this project is to design and implement a **web-based school canteen
                          └─────────────────┘
 
 
-┌─────────────────────────┐       ┌─────────────────────────┐
-│    Ordering Website     │       │  Order Processing Site  │
-│     (Students)          │       │      (Staff)            │
-└─────────────┬───────────┘       └─────────────┬───────────┘
-              │                                 │
-              │                                 │
-              ▼                                 ▼
-         ┌──────────────────────────────────────────┐
-         │               Order API                  │
-         │        (internal + public endpoints)     │
-         └───────────────┬──────────────────────────┘
-                         │
-                         ▼
-                  ┌─────────────────┐
-                  │    Order DB     │
-                  │ (Orders, Status │
-                  │  OrderItems)    │
-                  └─────────────────┘
+┌─────────────────────────┐        fetch menus / meals
+│    Ordering Website     │ ─────────────────────────▶ ┌─────────────────┐
+│     (Students)          │                              │    Menu API     │
+└─────────────┬───────────┘                              └─────────────────┘
+              │
+              │  create orders
+              ▼
+┌──────────────────────────────────────────┐
+│               Order API                  │
+│        (internal + public endpoints)     │
+└───────────────┬──────────────────────────┘
+                │
+                ▼
+         ┌─────────────────┐
+         │    Order DB     │
+         │ (Orders, Status │
+         │  OrderItems)    │
+         └─────────────────┘
 
 
-                 ┌─────────────────────────┐
-                 │  Public Order Tracking  │
-                 │        API (Public)     │
-                 └─────────────┬───────────┘
-                               │
-                               ▼
-                         (Read-only access
-                           to Order DB)
+┌─────────────────────────┐        update order status
+│  Order Processing Site  │ ─────────────────────────▶ ┌─────────────────┐
+│      (Staff)            │                              │    Order API    │
+└─────────────────────────┘                              └─────────────────┘
+
+
+┌─────────────────────────┐        read order status
+│  Public Order Tracking  │ ─────────────────────────▶ ┌─────────────────┐
+│        API (Public)     │                              │    Order API    │
+└─────────────────────────┘                              └─────────────────┘
 
 ```
 
