@@ -8,6 +8,56 @@ The goal of this project is to design and implement a **web-based school canteen
 
 ## System Architecture
 
+```text
+                    ┌─────────────────────────┐
+                    │   Meal & Menu Management │
+                    │        Website (Admin)   │
+                    └─────────────┬───────────┘
+                                  │
+                                  ▼
+                         ┌─────────────────┐
+                         │    Menu API     │
+                         │ (internal API)  │
+                         └────────┬────────┘
+                                  │
+                                  ▼
+                         ┌─────────────────┐
+                         │    Menu DB      │
+                         │ (Meals, Menus)  │
+                         └─────────────────┘
+
+
+┌─────────────────────────┐       ┌─────────────────────────┐
+│    Ordering Website     │       │  Order Processing Site  │
+│     (Students)          │       │      (Staff)            │
+└─────────────┬───────────┘       └─────────────┬───────────┘
+              │                                 │
+              │                                 │
+              ▼                                 ▼
+         ┌──────────────────────────────────────────┐
+         │               Order API                  │
+         │        (internal + public endpoints)     │
+         └───────────────┬──────────────────────────┘
+                         │
+                         ▼
+                  ┌─────────────────┐
+                  │    Order DB     │
+                  │ (Orders, Status │
+                  │  OrderItems)    │
+                  └─────────────────┘
+
+
+                 ┌─────────────────────────┐
+                 │  Public Order Tracking  │
+                 │        API (Public)     │
+                 └─────────────┬───────────┘
+                               │
+                               ▼
+                         (Read-only access
+                           to Order DB)
+
+```
+
 The system consists of multiple web clients communicating with backend APIs.
 All services may share a single database.
 
