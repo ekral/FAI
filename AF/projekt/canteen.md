@@ -1,9 +1,33 @@
 # Objednávací systém v menze
 
-Semestrální projekt do předmětu **[název předmětu]**.  
-Cílem projektu je návrh a implementace objednávacího systému pro menzu
-s využitím technologií **.NET Aspire, Minimal WebAPI, Entity Framework a Blazor**.
+Semestrální projekt do předmětu **Aplikační frameworky**.  
 
+Cílem projektu je návrh a implementace objednávacího systému pro menzu
+s využitím nástrojů a frameworků **.NET Aspire, Minimal WebAPI, Entity Framework a Blazor**.
+
+Objednávací systém pro menzu umožní objednávání minutek (jídel připravovaných na objednávku), kdy student si objedná jídlo v menze ve webové aplikaci běžící na dotykovém panelu a kuchařky jej začnou připravovat a budou měnit stav objednávky ve webové aplikaci běžící na dotykovém panelu. Student bude o stavu objednané minutky informován ve webové aplikaci.
+
+Případy použití:
+
+Vedení menzy:
+    - Jídla
+        - Zobrazuje seznam jídel (popis a cena jídla).
+        - Vytváří nové jídlo.
+        - Upravuje jídla. Jídlo se neodstraňuje, jen se označí že není aktivní.
+    - Menu
+        - Zobrazuje všechny položky menu (datum, jídlo, počet dostupných porcí) pro všechny dny.
+        - Vytváří novou položku menu.
+        - Upravuje položky menu.
+        - Odstraňuje položky menu.
+Kuchařka v menze
+    - Objednávky
+        - Zobrazí seznam objednávek které nejsou dokončené.
+        - Označí, že je objednávka s daným číslem hotová, zrušená nebo dokončená (vydaná studentovi nebo byl student informován o zrušení).
+Student
+    - Objednávky
+        - Student si zobrazí menu pro aktuální den.
+        - Student si objedná si jídlo z aktuálního menu. 
+        
 ---
 
 ## 👥 Tým
