@@ -91,74 +91,86 @@ musí být vyučující schopen spustit celý projekt lokálně včetně databá
 
 ---
 
-# 📊 Hodnocení předmětu
-
-Celkové hodnocení v předmětu je **100 bodů**:
-
-- **40 bodů** – průběžné testy  
-- **20 bodů** – půlsemestrální odevzdání  
-- **40 bodů** – semestrální odevzdání  
-
----
+# 📝 Objednávací systém v menze – checklist a hodnocení
 
 ## 📤 Půlsemestrální odevzdání (20 bodů)
 
-Odevzdávají se projekty:
+Studenti odevzdávají pouze **backend a WebAPI** (bez klientských aplikací a SSE).
 
-- `UTB.Minute.Db`
-- `UTB.Minute.DbManager`
-- `UTB.Minute.Contracts`
-- `UTB.Minute.WebAPI`
-- funkční databáze, reset a seedování dat
-- **bez autentizace a autorizace**
+### Projekty (0–4 body)
+- [ ] `UTB.Minute.Db`, `UTB.Minute.DbManager`, `UTB.Minute.Contracts`, `UTB.Minute.WebAPI` jsou odevzdány a správně strukturované  
 
-> ⚠️ **Podmínka hodnocení**  
-> Celé řešení musí být **plně spustitelné přes Aspire**, včetně databáze,
-> seedování dat a Service Discovery.  
-> Nesplnění této podmínky znamená **0 bodů**.
+### Datový model (0–4 body)
+- [ ] Entity a vazby správně navrženy  
+- [ ] `DbContext` odpovídá požadavkům  
+- [ ] DTO definována pouze v `UTB.Minute.Contracts`  
 
-### Hodnoticí rubrika
+### Funkčnost WebAPI (0–4 body)
+- [ ] CRUD pro Jídla  
+- [ ] CRUD pro Menu  
+- [ ] CRUD pro Objednávky (přidávání, změna stavu)  
 
-| Kritérium | Popis | Body |
-|----------|------|------|
-| Architektura řešení | Dodržení předepsané struktury projektů | 0–4 |
-| Datový model | Entity, vazby a `DbContext` (EF Core) | 0–4 |
-| DTO a Contracts | DTO oddělené od entit, sdílené v `UTB.Minute.Contracts` | 0–4 |
-| WebAPI | Funkční Minimal WebAPI, základní CRUD | 0–4 |
-| Aspire integrace | DB, Service Discovery, Http Command (reset + seed) | 0–4 |
-| **Celkem** |  | **0–20** |
+### Aspire integrace (0–4 body)
+- [ ] Databáze vytvořena přes Aspire  
+- [ ] Reset a seed dat funguje přes Http Command  
+- [ ] Service Discovery funguje  
+
+### Kvalita kódu a architektury (0–4 body)
+- [ ] Architektura odpovídá zadání  
+- [ ] DTO používány správně, žádná duplicita  
+- [ ] Kód čitelný, logicky strukturovaný  
 
 ---
 
 ## 🏁 Semestrální odevzdání (40 bodů)
 
-Odevzdává se **kompletní funkční systém**:
+Studenti odevzdávají **kompletní funkční systém**, backend + klienti + SSE.
 
-- `UTB.Minute.AdminClient`
-- `UTB.Minute.CanteenClient`
-- plně funkční backend
-- autentizace a autorizace pomocí **Keycloak**
-- notifikace změn objednávek pomocí **Server-Sent Events (SSE)**
+### Projekty (0–4 body)
+- [ ] `AdminClient` a `CanteenClient` připojené na WebAPI  
+- [ ] Backend plně funkční  
 
-> ⚠️ **Nutná podmínka**  
-> Celé řešení musí být **plně spustitelné přes Aspire**, včetně databáze,
-> seedování dat, Service Discovery a Keycloak autentizace.  
-> Nesplnění této podmínky znamená **0 bodů**.
+### Student (0–6 body)
+- [ ] Vidí menu pro aktuální den  
+- [ ] Může objednávat jídlo  
+- [ ] Vyprodané položky jsou přeškrtnuté  
 
-### Hodnoticí rubrika (40 bodů)
+### Kuchařka (0–5 body)
+- [ ] Vidí seznam aktuálních objednávek  
+- [ ] Mění stav objednávky (hotová, zrušená, dokončená)  
 
-| Kritérium | Popis | Body |
-|----------|------|------|
-| Funkční požadavky systému | Kompletní implementace všech rolí (student, kuchařka, vedení) | 0–10 |
-| Stavový model objednávek | Správná implementace stavů a jejich přechodů | 0–5 |
-| Server-Sent Events | Push notifikace změn objednávek (student, kuchařka) | 0–5 |
-| Autentizace a autorizace | Keycloak, role, ochrana API i klientských rout | 0–8 |
-| Klientská část (Blazor) | Funkčnost, napojení na API, práce se stavem | 0–6 |
-| Kvalita architektury a kódu | DTO, žádná duplicita, čitelnost | 0–4 |
-| Aspire integrace | Service Discovery, Http Commands, konfigurace | 0–2 |
-| **Celkem** |  | **0–40** |
+### Vedení menzy (0–5 body)
+- [ ] CRUD pro Jídla  
+- [ ] CRUD pro Menu (včetně deaktivace jídla)  
+
+### Stav objednávky (0–4 body)
+- [ ] Přechody stavů objednávky správně implementovány: Připravuje se → Hotová → Zrušená → Dokončená  
+
+### SSE notifikace (0–5 body)
+- [ ] SSE endpoint funguje  
+- [ ] Notifikace dorazí studentovi i kuchařce  
+- [ ] UI se aktualizuje v reálném čase  
+
+### Autentizace a autorizace (0–6 body)
+- [ ] Keycloak spuštěn přes Aspire  
+- [ ] Backend chráněn, role správně přiřazeny  
+- [ ] Klienti chrání routy a UI prvky podle role  
+
+### Kvalita kódu a architektury (0–5 body)
+- [ ] Architektura odpovídá zadání  
+- [ ] DTO používány správně, žádná duplicita  
+- [ ] Kód čitelný, logicky strukturovaný  
+- [ ] Bez mrtvého kódu nebo citlivých dat  
+
+### Aspire integrace (0–2 body)
+- [ ] Service Discovery funguje  
+- [ ] Http Commands a konfigurace správně nastaveny  
 
 ---
+
+## ✅ Finální kontrola
+- [ ] Projekt se spustí na čistém stroji přes Aspire  
+- [ ] Všechny funkce dostupné a testovatelné  
 
 ## 🧮 Shrnutí bodování
 
