@@ -1,64 +1,99 @@
 # Objednávací systém v menze
 
-Semestrální projekt do předmětu **Aplikační frameworky**.  
+Semestrální projekt do předmětu **Aplikační frameworky**.
 
 Cílem projektu je návrh a implementace objednávacího systému pro menzu
-s využitím nástrojů a frameworků **.NET Aspire, Minimal WebAPI, Entity Framework a Blazor**.
+s využitím nástrojů a frameworků **.NET Aspire, Minimal WebAPI, Entity Framework Core a Blazor**.
+
+---
 
 ## 🧠 Zadání projektu
 
-Objednávací systém pro menzu umožní objednávání minutek (jídel připravovaných na objednávku), kdy student si objedná jídlo v menze ve webové aplikaci běžící na dotykovém panelu a kuchařky jej začnou připravovat a budou měnit stav objednávky ve webové aplikaci běžící na dotykovém panelu. Student bude o stavu objednané minutky informován ve webové aplikaci.
+Objednávací systém pro menzu umožňuje objednávání minutek (jídel připravovaných na objednávku).
+Student si objedná jídlo ve webové aplikaci běžící na dotykovém panelu.
+Kuchařky následně jídlo připravují a mění stav objednávky ve své webové aplikaci.
+Student je o stavu objednávky informován v reálném čase.
 
-### Funkční požadavky:
+---
 
-- Vedení menzy:
-    - Jídla
-        - Zobrazuje seznam jídel (popis a cena jídla).
-        - Vytváří nové jídla.
-        - Upravuje jídla. Jídlo se neodstraňuje, jen se označí že není aktivní.
-    - Menu
-        - Zobrazuje všechny položky menu (datum, jídlo, počet dostupných porcí) pro všechny dny.
-        - Vytváří novou položku menu.
-        - Upravuje položky menu.
-        - Odstraňuje položky menu.
-- Kuchařka v menze
-    - Objednávky
-        - Zobrazí seznam objednávek které nejsou dokončené.
-        - Označí, že je objednávka s daným číslem hotová, zrušená nebo dokončená (vydaná studentovi nebo byl student informován o zrušení).
-- Student
-    - Objednávky
-        - Student si zobrazí menu pro aktuální den (vyprodaná jídla budou přeškrnutá).
-        - Student si objedná si jídlo z aktuálního menu (sníží se počet dostupných porcí jídla). 
-        
-Stavy objednávy:
-- Připravuje se.
-- Hotová (připraveno k vyzvednutí).
-- Zrušená.
-- Dokončená.
+## Funkční požadavky
 
-### Nefukční požadavky
+### Vedení menzy
 
-Díky použití nástrojů [Aspire](https://aspire.dev/get-started/what-is-aspire/) bude mít vyučující možnost spustit vytvoření projekt lokálně včetně použité databáze a KeyCloacku. 
+#### Jídla
+- Zobrazuje seznam jídel (název, popis, cena).
+- Vytváří nová jídla.
+- Upravuje jídla. Jídlo se neodstraňuje, pouze se označí jako neaktivní.
 
-- Projekt s pomocí nástrojů [Aspire](https://aspire.dev/get-started/what-is-aspire/):
-    - Vytvoří databázi, například [SQL Server](https://aspire.dev/integrations/databases/efcore/sql-server/sql-server-get-started/).
-    - Použije Identity nástroj [KeyCloack](https://aspire.dev/integrations/security/keycloak/) k zabezpečení aplikace.
-    - Využije Aspire [Service Discovery](https://aspire.dev/fundamentals/service-discovery/), aby nebylo nutné nastavovat v kódu konkrétní ip adresy.
-    - Použije [Http Command](https://aspire.dev/fundamentals/http-commands/#http-command-apis) pro restart databáze při kterém se vymaže existující databaze, vytvoří se nová a vloží se testovací data. 
-- V projektu se využijí DTO (Data Transfer Objects) nezávislé na Entitách pro přenos dat.
-- V projektu se nebude opakovat kód, například DTO budou nadefinované jen na jednom místě.
+#### Menu
+- Zobrazuje položky menu (datum, jídlo, počet dostupných porcí) pro všechny dny.
+- Vytváří nové položky menu.
+- Upravuje položky menu.
+- Odstraňuje položky menu.
+
+### Kuchařka v menze
+
+#### Objednávky
+- Zobrazuje seznam objednávek, které nejsou dokončené.
+- Mění stav objednávky na:
+  - hotová,
+  - zrušená,
+  - dokončená (vydaná studentovi nebo student informován o zrušení).
+
+### Student
+
+#### Objednávky
+- Zobrazuje menu pro aktuální den (vyprodaná jídla jsou přeškrtnutá).
+- Objednává jídlo z aktuálního menu (sníží se počet dostupných porcí).
+
+### Stavy objednávky
+- Připravuje se
+- Hotová (připraveno k vyzvednutí)
+- Zrušená
+- Dokončená
+
+---
+
+## Nefunkční požadavky
+
+Díky použití nástrojů [Aspire](https://aspire.dev/get-started/what-is-aspire/)
+musí být vyučující schopen spustit celý projekt lokálně včetně databáze a Keycloaku.
+
+### Požadavky na řešení
+
+- Projekt využívá **.NET Aspire**:
+  - Vytváří databázi (např. SQL Server).
+  - Používá Identity nástroj **Keycloak** k zabezpečení aplikace.
+  - Využívá **Service Discovery**, bez pevně zadaných IP adres.
+  - Obsahuje **Http Command** pro reset databáze (smazání, vytvoření, seed testovacích dat).
+- Projekt používá **DTO (Data Transfer Objects)** nezávislé na entitách.
+- Kód se neopakuje (DTO jsou definována pouze na jednom místě).
+
+---
 
 ## 🏗️ Architektura
 
-- Základní struktura řešení:
-    - UTB.Minute.Db - bude obsahovat Entity a DataContext.
-    - UTB.Minute.DbManager - bude obsahovat WebApi pro Http Command a reset databáze a seedování.
-    - UTB.Minute.Contracts - bude obsahovat DTOs (Data Trasfer Objects).
-    - UTB.Minute.WebAPI - společné WebAPI pro všechny klienty. Bude mít referenci na projekt UTB.Minute.Dba UTB.Minute.Contracts.
-    - UTB.Minute.AdminClient - Blazor Server Interactivity projekt, klient pro vedení menzy pro editaci jídel a menu. Bude mít referenci na projekt UTB.Minute.WebAPI a UTB.Minute.Contracts.
-    - UTB.Minute.CanteenClient - Blazor Server Interactivity projekt, klient pro studenty a kuchařky v menze. Bude mít referenci na projekt UTB.Minute.WebAPI.
-    
+### Základní struktura řešení
+
+- `UTB.Minute.Db` – entity a `DbContext`
+- `UTB.Minute.DbManager` – WebAPI pro Http Command, reset a seed databáze
+- `UTB.Minute.Contracts` – DTO (Data Transfer Objects)
+- `UTB.Minute.WebAPI` – společné WebAPI pro všechny klienty  
+  (reference na `UTB.Minute.Db` a `UTB.Minute.Contracts`)
+- `UTB.Minute.AdminClient` – Blazor Server aplikace pro vedení menzy
+- `UTB.Minute.CanteenClient` – Blazor Server aplikace pro studenty a kuchařky
+
+---
+
 # 📊 Hodnocení předmětu
+
+Celkové hodnocení v předmětu je **100 bodů**:
+
+- **40 bodů** – průběžné testy  
+- **20 bodů** – půlsemestrální odevzdání  
+- **40 bodů** – semestrální odevzdání  
+
+---
 
 ## 📤 Půlsemestrální odevzdání (20 bodů)
 
@@ -68,14 +103,15 @@ Odevzdávají se projekty:
 - `UTB.Minute.DbManager`
 - `UTB.Minute.Contracts`
 - `UTB.Minute.WebAPI`
-- Funkční databáze, reset a seedování databáze.
-- Bez autentikace a autorizace.
+- funkční databáze, reset a seedování dat
+- **bez autentizace a autorizace**
 
 > ⚠️ **Podmínka hodnocení**  
-> Celé řešení musí být **plně spustitelné přes Aspire**, včetně databáze, seedování dat a service discovery.  
+> Celé řešení musí být **plně spustitelné přes Aspire**, včetně databáze,
+> seedování dat a Service Discovery.  
 > Nesplnění této podmínky znamená **0 bodů**.
 
-### Hodnotící rubrika
+### Hodnoticí rubrika
 
 | Kritérium | Popis | Body |
 |----------|------|------|
@@ -94,11 +130,12 @@ Odevzdává se **kompletní funkční systém**:
 
 - `UTB.Minute.AdminClient`
 - `UTB.Minute.CanteenClient`
-- plně funkční backend,
-- autorizace a autentikace pomocí KeyCloak.
+- plně funkční backend
+- autentizace a autorizace pomocí **Keycloak**
 
 > ⚠️ **Nutná podmínka**  
-> Celé řešení musí být **plně spustitelné přes Aspire**, včetně databáze, seedování dat a Keycloak autentizace a autentikace.  
+> Celé řešení musí být **plně spustitelné přes Aspire**, včetně databáze,
+> seedování dat a Keycloak autentizace.  
 > Nesplnění této podmínky znamená **0 bodů**.
 
 ### 🔧 Backend (20 bodů)
@@ -124,7 +161,7 @@ Odevzdává se **kompletní funkční systém**:
 
 ---
 
-## 🧮 Shrnutí bodování v předmětu
+## 🧮 Shrnutí bodování
 
 | Část | Body |
 |------|------|
