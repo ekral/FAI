@@ -68,10 +68,11 @@ Odevzdávají se projekty:
 - `UTB.Minute.DbManager`
 - `UTB.Minute.Contracts`
 - `UTB.Minute.WebAPI`
+- Funkční databáze, reset a seedování databáze.
+- Bez autentikace a autorizace.
 
 > ⚠️ **Podmínka hodnocení**  
-> Celé řešení musí být **plně spustitelné přes Aspire**, včetně databáze,
-> Keycloak autentizace a seedování dat.  
+> Celé řešení musí být **plně spustitelné přes Aspire**, včetně databáze, seedování dat a service discovery.  
 > Nesplnění této podmínky znamená **0 bodů**.
 
 ### Hodnotící rubrika
@@ -93,11 +94,11 @@ Odevzdává se **kompletní funkční systém**:
 
 - `UTB.Minute.AdminClient`
 - `UTB.Minute.CanteenClient`
-- plně funkční backend
+- plně funkční backend,
+- autorizace a autentikace pomocí KeyCloak.
 
 > ⚠️ **Nutná podmínka**  
-> Celé řešení musí být **plně spustitelné přes Aspire**, včetně databáze,
-> Keycloak autentizace a seedování dat.  
+> Celé řešení musí být **plně spustitelné přes Aspire**, včetně databáze, seedování dat a Keycloak autentizace a autentikace.  
 > Nesplnění této podmínky znamená **0 bodů**.
 
 ### 🔧 Backend (20 bodů)
