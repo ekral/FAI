@@ -57,7 +57,7 @@ Student je o stavu objednávky informován v reálném čase.
 ## Nefunkční požadavky
 
 Díky použití nástrojů [Aspire](https://aspire.dev/get-started/what-is-aspire/)
-musí být vyučující schopen spustit celý projekt lokálně včetně databáze a Keycloaku.
+musí být vyučující schopen spustit celý projekt lokálně včetně databáze a Keycloak.
 
 ### Požadavky na řešení
 
@@ -68,6 +68,8 @@ musí být vyučující schopen spustit celý projekt lokálně včetně databá
   - Obsahuje **Http Command** pro reset databáze (smazání, vytvoření, seed testovacích dat).
 - Projekt používá **DTO (Data Transfer Objects)** nezávislé na entitách.
 - Kód se neopakuje (DTO jsou definována pouze na jednom místě).
+- Projekt využívá **Server-Sent Events (SSE)** pro serverem iniciované notifikace
+  o změnách v objednávkách pro studenta a kuchařku.
 
 ---
 
@@ -76,11 +78,16 @@ musí být vyučující schopen spustit celý projekt lokálně včetně databá
 ### Základní struktura řešení
 
 - `UTB.Minute.Db` – entity a `DbContext`
-- `UTB.Minute.DbManager` – WebAPI pro Http Command, reset a seed databáze (reference na `UTB.Minute.Db`)
+- `UTB.Minute.DbManager` – WebAPI pro Http Command, reset a seed databáze  
+  (reference na `UTB.Minute.Db`)
 - `UTB.Minute.Contracts` – DTO (Data Transfer Objects)
-- `UTB.Minute.WebAPI` – společné WebAPI pro všechny klienty (reference na `UTB.Minute.Db` a `UTB.Minute.Contracts`)
-- `UTB.Minute.AdminClient` – Blazor Server aplikace pro vedení menzy (reference na `UTB.Minute.Contracts`)
-- `UTB.Minute.CanteenClient` – Blazor Server aplikace pro studenty a kuchařky (reference na `UTB.Minute.Contracts`)
+- `UTB.Minute.WebAPI` – společné WebAPI pro všechny klienty včetně
+  Server-Sent Events (SSE) notifikací  
+  (reference na `UTB.Minute.Db` a `UTB.Minute.Contracts`)
+- `UTB.Minute.AdminClient` – Blazor Server aplikace pro vedení menzy  
+  (reference na `UTB.Minute.Contracts`)
+- `UTB.Minute.CanteenClient` – Blazor Server aplikace pro studenty a kuchařky  
+  (reference na `UTB.Minute.Contracts`)
 
 ---
 
@@ -131,32 +138,25 @@ Odevzdává se **kompletní funkční systém**:
 - `UTB.Minute.CanteenClient`
 - plně funkční backend
 - autentizace a autorizace pomocí **Keycloak**
+- notifikace změn objednávek pomocí **Server-Sent Events (SSE)**
 
 > ⚠️ **Nutná podmínka**  
 > Celé řešení musí být **plně spustitelné přes Aspire**, včetně databáze,
-> seedování dat a Keycloak autentizace.  
+> seedování dat, Service Discovery a Keycloak autentizace.  
 > Nesplnění této podmínky znamená **0 bodů**.
 
-### 🔧 Backend (20 bodů)
+### Hodnoticí rubrika (40 bodů)
 
 | Kritérium | Popis | Body |
 |----------|------|------|
-| Funkční požadavky API | Jídla, menu, objednávky, stavy | 0–6 |
-| Stavový model objednávek | Připravuje se / hotová / zrušená / dokončená | 0–4 |
-| Bezpečnost | Integrace Keycloak, role uživatelů | 0–4 |
-| Kvalita kódu | Žádná duplicita, správné použití DTO | 0–3 |
-| Aspire best practices | Service Discovery, Http Commands | 0–3 |
-| **Celkem backend** |  | **0–20** |
-
-### 🖥️ Klientské aplikace (20 bodů)
-
-| Kritérium | Popis | Body |
-|----------|------|------|
-| AdminClient | Správa jídel a menu | 0–6 |
-| CanteenClient – student | Zobrazení menu, objednání jídla | 0–6 |
-| CanteenClient – kuchařka | Přehled objednávek, změna stavů | 0–4 |
-| UX a funkčnost | Přehlednost, použití na dotykovém panelu | 0–4 |
-| **Celkem klienti** |  | **0–20** |
+| Funkční požadavky systému | Kompletní implementace všech rolí (student, kuchařka, vedení) | 0–10 |
+| Stavový model objednávek | Správná implementace stavů a jejich přechodů | 0–5 |
+| Server-Sent Events | Push notifikace změn objednávek (student, kuchařka) | 0–5 |
+| Autentizace a autorizace | Keycloak, role, ochrana API i klientských rout | 0–8 |
+| Klientská část (Blazor) | Funkčnost, napojení na API, práce se stavem | 0–6 |
+| Kvalita architektury a kódu | DTO, žádná duplicita, čitelnost | 0–4 |
+| Aspire integrace | Service Discovery, Http Commands, konfigurace | 0–2 |
+| **Celkem** |  | **0–40** |
 
 ---
 
