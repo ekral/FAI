@@ -76,12 +76,11 @@ musí být vyučující schopen spustit celý projekt lokálně včetně databá
 ### Základní struktura řešení
 
 - `UTB.Minute.Db` – entity a `DbContext`
-- `UTB.Minute.DbManager` – WebAPI pro Http Command, reset a seed databáze
+- `UTB.Minute.DbManager` – WebAPI pro Http Command, reset a seed databáze (reference na `UTB.Minute.Db`)
 - `UTB.Minute.Contracts` – DTO (Data Transfer Objects)
-- `UTB.Minute.WebAPI` – společné WebAPI pro všechny klienty  
-  (reference na `UTB.Minute.Db` a `UTB.Minute.Contracts`)
-- `UTB.Minute.AdminClient` – Blazor Server aplikace pro vedení menzy
-- `UTB.Minute.CanteenClient` – Blazor Server aplikace pro studenty a kuchařky
+- `UTB.Minute.WebAPI` – společné WebAPI pro všechny klienty (reference na `UTB.Minute.Db` a `UTB.Minute.Contracts`)
+- `UTB.Minute.AdminClient` – Blazor Server aplikace pro vedení menzy (reference na `UTB.Minute.Contracts`)
+- `UTB.Minute.CanteenClient` – Blazor Server aplikace pro studenty a kuchařky (reference na `UTB.Minute.Contracts`)
 
 ---
 
