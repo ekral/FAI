@@ -119,10 +119,9 @@ Studenti odevzdávají pouze **backend a WebAPI**
 ---
 
 ### Projekty a struktura řešení (0–3 body)
-- [ ] Všechny požadované projekty existují a jsou správně pojmenované (1 bod)  
+- [ ] Všechny požadované projekty existují a jsou správně pojmenované (2 body)  
   (`UTB.Minute.Db`, `DbManager`, `Contracts`, `WebAPI`, `WebAPI.Tests`)
 - [ ] Správné reference mezi projekty (1 bod)
-- [ ] Struktura odpovídá navržené architektuře (1 bod)
 
 ---
 
@@ -165,18 +164,82 @@ Studenti odevzdávají pouze **backend a WebAPI**
 ---
 
 ### Srážkové body (záporné)
-- [ ] Nepoužití angličtiny neb
-
+- [ ] Nepoužití angličtiny nebo starší verze než .NET 10  
+- [ ] Bugy, warningy, porušení nefunkčních požadavků 
 
 ---
 
-## ✅ Finální kontrola (povinné pro obě odevzdání)
+✅ **Součet: 20 bodů**
 
-- [ ] Projekt se **sestaví bez chyb**
-- [ ] Projekt se **spustí přes Aspire**
-- [ ] Databáze se vytvoří a je dostupná
-- [ ] Keycloak je dostupný (semestrální odevzdání)
-- [ ] Aplikace jsou použitelné bez ručních zásahů do konfigurace s použitím Aspire na čístém stroji jen s Dockerem nebo Podmanem.
+---
+
+## 🏁 Semestrální odevzdání (40 bodů)
+
+Studenti odevzdávají **kompletní funkční systém**  
+*(backend + klienti + SSE + zabezpečení)*
+
+---
+
+### Projekty a integrace (0–6 bodů)
+- [ ] `AdminClient` a `CanteenClient` napojené na WebAPI (3 body)
+- [ ] Backend plně funkční a použitý oběma klienty (3 body)
+
+---
+
+### Student – funkcionalita klienta (0–6 bodů)
+- [ ] Zobrazení menu pro aktuální den (2 body)
+- [ ] Objednání jídla + snížení počtu porcí (2 body)
+- [ ] Vyprodaná jídla vizuálně odlišena (2 body)
+
+---
+
+### Kuchařka – funkcionalita klienta (0–6 bodů)
+- [ ] Zobrazení nedokončených objednávek (2 body)
+- [ ] Změna stavu objednávky (hotová / zrušená / dokončená) (2 body)
+- [ ] Neplatné přechody jsou blokovány (2 body)
+
+---
+
+### Vedení menzy – funkcionalita klienta (0–5 bodů)
+
+#### Jídla (0–3 body)
+- [ ] Vytváření jídel (1 bod)
+- [ ] Úprava jídel (1 bod)
+- [ ] Deaktivace jídla (1 bod)
+
+#### Menu (0–2 body)
+- [ ] Vytváření položek menu (1 bod)
+- [ ] Úprava položek menu (1 bod)
+
+---
+
+### SSE notifikace (0–7 bodů)
+- [ ] Funkční SSE endpoint (3 body)
+- [ ] Notifikace pro studenta i kuchařku (2 body)
+- [ ] Automatická aktualizace UI (2 body)
+
+---
+
+### Autentizace a autorizace (0–6 bodů)
+- [ ] Keycloak spuštěn přes Aspire (2 body)
+- [ ] Backend zabezpečen podle rolí (2 body)
+- [ ] UI reaguje na roli uživatele (2 body)
+
+---
+
+### Dokumentace (0–4 body)
+- [ ] Aktualizovaná dokumentace k finálnímu řešení (4 body)
+
+---
+
+### Srážkové body (záporné)
+- [ ] Nepoužití angličtiny nebo starší verze než .NET 10  
+- [ ] Bugy, warningy, porušení nefunkčních požadavků  
+
+---
+
+✅ **Součet: 40 bodů**
+
 
 ---
 
