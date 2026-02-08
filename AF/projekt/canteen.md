@@ -43,13 +43,13 @@ Student je o stavu objednávky informován v reálném čase.
 ### Student
 
 #### Objednávky
-- Zobrazuje menu pro aktuální den (vyprodaná jídla jsou přeškrtnutá).
+- Zobrazuje menu pro aktuální den (vyprodaná jídla jsou vizuálně odlišena).
 - Objednává jídlo z aktuálního menu (sníží se počet dostupných porcí).
 
 ### Stavy objednávky
-- Připravuje se
+- Připravuje se (sníží počet porcí)
 - Hotová (připraveno k vyzvednutí)
-- Zrušená
+- Zrušená (počet porcí zůstane snížený)
 - Dokončená
 
 ---
@@ -63,9 +63,9 @@ musí být vyučující schopen spustit celý projekt lokálně včetně databá
 
 - .NET 10
 - Jazyk použitý ve zdrojovém kódu bude **angličtina**.
-- Projekt využívá **.NET Aspire**:
-  - Vytváří databázi (např. SQL Server).
-  - Používá Identity nástroj **Keycloak** k zabezpečení aplikace.
+- Projekt využívá [**.NET Aspire**](https://aspire.dev/get-started/what-is-aspire/):
+  - Vytváří databázi (např. [**SQL Server**](https://aspire.dev/integrations/databases/efcore/sql-server/sql-server-get-started/)).
+  - Používá Identity nástroj [**Keycloak**](https://aspire.dev/integrations/security/keycloak/) k zabezpečení aplikace.
   - Využívá **Service Discovery**, bez pevně zadaných IP adres.
   - Obsahuje **Http Command** pro reset databáze (smazání, vytvoření, seed testovacích dat).
 - Projekt používá **Entity framework pro práci s databází**.
@@ -81,16 +81,12 @@ musí být vyučující schopen spustit celý projekt lokálně včetně databá
 ### Základní struktura řešení
 
 - `UTB.Minute.Db` – entity a `DbContext`
-- `UTB.Minute.DbManager` – WebAPI pro Http Command, reset a seed databáze  
-  (reference na `UTB.Minute.Db`)
+- `UTB.Minute.DbManager` – WebAPI pro Http Command, reset a seed databáze (reference na `UTB.Minute.Db`)
 - `UTB.Minute.Contracts` – DTO (Data Transfer Objects)
-- `UTB.Minute.WebAPI` – společné WebAPI pro všechny klienty včetně
-  Server-Sent Events (SSE) notifikací (reference na `UTB.Minute.Db` a `UTB.Minute.Contracts`)
+- `UTB.Minute.WebAPI` – společné WebAPI pro všechny klienty včetně Server-Sent Events (SSE) notifikací (reference na `UTB.Minute.Db` a `UTB.Minute.Contracts`)
 - `UTB.Minute.WebAPI.Tests` - test WebAPI využívající použitou databázi, například SQL Server (reference na `UTB.Minute.WebAPI`).     
-- `UTB.Minute.AdminClient` – Blazor Server aplikace pro vedení menzy  
-  (reference na `UTB.Minute.Contracts`)
-- `UTB.Minute.CanteenClient` – Blazor Server aplikace pro studenty a kuchařky  
-  (reference na `UTB.Minute.Contracts`)
+- `UTB.Minute.AdminClient` – Blazor Server aplikace pro vedení menzy (reference na `UTB.Minute.Contracts`).
+- `UTB.Minute.CanteenClient` – Blazor Server aplikace pro zjednodušení pro studenty a kuchařky (nutno zabezpečit přístup). Pro kuchařky a studenty je možné i vytvořit nezávislé projekty (reference na `UTB.Minute.Contracts`).
 
 ---
 
@@ -129,7 +125,7 @@ Studenti odevzdávají pouze **backend a WebAPI**
 
 ---
 
-### Funkčnost WebAPI jeho testy (0–6 bodů)
+### Funkčnost WebAPI a jeho testy (0–6 bodů)
 
 #### Jídla (0–2 body)
 - [ ] Vytvoření a čtení jídel a jejich testy (1 bod)
@@ -182,7 +178,8 @@ Studenti odevzdávají **kompletní funkční systém**
 ---
 
 ### Student – funkcionalita klienta (0–6 bodů)
-- [ ] Zobrazení menu pro aktuální den (2 body)
+- [ ] Zobrazení menu pro aktuální den (1 body)
+- [ ] Zobrazení seznamu objednávek (1 bod)
 - [ ] Objednání jídla + snížení počtu porcí (2 body)
 - [ ] Vyprodaná jídla vizuálně odlišena (2 body)
 
@@ -191,7 +188,7 @@ Studenti odevzdávají **kompletní funkční systém**
 ### Kuchařka – funkcionalita klienta (0–6 bodů)
 - [ ] Zobrazení nedokončených objednávek (2 body)
 - [ ] Změna stavu objednávky (hotová / zrušená / dokončená) (2 body)
-- [ ] Neplatné přechody objednávek jsou blokovány (2 body)
+- [ ] Neplatné přechody objednávek jsou blokovány (např. nelze přejít ze 'Zrušeno' na 'Hotovo') (2 body)
 
 ---
 
@@ -267,8 +264,8 @@ Doporučené role v týmu:
 
 - Student odevzdá pouze **zdrojové kódy** bez binárních a dočasných souborů  
   (např. tak, jak je projekt uložen na GitHubu).  
-- Součástí odevzdaného projektu bude **stručná dokumentace ve formátu Markdown (README.md)**,  
-  která vysvětlí použitá architektonická rozhodnutí a případné problémy při řešení.  
+- Součástí odevzdaného projektu bude **stručná dokumentace ve formátu Markdown (readme.md)**,  
+  která vysvětlí použitá architektonická rozhodnutí a případné problémy při řešení. Zde je šablona: [readme-template.md](readme-template.md).  
 - Dokumentace musí také obsahovat **poměr práce jednotlivých členů týmu**,  
   aby bylo možné rozdělit body podle skutečného přínosu:  
   - Například `1:1:1` znamená rovnoměrný přínos,  
