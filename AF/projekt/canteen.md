@@ -61,15 +61,23 @@ musí být vyučující schopen spustit celý projekt lokálně včetně databá
 
 ### Požadavky na řešení
 
+- .NET 10
+- Jazyk použitý ve zdrojovém kódu bude **angličtina**.
 - Projekt využívá **.NET Aspire**:
   - Vytváří databázi (např. SQL Server).
   - Používá Identity nástroj **Keycloak** k zabezpečení aplikace.
   - Využívá **Service Discovery**, bez pevně zadaných IP adres.
   - Obsahuje **Http Command** pro reset databáze (smazání, vytvoření, seed testovacích dat).
+- Projekt používá **Entity framework pro práci s databází**.
 - Projekt používá **DTO (Data Transfer Objects)** nezávislé na entitách.
 - Kód se neopakuje (DTO jsou definována pouze na jednom místě).
 - Projekt využívá **Server-Sent Events (SSE)** pro serverem iniciované notifikace
   o změnách v objednávkách pro studenta a kuchařku.
+
+### Dokumentace a odevzdání
+- Student odevzdá pouze zdrojové kódy bez binárních a dočasných souborů (jak je projekt například uložený na Githubu).
+- Součástí odevzdaného projektu bude i stručná dokumentace ve formátu Markdown (readme.md), která vysvětlí použitá architektonická rozhodnutí a případné problémy při řešení a připomínky.
+- Odevzdává se zazipovaný soubor se zdrojovými soubory a dokumentací.
 
 ---
 
@@ -82,8 +90,8 @@ musí být vyučující schopen spustit celý projekt lokálně včetně databá
   (reference na `UTB.Minute.Db`)
 - `UTB.Minute.Contracts` – DTO (Data Transfer Objects)
 - `UTB.Minute.WebAPI` – společné WebAPI pro všechny klienty včetně
-  Server-Sent Events (SSE) notifikací  
-  (reference na `UTB.Minute.Db` a `UTB.Minute.Contracts`)
+  Server-Sent Events (SSE) notifikací (reference na `UTB.Minute.Db` a `UTB.Minute.Contracts`)
+- `UTB.Minute.WebAPI.Tests` - test WebAPI využívající použitou databázi, například SQL Server (reference na `UTB.Minute.WebAPI`).     
 - `UTB.Minute.AdminClient` – Blazor Server aplikace pro vedení menzy  
   (reference na `UTB.Minute.Contracts`)
 - `UTB.Minute.CanteenClient` – Blazor Server aplikace pro studenty a kuchařky  
@@ -98,27 +106,30 @@ musí být vyučující schopen spustit celý projekt lokálně včetně databá
 Studenti odevzdávají pouze **backend a WebAPI** (bez klientských aplikací a SSE).
 
 ### Projekty (0–4 body)
-- [ ] `UTB.Minute.Db`, `UTB.Minute.DbManager`, `UTB.Minute.Contracts`, `UTB.Minute.WebAPI` jsou odevzdány a správně strukturované  
+- [ ] `UTB.Minute.Db`, `UTB.Minute.DbManager`, `UTB.Minute.Contracts`, `UTB.Minute.WebAPI`, `UTB.Minute.WebAPI.Tests` jsou odevzdány a správně strukturované  
 
 ### Datový model (0–4 body)
 - [ ] Entity a vazby správně navrženy  
 - [ ] `DbContext` odpovídá požadavkům  
-- [ ] DTO definována pouze v `UTB.Minute.Contracts`  
+- [ ] DTO definována pouze v `UTB.Minute.Contracts` bez duplikací 
 
 ### Funkčnost WebAPI (0–4 body)
-- [ ] CRUD pro Jídla  
-- [ ] CRUD pro Menu  
-- [ ] CRUD pro Objednávky (přidávání, změna stavu)  
+- [ ] Vytvoření, čtení a změna pro Jídla  
+- [ ] Vytvoření, čtení, změna a smazání pro Menu  
+- [ ] Vytvoření, čtení a změna stavu pro Objednávky
+
+### Testy a dokumentace (0- 4 body)
+- [] Jeden test pro každý endpoint ve WebAPI
+- [] Odevzdaná dokumentace projektu
 
 ### Aspire integrace (0–4 body)
 - [ ] Databáze vytvořena přes Aspire  
 - [ ] Reset a seed dat funguje přes Http Command  
 - [ ] Service Discovery funguje  
 
-### Kvalita kódu a architektury (0–4 body)
-- [ ] Architektura odpovídá zadání  
-- [ ] DTO používány správně, žádná duplicita  
-- [ ] Kód čitelný, logicky strukturovaný  
+### Srážkové body (záporné body)
+- [ ] Není použitý jazyk angličtina není použitý .NET 10. 
+- [ ] Srážka za každý bug a warning při překladu.   
 
 ---
 
