@@ -74,11 +74,6 @@ musí být vyučující schopen spustit celý projekt lokálně včetně databá
 - Projekt využívá **Server-Sent Events (SSE)** pro serverem iniciované notifikace
   o změnách v objednávkách pro studenta a kuchařku.
 
-### Dokumentace a odevzdání
-- Student odevzdá pouze zdrojové kódy bez binárních a dočasných souborů (jak je projekt například uložený na Githubu).
-- Součástí odevzdaného projektu bude i stručná dokumentace ve formátu Markdown (readme.md), která vysvětlí použitá architektonická rozhodnutí a případné problémy při řešení a připomínky.
-- Odevzdává se zazipovaný soubor se zdrojovými soubory a dokumentací.
-
 ---
 
 ## 🏗️ Architektura
@@ -196,7 +191,7 @@ Studenti odevzdávají **kompletní funkční systém**
 ### Kuchařka – funkcionalita klienta (0–6 bodů)
 - [ ] Zobrazení nedokončených objednávek (2 body)
 - [ ] Změna stavu objednávky (hotová / zrušená / dokončená) (2 body)
-- [ ] Neplatné přechody jsou blokovány (2 body)
+- [ ] Neplatné přechody objednávek jsou blokovány (2 body)
 
 ---
 
@@ -251,3 +246,34 @@ Studenti odevzdávají **kompletní funkční systém**
 | Půlsemestrální odevzdání | 0–20 |
 | Semestrální odevzdání | 0–40 |
 | **Celkem** | **0–100** |
+
+
+## Řešení a odevzdávání projektu
+
+### Doporučená struktura týmu
+
+Projekt vypracovávají studenti ve tří členném týmu (výjimečně jiný počet pokud se studenti nemohou rozdělit přesně na tříčlenné týmy).
+
+Doporučené role v týmu:
+
+| Role | Odpovědnost | Příklad úkolů |
+|------|------------|---------------|
+| **Student A – Datový model & Backend** | Správa databáze, Entity Framework Core, DbManager | - Návrh entit a vztahů<br>- Implementace DbContext<br>- Reset a seed databáze<br>- Backendové testy |
+| **Student B – WebAPI & SSE** | WebAPI, DTO, Server-Sent Events | - Implementace WebAPI endpointů<br>- DTO pro komunikaci klient-server<br>- SSE notifikace<br>- Testování API |
+| **Student C – Blazor klient & UI** | Blazor klienty pro studenty a kuchařky, autentizace/Keycloak, UI | - Frontend Blazor klientů<br>- UI pro studenty a kuchařky<br>- Autentizace a autorizace přes Keycloak<br>- Vizualizace stavů objednávek |
+
+
+### Dokumentace a odevzdání
+
+- Student odevzdá pouze **zdrojové kódy** bez binárních a dočasných souborů  
+  (např. tak, jak je projekt uložen na GitHubu).  
+- Součástí odevzdaného projektu bude **stručná dokumentace ve formátu Markdown (README.md)**,  
+  která vysvětlí použitá architektonická rozhodnutí a případné problémy při řešení.  
+- Dokumentace musí také obsahovat **poměr práce jednotlivých členů týmu**,  
+  aby bylo možné rozdělit body podle skutečného přínosu:  
+  - Například `1:1:1` znamená rovnoměrný přínos,  
+    `1:1:2` znamená, že student 3 pracoval tolik, co studenti 1 a 2 dohromady.  
+  - Každý student odevzdá svůj vlastní soubor projektu se svým návrhem poměru (tedy třikrát).  
+  - Pokud se návrhy jednotlivých studentů liší, rozhodne po konzultaci vyučující.  
+- Odevzdává se **zazipovaný soubor** se zdrojovými soubory a dokumentací.  
+- Na konci semestru studenti projekt **obhajují**, aby prokázali, že rozumí odevzdanému kódu.
