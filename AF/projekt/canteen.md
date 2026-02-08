@@ -101,95 +101,84 @@ musí být vyučující schopen spustit celý projekt lokálně včetně databá
 
 # 📝 Objednávací systém v menze – checklist a hodnocení
 
+Tento checklist slouží:
+- **studentům** jako kontrolní seznam před odevzdáním
+- **vyučujícím** jako jednotná hodnoticí kritéria
+
+⚠️ **Důležité pravidlo**  
+Pokud se projekt **nesestaví nebo nespustí**, hodnotí se odevzdání **0 body**  
+(bez ohledu na částečnou implementaci funkcionality).
+
+---
+
 ## 📤 Půlsemestrální odevzdání (20 bodů)
 
-Studenti odevzdávají pouze **backend a WebAPI** (bez klientských aplikací a SSE).
+Studenti odevzdávají pouze **backend a WebAPI**  
+*(bez klientských aplikací a bez SSE)*
 
-### Projekty (0–4 body)
-- [ ] `UTB.Minute.Db`, `UTB.Minute.DbManager`, `UTB.Minute.Contracts`, `UTB.Minute.WebAPI`, `UTB.Minute.WebAPI.Tests` jsou odevzdány a správně strukturované  
+---
 
-### Datový model (0–4 body)
-- [ ] Entity a vazby správně navrženy  
-- [ ] `DbContext` odpovídá požadavkům  
-- [ ] DTO definována pouze v `UTB.Minute.Contracts` bez duplikací 
+### Projekty a struktura řešení (0–3 body)
+- [ ] Všechny požadované projekty existují a jsou správně pojmenované (1 bod)  
+  (`UTB.Minute.Db`, `DbManager`, `Contracts`, `WebAPI`, `WebAPI.Tests`)
+- [ ] Správné reference mezi projekty (1 bod)
+- [ ] Struktura odpovídá navržené architektuře (1 bod)
 
-### Funkčnost WebAPI (0–4 body)
-- [ ] Vytvoření, čtení a změna pro Jídla  
-- [ ] Vytvoření, čtení, změna a smazání pro Menu  
-- [ ] Vytvoření, čtení a změna stavu pro Objednávky
+---
+
+### Datový model a DTO (0–5 bodů)
+- [ ] Entity a jejich vazby odpovídají zadání (1 bod)
+- [ ] Správně navržený `DbContext` (1 bod)
+- [ ] Stav objednávky řešen enumem (1 bod)
+- [ ] DTO jsou definována pouze v `UTB.Minute.Contracts` (1 bod)
+- [ ] WebAPI nevrací entity přímo (1 bod)
+
+---
+
+### Funkčnost WebAPI jeho testy (0–6 bodů)
+
+#### Jídla (0–2 body)
+- [ ] Vytvoření a čtení jídel a jejich testy (1 bod)
+- [ ] Úprava jídla + deaktivace a jejich testy (1 bod)
+
+#### Menu (0–2 body)
+- [ ] Vytvoření a čtení položek menu a jejich testy (1 bod)
+- [ ] Úprava a smazání položek menu a jejich testy (1 bod)
+
+#### Objednávky (0–2 body)
+- [ ] Vytvoření a čtení objednávek a jejich testy (1 bod)
+- [ ] Změna stavu objednávky a jeho test (1 bod)
+
+---
 
 ### Aspire integrace (0–4 body)
-- [ ] Databáze vytvořena přes Aspire  
-- [ ] Reset a seed dat funguje přes Http Command  
-- [ ] Service Discovery funguje  
-
-### Testy a dokumentace (0- 4 body)
-- [] Jeden test pro každý endpoint ve WebAPI
-- [] Odevzdaná dokumentace projektu
-
-### Srážkové body (záporné body)
-- [ ] Není použitý jazyk angličtina nebo není použitý .NET 10. 
-- [ ] Srážka za každý bug a warning při překladu.
-- [ ] Srážka za nedodržené Nefukční požadavky   
+- [ ] Databáze vytvořena a konfigurována přes Aspire (1 bod)
+- [ ] Http Command pro reset databáze (1 bod)
+- [ ] Seed testovacích dat funguje (1 bod)
+- [ ] Service Discovery bez pevných adres (1 bod)
 
 ---
 
-## 🏁 Semestrální odevzdání (40 bodů)
+### Testy a dokumentace (0–2 body)
+- [ ] Stručná dokumentace projektu (README.md) (2 body)
 
-Studenti odevzdávají **kompletní funkční systém**, backend + klienti + SSE.
-
-### Projekty (0–4 body)
-- [ ] `AdminClient` a `CanteenClient` připojené na WebAPI  
-- [ ] Backend plně funkční  
-
-### Student (0–6 body)
-- [ ] Vidí menu pro aktuální den  
-- [ ] Může objednávat jídlo  
-- [ ] Vyprodané položky v menu jsou přeškrtnuté  
-
-### Kuchařka (0–5 body)
-- [ ] Vidí seznam aktuálních objednávek  
-- [ ] Mění stav objednávky (hotová, zrušená, dokončená)  
-
-### Vedení menzy (0–5 body)
-- [ ] Může vytvářet a upravovat Jídla (včetně deaktivace jídla) 
-- [ ] Může vytvářet a upravovat Menu 
-
-### Stav objednávky (0–4 body)
-- [ ] Přechody stavů objednávky správně implementovány: Připravuje se → Hotová → Zrušená → Dokončená  
-
-### SSE notifikace (0–5 body)
-- [ ] SSE endpoint funguje  
-- [ ] Notifikace dorazí studentovi i kuchařce  
-- [ ] UI se aktualizuje v reálném čase  
-
-### Autentizace a autorizace (0–6 body)
-- [ ] Keycloak spuštěn přes Aspire  
-- [ ] Backend chráněn, role správně přiřazeny  
-- [ ] Klienti chrání routy a UI prvky podle role  
-
-### Kvalita kódu a architektury (0–5 body)
-- [ ] Architektura odpovídá zadání  
-- [ ] DTO používány správně, žádná duplicita  
-- [ ] Kód čitelný, logicky strukturovaný  
-- [ ] Bez mrtvého kódu nebo citlivých dat  
-
-### Aspire integrace (0–2 body)
-- [ ] Service Discovery funguje  
-- [ ] Http Commands a konfigurace správně nastaveny  
-
-### Testy a dokumentace (0- 2 body)
-- [] Odevzdaná dokumentace projektu
-
-### Srážkové body (záporné body)
-- [ ] Není použitý jazyk angličtina nebo není použitý .NET 10 
-- [ ] Srážka za každý bug a warning při překladu 
-- [ ] Srážka za nedodržené Nefukční požadavky
 ---
 
-## ✅ Finální kontrola
-- [ ] Projekt se spustí na čistém stroji přes Aspire  
-- [ ] Všechny funkce dostupné a testovatelné  
+### Srážkové body (záporné)
+- [ ] Nepoužití angličtiny neb
+
+
+---
+
+## ✅ Finální kontrola (povinné pro obě odevzdání)
+
+- [ ] Projekt se **sestaví bez chyb**
+- [ ] Projekt se **spustí přes Aspire**
+- [ ] Databáze se vytvoří a je dostupná
+- [ ] Keycloak je dostupný (semestrální odevzdání)
+- [ ] Aplikace jsou použitelné bez ručních zásahů do konfigurace s použitím Aspire na čístém stroji jen s Dockerem nebo Podmanem.
+
+---
 
 ## 🧮 Shrnutí bodování
 
