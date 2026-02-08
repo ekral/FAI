@@ -69,11 +69,12 @@ musí být vyučující schopen spustit celý projekt lokálně včetně databá
   - Využívá **Service Discovery**, bez pevně zadaných IP adres.
   - Obsahuje **Http Command** pro reset databáze (smazání, vytvoření, seed testovacích dat).
 - Projekt používá **Entity framework pro práci s databází**.
-- Projekt používá **Minimal Web Api** s TypedResults.
+- Projekt používá **Minimal Web API** s TypedResults.
 - Projekt používá **DTO (Data Transfer Objects)** nezávislé na entitách.
 - Kód se neopakuje (DTO jsou definována pouze na jednom místě).
 - Projekt využívá **Server-Sent Events (SSE)** pro serverem iniciované notifikace
   o změnách v objednávkách pro studenta a kuchařku.
+- Klientské aplikace volají Minimal Web API pomocí Http protokolu a nepřistupují přímo k databázi a entitám.
 
 ---
 
@@ -86,8 +87,8 @@ musí být vyučující schopen spustit celý projekt lokálně včetně databá
 - `UTB.Minute.Contracts` – DTO (Data Transfer Objects)
 - `UTB.Minute.WebAPI` – společné WebAPI pro všechny klienty včetně Server-Sent Events (SSE) notifikací (reference na `UTB.Minute.Db` a `UTB.Minute.Contracts`)
 - `UTB.Minute.WebAPI.Tests` - test WebAPI využívající použitou databázi, například SQL Server (reference na `UTB.Minute.WebAPI`).     
-- `UTB.Minute.AdminClient` – Blazor Server aplikace pro vedení menzy (reference na `UTB.Minute.Contracts`).
-- `UTB.Minute.CanteenClient` – Blazor Server aplikace pro zjednodušení pro studenty a kuchařky (nutno zabezpečit přístup). Pro kuchařky a studenty je možné i vytvořit nezávislé projekty (reference na `UTB.Minute.Contracts`).
+- `UTB.Minute.AdminClient` – Blazor Server aplikace pro vedení menzy (reference na `UTB.Minute.Contracts`). Volá WebAPI pomocí protokolu Http.
+- `UTB.Minute.CanteenClient` – Blazor Server aplikace pro zjednodušení pro studenty a kuchařky (nutno zabezpečit přístup). Pro kuchařky a studenty je možné i vytvořit nezávislé projekty (reference na `UTB.Minute.Contracts`). Volá WebAPI pomocí protokolu Http.
 
 ---
 
@@ -178,9 +179,9 @@ Studenti odevzdávají **kompletní funkční systém**
 
 ---
 
-### Student – funkcionalita klienta (0–6 bodů)
-- [ ] Zobrazení menu pro aktuální den (1 body)
-- [ ] Zobrazení seznamu objednávek (1 bod)
+### Student – funkcionalita klienta (0–8 bodů)
+- [ ] Zobrazení menu pro aktuální den (2 body)
+- [ ] Zobrazení seznamu objednávek (2 bod)
 - [ ] Objednání jídla + snížení počtu porcí (2 body)
 - [ ] Vyprodaná jídla vizuálně odlišena (2 body)
 
@@ -220,7 +221,7 @@ Studenti odevzdávají **kompletní funkční systém**
 
 ---
 
-### Dokumentace (0–4 body)
+### Dokumentace (0–2 body)
 - [ ] Aktualizovaná dokumentace k finálnímu řešení (4 body)
 
 ---
@@ -275,3 +276,7 @@ Doporučené role v týmu:
   - Pokud se návrhy jednotlivých studentů liší, rozhodne po konzultaci vyučující.  
 - Odevzdává se **zazipovaný soubor** se zdrojovými soubory a dokumentací.  
 - Na konci semestru studenti projekt **obhajují**, aby prokázali, že rozumí odevzdanému kódu.
+
+### Bonusový úkol
+
+Bonusovým úkolem je vypracování desktopového klienta pro kuchařky ve frameworku [**Avalonia**](https://avaloniaui.net/).
