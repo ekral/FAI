@@ -118,18 +118,19 @@ Studenti odevzdávají pouze **backend a WebAPI** (bez klientských aplikací a 
 - [ ] Vytvoření, čtení, změna a smazání pro Menu  
 - [ ] Vytvoření, čtení a změna stavu pro Objednávky
 
-### Testy a dokumentace (0- 4 body)
-- [] Jeden test pro každý endpoint ve WebAPI
-- [] Odevzdaná dokumentace projektu
-
 ### Aspire integrace (0–4 body)
 - [ ] Databáze vytvořena přes Aspire  
 - [ ] Reset a seed dat funguje přes Http Command  
 - [ ] Service Discovery funguje  
 
+### Testy a dokumentace (0- 4 body)
+- [] Jeden test pro každý endpoint ve WebAPI
+- [] Odevzdaná dokumentace projektu
+
 ### Srážkové body (záporné body)
-- [ ] Není použitý jazyk angličtina není použitý .NET 10. 
-- [ ] Srážka za každý bug a warning při překladu.   
+- [ ] Není použitý jazyk angličtina nebo není použitý .NET 10. 
+- [ ] Srážka za každý bug a warning při překladu.
+- [ ] Srážka za nedodržené Nefukční požadavky   
 
 ---
 
@@ -144,15 +145,15 @@ Studenti odevzdávají **kompletní funkční systém**, backend + klienti + SSE
 ### Student (0–6 body)
 - [ ] Vidí menu pro aktuální den  
 - [ ] Může objednávat jídlo  
-- [ ] Vyprodané položky jsou přeškrtnuté  
+- [ ] Vyprodané položky v menu jsou přeškrtnuté  
 
 ### Kuchařka (0–5 body)
 - [ ] Vidí seznam aktuálních objednávek  
 - [ ] Mění stav objednávky (hotová, zrušená, dokončená)  
 
 ### Vedení menzy (0–5 body)
-- [ ] CRUD pro Jídla  
-- [ ] CRUD pro Menu (včetně deaktivace jídla)  
+- [ ] Může vytvářet a upravovat Jídla (včetně deaktivace jídla) 
+- [ ] Může vytvářet a upravovat Menu 
 
 ### Stav objednávky (0–4 body)
 - [ ] Přechody stavů objednávky správně implementovány: Připravuje se → Hotová → Zrušená → Dokončená  
@@ -177,6 +178,13 @@ Studenti odevzdávají **kompletní funkční systém**, backend + klienti + SSE
 - [ ] Service Discovery funguje  
 - [ ] Http Commands a konfigurace správně nastaveny  
 
+### Testy a dokumentace (0- 2 body)
+- [] Odevzdaná dokumentace projektu
+
+### Srážkové body (záporné body)
+- [ ] Není použitý jazyk angličtina nebo není použitý .NET 10 
+- [ ] Srážka za každý bug a warning při překladu 
+- [ ] Srážka za nedodržené Nefukční požadavky
 ---
 
 ## ✅ Finální kontrola
