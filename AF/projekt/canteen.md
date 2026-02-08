@@ -69,6 +69,7 @@ musí být vyučující schopen spustit celý projekt lokálně včetně databá
   - Využívá **Service Discovery**, bez pevně zadaných IP adres.
   - Obsahuje **Http Command** pro reset databáze (smazání, vytvoření, seed testovacích dat).
 - Projekt používá **Entity framework pro práci s databází**.
+- Projekt používá **Minimal Web Api** s TypedResults.
 - Projekt používá **DTO (Data Transfer Objects)** nezávislé na entitách.
 - Kód se neopakuje (DTO jsou definována pouze na jednom místě).
 - Projekt využívá **Server-Sent Events (SSE)** pro serverem iniciované notifikace
