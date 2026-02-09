@@ -93,7 +93,7 @@ V solution budou následující projekty:
 
 ---
 
-# 📝 Objednávací systém v menze – checklist a hodnocení
+# 📝 Checklist a hodnocení
 
 Tento checklist slouží:
 - **studentům** jako kontrolní seznam před odevzdáním
