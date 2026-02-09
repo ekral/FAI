@@ -266,7 +266,7 @@ Projekt vypracovávají studenti ve **tří členném týmu** (výjimečně jin�
   - Například `1:1:1` znamená rovnoměrný přínos,  
     `1:1:2` znamená, že student 3 pracoval tolik, co studenti 1 a 2 dohromady.  
   - Každý student odevzdá svůj vlastní soubor projektu se svým návrhem poměru (tedy třikrát).  
-  - Pokud se návrhy jednotlivých studentů liší, rozhodne po konzultaci vyučující.  
+  - Pokud se návrhy podílů jednotlivých studentů liší, rozhodne po konzultaci vyučující.  
 - Odevzdává se **zazipovaný soubor** se zdrojovými soubory a dokumentací.  
 - Na konci semestru studenti projekt **obhajují**, aby prokázali, že rozumí odevzdanému kódu.
 
