@@ -21,7 +21,7 @@ Student je o stavu objednávky informován v reálném čase.
 ### Vedení menzy
 
 #### Jídla
-- Zobrazuje seznam jídel (název, popis, cena).
+- Zobrazuje seznam jídel (popis, cena).
 - Vytváří nová jídla.
 - Upravuje jídla. Jídlo se neodstraňuje, pouze se označí jako neaktivní.
 
