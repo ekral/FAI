@@ -9,7 +9,7 @@ Semestrální projekt do předmětu **Aplikační frameworky**.
 | **Student B** | WebAPI & SSE | 1 |
 | **Student C** | Blazor klient & UI | 1 |
 
-*Poznámka: Poměr práce `1:1:1` značí rovnoměrný přínos všech členů.*
+*Poznámka: Poměr práce `1:1:1` značí rovnoměrný přínos všech členů.
 
 ---
 
@@ -17,6 +17,7 @@ Semestrální projekt do předmětu **Aplikační frameworky**.
 
 1. **Požadavky:** .NET 10 SDK, Docker Desktop nebo Podman (nutný pro běh SQL Serveru a Keycloaku v Aspire).
 2. **Postup:**
+   - Spusťe Docker Desktop nebo Podman.
    - Otevřete solution `UTB.Minute.slnx` ve Visual Studiu 2026 nebo JetBrains Rider.
    - Nastavte projekt `UTB.Minute.AppHost` jako **Start-up projekt**.
    - Spusťte projekt.
@@ -24,27 +25,16 @@ Semestrální projekt do předmětu **Aplikační frameworky**.
 
 ---
 
-## 🏗️ Architektura a technologie
+## 📂 Struktura řešení
+Pokud se struktura liší (například CanteenClient je rozdělený na dva projekty) tak zde uveďtte.
 
-Projekt je postaven na moderním stacku .NET s důrazem na distribuované systémy a orchestraci.
-
-### Použité technologie
-* **.NET Aspire:** Správa orchestrace, Service Discovery a integrace kontejnerů.
-* **Minimal WebAPI:** Implementace RESTful služeb na straně backendu.
-* **Entity Framework Core:** ORM pro přístup k SQL Serveru (Code First přístup).
-* **Blazor Server:** Frontendové aplikace s real-time vazbou.
-* **Keycloak:** Identity provider pro správu uživatelů a rolí (`admin`, `cook`, `student`).
-* **Server-Sent Events (SSE):** Push notifikace o změně stavu objednávek z API do klientů.
-
-### Struktura řešení
-* `UTB.Minute.Db`: Datové entity a `DbContext`.
-* `UTB.Minute.DbManager`: Obsahuje endpointy pro **Http Command** (reset a seed databáze).
-* `UTB.Minute.Contracts`: Sdílená DTO, aby byla zajištěna typová bezpečnost mezi API a klienty.
-* `UTB.Minute.WebAPI`: Hlavní byznys logika, správa objednávek a SSE hub.
-* `UTB.Minute.AdminClient`: Aplikace pro vedení menzy (správa jídel a menu).
-* `UTB.Minute.CanteenClient`: Společné rozhraní pro studenty a kuchařky (ošetřeno autorizací).
-
----
+- `UTB.Minute.AppHost`: Aspire orchestrace.
+- `UTB.Minute.Db`: Datové entity a `DbContext`.
+- `UTB.Minute.DbManager`: Obsahuje endpoint pro **Http Command** (reset databáze).
+- `UTB.Minute.Contracts`: Sdílená DTO, aby byla zajištěna typová bezpečnost mezi API a klienty.
+- `UTB.Minute.WebAPI`: Hlavní byznys logika, správa objednávek a SSE hub.
+- `UTB.Minute.AdminClient`: Aplikace pro vedení menzy (správa jídel a menu).
+- `UTB.Minute.CanteenClient`: Společné rozhraní pro studenty a kuchařky (ošetřeno autorizací).
 
 ## 🛠️ Klíčová implementační rozhodnutí
 
