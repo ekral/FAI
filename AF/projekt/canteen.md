@@ -253,18 +253,7 @@ Studenti odevzdávají **kompletní funkční systém**
 
 ## Řešení a odevzdávání projektu
 
-### Doporučená struktura týmu
-
-Projekt vypracovávají studenti ve tří členném týmu (výjimečně jiný počet pokud se studenti nemohou rozdělit přesně na tříčlenné týmy).
-
-Doporučené role v týmu:
-
-| Role | Odpovědnost | Příklad úkolů |
-|------|------------|---------------|
-| **Student A – Datový model & Backend** | Správa databáze, Entity Framework Core, DbManager | - Konfigurace .NET Aspire<br>- Návrh entit a vztahů<br>- Implementace DbContext<br>- Reset a seed databáze |
-| **Student B – WebAPI & SSE** | WebAPI, DTO, Server-Sent Events | - Implementace WebAPI endpointů<br>- DTO pro komunikaci klient-server<br>- SSE notifikace<br>- Testování API |
-| **Student C – Blazor klient & UI** | Blazor klienty pro studenty a kuchařky, autentizace/Keycloak, UI | - Frontend Blazor klientů<br>- UI pro studenty a kuchařky<br>- Autentizace a autorizace přes Keycloak<br>- Vizualizace stavů objednávek |
-
+Projekt vypracovávají studenti ve **tří členném týmu** (výjimečně jiný počet pokud se studenti nemohou rozdělit přesně na tříčlenné týmy).
 
 ### Dokumentace a odevzdání
 
