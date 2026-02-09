@@ -99,7 +99,7 @@ Tento checklist slouží:
 - **vyučujícím** jako jednotná hodnoticí kritéria
 
 ⚠️ **Důležité pravidlo**  
-Pokud se projekt **nesestaví nebo nespustí**, hodnotí se odevzdání **0 body**  
+Pokud se projekt **nesestaví nebo nespustí** a **nebude v angličtině nebo v .NET 10**, hodnotí se odevzdání **0 body**  
 (bez ohledu na částečnou implementaci funkcionality).
 
 ---
@@ -157,8 +157,8 @@ Studenti odevzdávají pouze **backend a WebAPI**
 ---
 
 ### Srážkové body (záporné)
-- [ ] Nepoužití angličtiny nebo starší verze než .NET 10  
-- [ ] Bugy, warningy, porušení nefunkčních požadavků 
+- [ ] Bugy, warningy (-1 bod za každý)
+- [ ] Nedodržení jmenných konvencí (-2 body)
 
 ---
 
@@ -227,8 +227,8 @@ Studenti odevzdávají **kompletní funkční systém**
 ---
 
 ### Srážkové body (záporné)
-- [ ] Nepoužití angličtiny nebo starší verze než .NET 10  
-- [ ] Bugy, warningy, porušení nefunkčních požadavků  
+- [ ] Bugy, warningy (-1 bod za každý)
+- [ ] Nedodržení jmenných konvencí (-2 body)
 
 ---
 
