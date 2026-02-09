@@ -63,7 +63,7 @@ musí být vyučující schopen spustit celý projekt lokálně včetně databá
 
 - .NET 10
 - Jazyk použitý ve zdrojovém kódu bude **angličtina**.
-- Projekt využívá [**.NET Aspire**](https://aspire.dev/get-started/what-is-aspire/):
+- Projekt využívá [**Aspire**](https://aspire.dev/get-started/what-is-aspire/):
   - Vytváří databázi (např. [**SQL Server**](https://aspire.dev/integrations/databases/efcore/sql-server/sql-server-get-started/)).
   - Používá Identity nástroj [**Keycloak**](https://aspire.dev/integrations/security/keycloak/) k zabezpečení aplikace.
   - Využívá **Service Discovery**, bez pevně zadaných IP adres.
