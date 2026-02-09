@@ -100,7 +100,7 @@ Tento checklist slouží:
 - **vyučujícím** jako jednotná hodnoticí kritéria
 
 > [!WARNING]
-> **Důležité pravidlo** 
+> **Důležité pravidlo**: 
 > Pokud se odevzdaný projekt **nedá sestavit nebo spustit**,
 > **není v angličtině** nebo **není vytvořen v .NET 10**  
 > bude hodnocen **0 body**
