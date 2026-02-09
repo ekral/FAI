@@ -82,10 +82,11 @@ musí být vyučující schopen spustit celý projekt lokálně včetně databá
 
 ### Základní struktura řešení
 
-- `UTB.Minute.Db` – entity a `DbContext`
-- `UTB.Minute.DbManager` – WebAPI pro Http Command, reset a seed databáze (reference na `UTB.Minute.Db`)
-- `UTB.Minute.Contracts` – DTO (Data Transfer Objects)
-- `UTB.Minute.WebAPI` – společné WebAPI pro všechny klienty včetně Server-Sent Events (SSE) notifikací (reference na `UTB.Minute.Db` a `UTB.Minute.Contracts`)
+- `UTB.Minute.AppHost` - Aspire Integrace.
+- `UTB.Minute.Db` – entity a `DbContext`.
+- `UTB.Minute.DbManager` – WebAPI pro Http Command, reset a seed databáze (reference na `UTB.Minute.Db`).
+- `UTB.Minute.Contracts` – DTO (Data Transfer Objects).
+- `UTB.Minute.WebAPI` – společné WebAPI pro všechny klienty včetně Server-Sent Events (SSE) notifikací (reference na `UTB.Minute.Db` a `UTB.Minute.Contracts`).
 - `UTB.Minute.WebAPI.Tests` - test WebAPI využívající použitou databázi, například SQL Server (reference na `UTB.Minute.WebAPI`).     
 - `UTB.Minute.AdminClient` – Blazor Server aplikace pro vedení menzy (reference na `UTB.Minute.Contracts`). Volá WebAPI pomocí protokolu Http.
 - `UTB.Minute.CanteenClient` – Blazor Server aplikace pro zjednodušení pro studenty a kuchařky (nutno zabezpečit přístup). Pro kuchařky a studenty je možné i vytvořit nezávislé projekty (reference na `UTB.Minute.Contracts`). Volá WebAPI pomocí protokolu Http.
@@ -99,7 +100,7 @@ Tento checklist slouží:
 - **vyučujícím** jako jednotná hodnoticí kritéria
 
 ⚠️ **Důležité pravidlo**  
-Pokud se projekt **nesestaví nebo nespustí**, hodnotí se odevzdání **0 body**  
+Pokud se projekt **nesestaví nebo nespustí** a **nebude v angličtině nebo v .NET 10**, hodnotí se odevzdání **0 body**  
 (bez ohledu na částečnou implementaci funkcionality).
 
 ---
@@ -157,8 +158,8 @@ Studenti odevzdávají pouze **backend a WebAPI**
 ---
 
 ### Srážkové body (záporné)
-- [ ] Nepoužití angličtiny nebo starší verze než .NET 10  
-- [ ] Bugy, warningy, porušení nefunkčních požadavků 
+- [ ] Bugy, warningy (-1 bod za každý)
+- [ ] Nedodržení jmenných konvencí (-2 body)
 
 ---
 
@@ -227,8 +228,8 @@ Studenti odevzdávají **kompletní funkční systém**
 ---
 
 ### Srážkové body (záporné)
-- [ ] Nepoužití angličtiny nebo starší verze než .NET 10  
-- [ ] Bugy, warningy, porušení nefunkčních požadavků  
+- [ ] Bugy, warningy (-1 bod za každý)
+- [ ] Nedodržení jmenných konvencí (-2 body)
 
 ---
 
