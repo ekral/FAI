@@ -99,7 +99,7 @@ Tento checklist slouží:
 - **studentům** jako kontrolní seznam před odevzdáním
 - **vyučujícím** jako jednotná hodnoticí kritéria
 
-> [!WARNING]
+> [!CAUTION] 
 > **Důležité pravidlo**: 
 > Pokud se odevzdaný projekt **nedá sestavit nebo spustit**,
 > **není v angličtině** nebo **není vytvořen v .NET 10**  
