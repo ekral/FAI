@@ -78,9 +78,9 @@ musí být vyučující schopen spustit celý projekt lokálně včetně databá
 
 ---
 
-## 🏗️ Architektura
+## 📂 Struktura řešení
 
-### Základní struktura řešení
+V solution budou následující projekty:
 
 - `UTB.Minute.AppHost` - Aspire Integrace.
 - `UTB.Minute.Db` – entity a `DbContext`.
