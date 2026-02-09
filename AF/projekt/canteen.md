@@ -99,9 +99,12 @@ Tento checklist slouží:
 - **studentům** jako kontrolní seznam před odevzdáním
 - **vyučujícím** jako jednotná hodnoticí kritéria
 
-⚠️ **Důležité pravidlo**  
-Pokud se projekt **nesestaví nebo nespustí** a **nebude v angličtině nebo v .NET 10**, hodnotí se odevzdání **0 body**  
-(bez ohledu na částečnou implementaci funkcionality).
+> [!WARNING]
+> **Důležité pravidlo** 
+> Pokud se odevzdaný projekt **nedá sestavit nebo spustit**,
+> **není v angličtině** nebo **není vytvořen v .NET 10**  
+> bude hodnocen **0 body**
+> (a to bez ohledu na míru implementované funkcionality).
 
 ---
 
