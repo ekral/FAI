@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="UTB.Library.AppHost/UTB.Library.AppHost.csproj" />
+  <Project Path="UTB.Library.ServiceDefaults/UTB.Library.ServiceDefaults.csproj" />
+</Solution>
