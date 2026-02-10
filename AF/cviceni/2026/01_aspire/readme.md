@@ -1,4 +1,6 @@
-# Úkol 1 – Aspire Host
+# Úkol 01: Aspire Host
+
+*Autor: Erik Král – <ekral@utb.cz>*
 
 V tomto cvičení se naučíme, jak vytvořit aplikaci řízenou technologií **Aspire**.
 
