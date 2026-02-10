@@ -15,4 +15,8 @@
     <PackageReference Include="Aspire.Hosting.SqlServer" Version="13.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\UTB.Library.DbManager\UTB.Library.DbManager.csproj" />
+  </ItemGroup>
+
 </Project>

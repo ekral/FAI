@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace UTB.Library.Db
 {
-    internal class LibraryContext
+    public class LibraryContext(DbContextOptions<LibraryContext> options) : DbContext(options)
     {
+        public DbSet<Author> Authors { get; set; }
     }
 }
