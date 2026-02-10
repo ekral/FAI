@@ -4,7 +4,7 @@
 
 V tomto cvičení se naučíme, jak vytvořit aplikaci řízenou technologií **Aspire** využívající Docker kontejnery.
 
-Instalace všech nástrojů (databázové servery, nástroje pro distribuovanou cache (např. Redis), nástroje pro zasílání zpráv) pro každý projekt by byla velmi náročná. Zároveň je vhodné s nástroji pracovat ve stejném prostředí (včetně operačního systému), ve kterém budou nasazeny. Proto využíváme virtualizaci pomocí kontejnerů — stáhneme si image s operačním systémem a například databázovým serverem, můžeme s ním pracovat a poté jej jednoduše odstranit.
+Instalace všech nástrojů (databázové servery, nástroje pro distribuovanou cache (např. Redis), nástroje pro zasílání zpráv atd.) pro každý projekt by byla velmi náročná. Zároveň je vhodné s nástroji pracovat ve stejném prostředí (včetně operačního systému), ve kterém budou nasazeny. Proto využíváme virtualizaci pomocí kontejnerů — stáhneme si image s operačním systémem a například databázovým serverem, můžeme s ním pracovat a poté jej jednoduše odstranit.
 
 Spouštění různých serverů, webových služeb a klientů musí probíhat v určitém pořadí a jednotlivé komponenty musí být vzájemně propojeny pomocí connection stringů k databázím a adres serverů hostujících webové a další služby. K tomuto účelu slouží Aspire, který řídí (orchestruje) spouštění distribuovaných aplikací a lze jej také použít pro jejich nasazení.
 
