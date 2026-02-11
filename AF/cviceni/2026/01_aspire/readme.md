@@ -17,6 +17,8 @@ Součástí projektu bude:
 
 ## 📋 Postup
 
+U všech projektů zvolte **.NET 10**.
+
 ### 1. Aspire Application Host 
 
 Vytvořte nový projekt typu **Aspire Empty App** s názvem `UTB.Library` a pro vytvořený projekt:
