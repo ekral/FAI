@@ -74,7 +74,7 @@ musí být vyučující schopen spustit celý projekt lokálně včetně databá
 - Kód se neopakuje (DTO jsou definována pouze na jednom místě).
 - Projekt využívá **Server-Sent Events (SSE)** pro serverem iniciované notifikace
   o změnách v objednávkách studentů a pro kuchařku. SSE o změnách objednávek se broadcastují všem bez zabezpečení.
-- Klientské aplikace volají Minimal Web API pomocí Http protokolu a nepřistupují přímo k databázi a entitám.
+- Klientské aplikace volají Minimal Web API pomocí HTTP protokolu a nepřistupují přímo k databázi a entitám.
 - Testy budou využívat "produkční" databázi, například SQL Server a ne InMemory EF. Testy musí běžet automaticky bez manuálního zásahu (pomocí databáze spuštěné přes Aspire).
 
 ---
