@@ -270,6 +270,41 @@ Projekt vypracovávají studenti ve **tří členném týmu** (výjimečně jin�
 - Odevzdává se **zazipovaný soubor** se zdrojovými soubory a dokumentací.  
 - Na konci semestru studenti projekt **obhajují**, aby prokázali, že rozumí odevzdanému kódu.
 
-### Bonusový úkol
+## Obhajoba projektu
+
+Cílem obhajoby je ověřit, že student rozumí odevzdanému projektu.  
+Obhajoba se skládá z **písemné části** pro všechny studenty a **ústní části** pouze pro ty, kteří neprokážou základní znalosti.
+
+Příklady otázek:
+
+- Co vše by bylo potřeba v projektu udělat pro přidání nového stavu objednávky?  
+- Jakým způsobem byste do projektu přidali nového Webového Clienta pracujícího s databází pomocí EF? 
+
+> Student si vybere jednu otázku odpovídající jeho části projektu a zodpoví ji textově v Moodle, bez použití vývojového nástroje.
+
+Procenta projektu podle písemné obhajoby:
+
+| Úroveň porozumění | Procento projektu | Poznámka |
+|------------------|-----------------|-----------|
+| Plně prokázal    | 100 %           | Student rozumí všem klíčovým částem projektu. |
+| Slabé porozumění | 70 %            | Drobná mezera (např. SSE, DTO, WebAPI). |
+| Výrazné mezery   | 40 %            | Neznalost klíčového toku objednávky nebo integrace. |
+| Neprokázal       | 30 %            | Projekt nebyl pochopen nebo použit cizí kód. |
+
+Výpočet bodů projektu po obhajobě:
+
+Projektové body po obhajobě = Projektové body × (procento splnění z písemné/ústní obhajoby).
+
+> ⚠️ Body z testů se tímto neovlivňují. Procenta se vztahují **pouze k projektové části (60 b)**.
+
+### 🗣️ Ústní obhajoba
+
+- Probíhá **jen u studentů s procentem ≤30 %**.  
+- Cíl: ověřit minimální porozumění projektu.  
+- Pokud student neprokáže ani ústně, projektové procento zůstává nízké → může vést k neudělení zápočtu.
+
+---
+
+## Bonusový úkol
 
 Bonusovým úkolem je vypracování desktopového klienta pro kuchařky ve frameworku [**Avalonia**](https://avaloniaui.net/).
