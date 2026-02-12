@@ -49,7 +49,7 @@ Student je o stavu objednávky informován v reálném čase.
 ### Stavy objednávky
 - Připravuje se (sníží počet porcí)
 - Hotová (připraveno k vyzvednutí)
-- Zrušená (počet porcí zůstane snížený)
+- Zrušená (zrušená objednávka nevrací porci zpět)
 - Dokončená
 
 ---
@@ -73,8 +73,9 @@ musí být vyučující schopen spustit celý projekt lokálně včetně databá
 - Projekt používá **DTO (Data Transfer Objects)** nezávislé na entitách.
 - Kód se neopakuje (DTO jsou definována pouze na jednom místě).
 - Projekt využívá **Server-Sent Events (SSE)** pro serverem iniciované notifikace
-  o změnách v objednávkách pro studenta a kuchařku.
+  o změnách v objednávkách studentů a pro kuchařku. SSE o změnách objednávek se broadcastují všem bez zabezpečení.
 - Klientské aplikace volají Minimal Web API pomocí Http protokolu a nepřistupují přímo k databázi a entitám.
+- Testy budou využívat "produkční" databázi, například SQL Server a ne InMemory EF. Testy musí běžet automaticky bez manuálního zásahu (pomocí databáze spuštěné přes Aspire).
 
 ---
 
@@ -183,11 +184,12 @@ Studenti odevzdávají **kompletní funkční systém**
 
 ---
 
-### Student – funkcionalita klienta (0–8 bodů)
+### Student – funkcionalita klienta (0–10 bodů)
 - [ ] Zobrazení menu pro aktuální den (2 body)
 - [ ] Zobrazení seznamu objednávek (2 bod)
 - [ ] Objednání jídla + snížení počtu porcí (2 body)
 - [ ] Vyprodaná jídla vizuálně odlišena (2 body)
+- [ ] Řešena souběžnost při objednávání poslední porce na úrovni databáze nebo transakce (např. optimistic concurrency, RowVersion) (2 body)
 
 ---
 
@@ -211,10 +213,10 @@ Studenti odevzdávají **kompletní funkční systém**
 
 ---
 
-### SSE notifikace (0–7 bodů)
-- [ ] Funkční SSE endpoint (3 body)
+### SSE notifikace (0–5 bodů)
+- [ ] Funkční SSE endpoint (2 body)
 - [ ] Notifikace pro studenta i kuchařku (2 body)
-- [ ] Automatická aktualizace UI (2 body)
+- [ ] Automatická aktualizace UI (1 bod)
 
 ---
 
@@ -226,7 +228,7 @@ Studenti odevzdávají **kompletní funkční systém**
 ---
 
 ### Dokumentace (0–2 body)
-- [ ] Aktualizovaná dokumentace k finálnímu řešení (4 body)
+- [ ] Aktualizovaná dokumentace k finálnímu řešení (2 body)
 
 ---
 
@@ -264,13 +266,10 @@ Projekt vypracovávají studenti ve **tří členném týmu** (výjimečně jin�
 - Součástí odevzdaného projektu bude **stručná dokumentace ve formátu Markdown (readme.md)**,  
   která vysvětlí použitá architektonická rozhodnutí a případné problémy při řešení. Zde je šablona: [readme-template.md](readme-template.md).  
 - Dokumentace musí také obsahovat **poměr práce jednotlivých členů týmu**,  
-  aby bylo možné rozdělit body podle skutečného přínosu:  
-  - Například `1:1:1` znamená rovnoměrný přínos,  
-    `1:1:2` znamená, že student 3 pracoval tolik, co studenti 1 a 2 dohromady.  
-  - Každý student odevzdá svůj vlastní soubor projektu se svým návrhem poměru (tedy třikrát).  
-  - Pokud se návrhy podílů jednotlivých studentů liší, rozhodne po konzultaci vyučující.  
+  aby bylo možné rozdělit body podle skutečného přínosu. Například `1:1:1` znamená rovnoměrný přínos, `1:1:2` znamená, že student 3 pracoval tolik, co studenti 1 a 2 dohromady.  
 - Odevzdává se **zazipovaný soubor** se zdrojovými soubory a dokumentací.  
-- Na konci semestru studenti projekt **obhajují**, aby prokázali, že rozumí odevzdanému kódu.
+
+> Vedoucí teamu odevzdá zazipovaný soubor se zdrojovým kódem a dokumentací. Ostatní studenti odevzdají jen dokumentaci.
 
 ## Obhajoba projektu
 
