@@ -1,4 +1,4 @@
-# 07 Blazor Web Forms
+# 06 Blazor Web Forms
 
 **autor: Erik Král ekral@utb.cz**
 

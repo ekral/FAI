@@ -1,4 +1,4 @@
-# Materiál 08: QuickGrid
+# Materiál 07: QuickGrid
 
 **autor: Erik Král ekral@utb.cz**
 
