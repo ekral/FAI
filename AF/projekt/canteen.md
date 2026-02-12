@@ -273,7 +273,7 @@ Projekt vypracovávají studenti ve **tří členném týmu** (výjimečně jin�
 ## Obhajoba projektu
 
 Cílem obhajoby je ověřit, že student rozumí odevzdanému projektu.  
-Obhajoba se skládá z **písemné části** pro všechny studenty a **ústní části** pouze pro ty, kteří neprokážou základní znalosti.
+Skládá se z **písemné části** pro všechny studenty a **dobrovolné ústní obhajoby** 🗣️ pro ty, kteří chtějí své znalosti prokázat více.
 
 Příklady otázek:
 
@@ -299,9 +299,10 @@ Projektové body po obhajobě = Projektové body × (procento splnění z písem
 
 ### 🗣️ Ústní obhajoba
 
-- Probíhá **jen u studentů s procentem ≤30 %**.  
-- Cíl: ověřit minimální porozumění projektu.  
-- Pokud student neprokáže ani ústně, projektové procento zůstává nízké → může vést k neudělení zápočtu.
+- Každý student, který chce, může přijít **obhájit ústně**.  
+- Celkem je možné navýšit procento projektu až na **100 %**.  
+- Doporučené studentům s velmi nízkým procentem (≤30 %) z písemné části, aby si mohli hodnocení zlepšit.  
+- Ti, kdo nepřijdou, zůstávají u procenta projektu z písemné části.
 
 ---
 
