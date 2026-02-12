@@ -289,7 +289,7 @@ Procenta projektu podle písemné obhajoby:
 | Plně prokázal    | 100 %           | Student rozumí všem klíčovým částem projektu. |
 | Slabé porozumění | 70 %            | Drobná mezera (např. SSE, DTO, WebAPI). |
 | Výrazné mezery   | 40 %            | Neznalost klíčového toku objednávky nebo integrace. |
-| Neprokázal       | 30 %            | Projekt nebyl pochopen nebo použit cizí kód. |
+| Neprokázal       | 30 %            | Projekt nebyl pochopen nebo byl použitý cizí kód. |
 
 Výpočet bodů projektu po obhajobě:
 
