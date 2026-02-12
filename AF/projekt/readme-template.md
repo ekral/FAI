@@ -5,7 +5,7 @@ Semestrální projekt do předmětu **Aplikační frameworky**.
 ## 👥 Členové týmu a poměr práce
 | Jméno a příjmení | Role v týmu | Poměr práce |
 |:---|:---|:---:|
-| **Student A** | Datový model & Backend | 1 |
+| **Student A** - vedoucí | Datový model & Backend | 1 |
 | **Student B** | WebAPI & SSE | 1 |
 | **Student C** | Blazor klient & UI | 1 |
 
