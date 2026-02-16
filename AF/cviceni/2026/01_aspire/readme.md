@@ -24,7 +24,7 @@ U všech projektů zvolte **.NET 10**.
 Vytvořte nový projekt typu **Aspire Empty App** s názvem `UTB.Library` a pro vytvořený projekt:
 - Zaktualizujte případné zastaralé NuGet balíčky.
 - Přidejte NuGet balíček `Aspire.Hosting.SqlServer` (viz [návod pro SQL Server](https://aspire.dev/integrations/databases/efcore/sql-server/sql-server-get-started/)).
-- Přidejte do kódu vytvoření SQL Serveru a databáze (viz kód níže).
+- Přidejte do souboru `AppHost.cs` vytvoření SQL Serveru a databáze (viz kód níže).
 - Spusťte Docker Desktop nebo Podman (pro Podman je nutné [nastavit Environment Variable](https://aspire.dev/get-started/prerequisites/#install-an-oci-compliant-container-runtime)).
 - Spusťte aplikaci a počkejte, než se stáhne Docker image a spustí se server a databáze. Prozkoumejte Aspire Dashboard.
 
