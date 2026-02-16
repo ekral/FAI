@@ -139,3 +139,8 @@ Po dokončení úkolu:
 - databáze je dostupná přes Service Discovery,
 - HTTP Command `reset-db` resetuje a seeduje databázi,
 - Aspire Dashboard umožňuje řízení celé aplikace.
+
+
+## Samostatný úkol
+
+Vytvořte Solution a projekty znovu, ale tentokrát s využitím opensource databáze [PostgreSQL](https://aspire.dev/integrations/databases/postgres/postgres-get-started/?lang=csharp) a porovnejte, která databáze zabírá méně prostředků. Tato databáze je také vhodnější pro MacOS a Linux.
