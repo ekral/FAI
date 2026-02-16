@@ -273,8 +273,10 @@ Projekt vypracovávají studenti ve **tří členném týmu** (výjimečně jin�
 
 ## Obhajoba projektu
 
-Cílem obhajoby je ověřit, že student rozumí odevzdanému projektu.  
+Cílem obhajoby je ověřit, že student rozumí odevzdanému projektu. 
 Skládá se z **písemné části** pro všechny studenty a **dobrovolné ústní obhajoby** 🗣️ pro ty, kteří chtějí své znalosti prokázat více.
+
+Pro řešení projektu můžete používat AI, ale odevzdanému kódu musíte rozumět.
 
 Příklady otázek:
 
