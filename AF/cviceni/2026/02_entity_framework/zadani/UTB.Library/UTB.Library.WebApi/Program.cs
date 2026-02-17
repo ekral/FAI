@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
-builder.AddNpgsqlDbContext<LibraryContext>("database");
+// 🚀 vložení LibraryContextu do IoC kontejneru.
 
 var app = builder.Build();
 
