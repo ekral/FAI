@@ -16,8 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Playground\Playground.csproj" />
     <ProjectReference Include="..\UTB.Library.DbManager\UTB.Library.DbManager.csproj" />
+    <ProjectReference Include="..\UTB.Library.WebAPI\UTB.Library.WebApi.csproj" />
   </ItemGroup>
 
 </Project>

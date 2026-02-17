@@ -1,7 +1,8 @@
 <Solution>
-  <Project Path="Playground/Playground.csproj" Id="03c90e5a-a0ca-4880-a744-e976a862c863" />
   <Project Path="UTB.Library.AppHost/UTB.Library.AppHost.csproj" />
+  <Project Path="UTB.Library.Contracts/UTB.Library.Contracts.csproj" Id="c666bc24-4028-4443-8cb6-15864484eb56" />
   <Project Path="UTB.Library.Db/UTB.Library.Db.csproj" />
   <Project Path="UTB.Library.DbManager/UTB.Library.DbManager.csproj" />
   <Project Path="UTB.Library.ServiceDefaults/UTB.Library.ServiceDefaults.csproj" />
+  <Project Path="UTB.Library.WebAPI/UTB.Library.WebApi.csproj" DisplayName="UTB.Library.WebApi" />
 </Solution>
