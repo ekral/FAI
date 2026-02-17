@@ -28,29 +28,31 @@ public static class WebApiVersion1
 {
     public static async Task<Created<AuthorDto>> CreateAuthor(AuthorDto authorDto, LibraryContext context)
     {
-        Author author = new() { Name = authorDto.Name };
+        // 🚀 1. Přidání nového autora do databáze.
 
-        context.Authors.Add(author);
-
-        await context.SaveChangesAsync();
-
-        AuthorDto resultDto = new(author.Id, author.Name);
+        AuthorDto resultDto = new(0, "nikdo");
 
         return TypedResults.Created($"/authors/{resultDto.Id}", resultDto);
     }
 
     public static async Task<Ok<AuthorDto[]>> GetAllAuthors(LibraryContext context)
     {
-        AuthorDto[] authors = await context.Authors.Select(a => new AuthorDto(a.Id, a.Name)).ToArrayAsync();
+        // 🚀 2.Vrácení všech autorů z databáze.
+
+        AuthorDto[] authors = [];
 
         return TypedResults.Ok(authors);
     }
 
     public static async Task<Results<NotFound, Ok<AuthorDto>>> GetAuthor(int id,  LibraryContext context)
     {
-        if(await context.Authors.FindAsync(id) is Author author)
+        // 📖 3. Vrácení jednoho autora podle id (už je implementováno, jen ho zkontrolujte).
+
+        if (await context.Authors.FindAsync(id) is Author author)
         {
-            return TypedResults.Ok(new AuthorDto(author.Id, author.Name));
+            AuthorDto authorDto = new(author.Id, author.Name);
+
+            return TypedResults.Ok(authorDto);
         }
         else
         {
@@ -62,9 +64,7 @@ public static class WebApiVersion1
     {
         if (await context.Authors.FindAsync(id) is Author author)
         {
-            author.Name = authorDto.Name;
-
-            await context.SaveChangesAsync();
+            // 🚀 4. Změna autora v databázi.
 
             return TypedResults.NoContent();
         }
@@ -72,15 +72,14 @@ public static class WebApiVersion1
         {
             return TypedResults.NotFound();
         }
+
     }
 
     public static async Task<Results<NoContent, NotFound>> DeleteAuthor(int id, LibraryContext context)
     {
         if (await context.Authors.FindAsync(id) is Author author)
         {
-            context.Authors.Remove(author);
-
-            await context.SaveChangesAsync();
+            // 🚀 5. Odstranění autora z databáze.
 
             return TypedResults.NoContent();
         }

@@ -50,7 +50,9 @@ public static class WebApiVersion1
     {
         if(await context.Authors.FindAsync(id) is Author author)
         {
-            return TypedResults.Ok(new AuthorDto(author.Id, author.Name));
+            AuthorDto authorDto = new(author.Id, author.Name);
+
+            return TypedResults.Ok(authorDto);
         }
         else
         {

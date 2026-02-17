@@ -257,7 +257,7 @@ Studenti odevzdávají **kompletní funkční systém**
 
 Projekt vypracovávají studenti ve **tří členném týmu** (výjimečně jiný počet pokud se studenti nemohou rozdělit přesně na tříčlenné týmy).
 
-⚠️ **Varování:** Všechny projekty budou testovány na plagiátorství. Jakékoliv zjištěné kopírování nebo předání cizí práce bude považováno za plagiát a bude mít za následek **0 bodů z projektu** a případné další akademické sankce podle pravidel univerzity.
+> ⚠️ **Varování:** Všechny projekty budou testovány na plagiátorství. Jakékoliv zjištěné kopírování nebo předání cizí práce bude považováno za plagiát a bude mít za následek **0 bodů z projektu** a případné další akademické sankce podle pravidel univerzity.
 
 ### Dokumentace a odevzdání
 
