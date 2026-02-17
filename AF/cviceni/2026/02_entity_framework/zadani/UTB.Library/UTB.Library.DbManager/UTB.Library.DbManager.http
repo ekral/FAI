@@ -1,0 +1,6 @@
+@UTB.Library.DbManager_HostAddress = http://localhost:5100
+
+GET {{UTB.Library.DbManager_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
