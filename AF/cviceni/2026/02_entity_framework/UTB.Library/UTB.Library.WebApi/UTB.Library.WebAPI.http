@@ -1,6 +1,30 @@
-@UTB.Library.WebAPI_HostAddress = http://localhost:5032
+@UTB.Library.WebApi_HostAddress = https://localhost:7298
 
-GET {{UTB.Library.WebAPI_HostAddress}}/weatherforecast/
-Accept: application/json
+
+GET {{UTB.Library.WebApi_HostAddress}}/authors
+
+###
+
+POST {{UTB.Library.WebApi_HostAddress}}/authors
+Content-Type: application/json
+
+{
+    "id": "0",
+    "name": "Karel Hynek Macha"
+}
+
+###
+
+GET {{UTB.Library.WebApi_HostAddress}}/authors/1
+
+###
+
+PUT {{UTB.Library.WebApi_HostAddress}}/authors/1
+Content-Type: application/json
+
+{
+    "id": "1",
+    "name": "Karel Capek"
+}
 
 ###
