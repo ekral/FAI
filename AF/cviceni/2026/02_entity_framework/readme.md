@@ -6,7 +6,7 @@ V tomto cvičení si procvičíme Entity Framework a jeho použití ve WebAPI a 
 
 ## 📋 Postup
 
-Otevřete si solution ze složky [zadani](/zadani) a doplňte chybějící kód související s prací s databází v Entity Frameworku.
+Otevřete si solution ze složky [zadani](./zadani) a doplňte chybějící kód související s prací s databází v Entity Frameworku.
 
 ### DbContext
 
