@@ -30,9 +30,7 @@ public static class WebApiVersion1
     {
         // 🚀 1. Přidání nového autora do databáze.
 
-        AuthorDto resultDto = new(0, "nikdo");
-
-        return TypedResults.Created($"/authors/{resultDto.Id}", resultDto);
+        return TypedResults.Created($"/authors/{authorDto.Id}", authorDto);
     }
 
     public static async Task<Ok<AuthorDto[]>> GetAllAuthors(LibraryContext context)
