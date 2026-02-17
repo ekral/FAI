@@ -18,7 +18,7 @@ app.UseHttpsRedirection();
 
 app.MapPost("/authors", WebApiVersion1.CreateAuthor);
 app.MapGet("/authors", WebApiVersion1.GetAllAuthors);
-app.MapGet("/authors/{id:int}", WebApiVersion1.GetAuthor);
+app.MapGet("/authors/{id:int}", WebApiVersion1.GetAuthorById);
 app.MapPut("/authors/{id:int}", WebApiVersion1.UpdateAuthor);
 app.MapDelete("/authors/{id:int}", WebApiVersion1.DeleteAuthor);
 
@@ -44,7 +44,7 @@ public static class WebApiVersion1
         return TypedResults.Ok(authors);
     }
 
-    public static async Task<Results<NotFound, Ok<AuthorDto>>> GetAuthor(int id,  LibraryContext context)
+    public static async Task<Results<NotFound, Ok<AuthorDto>>> GetAuthorById(int id,  LibraryContext context)
     {
         // 📖 3. Vrácení jednoho autora podle id (už je implementováno, jen ho zkontrolujte).
 
