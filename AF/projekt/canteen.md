@@ -87,8 +87,8 @@ V solution budou následující projekty:
 - `UTB.Minute.Db` – entity a `DbContext`.
 - `UTB.Minute.DbManager` – WebAPI pro Http Command, reset a seed databáze (reference na `UTB.Minute.Db`).
 - `UTB.Minute.Contracts` – DTO (Data Transfer Objects).
-- `UTB.Minute.WebAPI` – společné WebAPI pro všechny klienty včetně Server-Sent Events (SSE) notifikací (reference na `UTB.Minute.Db` a `UTB.Minute.Contracts`).
-- `UTB.Minute.WebAPI.Tests` - test WebAPI využívající použitou databázi, například SQL Server (reference na `UTB.Minute.WebAPI`).     
+- `UTB.Minute.WebApi` – společné WebAPI pro všechny klienty včetně Server-Sent Events (SSE) notifikací (reference na `UTB.Minute.Db` a `UTB.Minute.Contracts`).
+- `UTB.Minute.WebApi.Tests` - test WebAPI využívající použitou databázi, například SQL Server (reference na `UTB.Minute.WebApi`).     
 - `UTB.Minute.AdminClient` – Blazor Server aplikace pro vedení menzy (reference na `UTB.Minute.Contracts`). Volá WebAPI pomocí protokolu HTTP.
 - `UTB.Minute.CanteenClient` – Blazor Server aplikace pro zjednodušení pro studenty a kuchařky (nutno zabezpečit přístup). Pro kuchařky a studenty je možné i vytvořit nezávislé projekty (reference na `UTB.Minute.Contracts`). Volá WebAPI pomocí protokolu HTTP.
 
@@ -118,7 +118,7 @@ Studenti odevzdávají pouze **backend a WebAPI**
 
 ### Projekty a struktura řešení (0–3 body)
 - [ ] Všechny požadované projekty existují a jsou správně pojmenované (2 body)  
-  (`UTB.Minute.Db`, `DbManager`, `Contracts`, `WebAPI`, `WebAPI.Tests`)
+  (`UTB.Minute.Db`, `DbManager`, `Contracts`, `WebApi`, `WebApi.Tests`)
 - [ ] Správné reference mezi projekty (1 bod)
 
 ---
@@ -128,7 +128,7 @@ Studenti odevzdávají pouze **backend a WebAPI**
 - [ ] Správně navržený `DbContext` (1 bod)
 - [ ] Stav objednávky řešen enumem (1 bod)
 - [ ] DTO jsou definována pouze v `UTB.Minute.Contracts` (1 bod)
-- [ ] WebAPI nevrací entity přímo (1 bod)
+- [ ] WebAPI  nevrací entity přímo (1 bod)
 
 ---
 

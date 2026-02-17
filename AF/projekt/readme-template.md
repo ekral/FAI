@@ -32,7 +32,7 @@ Pokud se struktura liší (například CanteenClient je rozdělený na dva proje
 - `UTB.Minute.Db`: Datové entity a `DbContext`.
 - `UTB.Minute.DbManager`: Obsahuje endpoint pro **Http Command** (reset databáze).
 - `UTB.Minute.Contracts`: Sdílená DTO, aby byla zajištěna typová bezpečnost mezi API a klienty.
-- `UTB.Minute.WebAPI`: Hlavní byznys logika, správa objednávek a SSE hub.
+- `UTB.Minute.WebApi`: Hlavní byznys logika, správa objednávek a SSE hub.
 - `UTB.Minute.AdminClient`: Aplikace pro vedení menzy (správa jídel a menu).
 - `UTB.Minute.CanteenClient`: Společné rozhraní pro studenty a kuchařky (ošetřeno autorizací).
 
