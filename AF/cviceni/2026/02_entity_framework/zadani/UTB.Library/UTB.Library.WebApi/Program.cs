@@ -17,7 +17,7 @@ app.MapDefaultEndpoints();
 app.UseHttpsRedirection();
 
 app.MapPost("/authors", WebApiVersion1.CreateAuthor);
-app.MapGet("/authors", WebApiVersion1.GetAllAuthors);
+app.MapGet("/authors", WebApiVersion1.GetAuthors);
 app.MapGet("/authors/{id:int}", WebApiVersion1.GetAuthorById);
 app.MapPut("/authors/{id:int}", WebApiVersion1.UpdateAuthor);
 app.MapDelete("/authors/{id:int}", WebApiVersion1.DeleteAuthor);
@@ -33,7 +33,7 @@ public static class WebApiVersion1
         return TypedResults.Created($"/authors/{authorDto.Id}", authorDto);
     }
 
-    public static async Task<Ok<AuthorDto[]>> GetAllAuthors(LibraryContext context)
+    public static async Task<Ok<AuthorDto[]>> GetAuthors(LibraryContext context)
     {
         // 🚀 2.Vrácení všech autorů z databáze.
 
