@@ -1,7 +1,11 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
 var postgres = builder.AddPostgres("postgres")
-                      .WithPgAdmin(c => c.WithLifetime(ContainerLifetime.Persistent) )
+                      .WithPgAdmin(c => 
+                        {
+                            c.WithLifetime(ContainerLifetime.Persistent);
+                            c.WithImage("dpage/pgadmin4:latest");
+                        })
                       .WithDataVolume()
                       .WithLifetime(ContainerLifetime.Persistent);
 

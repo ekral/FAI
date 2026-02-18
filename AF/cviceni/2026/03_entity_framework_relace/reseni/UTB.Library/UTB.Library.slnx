@@ -4,5 +4,6 @@
   <Project Path="UTB.Library.Db/UTB.Library.Db.csproj" />
   <Project Path="UTB.Library.DbManager/UTB.Library.DbManager.csproj" />
   <Project Path="UTB.Library.ServiceDefaults/UTB.Library.ServiceDefaults.csproj" />
-  <Project Path="UTB.Library.WebAPI/UTB.Library.WebApi.csproj" DisplayName="UTB.Library.WebApi" />
+  <Project Path="UTB.Library.Tests/UTB.Library.Tests.csproj" Id="cd2ed200-6ecb-4cc0-a352-39cbf161fd36" />
+  <Project Path="UTB.Library.WebAPI/UTB.Library.WebApi.csproj" />
 </Solution>
