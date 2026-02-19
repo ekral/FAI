@@ -1,48 +1,54 @@
+using Aspire.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace UTB.Library.Tests.Tests
 {
-    public class IntegrationTest1
+    public class DatabaseFixture : IAsyncLifetime
     {
-        private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(30);
+        private DistributedApplication app = null!;
+        private HttpClient client = null!;
 
-        // Instructions:
-        // 1. Add a project reference to the target AppHost project, e.g.:
-        //
-        //    <ItemGroup>
-        //        <ProjectReference Include="../MyAspireApp.AppHost/MyAspireApp.AppHost.csproj" />
-        //    </ItemGroup>
-        //
-        // 2. Uncomment the following example test and update 'Projects.MyAspireApp_AppHost' to match your AppHost project:
-        //
+        public HttpClient HttpClient => client;
+
+        public async ValueTask InitializeAsync()
+        {
+            var builder = await DistributedApplicationTestingBuilder.CreateAsync<Projects.UTB_Library_AppHost>(["--environment=Testing"], TestContext.Current.CancellationToken);
+
+            app = await builder.BuildAsync();
+
+            await app.StartAsync(TestContext.Current.CancellationToken);
+
+            client = app.CreateHttpClient("webapi");
+
+            await app.ResourceNotifications.WaitForResourceHealthyAsync("webapi", TestContext.Current.CancellationToken);
+        }
+
+        public async ValueTask DisposeAsync()
+        {
+            client.Dispose();
+            await app.DisposeAsync();
+        }
+    }
+
+    [CollectionDefinition("Database collection")]
+    public class DatabaseCollection : ICollectionFixture<DatabaseFixture>
+    {
+    }
+
+    [Collection("Database collection")]
+    public class IntegrationTest1(DatabaseFixture fixture)
+    {
+        private readonly DatabaseFixture fixture = fixture;
+
         [Fact]
         public async Task GetWebResourceRootReturnsOkStatusCode()
         {
             // Arrange
-            var cancellationToken = TestContext.Current.CancellationToken;
-            var appHost = await DistributedApplicationTestingBuilder.CreateAsync<Projects.UTB_Library_AppHost>(cancellationToken);
-            appHost.Services.AddLogging(logging =>
-            {
-                logging.SetMinimumLevel(LogLevel.Debug);
-                logging.AddFilter(appHost.Environment.ApplicationName, LogLevel.Debug);
-                logging.AddFilter("Aspire.", LogLevel.Debug);
-            });
+
+            HttpClient client = fixture.HttpClient;
+
+            var response = await client.GetAsync("authors", TestContext.Current.CancellationToken);
             
-            appHost.Services.ConfigureHttpClientDefaults(clientBuilder =>
-            {
-                clientBuilder.AddStandardResilienceHandler();
-            });
-
-            await using var app = await appHost.BuildAsync(cancellationToken).WaitAsync(DefaultTimeout, cancellationToken);
-            await app.StartAsync(cancellationToken).WaitAsync(DefaultTimeout, cancellationToken);
-
-            // Act
-            using var httpClient = app.CreateHttpClient("webapi");
-            await app.ResourceNotifications.WaitForResourceHealthyAsync("webapi", cancellationToken).WaitAsync(DefaultTimeout, cancellationToken);
-            
-            using var response = await httpClient.GetAsync("/authors", cancellationToken);
-
-            // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
     }
