@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\UTB.Library.AppHost\UTB.Library.AppHost.csproj" />
     <ProjectReference Include="..\UTB.Library.Contracts\UTB.Library.Contracts.csproj" />
+    <ProjectReference Include="..\UTB.Library.Db\UTB.Library.Db.csproj" />
   </ItemGroup>
 
   <ItemGroup>
