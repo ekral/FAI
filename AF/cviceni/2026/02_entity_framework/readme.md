@@ -44,6 +44,6 @@ Po dokončení úkolu:
     - vrátit jednoho autora podle id,
     - změnit autora v databázi,
     - odstranit autora z databáze.
-- Všechny testy v projektu úspěšně projdou.
+- Všechny automatizované testy v projektu úspěšně projdou.
 
 > Poznámka: endpointy můžeme otestovat pomocí souboru `UTB.Library.WebAPI.http` v projektu `UTB.Library.WebApi` nebo například pomocí aplikace [PostMan](https://www.postman.com/) pokud nepoužíváte Visual Studio .
