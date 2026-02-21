@@ -14,7 +14,7 @@ app.MapPost("/reset-db", async (LibraryContext context) =>
 {
     // 🚀 smazání databáze pokud existuje,
     // 🚀 vytvoření databáze pokdu neexistuje,
-    // 🚀 vložení tří studentů do databáze.
+    // 🚀 vložení tří autorů do databáze.
 });
 
 app.UseHttpsRedirection();
