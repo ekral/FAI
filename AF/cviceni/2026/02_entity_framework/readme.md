@@ -18,10 +18,10 @@ Otevřete si solution ze složky [zadani](./zadani) a doplňte chybějící kód
 
 1. Do projektu `UTB.Library.DbManager` v souboru `Program.cs` doplňte:
 - smazání databáze pokud existuje,
-- vytvoření databáze pokdu neexistuje,
-- vložení tří studentů do databáze
+- vytvoření databáze pokud neexistuje,
+- vložení tří studentů do databáze.
 
-> nezapomeňte uložit změny v contextu do databáze pomocí zavolání metody `context.SaveChangesAsync`.
+> Nezapomeňte uložit změny v contextu do databáze pomocí zavolání metody `context.SaveChangesAsync`.
 
 ### CRUD
 
