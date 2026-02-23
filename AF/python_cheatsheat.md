@@ -2,8 +2,6 @@
 
 Tento přehled slouží k rychlému „přepnutí“ z Pythonu do C#. Pozor na nejčastější chyby: **středníky**, **závorky** a **datové typy**.
 
-https://quickref.me/cs.html
-
 ---
 
 ## 1. Základní syntaxe
