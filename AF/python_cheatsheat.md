@@ -2,6 +2,8 @@
 
 Tento přehled slouží k rychlému „přepnutí“ z Pythonu do C#. Pozor na nejčastější chyby: **středníky**, **závorky** a **datové typy**.
 
+https://quickref.me/cs.html
+
 ---
 
 ## 1. Základní syntaxe
@@ -18,6 +20,7 @@ Tento přehled slouží k rychlému „přepnutí“ z Pythonu do C#. Pozor na n
 
 ## 2. Proměnné a typy
 C# vyžaduje deklaraci typu (statická typizace).
+
 
 // Python: x = 10
 int x = 10; 
