@@ -19,7 +19,7 @@ https://quickref.me/cs.html
 ---
 
 ## 2. Proměnné a typy
-C# vyžaduje deklaraci typu (statická typizace).
+C# vyžaduje deklaraci typu (static typing).
 
 ```csharp
 // Python: x = 10
@@ -77,11 +77,17 @@ else
 // Python: pole = [1, 2, 3]
 int[] pole = [1, 2, 3];
 
-// Python: pole = [0] * 3
+// Python: 
+// pole = [0] * 3
+// delka_pole = len(pole)
 int[] pole = new int[3]; // tri defaultni prvky
+int delkaPole = pole.Length;
 
-// Python: dynamickePole = []
+// Python: 
+// dynamickePole = []
+// pocet_prvku = len(dynamicke_pole)
 List<int> dynamickePole = [];
+int pocetPrvku = dynamickePole.Count;
 ```
 
 ### Cykly
