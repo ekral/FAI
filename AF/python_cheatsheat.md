@@ -42,27 +42,69 @@ Podmínka musí být vždy v **kulatých závorkách ( )**.
 
 ### If-Else
 
+Python:
+
+```python
+if x > 0:
+    print("Kladné")
+elif x < 0:
+    print("Záporné")
+else:
+    print("Nula")
+```
+
+C#
+
 ```csharp
-if (x > 0) {
+if (x > 0) 
+{
     Console.WriteLine("Kladné");
-} else if (x < 0) {
+} 
+else if (x < 0) 
+{
     Console.WriteLine("Záporné");
-} else {
+} 
+else 
+{
     Console.WriteLine("Nula");
 }
+```
+
+### Pole
+
+
+```csharp
+// Python: pole = [1, 2, 3]
+int[] pole = [1, 2, 3];
+
+// Python: pole = [0] * 3
+int[] pole = new int[3]; // tri defaultni prvky
+
+// Python: dynamickePole = []
+List<int> dynamickePole = [];
 ```
 
 ### Cykly
 
 ```csharp
 // For cyklus (od 0 do 4)
-for (int i = 0; i < 5; i++) {
+
+// Python: 
+// for i in range(5):
+//     print(i)
+for (int i = 0; i < 5; i++) 
+{
     Console.WriteLine(i);
 }
 
 // Foreach (iterace kolekcí)
-foreach (var item in list) {
-    Console.WriteLine(item);
+
+// Python: 
+// for prvek in pole:
+//     print(prvek)
+foreach (var prvek in pole) 
+{
+    Console.WriteLine(prvek);
 }
 ```
 
@@ -87,7 +129,7 @@ public int Scitej(int a, int b)
 
 ---
 
-## 5. Třídy a 
+## 5. Třídy a instance tříd
 
 Místo self používáme this. Konstruktor má stejné jméno jako třída.
 
@@ -107,7 +149,12 @@ public class Student
 Instance třídy
 
 ```csharp
+// Python: pavel = Student("Pavel")
 Student pavel = new Student("Pavel");
+
+// Python: 
+// karel = Student("Karel")
+// karel.body = 40
 Student karel = new Karel("Karel") { Body = 40 }; // Object initializer 
 ```
 ---
