@@ -68,6 +68,8 @@ else
 }
 ```
 
+---
+
 ### Pole a kolekce
 
 
@@ -89,6 +91,8 @@ int pocetPrvku = dynamickePole.Count;
 ```
 
 > ⚠️ Poznámka: zápis `[]` a `[1,2,3]` funguje od **C# 12 / .NET 8+**
+
+---
 
 ### Cykly
 
@@ -156,6 +160,7 @@ public class Student
     }
 }
 ```
+
 Instance třídy
 
 ```csharp
@@ -167,6 +172,7 @@ Student pavel = new Student("Pavel");
 // karel.body = 40
 Student karel = new Student("Karel") { Body = 40 }; // Object initializer 
 ```
+
 ---
 
 ## 6. LINQ vs. List Comprehension
@@ -196,6 +202,7 @@ Pozor na NullReferenceException.
 3. **Pleteš si ' a "?** V C# jsou 'a' (char - jeden znak) a "abc" (string - text) dva různé typy.
 
 ---
+
 Můžete se také podívat na následující odkazy:
 
 [C# cheatsheet](https://quickref.me/cs.html)
