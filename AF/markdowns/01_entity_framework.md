@@ -326,8 +326,8 @@ var older = context.Students
 
 var student = context.Students.Find(1); // Kód vyhledá studenta podle primárního klíče
 
-var student = context.Students
-                     .FirstOrDefault(s => s.Name == "Jan");
+var jan = context.Students
+                 .FirstOrDefault(s => s.Name == "Jan");
 ```
 
 ---
