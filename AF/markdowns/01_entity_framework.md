@@ -324,7 +324,7 @@ var older = context.Students
                    .Where(s => s.Age > 20)
                    .ToList();
 
-var student = context.Students.Find(1);
+var student = context.Students.Find(1); // Kód vyhledá studenta podle primárního klíče
 
 var student = context.Students
                      .FirstOrDefault(s => s.Name == "Jan");
@@ -334,7 +334,6 @@ var student = context.Students
 
 ## UPDATE
 
-Kód vyhledá studenta podle primárního klíče
 ```csharp
 Student? student = context.Students.Find(1);
 
