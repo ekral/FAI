@@ -201,26 +201,92 @@ public class Student
 
 # 5. DbContext
 
+Do projektu definující DbContext musíme přidat providera pro Entity Framework Core, například nuget balíček `Microsoft.EntityFrameworkCore.Sqlite`.
+Více se dozvíte například v tutoriálu [Getting Started with EF Core](https://learn.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=netcore-cli).
+
+```csharp
+public class StudentContext(DbContextOptions<StudentContext> options): DbContext(options)
+{
+    public DbSet<Student> Students { get; set; }
+}
+```
+
+`DbSet<Student>` reprezentuje tabulku a umožňuje psát LINQ dotazy.
+
+## 5.1 Přetížené metody DbContext
+
+### OnConfiguring
+
+Metoda `OnConfiguring` se používá k nastavení `DbContext` přímo v třídě, například pro konfiguraci poskytovatele databáze a connection stringu.  
+Lze ji použít místo předávání `DbContextOptions` zvenčí.
+
 ```csharp
 public class StudentContext : DbContext
 {
     public DbSet<Student> Students { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder options)
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        options.UseSqlite("Data Source=students.db");
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseSqlite("Data Source=students.db");
+        }
     }
 }
 ```
 
-`DbSet<Student>` reprezentuje tabulku a umožňuje psát LINQ dotazy.
+Použití:
+
+```csharp
+using var context = new StudentContext();
+context.Database.EnsureCreated();
+```
+
+Výhody a nevýhody:
+
+- **Výhoda:** nemusíme pokaždé předávat `DbContextOptions`  
+- **Nevýhoda:** méně flexibilní při testování
+
+---
+
+### OnModelCreating
+
+Metoda `OnModelCreating` umožňuje konfiguraci mapování entit na tabulky, nastavení primárních klíčů, délky stringů a relací.
+
+#### Příklad – konfigurace primárního klíče a délky stringu
+
+```csharp
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<Student>()
+                .HasKey(s => s.Id);
+
+    modelBuilder.Entity<Student>()
+                .Property(s => s.Name)
+                .HasMaxLength(50)
+                .IsRequired();
+}
+```
+
+### Shrnutí
+
+| Metoda            | Účel |
+|------------------|------|
+| `OnConfiguring`   | Konfigurace DbContext (provider, connection string) |
+| `OnModelCreating` | Konfigurace entit, relací, omezení, pravidel mapování |
+
+> Tyto metody lze kombinovat s `DbContextOptions`, pokud chceme maximální flexibilitu.
 
 ---
 
 # 6. Vytvoření databáze
 
 ```csharp
-using var context = new StudentContext();
+var options = new DbContextOptionsBuilder<StudentContext>()
+                    .UseSqlite("Data Source=students.db")
+                    .Options;
+
+using var context = new StudentContext(options);
 context.Database.EnsureCreated();
 ```
 
@@ -260,23 +326,66 @@ var student = context.Students
 
 ## UPDATE
 
+Kód vyhledá studenta podle primárního klíče
 ```csharp
-var student = context.Students.Find(1);
-student.Age = 23;
-context.SaveChanges();
+Student? student = context.Students.Find(1);
+
+if(student is not null)
+{
+    student.Age = 23;
+    context.SaveChanges();
+}
 ```
 
 ## DELETE
 
 ```csharp
-var student = context.Students.Find(1);
-context.Students.Remove(student);
-context.SaveChanges();
+Student? student = context.Students.Find(1);
+
+if(student is not null)
+{
+    context.Students.Remove(student);
+    context.SaveChanges();
+}
 ```
 
 ---
 
-# 8. Asynchronní přístup
+# 8 Projekce
+
+Projekce představuje změnu typu než je originální typ entity v databázi. Například následující příkaz vrátí jen jména studentů. Místo typu `Student` tedy vrací `string`. Metoda opět vrací IQueryable, což znamená, že se dotaz do databáze se neprovede hned, ale teprve až provedeme například `foreach`.
+
+```csharp
+IQueryable<string> jmena = context.Students.Select(s => s.Jmeno);
+
+foreach (string jmeno in await jmena.ToListAsync())
+{
+    Console.WriteLine(jmeno);
+}
+```
+
+# 9 Řazení
+
+```csharp
+IOrderedQueryable<Student> serazeniStudentiDleKliceVzestupne = context.Students.OrderBy(s => s.Id);
+      
+IOrderedQueryable<Student> serazeniStudentiDleKliceSestupne = context.Students.OrderByDescending(s => s.Id);
+    
+IOrderedQueryable<Student> serazeniStudentiPodlePrijmeniVzestupne = context.Students.OrderBy(s => s.Prijmeni);
+```
+
+# 10. Kombinace metod
+
+Metody můžeme kombinovat. Následující příkaz vrací jména studentů s příjmením `"Vesely"` (filtruje) seřazená vzestupně. Dotaz se opět neprovede hned, ale až bychom provedli například příkaz `foreach` nebo `ToList`.
+
+```csharp
+IOrderedQueryable<string> jmena = context.Students
+    .Where(s => s.Prijmeni == "Vesely")
+    .Select(s => s.Jmeno)
+    .OrderDescending();
+```
+
+# 11. Asynchronní přístup
 
 V reálném kódu používám většinou asynchronní varianty, například:
 
@@ -287,7 +396,7 @@ await context.SaveChangesAsync();
 
 ---
 
-# 9. Překlad LINQ do SQL
+# 12. Překlad LINQ do SQL
 
 ```csharp
 context.Students
