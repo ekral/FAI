@@ -145,7 +145,7 @@ public int Scitej(int a, int b)
 
 ## 5. Třídy a instance tříd
 
-Místo self používáme this. Konstruktor má stejné jméno jako třída.
+Místo `self` používáme `this`. Konstruktor má stejné jméno jako třída.
 
 ```csharp
 public class Student 
