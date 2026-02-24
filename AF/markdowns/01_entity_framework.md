@@ -215,6 +215,8 @@ public class StudentContext(DbContextOptions<StudentContext> options): DbContext
 
 `DbSet<Student>` reprezentuje tabulku a umožňuje psát LINQ dotazy.
 
+---
+
 ## 5.1 Přetížené metody DbContext
 
 ### OnConfiguring
@@ -311,6 +313,8 @@ context.Students.Add(student);
 context.SaveChanges();
 ```
 
+---
+
 ## READ
 
 ```csharp
@@ -326,6 +330,8 @@ var student = context.Students
                      .FirstOrDefault(s => s.Name == "Jan");
 ```
 
+---
+
 ## UPDATE
 
 Kód vyhledá studenta podle primárního klíče
@@ -338,6 +344,8 @@ if(student is not null)
     context.SaveChanges();
 }
 ```
+
+---
 
 ## DELETE
 
@@ -366,6 +374,8 @@ foreach (string jmeno in await jmena.ToListAsync())
 }
 ```
 
+---
+
 # 9 Řazení
 
 ```csharp
@@ -375,6 +385,8 @@ IOrderedQueryable<Student> serazeniStudentiDleKliceSestupne = context.Students.O
     
 IOrderedQueryable<Student> serazeniStudentiPodlePrijmeniVzestupne = context.Students.OrderBy(s => s.Prijmeni);
 ```
+
+---
 
 # 10. Kombinace metod
 
@@ -386,6 +398,8 @@ IOrderedQueryable<string> jmena = context.Students
     .Select(s => s.Jmeno)
     .OrderDescending();
 ```
+
+---
 
 # 11. Asynchronní přístup
 
@@ -416,6 +430,7 @@ FROM Students
 WHERE Age > 18
 ORDER BY Name;
 ```
+
 ---
 
 # 10. Nejčastější chyby
