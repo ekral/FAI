@@ -4,6 +4,8 @@ marp: true
 
 # 01 – Základy Entity Framework Core
 
+**autor: Erik Král ekral@utb.cz**
+
 ## 🎯 Cíle kapitoly
 
 Po prostudování této kapitoly budete schopni:
