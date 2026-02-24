@@ -274,6 +274,8 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 }
 ```
 
+---
+
 ### Shrnutí
 
 | Metoda            | Účel |
