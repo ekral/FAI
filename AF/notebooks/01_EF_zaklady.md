@@ -95,6 +95,8 @@ var result = context.Students
                     .ToList();
 ```
 
+> Method syntaxe je v praxi běžnější, ale pro složitější dotazy můžeme použít i query syntaxi.
+
 ---
 
 ## 3.2 Extension metody
@@ -362,7 +364,7 @@ if(student is not null)
 
 # 8 Projekce
 
-Projekce představuje změnu typu než je originální typ entity v databázi. Například následující příkaz vrátí jen jména studentů. Místo typu `Student` tedy vrací `string`. Metoda opět vrací IQueryable, což znamená, že se dotaz do databáze se neprovede hned, ale teprve až provedeme například `foreach`.
+Projekce představuje změnu typu než je originální typ entity v databázi. Například následující příkaz vrátí jen jména studentů. Místo typu `Student` tedy vrací `string`. Metoda opět vrací `IQueryable`, což znamená, že se dotaz do databáze se neprovede hned, ale teprve až provedeme například `foreach`.
 
 ```csharp
 IQueryable<string> jmena = context.Students.Select(s => s.Jmeno);
@@ -377,32 +379,33 @@ foreach (string jmeno in await jmena.ToListAsync())
 
 # 9 Řazení
 
+Všimněte si, že metody pro řazení vrací typ `IOrderedQueryable`.
 ```csharp
-IOrderedQueryable<Student> serazeniStudentiDleKliceVzestupne = context.Students.OrderBy(s => s.Id);
+IOrderedQueryable<Student> podleKliceVzestupne = context.Students.OrderBy(s => s.Id);
       
-IOrderedQueryable<Student> serazeniStudentiDleKliceSestupne = context.Students.OrderByDescending(s => s.Id);
+IOrderedQueryable<Student> podleKliceSestupne = context.Students.OrderByDescending(s => s.Id);
     
-IOrderedQueryable<Student> serazeniStudentiPodlePrijmeniVzestupne = context.Students.OrderBy(s => s.Prijmeni);
+IOrderedQueryable<Student> podlePrijmeniVzestupne = context.Students.OrderBy(s => s.Prijmeni);
 ```
 
 ---
 
 # 10. Kombinace metod
 
-Metody můžeme kombinovat. Následující příkaz vrací jména studentů s příjmením `"Vesely"` (filtruje) seřazená vzestupně. Dotaz se opět neprovede hned, ale až bychom provedli například příkaz `foreach` nebo `ToList`.
+Metody můžeme kombinovat. Následující příkaz vrací jména studentů s příjmením `"Vesely"` (filtruje) seřazená sestupně. Dotaz se opět neprovede hned, ale až bychom provedli například příkaz `foreach` nebo `ToList`.
 
 ```csharp
 IOrderedQueryable<string> jmena = context.Students
     .Where(s => s.Prijmeni == "Vesely")
-    .Select(s => s.Jmeno)
-    .OrderDescending();
+    .OrderByDescending(s => s.Prijmeni)
+    .Select(s => s.Jmeno);
 ```
 
 ---
 
 # 11. Asynchronní přístup
 
-V reálném kódu používám většinou asynchronní varianty, například:
+V reálném kódu používáme většinou asynchronní varianty, například:
 
 ```csharp
 var students = await context.Students.ToListAsync();
