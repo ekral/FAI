@@ -296,13 +296,15 @@ using var context = new StudentContext(options);
 context.Database.EnsureCreated();
 ```
 
-`EnsureCreated()` není vhodné pro produkci.
+`EnsureCreated()` není vhodné pro produkci. V produkci používáme migrace, kdy si můžeme vygenerovat i SQL kód a ten potom nezávisle spustit.
 
 ---
 
 # 7. CRUD operace
 
 ## CREATE
+
+Když necháme `Id` s hodnotou `0`, tak Entity Framework, po volání metody `SaveChange`, **přidělí `Id` vygenerovanou hodnotu primárního klíče**.
 
 ```csharp
 var student = new Student
@@ -313,6 +315,8 @@ var student = new Student
 
 context.Students.Add(student);
 context.SaveChanges();
+
+int key = student.Id;
 ```
 
 ---
