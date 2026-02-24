@@ -283,6 +283,7 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 | `OnConfiguring`   | Konfigurace DbContext (provider, connection string) |
 | `OnModelCreating` | Konfigurace entit, relací, omezení, pravidel mapování |
 
+
 > Tyto metody lze kombinovat s `DbContextOptions`, pokud chceme maximální flexibilitu.
 
 ---
