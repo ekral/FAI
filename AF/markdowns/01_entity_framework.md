@@ -1,7 +1,3 @@
----
-marp: true
----
-
 # 01 – Základy Entity Framework Core
 
 **autor: Erik Král ekral@utb.cz**
