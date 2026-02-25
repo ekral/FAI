@@ -69,7 +69,7 @@ public class Group
 ```
 ---
 
-### Fluent API konfigurace
+### Fluent API konfigurace a DbContext
 
 - V tomto případě to tedy **není nutné**, ale pro větší názornost si ukažeme jak bychom nakonfigurovali relace pomocí fluent API a zároveň si ukážeme jak by vypadal `DbContext`.
 
@@ -93,7 +93,7 @@ public class StudentContext(DbContextOptions<StudentContext> options) : DbContex
 
 ---
 
-### Nový řádek databáze
+### CREATE
 
 Pro zadávání relací můžeme použít jak cizí klíč, ale také navigační property jak je ukázané v příkladě níže.
 
@@ -185,7 +185,7 @@ Každá entita může být propojena s více entitami druhého typu.
 
 Student může být zapsán do více kurzů a kurz může mít více studentů.
 
-### Model (implicitní spojovací tabulka)
+### 2.3.1 Model (implicitní spojovací tabulka)
 
 EF Core vytvoří spojovací tabulku automaticky.
 
@@ -207,7 +207,7 @@ EF Core vytvoří spojovací tabulku automaticky.
 
 ---
 
-#### Fluent API a DbContext
+#### Fluent API konfigurace a DbContext
 
 Vše se nakonfiguruje s pomocí jmenných konvencí. V tomto případě to tedy není nutné, ale pro větší názornost si opět ukažeme jak bychom nakonfigurovali relace pomocí fluent API:
 
@@ -230,7 +230,7 @@ class SchoolContext(DbContextOptions<SchoolContext> options) : DbContext(options
 
 ---
 
-### CREATE
+#### CREATE
 
 ```csharp
 Student karel = new Student() { Name = "Karel" };
@@ -246,9 +246,7 @@ int count = context.SaveChanges();
 
 ---
 
-### Model (explicitní spojovací tabulka)
-
-### Many-to-many with class for join entity
+### 2.3.2 Model (Many-to-many with class for join entity)
 
 U varianty [many-to-many with class for join entity](https://learn.microsoft.com/en-us/ef/core/modeling/relationships/many-to-many#many-to-many-with-class-for-join-entity) si přímo nadefinujeme propojovací třídu `StudentSubject` a označíme ji pomocí Fluent API. Výhodou je, že můžeme snadněji zadávat její hodnoty.
 
@@ -279,7 +277,7 @@ class StudentSubject
 ---
 
 ```csharp
-#### Fluent API a DbContext
+#### Fluent API konfigurace a DbContext
 
 class SchoolContext(DbContextOptions<SchoolContext> options) : DbContext(options)
 {
@@ -298,7 +296,7 @@ class SchoolContext(DbContextOptions<SchoolContext> options) : DbContext(options
 
 ---
 
-## Načítání souvisejících dat
+# 3. Načítání souvisejících dat
 
 Definice relace neznamená, že se související data načtou automaticky.  
 Musíme určit způsob načítání.
@@ -322,7 +320,7 @@ EF Core nabízí tři přístupy jak načítat data:
 
 ---
 
-### 3.1 Eager Loading
+## 3.1 Eager Loading
 
 Používá metodu Include.
 
@@ -332,13 +330,13 @@ var groups = await context.Groups
     .ToListAsync();
 ```
 
-#### Výhody
+### Výhody
 
 - Jeden SQL dotaz
 - Přehledné řešení
 - Vhodné, pokud víme, že data budeme potřebovat
 
-#### Výkonové dopady
+### Výkonové dopady
 
 - Více JOIN operací
 - Může dojít k přenosu velkého množství dat
@@ -346,7 +344,7 @@ var groups = await context.Groups
 
 ---
 
-### 3.2 Explicit Loading
+## 3.2 Explicit Loading
 
 Relace se načte až v případě potřeby.
 
@@ -358,23 +356,23 @@ context.Entry(group)
     .Load();
 ```
 
-#### Výhody
+### Výhody
 
 - Lepší kontrola nad načítáním
 - Načítáme pouze potřebná data
 
-#### Výkonové dopady
+### Výkonové dopady
 
 - Více SQL dotazů
 - Při použití v cyklu může vzniknout větší počet dotazů
 
 ---
 
-### 3.3 Lazy Loading
+## 3.3 Lazy Loading
 
 Relace se načte při prvním přístupu k navigační vlastnosti. Je nutné nakonfigurovat, ve výchozím stavu je vypnuté.
 
-#### Výkonové dopady
+### Výkonové dopady
 
 - Riziko tzv. N+1 problému tedy 1 dotaz na hlavní entitu + N dotazů na relace (EF Core provede 1 SQL dotaz na načtení všech kurzů. Poté pro každý kurz zvlášť provede další SQL) dotaz na studenty.
 - Může výrazně zpomalit aplikaci
@@ -388,6 +386,22 @@ Při práci s relacemi vždy přemýšlejte:
 - Nejběžnější je Eeager Loading.
 - Kolik SQL dotazů se provede?
 - Kolik dat se skutečně načte?
+
+---
+
+# Kontrolní otázky
+
+Odpovězte na následující otázky bez použití materiálů. Pokud si nejste jistí, vraťte se k příslušné části kapitoly.
+
+1. Jaký je rozdíl mezi relací 1:1, 1:N a N:M?
+2. Co je cizí klíč a jakou roli plní v databázi?
+3. Jaký je rozdíl mezi cizím klíčem a navigační vlastností?
+4. Jak se nastavuje relace pomocí Fluent API?
+5. Kdy EF Core vytvoří spojovací tabulku automaticky?
+6. Jaký je rozdíl mezi Eager, Explicit a Lazy loadingem?
+7. Proč může Eager loading způsobit přenos velkého množství dat?
+8. V jaké situaci byste použili Explicit loading?
+9. Co se může stát při smazání entity, která je navázána na jiné entity?
 
 ---
 
@@ -479,17 +493,3 @@ Vyzkoušejte:
 Popište, co se stane s relacemi a proč.
 
 ---
-
-# Kontrolní otázky
-
-Odpovězte na následující otázky bez použití materiálů. Pokud si nejste jistí, vraťte se k příslušné části kapitoly.
-
-1. Jaký je rozdíl mezi relací 1:1, 1:N a N:M?
-2. Co je cizí klíč a jakou roli plní v databázi?
-3. Jaký je rozdíl mezi cizím klíčem a navigační vlastností?
-4. Jak se nastavuje relace pomocí Fluent API?
-5. Kdy EF Core vytvoří spojovací tabulku automaticky?
-6. Jaký je rozdíl mezi Eager, Explicit a Lazy loadingem?
-7. Proč může Eager loading způsobit přenos velkého množství dat?
-8. V jaké situaci byste použili Explicit loading?
-9. Co se může stát při smazání entity, která je navázána na jiné entity?
