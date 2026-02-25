@@ -192,8 +192,8 @@ EF Core používá `IQueryable<T>`.
 public class Student
 {
     public int Id { get; set; }
-    public string Name { get; set; }
-    public int Age { get; set; }
+    public required string Name { get; set; }
+    public required int Age { get; set; }
 }
 ```
 
@@ -201,6 +201,7 @@ public class Student
 - instance odpovídá řádku v tabulce  
 - EF sleduje změny objektů  
 
+> required znamená, že musíme zadat hodnotu při vytváření instance třídy
 ---
 
 # 5. DbContext
