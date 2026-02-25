@@ -215,7 +215,7 @@ EF Core automaticky vytvoří spojovací tabulku v databázi, která obsahuje:
 - cizí klíč na entitu Course
 - složený primární klíč z obou těchto sloupců
 
-Tato tabulka nemá vlastní entitu v modelu – existuje pouze v databázi. Pokud potřebujeme do relace přidat další atributy (např. datum zápisu), musíme vytvořit explicitní spojovací entitu.
+Tato tabulka nemá vlastní entitu v modelu – existuje pouze v databázi. Pokud potřebujeme do relace přidat další atributy (např. datum zápisu), musíme vytvořit explicitní spojovací entitu. Tabulka je pojmenována kombinací názvů entit (např. StudentCourse).
 
 ```csharp
     public class Student
@@ -397,7 +397,7 @@ context.Entry(group)
 
 ## 3.3 Lazy Loading
 
-Lazy loading (líné načítání) znamená, že související data nejsou načtena z databáze společně s hlavní entitou, ale až ve chvíli, kdy k nim aplikace skutečně přistoupí prostřednictvím navigační property.
+Lazy loading znamená, že související data nejsou načtena z databáze společně s hlavní entitou, ale až ve chvíli, kdy k nim aplikace skutečně přistoupí prostřednictvím navigační property.
 
 Například při načtení studenta se nenačtou jeho kurzy. Ty se načtou až ve chvíli, kdy k nim program poprvé přistoupí.
 
@@ -405,10 +405,10 @@ Například při načtení studenta se nenačtou jeho kurzy. Ty se načtou až v
 
 EF Core při zapnutém lazy loadingu vytvoří tzv. proxy objekty. Ty zachytí přístup k navigační vlastnosti a automaticky odešlou dodatečný SQL dotaz do databáze. 
 
-Pro správnou funkci je nutné:
-- nainstalovat balíček Microsoft.EntityFrameworkCore.Proxies
-- aktivovat lazy loading v konfiguraci DbContextu
-- označit navigační property jako virtual
+Lazy loading není ve výchozím stavu zapnutý, pro správnou funkci je nutné jej explicitně povolit:
+- nainstalovat balíček `Microsoft.EntityFrameworkCore.Proxies`
+- aktivovat lazy loading v konfiguraci `DbContextu` pomocí `options.UseLazyLoadingProxies();`
+- označit navigační property jako `virtual`
 
 ### Výkonové dopady
 
