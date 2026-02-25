@@ -283,7 +283,7 @@ Příklady otázek:
 - Co vše by bylo potřeba v projektu udělat pro přidání nového stavu objednávky?  
 - Jakým způsobem byste do projektu přidali nového Webového Clienta pracujícího s databází pomocí EF? 
 
-> Student si vybere jednu otázku odpovídající jeho části projektu a zodpoví ji textově v Moodle, bez použití vývojového nástroje.
+> Student si vybere jednu otázku odpovídající jeho části projektu a zodpoví ji textově v Moodle nebo na papír, bez použití vývojového nástroje.
 
 Procenta projektu podle písemné obhajoby:
 
