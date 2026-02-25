@@ -387,13 +387,14 @@ foreach (string jmeno in await jmena.ToListAsync())
 
 # 9 Řazení
 
-Všimněte si, že metody pro řazení vrací typ `IOrderedQueryable`.
+Metody pro řazení vrací typ `IOrderedQueryable`.
+
 ```csharp
-IOrderedQueryable<Student> podleKliceVzestupne = context.Students.OrderBy(s => s.Id);
+var podleKliceVzestupne = context.Students.OrderBy(s => s.Id);
       
-IOrderedQueryable<Student> podleKliceSestupne = context.Students.OrderByDescending(s => s.Id);
+var podleKliceSestupne = context.Students.OrderByDescending(s => s.Id);
     
-IOrderedQueryable<Student> podlePrijmeniVzestupne = context.Students.OrderBy(s => s.Prijmeni);
+var podlePrijmeniVzestupne = context.Students.OrderBy(s => s.Prijmeni);
 ```
 
 ---
