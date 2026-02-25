@@ -298,8 +298,7 @@ class SchoolContext(DbContextOptions<SchoolContext> options) : DbContext(options
 
 # 3. Načítání souvisejících dat
 
-Definice relace neznamená, že se související data načtou automaticky.  
-Musíme určit způsob načítání.
+Definice relace neznamená, že se související data načtou automaticky. Sami musíme určit způsob načítání.
 
 Pokud bychom tedy načetli skupinu následujícím způsobem, tak by navigation property `skupina.Studenti` měla nulový počet studentů:
 
