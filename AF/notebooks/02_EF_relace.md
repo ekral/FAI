@@ -35,6 +35,29 @@ V EF Core se relace skládá ze dvou částí:
 - cizí klíč
 - Navigační properta (v C# třídách)
 
+Entity Framework Core využívá konvence, díky kterým dokáže automaticky rozpoznat relace bez nutnosti explicitní konfigurace.
+
+EF Core typicky odvodí relaci, pokud:
+
+- Existuje navigační vlastnost (např. `public Student Student { get; set; }`)
+
+- Existuje odpovídající cizí klíč pojmenovaný podle konvence (například `StudentId`).
+
+Například:
+
+```csharp
+public class Enrollment
+{
+    public int Id { get; set; }
+
+    public int StudentId { get; set; }   // EF rozpozná jako FK
+    public Student? Student { get; set; } // navigační property
+}
+```
+
+Pokud jsou dodrženy konvence, není nutné používat Fluent API ani atributy.
+Konfigurace je potřeba až v případě nestandardního pojmenování nebo složitější relace.
+
 ---
 
 # 2. Typy relací
@@ -148,14 +171,14 @@ public class StudentCard
 class StudentContext(DbContextOptions<StudentContext> options) : DbContext(options)
 {
     public DbSet<Student> Students { get; set; }
-    public DbSet<StudentCart> Carts { get; set; }
+    public DbSet<StudentCard> Cards { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Student>()
-            .HasOne(s => s.StudentCart)
+            .HasOne(s => s.StudentCard)
             .WithOne(sc => sc.Student)
-            .HasForeignKey<StudentCart>(sc => sc.StudentId)
+            .HasForeignKey<StudentCard>(sc => sc.StudentId)
             .IsRequired();
     }
 }
@@ -167,10 +190,10 @@ class StudentContext(DbContextOptions<StudentContext> options) : DbContext(optio
 
 ```csharp
 Student jiri = new Student() { Name = "Jiri" };
-StudentCart cart = new StudentCart() { Due = DateTime.Now.AddYears(1), Student = jiri };
+StudentCard card = new StudentCard() { Due = DateTime.Now.AddYears(1), Student = jiri };
 
 context.Students.Add(jiri);
-context.Carts.Add(cart);
+context.Cards.Add(card);
 
 await context.SaveChangesAsync();
 ```
@@ -187,7 +210,12 @@ Student může být zapsán do více kurzů a kurz může mít více studentů.
 
 ### 2.3.1 Model (implicitní spojovací tabulka)
 
-EF Core vytvoří spojovací tabulku automaticky.
+EF Core automaticky vytvoří spojovací tabulku v databázi, která obsahuje:
+- cizí klíč na entitu Student
+- cizí klíč na entitu Course
+- složený primární klíč z obou těchto sloupců
+
+Tato tabulka nemá vlastní entitu v modelu – existuje pouze v databázi. Pokud potřebujeme do relace přidat další atributy (např. datum zápisu), musíme vytvořit explicitní spojovací entitu.
 
 ```csharp
     public class Student
@@ -369,7 +397,18 @@ context.Entry(group)
 
 ## 3.3 Lazy Loading
 
-Relace se načte při prvním přístupu k navigační vlastnosti. Je nutné nakonfigurovat, ve výchozím stavu je vypnuté.
+Lazy loading (líné načítání) znamená, že související data nejsou načtena z databáze společně s hlavní entitou, ale až ve chvíli, kdy k nim aplikace skutečně přistoupí prostřednictvím navigační property.
+
+Například při načtení studenta se nenačtou jeho kurzy. Ty se načtou až ve chvíli, kdy k nim program poprvé přistoupí.
+
+### Jak funguje
+
+EF Core při zapnutém lazy loadingu vytvoří tzv. proxy objekty. Ty zachytí přístup k navigační vlastnosti a automaticky odešlou dodatečný SQL dotaz do databáze. 
+
+Pro správnou funkci je nutné:
+- nainstalovat balíček Microsoft.EntityFrameworkCore.Proxies
+- aktivovat lazy loading v konfiguraci DbContextu
+- označit navigační property jako virtual
 
 ### Výkonové dopady
 
