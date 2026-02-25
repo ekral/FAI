@@ -276,9 +276,9 @@ class StudentSubject
 
 ---
 
-```csharp
 #### Fluent API konfigurace a DbContext
 
+```csharp
 class SchoolContext(DbContextOptions<SchoolContext> options) : DbContext(options)
 {
     public DbSet<Student> Students { get; set; }
