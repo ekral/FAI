@@ -56,11 +56,9 @@ builder.Build().Run();
 Přidejte do solutionu nový projekt typu `Class Library` (knihovna tříd) s názvem `UTB.Library.Db` a do vytvořeného projektu:
 - Přidejte NuGet balíček `Aspire.Npgsql.EntityFrameworkCore.PostgreSQL`.
 - Přidejte třídu `Author`.
-- Přidejte třídu `LibraryContext` (doplňte chybějící `using Microsoft.EntityFrameworkCore;` pomocí QuickActions).
+- Přidejte třídu `LibraryContext` (doplňte chybějící `using Microsoft.EntityFrameworkCore;`).
 
 ```csharp
-using Microsoft.EntityFrameworkCore;
-
 public class Author
 {
     public int Id { get; set; }
@@ -69,6 +67,8 @@ public class Author
 ```
 
 ```csharp
+using Microsoft.EntityFrameworkCore;
+
 public class LibraryContext(DbContextOptions<LibraryContext> options) : DbContext(options)
 {
     public DbSet<Author> Authors { get; set; }
