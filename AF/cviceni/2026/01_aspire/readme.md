@@ -30,8 +30,10 @@ Vytvořte nový projekt typu **Aspire Empty App** (Prázdná aplikace Aspire) s 
 - Spusťte Docker Desktop nebo Podman (pro Podman je nutné [nastavit Environment Variable](https://aspire.dev/get-started/prerequisites/#install-an-oci-compliant-container-runtime)).
 - Spusťte aplikaci a počkejte, než se stáhne Docker image a spustí se server a databáze. Prozkoumejte Aspire Dashboard.
 
-Metoda `WithDataVolume` přidá ukládání dat na disk. Změny, které provedeme v PostgreSQL Serveru, se tedy po vypnutí kontejneru uloží a po dalším spuštění znovu použijí.  
+Metoda `WithDataVolume` přidá ukládání dat na disk. Změny, které provedeme v PostgreSQL Serveru, se tedy po vypnutí kontejneru uloží a po dalším spuštění znovu použijí. 
+
 Volba `ContainerLifetime.Persistent` znamená, že při vypnutí aplikace zůstane kontejner běžet.
+
 Metoda WithPgAdmin přidá do projektu PgAdmina pro administraci PostgreSQL serveru.
 
 ```csharp
