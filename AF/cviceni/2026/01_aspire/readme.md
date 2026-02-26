@@ -51,7 +51,7 @@ builder.Build().Run();
 
 ### 2. Class Library s entitami a DbContextem
 
-Přidejte do solutionu nový projekt typu `Class Library` s názvem `UTB.Library.Db` a do vytvořeného projektu:
+Přidejte do solutionu nový projekt typu `Class Library` (knihovna tříd) s názvem `UTB.Library.Db` a do vytvořeného projektu:
 - Přidejte NuGet balíček `Aspire.Npgsql.EntityFrameworkCore.PostgreSQL`.
 - Přidejte třídu `Author`.
 - Přidejte třídu `LibraryContext` (doplňte chybějící `using Microsoft.EntityFrameworkCore;` pomocí QuickActions).
@@ -119,7 +119,7 @@ app.UseHttpsRedirection();
 app.Run();
 ```
 
--
+---
 
 ### 4. HTTP Command v Aspire Dashboardu
 
