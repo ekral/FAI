@@ -4,7 +4,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
-builder.AddSqlServerDbContext<LibraryContext>("database");
+builder.AddNpgsqlDbContext<LibraryContext>("database");
 
 var app = builder.Build();
 
