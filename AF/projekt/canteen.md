@@ -163,7 +163,7 @@ Studenti odevzdávají pouze **backend a WebAPI**
 
 ### Srážkové body (záporné)
 - [ ] Bugy, warningy (-1 bod za každý)
-- [ ] Nedodržení jmenných konvencí (-2 body)
+- [ ] Nedodržení nefunkcionálních požadavků, jmenných konvencí (-2 body za každý)
 
 ---
 
