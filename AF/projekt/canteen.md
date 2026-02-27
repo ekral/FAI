@@ -62,7 +62,7 @@ musí být vyučující schopen spustit celý projekt lokálně včetně databá
 ### Požadavky na řešení
 
 - .NET 10
-- Jazyk použitý ve zdrojovém kódu bude **angličtina**.
+- Jazyk použitý ve zdrojovém kódu bude **angličtina**. Jazyk aplikace může být jiný.
 - Projekt využívá [**Aspire**](https://aspire.dev/get-started/what-is-aspire/):
   - Vytváří databázi (např. [**PostgreSQL**](https://aspire.dev/integrations/databases/efcore/postgres/postgresql-get-started/)).
   - Používá Identity nástroj [**Keycloak**](https://aspire.dev/integrations/security/keycloak/) k zabezpečení aplikace.
@@ -103,7 +103,7 @@ Tento checklist slouží:
 > [!WARNING]
 > **Důležité pravidlo** 
 > Pokud se odevzdaný projekt **nedá sestavit nebo spustit**,
-> **není v angličtině** nebo **není vytvořen v .NET 10**  
+> Zdrojový kód **není v angličtině** nebo **není vytvořen v .NET 10**  
 > bude hodnocen **0 body**
 > (a to bez ohledu na míru implementované funkcionality).
 
