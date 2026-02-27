@@ -64,7 +64,7 @@ musí být vyučující schopen spustit celý projekt lokálně včetně databá
 - .NET 10
 - Jazyk použitý ve zdrojovém kódu bude **angličtina**.
 - Projekt využívá [**Aspire**](https://aspire.dev/get-started/what-is-aspire/):
-  - Vytváří databázi (např. [**SQL Server**](https://aspire.dev/integrations/databases/efcore/sql-server/sql-server-get-started/)).
+  - Vytváří databázi (např. [**PostgreSQL**](https://aspire.dev/integrations/databases/efcore/postgres/postgresql-get-started/).
   - Používá Identity nástroj [**Keycloak**](https://aspire.dev/integrations/security/keycloak/) k zabezpečení aplikace.
   - Využívá **Service Discovery**, bez pevně zadaných IP adres.
   - Obsahuje **Http Command** pro reset databáze (smazání, vytvoření, seed testovacích dat).
@@ -75,7 +75,7 @@ musí být vyučující schopen spustit celý projekt lokálně včetně databá
 - Projekt využívá **Server-Sent Events (SSE)** pro serverem iniciované notifikace
   o změnách v objednávkách studentů a pro kuchařku. SSE o změnách objednávek se broadcastují všem bez zabezpečení.
 - Klientské aplikace volají Minimal Web API pomocí HTTP protokolu a nepřistupují přímo k databázi a entitám.
-- Testy budou využívat "produkční" databázi, například SQL Server a ne InMemory EF. Testy musí běžet automaticky bez manuálního zásahu (pomocí databáze spuštěné přes Aspire).
+- Testy budou využívat "produkční" databázi, například PostgreSQL server a ne InMemory EF. Testy musí běžet automaticky bez manuálního zásahu (pomocí databáze spuštěné přes Aspire).
 
 ---
 
