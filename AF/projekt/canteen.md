@@ -57,7 +57,7 @@ Student je o stavu objednávky informován v reálném čase.
 ## Nefunkční požadavky
 
 Díky použití nástrojů [Aspire](https://aspire.dev/get-started/what-is-aspire/)
-musí být vyučující schopen spustit celý projekt lokálně včetně databáze a Keycloak.
+musí být vyučující schopen spustit celý projekt lokálně včetně databáze a Keycloak. Vyučující bude mít na počítači nainstalované Visual Studio 2026, .NET 10 a spuštěný Docker.
 
 ### Požadavky na řešení
 
