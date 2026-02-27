@@ -377,7 +377,7 @@ Projekce představuje změnu typu než je originální typ entity v databázi. N
 ```csharp
 IQueryable<string> jmena = context.Students.Select(s => s.Jmeno);
 
-foreach (string jmeno in await jmena.ToListAsync())
+foreach (string jmeno in jmena)
 {
     Console.WriteLine(jmeno);
 }
