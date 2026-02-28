@@ -427,27 +427,9 @@ Při práci s relacemi vždy přemýšlejte:
 
 ---
 
-# Kontrolní otázky
-
-Odpovězte na následující otázky bez použití materiálů. Pokud si nejste jistí, vraťte se k příslušné části kapitoly.
-
-1. Jaký je rozdíl mezi relací 1:1, 1:N a N:M?
-2. Co je cizí klíč a jakou roli plní v databázi?
-3. Jaký je rozdíl mezi cizím klíčem a navigační vlastností?
-4. Jak se nastavuje relace pomocí Fluent API?
-5. Kdy EF Core vytvoří spojovací tabulku automaticky?
-6. Jaký je rozdíl mezi Eager, Explicit a Lazy loadingem?
-7. Proč může Eager loading způsobit přenos velkého množství dat?
-8. V jaké situaci byste použili Explicit loading?
-9. Co se může stát při smazání entity, která je navázána na jiné entity?
-
----
-
 ## 🧩 5. Závěrečný komplexní úkol – Library Management System
 
 Navrhněte jednoduchý informační systém veřejné knihovny pomocí Entity Framework Core.
-
----
 
 ### 📌 Požadované entity
 
@@ -511,5 +493,21 @@ Otestujte chování aplikace při smazání:
 - čtenáře 
 
 Popište výsledek.
+
+---
+
+# Kontrolní otázky
+
+Odpovězte na následující otázky bez použití materiálů. Pokud si nejste jistí, vraťte se k příslušné části kapitoly.
+
+1. Jaký je rozdíl mezi relací 1:1, 1:N a N:M?
+2. Co je cizí klíč a jakou roli plní v databázi?
+3. Jaký je rozdíl mezi cizím klíčem a navigační vlastností?
+4. Jak se nastavuje relace pomocí Fluent API?
+5. Kdy EF Core vytvoří spojovací tabulku automaticky?
+6. Jaký je rozdíl mezi Eager, Explicit a Lazy loadingem?
+7. Proč může Eager loading způsobit přenos velkého množství dat?
+8. V jaké situaci byste použili Explicit loading?
+9. Co se může stát při smazání entity, která je navázána na jiné entity?
 
 ---
