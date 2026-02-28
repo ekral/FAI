@@ -417,40 +417,37 @@ Lazy loading není ve výchozím stavu zapnutý, pro správnou funkci je nutné 
 
 ---
 
-# 4. Doporučení pro praxi
+### Doporučení pro praxi
 
 Při práci s relacemi vždy přemýšlejte:
 
-- Nejběžnější je Eeager Loading.
+- Nejběžnější je Eeger Loading.
 - Kolik SQL dotazů se provede?
 - Kolik dat se skutečně načte?
 
 ---
 
-## 🧩 5. Závěrečný komplexní úkol – Library Management System
+# 🧩 4. Závěrečný komplexní úkol – Library Management System
 
 Navrhněte jednoduchý informační systém veřejné knihovny pomocí Entity Framework Core.
 
-### 📌 Požadované entity
+## 📌 Požadované entity
 
 Implementujte následující třídy:
 
-#### Book (kniha)
-- Id  
-- Title  
-
-#### Author (autor)
-- Id  
-- Name  
-
-#### Reader (čtenář)
-- Id  
-- Name  
-
-#### Loan (výpůjčka)
-- Id  
-- LoanDate  
-- ReturnDate (nullable)  
+- Book (kniha)
+    - Id  
+    - Title  
+- Author (autor)
+    - Id  
+    - Name  
+- Reader (čtenář)
+    - Id  
+    - Name  
+- Loan (výpůjčka)
+    - Id  
+    - LoanDate  
+    - ReturnDate (nullable)  
   
 ---
 
