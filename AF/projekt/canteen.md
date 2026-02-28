@@ -57,14 +57,14 @@ Student je o stavu objednávky informován v reálném čase.
 ## Nefunkční požadavky
 
 Díky použití nástrojů [Aspire](https://aspire.dev/get-started/what-is-aspire/)
-musí být vyučující schopen spustit celý projekt lokálně včetně databáze a Keycloak.
+musí být vyučující schopen spustit celý projekt lokálně včetně databáze a Keycloak. Vyučující bude mít na počítači nainstalované Visual Studio 2026, .NET 10 a spuštěný Docker.
 
 ### Požadavky na řešení
 
 - .NET 10
-- Jazyk použitý ve zdrojovém kódu bude **angličtina**.
+- Jazyk použitý ve zdrojovém kódu bude **angličtina**. Jazyk aplikace může být jiný.
 - Projekt využívá [**Aspire**](https://aspire.dev/get-started/what-is-aspire/):
-  - Vytváří databázi (např. [**SQL Server**](https://aspire.dev/integrations/databases/efcore/sql-server/sql-server-get-started/)).
+  - Vytváří databázi (např. [**PostgreSQL**](https://aspire.dev/integrations/databases/efcore/postgres/postgresql-get-started/)).
   - Používá Identity nástroj [**Keycloak**](https://aspire.dev/integrations/security/keycloak/) k zabezpečení aplikace.
   - Využívá **Service Discovery**, bez pevně zadaných IP adres.
   - Obsahuje **Http Command** pro reset databáze (smazání, vytvoření, seed testovacích dat).
@@ -75,7 +75,7 @@ musí být vyučující schopen spustit celý projekt lokálně včetně databá
 - Projekt využívá **Server-Sent Events (SSE)** pro serverem iniciované notifikace
   o změnách v objednávkách studentů a pro kuchařku. SSE o změnách objednávek se broadcastují všem bez zabezpečení.
 - Klientské aplikace volají Minimal Web API pomocí HTTP protokolu a nepřistupují přímo k databázi a entitám.
-- Testy budou využívat "produkční" databázi, například SQL Server a ne InMemory EF. Testy musí běžet automaticky bez manuálního zásahu (pomocí databáze spuštěné přes Aspire).
+- Testy budou využívat "produkční" databázi, například PostgreSQL server a ne InMemory EF. Testy musí běžet automaticky bez manuálního zásahu (pomocí databáze spuštěné přes Aspire).
 
 ---
 
@@ -103,7 +103,7 @@ Tento checklist slouží:
 > [!WARNING]
 > **Důležité pravidlo** 
 > Pokud se odevzdaný projekt **nedá sestavit nebo spustit**,
-> **není v angličtině** nebo **není vytvořen v .NET 10**  
+> Zdrojový kód **není v angličtině** nebo **není vytvořen v .NET 10**  
 > bude hodnocen **0 body**
 > (a to bez ohledu na míru implementované funkcionality).
 
@@ -163,7 +163,7 @@ Studenti odevzdávají pouze **backend a WebAPI**
 
 ### Srážkové body (záporné)
 - [ ] Bugy, warningy (-1 bod za každý)
-- [ ] Nedodržení jmenných konvencí (-2 body)
+- [ ] Nedodržení nefunkcionálních požadavků, jmenných konvencí (-2 body za každý)
 
 ---
 
@@ -234,7 +234,7 @@ Studenti odevzdávají **kompletní funkční systém**
 
 ### Srážkové body (záporné)
 - [ ] Bugy, warningy (-1 bod za každý)
-- [ ] Nedodržení jmenných konvencí (-2 body)
+- [ ] Nedodržení nefunkcionálních požadavků, jmenných konvencí (-2 body za každý)
 
 ---
 
