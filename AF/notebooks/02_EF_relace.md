@@ -496,7 +496,7 @@ Popište výsledek.
 
 ---
 
-# Kontrolní otázky
+# ❓ Kontrolní otázky
 
 Odpovězte na následující otázky bez použití materiálů. Pokud si nejste jistí, vraťte se k příslušné části kapitoly.
 

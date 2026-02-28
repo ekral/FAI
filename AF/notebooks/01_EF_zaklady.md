@@ -464,7 +464,7 @@ ORDER BY Name;
 
 ---
 
-# 12. Kontrolní otázky
+# ❓ Kontrolní otázky
 
 1. Co je ORM?  
 2. Jaký je rozdíl mezi LINQ to Objects a LINQ to Entities?  
