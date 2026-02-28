@@ -459,16 +459,14 @@ Entity budou mít následující relace, doplňte cizí klíče a navigační pr
 - Reader → Loan (vztah 1:N mezi čtenářem a výpůjčkou)  
 - Book → Loan (vztah 1:N mezi knihou a výpůjčkou)  
 
----
-
 ### 📊 Testovací data
 
 Vytvořte a uložte do databáze:
 
 - alespoň 3 knihy
 - alespoň 3 autory 
-- alespoň 1 čtenáře
-- alespoň 1 výpůjčku
+- alespoň 2 čtenáře
+- alespoň 2 výpůjčky
 
 ---
 
@@ -478,8 +476,6 @@ Vytvořte a uložte do databáze:
 2. Vypište všechny výpůjčky konkrétního čtenáře.  
 3. Najděte čtenáře s více než jednou aktivní výpůjčkou (ReturnDate je null).  
 4. Vypište knihy, které nikdy nebyly půjčeny.  
-
----
 
 ### 🧪 Ověřte referenční integritu
 
