@@ -443,91 +443,73 @@ Odpovězte na následující otázky bez použití materiálů. Pokud si nejste 
 
 ---
 
-# 5. Závěrečný komplexní úkol – Course Management System
+## 🧩 5. Závěrečný komplexní úkol – Library Management System
 
-Navrhněte jednoduchý informační systém vysoké školy pro správu kurzů.
-
-## Požadované entity
-
-### Student
-
-- Id
-- FirstName
-- LastName
-- Courses (kolekce kurzů)
-- StudentCard (relace 1:1)
-
-### Teacher
-
-- Id
-- FirstName
-- LastName
-- Courses (kolekce kurzů)
-
-### Course
-
-- Id
-- Name
-- Credits
-- TeacherId
-- Teacher (navigační vlastnost)
-- Students (kolekce studentů)
-
-### StudentCard
-
-- Id
-- ExpirationDate
-- StudentId
-- Student (navigační vlastnost)
+Navrhněte jednoduchý informační systém veřejné knihovny pomocí Entity Framework Core.
 
 ---
 
-## Úkoly
+### 📌 Požadované entity
 
-### 1. Nastavte relace
+Implementujte následující třídy:
 
-- Student ↔ Course (N:M)
-- Teacher → Course (1:N)
-- Student ↔ StudentCard (1:1)
+#### Book (kniha)
+- Id  
+- Title  
 
-Použijte Fluent API.
+#### Author (autor)
+- Id  
+- Name  
+
+#### Reader (čtenář)
+- Id  
+- Name  
+
+#### Loan (výpůjčka)
+- Id  
+- LoanDate  
+- ReturnDate (nullable)  
+  
+---
+
+### 🔗 Požadované relace
+
+Entit budou mít následující relace, doplňte cizí klíče a navigační property:
+
+- Book ↔ Author (vztah M:N mezi knihou a autorem)  
+- Reader → Loan (vztah 1:N mezi čtenářem a výpůjčkou)  
+- Book → Loan (vztah 1:N mezi knihou a výpůjčkou)  
 
 ---
 
-### 2. Naplňte databázi testovacími daty
+### 📊 Testovací data
 
-Minimálně:
+Vytvořte a uložte do databáze:
 
-- 3 students
-- 2 teachers
-- 3 courses
-- každý student musí mít student card
-- každý student musí být zapsán alespoň do jednoho kurzu
-
----
-
-### 3. Implementujte dotazy
-
-Vytvořte:
-
-1. Výpis všech kurzů včetně učitele a počtu studentů  
-2. Výpis studentů z konkrétního kurzu (včetně jejich student card)  
-3. Výpis kurzů konkrétního učitele  
-4. Studenty zapsané ve více než jednom kurzu  
-5. Kompletní detail studenta (courses + student card)
-
-Použijte vhodný způsob načítání souvisejících dat.
+- alespoň 5 knih
+- alespoň 4 autory 
+- alespoň 5 čtenářů
+- alespoň 8 výpůjček
 
 ---
 
-### 4. Ověřte chování mazání
+### 🔍 Implementujte LINQ dotazy
 
-Vyzkoušejte:
+1. Vypište všechny knihy včetně jejich autorů.  
+2. Vypište všechny výpůjčky konkrétního čtenáře.  
+3. Najděte čtenáře s více než jednou aktivní výpůjčkou (ReturnDate je null).  
+4. Vypište knihy, které nikdy nebyly půjčeny.  
 
-- smazání course
-- smazání teacher
-- smazání student
+---
 
-Popište, co se stane s relacemi a proč.
+### 🧪 Ověřte referenční integritu
+
+Otestujte chování aplikace při smazání:
+
+- autora  
+- knihy  
+- čtenáře 
+
+Popište výsledek.
 
 ---
