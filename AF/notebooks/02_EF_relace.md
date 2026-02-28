@@ -453,7 +453,7 @@ Implementujte následující třídy:
 
 ### 🔗 Požadované relace
 
-Entit budou mít následující relace, doplňte cizí klíče a navigační property:
+Entity budou mít následující relace, doplňte cizí klíče a navigační property:
 
 - Book ↔ Author (vztah M:N mezi knihou a autorem)  
 - Reader → Loan (vztah 1:N mezi čtenářem a výpůjčkou)  
@@ -465,10 +465,10 @@ Entit budou mít následující relace, doplňte cizí klíče a navigační pro
 
 Vytvořte a uložte do databáze:
 
-- alespoň 5 knih
-- alespoň 4 autory 
-- alespoň 5 čtenářů
-- alespoň 8 výpůjček
+- alespoň 3 knihy
+- alespoň 3 autory 
+- alespoň 1 čtenáře
+- alespoň 1 výpůjčku
 
 ---
 
