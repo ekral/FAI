@@ -11,8 +11,8 @@ Tento přehled slouží k rychlému „přepnutí“ z Pythonu do C#. Pozor na n
 | :--- | :--- | :--- |
 | **Ukončení příkazu** | Nový řádek | **Středník ;** |
 | **Bloky kódu** | Odsazení (indent) | **Složené závorky { }** |
-| **Logické operátory** | and, or, not | &&, ||, ! |
-| **Komentáře** | # komentář | // (řádkový) nebo /* */ (blokový) |
+| **Logické operátory** | and, or, not | `&&`, `\|\|`, `!` |
+| **Komentáře** | # komentář | `//` (řádkový) nebo `/* */` (blokový) |
 
 ---
 
@@ -68,18 +68,20 @@ else
 }
 ```
 
-### Pole
+---
+
+### Pole a kolekce
 
 
 ```csharp
 // Python: pole = [1, 2, 3]
-int[] pole = [1, 2, 3];
+int[] poleA = [1, 2, 3];
 
 // Python: 
 // pole = [0] * 3
 // delka_pole = len(pole)
-int[] pole = new int[3]; // tri defaultni prvky
-int delkaPole = pole.Length;
+int[] poleB = new int[3]; // tri defaultni prvky
+int delkaPole = poleB.Length;
 
 // Python: 
 // dynamickePole = []
@@ -87,6 +89,10 @@ int delkaPole = pole.Length;
 List<int> dynamickePole = [];
 int pocetPrvku = dynamickePole.Count;
 ```
+
+> ⚠️ Poznámka: zápis `[]` a `[1,2,3]` funguje od **C# 12 / .NET 8+**
+
+---
 
 ### Cykly
 
@@ -118,13 +124,17 @@ foreach (var prvek in pole)
 V C# musí mít každá metoda definovaný návratový typ (nebo void).
 
 ```csharp
-// Python: def pozdrav(jmeno):
+// Python: 
+// def pozdrav(jmeno): 
+//     print(f"Ahoj {jmeno}")
 public void Pozdrav(string jmeno) 
 {
     Console.WriteLine($"Ahoj {jmeno}");
 }
 
-// Python: def scitej(a, b): return a + b
+// Python: 
+// def scitej(a, b): 
+//     return a + b
 public int Scitej(int a, int b) 
 {
     return a + b;
@@ -135,7 +145,7 @@ public int Scitej(int a, int b)
 
 ## 5. Třídy a instance tříd
 
-Místo self používáme this. Konstruktor má stejné jméno jako třída.
+Místo `self` používáme `this`. Konstruktor má stejné jméno jako třída.
 
 ```csharp
 public class Student 
@@ -150,6 +160,7 @@ public class Student
     }
 }
 ```
+
 Instance třídy
 
 ```csharp
@@ -159,14 +170,16 @@ Student pavel = new Student("Pavel");
 // Python: 
 // karel = Student("Karel")
 // karel.body = 40
-Student karel = new Karel("Karel") { Body = 40 }; // Object initializer 
+Student karel = new Student("Karel") { Body = 40 }; // Object initializer 
 ```
+
 ---
 
 ## 6. LINQ vs. List Comprehension
 Místo zkratek z Pythonu používáme v C# LINQ.
 
 ```csharp
+using System.Linq;
 // Python: filtered = [x for x in data if x > 5]
 var filtered = data.Where(x => x > 5).ToList();
 
@@ -178,8 +191,8 @@ var names = students.Select(s => s.Jmeno).ToList();
 
 ## 7. Práce s null (None)
 Pozor na NullReferenceException.
-- **Python:** ``` if x is None``` :
-- **C#:** ``` if (x == null) { ... } nebo moderní if (x is null) { ... } ```
+- **Python:** `if x is None`
+- **C#:** `if (x == null)` nebo moderní `if (x is null)`
 
 ---
 
@@ -187,3 +200,10 @@ Pozor na NullReferenceException.
 1. **Překladač píše "Semicolon expected"?** Chybí ti ; na konci řádku.
 2. **Překladač píše "The name '...' does not exist in the current context"?** Zkontroluj velká/malá písmena (C# je case-sensitive) nebo zda máš správný using.
 3. **Pleteš si ' a "?** V C# jsou 'a' (char - jeden znak) a "abc" (string - text) dva různé typy.
+
+---
+
+Můžete se také podívat na následující odkazy:
+
+[C# cheatsheet](https://quickref.me/cs.html)
+[.NET Videos](https://dotnet.microsoft.com/en-us/learn/videos)

@@ -1,2 +1,2 @@
-int[] pole = new int[3]; // tri defaultni prvky
+int[] pole = [1, 2, 3];
 int delkaPole = pole.Length;

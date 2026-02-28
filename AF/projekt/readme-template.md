@@ -15,7 +15,7 @@ Semestrální projekt do předmětu **Aplikační frameworky**.
 
 ## 🚀 Spuštění projektu
 
-1. **Požadavky:** .NET 10 SDK, Docker Desktop nebo Podman (nutný pro běh SQL Serveru a Keycloaku v Aspire).
+1. **Požadavky:** .NET 10 SDK, Docker Desktop nebo Podman (nutný pro běh databázového Serveru a Keycloaku v Aspire).
 2. **Postup:**
    - Spusťe Docker Desktop nebo Podman.
    - Otevřete solution `UTB.Minute.slnx` ve Visual Studiu 2026 nebo JetBrains Rider.
