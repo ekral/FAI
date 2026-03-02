@@ -220,7 +220,7 @@ public class StudentContext(DbContextOptions<StudentContext> options): DbContext
 
 ---
 
-## 5.1 Přetížené metody DbContext
+## 5.1 Překryté (override) metody DbContext
 
 ### OnConfiguring
 
