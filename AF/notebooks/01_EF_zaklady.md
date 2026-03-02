@@ -331,8 +331,12 @@ int key = student.Id;
 var students = context.Students.ToList();
 
 var older = context.Students
-                   .Where(s => s.Age > 20)
-                   .ToList();
+                   .Where(s => s.Age > 20);
+
+foreach(var student in older)
+{
+  Console.WriteLine($"{student.Id}: {student.Name}");
+}
 
 var student = context.Students.Find(1); // Kód vyhledá studenta podle primárního klíče
 
