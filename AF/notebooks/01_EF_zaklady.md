@@ -306,7 +306,7 @@ context.Database.EnsureCreated();
 
 # 7. CRUD operace
 
-## CREATE
+## 7.1 CREATE
 
 Když necháme `Id` s hodnotou `0`, tak Entity Framework, po volání metody `SaveChange`, **přidělí `Id` vygenerovanou hodnotu primárního klíče**.
 
@@ -325,7 +325,7 @@ int key = student.Id;
 
 ---
 
-## READ
+## 7.2 READ
 
 ```csharp
 var students = context.Students.ToList(); // včetně materializace
@@ -386,7 +386,7 @@ IOrderedQueryable<string> jmena = context.Students
 
 ---
 
-## UPDATE
+## 7.3 UPDATE
 
 ```csharp
 Student? student = context.Students.Find(1);
@@ -400,7 +400,7 @@ if(student is not null)
 
 ---
 
-## DELETE
+## 7.4 DELETE
 
 ```csharp
 Student? student = context.Students.Find(1);
@@ -414,7 +414,7 @@ if(student is not null)
 
 ---
 
-# 7. Asynchronní přístup
+# 8. Asynchronní přístup
 
 V reálném kódu používáme většinou asynchronní varianty, například:
 
@@ -425,7 +425,7 @@ await context.SaveChangesAsync();
 
 ---
 
-# 8. Překlad LINQ do SQL
+# 9. Překlad LINQ do SQL
 
 ```csharp
 context.Students
