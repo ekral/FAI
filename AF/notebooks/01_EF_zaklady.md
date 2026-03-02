@@ -328,20 +328,19 @@ int key = student.Id;
 ## READ
 
 ```csharp
-var students = context.Students.ToList();
+var students = context.Students.ToList(); // včetně materializace
 
-var older = context.Students
-                   .Where(s => s.Age > 20);
+var older = context.Students.Where(s => s.Age > 20);
 
+// materializace proběhne až začneme číst kolekci
 foreach(var student in older)
 {
   Console.WriteLine($"{student.Id}: {student.Name}");
 }
 
-var student = context.Students.Find(1); // Kód vyhledá studenta podle primárního klíče
+var first = context.Students.Find(1); // Kód vyhledá studenta podle primárního klíče
 
-var jan = context.Students
-                 .FirstOrDefault(s => s.Name == "Jan");
+var jan = context.Students.FirstOrDefault(s => s.Name == "Jan");
 ```
 ---
 
@@ -350,7 +349,7 @@ var jan = context.Students
 Metody pro řazení vrací typ `IOrderedQueryable`.
 
 ```csharp
-var podleKliceVzestupne = context.Students.OrderBy(s => s.Id);
+var podleKliceVzestupne = context.Students.OrderBy(s => s.Id); // Jen pro ukázku, výchozí řazení bez OrderBy je podle klíče
       
 var podleKliceSestupne = context.Students.OrderByDescending(s => s.Id);
     
