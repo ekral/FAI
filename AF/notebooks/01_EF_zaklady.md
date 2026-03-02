@@ -374,7 +374,7 @@ foreach (string jmeno in jmena)
 
 ---
 
-# Kombinace metod
+### Kombinace metod
 
 Metody můžeme kombinovat. Následující příkaz vrací jména studentů s příjmením `"Vesely"` (filtruje) seřazená sestupně. Dotaz se opět neprovede hned, ale až bychom provedli například příkaz `foreach` nebo `ToList`.
 
