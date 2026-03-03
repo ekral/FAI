@@ -1,5 +1,9 @@
 # Minimal Web API – studijní materiál (bakalářské studium)
 
+**autor: Erik Král ekral@utb.cz**
+
+## 🎯 Definice
+
 Web API (Web Application Programming Interface) je sada pravidel a protokolů umožňující komunikovat programům prostřednictvím internetu. REST (Representation State Transfer) je druh Web API a představuj architektonický styl použivající standartní HTTP metody (GET, POST, PUT, PATCH a DELETE) zpřístupňující endpoity identifikvané pomocí URI. Pro přenos dat využívá přitom především format JSON.
 
 [Minimal Web API](https://learn.microsoft.com/en-us/aspnet/core/tutorials/min-web-api)umožňuje vytvářet REST služby bez controllerů.
@@ -359,7 +363,7 @@ app.MapGet("/students-dto", async (StudentContext context) =>
 
 ---
 
-## Kontrolní otázky
+## ❓ Kontrolní otázky
 
 1. Jaký je rozdíl mezi PUT a PATCH?  
 2. Co vrátí metoda `GetStudent`, pokud záznam neexistuje?  
