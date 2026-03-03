@@ -331,9 +331,10 @@ Content-Type: application/json
 ### Co kód dělá
 
 - vyhledá studenta podle ID,  
-- přepíše všechny jeho vlastnosti,  
+- pokud existuje, přepíše všechny jeho vlastnosti,  
 - uloží změny,  
 - vrátí HTTP 204 No Content.
+- pokud neexistuje, vrátí HTTP 404 Not Found.
 
 ---
 
@@ -376,9 +377,10 @@ DELETE {{Students.WebAPI_HostAddress}}/students/1
 ### Co kód dělá
 
 - vyhledá studenta,  
-- odstraní ho z databáze,  
+- pokud existuje, odstraní ho z databáze,  
 - uloží změny,  
 - vrátí HTTP 204 No Content.
+- pokud neexistuje, vrátí HTTP 404 Not Found.
 
 ---
 
@@ -421,9 +423,10 @@ PATCH {{Students.WebAPI_HostAddress}}/students/1
 ### Co kód dělá
 
 - vyhledá studenta,  
-- nastaví `IsActive = false`,  
+- pokud existuje, nastaví `IsActive = false`,  
 - uloží změny,  
 - vrátí HTTP 204 No Content.
+- pokud neexistuje, vrátí HTTP 404 Not Found.
 
 ---
 
