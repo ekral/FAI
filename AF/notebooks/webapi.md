@@ -65,12 +65,22 @@ builder.Services.AddDbContext(opt => opt.UseSqlite("Data Source=students.db"));
 
 ---
 
-## Třída s implementací endpointů
+## Třída s implementací endpointů a soubor .http
+
+Uvedené metody budou definovány v následující třídě.
 
 ```csharp
 public static class WebApiVersion1
 {
 }
+```
+
+HTTP metody můžeme ve Visual Studiu zavolat pomocí souboru s příponou `.http`.
+
+Soubor s příponou `.http` bude mít na začátku nadefinovanou adresu služby, například:
+
+```json
+@Students.WebAPI_HostAddress = https://localhost:7042
 ```
 
 ---
@@ -125,7 +135,7 @@ app.MapGet("/students", WebApiVersion1.GetAllStudents);
 ### Implementace
 
 ```csharp
- public static async Task<Ok<Student[]>> GetAllStudents(StudentContext context)
+public static async Task<Ok<Student[]>> GetAllStudents(StudentContext context)
 {
     return TypedResults.Ok(await context.Studenti.ToArrayAsync());
 }
@@ -240,7 +250,7 @@ app.MapPut("/students/{id}", WebApiVersion1.UpdateStudent);
 ### Implementace
 
 ```csharp
- public static async Task<Results<NoContent, NotFound>> UpdateStudent(int id, Student inputStudent, StudentContext context)
+public static async Task<Results<NoContent, NotFound>> UpdateStudent(int id, Student inputStudent, StudentContext context)
 {
     if (await context.Studenti.FindAsync(id) is Student student)
     {
@@ -251,9 +261,10 @@ app.MapPut("/students/{id}", WebApiVersion1.UpdateStudent);
 
         return TypedResults.NoContent();
     }
-
-    return TypedResults.NotFound();
-}
+    else
+    {
+        return TypedResults.NotFound();
+    }
 ```
 
 ### Co kód dělá
@@ -286,8 +297,10 @@ public static async Task<Results<NoContent, NotFound>> DeleteStudent(int id, Stu
 
         return TypedResults.NoContent();
     }
-
-    return TypedResults.NotFound();
+    else
+    {
+        return TypedResults.NotFound();
+    }
 }
 ```
 
@@ -321,8 +334,10 @@ public static async Task<Results<NoContent, NotFound> DeactivateStudent(int id, 
 
         return TypedResults.NoContent();
     }
-
-    return TypedResults.NotFound();
+    else
+    {
+        return TypedResults.NotFound();
+    }
 }
 ```
 
