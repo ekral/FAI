@@ -39,7 +39,7 @@ app.Run();
 ```csharp
 public class Student
 {
-    public int StudentId { get; set; }
+    public int Id { get; set; }
     public required string Name { get; set; }
     public required bool IsActive { get; set; }
 }
@@ -85,7 +85,7 @@ Soubor s příponou `.http` bude mít na začátku nadefinovanou adresu služby,
 
 ---
 
-## 1) POST `/seed`
+## 1. POST `/seed`
 
 ### Mapování
 
@@ -114,6 +114,13 @@ public static async Task<Created> Seed(StudentContext context)
     return TypedResults.Created();
 }
 ```
+### Volání
+
+```json
+POST {{Students.WebAPI_HostAddress}}/seed
+
+###
+```
 
 ### Co kód dělá
 
@@ -124,7 +131,7 @@ public static async Task<Created> Seed(StudentContext context)
 
 ---
 
-## 2) GET `/students`
+## 2. GET `/students`
 
 ### Mapování
 
@@ -141,6 +148,14 @@ public static async Task<Ok<Student[]>> GetAllStudents(StudentContext context)
 }
 ```
 
+### Volání
+
+```json
+GET {{Students.WebAPI_HostAddress}}/students/
+
+###
+```
+
 ### Co kód dělá
 
 - načte všechny studenty z databáze,  
@@ -149,7 +164,7 @@ public static async Task<Ok<Student[]>> GetAllStudents(StudentContext context)
 
 ---
 
-## 3) GET `/students/active`
+## 3. GET `/students/active`
 
 ### Mapování
 
@@ -170,6 +185,14 @@ public static async Task<Ok<Student[]>> GetActiveStudents(StudentContext context
 }
 ```
 
+### Volání
+
+```json
+GET {{Students.WebAPI_HostAddress}}/Students/Active
+
+###
+```
+
 ### Co kód dělá
 
 - vyfiltruje pouze aktivní studenty,  
@@ -178,7 +201,7 @@ public static async Task<Ok<Student[]>> GetActiveStudents(StudentContext context
 
 ---
 
-## 4) GET `/students/{id}`
+## 4. GET `/students/{id}`
 
 ### Mapování
 
@@ -202,6 +225,14 @@ public static async Task<Results<Ok<Student>, NotFound>> GetStudent(int id, Stud
 }
 ```
 
+### Volání
+
+```json
+GET {{Students.WebAPI_HostAddress}}/students/1
+
+###
+```
+
 ### Co kód dělá
 
 - vyhledá studenta podle primárního klíče,  
@@ -210,7 +241,7 @@ public static async Task<Results<Ok<Student>, NotFound>> GetStudent(int id, Stud
 
 ---
 
-## 5) POST `/students`
+## 5. POST `/students`
 
 ### Mapování
 
@@ -231,6 +262,21 @@ public static async Task<Created<Student>> CreateStudent(Student student, Studen
 }
 ```
 
+### Volání
+
+```json
+POST {{Students.WebAPI_HostAddress}}/Students
+Content-Type: application/json
+
+{
+  "id": 0,
+  "name": "Lenka",
+  "isactive": true
+}
+
+###
+```
+
 ### Co kód dělá
 
 - přijme JSON data z těla požadavku,  
@@ -239,7 +285,7 @@ public static async Task<Created<Student>> CreateStudent(Student student, Studen
 
 ---
 
-## 6) PUT `/students/{id}`
+## 6. PUT `/students/{id}`
 
 ### Mapování
 
@@ -267,6 +313,21 @@ public static async Task<Results<NoContent, NotFound>> UpdateStudent(int id, Stu
     }
 ```
 
+### Volání
+
+```json
+PUT {{Students.WebAPI_HostAddress}}/students/1
+Content-Type: application/json
+
+{
+  "studentId": 1,
+  "jmeno": "Novotna",
+  "studuje": true
+}
+
+###
+```
+
 ### Co kód dělá
 
 - vyhledá studenta podle ID,  
@@ -276,7 +337,7 @@ public static async Task<Results<NoContent, NotFound>> UpdateStudent(int id, Stu
 
 ---
 
-## 7) DELETE `/students/{id}`
+## 7. DELETE `/students/{id}`
 
 ### Mapování
 
@@ -304,6 +365,14 @@ public static async Task<Results<NoContent, NotFound>> DeleteStudent(int id, Stu
 }
 ```
 
+### Volání
+
+```json
+DELETE {{Students.WebAPI_HostAddress}}/students/1
+
+###
+```
+
 ### Co kód dělá
 
 - vyhledá studenta,  
@@ -313,7 +382,7 @@ public static async Task<Results<NoContent, NotFound>> DeleteStudent(int id, Stu
 
 ---
 
-## 8) PATCH `/students/{id}`
+## 8. PATCH `/students/{id}`
 
 ### Mapování
 
@@ -339,6 +408,14 @@ public static async Task<Results<NoContent, NotFound> DeactivateStudent(int id, 
         return TypedResults.NotFound();
     }
 }
+```
+
+### Volání
+
+```json
+PATCH {{Students.WebAPI_HostAddress}}/students/1
+
+###
 ```
 
 ### Co kód dělá
