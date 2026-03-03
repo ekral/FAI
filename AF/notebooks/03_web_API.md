@@ -127,7 +127,8 @@ POST {{Students.WebAPI_HostAddress}}/seed
 - odstraní databázi (pokud existuje),  
 - vytvoří novou databázi podle aktuálního modelu,  
 - vloží testovací data,  
-- uloží změny.
+- uloží změny,
+- vrátí HTTP 201 (Created).
 
 ---
 
@@ -333,7 +334,7 @@ Content-Type: application/json
 - vyhledá studenta podle ID,  
 - pokud existuje, přepíše všechny jeho vlastnosti,  
 - uloží změny,  
-- vrátí HTTP 204 No Content.
+- vrátí HTTP 204 No Content,
 - pokud neexistuje, vrátí HTTP 404 Not Found.
 
 ---
@@ -379,7 +380,7 @@ DELETE {{Students.WebAPI_HostAddress}}/students/1
 - vyhledá studenta,  
 - pokud existuje, odstraní ho z databáze,  
 - uloží změny,  
-- vrátí HTTP 204 No Content.
+- vrátí HTTP 204 No Content,
 - pokud neexistuje, vrátí HTTP 404 Not Found.
 
 ---
@@ -425,7 +426,7 @@ PATCH {{Students.WebAPI_HostAddress}}/students/1
 - vyhledá studenta,  
 - pokud existuje, nastaví `IsActive = false`,  
 - uloží změny,  
-- vrátí HTTP 204 No Content.
+- vrátí HTTP 204 No Content,
 - pokud neexistuje, vrátí HTTP 404 Not Found.
 
 ---
