@@ -50,7 +50,7 @@ public class Student
 Do projektu definující DbContext musíme přidat providera pro Entity Framework Core, například nuget balíček `Microsoft.EntityFrameworkCore.Sqlite`.
 
 ```csharp
-public class StudentContext(DbContextOptions options)
+public class StudentContext(DbContextOptions<StudentContext> options)
     : DbContext(options)
 {
     public DbSet<Student> Students { get; set; }
@@ -60,7 +60,7 @@ public class StudentContext(DbContextOptions options)
 ### Registrace databáze v Program.cs
 
 ```csharp
-builder.Services.AddDbContext(opt => opt.UseSqlite("Data Source=students.db"));
+builder.Services.AddDbContext<StudentContext>(opt => opt.UseSqlite("Data Source=students.db"));
 ```
 
 ---
