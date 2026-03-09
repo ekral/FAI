@@ -467,6 +467,7 @@ Vytvořte a uložte do databáze:
 - alespoň 2 čtenáře
 - alespoň 2 výpůjčky
 
+> Zamyslete se nad vztahem ReaderCard (čternářský průkaz) a Reader a implementujte jej.
 ---
 
 ### 🔍 Implementujte LINQ dotazy
