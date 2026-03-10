@@ -87,6 +87,59 @@ Soubor s příponou `.http` bude mít na začátku nadefinovanou adresu služby,
 
 ---
 
+## Návratové typy pomocí TypedResults
+
+V Minimal API v ASP.NET Core lze pomocí třídy `TypedResults` vracet silně typované HTTP odpovědi. Na rozdíl od třídy `Results`, která vrací obecný typ `IResult`, `TypedResults` vrací konkrétní typ odpovědi (např. `Ok<T>`, `Created<T>` nebo `NotFound`). Díky tomu je návratový typ endpointu přesně definovaný a může být lépe využit například při generování dokumentace API.
+
+### Jeden status code
+
+Pokud endpoint vrací pouze jednu odpověď, může být návratový typ přímo konkrétní typ výsledku.
+
+```csharp
+app.MapDelete("/items/{id}", async Task<NoContent> (int id, ItemService service) =>
+{
+    await service.DeleteAsync(id);
+    return TypedResults.NoContent();
+});
+```
+
+Endpoint v tomto případě vrací pouze odpověď `204 No Content` bez payloadu.
+
+### Status code s payloadem
+
+Pokud endpoint vrací data, používají se generické typy, například `Ok<T>` nebo `Created<T>`.
+
+```csharp
+app.MapPost("/items", async Task<Created<ItemDto>> (ItemDto item, ItemService service) =>
+{
+    var created = await service.CreateAsync(item);
+    return TypedResults.Created($"/items/{created.Id}", created);
+});
+```
+
+Tento endpoint vrací odpověď `201 Created` spolu s vytvořeným objektem v těle odpovědi.
+
+### Více možných status codů
+
+Pokud endpoint může vracet více různých odpovědí, používá se typ `Results<T1, T2, ...>`, který reprezentuje sjednocení možných výsledků.
+
+```csharp
+app.MapGet("/items/{id}",
+async Task<Results<Ok<ItemDto>, NotFound>> (int id, ItemService service) =>
+{
+    var item = await service.GetAsync(id);
+
+    if (item == null)
+        return TypedResults.NotFound();
+
+    return TypedResults.Ok(item);
+});
+```
+
+V tomto případě endpoint může vrátit buď `200 OK` s objektem `ItemDto`, nebo `404 NotFound`, pokud požadovaný záznam neexistuje.
+
+---
+
 ## 1. POST `/seed`
 
 ### Mapování
