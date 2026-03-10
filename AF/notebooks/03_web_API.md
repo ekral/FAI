@@ -34,6 +34,8 @@ app.Run();
 
 ## Datový model a DbContext
 
+Ukázky jednotlivých HTTP metod si probereme na příkladu databáze studentů. Kdy zároveň použijeme `DbContext` pro práci s databází.
+
 ### Entita
 
 ```csharp
@@ -128,7 +130,7 @@ POST {{Students.WebAPI_HostAddress}}/seed
 - vytvoří novou databázi podle aktuálního modelu,  
 - vloží testovací data,  
 - uloží změny,
-- vrátí HTTP 201 (Created).
+- vrátí HTTP 201 (Created) pomocí `TypedResults`.
 
 ---
 
