@@ -473,8 +473,8 @@ Vytvořte a uložte do databáze:
 ### 🔍 Implementujte LINQ dotazy
 
 1. Vypište všechny knihy včetně jejich autorů.  
-2. Vypište všechny výpůjčky konkrétního čtenáře.  
-3. Najděte čtenáře s více než jednou aktivní výpůjčkou (ReturnDate je null).  
+2. Vypište názvy všech knih vypůjčených (vrácených i nevrácených) konkrétním čtenářem.  
+3. Najděte a vypište čtenáře s více než jednou aktivní výpůjčkou (ReturnDate je null).  
 4. Vypište knihy, které nikdy nebyly půjčeny.  
 
 ### 🧪 Ověřte referenční integritu
