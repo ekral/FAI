@@ -467,14 +467,14 @@ Vytvořte a uložte do databáze:
 - alespoň 2 čtenáře
 - alespoň 2 výpůjčky
 
-> Zamyslete se nad vztahem ReaderCard (čternářský průkaz) a Reader a implementujte jej.
+> Zamyslete se nad vztahem ReaderCard (čtenářský průkaz) a Reader a implementujte jej.
 ---
 
 ### 🔍 Implementujte LINQ dotazy
 
 1. Vypište všechny knihy včetně jejich autorů.  
-2. Vypište všechny výpůjčky konkrétního čtenáře.  
-3. Najděte čtenáře s více než jednou aktivní výpůjčkou (ReturnDate je null).  
+2. Vypište názvy všech knih vypůjčených (vrácených i nevrácených) konkrétním čtenářem.  
+3. Najděte a vypište čtenáře s více než jednou aktivní výpůjčkou (ReturnDate je null).  
 4. Vypište knihy, které nikdy nebyly půjčeny.  
 
 ### 🧪 Ověřte referenční integritu
