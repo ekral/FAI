@@ -459,8 +459,7 @@ EF Core nabízí tři přístupy jak načítat data:
 Používá metodu Include.
 
 ```csharp
-var groups = await context.Groups
-    .Include(g => g.Students);
+var groups = context.Groups.Include(g => g.Students);
 ```
 
 #### Výhody
