@@ -580,8 +580,9 @@ Vytvořte a uložte do databáze:
 
 1. Vypište všechny knihy včetně jejich autorů.  
 2. Vypište názvy všech knih vypůjčených (vrácených i nevrácených) konkrétním čtenářem.  
-3. Najděte a vypište čtenáře s více než jednou aktivní výpůjčkou (ReturnDate je null).  
-4. Vypište knihy, které nikdy nebyly půjčeny.  
+3. Najděte a vypište čtenáře aspoň s jednou výpůjčkou.
+4. Najděte a vypište čtenáře aspoň s jednou aktivní výpůjčkou (ReturnDate je null).  
+5. Vypište knihy, které nikdy nebyly půjčeny.  
 
 ### 🧪 Ověřte referenční integritu
 
