@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 var options = new DbContextOptionsBuilder<LibraryContext>()
                     .UseSqlite("Data Source=library.db")
@@ -20,19 +20,19 @@ Book kniha1984 = new Book() { Title = "1984", Authors = [orwel] };
 Reader karel = new Reader() { Name = "Karel Čech" };
 Reader honza = new Reader() { Name = "Honza Svoboda" };
 
-Loan loan1 = new Loan() { LoanDate = new DateOnly(2026, 3, 6), Reader = karel, Book = babicka };
-Loan loan2 = new Loan() { LoanDate = new DateOnly(2026, 2, 25), Reader = honza, Book = rur };
+Loan loanKarelBabicka = new Loan() { LoanDate = new DateOnly(2026, 3, 6), Reader = karel, Book = babicka };
+Loan loanHonzaRur = new Loan() { LoanDate = new DateOnly(2026, 2, 25), Reader = honza, Book = rur };
 
 context.Authors.AddRange(capek, nemcova, orwel);
 context.Books.AddRange(babicka, rur, kniha1984);
 context.Readers.AddRange(karel, honza);
-context.Loans.AddRange(loan1, loan2);
+context.Loans.AddRange(loanKarelBabicka, loanHonzaRur);
 
 await context.SaveChangesAsync();
 
 Console.WriteLine("Konec programu!");
 
-class LibraryContext(DbContextOptions<LibraryContext> options) 
+class LibraryContext(DbContextOptions<LibraryContext> options)
     : DbContext(options)
 {
     public DbSet<Author> Authors { get; set; }
@@ -60,7 +60,7 @@ class Loan
 {
     public int Id { get; set; }
     public required DateOnly LoanDate { get; set; }
-    public DateOnly? ReturnedDate { get; set; }
+    public DateOnly? ReturnDate { get; set; }
     public int BookId { get; set; }
     public Book? Book { get; set; }
     public int ReaderId { get; set; }
@@ -73,4 +73,3 @@ class Reader
     public required string Name { get; set; }
     public List<Loan> Loans { get; set; } = [];
 }
-
