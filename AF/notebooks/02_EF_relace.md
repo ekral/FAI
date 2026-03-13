@@ -460,8 +460,7 @@ Používá metodu Include.
 
 ```csharp
 var groups = await context.Groups
-    .Include(g => g.Students)
-    .ToListAsync();
+    .Include(g => g.Students);
 ```
 
 #### Výhody
