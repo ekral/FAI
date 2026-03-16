@@ -6,7 +6,9 @@ IResourceBuilder<PostgresServerResource> postgres;
 
 if (builder.Environment.IsEnvironment("Testing"))
 {
-    postgres = builder.AddPostgres("postgres-testing");
+    postgres = builder.AddPostgres("postgres-testing")
+                      .WithContainerName("postgres-testing");
+
 }
 else
 {

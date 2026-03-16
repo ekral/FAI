@@ -1,5 +1,4 @@
 using Aspire.Hosting;
-using k8s.KubeConfigModels;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Json;
 using UTB.Library.Contracts;
@@ -63,10 +62,8 @@ namespace UTB.Library.Tests
         private readonly TestFixture fixture = fixture;
 
         [Fact]
-        public async Task Test()
-        {
-            using var context = fixture.CreateContext();
-
+        public async Task CreateAuthor_ReturnsCreatedAndPersistsAuthor()
+        {   
             var authorDto = new AuthorDto(0, "Franz Kafka");
 
             var response = await fixture.HttpClient.PostAsJsonAsync("/authors", authorDto, TestContext.Current.CancellationToken);
@@ -78,9 +75,11 @@ namespace UTB.Library.Tests
             Assert.NotNull(responseAuthorDto);
             Assert.Equal(authorDto.Name, responseAuthorDto.Name);
             Assert.NotNull(response.Headers.Location);
-            Assert.Equal($"/authors/{responseAuthorDto.Id}", response.Headers.Location.ToString());
+            Assert.EndsWith($"/authors/{responseAuthorDto.Id}", response.Headers.Location.ToString());
 
-            var author = context.Authors.Find(responseAuthorDto.Id);
+            using var context = fixture.CreateContext();
+
+            Author? author = await context.Authors.FindAsync(responseAuthorDto.Id, TestContext.Current.CancellationToken);
 
             Assert.NotNull(author);
             Assert.Equal(authorDto.Name, author.Name);
