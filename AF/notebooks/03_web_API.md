@@ -529,7 +529,9 @@ app.MapGet("/students-dto", async (StudentContext context) =>
 
 Vytvořte Minimal Web API pro veřejnou knihovnu.
 
-### Entita
+Využijte databází Sqlite, nuget [Microsoft.EntityFrameworkCore.Sqlite](https://www.nuget.org/packages/microsoft.entityframeworkcore.sqlite).
+
+### Entita a context
 
 ```csharp
 public class Book
@@ -541,21 +543,30 @@ public class Book
 }
 ```
 
+```csharp
+using Microsoft.EntityFrameworkCore;
+
+public class LibraryContext(DbContextOptions<StudentContext> options) : DbContext(options)
+{
+    public DbSet<Book> Books { get; set; }
+}
+```
+
 ### Implementujte endpointy
 
-- `POST /seed`  
-- `GET /books`  
-- `GET /books/available`  
-- `GET /books/{id}`  
-- `POST /books`  
-- `PUT /books/{id}`  
-- `DELETE /books/{id}`  
+- `POST /seed` přidá tři knihy do databáze.
+- `GET /books` vrátí všechny knihy.
+- `GET /books/available` vrátí jen dostupné kníhy (`IsAvailable == true`)
+- `GET /books/{id}` vrátí knihu dle Id.    
+- `POST /books` vytvoří novou knihu.
+- `PUT /books/{id}` nahradí existující knihu jinou. 
+- `DELETE /books/{id}` odstraní knihu dle Id.
 - `PATCH /books/{id}` (nastaví `IsAvailable = false`)
 
 ### Další požadavky
 
 1. Použijte SQLite databázi.  
-2. Vytvořte `BookDto` pomocí primárního konstruktoru.  
-3. Připravte `.http` soubor pro testování.  
-4. Ošetřete situaci, kdy záznam neexistuje.  
+2. Vytvořte `BookDto` s pomocí recordu.  
+3. Připravte `.http` soubor pro manuální testování (pouze ve Visual Studiu, jinde použijte například Postman).  
+4. Ošetřete situaci, kdy záznam neexistuje.
 5. Implementaci umístěte do samostatné statické třídy.
