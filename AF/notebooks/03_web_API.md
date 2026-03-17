@@ -514,17 +514,6 @@ app.MapGet("/students-dto", async (StudentContext context) =>
 
 ---
 
-## ❓ Kontrolní otázky
-
-1. Jaký je rozdíl mezi PUT a PATCH?  
-2. Co vrátí metoda `GetStudent`, pokud záznam neexistuje?  
-3. Jak funguje metoda `Seed` s `EnsureDeletedAsync()` a `EnsureCreatedAsync()`?  
-4. Proč je vhodné používat DTO?  
-5. Jak funguje dependency injection v tomto příkladu?  
-6. Jaký je rozdíl mezi `FindAsync()` a `ToArrayAsync()`?
-
----
-
 ## Závěrečný úkol – Public Library API
 
 Vytvořte Minimal Web API pro veřejnou knihovnu.
@@ -552,9 +541,11 @@ public class LibraryContext(DbContextOptions<StudentContext> options) : DbContex
 }
 ```
 
+---
+
 ### Implementujte endpointy
 
-- `POST /seed` přidá tři knihy do databáze.
+- `POST /seed` smaže a vytvoří databází a přidá do databáze tři knihy.
 - `GET /books` vrátí všechny knihy.
 - `GET /books/available` vrátí jen dostupné kníhy (`IsAvailable == true`)
 - `GET /books/{id}` vrátí knihu dle Id.    
@@ -570,3 +561,16 @@ public class LibraryContext(DbContextOptions<StudentContext> options) : DbContex
 3. Připravte `.http` soubor pro manuální testování (pouze ve Visual Studiu, jinde použijte například Postman).  
 4. Ošetřete situaci, kdy záznam neexistuje.
 5. Implementaci umístěte do samostatné statické třídy.
+
+---
+
+## ❓ Kontrolní otázky
+
+1. Jaký je rozdíl mezi PUT a PATCH?  
+2. Co vrátí metoda `GetStudent`, pokud záznam neexistuje?  
+3. Jak funguje metoda `Seed` s `EnsureDeletedAsync()` a `EnsureCreatedAsync()`?  
+4. Proč je vhodné používat DTO?  
+5. Jak funguje dependency injection v tomto příkladu?  
+6. Jaký je rozdíl mezi `FindAsync()` a `ToArrayAsync()`?
+
+---
