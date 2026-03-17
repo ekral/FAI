@@ -518,27 +518,19 @@ app.MapGet("/students-dto", async (StudentContext context) =>
 
 Vytvořte Minimal Web API pro veřejnou knihovnu.
 
-Využijte databází Sqlite, nuget [Microsoft.EntityFrameworkCore.Sqlite](https://www.nuget.org/packages/microsoft.entityframeworkcore.sqlite).
-
-### Entita a context
+### Entita a DTO
 
 ```csharp
 public class Book
 {
     public int Id { get; set; }
     public required string Title { get; set; }
-    public required string Author { get; set; }
     public bool IsAvailable { get; set; }
 }
 ```
 
 ```csharp
-using Microsoft.EntityFrameworkCore;
-
-public class LibraryContext(DbContextOptions<StudentContext> options) : DbContext(options)
-{
-    public DbSet<Book> Books { get; set; }
-}
+public record BookDto(int Id, string Tittle)
 ```
 
 ---
