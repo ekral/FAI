@@ -518,7 +518,7 @@ app.MapGet("/students-dto", async (StudentContext context) =>
 
 Vytvořte Minimal Web API pro veřejnou knihovnu.
 
-### Entita a DTO
+### Entita
 
 ```csharp
 public class Book
@@ -527,10 +527,6 @@ public class Book
     public required string Title { get; set; }
     public bool IsAvailable { get; set; }
 }
-```
-
-```csharp
-public record BookDto(int Id, string Tittle)
 ```
 
 ---
