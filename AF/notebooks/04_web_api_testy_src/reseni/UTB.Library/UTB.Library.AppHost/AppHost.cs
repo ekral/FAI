@@ -3,12 +3,14 @@ using Microsoft.Extensions.Hosting;
 var builder = DistributedApplication.CreateBuilder(args);
 
 IResourceBuilder<PostgresServerResource> postgres;
+IResourceBuilder<PostgresDatabaseResource> database;
 
 if (builder.Environment.IsEnvironment("Testing"))
 {
     postgres = builder.AddPostgres("postgres-testing")
                       .WithContainerName("postgres-testing");
 
+    database = postgres.AddDatabase("database");
 }
 else
 {
@@ -20,14 +22,14 @@ else
                       })
                       .WithDataVolume()
                       .WithLifetime(ContainerLifetime.Persistent);
-}
 
-var database = postgres.AddDatabase("database");
+    database = postgres.AddDatabase("database");
 
-builder.AddProject<Projects.UTB_Library_DbManager>("dbmanager")
+    builder.AddProject<Projects.UTB_Library_DbManager>("dbmanager")
        .WithReference(database)
        .WithHttpCommand("reset-db", "Reset Database")
        .WaitFor(database);
+}
 
 builder.AddProject<Projects.UTB_Library_WebApi>("webapi")
        .WithReference(database)

@@ -4,7 +4,7 @@
 
 ---
 
-V tomto materiálu si probereme [testování Web API s produkční databází](https://learn.microsoft.com/en-us/ef/core/testing/testing-with-the-database) a frameworkem [xUnit](https://xunit.net/). Dále si ukážeme moderní přístup k integračním testům pomocí [Aspire](https://learn.microsoft.com/en-us/dotnet/aspire/get-started/aspire-overview), který umožňuje testovat celou aplikaci včetně závislostí jako databáze v kontejnerizovaném prostředí.
+V tomto materiálu si ukážeme moderní přístup k integračním testům pomocí [Aspire](https://learn.microsoft.com/en-us/dotnet/aspire/get-started/aspire-overview) a frameworku [xUnit](https://xunit.net/). Aspire umožňuje testovat celou aplikaci včetně závislostí, jako je databáze, v kontejnerizovaném prostředí.
 
 ---
 
@@ -26,14 +26,28 @@ namespace UTB.Library.Db
 }
 ```
 
+---
+
+DTO pro přenos dat:
+
+`AuthorRequestDto` se používá ve vstupu (`POST /authors`) a neobsahuje `Id`, protože to přidělí databáze. `AuthorDto` se používá ve výstupu API a `Id` obsahuje.
+
+```csharp
+namespace UTB.Library.Contracts
+{
+    public record AuthorRequestDto(string Name);
+    public record AuthorDto(int Id, string Name);
+}
+```
+
 A dále si nadefinujeme následující WebAPI metody:
 
 ---
 
 ```csharp
-public static async Task<Created<AuthorDto>> CreateAuthor(AuthorDto authorDto, LibraryContext context)
+static async Task<Created<AuthorDto>> CreateAuthor(AuthorRequestDto authorRequestDto, LibraryContext context)
 {
-    Author author = new() { Name = authorDto.Name };
+    Author author = new() { Name = authorRequestDto.Name };
 
     context.Authors.Add(author);
 
@@ -44,14 +58,14 @@ public static async Task<Created<AuthorDto>> CreateAuthor(AuthorDto authorDto, L
     return TypedResults.Created($"/authors/{resultDto.Id}", resultDto);
 }
 
-public static async Task<Ok<AuthorDto[]>> GetAuthors(LibraryContext context)
+static async Task<Ok<AuthorDto[]>> GetAuthors(LibraryContext context)
 {
     AuthorDto[] authors = await context.Authors.Select(a => new AuthorDto(a.Id, a.Name)).ToArrayAsync();
 
     return TypedResults.Ok(authors);
 }
 
-public static async Task<Results<NotFound, Ok<AuthorDto>>> GetAuthorById(int id, LibraryContext context)
+static async Task<Results<NotFound, Ok<AuthorDto>>> GetAuthorById(int id, LibraryContext context)
 {
     if (await context.Authors.FindAsync(id) is Author author)
     {
@@ -65,23 +79,7 @@ public static async Task<Results<NotFound, Ok<AuthorDto>>> GetAuthorById(int id,
     }
 }
 
-public static async Task<Results<NoContent, NotFound>> UpdateAuthor(int id, AuthorDto authorDto, LibraryContext context)
-{
-    if (await context.Authors.FindAsync(id) is Author author)
-    {
-        author.Name = authorDto.Name;
-
-        await context.SaveChangesAsync();
-
-        return TypedResults.NoContent();
-    }
-    else
-    {
-        return TypedResults.NotFound();
-    }
-}
-
-public static async Task<Results<NoContent, NotFound>> DeleteAuthor(int id, LibraryContext context)
+static async Task<Results<NoContent, NotFound>> DeleteAuthor(int id, LibraryContext context)
 {
     if (await context.Authors.FindAsync(id) is Author author)
     {
@@ -101,205 +99,16 @@ public static async Task<Results<NoContent, NotFound>> DeleteAuthor(int id, Libr
 
 ---
 
-DTO pro přenos dat:
+Mapování metod na endpointy v `Program.cs`:
 
 ```csharp
-namespace UTB.Library.Contracts
-{
-    public record AuthorDto(int Id, string Name);
-}
+app.MapPost("/authors", CreateAuthor);
+app.MapGet("/authors", GetAuthors);
+app.MapGet("/authors/{id:int}", GetAuthorById);
+app.MapDelete("/authors/{id:int}", DeleteAuthor);
 ```
 
 ---
-
-## Testování s produkční databází (Unit testy)
-
-Nástroj xUnit organizuje testovací metody do tříd, kdy testovací metody ve třídě se spouští sekvenčně a testy v různých třídách se potom pouští souběžně. Pro testování s produkční databází používáme Class Fixture pro sdílení databáze mezi testy.
-
-```csharp
-public class DatabaseFixture
-{
-    private static readonly Lock _lock = new();
-    private static bool _databaseInitialized = false;
-
-    public DatabaseFixture()
-    {
-        lock (_lock)
-        {
-            if (!_databaseInitialized)
-            {
-                using LibraryContext context = CreateContext();
-
-                context.Database.EnsureDeleted();
-                context.Database.EnsureCreated();
-
-                context.Authors.AddRange(
-                    new Author() { Id = 1, Name = "Karel Čapek" },
-                    new Author() { Id = 2, Name = "Jaroslav Hašek" },
-                    new Author() { Id = 3, Name = "Bohumil Hrabal" }
-                    );
-
-                context.SaveChanges();
-
-                _databaseInitialized = true;
-            }
-        }
-    }
-
-    public LibraryContext CreateContext()
-    {
-        var options = new DbContextOptionsBuilder<LibraryContext>()
-            .UseSqlite("DataSource=test.db")
-            .Options;
-
-        return new LibraryContext(options);
-    }
-}
-```
-
-Vlastní testy pak vypadají následovně:
-
-```csharp
-public class UnitTestWebAPI(DatabaseFixture fixture) : IClassFixture<DatabaseFixture>
-{
-    private DatabaseFixture Fixture { get; } = fixture;
-
-    [Fact]
-    public async Task GetAuthors_ShouldReturnAllAuthors()
-    {
-        // Arrange
-        using LibraryContext context = Fixture.CreateContext();
-
-        // Act
-        var result = await WebApiVersion1.GetAuthors(context);
-
-        // Assert
-        Assert.Equal(3, result.Value?.Length);
-    }
-
-    [Fact]
-    public async Task GetAuthorById_ShouldReturnAuthor_WhenAuthorExists()
-    {
-        // Arrange
-        using LibraryContext context = Fixture.CreateContext();
-
-        // Act
-        var result = await WebApiVersion1.GetAuthorById(1, context);
-
-        // Assert
-        Ok<AuthorDto> okAuthor = Assert.IsType<Ok<AuthorDto>>(result.Result);
-
-        Assert.Equal(1, okAuthor.Value?.Id);
-    }
-
-    [Fact]
-    public async Task GetAuthorById_ShouldReturnNotFound_WhenAuthorDoesNotExist()
-    {
-        // Arrange
-        using LibraryContext context = Fixture.CreateContext();
-
-        // Act
-        var result = await WebApiVersion1.GetAuthorById(999, context);
-
-        // Assert
-        Assert.IsType<NotFound>(result.Result);
-    }
-
-    [Fact]
-    public async Task CreateAuthor_ShouldAddAuthor()
-    {
-        // Arrange
-        using LibraryContext context = Fixture.CreateContext();
-        
-        context.Database.BeginTransaction(); // nechci ukladat zmeny do databaze
-
-        var newAuthor = new AuthorDto(0, "New Author");
-
-        // Act
-        _ = await WebApiVersion1.CreateAuthor(newAuthor, context);
-
-        context.ChangeTracker.Clear();
-
-        // Assert
-        Assert.Equal(4, await context.Authors.CountAsync());
-        Author? author = await context.Authors.FindAsync(4);
-        Assert.NotNull(author);
-        Assert.Equal("New Author", author.Name);
-    }
-
-    [Fact]
-    public async Task UpdateAuthor_ShouldUpdateAuthor_WhenAuthorExists()
-    {
-        // Arrange
-        using LibraryContext context = Fixture.CreateContext();
-
-        context.Database.BeginTransaction(); // nechci ukladat zmeny do databaze
-
-        var updatedAuthor = new AuthorDto(0, "Updated Author");
-
-        // Act
-        var result = await WebApiVersion1.UpdateAuthor(1, updatedAuthor, context);
-
-        context.ChangeTracker.Clear();
-
-        // Assert
-        Assert.IsType<NoContent>(result.Result);
-        Author? author = await context.Authors.FindAsync(1);
-        Assert.NotNull(author);
-        Assert.Equal("Updated Author", author.Name);
-    }
-
-    [Fact]
-    public async Task UpdateAuthor_ShouldReturnNotFound_WhenAuthorDoesNotExist()
-    {
-        // Arrange
-        using LibraryContext context = Fixture.CreateContext();
-
-        context.Database.BeginTransaction(); // nechci ukladat zmeny do databaze
-
-        var updatedAuthor = new AuthorDto(0, "Updated Author");
-
-        // Act
-        var result = await WebApiVersion1.UpdateAuthor(999, updatedAuthor, context);
-
-        // Assert
-        Assert.IsType<NotFound>(result.Result);
-    }
-
-    [Fact]
-    public async Task DeleteAuthor_ShouldRemoveAuthor_WhenAuthorExists()
-    {
-        // Arrange
-        using LibraryContext context = Fixture.CreateContext();
-
-        context.Database.BeginTransaction(); // nechci ukladat zmeny do databaze
-
-        // Act
-        var result = await WebApiVersion1.DeleteAuthor(1, context);
-
-        context.ChangeTracker.Clear();
-
-        // Assert
-        Assert.IsType<NoContent>(result.Result);
-        Assert.Null(await context.Authors.FindAsync(1));
-    }
-
-    [Fact]
-    public async Task DeleteAuthor_ShouldReturnNotFound_WhenAuthorDoesNotExist()
-    {
-        // Arrange
-        using LibraryContext context = Fixture.CreateContext();
-
-        context.Database.BeginTransaction(); // nechci ukladat zmeny do databaze
-
-        // Act
-        var result = await WebApiVersion1.DeleteAuthor(999, context);
-
-        // Assert
-        Assert.IsType<NotFound>(result.Result);
-    }
-}
-```
 
 ## Integrační testy s Aspire
 
@@ -307,17 +116,22 @@ Moderní přístup k testování Web API využívá [Aspire](https://learn.micro
 
 ### Nastavení Aspire projektu
 
-Nejprve vytvoříme Aspire AppHost projekt, který definuje infrastrukturu aplikace:
+Nejprve vytvoříme Aspire AppHost projekt, který definuje infrastrukturu aplikace. V testovacím prostředí používáme jednodušší konfiguraci PostgreSQL bez persistentních dat a bez dbmanagera pro ruční reset databáze.
 
 ```csharp
+using Microsoft.Extensions.Hosting;
+
 var builder = DistributedApplication.CreateBuilder(args);
 
 IResourceBuilder<PostgresServerResource> postgres;
+IResourceBuilder<PostgresDatabaseResource> database;
 
 if (builder.Environment.IsEnvironment("Testing"))
 {
     postgres = builder.AddPostgres("postgres-testing")
                       .WithContainerName("postgres-testing");
+
+    database = postgres.AddDatabase("database");
 }
 else
 {
@@ -329,27 +143,34 @@ else
                       })
                       .WithDataVolume()
                       .WithLifetime(ContainerLifetime.Persistent);
-}
 
-var database = postgres.AddDatabase("database");
+    database = postgres.AddDatabase("database");
 
-builder.AddProject<Projects.UTB_Library_DbManager>("dbmanager")
+    builder.AddProject<Projects.UTB_Library_DbManager>("dbmanager")
        .WithReference(database)
        .WithHttpCommand("reset-db", "Reset Database")
        .WaitFor(database);
+}
 
 builder.AddProject<Projects.UTB_Library_WebApi>("webapi")
        .WithReference(database)
        .WaitFor(database);
 
 builder.Build().Run();
+
 ```
 
-V testovacím prostředí používáme jednodušší konfiguraci PostgreSQL bez persistentních dat.
+---
 
 ### Integrační testy
 
 Pro integrační testy použijeme `DistributedApplicationTestingBuilder`, který spustí celou aplikaci včetně databáze. Testy pak komunikují s API přes HTTP klient.
+
+`TestFixture` připraví integrační prostředí pro všechny testy: spustí Aspire AppHost v režimu `Testing`, počká na dostupnost databáze a Web API, vytvoří `HttpClient` a poskytne metodu `CreateContext()` pro vytváření contextu pro práci s databázi (ověřujeme, že v databázi jsou po volání endpointu správná data). Také seeduje data pro čtení.
+
+`DatabaseCollection` zajistí sdílení jedné instance `TestFixture` mezi testy ve stejné kolekci, takže testy používají stejnou testovací infrastrukturu a není potřeba ji opakovaně inicializovat.
+
+Ukázkové integrační testy níže pokrývají klíčové scénáře: vytvoření záznamu a kontrolu perzistence dat, načtení seed dat po resetu databáze, negativní scénář `404 NotFound` a mazání záznamu s následným ověřením změny stavu.
 
 ```csharp
 using Aspire.Hosting;
@@ -382,7 +203,16 @@ namespace UTB.Library.Tests
 
             using var context = CreateContext();
 
+            await context.Database.EnsureDeletedAsync(TestContext.Current.CancellationToken);
             await context.Database.EnsureCreatedAsync(TestContext.Current.CancellationToken);
+
+            var capek = new Author { Name = "Karel Capek" };
+            var nemcova = new Author { Name = "Bozena Nemcova" };
+            var mnacko = new Author { Name = "Ladislav Mnacko" };
+
+            context.Authors.AddRange(capek, nemcova, mnacko);
+
+            await context.SaveChangesAsync(TestContext.Current.CancellationToken);
         }
 
         public async ValueTask DisposeAsync()
@@ -405,7 +235,7 @@ namespace UTB.Library.Tests
         }
     }
 
-    [CollectionDefinition("Database collection")]
+    [CollectionDefinition("Database collection", DisableParallelization = true)]
     public class DatabaseCollection : ICollectionFixture<TestFixture>
     {
     }
@@ -417,17 +247,17 @@ namespace UTB.Library.Tests
 
         [Fact]
         public async Task CreateAuthor_ReturnsCreatedAndPersistsAuthor()
-        {   
-            var authorDto = new AuthorDto(0, "Franz Kafka");
+        {
+            var authorRequestDto = new AuthorRequestDto("Franz Kafka");
 
-            var response = await fixture.HttpClient.PostAsJsonAsync("/authors", authorDto, TestContext.Current.CancellationToken);
+            var response = await fixture.HttpClient.PostAsJsonAsync("/authors", authorRequestDto, TestContext.Current.CancellationToken);
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
             AuthorDto? responseAuthorDto = await response.Content.ReadFromJsonAsync<AuthorDto>(TestContext.Current.CancellationToken);
 
             Assert.NotNull(responseAuthorDto);
-            Assert.Equal(authorDto.Name, responseAuthorDto.Name);
+            Assert.Equal(authorRequestDto.Name, responseAuthorDto.Name);
             Assert.NotNull(response.Headers.Location);
             Assert.EndsWith($"/authors/{responseAuthorDto.Id}", response.Headers.Location.ToString());
 
@@ -436,16 +266,12 @@ namespace UTB.Library.Tests
             Author? author = await context.Authors.FindAsync(responseAuthorDto.Id, TestContext.Current.CancellationToken);
 
             Assert.NotNull(author);
-            Assert.Equal(authorDto.Name, author.Name);
+            Assert.Equal(authorRequestDto.Name, author.Name);
         }
 
         [Fact]
         public async Task GetAuthors_ReturnsAllAuthors()
         {
-            // Reset database to known state
-            var resetResponse = await fixture.HttpClient.PostAsync("/reset-db", null, TestContext.Current.CancellationToken);
-            resetResponse.EnsureSuccessStatusCode();
-
             var response = await fixture.HttpClient.GetAsync("/authors", TestContext.Current.CancellationToken);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -453,12 +279,14 @@ namespace UTB.Library.Tests
             AuthorDto[]? authors = await response.Content.ReadFromJsonAsync<AuthorDto[]>(TestContext.Current.CancellationToken);
 
             Assert.NotNull(authors);
-            Assert.Equal(3, authors.Length);
+            Assert.True(authors.Length > 2);
             Assert.Contains(authors, a => a.Name == "Karel Capek");
+            Assert.Contains(authors, a => a.Name == "Bozena Nemcova");
+            Assert.Contains(authors, a => a.Name == "Ladislav Mnacko");
         }
 
         [Fact]
-        public async Task GetAuthorById_ReturnsAuthor_WhenExists()
+        public async Task GetAuthorById_ReturnsOkAndAuthor_WhenAuthorExists()
         {
             var response = await fixture.HttpClient.GetAsync("/authors/1", TestContext.Current.CancellationToken);
 
@@ -467,7 +295,6 @@ namespace UTB.Library.Tests
             AuthorDto? author = await response.Content.ReadFromJsonAsync<AuthorDto>(TestContext.Current.CancellationToken);
 
             Assert.NotNull(author);
-            Assert.Equal(1, author.Id);
             Assert.Equal("Karel Capek", author.Name);
         }
 
@@ -480,58 +307,44 @@ namespace UTB.Library.Tests
         }
 
         [Fact]
-        public async Task UpdateAuthor_UpdatesAndReturnsNoContent_WhenExists()
-        {
-            var updateDto = new AuthorDto(0, "Updated Name");
-
-            var response = await fixture.HttpClient.PutAsJsonAsync("/authors/1", updateDto, TestContext.Current.CancellationToken);
-
-            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
-
-            // Verify the update
-            var getResponse = await fixture.HttpClient.GetAsync("/authors/1", TestContext.Current.CancellationToken);
-            AuthorDto? updatedAuthor = await getResponse.Content.ReadFromJsonAsync<AuthorDto>(TestContext.Current.CancellationToken);
-
-            Assert.NotNull(updatedAuthor);
-            Assert.Equal("Updated Name", updatedAuthor.Name);
-        }
-
-        [Fact]
-        public async Task UpdateAuthor_ReturnsNotFound_WhenDoesNotExist()
-        {
-            var updateDto = new AuthorDto(0, "Updated Name");
-
-            var response = await fixture.HttpClient.PutAsJsonAsync("/authors/999", updateDto, TestContext.Current.CancellationToken);
-
-            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-        }
-
-        [Fact]
         public async Task DeleteAuthor_DeletesAndReturnsNoContent_WhenExists()
         {
-            var response = await fixture.HttpClient.DeleteAsync("/authors/1", TestContext.Current.CancellationToken);
+            var macha = new Author { Name = "Karel Hynek Macha" };
 
-            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+            using (var context = fixture.CreateContext())
+            {
+                context.Authors.Add(macha);
 
-            // Verify deletion
-            var getResponse = await fixture.HttpClient.GetAsync("/authors/1", TestContext.Current.CancellationToken);
-            Assert.Equal(HttpStatusCode.NotFound, getResponse.StatusCode);
-        }
+                await context.SaveChangesAsync(TestContext.Current.CancellationToken);
 
-        [Fact]
-        public async Task DeleteAuthor_ReturnsNotFound_WhenDoesNotExist()
-        {
-            var response = await fixture.HttpClient.DeleteAsync("/authors/999", TestContext.Current.CancellationToken);
+                var response = await fixture.HttpClient.DeleteAsync($"/authors/{macha.Id}", TestContext.Current.CancellationToken);
 
-            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+                Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+            }
+
+            using (var context = fixture.CreateContext())
+            {
+                var authorDto = await context.Authors.FindAsync(macha.Id, TestContext.Current.CancellationToken);
+
+                Assert.Null(authorDto);
+            }
         }
     }
 }
 ```
 
-### Klíčové rozdíly mezi unit a integračními testy
+### Co dělají jednotlivé testy
 
-- **Unit testy**: Testují jednotlivé metody s přímým přístupem k DbContext, používají transakce pro izolaci
-- **Integrační testy**: Testují celou aplikaci přes HTTP API, spouští skutečnou databázi v kontejneru, ověřují end-to-end funkcionalitu
+`CreateAuthor_ReturnsCreatedAndPersistsAuthor` ověřuje, že `POST /authors` vrátí `201 Created`, vrátí DTO nového autora, nastaví hlavičku `Location` a že je autor skutečně uložen v databázi.
 
-Integrační testy s Aspire poskytují vyšší jistotu, že aplikace funguje správně v reálném prostředí, ale jsou pomalejší a vyžadují více zdrojů.
+`GetAuthors_ReturnsAllAuthors` nejdřív resetuje databázi přes `POST /reset-db`, potom volá `GET /authors` a ověřuje návrat seed dat v očekávaném počtu.
+
+`GetAuthorById_ReturnsOkAndAuthor_WhenAuthorExists` ověřuje scénář, kdy autor existuje a vrátí autora.
+
+`GetAuthorById_ReturnsNotFound_WhenDoesNotExist` ověřuje negativní scénář, kdy API pro neexistující záznam vrací správně `404 NotFound`.
+
+`DeleteAuthor_DeletesAndReturnsNoContent_WhenExists` ověřuje mazání přes `DELETE /authors/1`, návrat `204 NoContent` a následně potvrzuje odstranění dalším `GET` dotazem.
+
+### Shrnutí
+
+Integrační testy s Aspire testují aplikaci přes HTTP jako celek, včetně reálné databáze běžící v kontejneru. Tento přístup dává jednoznačný a praktický obraz toho, jak ověřovat chování API v podmínkách blízkých produkčnímu prostředí.

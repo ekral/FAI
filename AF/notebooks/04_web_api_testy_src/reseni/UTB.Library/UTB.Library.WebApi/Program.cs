@@ -15,79 +15,59 @@ app.MapDefaultEndpoints();
 
 app.UseHttpsRedirection();
 
-app.MapPost("/authors", WebApiVersion1.CreateAuthor);
-app.MapGet("/authors", WebApiVersion1.GetAuthors);
-app.MapGet("/authors/{id:int}", WebApiVersion1.GetAuthorById);
-app.MapPut("/authors/{id:int}", WebApiVersion1.UpdateAuthor);
-app.MapDelete("/authors/{id:int}", WebApiVersion1.DeleteAuthor);
+app.MapPost("/authors", CreateAuthor);
+app.MapGet("/authors", GetAuthors);
+app.MapGet("/authors/{id:int}", GetAuthorById);
+app.MapDelete("/authors/{id:int}", DeleteAuthor);
 
 app.Run();
 
-public static class WebApiVersion1
+static async Task<Created<AuthorDto>> CreateAuthor(AuthorRequestDto authorRequestDto, LibraryContext context)
 {
-    public static async Task<Created<AuthorDto>> CreateAuthor(AuthorDto authorDto, LibraryContext context)
-    {
-        Author author = new() { Name = authorDto.Name };
+    Author author = new() { Id = 0, Name = authorRequestDto.Name };
 
-        context.Authors.Add(author);
+    context.Authors.Add(author);
+
+    await context.SaveChangesAsync();
+
+    AuthorDto resultDto = new(author.Id, author.Name);
+
+    return TypedResults.Created($"/authors/{resultDto.Id}", resultDto);
+}
+
+static async Task<Ok<AuthorDto[]>> GetAuthors(LibraryContext context)
+{
+    AuthorDto[] authors = await context.Authors.Select(a => new AuthorDto(a.Id, a.Name)).ToArrayAsync();
+
+    return TypedResults.Ok(authors);
+}
+
+static async Task<Results<NotFound, Ok<AuthorDto>>> GetAuthorById(int id, LibraryContext context)
+{
+    if (await context.Authors.FindAsync(id) is Author author)
+    {
+        AuthorDto authorDto = new(author.Id, author.Name);
+
+        return TypedResults.Ok(authorDto);
+    }
+    else
+    {
+        return TypedResults.NotFound();
+    }
+}
+
+static async Task<Results<NoContent, NotFound>> DeleteAuthor(int id, LibraryContext context)
+{
+    if (await context.Authors.FindAsync(id) is Author author)
+    {
+        context.Authors.Remove(author);
 
         await context.SaveChangesAsync();
 
-        AuthorDto resultDto = new(author.Id, author.Name);
-
-        return TypedResults.Created($"/authors/{resultDto.Id}", resultDto);
+        return TypedResults.NoContent();
     }
-
-    public static async Task<Ok<AuthorDto[]>> GetAuthors(LibraryContext context)
+    else
     {
-        AuthorDto[] authors = await context.Authors.Select(a => new AuthorDto(a.Id, a.Name)).ToArrayAsync();
-
-        return TypedResults.Ok(authors);
-    }
-
-    public static async Task<Results<NotFound, Ok<AuthorDto>>> GetAuthorById(int id,  LibraryContext context)
-    {
-        if(await context.Authors.FindAsync(id) is Author author)
-        {
-            AuthorDto authorDto = new(author.Id, author.Name);
-
-            return TypedResults.Ok(authorDto);
-        }
-        else
-        {
-            return TypedResults.NotFound();
-        }
-    }
-
-    public static async Task<Results<NoContent, NotFound>> UpdateAuthor(int id, AuthorDto authorDto, LibraryContext context)
-    {
-        if (await context.Authors.FindAsync(id) is Author author)
-        {
-            author.Name = authorDto.Name;
-
-            await context.SaveChangesAsync();
-
-            return TypedResults.NoContent();
-        }
-        else
-        {
-            return TypedResults.NotFound();
-        }
-    }
-
-    public static async Task<Results<NoContent, NotFound>> DeleteAuthor(int id, LibraryContext context)
-    {
-        if (await context.Authors.FindAsync(id) is Author author)
-        {
-            context.Authors.Remove(author);
-
-            await context.SaveChangesAsync();
-
-            return TypedResults.NoContent();
-        }
-        else
-        {
-            return TypedResults.NotFound();
-        }
+        return TypedResults.NotFound();
     }
 }
