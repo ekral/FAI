@@ -535,7 +535,7 @@ public class Loan
     public required DateOnly LoanDate{ get; set; };
     public DateOnly? ReturnDate{ get; set; };
     public int BookId { get; set; }
-    public Book Book { get; set; } 
+    public Book? Book { get; set; } 
 }
 ```
 
