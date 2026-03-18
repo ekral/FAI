@@ -496,6 +496,47 @@ Vytvořte Minimal Web API pro veřejnou knihovnu.
 ### Výchozí kód
 
 ```csharp
+// Pridat nuget Microsoft.EntityFrameworkCore.Sqlite
+
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
+
+var builder = WebApplication.CreateBuilder();
+
+builder.Services.AddDbContext<StudentContext>(opt => opt.UseSqlite("Data Source=library.db"));
+
+var app = builder.Build();
+
+app.MapPost("/dev/seed", Seed);
+
+app.Run();
+
+static async Task<NoContent> Seed(StudentContext context)
+{
+    await context.Database.EnsureDeletedAsync();
+    await context.Database.EnsureCreatedAsync();
+
+    var babicka = new Book { Title = "Babicka", IsArchived = false };
+    var rur = new Book { Title = "R.U.R.", IsArchived = false };
+    var maj = new Book { Title = "Maj", IsArchived = true };
+
+    var loanBabicka = new Loan { Book = babicka, LoanDate = new DateOnly(2026, 3, 18) };
+    var loanRur = new Loan { Book = rur, LoanDate = new DateOnly(2026, 3, 17) };
+
+    context.Books.AddRange(babicka, rur, maj);
+    context.Loans.AddRange(loanBabicka, loanRur);
+
+    await context.SaveChangesAsync();
+
+    return TypedResults.NoContent();
+}
+
+public class StudentContext(DbContextOptions<StudentContext> options) : DbContext(options)
+{
+    public DbSet<Book> Books { get; set; }
+    public DbSet<Loan> Loans { get; set; }
+}
+
 public class Book
 {
     public int Id { get; set; }
@@ -507,10 +548,10 @@ public class Book
 public class Loan
 {
     public int Id { get; set; }
-    public required DateOnly LoanDate{ get; set; }
-    public DateOnly? ReturnDate{ get; set; }
+    public required DateOnly LoanDate { get; set; }
+    public DateOnly? ReturnDate { get; set; }
     public int BookId { get; set; }
-    public Book? Book { get; set; } 
+    public Book? Book { get; set; }
 }
 ```
 
