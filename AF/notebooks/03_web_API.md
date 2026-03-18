@@ -164,12 +164,12 @@ Soubor s příponou `.http` bude mít na začátku nadefinovanou adresu služby,
 
 ---
 
-## 1. POST `/seed`
+## 1. POST `/dev/seed`
 
 ### Mapování
 
 ```csharp
-app.MapPost("/seed", Seed);
+app.MapPost("/dev/seed", Seed);
 ```
 
 ### Implementace
@@ -177,7 +177,7 @@ app.MapPost("/seed", Seed);
 Endpoint odstraní stávající databázi (pokud existuje), vytvoří novou podle aktuálního modelu, vloží testovací data a vrátí HTTP 204 No Content.
 
 ```csharp
-static async Task<Created> Seed(StudentContext context)
+static async Task<NoContent> Seed(StudentContext context)
 {
     await context.Database.EnsureDeletedAsync();
     await context.Database.EnsureCreatedAsync();
