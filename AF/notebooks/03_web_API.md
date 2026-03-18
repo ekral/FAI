@@ -256,15 +256,14 @@ static async Task<Ok<StudentDto[]>> GetStudents(bool? isActive, StudentContext c
 
     if(isActive.HasValue)
     {
-        query = await context.Students.Where(s => s.IsActive == isActive);           
+        query = context.Students.Where(s => s.IsActive == isActive);           
     }
     else
     {
-        query = await context.Students;
+        query = context.Students;
     }
     
-    StudentDto[] students = await query.Select(s => new StudentDto(s.Id, s.Name, s.IsActive))
-                                       .ToArrayAsync();
+    StudentDto[] students = await query.Select(s => new StudentDto(s.Id, s.Name, s.IsActive)).ToArrayAsync();
 
     return TypedResults.Ok(students);
 }
