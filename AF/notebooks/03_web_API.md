@@ -110,8 +110,7 @@ public class Student
 Do projektu definující DbContext musíme přidat providera pro Entity Framework Core, například nuget balíček `Microsoft.EntityFrameworkCore.Sqlite`.
 
 ```csharp
-public class StudentContext(DbContextOptions<StudentContext> options)
-    : DbContext(options)
+public class StudentContext(DbContextOptions<StudentContext> options) : DbContext(options)
 {
     public DbSet<Student> Students { get; set; }
 }
@@ -175,6 +174,8 @@ app.MapPost("/seed", Seed);
 
 ### Implementace
 
+Endpoint odstraní stávající databázi (pokud existuje), vytvoří novou podle aktuálního modelu, vloží testovací data a vrátí HTTP 204 No Content.
+
 ```csharp
 static async Task<Created> Seed(StudentContext context)
 {
@@ -193,8 +194,6 @@ static async Task<Created> Seed(StudentContext context)
 }
 ```
 
----
-
 ### Volání
 
 ```json
@@ -202,14 +201,6 @@ POST {{Students.WebAPI_HostAddress}}/seed
 
 ###
 ```
-
-### Co kód dělá
-
-- odstraní databázi (pokud existuje),  
-- vytvoří novou databázi podle aktuálního modelu,  
-- vloží testovací data,  
-- uloží změny,
-- vrátí HTTP 204 No Content, pomocí `TypedResults`.
 
 ---
 
@@ -223,6 +214,8 @@ app.MapGet("/students", GetAllStudents);
 
 ### Implementace
 
+Endpoint načte všechny studenty z databáze, namapuje je na `StudentDto` a vrátí HTTP 200 OK s JSON daty.
+
 ```csharp
 static async Task<Ok<StudentDto[]>> GetAllStudents(StudentContext context)
 {
@@ -234,8 +227,6 @@ static async Task<Ok<StudentDto[]>> GetAllStudents(StudentContext context)
 }
 ```
 
----
-
 ### Volání
 
 ```json
@@ -244,15 +235,9 @@ GET {{Students.WebAPI_HostAddress}}/students/
 ###
 ```
 
-### Co kód dělá
-
-- načte všechny studenty z databáze,  
-- převede je do pole,  
-- vrátí HTTP 200 OK s JSON daty.
-
 ---
 
-## 3. GET `/students` s filterem pro aktivní studenty
+## 3. GET `/students` s filtrem pro aktivní studenty
 
 ### Mapování
 
@@ -261,6 +246,8 @@ app.MapGet("/students", GetStudents);
 ```
 
 ### Implementace
+
+Endpoint přijme volitelný query string parametr `isActive`. Pokud je zadán, vyfiltruje studenty podle hodnoty `IsActive`; jinak vrátí všechny. Výsledek namapuje na `StudentDto[]` a vrátí HTTP 200 OK.
 
 ```csharp
 static async Task<Ok<StudentDto[]>> GetStudents(bool? isActive, StudentContext context)
@@ -283,8 +270,6 @@ static async Task<Ok<StudentDto[]>> GetStudents(bool? isActive, StudentContext c
 }
 ```
 
----
-
 ### Volání
 
 ```json
@@ -292,13 +277,6 @@ GET {{Students.WebAPI_HostAddress}}/students?isActive=true
 
 ###
 ```
-
-### Co kód dělá
-
-- pokud není ve query stringu parameter isActive s přiřazenou hodnotou, tak vrátí všechny studnety nebo
-- vyfiltruje aktivní nebo neaktivní studenty,  
-- převede je do pole,  
-- vrátí HTTP 200 OK.
 
 ---
 
@@ -311,6 +289,8 @@ app.MapGet("/students/{id}", GetStudent);
 ```
 
 ### Implementace
+
+Endpoint vyhledá studenta podle primárního klíče. Pokud existuje, namapuje ho na `StudentDto` a vrátí HTTP 200 OK; pokud neexistuje, vrátí HTTP 404 Not Found.
 
 ```csharp
 static async Task<Results<Ok<StudentDto>, NotFound>> GetStudent(int id, StudentContext context)
@@ -326,8 +306,6 @@ static async Task<Results<Ok<StudentDto>, NotFound>> GetStudent(int id, StudentC
 }
 ```
 
----
-
 ### Volání
 
 ```json
@@ -335,12 +313,6 @@ GET {{Students.WebAPI_HostAddress}}/students/1
 
 ###
 ```
-
-### Co kód dělá
-
-- vyhledá studenta podle primárního klíče,  
-- pokud existuje, vrátí HTTP 200 OK,  
-- pokud neexistuje, vrátí HTTP 404 Not Found.
 
 ---
 
@@ -354,6 +326,8 @@ app.MapPost("/students", CreateStudent);
 
 ### Implementace
 
+Endpoint přijme JSON data z těla požadavku jako `StudentRequest`, uloží nového studenta do databáze a vrátí HTTP 201 Created spolu s URL a `StudentDto` nového záznamu.
+
 ```csharp
 static async Task<Created<StudentDto>> CreateStudent(StudentRequest request, StudentContext context)
 {
@@ -366,8 +340,6 @@ static async Task<Created<StudentDto>> CreateStudent(StudentRequest request, Stu
     return TypedResults.Created($"/students/{student.Id}", new StudentDto(student.Id, student.Name, student.IsActive));
 }
 ```
-
----
 
 ### Volání
 
@@ -383,12 +355,6 @@ Content-Type: application/json
 ###
 ```
 
-### Co kód dělá
-
-- přijme JSON data z těla požadavku,  
-- uloží nového studenta do databáze,  
-- vrátí HTTP 201 Created s adresou nového záznamu.
-
 ---
 
 ## 6. PUT `/students/{id}`
@@ -400,6 +366,8 @@ app.MapPut("/students/{id}", UpdateStudent);
 ```
 
 ### Implementace
+
+Endpoint vyhledá studenta podle ID. Pokud existuje, přepíše všechny jeho vlastnosti hodnotami z `StudentRequest`, uloží změny a vrátí HTTP 204 No Content; pokud neexistuje, vrátí HTTP 404 Not Found.
 
 ```csharp
 static async Task<Results<NoContent, NotFound>> UpdateStudent(int id, StudentRequest request, StudentContext context)
@@ -434,14 +402,6 @@ Content-Type: application/json
 ###
 ```
 
-### Co kód dělá
-
-- vyhledá studenta podle ID,  
-- pokud existuje, přepíše všechny jeho vlastnosti,  
-- uloží změny,  
-- vrátí HTTP 204 No Content,
-- pokud neexistuje, vrátí HTTP 404 Not Found.
-
 ---
 
 ## 7. DELETE `/students/{id}`
@@ -453,6 +413,8 @@ app.MapDelete("/students/{id}", WDeleteStudent);
 ```
 
 ### Implementace
+
+Endpoint vyhledá studenta. Pokud existuje, odstraní ho z databáze, uloží změny a vrátí HTTP 204 No Content; pokud neexistuje, vrátí HTTP 404 Not Found.
 
 ```csharp
 public async Task<Results<NoContent, NotFound>> DeleteStudent(int id, StudentContext context)
@@ -472,8 +434,6 @@ public async Task<Results<NoContent, NotFound>> DeleteStudent(int id, StudentCon
 }
 ```
 
----
-
 ### Volání
 
 ```json
@@ -481,14 +441,6 @@ DELETE {{Students.WebAPI_HostAddress}}/students/1
 
 ###
 ```
-
-### Co kód dělá
-
-- vyhledá studenta,  
-- pokud existuje, odstraní ho z databáze,  
-- uloží změny,  
-- vrátí HTTP 204 No Content,
-- pokud neexistuje, vrátí HTTP 404 Not Found.
 
 ---
 
@@ -501,6 +453,8 @@ app.MapPatch("/students/{id}", PatchStudentActivity);
 ```
 
 ### Implementace
+
+Endpoint vyhledá studenta. Pokud existuje, aktualizuje vlastnost `IsActive` podle `StudentPatchRequest`, uloží změny a vrátí HTTP 204 No Content; pokud neexistuje, vrátí HTTP 404 Not Found.
 
 ```csharp
 static async Task<Results<NoContent, NotFound>> PatchStudentActivity(int id, StudentPatchRequest request, StudentContext context)
@@ -520,8 +474,6 @@ static async Task<Results<NoContent, NotFound>> PatchStudentActivity(int id, Stu
 }
 ```
 
----
-
 ### Volání
 
 ```json
@@ -534,14 +486,6 @@ Content-Type: application/json
 
 ###
 ```
-
-### Co kód dělá
-
-- vyhledá studenta,  
-- pokud existuje, částečně změní hodnotu `IsActive` podle request DTO,  
-- uloží změny,  
-- vrátí HTTP 204 No Content,
-- pokud neexistuje, vrátí HTTP 404 Not Found.
 
 ---
 
