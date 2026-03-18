@@ -67,6 +67,28 @@ builder.Services.AddDbContext<StudentContext>(opt => opt.UseSqlite("Data Source=
 
 ---
 
+## DTO – Data Transfer Object
+
+DTO (Data Transfer Object) odděluje databázovou entitu od dat, která jsou poskytována klientovi přes API, nebo která klient posílá serveru. Díky tomu lze přesněji kontrolovat, jaká data API přijímá a vrací.
+
+### DTO pro čtení dat
+
+`StudentDto` obsahuje data, která vrátíme klientovi:
+
+```csharp
+public record StudentDto(int Id, string Name, bool IsActive);
+```
+
+### DTO pro zápis dat
+
+`StudentRequest` obsahuje data, která přijímáme od klienta. Neobsahuje `Id`, protože to generuje databáze:
+
+```csharp
+public record StudentRequest(string Name, bool IsActive);
+```
+
+---
+
 ## Třída s implementací endpointů a soubor .http
 
 Uvedené metody budou definovány v následující třídě.
@@ -198,9 +220,13 @@ app.MapGet("/students", WebApiVersion1.GetAllStudents);
 ### Implementace
 
 ```csharp
-public static async Task<Ok<Student[]>> GetAllStudents(StudentContext context)
+public static async Task<Ok<StudentDto[]>> GetAllStudents(StudentContext context)
 {
-    return TypedResults.Ok(await context.Studenti.ToArrayAsync());
+    var students = await context.Students
+        .Select(s => new StudentDto(s.Id, s.Name, s.IsActive))
+        .ToArrayAsync();
+
+    return TypedResults.Ok(students);
 }
 ```
 
@@ -231,11 +257,12 @@ app.MapGet("/students/active", WebApiVersion1.GetActiveStudents);
 ### Implementace
 
 ```csharp
-public static async Task<Ok<Student[]>> GetActiveStudents(StudentContext context)
+public static async Task<Ok<StudentDto[]>> GetActiveStudents(StudentContext context)
 {
     var students = await context.Students
-                                .Where(s => s.IsActive)
-                                .ToArrayAsync();
+        .Where(s => s.IsActive)
+        .Select(s => new StudentDto(s.Id, s.Name, s.IsActive))
+        .ToArrayAsync();
 
     return TypedResults.Ok(students);
 }
@@ -268,11 +295,11 @@ app.MapGet("/students/{id}", WebApiVersion1.GetStudent);
 ### Implementace
 
 ```csharp
-public static async Task<Results<Ok<Student>, NotFound>> GetStudent(int id, StudentContext context)
+public static async Task<Results<Ok<StudentDto>, NotFound>> GetStudent(int id, StudentContext context)
 {
-    if (await context.Studenti.FindAsync(id) is Student student)
+    if (await context.Students.FindAsync(id) is Student student)
     {
-        return TypedResults.Ok(student);
+        return TypedResults.Ok(new StudentDto(student.Id, student.Name, student.IsActive));
     }
     else
     {
@@ -308,26 +335,27 @@ app.MapPost("/students", WebApiVersion1.CreateStudent);
 ### Implementace
 
 ```csharp
-public static async Task<Created<Student>> CreateStudent(Student student, StudentContext context)
+public static async Task<Created<StudentDto>> CreateStudent(StudentRequest request, StudentContext context)
 {
+    var student = new Student { Name = request.Name, IsActive = request.IsActive };
+
     context.Add(student);
 
     await context.SaveChangesAsync();
 
-    return TypedResults.Created($"/Students/GetStudent/{student.StudentId}", student);
+    return TypedResults.Created($"/students/{student.Id}", new StudentDto(student.Id, student.Name, student.IsActive));
 }
 ```
 
 ### Volání
 
 ```json
-POST {{Students.WebAPI_HostAddress}}/Students
+POST {{Students.WebAPI_HostAddress}}/students
 Content-Type: application/json
 
 {
-  "id": 0,
   "name": "Lenka",
-  "isactive": true
+  "isActive": true
 }
 
 ###
@@ -352,12 +380,12 @@ app.MapPut("/students/{id}", WebApiVersion1.UpdateStudent);
 ### Implementace
 
 ```csharp
-public static async Task<Results<NoContent, NotFound>> UpdateStudent(int id, Student inputStudent, StudentContext context)
+public static async Task<Results<NoContent, NotFound>> UpdateStudent(int id, StudentRequest request, StudentContext context)
 {
-    if (await context.Studenti.FindAsync(id) is Student student)
+    if (await context.Students.FindAsync(id) is Student student)
     {
-        student.Jmeno = inputStudent.Jmeno;
-        student.Studuje = inputStudent.Studuje;
+        student.Name = request.Name;
+        student.IsActive = request.IsActive;
 
         await context.SaveChangesAsync();
 
@@ -367,6 +395,7 @@ public static async Task<Results<NoContent, NotFound>> UpdateStudent(int id, Stu
     {
         return TypedResults.NotFound();
     }
+}
 ```
 
 ### Volání
@@ -376,9 +405,8 @@ PUT {{Students.WebAPI_HostAddress}}/students/1
 Content-Type: application/json
 
 {
-  "studentId": 1,
-  "jmeno": "Novotna",
-  "studuje": true
+  "name": "Novotna",
+  "isActive": true
 }
 
 ###
@@ -451,11 +479,11 @@ app.MapPatch("/students/{id}", WebApiVersion1.DeactivateStudent);
 ### Implementace
 
 ```csharp
-public static async Task<Results<NoContent, NotFound> DeactivateStudent(int id, StudentContext context)
+public static async Task<Results<NoContent, NotFound>> DeactivateStudent(int id, StudentContext context)
 {
-    if (await context.Studenti.FindAsync(id) is Student student)
+    if (await context.Students.FindAsync(id) is Student student)
     {
-        student.Studuje = false;
+        student.IsActive = false;
 
         await context.SaveChangesAsync();
 
@@ -486,39 +514,11 @@ PATCH {{Students.WebAPI_HostAddress}}/students/1
 
 ---
 
-## DTO – Data Transfer Object
-
-DTO odděluje databázovou entitu od dat poskytovaných přes API.
-
-### DTO s primárním konstruktorem
-
-```csharp
-public record StudentDto(int StudentId, string Name);
-```
-
-### Použití v endpointu
-
-```csharp
-app.MapGet("/students-dto", async (StudentContext context) =>
-{
-    return TypedResults.Ok(await context.Students
-        .Select(s => new StudentDto(s.StudentId, s.Name))
-        .ToArrayAsync());
-});
-```
-
-### Co kód dělá
-
-- vrací pouze vybrané vlastnosti,  
-- odděluje databázový model od API kontraktu.
-
----
-
 ## Závěrečný úkol – Public Library API
 
 Vytvořte Minimal Web API pro veřejnou knihovnu.
 
-### Entity
+### Výchozí kód
 
 ```csharp
 public class Book
