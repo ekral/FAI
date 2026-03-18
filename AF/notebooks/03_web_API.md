@@ -544,14 +544,14 @@ public class Loan
 ### Implementujte endpointy
 
 - `POST /dev/seed` smaže a vytvoří databází a přidá do databáze tři knihy a dvě výpůjčky.
-- `GET /books` vrátí všechny knihy `BookDto`. Vytvořte variantu s query string parametrem IsArchived, který bude volitelně definovat zda se mají vracet jen archivované nebo nearchivované knihy. 
+- `GET /books` vrátí všechny knihy. Vytvořte také variantu s query string parametrem IsArchived, který bude volitelně definovat zda se mají vracet jen archivované nebo nearchivované knihy. 
 - `GET /books/{id}` vrátí knihu dle Id.    
-- `POST /books` vytvoří novou knihu, v body předává `BookDto`.
-- `PUT /books/{id}` nahradí existující knihu jinou, v body předává `BookDto`. 
+- `POST /books` vytvoří novou knihu.
+- `PUT /books/{id}` nahradí existující knihu jinou. 
 - `DELETE /books/{id}` odstraní knihu dle Id.
 - `PATCH /books/{id}` (v body pošle DTO zda `IsArchived = false` nebo `IsArchived = true`)
-- `GET /loans/` vrátí všechny výpůjčky (název knihy), vrací `LoanDto`.
-- `POST /loans/` vytvoří novou výpůjčku pro knihu pokud je kniha dostupná k půjčování a není již vypůjčená, posílá v body `LoanBookDto`.
+- `GET /loans/` vrátí všechny výpůjčky (název knihy).
+- `POST /loans/` vytvoří novou výpůjčku pro knihu pokud je kniha dostupná k půjčování a není již vypůjčená.
 
 
 ### Další požadavky
