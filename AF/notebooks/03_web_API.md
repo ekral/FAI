@@ -518,14 +518,24 @@ app.MapGet("/students-dto", async (StudentContext context) =>
 
 Vytvořte Minimal Web API pro veřejnou knihovnu.
 
-### Entita
+### Entity
 
 ```csharp
 public class Book
 {
     public int Id { get; set; }
     public required string Title { get; set; }
-    public bool IsAvailable { get; set; }
+    public bool IsArchived { get; set; }
+    public List<Loan> Loans { get; set; } = [];
+}
+
+public class Loan
+{
+    public int Id { get; set; }
+    public required DateOnly LoanDate{ get; set; };
+    public DateOnly? ReturnDate{ get; set; };
+    public int BookId { get; set; }
+    public Book Book { get; set; } 
 }
 ```
 
@@ -533,19 +543,21 @@ public class Book
 
 ### Implementujte endpointy
 
-- `POST /seed` smaže a vytvoří databází a přidá do databáze tři knihy.
-- `GET /books` vrátí všechny knihy.
-- `GET /books/available` vrátí jen dostupné kníhy (`IsAvailable == true`)
+- `POST /dev/seed` smaže a vytvoří databází a přidá do databáze tři knihy a dvě výpůjčky.
+- `GET /books` vrátí všechny knihy které nejsou archivovány jako `BookDto`.
 - `GET /books/{id}` vrátí knihu dle Id.    
-- `POST /books` vytvoří novou knihu.
-- `PUT /books/{id}` nahradí existující knihu jinou. 
+- `POST /books` vytvoří novou knihu, v body předává `BookDto`.
+- `PUT /books/{id}` nahradí existující knihu jinou, v body předává `BookDto`. 
 - `DELETE /books/{id}` odstraní knihu dle Id.
-- `PATCH /books/{id}` (nastaví `IsAvailable = false`)
+- `PATCH /books/{id}` (v body pošle DTO zda `IsArchived = false` nebo `IsArchived = true`)
+- `GET /loans/` vrátí všechny výpůjčky (název knihy), vrací `LoanDto`.
+- `POST /loans/` vytvoří novou výpůjčku pro knihu pokud je kniha dostupná k půjčování a není již vypůjčená, posílá v body `LoanBookDto`.
+
 
 ### Další požadavky
 
 1. Použijte SQLite databázi.  
-2. Vytvořte `BookDto` s pomocí recordu.  
+2. Použijte DTO a definujte je s využitím recordu. 
 3. Připravte `.http` soubor pro manuální testování (pouze ve Visual Studiu, jinde použijte například Postman).  
 4. Ošetřete situaci, kdy záznam neexistuje.
 5. Implementaci umístěte do samostatné statické třídy.
