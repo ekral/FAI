@@ -32,7 +32,63 @@ app.Run();
 
 ---
 
-## Datový model a DbContext
+
+## Návratové typy pomocí TypedResults
+
+V Minimal API v ASP.NET Core lze pomocí třídy `TypedResults` vracet silně typované HTTP odpovědi. Na rozdíl od třídy `Results`, která vrací obecný typ `IResult`, `TypedResults` vrací konkrétní typ odpovědi (např. `Ok<T>`, `Created<T>` nebo `NotFound`). Díky tomu je návratový typ endpointu přesně definovaný a může být lépe využit například při generování dokumentace API.
+
+### Jeden status code
+
+Pokud endpoint vrací pouze jednu odpověď, může být návratový typ přímo konkrétní typ výsledku.
+
+```csharp
+app.MapDelete("/items/{id}", async Task<NoContent> (int id, ItemService service) =>
+{
+    await service.DeleteAsync(id);
+
+    return TypedResults.NoContent();
+});
+```
+
+Endpoint v tomto případě vrací pouze odpověď `204 No Content` bez payloadu.
+
+### Status code s payloadem
+
+Pokud endpoint vrací data, používají se generické typy, například `Ok<T>` nebo `Created<T>`.
+
+```csharp
+app.MapPost("/items", async Task<Created<ItemDto>> (ItemDto item, ItemService service) =>
+{
+    var created = await service.CreateAsync(item);
+
+    return TypedResults.Created($"/items/{created.Id}", created);
+});
+```
+
+Tento endpoint vrací odpověď `201 Created` spolu s vytvořeným objektem v těle odpovědi.
+
+### Více možných status kódů
+
+Pokud endpoint může vracet více různých odpovědí, používá se typ `Results<T1, T2, ...>`, který reprezentuje sjednocení možných výsledků.
+
+```csharp
+app.MapGet("/items/{id}",
+async Task<Results<Ok<ItemDto>, NotFound>> (int id, ItemService service) =>
+{
+    var item = await service.GetAsync(id);
+
+    if (item == null)
+        return TypedResults.NotFound();
+
+    return TypedResults.Ok(item);
+});
+```
+
+V tomto případě endpoint vrací buď `200 OK` s objektem `ItemDto`, nebo `404 NotFound`, pokud požadovaný záznam neexistuje.
+
+---
+
+## Příklad: Entity, DbContext, DTOs a .http soubor
 
 Ukázky jednotlivých HTTP metod si probereme na příkladu databáze studentů. Kdy zároveň použijeme `DbContext` pro práci s databází.
 
@@ -46,6 +102,8 @@ public class Student
     public required bool IsActive { get; set; }
 }
 ```
+
+---
 
 ### Databázový kontext
 
@@ -67,11 +125,11 @@ builder.Services.AddDbContext<StudentContext>(opt => opt.UseSqlite("Data Source=
 
 ---
 
-## DTO – Data Transfer Object
+### DTO – Data Transfer Object
 
 DTO (Data Transfer Object) odděluje databázovou entitu od dat, která jsou poskytována klientovi přes API, nebo která klient posílá serveru. Díky tomu lze přesněji kontrolovat, jaká data API přijímá a vrací.
 
-### DTO pro čtení dat
+#### DTO pro čtení dat
 
 `StudentDto` obsahuje data, která vrátíme klientovi:
 
@@ -79,7 +137,7 @@ DTO (Data Transfer Object) odděluje databázovou entitu od dat, která jsou pos
 public record StudentDto(int Id, string Name, bool IsActive);
 ```
 
-### DTO pro zápis dat
+#### DTO pro zápis dat
 
 `StudentRequest` obsahuje data, která přijímáme od klienta. Neobsahuje `Id`, protože to generuje databáze:
 
@@ -87,17 +145,15 @@ public record StudentDto(int Id, string Name, bool IsActive);
 public record StudentRequest(string Name, bool IsActive);
 ```
 
----
-
-## Třída s implementací endpointů a soubor .http
-
-Uvedené metody budou definovány v následující třídě.
+`StudentPatchRequest` obsahuje jen vlastnosti určené pro částečnou změnu:
 
 ```csharp
-public static class WebApiVersion1
-{
-}
+public record StudentPatchRequest(bool IsActive);
 ```
+
+---
+
+### soubor .http
 
 HTTP metody můžeme ve Visual Studiu zavolat pomocí souboru s příponou `.http`.
 
@@ -109,73 +165,18 @@ Soubor s příponou `.http` bude mít na začátku nadefinovanou adresu služby,
 
 ---
 
-## Návratové typy pomocí TypedResults
-
-V Minimal API v ASP.NET Core lze pomocí třídy `TypedResults` vracet silně typované HTTP odpovědi. Na rozdíl od třídy `Results`, která vrací obecný typ `IResult`, `TypedResults` vrací konkrétní typ odpovědi (např. `Ok<T>`, `Created<T>` nebo `NotFound`). Díky tomu je návratový typ endpointu přesně definovaný a může být lépe využit například při generování dokumentace API.
-
-### Jeden status code
-
-Pokud endpoint vrací pouze jednu odpověď, může být návratový typ přímo konkrétní typ výsledku.
-
-```csharp
-app.MapDelete("/items/{id}", async Task<NoContent> (int id, ItemService service) =>
-{
-    await service.DeleteAsync(id);
-    return TypedResults.NoContent();
-});
-```
-
-Endpoint v tomto případě vrací pouze odpověď `204 No Content` bez payloadu.
-
-### Status code s payloadem
-
-Pokud endpoint vrací data, používají se generické typy, například `Ok<T>` nebo `Created<T>`.
-
-```csharp
-app.MapPost("/items", async Task<Created<ItemDto>> (ItemDto item, ItemService service) =>
-{
-    var created = await service.CreateAsync(item);
-    return TypedResults.Created($"/items/{created.Id}", created);
-});
-```
-
-Tento endpoint vrací odpověď `201 Created` spolu s vytvořeným objektem v těle odpovědi.
-
-### Více možných status codů
-
-Pokud endpoint může vracet více různých odpovědí, používá se typ `Results<T1, T2, ...>`, který reprezentuje sjednocení možných výsledků.
-
-```csharp
-app.MapGet("/items/{id}",
-async Task<Results<Ok<ItemDto>, NotFound>> (int id, ItemService service) =>
-{
-    var item = await service.GetAsync(id);
-
-    if (item == null)
-        return TypedResults.NotFound();
-
-    return TypedResults.Ok(item);
-});
-```
-
-V tomto případě endpoint může vrátit buď `200 OK` s objektem `ItemDto`, nebo `404 NotFound`, pokud požadovaný záznam neexistuje.
-
----
-
 ## 1. POST `/seed`
 
 ### Mapování
 
 ```csharp
-app.MapPost("/seed", WebApiVersion1.Seed);
+app.MapPost("/seed", Seed);
 ```
-
----
 
 ### Implementace
 
 ```csharp
-public static async Task<Created> Seed(StudentContext context)
+static async Task<Created> Seed(StudentContext context)
 {
     await context.Database.EnsureDeletedAsync();
     await context.Database.EnsureCreatedAsync();
@@ -188,9 +189,12 @@ public static async Task<Created> Seed(StudentContext context)
 
     await context.SaveChangesAsync();
 
-    return TypedResults.Created();
+    return TypedResults.NoContent();
 }
 ```
+
+---
+
 ### Volání
 
 ```json
@@ -205,7 +209,7 @@ POST {{Students.WebAPI_HostAddress}}/seed
 - vytvoří novou databázi podle aktuálního modelu,  
 - vloží testovací data,  
 - uloží změny,
-- vrátí HTTP 201 (Created) pomocí `TypedResults`.
+- vrátí HTTP 204 No Content, pomocí `TypedResults`.
 
 ---
 
@@ -214,13 +218,13 @@ POST {{Students.WebAPI_HostAddress}}/seed
 ### Mapování
 
 ```csharp
-app.MapGet("/students", WebApiVersion1.GetAllStudents);
+app.MapGet("/students", GetAllStudents);
 ```
 
 ### Implementace
 
 ```csharp
-public static async Task<Ok<StudentDto[]>> GetAllStudents(StudentContext context)
+static async Task<Ok<StudentDto[]>> GetAllStudents(StudentContext context)
 {
     var students = await context.Students
         .Select(s => new StudentDto(s.Id, s.Name, s.IsActive))
@@ -229,6 +233,8 @@ public static async Task<Ok<StudentDto[]>> GetAllStudents(StudentContext context
     return TypedResults.Ok(students);
 }
 ```
+
+---
 
 ### Volání
 
@@ -246,39 +252,51 @@ GET {{Students.WebAPI_HostAddress}}/students/
 
 ---
 
-## 3. GET `/students/active`
+## 3. GET `/students` s filterem pro aktivní studenty
 
 ### Mapování
 
 ```csharp
-app.MapGet("/students/active", WebApiVersion1.GetActiveStudents);
+app.MapGet("/students", GetStudents);
 ```
 
 ### Implementace
 
 ```csharp
-public static async Task<Ok<StudentDto[]>> GetActiveStudents(StudentContext context)
+static async Task<Ok<StudentDto[]>> GetStudents(bool? isActive, StudentContext context)
 {
-    var students = await context.Students
-        .Where(s => s.IsActive)
-        .Select(s => new StudentDto(s.Id, s.Name, s.IsActive))
-        .ToArrayAsync();
+    IQueryable<Student> query;
+
+    if(isActive.HasValue)
+    {
+        query = await context.Students.Where(s => s.IsActive == isActive);           
+    }
+    else
+    {
+        query = await context.Students;
+    }
+    
+    StudentDto[] students = await query.Select(s => new StudentDto(s.Id, s.Name, s.IsActive))
+                                       .ToArrayAsync();
 
     return TypedResults.Ok(students);
 }
 ```
 
+---
+
 ### Volání
 
 ```json
-GET {{Students.WebAPI_HostAddress}}/Students/Active
+GET {{Students.WebAPI_HostAddress}}/students?isActive=true
 
 ###
 ```
 
 ### Co kód dělá
 
-- vyfiltruje pouze aktivní studenty,  
+- pokud není ve query stringu parameter isActive s přiřazenou hodnotou, tak vrátí všechny studnety nebo
+- vyfiltruje aktivní nebo neaktivní studenty,  
 - převede je do pole,  
 - vrátí HTTP 200 OK.
 
@@ -289,13 +307,13 @@ GET {{Students.WebAPI_HostAddress}}/Students/Active
 ### Mapování
 
 ```csharp
-app.MapGet("/students/{id}", WebApiVersion1.GetStudent);
+app.MapGet("/students/{id}", GetStudent);
 ```
 
 ### Implementace
 
 ```csharp
-public static async Task<Results<Ok<StudentDto>, NotFound>> GetStudent(int id, StudentContext context)
+static async Task<Results<Ok<StudentDto>, NotFound>> GetStudent(int id, StudentContext context)
 {
     if (await context.Students.FindAsync(id) is Student student)
     {
@@ -307,6 +325,8 @@ public static async Task<Results<Ok<StudentDto>, NotFound>> GetStudent(int id, S
     }
 }
 ```
+
+---
 
 ### Volání
 
@@ -329,13 +349,13 @@ GET {{Students.WebAPI_HostAddress}}/students/1
 ### Mapování
 
 ```csharp
-app.MapPost("/students", WebApiVersion1.CreateStudent);
+app.MapPost("/students", CreateStudent);
 ```
 
 ### Implementace
 
 ```csharp
-public static async Task<Created<StudentDto>> CreateStudent(StudentRequest request, StudentContext context)
+static async Task<Created<StudentDto>> CreateStudent(StudentRequest request, StudentContext context)
 {
     var student = new Student { Name = request.Name, IsActive = request.IsActive };
 
@@ -346,6 +366,8 @@ public static async Task<Created<StudentDto>> CreateStudent(StudentRequest reque
     return TypedResults.Created($"/students/{student.Id}", new StudentDto(student.Id, student.Name, student.IsActive));
 }
 ```
+
+---
 
 ### Volání
 
@@ -374,13 +396,13 @@ Content-Type: application/json
 ### Mapování
 
 ```csharp
-app.MapPut("/students/{id}", WebApiVersion1.UpdateStudent);
+app.MapPut("/students/{id}", UpdateStudent);
 ```
 
 ### Implementace
 
 ```csharp
-public static async Task<Results<NoContent, NotFound>> UpdateStudent(int id, StudentRequest request, StudentContext context)
+static async Task<Results<NoContent, NotFound>> UpdateStudent(int id, StudentRequest request, StudentContext context)
 {
     if (await context.Students.FindAsync(id) is Student student)
     {
@@ -427,13 +449,13 @@ Content-Type: application/json
 ### Mapování
 
 ```csharp
-app.MapDelete("/students/{id}", WebApiVersion1.DeleteStudent);
+app.MapDelete("/students/{id}", WDeleteStudent);
 ```
 
 ### Implementace
 
 ```csharp
-public static async Task<Results<NoContent, NotFound>> DeleteStudent(int id, StudentContext context)
+public async Task<Results<NoContent, NotFound>> DeleteStudent(int id, StudentContext context)
 {
     if(await context.Studenti.FindAsync(id) is Student student)
     {
@@ -449,6 +471,8 @@ public static async Task<Results<NoContent, NotFound>> DeleteStudent(int id, Stu
     }
 }
 ```
+
+---
 
 ### Volání
 
@@ -473,17 +497,17 @@ DELETE {{Students.WebAPI_HostAddress}}/students/1
 ### Mapování
 
 ```csharp
-app.MapPatch("/students/{id}", WebApiVersion1.DeactivateStudent);
+app.MapPatch("/students/{id}", PatchStudentActivity);
 ```
 
 ### Implementace
 
 ```csharp
-public static async Task<Results<NoContent, NotFound>> DeactivateStudent(int id, StudentContext context)
+static async Task<Results<NoContent, NotFound>> PatchStudentActivity(int id, StudentPatchRequest request, StudentContext context)
 {
     if (await context.Students.FindAsync(id) is Student student)
     {
-        student.IsActive = false;
+        student.IsActive = request.IsActive;
 
         await context.SaveChangesAsync();
 
@@ -496,10 +520,17 @@ public static async Task<Results<NoContent, NotFound>> DeactivateStudent(int id,
 }
 ```
 
+---
+
 ### Volání
 
 ```json
 PATCH {{Students.WebAPI_HostAddress}}/students/1
+Content-Type: application/json
+
+{
+    "isActive": false
+}
 
 ###
 ```
@@ -507,14 +538,14 @@ PATCH {{Students.WebAPI_HostAddress}}/students/1
 ### Co kód dělá
 
 - vyhledá studenta,  
-- pokud existuje, nastaví `IsActive = false`,  
+- pokud existuje, částečně změní hodnotu `IsActive` podle request DTO,  
 - uloží změny,  
 - vrátí HTTP 204 No Content,
 - pokud neexistuje, vrátí HTTP 404 Not Found.
 
 ---
 
-## Závěrečný úkol – Public Library API
+## Úkol – Public Library API
 
 Vytvořte Minimal Web API pro veřejnou knihovnu.
 
