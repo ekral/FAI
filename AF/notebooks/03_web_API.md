@@ -404,7 +404,7 @@ Content-Type: application/json
 ### Mapování
 
 ```csharp
-app.MapDelete("/students/{id}", WDeleteStudent);
+app.MapDelete("/students/{id}", DeleteStudent);
 ```
 
 ### Implementace
