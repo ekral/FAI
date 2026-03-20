@@ -498,7 +498,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder();
 
-builder.Services.AddDbContext<StudentContext>(opt => opt.UseSqlite("Data Source=library.db"));
+builder.Services.AddDbContext<LibraryContext>(opt => opt.UseSqlite("Data Source=library.db"));
 
 var app = builder.Build();
 
