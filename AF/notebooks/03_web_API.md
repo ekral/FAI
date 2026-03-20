@@ -280,7 +280,7 @@ GET {{Students.WebAPI_HostAddress}}/students?isActive=true
 ### Mapování
 
 ```csharp
-app.MapGet("/students/{id}", GetStudent);
+app.MapGet("/students/{id:int}", GetStudent);
 ```
 
 ### Implementace
@@ -357,7 +357,7 @@ Content-Type: application/json
 ### Mapování
 
 ```csharp
-app.MapPut("/students/{id}", UpdateStudent);
+app.MapPut("/students/{id:int}", UpdateStudent);
 ```
 
 ### Implementace
@@ -404,7 +404,7 @@ Content-Type: application/json
 ### Mapování
 
 ```csharp
-app.MapDelete("/students/{id}", DeleteStudent);
+app.MapDelete("/students/{id:int}", DeleteStudent);
 ```
 
 ### Implementace
