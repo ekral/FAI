@@ -506,7 +506,7 @@ app.MapPost("/dev/seed", Seed);
 
 app.Run();
 
-static async Task<NoContent> Seed(StudentContext context)
+static async Task<NoContent> Seed(LibraryContext context)
 {
     await context.Database.EnsureDeletedAsync();
     await context.Database.EnsureCreatedAsync();
@@ -526,7 +526,7 @@ static async Task<NoContent> Seed(StudentContext context)
     return TypedResults.NoContent();
 }
 
-public class StudentContext(DbContextOptions<StudentContext> options) : DbContext(options)
+public class LibraryContext(DbContextOptions<LibraryContext> options) : DbContext(options)
 {
     public DbSet<Book> Books { get; set; }
     public DbSet<Loan> Loans { get; set; }
