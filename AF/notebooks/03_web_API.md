@@ -416,7 +416,7 @@ public async Task<Results<NoContent, NotFound>> DeleteStudent(int id, StudentCon
 {
     if(await context.Studenti.FindAsync(id) is Student student)
     {
-        context.Remove(student);
+        context.Students.Remove(student);
 
         await context.SaveChangesAsync();
 
