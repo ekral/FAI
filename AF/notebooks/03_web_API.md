@@ -138,10 +138,10 @@ public record StudentDto(int Id, string Name, bool IsActive);
 
 #### DTO pro zápis dat
 
-`StudentRequest` obsahuje data, která přijímáme od klienta. Neobsahuje `Id`, protože to generuje databáze:
+`StudentRequestDto` obsahuje data, která přijímáme od klienta. Neobsahuje `Id`, protože to generuje databáze:
 
 ```csharp
-public record StudentRequest(string Name, bool IsActive);
+public record StudentRequestDto(string Name, bool IsActive);
 ```
 
 `StudentPatchRequest` obsahuje jen vlastnosti určené pro částečnou změnu:
@@ -321,10 +321,10 @@ app.MapPost("/students", CreateStudent);
 
 ### Implementace
 
-Endpoint přijme JSON data z těla požadavku jako `StudentRequest`, uloží nového studenta do databáze a vrátí HTTP 201 Created spolu s URL a `StudentDto` nového záznamu.
+Endpoint přijme JSON data z těla požadavku jako `StudentRequestDto`, uloží nového studenta do databáze a vrátí HTTP 201 Created spolu s URL a `StudentDto` nového záznamu.
 
 ```csharp
-static async Task<Created<StudentDto>> CreateStudent(StudentRequest request, StudentContext context)
+static async Task<Created<StudentDto>> CreateStudent(StudentRequestDto request, StudentContext context)
 {
     var student = new Student { Name = request.Name, IsActive = request.IsActive };
 
@@ -362,10 +362,10 @@ app.MapPut("/students/{id:int}", UpdateStudent);
 
 ### Implementace
 
-Endpoint vyhledá studenta podle ID. Pokud existuje, přepíše všechny jeho vlastnosti hodnotami z `StudentRequest`, uloží změny a vrátí HTTP 204 No Content; pokud neexistuje, vrátí HTTP 404 Not Found.
+Endpoint vyhledá studenta podle ID. Pokud existuje, přepíše všechny jeho vlastnosti hodnotami z `StudentRequestDto`, uloží změny a vrátí HTTP 204 No Content; pokud neexistuje, vrátí HTTP 404 Not Found.
 
 ```csharp
-static async Task<Results<NoContent, NotFound>> UpdateStudent(int id, StudentRequest request, StudentContext context)
+static async Task<Results<NoContent, NotFound>> UpdateStudent(int id, StudentRequestDto request, StudentContext context)
 {
     if (await context.Students.FindAsync(id) is Student student)
     {
