@@ -252,17 +252,13 @@ Endpoint přijme volitelný query string parametr `isActive`. Pokud je zadán, v
 ```csharp
 static async Task<Ok<StudentDto[]>> GetStudents(bool? isActive, StudentContext context)
 {
-    IQueryable<Student> query;
+    var query = context.Students.AsQueryable();
 
     if(isActive.HasValue)
     {
-        query = context.Students.Where(s => s.IsActive == isActive);           
+        query = query.Where(s => s.IsActive == isActive);           
     }
-    else
-    {
-        query = context.Students;
-    }
-    
+
     StudentDto[] students = await query.Select(s => new StudentDto(s.Id, s.Name, s.IsActive)).ToArrayAsync();
 
     return TypedResults.Ok(students);
