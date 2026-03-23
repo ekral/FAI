@@ -16,6 +16,15 @@ docker stop keycloak
 docker run --rm -v C:\temp\kc-export:/opt/keycloak/data/export -v volume-name:/opt/keycloak/data quay.io/keycloak/keycloak:26.4 export --dir /opt/keycloak/data/export
 ```
 
+Protože roles je globální scope, neupravujte ho přímo u klienta, ale v hlavním menu:
+
+- V levém černém menu klikněte na Client scopes.
+- Najděte v seznamu ten s názvem roles a klikněte na něj.
+- Přejděte na záložku Mappers.
+- Uvidíte tam mapper s názvem realm roles. Klikněte na něj.
+- Zkontrolujte/změňte pole Token Claim Name. Pokud tam je realm_access.roles, přepište to na roles.
+- Uložte (Save).
+
 
 - Nastavit Standard flow
 - Pokud by jedna webova sluzba chtela volat jinou, tak povolit Client Authentication a Service account roles
