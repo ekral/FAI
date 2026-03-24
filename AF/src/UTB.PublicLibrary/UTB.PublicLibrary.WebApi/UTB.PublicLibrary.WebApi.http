@@ -1,0 +1,55 @@
+@UTB.PublicLibrary.WebApi_HostAddress = https://localhost:7195
+
+
+POST {{UTB.PublicLibrary.WebApi_HostAddress}}/dev/seed
+
+###
+
+GET {{UTB.PublicLibrary.WebApi_HostAddress}}/books
+
+###
+
+GET {{UTB.PublicLibrary.WebApi_HostAddress}}/books/1
+
+###
+
+GET {{UTB.PublicLibrary.WebApi_HostAddress}}/books?isArchived=true
+
+###
+
+GET {{UTB.PublicLibrary.WebApi_HostAddress}}/books?isArchived=false
+
+###
+
+POST {{UTB.PublicLibrary.WebApi_HostAddress}}/books
+Content-Type: application/json
+
+{
+  "title": "Krakatit",
+  "isArchived": false
+}
+
+###
+
+PUT {{UTB.PublicLibrary.WebApi_HostAddress}}/books/1
+Content-Type: application/json
+
+{
+  "title": "Bila Nemoc",
+  "isArchived": false
+}
+
+###
+
+PATCH {{UTB.PublicLibrary.WebApi_HostAddress}}/books/1
+Content-Type: application/json
+
+{
+  "isArchived": true
+}
+
+###
+
+DELETE {{UTB.PublicLibrary.WebApi_HostAddress}}/books/1
+
+###
