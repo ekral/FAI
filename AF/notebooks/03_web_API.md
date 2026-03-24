@@ -138,10 +138,10 @@ public record StudentDto(int Id, string Name, bool IsActive);
 
 #### DTO pro zápis dat
 
-`StudentRequest` obsahuje data, která přijímáme od klienta. Neobsahuje `Id`, protože to generuje databáze:
+`StudentRequestDto` obsahuje data, která přijímáme od klienta. Neobsahuje `Id`, protože to generuje databáze:
 
 ```csharp
-public record StudentRequest(string Name, bool IsActive);
+public record StudentRequestDto(string Name, bool IsActive);
 ```
 
 `StudentPatchRequest` obsahuje jen vlastnosti určené pro částečnou změnu:
@@ -252,17 +252,13 @@ Endpoint přijme volitelný query string parametr `isActive`. Pokud je zadán, v
 ```csharp
 static async Task<Ok<StudentDto[]>> GetStudents(bool? isActive, StudentContext context)
 {
-    IQueryable<Student> query;
+    var query = context.Students.AsQueryable();
 
     if(isActive.HasValue)
     {
-        query = context.Students.Where(s => s.IsActive == isActive);           
+        query = query.Where(s => s.IsActive == isActive);           
     }
-    else
-    {
-        query = context.Students;
-    }
-    
+
     StudentDto[] students = await query.Select(s => new StudentDto(s.Id, s.Name, s.IsActive)).ToArrayAsync();
 
     return TypedResults.Ok(students);
@@ -284,7 +280,7 @@ GET {{Students.WebAPI_HostAddress}}/students?isActive=true
 ### Mapování
 
 ```csharp
-app.MapGet("/students/{id}", GetStudent);
+app.MapGet("/students/{id:int}", GetStudent);
 ```
 
 ### Implementace
@@ -325,10 +321,10 @@ app.MapPost("/students", CreateStudent);
 
 ### Implementace
 
-Endpoint přijme JSON data z těla požadavku jako `StudentRequest`, uloží nového studenta do databáze a vrátí HTTP 201 Created spolu s URL a `StudentDto` nového záznamu.
+Endpoint přijme JSON data z těla požadavku jako `StudentRequestDto`, uloží nového studenta do databáze a vrátí HTTP 201 Created spolu s URL a `StudentDto` nového záznamu.
 
 ```csharp
-static async Task<Created<StudentDto>> CreateStudent(StudentRequest request, StudentContext context)
+static async Task<Created<StudentDto>> CreateStudent(StudentRequestDto request, StudentContext context)
 {
     var student = new Student { Name = request.Name, IsActive = request.IsActive };
 
@@ -361,15 +357,15 @@ Content-Type: application/json
 ### Mapování
 
 ```csharp
-app.MapPut("/students/{id}", UpdateStudent);
+app.MapPut("/students/{id:int}", UpdateStudent);
 ```
 
 ### Implementace
 
-Endpoint vyhledá studenta podle ID. Pokud existuje, přepíše všechny jeho vlastnosti hodnotami z `StudentRequest`, uloží změny a vrátí HTTP 204 No Content; pokud neexistuje, vrátí HTTP 404 Not Found.
+Endpoint vyhledá studenta podle ID. Pokud existuje, přepíše všechny jeho vlastnosti hodnotami z `StudentRequestDto`, uloží změny a vrátí HTTP 204 No Content; pokud neexistuje, vrátí HTTP 404 Not Found.
 
 ```csharp
-static async Task<Results<NoContent, NotFound>> UpdateStudent(int id, StudentRequest request, StudentContext context)
+static async Task<Results<NoContent, NotFound>> UpdateStudent(int id, StudentRequestDto request, StudentContext context)
 {
     if (await context.Students.FindAsync(id) is Student student)
     {
@@ -408,7 +404,7 @@ Content-Type: application/json
 ### Mapování
 
 ```csharp
-app.MapDelete("/students/{id}", WDeleteStudent);
+app.MapDelete("/students/{id:int}", DeleteStudent);
 ```
 
 ### Implementace
@@ -420,7 +416,7 @@ public async Task<Results<NoContent, NotFound>> DeleteStudent(int id, StudentCon
 {
     if(await context.Studenti.FindAsync(id) is Student student)
     {
-        context.Remove(student);
+        context.Students.Remove(student);
 
         await context.SaveChangesAsync();
 
@@ -502,7 +498,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder();
 
-builder.Services.AddDbContext<StudentContext>(opt => opt.UseSqlite("Data Source=library.db"));
+builder.Services.AddDbContext<LibraryContext>(opt => opt.UseSqlite("Data Source=library.db"));
 
 var app = builder.Build();
 
@@ -510,7 +506,7 @@ app.MapPost("/dev/seed", Seed);
 
 app.Run();
 
-static async Task<NoContent> Seed(StudentContext context)
+static async Task<NoContent> Seed(LibraryContext context)
 {
     await context.Database.EnsureDeletedAsync();
     await context.Database.EnsureCreatedAsync();
@@ -530,7 +526,7 @@ static async Task<NoContent> Seed(StudentContext context)
     return TypedResults.NoContent();
 }
 
-public class StudentContext(DbContextOptions<StudentContext> options) : DbContext(options)
+public class LibraryContext(DbContextOptions<LibraryContext> options) : DbContext(options)
 {
     public DbSet<Book> Books { get; set; }
     public DbSet<Loan> Loans { get; set; }
