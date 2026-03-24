@@ -11,10 +11,13 @@ Export realmů i uživatelů. Kde `keycloack` je název kontaineru Keycloaku a `
 Nejdřív zastavíme kontainer `keycloack`, potom pustíme nový kontainer a namapujeme cestu `C:\temp\kc-export` na adresář v linuxu s exportem a připojíme existující data z původního kontajneru s názvem `volume-name` a exportujeme data do namapovaného adresáře.
 
 ```powershell
-docker stop keycloak
+docker stop keycloack-UTB.MinuteMeal
 
 docker run --rm -v C:\temp\kc-export:/opt/keycloak/data/export -v volume-name:/opt/keycloak/data quay.io/keycloak/keycloak:26.4 export --dir /opt/keycloak/data/export
 ```
+
+Pro vašeho testovacího uživatele je nejlepší otevřít nové okno prohlížeče (Anonymní režim / Incognito) a zadat adresu:
+http://<vás-server>:<port>/realms/UTB.MinuteMeal/account
 
 Protože roles je globální scope, neupravujte ho přímo u klienta, ale v hlavním menu:
 
@@ -32,6 +35,10 @@ Protože roles je globální scope, neupravujte ho přímo u klienta, ale v hlav
 - Nastavit Valid redirect URIs na adresu Blazoru
 - Nastavit Web origins url na adresu Blazoru
 
+**Keycloak Roles mapper**:
+
+- Add to ID token
+- prejmenovat na krátke User Realm Role na krátké roles
 
 1) Pridat cors.
 
