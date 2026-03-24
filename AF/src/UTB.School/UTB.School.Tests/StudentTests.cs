@@ -1,10 +1,8 @@
 using Aspire.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using System.Net.Http.Json;
 using UTB.School.Contracts;
 using UTB.School.Db;
-using YamlDotNet.Core.Tokens;
 
 namespace UTB.School.Tests.Tests
 {
@@ -73,7 +71,7 @@ namespace UTB.School.Tests.Tests
         private readonly TestFixture fixture = fixture;
 
         [Fact]
-        public async Task CreateAuthor_ReturnsCreatedAndPersistsAuthor()
+        public async Task CreateStudent_ReturnsCreatedAndPersistsStudent()
         {
             var studentRequestDto = new StudentRequestDto("Franz Kafka", true);
 
@@ -90,7 +88,7 @@ namespace UTB.School.Tests.Tests
 
             using var context = fixture.CreateContext();
 
-            Student? student = await context.Students.FindAsync(studentDto.Id, TestContext.Current.CancellationToken);
+            Student? student = await context.Students.FindAsync([studentDto.Id], TestContext.Current.CancellationToken);
 
             Assert.NotNull(student);
             Assert.Equal(studentRequestDto.Name, student.Name);
@@ -98,7 +96,7 @@ namespace UTB.School.Tests.Tests
         }
 
         [Fact]
-        public async Task GetAuthors_ReturnsAllAuthors()
+        public async Task GetStudents_ReturnsAllStudents()
         {
             var response = await fixture.HttpClient.GetAsync("/students", TestContext.Current.CancellationToken);
 
@@ -114,7 +112,7 @@ namespace UTB.School.Tests.Tests
         }
 
         [Fact]
-        public async Task GetAuthorById_ReturnsOkAndAuthor_WhenAuthorExists()
+        public async Task GetStudentById_ReturnsOkAndStudent_WhenStudentExists()
         {
             var response = await fixture.HttpClient.GetAsync("/students/1", TestContext.Current.CancellationToken);
 
@@ -128,7 +126,7 @@ namespace UTB.School.Tests.Tests
         }
 
         [Fact]
-        public async Task GetAuthorById_ReturnsNotFound_WhenDoesNotExist()
+        public async Task GetStudentById_ReturnsNotFound_WhenStudentDoesNotExist()
         {
             var response = await fixture.HttpClient.GetAsync("/students/999", TestContext.Current.CancellationToken);
 
@@ -136,7 +134,7 @@ namespace UTB.School.Tests.Tests
         }
 
         [Fact]
-        public async Task DeleteAuthor_DeletesAndReturnsNoContent_WhenExists()
+        public async Task DeleteStudent_DeletesAndReturnsNoContent_WhenStudentExists()
         {
             var tereza = new Student { Name = "Tereza", IsActive = true };
 
@@ -153,7 +151,7 @@ namespace UTB.School.Tests.Tests
 
             using (var context = fixture.CreateContext())
             {
-                var studentDto = await context.Students.FindAsync(tereza.Id, TestContext.Current.CancellationToken);
+                var studentDto = await context.Students.FindAsync([tereza.Id], TestContext.Current.CancellationToken);
 
                 Assert.Null(studentDto);
             }

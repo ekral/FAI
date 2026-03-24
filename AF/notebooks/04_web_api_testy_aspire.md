@@ -1,122 +1,174 @@
-# 04 Testování Minimal Web API s Aspire
+# 04 Testování Web API s Aspire – studijní materiál (bakalářské studium)
 
 **autor: Erik Král ekral@utb.cz**
 
+## 🎯 Definice
+
+- Testování Web API ověřuje, že endpointy vrací správné HTTP status kódy, JSON data a správně pracují s databází.
+- Integrační test testuje více vrstev aplikace najednou, například HTTP endpoint, EF Core i databázi.
+- [Aspire](https://learn.microsoft.com/en-us/dotnet/aspire/get-started/aspire-overview) je platforma pro .NET aplikace, která umí spouštět více projektů a jejich závislosti dohromady.
+- V integračních testech nám Aspire pomáhá spustit skutečné Web API i databázi v prostředí blízkém reálnému provozu.
+
+Použité technologie:
+
+- `ASP.NET Core Minimal API`
+- `Entity Framework Core`
+- `PostgreSQL`
+- `xUnit`
+- `Aspire.Hosting.Testing`
+
 ---
 
-V tomto materiálu si ukážeme moderní přístup k integračním testům pomocí [Aspire](https://learn.microsoft.com/en-us/dotnet/aspire/get-started/aspire-overview) a frameworku [xUnit](https://xunit.net/). Aspire umožňuje testovat celou aplikaci včetně závislostí, jako je databáze, v kontejnerizovaném prostředí.
+## Proč nestačí jen unit testy
+
+Unit test ověřuje malý izolovaný kus kódu, například jednu metodu. To je užitečné, ale u Web API často potřebujeme vědět i to, že:
+
+- endpoint je opravdu namapovaný na správnou URL,
+- data z requestu se správně deserializují,
+- databáze je dostupná,
+- EF Core správně ukládá nebo čte data,
+- aplikace vrací správný HTTP status code.
+
+Právě to řeší integrační testy.
 
 ---
 
-Nejprve si nadefinujeme entity a DbContext:
+## Projekt UTB.School
+
+Budeme vycházet z projektu `UTB.School`, který obsahuje několik částí:
+
+- `UTB.School.WebApi` – vlastní Minimal API
+- `UTB.School.Db` – entity a `DbContext`
+- `UTB.School.Contracts` – DTO recordy
+- `UTB.School.AppHost` – Aspire projekt, který spouští infrastrukturu
+- `UTB.School.Tests` – integrační testy
+
+Tato architektura je vhodná proto, že odděluje API, databázový model, přenosové objekty a testy.
+
+---
+
+## 1. Datový model
+
+V projektu je použita jednoduchá entita `Student`:
 
 ```csharp
-namespace UTB.Library.Db
+namespace UTB.School.Db
 {
-    public class Author
+    public class Student
     {
         public int Id { get; set; }
         public required string Name { get; set; }
+        public required bool IsActive { get; set; }
     }
+}
+```
 
-    public class LibraryContext(DbContextOptions<LibraryContext> options) : DbContext(options)
+Databázový kontext obsahuje tabulku studentů:
+
+```csharp
+namespace UTB.School.Db
+{
+    public class SchoolContext(DbContextOptions<SchoolContext> options) : DbContext(options)
     {
-        public DbSet<Author> Authors { get; set; }
+        public DbSet<Student> Students { get; set; }
     }
 }
 ```
 
 ---
 
-DTO pro přenos dat:
+## 2. DTO objekty
 
-`AuthorRequestDto` se používá ve vstupu (`POST /authors`) a neobsahuje `Id`, protože to přidělí databáze. `AuthorDto` se používá ve výstupu API a `Id` obsahuje.
+Stejně jako v předchozím materiálu nepoužíváme entitu přímo pro komunikaci s klientem, ale DTO objekty.
 
 ```csharp
-namespace UTB.Library.Contracts
+namespace UTB.School.Contracts
 {
-    public record AuthorRequestDto(string Name);
-    public record AuthorDto(int Id, string Name);
+    public record StudentDto(int Id, string Name, bool IsActive);
+    public record StudentRequestDto(string Name, bool IsActive);
+    public record StudentPatchRequestDto(bool IsActive);
 }
 ```
 
-A dále si nadefinujeme následující WebAPI metody:
+Význam jednotlivých DTO:
+
+- `StudentDto` vracíme klientovi
+- `StudentRequestDto` používáme pro `POST` a `PUT`
+- `StudentPatchRequestDto` používáme pro `PATCH`, kdy měníme jen část dat
 
 ---
 
-```csharp
-static async Task<Created<AuthorDto>> CreateAuthor(AuthorRequestDto authorRequestDto, LibraryContext context)
-{
-    Author author = new() { Name = authorRequestDto.Name };
+## 3. Endpointy ve Web API
 
-    context.Authors.Add(author);
+V `Program.cs` jsou namapované endpointy pro CRUD operace nad studenty:
+
+```csharp
+app.MapPost("/dev/seed", Seed);
+app.MapGet("/students", GetStudents);
+app.MapGet("/students/{id:int}", GetStudent);
+app.MapPost("/students", CreateStudent);
+app.MapPut("/students/{id:int}", UpdateStudent);
+app.MapDelete("/students/{id:int}", DeleteStudent);
+app.MapPatch("/students/{id}", PatchStudentActivity);
+```
+
+Například načtení studentů s volitelným filtrem `isActive` vypadá takto:
+
+```csharp
+static async Task<Ok<StudentDto[]>> GetStudents(bool? isActive, SchoolContext context)
+{
+    var query = context.Students.AsQueryable();
+
+    if (isActive.HasValue)
+    {
+        query = query.Where(s => s.IsActive == isActive);
+    }
+
+    StudentDto[] students = await query.Select(s => new StudentDto(s.Id, s.Name, s.IsActive))
+                                       .ToArrayAsync();
+
+    return TypedResults.Ok(students);
+}
+```
+
+Endpoint pro seed vytvoří testovací databázi a vloží tři studenty:
+
+```csharp
+static async Task<NoContent> Seed(SchoolContext context)
+{
+    await context.Database.EnsureDeletedAsync();
+    await context.Database.EnsureCreatedAsync();
+
+    context.Students.AddRange(
+        new Student { Name = "Jan", IsActive = true },
+        new Student { Name = "Eva", IsActive = true },
+        new Student { Name = "Petr", IsActive = false }
+    );
 
     await context.SaveChangesAsync();
 
-    AuthorDto resultDto = new(author.Id, author.Name);
-
-    return TypedResults.Created($"/authors/{resultDto.Id}", resultDto);
+    return TypedResults.NoContent();
 }
-
-static async Task<Ok<AuthorDto[]>> GetAuthors(LibraryContext context)
-{
-    AuthorDto[] authors = await context.Authors.Select(a => new AuthorDto(a.Id, a.Name)).ToArrayAsync();
-
-    return TypedResults.Ok(authors);
-}
-
-static async Task<Results<NotFound, Ok<AuthorDto>>> GetAuthorById(int id, LibraryContext context)
-{
-    if (await context.Authors.FindAsync(id) is Author author)
-    {
-        AuthorDto authorDto = new(author.Id, author.Name);
-
-        return TypedResults.Ok(authorDto);
-    }
-    else
-    {
-        return TypedResults.NotFound();
-    }
-}
-
-static async Task<Results<NoContent, NotFound>> DeleteAuthor(int id, LibraryContext context)
-{
-    if (await context.Authors.FindAsync(id) is Author author)
-    {
-        context.Authors.Remove(author);
-
-        await context.SaveChangesAsync();
-
-        return TypedResults.NoContent();
-    }
-    else
-    {
-        return TypedResults.NotFound();
-    }
-}
-
 ```
 
 ---
 
-Mapování metod na endpointy v `Program.cs`:
+## 4. Co do testů přináší Aspire
 
-```csharp
-app.MapPost("/authors", CreateAuthor);
-app.MapGet("/authors", GetAuthors);
-app.MapGet("/authors/{id:int}", GetAuthorById);
-app.MapDelete("/authors/{id:int}", DeleteAuthor);
-```
+Aspire umí během testů spustit:
+
+- databázový server,
+- samotné Web API,
+- propojení mezi nimi,
+- health checks a čekání na připravenost služeb.
+
+To znamená, že test nevolá jen metodu v paměti, ale komunikuje s opravdovou HTTP aplikací a opravdovou databází.
 
 ---
 
-## Integrační testy s Aspire
+## 5. Aspire AppHost
 
-Moderní přístup k testování Web API využívá [Aspire](https://learn.microsoft.com/en-us/dotnet/aspire/get-started/aspire-overview), který umožňuje spouštět celou aplikaci včetně závislostí (databáze, cache, messaging) v kontejnerizovaném prostředí během testů. To poskytuje skutečně integrační testy, které testují aplikaci jako celek.
-
-### Nastavení Aspire projektu
-
-Nejprve vytvoříme Aspire AppHost projekt, který definuje infrastrukturu aplikace. V testovacím prostředí používáme jednodušší konfiguraci PostgreSQL bez persistentních dat a bez dbmanagera pro ruční reset databáze.
+Aspire infrastruktura je definovaná v projektu `UTB.School.AppHost`.
 
 ```csharp
 using Microsoft.Extensions.Hosting;
@@ -124,227 +176,422 @@ using Microsoft.Extensions.Hosting;
 var builder = DistributedApplication.CreateBuilder(args);
 
 IResourceBuilder<PostgresServerResource> postgres;
-IResourceBuilder<PostgresDatabaseResource> database;
 
 if (builder.Environment.IsEnvironment("Testing"))
 {
     postgres = builder.AddPostgres("postgres-testing")
-                      .WithContainerName("postgres-testing");
-
-    database = postgres.AddDatabase("database");
+                      .WithContainerName("postgres-testing-UTB.School");
 }
 else
 {
     postgres = builder.AddPostgres("postgres")
-                      .WithPgAdmin(c =>
-                      {
-                          c.WithLifetime(ContainerLifetime.Persistent);
-                          c.WithImage("dpage/pgadmin4:latest");
-                      })
-                      .WithDataVolume()
-                      .WithLifetime(ContainerLifetime.Persistent);
-
-    database = postgres.AddDatabase("database");
-
-    builder.AddProject<Projects.UTB_Library_DbManager>("dbmanager")
-       .WithReference(database)
-       .WithHttpCommand("reset-db", "Reset Database")
-       .WaitFor(database);
+                     .WithContainerName("postgres-UTB.School")
+                     .WithDataVolume()
+                     .WithLifetime(ContainerLifetime.Persistent);
 }
 
-builder.AddProject<Projects.UTB_Library_WebApi>("webapi")
+var database = postgres.AddDatabase("database");
+
+builder.AddProject<Projects.UTB_School_WebApi>("webapi")
        .WithReference(database)
        .WaitFor(database);
 
 builder.Build().Run();
-
 ```
+
+Důležité body:
+
+- v režimu `Testing` se používá testovací PostgreSQL kontejner,
+- databáze je v Aspire zaregistrovaná pod názvem `database`,
+- Web API dostane databázi přes `WithReference(database)`,
+- `WaitFor(database)` zajistí, že se API spustí až po databázi.
 
 ---
 
-### Integrační testy
+## 6. Registrace databáze ve Web API
 
-Pro integrační testy použijeme `DistributedApplicationTestingBuilder`, který spustí celou aplikaci včetně databáze. Testy pak komunikují s API přes HTTP klient.
+Ve Web API je databázový kontext zaregistrovaný takto:
 
-`TestFixture` připraví integrační prostředí pro všechny testy: spustí Aspire AppHost v režimu `Testing`, počká na dostupnost databáze a Web API, vytvoří `HttpClient` a poskytne metodu `CreateContext()` pro vytváření contextu pro práci s databázi (ověřujeme, že v databázi jsou po volání endpointu správná data). Také seeduje data pro čtení.
+```csharp
+builder.AddNpgsqlDbContext<SchoolContext>("database");
+```
 
-`DatabaseCollection` zajistí sdílení jedné instance `TestFixture` mezi testy ve stejné kolekci, takže testy používají stejnou testovací infrastrukturu a není potřeba ji opakovaně inicializovat.
+Tento zápis říká, že `SchoolContext` má použít connection string ze zdroje `database`, který dodá Aspire AppHost.
 
-Ukázkové integrační testy níže pokrývají klíčové scénáře: vytvoření záznamu a kontrolu perzistence dat, načtení seed dat po resetu databáze, negativní scénář `404 NotFound` a mazání záznamu s následným ověřením změny stavu.
+To je zásadní rozdíl oproti jednoduchému příkladu se SQLite, kde jsme connection string zapisovali ručně přímo do `Program.cs`.
+
+---
+
+## 7. Testovací projekt
+
+Testovací projekt obsahuje například tyto balíčky:
+
+```xml
+<PackageReference Include="Aspire.Hosting.Testing" Version="13.1.0" />
+<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+<PackageReference Include="xunit.v3" Version="3.0.1" />
+```
+
+Nejdůležitější je balíček `Aspire.Hosting.Testing`, protože právě ten umožňuje spustit AppHost uvnitř testu.
+
+---
+
+## 8. TestFixture
+
+Základ integračních testů tvoří třída `TestFixture`. Ta připraví celé testovací prostředí.
 
 ```csharp
 using Aspire.Hosting;
 using Microsoft.EntityFrameworkCore;
-using System.Net.Http.Json;
-using UTB.Library.Contracts;
-using UTB.Library.Db;
+using UTB.School.Db;
 
-namespace UTB.Library.Tests
+public class TestFixture : IAsyncLifetime
 {
-    public class TestFixture : IAsyncLifetime
+    private DistributedApplication app = null!;
+    private string? connectionString;
+    public HttpClient HttpClient { get; private set; } = null!;
+
+    public async ValueTask InitializeAsync()
     {
-        private DistributedApplication app = null!;
-        private string? connectionString;
-        public HttpClient HttpClient { get; private set; } = null!;
+        var builder = await DistributedApplicationTestingBuilder
+            .CreateAsync<Projects.UTB_School_AppHost>(["--environment=Testing"], TestContext.Current.CancellationToken);
 
-        public async ValueTask InitializeAsync()
-        {
-            var builder = await DistributedApplicationTestingBuilder.CreateAsync<Projects.UTB_Library_AppHost>(["--environment=Testing"], TestContext.Current.CancellationToken);
+        app = await builder.BuildAsync(TestContext.Current.CancellationToken);
 
-            app = await builder.BuildAsync(TestContext.Current.CancellationToken);
+        await app.StartAsync(TestContext.Current.CancellationToken);
 
-            await app.StartAsync(TestContext.Current.CancellationToken);
+        await app.ResourceNotifications.WaitForResourceHealthyAsync("database", TestContext.Current.CancellationToken);
+        await app.ResourceNotifications.WaitForResourceHealthyAsync("webapi", TestContext.Current.CancellationToken);
 
-            await app.ResourceNotifications.WaitForResourceHealthyAsync("database", TestContext.Current.CancellationToken);
-            await app.ResourceNotifications.WaitForResourceHealthyAsync("webapi", TestContext.Current.CancellationToken);
+        connectionString = await app.GetConnectionStringAsync("database", TestContext.Current.CancellationToken);
+        HttpClient = app.CreateHttpClient("webapi", "https");
 
-            connectionString = await app.GetConnectionStringAsync("database", TestContext.Current.CancellationToken);
-            HttpClient = app.CreateHttpClient("webapi", "https");
+        using var context = CreateContext();
 
-            using var context = CreateContext();
+        await context.Database.EnsureDeletedAsync(TestContext.Current.CancellationToken);
+        await context.Database.EnsureCreatedAsync(TestContext.Current.CancellationToken);
 
-            await context.Database.EnsureDeletedAsync(TestContext.Current.CancellationToken);
-            await context.Database.EnsureCreatedAsync(TestContext.Current.CancellationToken);
+        context.Students.AddRange(
+            new Student { Name = "Jan", IsActive = true },
+            new Student { Name = "Eva", IsActive = true },
+            new Student { Name = "Petr", IsActive = false }
+        );
 
-            var capek = new Author { Name = "Karel Capek" };
-            var nemcova = new Author { Name = "Bozena Nemcova" };
-            var mnacko = new Author { Name = "Ladislav Mnacko" };
-
-            context.Authors.AddRange(capek, nemcova, mnacko);
-
-            await context.SaveChangesAsync(TestContext.Current.CancellationToken);
-        }
-
-        public async ValueTask DisposeAsync()
-        {
-            HttpClient.Dispose();
-            await app.DisposeAsync();
-
-            GC.SuppressFinalize(this);
-        }
-
-        public LibraryContext CreateContext()
-        {
-            var options = new DbContextOptionsBuilder<LibraryContext>()
-                    .UseNpgsql(connectionString)
-                    .Options;
-
-            var context = new LibraryContext(options);
-
-            return context;
-        }
+        await context.SaveChangesAsync(TestContext.Current.CancellationToken);
     }
 
-    [CollectionDefinition("Database collection", DisableParallelization = true)]
-    public class DatabaseCollection : ICollectionFixture<TestFixture>
+    public SchoolContext CreateContext()
     {
+        var options = new DbContextOptionsBuilder<SchoolContext>()
+            .UseNpgsql(connectionString)
+            .Options;
+
+        return new SchoolContext(options);
     }
 
-    [Collection("Database collection")]
-    public class IntegrationTest(TestFixture fixture)
+    public async ValueTask DisposeAsync()
     {
-        private readonly TestFixture fixture = fixture;
-
-        [Fact]
-        public async Task CreateAuthor_ReturnsCreatedAndPersistsAuthor()
-        {
-            var authorRequestDto = new AuthorRequestDto("Franz Kafka");
-
-            var response = await fixture.HttpClient.PostAsJsonAsync("/authors", authorRequestDto, TestContext.Current.CancellationToken);
-
-            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-
-            AuthorDto? responseAuthorDto = await response.Content.ReadFromJsonAsync<AuthorDto>(TestContext.Current.CancellationToken);
-
-            Assert.NotNull(responseAuthorDto);
-            Assert.Equal(authorRequestDto.Name, responseAuthorDto.Name);
-            Assert.NotNull(response.Headers.Location);
-            Assert.EndsWith($"/authors/{responseAuthorDto.Id}", response.Headers.Location.ToString());
-
-            using var context = fixture.CreateContext();
-
-            Author? author = await context.Authors.FindAsync(responseAuthorDto.Id, TestContext.Current.CancellationToken);
-
-            Assert.NotNull(author);
-            Assert.Equal(authorRequestDto.Name, author.Name);
-        }
-
-        [Fact]
-        public async Task GetAuthors_ReturnsAllAuthors()
-        {
-            var response = await fixture.HttpClient.GetAsync("/authors", TestContext.Current.CancellationToken);
-
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
-            AuthorDto[]? authors = await response.Content.ReadFromJsonAsync<AuthorDto[]>(TestContext.Current.CancellationToken);
-
-            Assert.NotNull(authors);
-            Assert.True(authors.Length > 2);
-            Assert.Contains(authors, a => a.Name == "Karel Capek");
-            Assert.Contains(authors, a => a.Name == "Bozena Nemcova");
-            Assert.Contains(authors, a => a.Name == "Ladislav Mnacko");
-        }
-
-        [Fact]
-        public async Task GetAuthorById_ReturnsOkAndAuthor_WhenAuthorExists()
-        {
-            var response = await fixture.HttpClient.GetAsync("/authors/1", TestContext.Current.CancellationToken);
-
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
-            AuthorDto? author = await response.Content.ReadFromJsonAsync<AuthorDto>(TestContext.Current.CancellationToken);
-
-            Assert.NotNull(author);
-            Assert.Equal("Karel Capek", author.Name);
-        }
-
-        [Fact]
-        public async Task GetAuthorById_ReturnsNotFound_WhenDoesNotExist()
-        {
-            var response = await fixture.HttpClient.GetAsync("/authors/999", TestContext.Current.CancellationToken);
-
-            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-        }
-
-        [Fact]
-        public async Task DeleteAuthor_DeletesAndReturnsNoContent_WhenExists()
-        {
-            var macha = new Author { Name = "Karel Hynek Macha" };
-
-            using (var context = fixture.CreateContext())
-            {
-                context.Authors.Add(macha);
-
-                await context.SaveChangesAsync(TestContext.Current.CancellationToken);
-
-                var response = await fixture.HttpClient.DeleteAsync($"/authors/{macha.Id}", TestContext.Current.CancellationToken);
-
-                Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
-            }
-
-            using (var context = fixture.CreateContext())
-            {
-                var authorDto = await context.Authors.FindAsync(macha.Id, TestContext.Current.CancellationToken);
-
-                Assert.Null(authorDto);
-            }
-        }
+        HttpClient.Dispose();
+        await app.DisposeAsync();
+        GC.SuppressFinalize(this);
     }
 }
 ```
 
-### Co dělají jednotlivé testy
+Co třída dělá:
 
-`CreateAuthor_ReturnsCreatedAndPersistsAuthor` ověřuje, že `POST /authors` vrátí `201 Created`, vrátí DTO nového autora, nastaví hlavičku `Location` a že je autor skutečně uložen v databázi.
+1. Spustí celý Aspire AppHost v režimu `Testing`.
+2. Počká, až budou `database` a `webapi` ve stavu healthy.
+3. Vytvoří `HttpClient`, kterým budeme volat endpointy.
+4. Získá connection string do databáze.
+5. Připraví databázi a vloží seed data pro testy.
 
-`GetAuthors_ReturnsAllAuthors` nejdřív resetuje databázi přes `POST /reset-db`, potom volá `GET /authors` a ověřuje návrat seed dat v očekávaném počtu.
+---
 
-`GetAuthorById_ReturnsOkAndAuthor_WhenAuthorExists` ověřuje scénář, kdy autor existuje a vrátí autora.
+## 9. Sdílení fixture mezi testy
 
-`GetAuthorById_ReturnsNotFound_WhenDoesNotExist` ověřuje negativní scénář, kdy API pro neexistující záznam vrací správně `404 NotFound`.
+Aby se testovací prostředí nemuselo startovat pro každý test zvlášť, používá se kolekce:
 
-`DeleteAuthor_DeletesAndReturnsNoContent_WhenExists` ověřuje mazání přes `DELETE /authors/1`, návrat `204 NoContent` a následně potvrzuje odstranění dalším `GET` dotazem.
+```csharp
+[CollectionDefinition("Database collection", DisableParallelization = true)]
+public class DatabaseCollection : ICollectionFixture<TestFixture>
+{
+}
+```
 
-### Shrnutí
+Potom konkrétní testovací třída používá stejnou fixture:
 
-Integrační testy s Aspire testují aplikaci přes HTTP jako celek, včetně reálné databáze běžící v kontejneru. Tento přístup dává jednoznačný a praktický obraz toho, jak ověřovat chování API v podmínkách blízkých produkčnímu prostředí.
+```csharp
+[Collection("Database collection")]
+public class StudentTests(TestFixture fixture)
+{
+    private readonly TestFixture fixture = fixture;
+}
+```
+
+`DisableParallelization = true` je zde důležité, protože všechny testy pracují nad stejnou databází. Kdyby běžely paralelně, mohly by se navzájem ovlivňovat.
+
+---
+
+## 10. Příklad integračních testů
+
+### POST `/students`
+
+Tento test ověřuje vytvoření studenta, návratový status code `201 Created`, správný obsah DTO i skutečné uložení do databáze.
+
+```csharp
+[Fact]
+public async Task CreateStudent_ReturnsCreatedAndPersistsStudent()
+{
+    var studentRequestDto = new StudentRequestDto("Franz Kafka", true);
+
+    var response = await fixture.HttpClient.PostAsJsonAsync(
+        "/students",
+        studentRequestDto,
+        TestContext.Current.CancellationToken);
+
+    Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+
+    StudentDto? studentDto = await response.Content
+        .ReadFromJsonAsync<StudentDto>(TestContext.Current.CancellationToken);
+
+    Assert.NotNull(studentDto);
+    Assert.Equal(studentRequestDto.Name, studentDto.Name);
+    Assert.True(studentDto.IsActive);
+    Assert.NotNull(response.Headers.Location);
+    Assert.EndsWith($"/students/{studentDto.Id}", response.Headers.Location.ToString());
+
+    using var context = fixture.CreateContext();
+
+    Student? student = await context.Students.FindAsync(studentDto.Id, TestContext.Current.CancellationToken);
+
+    Assert.NotNull(student);
+    Assert.Equal(studentRequestDto.Name, student.Name);
+    Assert.Equal(studentRequestDto.IsActive, student.IsActive);
+}
+```
+
+### GET `/students`
+
+Tento test ověřuje, že endpoint vrátí seed data vložená při inicializaci fixture.
+
+```csharp
+[Fact]
+public async Task GetStudents_ReturnsAllSeededStudents()
+{
+    var response = await fixture.HttpClient.GetAsync("/students", TestContext.Current.CancellationToken);
+
+    Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+    StudentDto[]? students = await response.Content
+        .ReadFromJsonAsync<StudentDto[]>(TestContext.Current.CancellationToken);
+
+    Assert.NotNull(students);
+    Assert.True(students.Length >= 3);
+    Assert.Contains(students, s => s.Name == "Jan" && s.IsActive);
+    Assert.Contains(students, s => s.Name == "Eva" && s.IsActive);
+    Assert.Contains(students, s => s.Name == "Petr" && !s.IsActive);
+}
+```
+
+### GET `/students/{id}` pro neexistující záznam
+
+```csharp
+[Fact]
+public async Task GetStudent_ReturnsNotFound_WhenStudentDoesNotExist()
+{
+    var response = await fixture.HttpClient.GetAsync("/students/999", TestContext.Current.CancellationToken);
+
+    Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+}
+```
+
+### DELETE `/students/{id}`
+
+Tento test nejdřív vloží záznam přímo do databáze, potom ho smaže přes HTTP endpoint a nakonec ověří, že záznam už v databázi neexistuje.
+
+```csharp
+[Fact]
+public async Task DeleteStudent_DeletesStudent_WhenExists()
+{
+    var tereza = new Student { Name = "Tereza", IsActive = true };
+
+    using (var context = fixture.CreateContext())
+    {
+        context.Students.Add(tereza);
+        await context.SaveChangesAsync(TestContext.Current.CancellationToken);
+    }
+
+    var response = await fixture.HttpClient.DeleteAsync($"/students/{tereza.Id}", TestContext.Current.CancellationToken);
+
+    Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+
+    using var verificationContext = fixture.CreateContext();
+
+    var deletedStudent = await verificationContext.Students.FindAsync(tereza.Id, TestContext.Current.CancellationToken);
+
+    Assert.Null(deletedStudent);
+}
+```
+
+---
+
+## 11. Jak tyto testy číst
+
+Každý integrační test má většinou tři části:
+
+1. `Arrange` – připravíme data a prostředí.
+2. `Act` – zavoláme endpoint přes `HttpClient`.
+3. `Assert` – ověříme HTTP odpověď a případně i obsah databáze.
+
+Typický postup:
+
+- pošlu HTTP požadavek,
+- zkontroluji `StatusCode`,
+- deserializuji JSON odpověď na DTO,
+- ověřím, že se skutečně změnila databáze.
+
+---
+
+## 12. Proč v testu kontrolovat i databázi
+
+Samotná HTTP odpověď nestačí. Endpoint může vrátit správný JSON, ale data se do databáze vůbec nemusela uložit.
+
+Proto je v integračních testech běžné kombinovat:
+
+- kontrolu HTTP odpovědi,
+- kontrolu stavu databáze přes nový `DbContext`.
+
+Použití nového contextu je důležité, protože nechceme číst data z cache již existující instance EF Core.
+
+---
+
+## 13. Jak testy spustit
+
+Předpoklady:
+
+- nainstalovaný `.NET SDK`,
+- spuštěný Docker Desktop nebo jiný kontejnerový runtime podporovaný Aspire.
+
+Testy lze spustit příkazem:
+
+```powershell
+dotnet test
+```
+
+Při spuštění Aspire vytvoří testovací PostgreSQL kontejner, spustí Web API a po dokončení testů vše ukončí.
+
+---
+
+## 14. Nejčastější chyby
+
+### Test padá ještě před voláním API
+
+Často neběží Docker nebo se nepodařilo spustit databázový kontejner.
+
+### API vrací chybu připojení k databázi
+
+V AppHostu nebo ve Web API nesouhlasí název resource. Pokud AppHost registruje databázi jako `database`, musí stejný název použít i `AddNpgsqlDbContext<SchoolContext>("database")`.
+
+### Testy se navzájem ovlivňují
+
+Typicky je problém v tom, že více testů mění stejnou databázi paralelně. Pomáhá použití jedné kolekce testů s vypnutou paralelizací.
+
+### Test vrací jiná data, než očekáváme
+
+Je potřeba si uvědomit, jestli test používá seed data z fixture, nebo si data připravuje sám.
+
+---
+
+## 15. Shrnutí
+
+Aspire umožňuje psát velmi kvalitní integrační testy, protože:
+
+- spouští skutečnou infrastrukturu,
+- propojí Web API s databází,
+- umožní volat endpointy přes `HttpClient`,
+- dovolí ověřit reálné chování celé aplikace.
+
+Pro výuku je tento přístup vhodný proto, že studenti nevidí jen izolované metody, ale celý tok aplikace od HTTP požadavku až po databázi.
+
+---
+
+## ❓ Kontrolní otázky
+
+1. Jaký je rozdíl mezi unit testem a integračním testem?
+2. K čemu slouží `DistributedApplicationTestingBuilder`?
+3. Proč v testech čekáme na `WaitForResourceHealthyAsync("database")`?
+4. Proč testy používají `HttpClient` místo přímého volání metod z `Program.cs`?
+5. Proč je vhodné po HTTP volání ověřovat i skutečný stav databáze?
+6. K čemu slouží `DisableParallelization = true`?
+7. Jakou roli má v Aspire AppHostu `WithReference(database)`?
+
+---
+
+## Úkol – Public Library s testy v Aspire
+
+Vytvořte vlastní řešení na téma **Public Library**. Cílem je procvičit nejen Minimal API, ale hlavně integrační testy s Aspire.
+
+### Entita
+
+Použijte entitu `Book`:
+
+```csharp
+public class Book
+{
+    public int Id { get; set; }
+    public required string Title { get; set; }
+    public required string Author { get; set; }
+    public bool IsArchived { get; set; }
+}
+```
+
+### DTO
+
+Definujte DTO pomocí `record`:
+
+- `BookDto`
+- `BookRequestDto`
+- `BookPatchRequestDto`
+
+### Endpointy
+
+Implementujte tyto endpointy:
+
+- `POST /dev/seed` smaže databázi, znovu ji vytvoří a vloží alespoň tři knihy
+- `GET /books` vrátí všechny knihy
+- `GET /books?isArchived=true` umožní filtrovat knihy podle archivace
+- `GET /books/{id}` vrátí jednu knihu podle `Id`
+- `POST /books` vytvoří novou knihu
+- `PUT /books/{id}` nahradí existující knihu
+- `PATCH /books/{id}` změní pouze `IsArchived`
+- `DELETE /books/{id}` odstraní knihu
+
+### Aspire část
+
+Vytvořte:
+
+- `PublicLibrary.WebApi`
+- `PublicLibrary.Db`
+- `PublicLibrary.Contracts`
+- `PublicLibrary.AppHost`
+- `PublicLibrary.Tests`
+
+Použijte PostgreSQL v Aspire AppHostu a napojte Web API na databázi přes `WithReference(database)`.
+
+### Testy
+
+Napište integrační testy alespoň pro tyto scénáře:
+
+1. `POST /books` vrátí `201 Created` a kniha se opravdu uloží do databáze.
+2. `GET /books` vrátí seed data.
+3. `GET /books/{id}` vrátí `404 NotFound` pro neexistující záznam.
+4. `PATCH /books/{id}` správně změní `IsArchived`.
+5. `DELETE /books/{id}` odstraní knihu z databáze.
+
+### Další požadavky
+
+1. Použijte `record` DTO.
+2. Testy realizujte pomocí `Aspire.Hosting.Testing` a `xUnit`.
+3. V testech kontrolujte jak HTTP odpověď, tak skutečný stav databáze.
+4. Připravte `.http` soubor pro ruční vyzkoušení endpointů.
