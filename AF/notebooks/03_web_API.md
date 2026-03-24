@@ -412,9 +412,9 @@ app.MapDelete("/students/{id:int}", DeleteStudent);
 Endpoint vyhledá studenta. Pokud existuje, odstraní ho z databáze, uloží změny a vrátí HTTP 204 No Content; pokud neexistuje, vrátí HTTP 404 Not Found.
 
 ```csharp
-public async Task<Results<NoContent, NotFound>> DeleteStudent(int id, StudentContext context)
+static async Task<Results<NoContent, NotFound>> DeleteStudent(int id, StudentContext context)
 {
-    if(await context.Studenti.FindAsync(id) is Student student)
+    if(await context.Students.FindAsync(id) is Student student)
     {
         context.Students.Remove(student);
 
