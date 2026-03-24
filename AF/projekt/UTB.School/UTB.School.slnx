@@ -3,5 +3,6 @@
   <Project Path="UTB.School.Contracts/UTB.School.Contracts.csproj" />
   <Project Path="UTB.School.Db/UTB.School.Db.csproj" />
   <Project Path="UTB.School.ServiceDefaults/UTB.School.ServiceDefaults.csproj" />
+  <Project Path="UTB.School.Tests/UTB.School.Tests.csproj" />
   <Project Path="UTB.School.WebApi/UTB.School.WebApi.csproj" />
 </Solution>

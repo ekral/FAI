@@ -7,12 +7,12 @@ IResourceBuilder<PostgresServerResource> postgres;
 if (builder.Environment.IsEnvironment("Testing"))
 {
     postgres = builder.AddPostgres("postgres-testing")
-                      .WithContainerName("postgres-testing-UTB.MinuteMeal");   
+                      .WithContainerName("postgres-testing-UTB.School");   
 }
 else
 {
     postgres = builder.AddPostgres("postgres")
-                     .WithContainerName("postgres-UTB.MinuteMeal")
+                     .WithContainerName("postgres-UTB.School")
                      .WithDataVolume()
                      .WithLifetime(ContainerLifetime.Persistent);                     
 }
