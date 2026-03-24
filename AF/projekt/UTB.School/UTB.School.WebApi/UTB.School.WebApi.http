@@ -1,0 +1,6 @@
+@UTB.School.WebApi_HostAddress = http://localhost:5132
+
+GET {{UTB.School.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
