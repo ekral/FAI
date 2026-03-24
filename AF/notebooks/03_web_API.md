@@ -399,47 +399,7 @@ Content-Type: application/json
 
 ---
 
-## 7. DELETE `/students/{id}`
-
-### Mapování
-
-```csharp
-app.MapDelete("/students/{id:int}", DeleteStudent);
-```
-
-### Implementace
-
-Endpoint vyhledá studenta. Pokud existuje, odstraní ho z databáze, uloží změny a vrátí HTTP 204 No Content; pokud neexistuje, vrátí HTTP 404 Not Found.
-
-```csharp
-static async Task<Results<NoContent, NotFound>> DeleteStudent(int id, StudentContext context)
-{
-    if(await context.Students.FindAsync(id) is Student student)
-    {
-        context.Students.Remove(student);
-
-        await context.SaveChangesAsync();
-
-        return TypedResults.NoContent();
-    }
-    else
-    {
-        return TypedResults.NotFound();
-    }
-}
-```
-
-### Volání
-
-```json
-DELETE {{Students.WebAPI_HostAddress}}/students/1
-
-###
-```
-
----
-
-## 8. PATCH `/students/{id}`
+## 7. PATCH `/students/{id}`
 
 ### Mapování
 
@@ -478,6 +438,46 @@ Content-Type: application/json
 {
     "isActive": false
 }
+
+###
+```
+
+---
+
+## 8. DELETE `/students/{id}`
+
+### Mapování
+
+```csharp
+app.MapDelete("/students/{id:int}", DeleteStudent);
+```
+
+### Implementace
+
+Endpoint vyhledá studenta. Pokud existuje, odstraní ho z databáze, uloží změny a vrátí HTTP 204 No Content; pokud neexistuje, vrátí HTTP 404 Not Found.
+
+```csharp
+static async Task<Results<NoContent, NotFound>> DeleteStudent(int id, StudentContext context)
+{
+    if(await context.Students.FindAsync(id) is Student student)
+    {
+        context.Students.Remove(student);
+
+        await context.SaveChangesAsync();
+
+        return TypedResults.NoContent();
+    }
+    else
+    {
+        return TypedResults.NotFound();
+    }
+}
+```
+
+### Volání
+
+```json
+DELETE {{Students.WebAPI_HostAddress}}/students/1
 
 ###
 ```

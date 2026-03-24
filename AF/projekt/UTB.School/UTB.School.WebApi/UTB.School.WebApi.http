@@ -1,6 +1,24 @@
-@UTB.School.WebApi_HostAddress = http://localhost:5132
+@UTB.School.WebApi_HostAddress = https://localhost:7194
 
-GET {{UTB.School.WebApi_HostAddress}}/weatherforecast/
-Accept: application/json
+
+POST {{UTB.School.WebApi_HostAddress}}/dev/seed
+
+###
+
+GET {{UTB.School.WebApi_HostAddress}}/students
+
+###
+
+GET {{UTB.School.WebApi_HostAddress}}/students?isActive=true
+
+###
+
+GET {{UTB.School.WebApi_HostAddress}}/students?isActive=false
+
+###
+
+
+
+POST {{UTB.School.WebApi_HostAddress}}/students
 
 ###

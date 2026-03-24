@@ -7,8 +7,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
-builder.AddServiceDefaults();
-
 builder.AddNpgsqlDbContext<SchoolContext>("database");
 
 var app = builder.Build();
