@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\UTB.School.DatabaseManager\UTB.School.DatabaseManager.csproj" />
     <ProjectReference Include="..\UTB.School.WebApi\UTB.School.WebApi.csproj" />
   </ItemGroup>
 

@@ -1,6 +1,7 @@
 <Solution>
   <Project Path="UTB.School.AppHost/UTB.School.AppHost.csproj" />
   <Project Path="UTB.School.Contracts/UTB.School.Contracts.csproj" />
+  <Project Path="UTB.School.DatabaseManager/UTB.School.DatabaseManager.csproj" />
   <Project Path="UTB.School.Db/UTB.School.Db.csproj" />
   <Project Path="UTB.School.ServiceDefaults/UTB.School.ServiceDefaults.csproj" />
   <Project Path="UTB.School.Tests/UTB.School.Tests.csproj" />
