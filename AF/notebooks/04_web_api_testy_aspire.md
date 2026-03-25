@@ -481,6 +481,11 @@ dotnet test
 
 Při spuštění Aspire vytvoří testovací PostgreSQL kontejner, spustí Web API a po dokončení testů vše ukončí.
 
+> Před spuštěním testů v příkazové řádce nebo v Rideru bude možná nutné nainstalovat https certifikáty  příkazem [Aspire CLI](https://aspire.dev/app-host/certificate-configuration/#using-the-aspire-cli-recommended):
+> ```powershell
+> aspire certs trust
+> ```
+
 ---
 
 ## 14. Nejčastější chyby
@@ -512,7 +517,7 @@ Aspire umožňuje psát velmi kvalitní integrační testy, protože:
 - umožní volat endpointy přes `HttpClient`,
 - dovolí ověřit reálné chování celé aplikace.
 
-Pro výuku je tento přístup vhodný proto, že studenti nevidí jen izolované metody, ale celý tok aplikace od HTTP požadavku až po databázi.
+Na tomto příkladu nevidíme jen izolované metody, ale celý tok aplikace od HTTP požadavku až po databázi.
 
 ---
 

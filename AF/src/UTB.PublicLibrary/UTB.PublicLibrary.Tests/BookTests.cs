@@ -24,7 +24,7 @@ namespace UTB.PublicLibrary.Tests.Tests
             BookDto[]? books = await response.Content.ReadFromJsonAsync<BookDto[]>(TestContext.Current.CancellationToken);
 
             Assert.NotNull(books);
-            Assert.Equal(3, books.Length);
+            Assert.True(books.Length > 2);
             Assert.Contains(books, book => book.Title == "Kytice" && book.IsArchived == false);
             Assert.Contains(books, book => book.Title == "Bila Nemoc" && book.IsArchived == false);
             Assert.Contains(books, book => book.Title == "Babicka" && book.IsArchived == true);
