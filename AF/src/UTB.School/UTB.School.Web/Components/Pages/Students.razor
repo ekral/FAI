@@ -1,0 +1,46 @@
+﻿@page "/students"
+@using UTB.School.Contracts
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@inject SchoolService SchoolService
+
+<PageTitle>Students</PageTitle>
+
+<h1>Students</h1>
+
+<p>This component demonstrates showing students.</p>
+
+@if (students == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Active</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var forecast in students)
+            {
+                <tr>
+                    <td>@forecast.Id</td>
+                    <td>@forecast.Name</td>
+                    <td>@forecast.IsActive</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private StudentDto[]? students;
+
+    protected override async Task OnInitializedAsync()
+    {
+        students = await SchoolService.GetStudentsAsync();
+    }
+}
