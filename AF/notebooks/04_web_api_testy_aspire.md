@@ -222,21 +222,7 @@ To je zásadní rozdíl oproti jednoduchému příkladu se SQLite, kde jsme conn
 
 ---
 
-## 7. Testovací projekt
-
-Testovací projekt obsahuje například tyto balíčky:
-
-```xml
-<PackageReference Include="Aspire.Hosting.Testing" Version="13.1.0" />
-<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-<PackageReference Include="xunit.v3" Version="3.0.1" />
-```
-
-Nejdůležitější je balíček `Aspire.Hosting.Testing`, protože právě ten umožňuje spustit AppHost uvnitř testu.
-
----
-
-## 8. TestFixture
+## 7. TestFixture
 
 Základ integračních testů tvoří třída `TestFixture`. Ta připraví celé testovací prostředí.
 
@@ -308,7 +294,7 @@ Co třída dělá:
 
 ---
 
-## 9. Sdílení fixture mezi testy
+## 8. Sdílení fixture mezi testy
 
 Aby se testovací prostředí nemuselo startovat pro každý test zvlášť, používá se kolekce:
 
@@ -333,7 +319,7 @@ public class StudentTests(TestFixture fixture)
 
 ---
 
-## 10. Příklad integračních testů
+## 9. Příklad integračních testů
 
 ### POST `/students`
 
@@ -436,7 +422,7 @@ public async Task DeleteStudent_DeletesStudent_WhenExists()
 
 ---
 
-## 11. Jak tyto testy číst
+## 10. Jak tyto testy číst
 
 Každý integrační test má většinou tři části:
 
@@ -453,7 +439,7 @@ Typický postup:
 
 ---
 
-## 12. Proč v testu kontrolovat i databázi
+## 11. Proč v testu kontrolovat i databázi
 
 Samotná HTTP odpověď nestačí. Endpoint může vrátit správný JSON, ale data se do databáze vůbec nemusela uložit.
 
@@ -466,7 +452,7 @@ Použití nového contextu je důležité, protože nechceme číst data z cache
 
 ---
 
-## 13. Jak testy spustit
+## 12. Jak testy spustit
 
 Předpoklady:
 
@@ -488,7 +474,7 @@ Při spuštění Aspire vytvoří testovací PostgreSQL kontejner, spustí Web A
 
 ---
 
-## 14. Nejčastější chyby
+## 13. Nejčastější chyby
 
 ### Test padá ještě před voláním API
 
@@ -508,7 +494,7 @@ Je potřeba si uvědomit, jestli test používá seed data z fixture, nebo si da
 
 ---
 
-## 15. Shrnutí
+## 14. Shrnutí
 
 Aspire umožňuje psát velmi kvalitní integrační testy, protože:
 
