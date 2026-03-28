@@ -10,12 +10,12 @@ $$k_{jitter} = k_{base} + \text{random}(-\Delta, \Delta)$$
 $$F_{pružina} = -k_{jitter} \cdot x$$
 
 ### Tvarování (Pohon pro Triangle)
-Konstantní impuls dodávaný podle polohy vytváří lineární náběhy (trojúhelníkový průběh):
-$$F_{pohon} = \text{sign}(-x) \cdot \text{síla\_pohonu}$$
+Konstantní impuls dodávaný podle polohy vytváří lineární náběhy:
+$$F_{pohon} = \text{sign}(-x) \cdot F_{drive}$$
 
 ### Brownův pohyb (Tepelný šum)
-Náhodná síla přidaná přímo do zrychlení simuluje neustálé mikroskopické nárazy:
 $$F_{brown} = \text{random}(-\Delta, \Delta)$$
+
 
 ### Opotřebení a odpor (Tlumení)
 Simulujeme ztrátu energie (tření). Opotřebení zaneseme jako drobnou nestabilitu v koeficientu tlumení $b$:
