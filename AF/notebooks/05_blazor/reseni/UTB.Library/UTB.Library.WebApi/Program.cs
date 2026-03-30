@@ -25,7 +25,7 @@ app.Run();
 
 public static class WebApiVersion1
 {
-    public static async Task<Created<AuthorDto>> CreateAuthor(AuthorDto authorDto, LibraryContext context)
+    public static async Task<Created<AuthorDto>> CreateAuthor(AuthorRequestDto authorDto, LibraryContext context)
     {
         Author author = new() { Name = authorDto.Name };
 

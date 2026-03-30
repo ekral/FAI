@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\UTB.Library.DbManager\UTB.Library.DbManager.csproj" />
     <ProjectReference Include="..\UTB.Library.WebAPI\UTB.Library.WebApi.csproj" />
+    <ProjectReference Include="..\UTB.Library.Web\UTB.Library.Web.csproj" />
   </ItemGroup>
 
 </Project>

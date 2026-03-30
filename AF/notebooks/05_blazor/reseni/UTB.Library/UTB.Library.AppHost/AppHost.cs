@@ -7,7 +7,7 @@ IResourceBuilder<PostgresServerResource> postgres;
 if (builder.Environment.IsEnvironment("Testing"))
 {
     postgres = builder.AddPostgres("postgres-testing")
-                      .WithContainerName("postgres-testing");
+                      .WithContainerName("UTB.Library-postgres-testing");
 
 }
 else
@@ -15,9 +15,11 @@ else
     postgres = builder.AddPostgres("postgres")
                       .WithPgAdmin(c =>
                       {
-                          c.WithLifetime(ContainerLifetime.Persistent);
-                          c.WithImage("dpage/pgadmin4:latest");
+                          c.WithLifetime(ContainerLifetime.Persistent)
+                           .WithImage("dpage/pgadmin4:latest")
+                           .WithContainerName("UTB.Library-pgadmin");
                       })
+                      .WithContainerName("UTB.Library-postgres")
                       .WithDataVolume()
                       .WithLifetime(ContainerLifetime.Persistent);
 }
@@ -29,8 +31,12 @@ builder.AddProject<Projects.UTB_Library_DbManager>("dbmanager")
        .WithHttpCommand("reset-db", "Reset Database")
        .WaitFor(database);
 
-builder.AddProject<Projects.UTB_Library_WebApi>("webapi")
+var webapi = builder.AddProject<Projects.UTB_Library_WebApi>("webapi")
        .WithReference(database)
        .WaitFor(database);
+
+builder.AddProject<Projects.UTB_Library_Web>("web")
+       .WithReference(webapi)
+       .WaitFor(webapi);
 
 builder.Build().Run();
