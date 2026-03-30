@@ -1,0 +1,52 @@
+@UTB.School.WebApi_HostAddress = https://localhost:7194
+
+
+POST {{UTB.School.WebApi_HostAddress}}/dev/seed
+
+###
+
+GET {{UTB.School.WebApi_HostAddress}}/students
+
+###
+
+GET {{UTB.School.WebApi_HostAddress}}/students?isActive=true
+
+###
+
+GET {{UTB.School.WebApi_HostAddress}}/students?isActive=false
+
+###
+
+POST {{UTB.School.WebApi_HostAddress}}/students
+Content-Type: application/json
+
+{
+  "name": "Lenka",
+  "isActive": true
+}
+
+###
+
+PUT {{UTB.School.WebApi_HostAddress}}/students/1
+Content-Type: application/json
+
+{
+  "name": "Novotna",
+  "isActive": true
+}
+
+###
+
+PATCH {{UTB.School.WebApi_HostAddress}}/students/1
+Content-Type: application/json
+
+{
+    "isActive": false
+}
+###
+
+DELETE {{UTB.School.WebApi_HostAddress}}/students/1
+
+###
+
+

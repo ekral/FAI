@@ -1,0 +1,5 @@
+@UTB.School.DatabaseManager_HostAddress = http://localhost:5088
+
+POST {{UTB.School.DatabaseManager_HostAddress}}/dev/seed
+
+###
