@@ -1,0 +1,15 @@
+﻿@page "/edit/{AuthorId:int}"
+
+<h3>EditAuthor</h3>
+
+AuthorId: @AuthorId
+
+@code {
+    [Parameter]
+    public int AuthorId { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        // nacit autora z db, ulozit do modelu, zbytek stejny
+    }
+}

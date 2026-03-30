@@ -10,7 +10,7 @@
 
 <p>This component demonstrates calling web api.</p>
 
-<button class="btn btn-primary" @onclick="Create">New Author</button>
+<a href="/Create" class="btn btn-primary">Create</a>
 
 @if (authors == null)
 {
@@ -23,6 +23,8 @@ else
             <tr>
                 <th>Id</th>
                 <th>Name</th>
+                <th>Action</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -31,6 +33,8 @@ else
                 <tr>
                     <td>@author.Id</td>
                     <td>@author.Name</td>
+                    <td><button @onclick="@(async () => await Delete(author.Id))" class="btn btn-danger">Delete</button></td>
+                    <td><a href="/edit/@author.Id" class="btn btn-success">Edit</a></td>
                 </tr>
             }
         </tbody>
@@ -45,10 +49,10 @@ else
         authors = await LibraryService.GetAuthorsAsync();
     }
 
-    private async Task Create()
+    private async Task Delete(int authorId)
     {
-        await LibraryService.CreateAuthorAsync();
+        await LibraryService.DeleteAuthorAsync(authorId);
 
-        authors = await LibraryService.GetAuthorsAsync();
+        StateHasChanged();
     }
 }

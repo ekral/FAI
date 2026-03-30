@@ -13,11 +13,14 @@ namespace UTB.Library.Web
             return authors;
         }
 
-        public async Task CreateAuthorAsync()
+        public async Task CreateAuthorAsync(AuthorRequestDto authorDto)
         {
-            AuthorRequestDto authorDto = new AuthorRequestDto("Jules Verne");
-
             await httpClient.PostAsJsonAsync("/authors", authorDto);
+        }
+
+        public async Task DeleteAuthorAsync(int authorId)
+        {
+            await httpClient.DeleteAsync($"/authors/{authorId}");
         }
 
     }
