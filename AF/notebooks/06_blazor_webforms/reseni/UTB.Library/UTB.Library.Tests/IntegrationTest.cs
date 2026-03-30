@@ -79,7 +79,7 @@ namespace UTB.Library.Tests
 
             using var context = fixture.CreateContext();
 
-            Author? author = await context.Authors.FindAsync([responseAuthorDto.Id], TestContext.Current.CancellationToken);
+            Author? author = await context.Authors.FindAsync(responseAuthorDto.Id, TestContext.Current.CancellationToken);
 
             Assert.NotNull(author);
             Assert.Equal(authorDto.Name, author.Name);
