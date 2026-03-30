@@ -33,7 +33,7 @@ else
                 <tr>
                     <td>@author.Id</td>
                     <td>@author.Name</td>
-                    <td><button @onclick="@(async () => await Delete(author.Id))" class="btn btn-danger">Delete</button></td>
+                    <td><button @onclick="@(() => Delete(author.Id))" class="btn btn-danger">Delete</button></td>
                     <td><a href="/edit/@author.Id" class="btn btn-success">Edit</a></td>
                 </tr>
             }
@@ -53,6 +53,6 @@ else
     {
         await LibraryService.DeleteAuthorAsync(authorId);
 
-        StateHasChanged();
+        authors = await LibraryService.GetAuthorsAsync();
     }
 }
