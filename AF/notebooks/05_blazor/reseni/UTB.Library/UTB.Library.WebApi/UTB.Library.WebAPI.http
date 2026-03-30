@@ -9,7 +9,6 @@ POST {{UTB.Library.WebApi_HostAddress}}/authors
 Content-Type: application/json
 
 {
-    "id": "0",
     "name": "Karel Hynek Macha"
 }
 
@@ -23,7 +22,6 @@ PUT {{UTB.Library.WebApi_HostAddress}}/authors/1
 Content-Type: application/json
 
 {
-    "id": "1",
     "name": "Karel Capek"
 }
 

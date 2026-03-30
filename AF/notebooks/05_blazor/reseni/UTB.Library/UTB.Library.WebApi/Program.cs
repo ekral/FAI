@@ -25,9 +25,9 @@ app.Run();
 
 public static class WebApiVersion1
 {
-    public static async Task<Created<AuthorDto>> CreateAuthor(AuthorRequestDto authorDto, LibraryContext context)
+    public static async Task<Created<AuthorDto>> CreateAuthor(AuthorRequestDto authorRequestDto, LibraryContext context)
     {
-        Author author = new() { Name = authorDto.Name };
+        Author author = new() { Name = authorRequestDto.Name };
 
         context.Authors.Add(author);
 
@@ -59,11 +59,11 @@ public static class WebApiVersion1
         }
     }
 
-    public static async Task<Results<NoContent, NotFound>> UpdateAuthor(int id, AuthorDto authorDto, LibraryContext context)
+    public static async Task<Results<NoContent, NotFound>> UpdateAuthor(int id, AuthorRequestDto authorRequestDto, LibraryContext context)
     {
         if (await context.Authors.FindAsync(id) is Author author)
         {
-            author.Name = authorDto.Name;
+            author.Name = authorRequestDto.Name;
 
             await context.SaveChangesAsync();
 

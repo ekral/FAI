@@ -13,9 +13,21 @@ namespace UTB.Library.Web
             return authors;
         }
 
-        public async Task CreateAuthorAsync(AuthorRequestDto authorDto)
+        public async Task<AuthorDto?> GetAuthorByIdAsync(int authorId)
         {
-            await httpClient.PostAsJsonAsync("/authors", authorDto);
+            AuthorDto? author = await httpClient.GetFromJsonAsync<AuthorDto>($"/authors/{authorId}");
+
+            return author;
+        }
+
+        public async Task CreateAuthorAsync(AuthorRequestDto authorRequestDto)
+        {
+            await httpClient.PostAsJsonAsync("/authors", authorRequestDto);
+        }
+
+        public async Task UpdateAuthorAsync(int authorId, AuthorRequestDto authorRequestDto)
+        {
+            await httpClient.PutAsJsonAsync($"/authors/{authorId}", authorRequestDto);
         }
 
         public async Task DeleteAuthorAsync(int authorId)

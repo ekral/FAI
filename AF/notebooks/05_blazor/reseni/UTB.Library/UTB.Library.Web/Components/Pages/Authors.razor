@@ -1,7 +1,7 @@
 ﻿@page "/authors"
-@rendermode InteractiveServer
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
 @using UTB.Library.Contracts
-@attribute [StreamRendering]
+
 @inject LibraryService LibraryService
 
 <PageTitle>Authors</PageTitle>
@@ -23,8 +23,8 @@ else
             <tr>
                 <th>Id</th>
                 <th>Name</th>
-                <th>Action</th>
-                <th>Action</th>
+                <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
