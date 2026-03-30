@@ -1,0 +1,30 @@
+﻿@page "/Create"
+@using UTB.Library.Contracts
+@inject LibraryService LibraryService
+@inject NavigationManager NavigationManager
+
+<h3>Create Author</h3>
+
+<EditForm FormName="AuthorForm" Model="Model" OnSubmit="Submit">
+    <InputText @bind-Value="Model.Name"  />
+    <button type="submit" class="btn btn-success">Submit</button>
+</EditForm>
+
+@code {
+    [SupplyParameterFromForm]
+    private AuthorFormData Model { get; set; } = new();
+
+    private async Task Submit()
+    {
+        AuthorRequestDto requestDto = new(Model.Name);
+
+        await LibraryService.CreateAuthorAsync(requestDto);
+
+        NavigationManager.NavigateTo("/authors");
+    }
+
+    public class AuthorFormData
+    {
+        public string Name { get; set; } = string.Empty;
+    }
+}

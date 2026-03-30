@@ -1,0 +1,58 @@
+﻿@page "/authors"
+@rendermode InteractiveServer
+@using UTB.Library.Contracts
+@attribute [StreamRendering]
+@inject LibraryService LibraryService
+
+<PageTitle>Authors</PageTitle>
+
+<h1>Authors</h1>
+
+<p>This component demonstrates calling web api.</p>
+
+<a href="/Create" class="btn btn-primary">Create</a>
+
+@if (authors == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Action</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var author in authors)
+            {
+                <tr>
+                    <td>@author.Id</td>
+                    <td>@author.Name</td>
+                    <td><button @onclick="@(async () => await Delete(author.Id))" class="btn btn-danger">Delete</button></td>
+                    <td><a href="/edit/@author.Id" class="btn btn-success">Edit</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private AuthorDto[]? authors;
+
+    protected override async Task OnInitializedAsync()
+    {
+        authors = await LibraryService.GetAuthorsAsync();
+    }
+
+    private async Task Delete(int authorId)
+    {
+        await LibraryService.DeleteAuthorAsync(authorId);
+
+        StateHasChanged();
+    }
+}
