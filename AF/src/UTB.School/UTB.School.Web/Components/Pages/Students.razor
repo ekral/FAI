@@ -37,7 +37,7 @@ else
                     <td>@student.Id</td>
                     <td>@student.Name</td>
                     <td>@student.IsActive</td>
-                    <td><button @onclick="@(() => Delete(student.Id))">Delete</button></td>
+                    <td><button class="btn btn-danger" @onclick="@(() => Delete(student.Id))">Delete</button></td>
                 </tr>
             }
         </tbody>
