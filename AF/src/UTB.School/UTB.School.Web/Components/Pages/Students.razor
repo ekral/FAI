@@ -57,23 +57,29 @@ else
     {
         var result = await SchoolService.DeleteStudentAsync(studentId);
 
-        result.Switch(async _ => await LoadStudentsAsync(), error => errorMessage = error );
+        if (result.IsT0)
+        {
+            await LoadStudentsAsync();
+        }
+        else
+        {
+            errorMessage = result.AsT1;
+        }
     }
 
     protected async Task LoadStudentsAsync()
     {
         var result = await SchoolService.GetStudentsAsync();
 
-        result.Switch(
-            students =>
-            {
-                this.students = students;
-                errorMessage = null;
-            },
-            error =>
-            {
-                students = [];
-                errorMessage = error;
-            });
+        if (result.IsT0)
+        {
+            students = result.AsT0;
+            errorMessage = null;
+        }
+        else
+        {
+            students = [];
+            errorMessage = result.AsT1;
+        }
     }
 }
