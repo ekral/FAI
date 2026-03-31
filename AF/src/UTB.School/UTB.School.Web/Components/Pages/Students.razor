@@ -57,13 +57,13 @@ else
     {
         var result = await SchoolService.DeleteStudentAsync(studentId);
 
-        if (result.IsT0)
+        if (result.IsSuccess)
         {
             await LoadStudentsAsync();
         }
         else
         {
-            errorMessage = result.AsT1;
+            errorMessage = result.Error;
         }
     }
 
@@ -71,15 +71,15 @@ else
     {
         var result = await SchoolService.GetStudentsAsync();
 
-        if (result.IsT0)
+        if (result.IsSuccess)
         {
-            students = result.AsT0;
+            students = result.Value;
             errorMessage = null;
         }
         else
         {
             students = [];
-            errorMessage = result.AsT1;
+            errorMessage = result.Error;
         }
     }
 }

@@ -1,83 +1,82 @@
-﻿using OneOf;
-using OneOf.Types;
+﻿using System.Net;
 using UTB.School.Contracts;
 
 namespace UTB.School.Web
 {
     public class SchoolService(HttpClient httpClient)
     {
-        public async Task<OneOf<StudentDto[], string>> GetStudentsAsync()
+        public async Task<Result<StudentDto[]>> GetStudentsAsync()
         {
             try
             {
                 var response = await httpClient.GetAsync("/students");
 
-                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
                     StudentDto[]? students = await response.Content.ReadFromJsonAsync<StudentDto[]>();
-                    return students ?? [];
+                    return Result<StudentDto[]>.Success(students ?? []);
                 }
 
-                return $"Načtení studentů selhalo. Neočekávaný stav: {(int)response.StatusCode} {response.ReasonPhrase}";
+                return Result<StudentDto[]>.Failure($"Načtení studentů selhalo. Neočekávaný stav: {(int)response.StatusCode} ({response.StatusCode})");
             }
             catch (HttpRequestException)
             {
-                return "Nepodařilo se načíst studenty.";
+                return Result<StudentDto[]>.Failure("API není dostupné");
             }
             catch (TaskCanceledException)
             {
-                return "Vypršel časový limit požadavku.";
+                return Result<StudentDto[]>.Failure("Timeout");
             }
         }
 
-        public async Task<OneOf<Success, string>> CreateStudentAsync(StudentRequestDto requestDto)
+        public async Task<Result> CreateStudentAsync(StudentRequestDto requestDto)
         {
             try
             {
                 var response = await httpClient.PostAsJsonAsync("/students", requestDto);
 
-                if (response.StatusCode == System.Net.HttpStatusCode.Created)
+                if (response.StatusCode == HttpStatusCode.Created)
                 {
-                    return new Success();
+                    return Result.Success();
                 }
 
-                return $"Vytvoření studenta selhalo. Neočekávaný stav: {(int)response.StatusCode} {response.ReasonPhrase}";
+                return Result.Failure($"Vytvoření studenta selhalo. Neočekávaný stav: {(int)response.StatusCode} ({response.StatusCode})");
             }
             catch (HttpRequestException)
             {
-                return "Nepodařilo se připojit k serveru.";
+                return Result.Failure("API není dostupné");
             }
             catch (TaskCanceledException)
             {
-                return "Vypršel časový limit požadavku.";
+                return Result.Failure("Timeout");
             }
         }
 
-        public async Task<OneOf<Success, string>> DeleteStudentAsync(int studentId)
+        public async Task<Result> DeleteStudentAsync(int studentId)
         {
             try
             {
                 var response = await httpClient.DeleteAsync($"/students/{studentId}");
 
-                if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+                if (response.StatusCode == HttpStatusCode.NoContent)
                 {
-                    return new Success();
+                    return Result.Success();
                 }
 
-                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                if (response.StatusCode == HttpStatusCode.NotFound)
                 {
-                    return "Požadovaný záznam neexistuje.";
+                    return Result.Failure("Požadovaný záznam neexistuje.");
                 }
 
-                return $"Smazání selhalo. Neočekávaný stav: {(int)response.StatusCode} {response.ReasonPhrase}";
+                return Result.Failure($"Smazání selhalo. Neočekávaný stav: {(int)response.StatusCode} ({response.StatusCode})");
             }
             catch (HttpRequestException)
             {
-                return "Nepodařilo se připojit k serveru.";
+                return Result.Failure("API není dostupné");
             }
             catch (TaskCanceledException)
             {
-                return "Vypršel časový limit požadavku.";
+                return Result.Failure("Timeout");
             }
         }
     }

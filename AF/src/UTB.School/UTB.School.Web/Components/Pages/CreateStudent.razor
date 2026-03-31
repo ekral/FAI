@@ -55,13 +55,13 @@ else
 
             var result = await SchoolService.CreateStudentAsync(requestDto);
 
-            if (result.IsT0)
+            if (result.IsSuccess)
             {
                 NavigationManager.NavigateTo("/students");
             }
             else
             {
-                errorMessage = result.AsT1;
+                errorMessage = result.Error;
             }
         }
     }
