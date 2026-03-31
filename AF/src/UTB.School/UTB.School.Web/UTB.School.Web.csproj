@@ -12,4 +12,8 @@
     <ProjectReference Include="..\UTB.School.ServiceDefaults\UTB.School.ServiceDefaults.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="OneOf" Version="3.0.271" />
+  </ItemGroup>
+
 </Project>

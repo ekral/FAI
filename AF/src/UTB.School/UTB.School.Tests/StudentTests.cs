@@ -1,69 +1,9 @@
-using Aspire.Hosting;
-using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Json;
 using UTB.School.Contracts;
 using UTB.School.Db;
 
 namespace UTB.School.Tests.Tests
 {
-    public class TestFixture : IAsyncLifetime
-    {
-        private DistributedApplication app = null!;
-        private string? connectionString;
-        public HttpClient HttpClient { get; private set; } = null!;
-
-        public async ValueTask InitializeAsync()
-        {
-            var builder = await DistributedApplicationTestingBuilder.CreateAsync<Projects.UTB_School_AppHost>(["--environment=Testing"], TestContext.Current.CancellationToken);
-
-            app = await builder.BuildAsync(TestContext.Current.CancellationToken);
-
-            await app.StartAsync(TestContext.Current.CancellationToken);
-
-            await app.ResourceNotifications.WaitForResourceHealthyAsync("database", TestContext.Current.CancellationToken);
-            await app.ResourceNotifications.WaitForResourceHealthyAsync("webapi", TestContext.Current.CancellationToken);
-
-            connectionString = await app.GetConnectionStringAsync("database", TestContext.Current.CancellationToken);
-            HttpClient = app.CreateHttpClient("webapi", "https");
-
-            using var context = CreateContext();
-
-            await context.Database.EnsureDeletedAsync(TestContext.Current.CancellationToken);
-            await context.Database.EnsureCreatedAsync(TestContext.Current.CancellationToken);
-
-            Student jan = new() { Name = "Jan", IsActive = true };
-            Student eva = new() { Name = "Eva", IsActive = true };
-            Student petr = new() { Name = "Petr", IsActive = false };
-
-            context.Students.AddRange(jan, eva, petr);
-
-            await context.SaveChangesAsync(TestContext.Current.CancellationToken);
-        }
-
-        public async ValueTask DisposeAsync()
-        {
-            HttpClient.Dispose();
-            await app.DisposeAsync();
-
-            GC.SuppressFinalize(this);
-        }
-
-        public SchoolContext CreateContext()
-        {
-            var options = new DbContextOptionsBuilder<SchoolContext>()
-                    .UseNpgsql(connectionString)
-                    .Options;
-
-            var context = new SchoolContext(options);
-
-            return context;
-        }
-    }
-
-    [CollectionDefinition("Database collection", DisableParallelization = true)]
-    public class DatabaseCollection : ICollectionFixture<TestFixture>
-    {
-    }
 
     [Collection("Database collection")]
     public class StudentTests(TestFixture fixture)
@@ -143,12 +83,12 @@ namespace UTB.School.Tests.Tests
                 context.Students.Add(tereza);
 
                 await context.SaveChangesAsync(TestContext.Current.CancellationToken);
-
-                var response = await fixture.HttpClient.DeleteAsync($"/students/{tereza.Id}", TestContext.Current.CancellationToken);
-
-                Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
             }
 
+            var response = await fixture.HttpClient.DeleteAsync($"/students/{tereza.Id}", TestContext.Current.CancellationToken);
+
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+            
             using (var context = fixture.CreateContext())
             {
                 var studentDto = await context.Students.FindAsync([tereza.Id], TestContext.Current.CancellationToken);

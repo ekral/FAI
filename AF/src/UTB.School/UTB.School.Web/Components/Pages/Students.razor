@@ -9,7 +9,13 @@
 
 <p>This component demonstrates showing students.</p>
 
-@if (students == null)
+<a class="btn btn-primary" href="/createstudent">Create</a>
+
+@if (errorMessage is not null)
+{
+    <div class="alert alert-danger">@errorMessage</div>
+}
+else if (students == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -21,15 +27,17 @@ else
                 <th>Id</th>
                 <th>Name</th>
                 <th>Active</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var forecast in students)
+            @foreach (var student in students)
             {
                 <tr>
-                    <td>@forecast.Id</td>
-                    <td>@forecast.Name</td>
-                    <td>@forecast.IsActive</td>
+                    <td>@student.Id</td>
+                    <td>@student.Name</td>
+                    <td>@student.IsActive</td>
+                    <td><button @onclick="@(() => Delete(student.Id))">Delete</button></td>
                 </tr>
             }
         </tbody>
@@ -38,9 +46,34 @@ else
 
 @code {
     private StudentDto[]? students;
+    private string? errorMessage;
 
     protected override async Task OnInitializedAsync()
     {
-        students = await SchoolService.GetStudentsAsync();
+        await LoadStudentsAsync();
+    }
+
+    private async Task Delete(int studentId)
+    {
+        var result = await SchoolService.DeleteStudentAsync(studentId);
+
+        result.Switch(async _ => await LoadStudentsAsync(), error => errorMessage = error );
+    }
+
+    protected async Task LoadStudentsAsync()
+    {
+        var result = await SchoolService.GetStudentsAsync();
+
+        result.Switch(
+            students =>
+            {
+                this.students = students;
+                errorMessage = null;
+            },
+            error =>
+            {
+                students = [];
+                errorMessage = error;
+            });
     }
 }
