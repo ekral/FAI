@@ -25,7 +25,7 @@ Použité technologie:
 V tomto materiálu navážeme na předchozí kapitolu o Web API a testech. Cíl je postavit Blazor klienta, který:
 
 1. běží jako interaktivní SSR aplikace,
-2. čte studenty z endpointu `GET /students` pomocí `HttpClient` a zobrazuje je v tabulce,
+2. čte studenty z endpointu `GET /students` pomocí `SchoolService` a `HttpClient` a zobrazuje je v tabulce,
 3. umí studenta smazat přes `DELETE /students/{id}` pomocí `SchoolService` a `HttpClient`.
 
 Webové formuláře (Create/Edit) budeme řešit až v následujícím materiálu.
@@ -225,9 +225,9 @@ else
 
 Poznámka k `@rendermode`:
 
-> `InteractiveServerRenderMode(prerender: false)` znamená, že stránka nebude nejdříve staticky prerenderovaná.
+> 1. `InteractiveServerRenderMode(prerender: false)` znamená, že stránka nebude nejdříve staticky prerenderovaná.
 > U výuky je to praktické, protože se lépe sleduje okamžik načítání dat (`Loading...`) a také se tím zabráním dvojitému načítání dat.
-> `@inject SchoolService SchoolService` umožňuje používat službu pro volání API, jde o dependency injection.
+> 2. `@inject SchoolService SchoolService` umožňuje používat službu pro volání API, jde o dependency injection.
 
 ---
 
