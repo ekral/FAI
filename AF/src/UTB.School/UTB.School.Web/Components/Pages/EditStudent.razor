@@ -1,4 +1,4 @@
-﻿@page "/createstudent"
+﻿@page "/students/{Id:int}"
 @using UTB.School.Contracts
 @using UTB.School.Web.FormModels
 @inject NavigationManager NavigationManager
@@ -9,7 +9,7 @@
     <div class="alert alert-danger">@errorMessage</div>
 }
 
-<h3>Create Student</h3>
+<h3>Edit Student</h3>
 
 @if (Model is null)
 {
@@ -17,33 +17,58 @@
 }
 else
 {
-    <EditForm Model="Model" OnValidSubmit="Submit" FormName="createStudent">
+    <EditForm Model="Model" OnValidSubmit="Submit" FormName="editStudent">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
+       
+
         <div class="mb-3">
             <label class="form-label" for="textName">Name</label>
-            <InputText class="form-control" @bind-Value="Model.Name" id="textName"/>
+            <InputText class="form-control" @bind-Value="Model.Name" id="textName" />
         </div>
 
         <div class="mb-3 form-check">
             <InputCheckbox class="form-check-input" @bind-Value="Model.IsActive" id="checkboxIsActive" />
             <label class="form-check-label" for="checkboxIsActive">Is active</label>
         </div>
-        <button class="btn btn-primary" type="submit">Submit</button>
+
+        <button class="btn btn-primary" type="submit">Save</button>
     </EditForm>
 }
 
 @code {
+    [Parameter]
+    public int Id { get; set; }
 
     [SupplyParameterFromForm]
     public StudentFormModel? Model { get; set; }
 
     private string? errorMessage;
 
-    protected override void OnInitialized()
+    protected override async Task OnParametersSetAsync()
     {
-        Model ??= new() { Name = string.Empty, IsActive = true };
+        if (Model is not null)
+        {
+            return;
+        }
+
+        var result = await SchoolService.GetStudentAsync(Id);
+
+        if (result.IsSuccess)
+        {
+            var student = result.Value!;
+            Model = new StudentFormModel
+            {
+                Name = student.Name,
+                IsActive = student.IsActive
+            };
+            errorMessage = null;
+        }
+        else
+        {
+            errorMessage = result.Error;
+        }
     }
 
     private async Task Submit()
@@ -53,7 +78,7 @@ else
             StudentRequestDto requestDto = new(Model.Name, Model.IsActive);
             errorMessage = null;
 
-            var result = await SchoolService.CreateStudentAsync(requestDto);
+            var result = await SchoolService.UpdateStudentAsync(Id, requestDto);
 
             if (result.IsSuccess)
             {

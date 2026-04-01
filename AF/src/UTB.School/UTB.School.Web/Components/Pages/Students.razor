@@ -28,6 +28,7 @@ else
                 <th>Name</th>
                 <th>Active</th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -38,6 +39,7 @@ else
                     <td>@student.Name</td>
                     <td>@student.IsActive</td>
                     <td><button class="btn btn-danger" @onclick="@(() => Delete(student.Id))">Delete</button></td>
+                    <td><a class="btn btn-success" href="students/@student.Id">Edit</a></td>
                 </tr>
             }
         </tbody>
