@@ -296,6 +296,8 @@ Potom:
 
 ---
 
+> Poznámka: Formuláře vyřešíme v následujícím materiálu.
+
 ## Úkol
 
 Upravte stránku `Students.razor` tak, aby šlo přepínat filtr aktivních studentů:
@@ -307,4 +309,44 @@ Upravte stránku `Students.razor` tak, aby šlo přepínat filtr aktivních stud
    - `GET /students?isActive=false`
 3. Po kliknutí na filtr načtěte odpovídající data.
 
-> Poznámka: Formuláře vyřešíme v následujícím materiálu.
+---
+
+## Závěrečný úkol - Public Library (knihy)
+
+Vytvořte obdobného Blazor SSR klienta pro téma veřejné knihovny. Cílem je použít stejný princip jako u studentů, ale nad entitou `Book`.
+
+### API kontrakt
+
+Použijte DTO:
+
+- `BookDto(int Id, string Title, bool IsArchived)`
+
+Používané endpointy:
+
+- `GET /books`
+- `GET /books?isArchived=true`
+- `DELETE /books/{id}`
+
+### Požadované části řešení
+
+1. V Blazor projektu vytvořte službu `LibraryService`.
+2. Zaregistrujte HTTP klienta přes Aspire service discovery:
+    - `builder.Services.AddHttpClient<LibraryService>(c => c.BaseAddress = new Uri("https://webapi"));`
+3. Vytvořte stránku `Books.razor` s route `/books`.
+4. Na stránce zobrazte tabulku knih (`Id`, `Title`, `Author`, `IsArchived`).
+5. Přidejte tlačítko `Delete` pro smazání knihy přes `DELETE /books/{id}`.
+6. Po úspěšném smazání znovu načtěte seznam knih.
+
+### Rozšiřující požadavky
+
+1. Přidejte filtry `All`, `Archived`, `Not Archived`.
+2. Implementujte načítání podle filtru (`/books`, `/books?isArchived=true`, `/books?isArchived=false`).
+3. Ověřte, že stránka funguje v render módu `Interactive Server`.
+
+### Odevzdání
+
+Odevzdejte:
+
+1. `LibraryService.cs`
+2. `Books.razor`
+3. stručný popis (3-5 vět), jak jste řešili refresh seznamu po smazání.
