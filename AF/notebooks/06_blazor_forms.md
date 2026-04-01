@@ -103,7 +103,7 @@ public class SchoolService(HttpClient httpClient)
 }
 ```
 
-Ano, je to zjednodušené. V produkci budeme chtít lepší diagnostiku chyb, ale pro výuku formulářů je tento tvar přehlednější.
+Kód je zjednodušený. V produkci budeme chtít lepší diagnostiku chyb, ale pro výuku formulářů je tento tvar přehlednější.
 
 ---
 
@@ -251,7 +251,7 @@ V SSR/Interactive Server scénáři je to užitečné, protože:
 
 ---
 
-## 6. Validace v praxi
+## 6. Validace
 
 Formulář je validní pouze pokud projde DataAnnotations pravidly.
 
@@ -262,6 +262,54 @@ Kritické části:
 - `OnValidSubmit` volá metodu jen při validním modelu.
 
 Díky tomu se například neodešle prázdné jméno.
+
+### Co přesně dělá `<DataAnnotationsValidator />`
+
+- Napojí `EditForm` na validační atributy z modelu (např. `[Required]`, `[StringLength]`).
+- Při změně hodnot i při odeslání formuláře vyhodnotí, zda model splňuje pravidla.
+- Bez této komponenty se DataAnnotations pravidla v `EditForm` neaplikují.
+
+### Co přesně dělá `<ValidationSummary />`
+
+- Zobrazí souhrnný seznam validačních chyb pro celý formulář.
+- Je vhodný zejména při výuce a debugování, protože student hned vidí všechny chyby na jednom místě.
+- V produkčním UI se často kombinuje s `ValidationMessage` u jednotlivých polí.
+
+Praktický příklad:
+
+- `Name` je prázdné a má `[Required]`.
+- `DataAnnotationsValidator` označí model jako nevalidní.
+- `ValidationSummary` vypíše chybovou zprávu.
+- `OnValidSubmit` se nespustí, takže se neodešle požadavek na API.
+
+### Mini-ukázka: `ValidationMessage` u konkrétního pole
+
+Kromě souhrnu lze chybu zobrazit přímo u konkrétního inputu:
+
+```razor
+<EditForm Model="Model" OnValidSubmit="Submit" FormName="createStudent">
+    <DataAnnotationsValidator />
+
+    <div class="mb-3">
+        <label class="form-label" for="textName">Name</label>
+        <InputText class="form-control" @bind-Value="Model.Name" id="textName" />
+        <ValidationMessage For="() => Model.Name" />
+    </div>
+
+    <div class="mb-3 form-check">
+        <InputCheckbox class="form-check-input" @bind-Value="Model.IsActive" id="checkboxIsActive" />
+        <label class="form-check-label" for="checkboxIsActive">Is active</label>
+    </div>
+
+    <button class="btn btn-primary" type="submit">Submit</button>
+</EditForm>
+```
+
+Co je výhoda:
+
+- uživatel vidí chybu přesně u pole, které je neplatné,
+- UX je přehlednější než samotný souhrn nahoře,
+- dobře funguje v kombinaci `ValidationSummary + ValidationMessage`.
 
 ---
 
