@@ -57,9 +57,4 @@ namespace UTB.PublicLibrary.Tests.Tests
             return context;
         }
     }
-
-    [CollectionDefinition("Database collection", DisableParallelization = true)]
-    public class DatabaseCollection : ICollectionFixture<TestFixture>
-    {
-    }
 }
