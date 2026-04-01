@@ -139,7 +139,7 @@ namespace UTB.School.Tests.Tests
 
             StudentPatchRequestDto studentPatchRequestDto = new(false);
 
-            var response = await fixture.HttpClient.PutAsJsonAsync($"/students/{josef.Id}", studentPatchRequestDto, TestContext.Current.CancellationToken);
+            var response = await fixture.HttpClient.PatchAsJsonAsync($"/students/{josef.Id}", studentPatchRequestDto, TestContext.Current.CancellationToken);
 
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
 
@@ -148,7 +148,7 @@ namespace UTB.School.Tests.Tests
                 var student = await context.Students.FindAsync([josef.Id], TestContext.Current.CancellationToken);
 
                 Assert.NotNull(student);
-                Assert.Equal(studentPatchRequestDto.Name, student.Name);
+                Assert.Equal(josef.Name, student.Name);
                 Assert.Equal(studentPatchRequestDto.IsActive, student.IsActive);
             }
         }
