@@ -24,9 +24,9 @@ Použité technologie:
 
 V tomto materiálu navážeme na předchozí kapitolu o Web API a testech. Cíl je postavit Blazor klienta, který:
 
-1. běží jako SSR aplikace,
-2. čte studenty z endpointu `GET /students`,
-3. umí studenta smazat přes `DELETE /students/{id}`.
+1. běží jako interaktivní SSR aplikace,
+2. čte studenty z endpointu `GET /students` pomocí `HttpClient` a zobrazuje je v tabulce,
+3. umí studenta smazat přes `DELETE /students/{id}` pomocí `SchoolService` a `HttpClient`.
 
 Webové formuláře (Create/Edit) budeme řešit až v následujícím materiálu.
 
