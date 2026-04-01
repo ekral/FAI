@@ -96,5 +96,61 @@ namespace UTB.School.Tests.Tests
                 Assert.Null(student);
             }
         }
+
+        [Fact]
+        public async Task UpdateBook_ReturnsNoContentAndUpdatesBook()
+        {
+            var josef = new Student { Name = "Josef", IsActive = true };
+
+            using (var context = fixture.CreateContext())
+            {
+                context.Students.Add(josef);
+
+                await context.SaveChangesAsync(TestContext.Current.CancellationToken);
+            }
+
+            StudentRequestDto studentRequestDto = new("Pepa", false);
+
+            var response = await fixture.HttpClient.PutAsJsonAsync($"/students/{josef.Id}", studentRequestDto, TestContext.Current.CancellationToken);
+
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+
+            using (var context = fixture.CreateContext())
+            {
+                var student = await context.Students.FindAsync([josef.Id], TestContext.Current.CancellationToken);
+
+                Assert.NotNull(student);
+                Assert.Equal(studentRequestDto.Name, student.Name);
+                Assert.Equal(studentRequestDto.IsActive, student.IsActive);
+            }
+        }
+
+        [Fact]
+        public async Task PatchBookArchiveState_ReturnsNoContentAndUpdatesFlag()
+        {
+            var josef = new Student { Name = "Josef", IsActive = true };
+
+            using (var context = fixture.CreateContext())
+            {
+                context.Students.Add(josef);
+
+                await context.SaveChangesAsync(TestContext.Current.CancellationToken);
+            }
+
+            StudentPatchRequestDto studentPatchRequestDto = new(false);
+
+            var response = await fixture.HttpClient.PutAsJsonAsync($"/students/{josef.Id}", studentPatchRequestDto, TestContext.Current.CancellationToken);
+
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+
+            using (var context = fixture.CreateContext())
+            {
+                var student = await context.Students.FindAsync([josef.Id], TestContext.Current.CancellationToken);
+
+                Assert.NotNull(student);
+                Assert.Equal(studentPatchRequestDto.Name, student.Name);
+                Assert.Equal(studentPatchRequestDto.IsActive, student.IsActive);
+            }
+        }
     }
 }

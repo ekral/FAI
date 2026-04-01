@@ -147,6 +147,7 @@ namespace UTB.PublicLibrary.Tests.Tests
                 var book = await context.Books.FindAsync([maj.Id], TestContext.Current.CancellationToken);
 
                 Assert.NotNull(book);
+                Assert.Equal(maj.Title, book.Title);
                 Assert.Equal(bookPatchRequestDto.IsArchived, book.IsArchived);
             }
         }
