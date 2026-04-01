@@ -1,6 +1,7 @@
 # 04 Testování Web API s Aspire – studijní materiál (bakalářské studium)
 
 **autor: Erik Král ekral@utb.cz**
+S asistencí: GitHub Copilot (GPT-5.3-Codex)
 
 ## 🎯 Definice
 

@@ -1,6 +1,7 @@
 # 05 Blazor klient (SSR) nad School API
 
 **autor: Erik Král ekral@utb.cz**
+S asistencí: GitHub Copilot (GPT-5.3-Codex)
 
 ## 🎯 Definice
 
@@ -223,7 +224,7 @@ else
 }
 ```
 
-Poznámka k `@rendermode`:
+Poznámky k implementaci:
 
 > 1. `InteractiveServerRenderMode(prerender: false)` znamená, že stránka nebude nejdříve staticky prerenderovaná.
 > U výuky je to praktické, protože se lépe sleduje okamžik načítání dat (`Loading...`) a také se tím zabráním dvojitému načítání dat.
