@@ -1,5 +1,6 @@
 using System.Net.Http.Json;
 using UTB.PublicLibrary.Contracts;
+using UTB.PublicLibrary.Db;
 
 namespace UTB.PublicLibrary.Tests.Tests
 {
@@ -8,10 +9,29 @@ namespace UTB.PublicLibrary.Tests.Tests
     {
         private readonly TestFixture fixture = fixture;
 
-        [Fact(Skip = "TODO: Implement as a student exercise.")]
-        public Task CreateBook_ReturnsCreatedAndPersistsBook()
+        [Fact]
+        public async Task CreateBook_ReturnsCreatedAndPersistsBook()
         {
-            return Task.CompletedTask;
+            var bookRequestDto = new BookRequestDto("R.U.R.", true);
+
+            var response = await fixture.HttpClient.PostAsJsonAsync("/books", bookRequestDto, TestContext.Current.CancellationToken);
+
+            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+
+            BookDto? bookDto = await response.Content.ReadFromJsonAsync<BookDto>(TestContext.Current.CancellationToken);
+
+            Assert.NotNull(bookDto);
+            Assert.Equal(bookRequestDto.Title, bookDto.Title);
+            Assert.NotNull(response.Headers.Location);
+            Assert.EndsWith($"/books/{bookDto.Id}", response.Headers.Location.ToString());
+
+            using var context = fixture.CreateContext();
+
+            Book? book = await context.Books.FindAsync([bookDto.Id], TestContext.Current.CancellationToken);
+
+            Assert.NotNull(book);
+            Assert.Equal(bookRequestDto.Title, book.Title);
+            Assert.Equal(bookRequestDto.IsArchived, book.IsArchived);
         }
 
         [Fact]
@@ -21,31 +41,59 @@ namespace UTB.PublicLibrary.Tests.Tests
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            BookDto[]? books = await response.Content.ReadFromJsonAsync<BookDto[]>(TestContext.Current.CancellationToken);
+            BookDto[]? bookDtos = await response.Content.ReadFromJsonAsync<BookDto[]>(TestContext.Current.CancellationToken);
 
-            Assert.NotNull(books);
-            Assert.True(books.Length > 2);
-            Assert.Contains(books, book => book.Title == "Kytice" && book.IsArchived == false);
-            Assert.Contains(books, book => book.Title == "Bila Nemoc" && book.IsArchived == false);
-            Assert.Contains(books, book => book.Title == "Babicka" && book.IsArchived == true);
+            Assert.NotNull(bookDtos);
+            Assert.True(bookDtos.Length > 2);
+            Assert.Contains(bookDtos, book => book.Title == "Kytice" && book.IsArchived == false);
+            Assert.Contains(bookDtos, book => book.Title == "Bila Nemoc" && book.IsArchived == false);
+            Assert.Contains(bookDtos, book => book.Title == "Babicka" && book.IsArchived == true);
         }
 
-        [Fact(Skip = "TODO: Implement as a student exercise.")]
-        public Task GetBookById_ReturnsOkAndBook_WhenBookExists()
+        [Fact]
+        public async Task GetBookById_ReturnsOkAndBook_WhenBookExists()
         {
-            return Task.CompletedTask;
+            var response = await fixture.HttpClient.GetAsync("/books/1", TestContext.Current.CancellationToken);
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            BookDto? bookDto = await response.Content.ReadFromJsonAsync<BookDto>(TestContext.Current.CancellationToken);
+
+            Assert.NotNull(bookDto);
+            Assert.Equal("Kytice", bookDto.Title);
+            Assert.False(bookDto.IsArchived);
         }
 
-        [Fact(Skip = "TODO: Implement as a student exercise.")]
-        public Task GetBookById_ReturnsNotFound_WhenBookDoesNotExist()
+        [Fact]
+        public async Task GetBookById_ReturnsNotFound_WhenBookDoesNotExist()
         {
-            return Task.CompletedTask;
+            var response = await fixture.HttpClient.GetAsync("/books/999", TestContext.Current.CancellationToken);
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
-        [Fact(Skip = "TODO: Implement as a student exercise.")]
-        public Task DeleteBook_DeletesAndReturnsNoContent_WhenBookExists()
+        [Fact]
+        public async Task DeleteBook_DeletesAndReturnsNoContent_WhenBookExists()
         {
-            return Task.CompletedTask;
+            var maj = new Book { Title = "Maj", IsArchived = false };
+
+            using (var context = fixture.CreateContext())
+            {
+                context.Books.Add(maj);
+
+                await context.SaveChangesAsync(TestContext.Current.CancellationToken);
+            }
+
+            var response = await fixture.HttpClient.DeleteAsync($"/books/{maj.Id}", TestContext.Current.CancellationToken);
+
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+
+            using (var context = fixture.CreateContext())
+            {
+                var book = await context.Books.FindAsync([maj.Id], TestContext.Current.CancellationToken);
+
+                Assert.Null(book);
+            }
         }
 
         [Fact(Skip = "TODO: Implement as a student exercise.")]

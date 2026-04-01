@@ -91,9 +91,9 @@ namespace UTB.School.Tests.Tests
             
             using (var context = fixture.CreateContext())
             {
-                var studentDto = await context.Students.FindAsync([tereza.Id], TestContext.Current.CancellationToken);
+                var student = await context.Students.FindAsync([tereza.Id], TestContext.Current.CancellationToken);
 
-                Assert.Null(studentDto);
+                Assert.Null(student);
             }
         }
     }
