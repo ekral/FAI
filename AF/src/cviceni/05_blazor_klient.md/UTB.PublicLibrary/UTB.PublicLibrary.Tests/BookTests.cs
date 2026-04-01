@@ -96,16 +96,59 @@ namespace UTB.PublicLibrary.Tests.Tests
             }
         }
 
-        [Fact(Skip = "TODO: Implement as a student exercise.")]
-        public Task UpdateBook_ReturnsNoContentAndUpdatesBook()
+        [Fact]
+        public async Task UpdateBook_ReturnsNoContentAndUpdatesBook()
         {
-            return Task.CompletedTask;
+            var maj = new Book { Title = "Maj", IsArchived = false };
+
+            using (var context = fixture.CreateContext())
+            {
+                context.Books.Add(maj);
+
+                await context.SaveChangesAsync(TestContext.Current.CancellationToken);
+            }
+
+            BookRequestDto bookRequestDto = new("Vojna a mir", true);
+
+            var response = await fixture.HttpClient.PutAsJsonAsync($"/books/{maj.Id}", bookRequestDto,TestContext.Current.CancellationToken);
+
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+
+            using (var context = fixture.CreateContext())
+            {
+                var book = await context.Books.FindAsync([maj.Id], TestContext.Current.CancellationToken);
+
+                Assert.NotNull(book);
+                Assert.Equal(bookRequestDto.Title, book.Title);
+                Assert.Equal(bookRequestDto.IsArchived, book.IsArchived);
+            }
         }
 
-        [Fact(Skip = "TODO: Implement as a student exercise.")]
-        public Task PatchBookArchiveState_ReturnsNoContentAndUpdatesFlag()
+        [Fact]
+        public async Task PatchBookArchiveState_ReturnsNoContentAndUpdatesFlag()
         {
-            return Task.CompletedTask;
+            var maj = new Book { Title = "Maj", IsArchived = false };
+
+            using (var context = fixture.CreateContext())
+            {
+                context.Books.Add(maj);
+
+                await context.SaveChangesAsync(TestContext.Current.CancellationToken);
+            }
+
+            BookPatchRequestDto bookPatchRequestDto = new(true);
+
+            var response = await fixture.HttpClient.PatchAsJsonAsync($"/books/{maj.Id}", bookPatchRequestDto, TestContext.Current.CancellationToken);
+
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+
+            using (var context = fixture.CreateContext())
+            {
+                var book = await context.Books.FindAsync([maj.Id], TestContext.Current.CancellationToken);
+
+                Assert.NotNull(book);
+                Assert.Equal(bookPatchRequestDto.IsArchived, book.IsArchived);
+            }
         }
     }
 }
