@@ -1,148 +1,310 @@
-# 05 Blazor klient
+# 05 Blazor klient (SSR) nad School API
 
 **autor: Erik Král ekral@utb.cz**
 
+## 🎯 Definice
+
+- Blazor je framework pro tvorbu webového UI v C#.
+- SSR (Server-Side Rendering) znamená, že HTML stránky je vygenerováno na serveru.
+- Render mode určuje, kde a jak se komponenta vykreslí a zda bude interaktivní.
+- Aspire v tomto příkladu orchestrace spouští Web API, databázi a Blazor Web projekt společně.
+
+Použité technologie:
+
+- `ASP.NET Core Blazor Web App`
+- `Interactive Server render mode`
+- `ASP.NET Core Minimal API`
+- `Entity Framework Core`
+- `PostgreSQL`
+- `Aspire`
+
 ---
 
-V tomto materiálu si probereme jak vytvořit jednoduchého [Blazor](https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor) klienta pro naši webovou službu. Konkrétně použijme Interactive WebAssembly [Render Mode](https://learn.microsoft.com/en-us/aspnet/core/blazor/components/render-modes?view=aspnetcore-9.0), tedy Client-side rendering (CSR) s využitím Blazor WebAssembly.
+## Co je cílem tohoto materiálu
 
-## WebAPI
+V tomto materiálu navážeme na předchozí kapitolu o Web API a testech. Cíl je postavit Blazor klienta, který:
 
-Nejprve si vytvoříme WebAPI, kde budeme mít entitu `Student`  a `StudentContext`. Dále máme namapované následující endpointy "/seed" a "/students". První endpoint vytvoří databází a druhý endpoint vrátí všechny studenty v databázi. Také přidáme `StudentContext` do Services (IoC kontejneru). 
+1. běží jako SSR aplikace,
+2. čte studenty z endpointu `GET /students`,
+3. umí studenta smazat přes `DELETE /students/{id}`.
 
-Co je ale velmi důležité a nové pro Blazor projekt, tak do konfigurace a middlewaru přidáme podporu CORS (Cross-origin resource sharing), kde adresa "https://localhost:7074" je adresa Blazor aplikace, kterou zadáme až tuto aplikaci vytvoříme. CORS musíme povolit proto, že Blazor a WebAPI budou běžet na jiném portu. To znamená že jde o jinou doménu a prohlížeč může blokovat dotaz z klienta na jinou doménu, než na které běží.
+Webové formuláře (Create/Edit) budeme řešit až v následujícím materiálu.
 
-Nezpomeňte do projektu vložit nuget balíček `Microsoft.EntityFrameworkCore.Sqlite`.
+---
+
+## 1. Přehled renderovacích módů v Blazoru
+
+Blazor Web App (od .NET 8+) podporuje více renderovacích módů:
+
+- `Static SSR`
+  - stránka se vyrenderuje na serveru jako čisté HTML,
+  - po načtení není interaktivní (žádné `@onclick`).
+
+- `Interactive Server`
+  - první HTML přijde ze serveru (SSR),
+  - interaktivita běží přes SignalR spojení se serverem,
+  - logika komponent běží na serveru.
+
+- `Interactive WebAssembly`
+  - komponenta běží v prohlížeči přes WebAssembly,
+  - po stažení runtime a assemblies je UI interaktivní na klientovi.
+
+- `Interactive Auto`
+  - kombinuje server/client přístup podle dostupnosti a konfigurace.
+
+V tomto cvičení použijeme hlavně **Interactive Server**, protože je jednodušší a dobře se integruje s Aspire řešením.
+
+---
+
+## 2. Architektura řešení UTB.School
+
+V řešení máme oddělené projekty:
+
+- `UTB.School.WebApi` - endpointy a práce s databází
+- `UTB.School.Db` - entity a `DbContext`
+- `UTB.School.Contracts` - DTO objekty sdílené mezi API a klientem
+- `UTB.School.Web` - Blazor klient
+- `UTB.School.AppHost` - Aspire orchestrace
+
+Webový klient nepoužívá entity z databáze, ale stabilní DTO kontrakty.
+
+---
+
+## 3. Aspire AppHost: propojení Web + Web API
+
+V AppHostu je důležité, že Blazor web projekt má referenci na Web API resource:
 
 ```csharp
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.EntityFrameworkCore;
+var webapi = builder.AddProject<Projects.UTB_School_WebApi>("webapi")
+                    .WithReference(database)
+                    .WaitFor(database);
 
-namespace Studenti.WebAPI
+_ = builder.AddProject<Projects.UTB_School_Web>("web")
+           .WithReference(webapi)
+           .WaitFor(webapi);
+```
+
+Tím Aspire:
+
+- zajistí startovací pořadí,
+- předá konfiguraci pro service discovery,
+- umožní webu volat API přes jméno resource (`webapi`) místo pevného localhost portu.
+
+---
+
+## 4. Konfigurace Blazor Web projektu (SSR + Interactive Server)
+
+V `Program.cs` projektu `UTB.School.Web` jsou klíčové dvě části.
+
+### a) Registrace HTTP klienta pro SchoolService
+
+```csharp
+builder.Services.AddHttpClient<SchoolService>(c => c.BaseAddress = new Uri("https://webapi"));
+```
+
+Proč ne `https://localhost:xxxx`?
+
+- v Aspire se porty mohou měnit,
+- název `webapi` je stabilní název resource,
+- adresu doplní service discovery.
+
+### b) Registrace a mapování render módu
+
+```csharp
+builder.Services.AddRazorComponents()
+    .AddInteractiveServerComponents();
+
+app.MapRazorComponents<App>()
+    .AddInteractiveServerRenderMode();
+```
+
+První řádek registruje služby pro interactive server komponenty, druhý povolí tento render mode při mapování.
+
+---
+
+## 5. SchoolService
+
+V této verzi záměrně nebudeme řešit detailní chybové zprávy. Služba bude jednoduchá: načte data nebo vraťí prázdné pole nebo false
+
+```csharp
+using System.Net;
+using UTB.School.Contracts;
+
+namespace UTB.School.Web;
+
+public class SchoolService(HttpClient httpClient)
 {
-    public class Student
+    public async Task<StudentDto[]> GetStudentsAsync()
     {
-        public int StudentId { get; set; }
-        public required string Jmeno { get; set; }
-        public required bool Studuje { get; set; }
+        StudentDto[]? students = await httpClient.GetFromJsonAsync<StudentDto[]>("/students");
+        return students ?? [];
     }
 
-    public class StudentContext(DbContextOptions<StudentContext> options) : DbContext(options)
+    public async Task<bool> DeleteStudentAsync(int studentId)
     {
-        public DbSet<Student> Studenti { get; set; }
-    }
+        HttpResponseMessage response = await httpClient.DeleteAsync($"/students/{studentId}");
 
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
-
-            builder.Services.AddDbContext<StudentContext>(opt => opt.UseSqlite("DataSource=studenti.db"));
-
-            builder.Services.AddCors(); // CORS 
-
-            WebApplication app = builder.Build();
-
-            app.UseCors(p => p.WithOrigins("https://localhost:7074").AllowCredentials().AllowAnyMethod().AllowAnyHeader()); // CORS 
-
-            app.MapGet("/seed", Seed);
-            app.MapGet("/students", GetAllStudents);
-
-            app.Run();
-        }
-
-        public static async Task<Created> Seed(StudentContext context)
-        {
-            await context.Database.EnsureDeletedAsync();
-
-            if (await context.Database.EnsureCreatedAsync())
-            {
-                await context.AddRangeAsync(
-                    new Student() { Jmeno = "Jiri", Studuje = true },
-                    new Student() { Jmeno = "Karel", Studuje = false },
-                    new Student() { Jmeno = "Alena", Studuje = true });
-
-                await context.SaveChangesAsync();
-            }
-
-            return TypedResults.Created();
-        }
-
-        public static async Task<Ok<Student[]>> GetAllStudents(StudentContext context)
-        {
-            return TypedResults.Ok(await context.Studenti.ToArrayAsync());
-        }
+        return response.StatusCode == HttpStatusCode.NoContent;
     }
 }
 ```
 
-##  Blazor WebAssembly
+Tento přístup je vhodný pro první seznámení s klientem. Robustnější error handling doplníme později.
 
-Nyní vytvoříme projekt "Blazor WebAssembly Standalone App" využívající render mód Interactive WebAssembly.
+---
 
-V projektu máme zaregistrovaného HttpClienta jako službu s lifetimem Scoped, pro každý request se tedy vytvoří nový HttpClient. Adresa "https://localhost:7042" představuje adresu našeho WebAPI.
+## 6. Stránka Students.razor: načtení a smazání
 
-```csharp
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7042") });
-```
-
-Do projektu si přidáme novou Razor Componentu Studenti.razor
+Stránka používá `@inject SchoolService`, v `OnInitializedAsync` načte studenty a po kliknutí na tlačítko smaže vybraný záznam.
 
 ```razor
 @page "/students"
+@using UTB.School.Contracts
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@inject SchoolService SchoolService
 
-<PageTitle>Studenti</PageTitle>
+<PageTitle>Students</PageTitle>
 
-<h3>Studenti</h3>
+<h1>Students</h1>
 
-@if(studenti is not null)
+@if (students is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
 {
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Jmeno</th>
-                <th>Studuje</th>
+                <th>Name</th>
+                <th>Active</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
-            @foreach(Student student in studenti)
+            @foreach (var student in students)
             {
                 <tr>
-                    <td>@student.StudentId</td>
-                    <td>@student.Jmeno</td>
-                    <td>@student.Studuje</td>
+                    <td>@student.Id</td>
+                    <td>@student.Name</td>
+                    <td>@student.IsActive</td>
+                    <td>
+                        <button class="btn btn-danger" @onclick="() => Delete(student.Id)">Delete</button>
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
 }
-```
 
-A v kódu na pozadí načteme studenty:
+@code {
+    private StudentDto[]? students;
 
-```cs
-using System.Net.Http.Json;
-
-namespace Students.BlazorApp.Pages
-{
-    public class Student
+    protected override async Task OnInitializedAsync()
     {
-        public int StudentId { get; set; }
-        public required string Jmeno { get; set; }
-        public required bool Studuje { get; set; }
+        await LoadStudentsAsync();
     }
 
-    public partial class Studenti(HttpClient client)
+    private async Task Delete(int studentId)
     {
-        private readonly HttpClient client = client;
-        private Student[]? studenti;
+        bool deleted = await SchoolService.DeleteStudentAsync(studentId);
 
-        protected override async Task OnInitializedAsync()
+        if (deleted)
         {
-            studenti = await client.GetFromJsonAsync<Student[]>("/students");
+            await LoadStudentsAsync();
         }
+    }
+
+    private async Task LoadStudentsAsync()
+    {
+        students = await SchoolService.GetStudentsAsync();
     }
 }
 ```
+
+Poznámka k `@rendermode`:
+
+> `InteractiveServerRenderMode(prerender: false)` znamená, že stránka nebude nejdříve staticky prerenderovaná.
+> U výuky je to praktické, protože se lépe sleduje okamžik načítání dat (`Loading...`) a také se tím zabráním dvojitému načítání dat.
+> `@inject SchoolService SchoolService` umožňuje používat službu pro volání API, jde o dependency injection.
+
+---
+
+## 7. Endpointy ve Web API, které klient používá
+
+Klient v tomto materiálu používá hlavně:
+
+- `GET /students`
+- `DELETE /students/{id:int}`
+
+Ukázka endpointu pro smazání:
+
+```csharp
+static async Task<Results<NoContent, NotFound>> DeleteStudent(int id, SchoolContext context)
+{
+    if (await context.Students.FindAsync(id) is Student student)
+    {
+        context.Students.Remove(student);
+        await context.SaveChangesAsync();
+        return TypedResults.NoContent();
+    }
+
+    return TypedResults.NotFound();
+}
+```
+
+---
+
+## 8. Jak aplikaci spustit
+
+Předpoklady:
+
+- nainstalovaný `.NET SDK`,
+- spuštěný Docker Desktop (kvůli PostgreSQL kontejneru v Aspire).
+
+Spuštění z kořene řešení:
+
+```powershell
+dotnet run --project .\UTB.School.AppHost
+```
+
+Potom:
+
+1. přes Aspire dashboard otevřete projekt `web`,
+2. otevřete stránku `/students`,
+3. ověřte, že se načtou seed data,
+4. smažte studenta tlačítkem `Delete` a ověřte, že zmizí z tabulky.
+
+---
+
+## 9. Co jsme si procvičili
+
+- konfiguraci `HttpClient` přes Aspire service discovery,
+- práci se službou `SchoolService`,
+- načtení dat z API a smazání přes HTTP `DELETE`.
+
+---
+
+## ❓ Kontrolní otázky
+
+1. Jaký je rozdíl mezi `Static SSR` a `Interactive Server`?
+2. Proč je v Aspire výhodné použít `https://webapi` místo pevného localhost portu?
+3. Kde se v Blazor komponentě nejčastěji načítají data z API?
+4. Co vrací endpoint `DELETE /students/{id}` při úspěšném smazání?
+5. Proč po úspěšném smazání znovu voláme načtení seznamu studentů?
+
+---
+
+## Úkol
+
+Upravte stránku `Students.razor` tak, aby šlo přepínat filtr aktivních studentů:
+
+1. Přidejte tlačítka `All`, `Active`, `Inactive`.
+2. V `SchoolService` doplňte metodu pro volání:
+   - `GET /students`
+   - `GET /students?isActive=true`
+   - `GET /students?isActive=false`
+3. Po kliknutí na filtr načtěte odpovídající data.
+
+> Poznámka: Formuláře vyřešíme v následujícím materiálu.

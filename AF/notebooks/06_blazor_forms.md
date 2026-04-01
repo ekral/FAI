@@ -1,121 +1,306 @@
-# 06 Blazor Web Forms
+# 06 Blazor formuláře nad School API
 
 **autor: Erik Král ekral@utb.cz**
 
+## 🎯 Definice
+
+- Blazor formulář je komponenta `EditForm`, která mapuje vstupy na C# model.
+- Validace v Blazoru často používá DataAnnotations (`[Required]`, `[StringLength]`, ...).
+- V tomto materiálu budeme řešit formuláře pro `Create` a `Edit` studenta.
+
+Použité technologie:
+
+- `Blazor Web App` (Interactive Server)
+- `EditForm`, `InputText`, `InputCheckbox`
+- `DataAnnotationsValidator`, `ValidationSummary`
+- `SchoolService` pro volání Web API
+
 ---
 
-Data zadáváme pomocí formulářů, kdy můžeme použít jak HTML prvky, tak Blazor componenty což je běžnější. 
+## Co navazuje na minulou kapitolu
 
-V následujícím příkladu je ukázka formuláře pro výpočet BMI indexu s využitím Blazor componentů. První komponentou je ```EditForm```, který má atributy ```FormName```tedy název formuláře, ```Model``` což je název property představující data formuláře a ```Submit``` jehož hodnotou je název metody, která se má zavolat na serveru pro obsluhu daného formuláře. Máme na vyýber, jestli zvolíme `OnValidSubmit`, `OnInvalidSubmit` nebo `Submit`. `Submit` se zavolá vždy a `OnValidSubmit` pouze pokud je formulář validní, viz validace níže.
+V minulé kapitole jsme měli stránku se seznamem studentů a mazání přes `DELETE`.
 
-Property představující data formuláře musí být označená atributem ```[SupplyParameterFromForm]```.
+Teď přidáme:
 
-```EditForm``` potom obsahuje komponenty pro jednotlivé pole formuláře. Konkrétně dvě komponenty ```InputNumber```, které mají atribut ```@bind-Value="Data.Height"``` respektive ```@bind-Value="Data.Mass"``` představující obousměrné bindování na property. Znamená to, že se data jak zobrazují tak i mění.
+1. stránku `/createstudent` pro založení záznamu,
+2. stránku `/students/{id}` pro editaci,
+3. validaci vstupu ve formuláři.
 
-Atribut ```Enhance``` zlepšuje uživatelský zážitek tak, že při odeslání formuláře nedojde k obnovení celé stránky ale pouze její části.
+Stejně jako v minulé kapitole zjednodušíme ukázky a nebudeme řešit předávání detailních chybových obálek.
 
-```razor
-<h3>Bmi Calculator</h3>
+---
 
-<EditForm FormName="BmiForm" Model="Data" Submit="Submit" Enhance>
-    <div>
-        <label>
-            Height:
-            <br/>
-            <InputNumber @bind-Value="Data.Height" />
-        </label>
-    </div>
-    <div>
-        <label>
-            Mass:
-            <br />
-            <InputNumber @bind-Value="Data.Mass" />
-        </label>
-    </div>
-    <div>
-        <button type="submit">Submit</button>
-    </div>
-</EditForm>
+## 1. DTO a form model
 
-Bmi: @bmi.ToString("F2")
+Ve Web API už máme kontrakt pro vytvoření/úpravu:
 
-@code {
-    [SupplyParameterFromForm]
-    public BmiInputData Data { get; set; } = new();
+```csharp
+public record StudentRequestDto(string Name, bool IsActive);
+```
 
-    public double bmi = 0.0;
+V Blazor klientovi je praktické mít vlastní form model s validačními atributy:
 
-    private void Submit()
+```csharp
+using System.ComponentModel.DataAnnotations;
+
+namespace UTB.School.Web.FormModels;
+
+public class StudentFormModel
+{
+    [Required(ErrorMessage = "Jméno je povinné.")]
+    [StringLength(100, ErrorMessage = "Jméno může mít maximálně 100 znaků.")]
+    public string Name { get; set; } = string.Empty;
+
+    public bool IsActive { get; set; } = true;
+}
+```
+
+Proč oddělovat form model od DTO:
+
+- UI může mít vlastní validační pravidla,
+- DTO zůstává jednoduchý přenosový objekt,
+- form model lze později rozšířit o UI-only vlastnosti.
+
+---
+
+## 2. Jednoduchý SchoolService pro formuláře
+
+Pro potřeby create/edit nám stačí tři metody:
+
+```csharp
+using System.Net;
+using UTB.School.Contracts;
+
+namespace UTB.School.Web;
+
+public class SchoolService(HttpClient httpClient)
+{
+    public async Task<StudentDto?> GetStudentAsync(int studentId)
     {
-        double heightMeters = Data.Height / 100.0;
+        var response = await httpClient.GetAsync($"/students/{studentId}");
 
-        bmi = Data.Mass / (heightMeters * heightMeters);
+        if (response.StatusCode != HttpStatusCode.OK)
+        {
+            return null;
+        }
+
+        return await response.Content.ReadFromJsonAsync<StudentDto>();
     }
-    public class BmiInputData
+
+    public async Task<bool> CreateStudentAsync(StudentRequestDto requestDto)
     {
-        public double Height { get; set; } = 180.0;
-        public double Mass { get; set; } = 75.0;
+        var response = await httpClient.PostAsJsonAsync("/students", requestDto);
+        return response.StatusCode == HttpStatusCode.Created;
+    }
+
+    public async Task<bool> UpdateStudentAsync(int studentId, StudentRequestDto requestDto)
+    {
+        var response = await httpClient.PutAsJsonAsync($"/students/{studentId}", requestDto);
+        return response.StatusCode == HttpStatusCode.NoContent;
     }
 }
 ```
-## Validace dat
 
-Následující příklad představuje ukázku validace dat. Pro definování pravidel můžeme použít atributy, například atribut ```[Range(1.0, 300.0, ErrorMessage = "Height invalid (1-300).")]``` který definuje povolený rozsah hodnot pro property.
+Ano, je to zjednodušené. V produkci budeme chtít lepší diagnostiku chyb, ale pro výuku formulářů je tento tvar přehlednější.
 
-Do EditFormu potom přidáme komponentu  ```<DataAnnotationsValidator />``` a volitelně ```<ValidationSummary />``` představující seznam všech chyb při validaci. Také ale můžeme použít zápis ```<ValidationMessage For="() => Data.Height" />``` který vypíše chyby pro jednotlivé položky formuláře.
+---
+
+## 3. CreateStudent.razor
+
+Stránka používá `EditForm` s `OnValidSubmit`. Po úspěšném odeslání přesměruje uživatele na seznam studentů.
 
 ```razor
-@using System.ComponentModel.DataAnnotations
-<h3>Bmi Calculator</h3>
+@page "/createstudent"
+@using UTB.School.Contracts
+@using UTB.School.Web.FormModels
+@inject NavigationManager NavigationManager
+@inject SchoolService SchoolService
 
-<EditForm FormName="BmiForm" Model="Data" OnValidSubmit="Submit" Enhance>
+<h3>Create Student</h3>
+
+<EditForm Model="Model" OnValidSubmit="Submit" FormName="createStudent">
     <DataAnnotationsValidator />
     <ValidationSummary />
-    <div>
-        <label>
-            Height:
-            <br />
-            <ValidationMessage For="() => Data.Height" />
-            <InputNumber @bind-Value="Data.Height" />
-        </label>
-    </div>
-    <div>
-        <label>
-            Mass:
-            <br />
-            <ValidationMessage For="() => Data.Mass" />
-            <InputNumber @bind-Value="Data.Mass" />
-        </label>
-    </div>
-    <div>
-        <button type="submit">Submit</button>
-    </div>
-</EditForm>
 
-Bmi: @bmi.ToString("F2")
+    <div class="mb-3">
+        <label class="form-label" for="textName">Name</label>
+        <InputText class="form-control" @bind-Value="Model.Name" id="textName" />
+    </div>
+
+    <div class="mb-3 form-check">
+        <InputCheckbox class="form-check-input" @bind-Value="Model.IsActive" id="checkboxIsActive" />
+        <label class="form-check-label" for="checkboxIsActive">Is active</label>
+    </div>
+
+    <button class="btn btn-primary" type="submit">Submit</button>
+</EditForm>
 
 @code {
     [SupplyParameterFromForm]
-    public BmiInputData Data { get; set; } = new();
+    public StudentFormModel Model { get; set; } = new();
 
-    public double bmi = 0.0;
-
-    private void Submit()
+    private async Task Submit()
     {
-        double heightMeters = Data.Height / 100.0;
+        StudentRequestDto requestDto = new(Model.Name, Model.IsActive);
+        bool created = await SchoolService.CreateStudentAsync(requestDto);
 
-        bmi = Data.Mass / (heightMeters * heightMeters);
-    }
-    public class BmiInputData
-    {
-        [Range(1.0, 300.0, ErrorMessage = "Height invalid (1-300).")]
-        public double Height { get; set; } = 180.0;
-
-        [Range(1.0, 500.0, ErrorMessage = "Mass invalid (1-500).")]
-        public double Mass { get; set; } = 75.0;
+        if (created)
+        {
+            NavigationManager.NavigateTo("/students");
+        }
     }
 }
 ```
+
 ---
-1. [ASP.NET Core Blazor forms overview](https://learn.microsoft.com/en-us/aspnet/core/blazor/forms/?view=aspnetcore-8.0)
-2. [ASP.NET Core Blazor input components](https://learn.microsoft.com/en-us/aspnet/core/blazor/forms/input-components?view=aspnetcore-8.0)
+
+## 4. EditStudent.razor
+
+Edit stránka má route parametr `Id`, při načtení si stáhne detail studenta a předvyplní formulář.
+
+```razor
+@page "/students/{Id:int}"
+@using UTB.School.Contracts
+@using UTB.School.Web.FormModels
+@inject NavigationManager NavigationManager
+@inject SchoolService SchoolService
+
+<h3>Edit Student</h3>
+
+@if (Model is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Model="Model" OnValidSubmit="Submit" FormName="editStudent">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-3">
+            <label class="form-label" for="textName">Name</label>
+            <InputText class="form-control" @bind-Value="Model.Name" id="textName" />
+        </div>
+
+        <div class="mb-3 form-check">
+            <InputCheckbox class="form-check-input" @bind-Value="Model.IsActive" id="checkboxIsActive" />
+            <label class="form-check-label" for="checkboxIsActive">Is active</label>
+        </div>
+
+        <button class="btn btn-primary" type="submit">Save</button>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    public StudentFormModel? Model { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Model is not null)
+        {
+            return;
+        }
+
+        StudentDto? student = await SchoolService.GetStudentAsync(Id);
+
+        if (student is not null)
+        {
+            Model = new StudentFormModel
+            {
+                Name = student.Name,
+                IsActive = student.IsActive
+            };
+        }
+    }
+
+    private async Task Submit()
+    {
+        if (Model is null)
+        {
+            return;
+        }
+
+        StudentRequestDto requestDto = new(Model.Name, Model.IsActive);
+        bool updated = await SchoolService.UpdateStudentAsync(Id, requestDto);
+
+        if (updated)
+        {
+            NavigationManager.NavigateTo("/students");
+        }
+    }
+}
+```
+
+---
+
+## 5. Co dělá [SupplyParameterFromForm]
+
+`[SupplyParameterFromForm]` říká Blazoru, že hodnoty modelu se mají naplnit z HTTP form postu.
+
+V SSR/Interactive Server scénáři je to užitečné, protože:
+
+- model je správně navázán při submitu,
+- podporuje to hladké zpracování formuláře na serveru,
+- funguje to přirozeně s `EditForm`.
+
+---
+
+## 6. Validace v praxi
+
+Formulář je validní pouze pokud projde DataAnnotations pravidly.
+
+Kritické části:
+
+- `<DataAnnotationsValidator />` aktivuje validaci přes atributy modelu,
+- `<ValidationSummary />` vypíše seznam chyb,
+- `OnValidSubmit` volá metodu jen při validním modelu.
+
+Díky tomu se například neodešle prázdné jméno.
+
+---
+
+## 7. Jak si to vyzkoušet
+
+1. Spusťte AppHost:
+
+```powershell
+dotnet run --project .\UTB.School.AppHost
+```
+
+2. Otevřete Blazor web aplikaci.
+3. Na stránce `/students` klikněte na `Create`.
+4. Vytvořte nového studenta.
+5. U záznamu klikněte na `Edit`, upravte data a uložte.
+
+---
+
+## 8. Shrnutí
+
+V této kapitole jsme doplnili Blazor klienta o formuláře:
+
+- vytvoření studenta (`POST /students`),
+- editaci studenta (`PUT /students/{id}`),
+- validační pravidla na úrovni form modelu,
+- přesměrování po úspěšném uložení zpět na seznam.
+
+---
+
+## ❓ Kontrolní otázky
+
+1. Jaký je rozdíl mezi `OnSubmit` a `OnValidSubmit`?
+2. Proč je vhodné mít `StudentFormModel` odděleně od `StudentRequestDto`?
+3. K čemu slouží `[SupplyParameterFromForm]`?
+4. Jak poznáte ve službě, že `POST /students` proběhl úspěšně?
+5. Proč po vytvoření nebo úpravě záznamu navigujeme zpět na `/students`?
+
+---
+
+## Zdroje
+
+1. [ASP.NET Core Blazor forms overview](https://learn.microsoft.com/en-us/aspnet/core/blazor/forms/?view=aspnetcore-9.0)
+2. [ASP.NET Core Blazor input components](https://learn.microsoft.com/en-us/aspnet/core/blazor/forms/input-components?view=aspnetcore-9.0)
