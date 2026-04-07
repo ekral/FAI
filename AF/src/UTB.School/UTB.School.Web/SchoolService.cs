@@ -147,22 +147,25 @@ namespace UTB.School.Web
             }
         }
 
-        public async IAsyncEnumerable<string> StreamSseMessagesAsync([EnumeratorCancellation] CancellationToken ct = default)
+        public async IAsyncEnumerable<StudentDto> StreamSseMessagesAsync([EnumeratorCancellation] CancellationToken ct = default)
         {
-            using HttpResponseMessage response = await httpClient.GetAsync("/stream", HttpCompletionOption.ResponseHeadersRead, ct);
+            using var response = await httpClient.GetAsync("/stream", HttpCompletionOption.ResponseHeadersRead, ct);
             response.EnsureSuccessStatusCode();
 
-            using Stream stream = await response.Content.ReadAsStreamAsync(ct);
+            using var stream = await response.Content.ReadAsStreamAsync(ct);
             
             SseParser<string> parser = SseParser.Create(stream);
 
-            IAsyncEnumerable<SseItem<string>> sseEvents = parser.EnumerateAsync(ct);
-            
-            await foreach (var sseEvent in sseEvents)
+            await foreach (var sseEvent in parser.EnumerateAsync(ct))
             {
                 if (!string.IsNullOrEmpty(sseEvent.Data))
                 {
-                    yield return sseEvent.Data;
+                    // SSE vrací JSON string, parsuj ho na StudentDto
+                    var student = System.Text.Json.JsonSerializer.Deserialize<StudentDto>(sseEvent.Data);
+                    if (student is not null)
+                    {
+                        yield return student;
+                    }
                 }
             }
         }

@@ -2,18 +2,39 @@
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
 @inject SchoolService SchoolService
 @implements IAsyncDisposable
+@using UTB.School.Contracts
 
-<h3>LiveUpdates</h3>
+<h3>Nově přidaní studenti</h3>
 
-<ul>
-@foreach(string message in messages)
+@if (students.Count == 0)
 {
-    <li>@message</li>
+    <p><em>Čekám na nové studenty...</em></p>
 }
-</ul>
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Jméno</th>
+                <th>Aktivní</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var student in students)
+            {
+                <tr>
+                    <td>@student.Id</td>
+                    <td>@student.Name</td>
+                    <td>@(student.IsActive ? "Ano" : "Ne")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
 @code {
-    private List<string> messages = [];
+    private List<StudentDto> students = [];
     private CancellationTokenSource? cts;
 
     protected override void OnInitialized()
@@ -24,9 +45,21 @@
 
     private async Task ReadMessagesAsync(CancellationToken ct)
     {
-        await foreach (var message in SchoolService.StreamSseMessagesAsync(ct))
+        try
         {
-            messages.Add(message);
+            await foreach (var student in SchoolService.StreamSseMessagesAsync(ct))
+            {
+                students.Add(student);
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // Ignorovat při zavření komponenty
+        }
+        catch (Exception ex)
+        {
+            students.Add(new StudentDto(0, $"Chyba: {ex.Message}", false));
             await InvokeAsync(StateHasChanged);
         }
     }

@@ -1,6 +1,7 @@
 # 05 Blazor klient (SSR) nad School API
 
 **autor: Erik Král ekral@utb.cz**
+
 S asistencí: GitHub Copilot (GPT-5.3-Codex)
 
 ## 🎯 Definice

@@ -46,9 +46,9 @@ static async Task<NoContent> Seed(SchoolContext context)
     return TypedResults.NoContent();
 }
 
-static async Task<ServerSentEventsResult<int>> GetUpdates(ServerSentEventsService updates, CancellationToken cancellationToken)
+static async Task<ServerSentEventsResult<StudentDto>> GetUpdates(ServerSentEventsService updates, CancellationToken cancellationToken)
 {
-    ServerSentEventsResult<int> serverSentEventsResult = TypedResults.ServerSentEvents(updates.InitAndGetStream(cancellationToken));
+    ServerSentEventsResult<StudentDto> serverSentEventsResult = TypedResults.ServerSentEvents(updates.InitAndGetStream(cancellationToken));
 
     return serverSentEventsResult;
 }
@@ -88,9 +88,12 @@ static async Task<Created<StudentDto>> CreateStudent(StudentRequestDto request, 
 
     await context.SaveChangesAsync();
 
-    await eventService.WriteAsync();
+    var studentDto = new StudentDto(student.Id, student.Name, student.IsActive);
 
-    return TypedResults.Created($"/students/{student.Id}", new StudentDto(student.Id, student.Name, student.IsActive));
+    // Pošli SSE zprávu s novým studentem všem klientům
+    await eventService.WriteAsync(studentDto);
+
+    return TypedResults.Created($"/students/{student.Id}", studentDto);
 }
 
 static async Task<Results<NoContent, NotFound>> UpdateStudent(int id, StudentRequestDto request, SchoolContext context)

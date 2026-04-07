@@ -2,44 +2,36 @@
 using System.Net.ServerSentEvents;
 using System.Runtime.CompilerServices;
 using System.Threading.Channels;
+using UTB.School.Contracts;
 
 namespace UTB.School.WebApi
 {
     public class ServerSentEventsService
     {
-        private readonly ConcurrentDictionary<Guid, Channel<SseItem<int>>> subscribers = [];
+        private readonly ConcurrentDictionary<Guid, Channel<StudentDto>> subscribers = [];
 
-        public async Task WriteAsync()
+        // Zavolá se, když se vytvoří nový student
+        public async Task WriteAsync(StudentDto student)
         {
-            var item = new SseItem<int>(Random.Shared.Next(1, 100), "order-update")
-            {
-                ReconnectionInterval = TimeSpan.FromMinutes(1)
-            };
-
             // Pošli zprávu všem připojeným klientům
             foreach (var channel in subscribers.Values)
             {
-                await channel.Writer.WriteAsync(item);
+                await channel.Writer.WriteAsync(student);
             }
         }
 
-        public async IAsyncEnumerable<SseItem<int>> InitAndGetStream([EnumeratorCancellation] CancellationToken ct)
+        // Zavolá se, když se klient připojí na GET /stream
+        public async IAsyncEnumerable<StudentDto> InitAndGetStream([EnumeratorCancellation] CancellationToken ct)
         {
-            // Vytvoř kanál pro tohoto klienta
+            // Vytvoř kanál pro TOhoto konkrétního klienta
             var clientId = Guid.NewGuid();
-            var clientChannel = Channel.CreateUnbounded<SseItem<int>>();
+            var clientChannel = Channel.CreateUnbounded<StudentDto>();
 
-            // Zaregistruj tohoto klienta
+            // Zaregistruj klienta do slovníku
             subscribers.TryAdd(clientId, clientChannel);
 
             try
             {
-                // Vždy poslat init zprávu jako první
-                yield return new SseItem<int>(Random.Shared.Next(1, 100), "order-init")
-                {
-                    ReconnectionInterval = TimeSpan.FromMinutes(1)
-                };
-
                 // Pak poslouchat zprávy pro TOHOTO klienta
                 await foreach (var item in clientChannel.Reader.ReadAllAsync(ct))
                 {
