@@ -1,10 +1,14 @@
 ﻿using System.Net;
+using System.Net.ServerSentEvents;
+using System.Runtime.CompilerServices;
 using UTB.School.Contracts;
+using static System.Net.WebRequestMethods;
 
 namespace UTB.School.Web
 {
     public class SchoolService(HttpClient httpClient)
     {
+        
         public async Task<Result<StudentDto[]>> GetStudentsAsync()
         {
             try
@@ -140,6 +144,26 @@ namespace UTB.School.Web
             catch (TaskCanceledException)
             {
                 return Result.Failure("Timeout");
+            }
+        }
+
+        public async IAsyncEnumerable<string> StreamSseMessagesAsync([EnumeratorCancellation] CancellationToken ct = default)
+        {
+            using HttpResponseMessage response = await httpClient.GetAsync("/stream", HttpCompletionOption.ResponseHeadersRead, ct);
+            response.EnsureSuccessStatusCode();
+
+            using Stream stream = await response.Content.ReadAsStreamAsync(ct);
+            
+            SseParser<string> parser = SseParser.Create(stream);
+
+            IAsyncEnumerable<SseItem<string>> sseEvents = parser.EnumerateAsync(ct);
+            
+            await foreach (var sseEvent in sseEvents)
+            {
+                if (!string.IsNullOrEmpty(sseEvent.Data))
+                {
+                    yield return sseEvent.Data;
+                }
             }
         }
     }

@@ -1,0 +1,39 @@
+﻿@page "/updates"
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@inject SchoolService SchoolService
+@implements IAsyncDisposable
+
+<h3>LiveUpdates</h3>
+
+<ul>
+@foreach(string message in messages)
+{
+    <li>@message</li>
+}
+</ul>
+
+@code {
+    private List<string> messages = [];
+    private CancellationTokenSource? cts;
+
+    protected override void OnInitialized()
+    {
+        cts = new CancellationTokenSource();
+        _ = ReadMessagesAsync(cts.Token);
+    }
+
+    private async Task ReadMessagesAsync(CancellationToken ct)
+    {
+        await foreach (var message in SchoolService.StreamSseMessagesAsync(ct))
+        {
+            messages.Add(message);
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        cts?.Cancel();
+        cts?.Dispose();
+    }
+}

@@ -2,12 +2,15 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using UTB.School.Contracts;
 using UTB.School.Db;
+using UTB.School.WebApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
 builder.AddNpgsqlDbContext<SchoolContext>("database");
+
+builder.Services.AddSingleton<ServerSentEventsService>();
 
 var app = builder.Build();
 
@@ -17,6 +20,7 @@ app.UseHttpsRedirection();
 
 
 app.MapPost("/dev/seed", Seed);
+app.MapGet("/stream", GetUpdates);
 app.MapGet("/students", GetStudents);
 app.MapGet("/students/{id:int}", GetStudent);
 app.MapPost("/students", CreateStudent);
@@ -40,6 +44,13 @@ static async Task<NoContent> Seed(SchoolContext context)
     await context.SaveChangesAsync();
 
     return TypedResults.NoContent();
+}
+
+static async Task<ServerSentEventsResult<int>> GetUpdates(ServerSentEventsService updates, CancellationToken cancellationToken)
+{
+    ServerSentEventsResult<int> serverSentEventsResult = TypedResults.ServerSentEvents(updates.InitAndGetStream(cancellationToken));
+
+    return serverSentEventsResult;
 }
 
 static async Task<Ok<StudentDto[]>> GetStudents(bool? isActive, SchoolContext context)
@@ -69,13 +80,15 @@ static async Task<Results<Ok<StudentDto>, NotFound>> GetStudent(int id, SchoolCo
     }
 }
 
-static async Task<Created<StudentDto>> CreateStudent(StudentRequestDto request, SchoolContext context)
+static async Task<Created<StudentDto>> CreateStudent(StudentRequestDto request, SchoolContext context, ServerSentEventsService eventService)
 {
     var student = new Student { Name = request.Name, IsActive = request.IsActive };
 
     context.Add(student);
 
     await context.SaveChangesAsync();
+
+    await eventService.WriteAsync();
 
     return TypedResults.Created($"/students/{student.Id}", new StudentDto(student.Id, student.Name, student.IsActive));
 }
