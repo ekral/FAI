@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+  <question type="cloze">
+    <name>
+      <text>Definice Blazoru</text>
+    </name>
+    <questiontext format="html">
+      <text>Blazor je {1:MULTICHOICE_S:=framework pro tvorbu webového UI v C#~JavaScriptový framework~desktopová aplikace~databázový systém}.</text>
+    </questiontext>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="cloze">
+    <name>
+      <text>Co znamená SSR</text>
+    </name>
+    <questiontext format="html">
+      <text>SSR v Blazoru znamená {1:MULTICHOICE_S:=Server-Side Rendering~System Server Request~Static Site Rendering~Secure Socket Routing}.</text>
+    </questiontext>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="cloze">
+    <name>
+      <text>Render mode Static SSR</text>
+    </name>
+    <questiontext format="html">
+      <text>Režim Static SSR znamená, že {1:MULTICHOICE_S:=stránka se vyrenderuje na serveru jako čisté HTML a není interaktivní~komponenta běží v prohlížeči~první HTML přijde ze serveru a logika běží na serveru~kombinuje server/client přístup}.</text>
+    </questiontext>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="cloze">
+    <name>
+      <text>Interactive Server render mode - komunikace</text>
+    </name>
+    <questiontext format="html">
+      <text>Režim Interactive Server používá {1:MULTICHOICE_S:=SignalR spojení pro interaktivitu se serverem~WebAssembly pro běh v prohlížeči~statický HTML bez interakcí~komunikaci přes REST API}.</text>
+    </questiontext>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="cloze">
+    <name>
+      <text>BaseAddress v Aspire - service discovery</text>
+    </name>
+    <questiontext format="html">
+      <text>V Aspire se HTTP klient registruje s BaseAddress {1:MULTICHOICE_S:=s názvem resource (https://webapi) místo pevného portu~vždy s localhost adresou~bez ohledu na konfiguraci~s fixním portem 5000}.</text>
+    </questiontext>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="cloze">
+    <name>
+      <text>Registrace RazorComponents v Program.cs</text>
+    </name>
+    <questiontext format="html">
+      <text>V Program.cs Blazor projektu se RazorComponents pro Interactive Server registrují pomocí {1:MULTICHOICE_S:=AddRazorComponents().AddInteractiveServerComponents()~AddBlazorServices()~AddServerSideRendering()~AddWebComponents()}.</text>
+    </questiontext>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="multichoice">
+    <name>
+      <text>HTTP klient - registrace v Blazoru</text>
+    </name>
+    <questiontext format="html">
+      <text>V Program.cs Blazor projektu se HTTP klient registruje takto:&lt;br&gt;&lt;br&gt;&lt;code&gt;builder.Services.AddHttpClient&lt;SchoolService&gt;(c =&gt; c.BaseAddress = new Uri("https://webapi"));&lt;/code&gt;&lt;br&gt;&lt;br&gt;Proč se používá "https://webapi" místo "https://localhost:xxxx"?</text>
+    </questiontext>
+    <answer fraction="100">
+      <text>Protože Aspire service discovery používá stabilní jména resource; porty jsou dynamické a mění se</text>
+    </answer>
+    <answer fraction="0">
+      <text>Protože https://webapi je vždy na portu 443</text>
+    </answer>
+    <answer fraction="0">
+      <text>Aby bylo připojení bezpečnější</text>
+    </answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="multichoice">
+    <name>
+      <text>GetStudentsAsync - implementace v SchoolService</text>
+    </name>
+    <questiontext format="html">
+      <text>Metoda GetStudentsAsync:&lt;br&gt;&lt;br&gt;&lt;code&gt;public async Task&lt;StudentDto[]&gt; GetStudentsAsync()&lt;br&gt;{&lt;br&gt;    StudentDto[]? students = await httpClient.GetFromJsonAsync&lt;StudentDto[]&gt;("/students");&lt;br&gt;    return students ?? [];&lt;br&gt;}&lt;/code&gt;&lt;br&gt;&lt;br&gt;Co řeší ?? []?</text>
+    </questiontext>
+    <answer fraction="100">
+      <text>Vrací prázdné pole, pokud GetFromJsonAsync vrátí null</text>
+    </answer>
+    <answer fraction="0">
+      <text>Vrací null, pokud je pole prázdné</text>
+    </answer>
+    <answer fraction="0">
+      <text>Filtruje pouze aktivní prvky</text>
+    </answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="multichoice">
+    <name>
+      <text>DeleteStudentAsync - vracení bool hodnoty</text>
+    </name>
+    <questiontext format="html">
+      <text>Metoda DeleteStudentAsync:&lt;br&gt;&lt;br&gt;&lt;code&gt;public async Task&lt;bool&gt; DeleteStudentAsync(int studentId)&lt;br&gt;{&lt;br&gt;    HttpResponseMessage response = await httpClient.DeleteAsync($"/students/{studentId}");&lt;br&gt;    return response.StatusCode == HttpStatusCode.NoContent;&lt;br&gt;}&lt;/code&gt;&lt;br&gt;&lt;br&gt;Proč se vrátí true pouze při HttpStatusCode.NoContent?</text>
+    </questiontext>
+    <answer fraction="100">
+      <text>Protože DELETE endpoint při úspěchu vrací 204 NoContent</text>
+    </answer>
+    <answer fraction="0">
+      <text>Protože to je vždy výchozí status pro DELETE operace</text>
+    </answer>
+    <answer fraction="0">
+      <text>Aby se zabránilo parsování JSON</text>
+    </answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="multichoice">
+    <name>
+      <text>Delete metoda - refresh seznamu</text>
+    </name>
+    <questiontext format="html">
+      <text>V Students.razor Delete metoda:&lt;br&gt;&lt;br&gt;&lt;code&gt;private async Task Delete(int studentId)&lt;br&gt;{&lt;br&gt;    bool deleted = await SchoolService.DeleteStudentAsync(studentId);&lt;br&gt;    if (deleted)&lt;br&gt;    {&lt;br&gt;        await LoadStudentsAsync();&lt;br&gt;    }&lt;br&gt;}&lt;/code&gt;&lt;br&gt;&lt;br&gt;Proč se po smazání volá LoadStudentsAsync()?</text>
+    </questiontext>
+    <answer fraction="100">
+      <text>Aby se seznam aktualizoval z serveru a smazaný student zmizí z tabulky</text>
+    </answer>
+    <answer fraction="0">
+      <text>Protože to je povinné volání v Blazoru</text>
+    </answer>
+    <answer fraction="0">
+      <text>Aby se zabránilo chybě při převodu dat</text>
+    </answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="multichoice">
+    <name>
+      <text>@inject - dependency injection</text>
+    </name>
+    <questiontext format="html">
+      <text>V Students.razor:&lt;br&gt;&lt;br&gt;&lt;code&gt;@inject SchoolService SchoolService&lt;/code&gt;&lt;br&gt;&lt;br&gt;Co tato direktiva umožňuje?</text>
+    </questiontext>
+    <answer fraction="100">
+      <text>Umožňuje používat SchoolService, kterou injektuje Ioc kontejner</text>
+    </answer>
+    <answer fraction="0">
+      <text>Registruje SchoolService do DI kontejneru</text>
+    </answer>
+    <answer fraction="0">
+      <text>Definuje novou třídu.</text>
+    </answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="multichoice">
+    <name>
+      <text>@foreach tabulka - @onclick handler</text>
+    </name>
+    <questiontext format="html">
+      <text>V tabulce Students.razor:&lt;br&gt;&lt;br&gt;&lt;code&gt;@foreach (var student in students)&lt;br&gt;{&lt;br&gt;    &lt;button @onclick="() =&gt; Delete(student.Id)"&gt;Delete&lt;/button&gt;&lt;br&gt;}&lt;/code&gt;&lt;br&gt;&lt;br&gt;Jaký je účel @onclick direktivy?</text>
+    </questiontext>
+    <answer fraction="100">
+      <text>Registruje handler, který se zavolá po kliknutí tlačítka</text>
+    </answer>
+    <answer fraction="0">
+      <text>Bindování na property</text>
+    </answer>
+    <answer fraction="0">
+      <text>Mění barvu tlačítka</text>
+    </answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="multichoice">
+    <name>
+      <text>Aspire AppHost - propojení Web a WebApi</text>
+    </name>
+    <questiontext format="html">
+      <text>V Aspire AppHostu:&lt;br&gt;&lt;br&gt;&lt;code&gt;var webapi = builder.AddProject&lt;Projects.UTB_School_WebApi&gt;("webapi")&lt;br&gt;    .WithReference(database)&lt;br&gt;    .WaitFor(database);&lt;br&gt;&lt;br&gt;_ = builder.AddProject&lt;Projects.UTB_School_Web&gt;("web")&lt;br&gt;    .WithReference(webapi)&lt;br&gt;    .WaitFor(webapi);&lt;/code&gt;&lt;br&gt;&lt;br&gt;Co umožňuje WithReference(webapi)?</text>
+    </questiontext>
+    <answer fraction="100">
+      <text>Umožňuje Web zjistit adresu WebApi a komunikovat s ním</text>
+    </answer>
+    <answer fraction="0">
+      <text>Zajistí, že WebApi se spustí před Web projektem</text>
+    </answer>
+    <answer fraction="0">
+      <text>Registruje WebApi na pevný port</text>
+    </answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="multichoice">
+    <name>
+      <text>DTO - umístění v projektech</text>
+    </name>
+    <questiontext format="html">
+      <text>V UTB.School řešení jsou DTO objekty (StudentDto, StudentRequestDto) umístěny v projektu:</text>
+    </questiontext>
+    <answer fraction="100">
+      <text>Contracts</text>
+    </answer>
+    <answer fraction="0">
+      <text>WebApi</text>
+    </answer>
+    <answer fraction="0">
+      <text>Db</text>
+    </answer>
+    <answer fraction="0">
+      <text>Web</text>
+    </answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="truefalse">
+    <name>
+      <text>Prerender: false v Interactive Server</text>
+    </name>
+    <questiontext format="html">
+      <text>V příkladu Students.razor je prerender nastaven na false. To znamená, že stránka bude nejdříve staticky vyrenderována na serveru než se stane interaktivní.</text>
+    </questiontext>
+    <answer fraction="0" format="moodle_auto_format">
+      <text>true</text>
+    </answer>
+    <answer fraction="100" format="moodle_auto_format">
+      <text>false</text>
+    </answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="truefalse">
+    <name>
+      <text>DTO oddělení od entit</text>
+    </name>
+    <questiontext format="html">
+      <text>V UTB.School řešení se DTO objekty uchovávají v projektu Contracts odděleně od entit v projektu Db pro lepší oddělení vrstev a bezpečnost.</text>
+    </questiontext>
+    <answer fraction="100" format="moodle_auto_format">
+      <text>true</text>
+    </answer>
+    <answer fraction="0" format="moodle_auto_format">
+      <text>false</text>
+    </answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="truefalse">
+    <name>
+      <text>Aspire AppHost - WaitFor</text>
+    </name>
+    <questiontext format="html">
+      <text>V Aspire AppHostu se WaitFor() používá k zajištění, že Web API se nespustí dříve než databáze bude připravena.</text>
+    </questiontext>
+    <answer fraction="100" format="moodle_auto_format">
+      <text>true</text>
+    </answer>
+    <answer fraction="0" format="moodle_auto_format">
+      <text>false</text>
+    </answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+</quiz>

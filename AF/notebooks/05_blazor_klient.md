@@ -99,6 +99,8 @@ V `Program.cs` projektu `UTB.School.Web` jsou klíčové dvě části.
 
 ### a) Registrace HTTP klienta pro SchoolService
 
+V projektu máme zaregistrovaného HttpClienta jako službu s lifetimem Scoped, což znamená, že pro každý HTTP request (nebo v případě Blazoru pro každou uživatelskou session) bude vytvořena jedna instance `SchoolService` a `HttpClient`.
+
 ```csharp
 builder.Services.AddHttpClient<SchoolService>(c => c.BaseAddress = new Uri("https://webapi"));
 ```

@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+  <question type="cloze">
+    <name><text>Rozsah integračního testu</text></name>
+    <questiontext format="html"><text>Integrační test typicky ověřuje {1:MULTICHOICE_S:=spolupráci více vrstev aplikace~jen jednu izolovanou metodu~jen formátování kódu~jen výkon jedné smyčky}.</text></questiontext>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="cloze">
+    <name><text>Proč dělat integrační testy</text></name>
+    <questiontext format="html"><text>Hlavní důvod integračních testů je odhalit chyby v {1:MULTICHOICE_S:=integraci komponent a infrastruktury~pojmenování proměnných~barvách uživatelského rozhraní~syntaxi markdownu}.</text></questiontext>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="cloze">
+    <name><text>Přínos Aspire</text></name>
+    <questiontext format="html"><text>Aspire v integračních testech usnadňuje {1:MULTICHOICE_S:=orchestrace služeb a jejich závislostí~ruční přepis všech portů po každém spuštění~vypnutí databáze během testu~převod CSharp na Java}.</text></questiontext>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="cloze">
+    <name><text>Service discovery</text></name>
+    <questiontext format="html"><text>Service discovery v Aspire umožňuje používat {1:MULTICHOICE_S:=stabilní názvy služeb místo pevných portů~jen localhost bez názvů služeb~pouze ipv6 adresy~náhodné URL v každém testu}.</text></questiontext>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="cloze">
+    <name><text>Účel TestFixture</text></name>
+    <questiontext format="html"><text>TestFixture slouží ke {1:MULTICHOICE_S:=sdílené přípravě testovacího prostředí~náhodnému mazání testů~překladu aplikace do release~exportu výsledků do pdf}.</text></questiontext>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="cloze">
+    <name><text>Čekání na ready stav</text></name>
+    <questiontext format="html"><text>Před spuštěním testů je vhodné čekat na health stav služeb, aby se omezily {1:MULTICHOICE_S:=nestabilní chyby způsobené nepřipravenou infrastrukturou~chyby diakritiky v názvech~problémy s odsazením markdownu~chyby způsobené komentáři v kódu}.</text></questiontext>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="cloze">
+    <name><text>Paralelizace a sdílená DB</text></name>
+    <questiontext format="html"><text>Pokud více testů sdílí jednu databázi, paralelizace se často {1:MULTICHOICE_S:=vypíná kvůli kolizím dat~zapíná na maximum bez rizik~nahrazuje unit testy~řeší přidáním console write line}.</text></questiontext>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="cloze">
+    <name><text>Co ověřovat v integračním testu</text></name>
+    <questiontext format="html"><text>Kvalitní integrační test obvykle kontroluje {1:MULTICHOICE_S:=HTTP odpověď i skutečný stav databáze~jen název testovací metody~jen délku souboru~jen rychlost spuštění editoru}.</text></questiontext>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="cloze">
+    <name><text>Výhoda HttpClient v integračním testu</text></name>
+    <questiontext format="html"><text>Použití HttpClient v integračním testu je užitečné, protože testuje {1:MULTICHOICE_S:=skutečné HTTP chování endpointu~jen interní privátní metody~jen výstup loggeru~jen compile time generics}.</text></questiontext>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="cloze">
+    <name><text>Účel seed dat</text></name>
+    <questiontext format="html"><text>Seed data v integračních testech pomáhají zajistit {1:MULTICHOICE_S:=deterministické a opakovatelné výchozí podmínky~náhodné výsledky každého běhu~automatické nasazení do produkce~vypnutí všech validací}.</text></questiontext>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="multichoice">
+    <name><text>Unit vs integrační test</text></name>
+    <questiontext format="html"><text>Co nejlépe popisuje rozdíl mezi unit a integračním testem?</text></questiontext>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="100"><text>Unit test izoluje část kódu, integrační test ověřuje spolupráci více částí</text></answer>
+    <answer fraction="0"><text>Unit test je vždy pomalejší než integrační test</text></answer>
+    <answer fraction="0"><text>Integrační test se používá jen pro frontend css</text></answer>
+    <answer fraction="0"><text>Mezi nimi není žádný rozdíl</text></answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="multichoice">
+    <name><text>Proč testovat přes HTTP</text></name>
+    <questiontext format="html"><text>Proč je u WebApi integračního testu vhodné volat endpoint přes HttpClient?</text></questiontext>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="100"><text>Ověří se routing, serializace, status kódy a middleware pipeline</text></answer>
+    <answer fraction="0"><text>Je to nutné jen kvůli rychlejší kompilaci</text></answer>
+    <answer fraction="0"><text>HttpClient automaticky opraví logické chyby domény</text></answer>
+    <answer fraction="0"><text>Endpointy nelze testovat jinak než screenshotem</text></answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="multichoice">
+    <name><text>Přínos Aspire orchestrací</text></name>
+    <questiontext format="html"><text>Jaký je hlavní přínos Aspire při integračních testech více služeb?</text></questiontext>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="100"><text>Jednotné spuštění aplikace a závislostí včetně jejich návazností</text></answer>
+    <answer fraction="0"><text>Náhrada databáze za textový soubor bez konfigurace</text></answer>
+    <answer fraction="0"><text>Automatické odstranění potřeby všech testů</text></answer>
+    <answer fraction="0"><text>Povinné nasazení do cloudu před každým testem</text></answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="multichoice">
+    <name><text>Význam WithReference</text></name>
+    <questiontext format="html"><text>K čemu v Aspire typicky slouží WithReference mezi službami?</text></questiontext>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="100"><text>K propojení služeb a předání informací o závislém resource</text></answer>
+    <answer fraction="0"><text>K vynucení paralelního běhu všech testů</text></answer>
+    <answer fraction="0"><text>K vypnutí health checků</text></answer>
+    <answer fraction="0"><text>K odstranění HttpClient z aplikace</text></answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="multichoice">
+    <name><text>Význam WaitFor</text></name>
+    <questiontext format="html"><text>Proč se v AppHostu používá WaitFor u databázové služby?</text></questiontext>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="100"><text>Aby závislá služba nestartovala dříve, než je databáze připravená</text></answer>
+    <answer fraction="0"><text>Aby se vždy používal stejný pevný port</text></answer>
+    <answer fraction="0"><text>Aby se přeskočily migrace databáze</text></answer>
+    <answer fraction="0"><text>Aby testy běžely bez síťové komunikace</text></answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="multichoice">
+    <name><text>Role fixture v xUnit</text></name>
+    <questiontext format="html"><text>Jaký je hlavní účel sdílené fixture v integračních testech?</text></questiontext>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="100"><text>Jednou připravit prostředí a znovu jej použít napříč testy</text></answer>
+    <answer fraction="0"><text>Nahradit assert výrazy v testech</text></answer>
+    <answer fraction="0"><text>Automaticky opravovat chybné testy</text></answer>
+    <answer fraction="0"><text>Zakázat HTTP volání v testech</text></answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="multichoice">
+    <name><text>Proč vypnout paralelizaci</text></name>
+    <questiontext format="html"><text>Proč se v některých integračních testech nastavuje DisableParallelization = true?</text></questiontext>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="100"><text>Aby testy se sdílenými daty neovlivňovaly navzájem výsledky</text></answer>
+    <answer fraction="0"><text>Protože xUnit neumí paralelní běh vůbec</text></answer>
+    <answer fraction="0"><text>Protože databáze neumí číst data</text></answer>
+    <answer fraction="0"><text>Aby se nemusel používat HttpClient</text></answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="multichoice">
+    <name><text>Kontrola databáze po API volání</text></name>
+    <questiontext format="html"><text>Proč po API volání kontrolovat i databázi?</text></questiontext>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="100"><text>Správná HTTP odpověď sama o sobě negarantuje trvalé uložení dat</text></answer>
+    <answer fraction="0"><text>Databáze se v integračních testech nikdy nepoužívá</text></answer>
+    <answer fraction="0"><text>Kontrola databáze je potřebná jen u unit testů</text></answer>
+    <answer fraction="0"><text>Je to nutné pouze kvůli dokumentaci api</text></answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="multichoice">
+    <name><text>Kdy použít integrační test</text></name>
+    <questiontext format="html"><text>Pro který scénář je integrační test nejvhodnější?</text></questiontext>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="100"><text>Ověření, že endpoint ukládá data přes EF Core do reálné databáze</text></answer>
+    <answer fraction="0"><text>Ověření getteru jedné třídy bez závislostí</text></answer>
+    <answer fraction="0"><text>Kontrola pravopisu komentářů</text></answer>
+    <answer fraction="0"><text>Měření fps ve webovém prohlížeči</text></answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="multichoice">
+    <name><text>Stabilita integračních testů</text></name>
+    <questiontext format="html"><text>Co nejvíc pomáhá stabilitě integračních testů?</text></questiontext>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="100"><text>Deterministický setup, seed data a čekání na připravenost služeb</text></answer>
+    <answer fraction="0"><text>Náhodné pořadí assercí v každém běhu</text></answer>
+    <answer fraction="0"><text>Ignorování chyb databáze</text></answer>
+    <answer fraction="0"><text>Ruční změna konfigurace během testu</text></answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="truefalse">
+    <name><text>Kontrola DB spolu s HTTP</text></name>
+    <questiontext format="html"><text>Integrační test WebApi je kvalitnější, když kontroluje HTTP odpověď i skutečný stav databáze.</text></questiontext>
+    <answer fraction="100" format="moodle_auto_format"><text>true</text></answer>
+    <answer fraction="0" format="moodle_auto_format"><text>false</text></answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="truefalse">
+    <name><text>Paralelizace se sdílenou DB</text></name>
+    <questiontext format="html"><text>Pokud testy zapisují do stejné databáze, je vždy bezpečné je spouštět paralelně bez dalších opatření.</text></questiontext>
+    <answer fraction="0" format="moodle_auto_format"><text>true</text></answer>
+    <answer fraction="100" format="moodle_auto_format"><text>false</text></answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="truefalse">
+    <name><text>Přínos seed dat</text></name>
+    <questiontext format="html"><text>Seed data jsou užitečná pro opakovatelnost testů a předvídatelné výchozí podmínky.</text></questiontext>
+    <answer fraction="100" format="moodle_auto_format"><text>true</text></answer>
+    <answer fraction="0" format="moodle_auto_format"><text>false</text></answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="truefalse">
+    <name><text>Role WaitFor a health</text></name>
+    <questiontext format="html"><text>Čekání na ready stav služeb pomáhá snížit flaky testy způsobené předčasným startem závislostí.</text></questiontext>
+    <answer fraction="100" format="moodle_auto_format"><text>true</text></answer>
+    <answer fraction="0" format="moodle_auto_format"><text>false</text></answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="truefalse">
+    <name><text>Fixture a výkon testů</text></name>
+    <questiontext format="html"><text>Sdílená fixture může zrychlit běh testů tím, že neprovádí kompletní setup pro každý test zvlášť.</text></questiontext>
+    <answer fraction="100" format="moodle_auto_format"><text>true</text></answer>
+    <answer fraction="0" format="moodle_auto_format"><text>false</text></answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+</quiz>
