@@ -1,6 +1,7 @@
 # 06 Blazor formuláře nad School API
 
 **autor: Erik Král ekral@utb.cz**
+
 S asistencí: GitHub Copilot (GPT-5.3-Codex)
 
 ## 🎯 Definice
