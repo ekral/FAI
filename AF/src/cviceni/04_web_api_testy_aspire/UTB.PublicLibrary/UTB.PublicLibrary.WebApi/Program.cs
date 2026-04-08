@@ -15,7 +15,6 @@ app.MapDefaultEndpoints();
 
 app.UseHttpsRedirection();
 
-app.MapPost("/dev/seed", Seed);
 app.MapGet("/books", GetBooks);
 app.MapGet("/books/{id:int}", GetBook);
 app.MapPost("/books", CreateBook);
@@ -24,22 +23,6 @@ app.MapDelete("/books/{id:int}", DeleteBook);
 app.MapPatch("/books/{id:int}", PatchBookArchiveState);
 
 app.Run();
-
-static async Task<NoContent> Seed(PublicLibraryContext context)
-{
-    await context.Database.EnsureDeletedAsync();
-    await context.Database.EnsureCreatedAsync();
-
-    context.Books.AddRange(
-        new Book { Title = "Kytice", IsArchived = false },
-        new Book { Title = "Bila Nemoc", IsArchived = false },
-        new Book { Title = "Babicka", IsArchived = true }
-    );
-
-    await context.SaveChangesAsync();
-
-    return TypedResults.NoContent();
-}
 
 static async Task<Ok<BookDto[]>> GetBooks(bool? isArchived, PublicLibraryContext context)
 {

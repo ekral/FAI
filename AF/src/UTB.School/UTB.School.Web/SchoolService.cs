@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.ServerSentEvents;
 using System.Runtime.CompilerServices;
+using System.Text.Json;
 using UTB.School.Contracts;
 using static System.Net.WebRequestMethods;
 
@@ -8,7 +9,6 @@ namespace UTB.School.Web
 {
     public class SchoolService(HttpClient httpClient)
     {
-        
         public async Task<Result<StudentDto[]>> GetStudentsAsync()
         {
             try
@@ -153,20 +153,24 @@ namespace UTB.School.Web
             response.EnsureSuccessStatusCode();
 
             using var stream = await response.Content.ReadAsStreamAsync(ct);
-            
+
             SseParser<string> parser = SseParser.Create(stream);
 
-            await foreach (var sseEvent in parser.EnumerateAsync(ct))
+            await foreach (SseItem<string> sseEvent in parser.EnumerateAsync(ct))
             {
-                if (!string.IsNullOrEmpty(sseEvent.Data))
+                if(sseEvent.EventType == "init")
                 {
-                    // SSE vrací JSON string, parsuj ho na StudentDto
-                    var student = System.Text.Json.JsonSerializer.Deserialize<StudentDto>(sseEvent.Data);
-                    if (student is not null)
-                    {
-                        yield return student;
-                    }
+                    continue;
                 }
+
+                StudentDto? student = JsonSerializer.Deserialize<StudentDto>(sseEvent.Data, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+
+                if (student is null)
+                {
+                    continue;
+                }
+
+                yield return student;
             }
         }
     }

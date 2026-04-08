@@ -3,46 +3,42 @@ using System.Net.ServerSentEvents;
 using System.Runtime.CompilerServices;
 using System.Threading.Channels;
 using UTB.School.Contracts;
+using UTB.School.Db;
 
 namespace UTB.School.WebApi
 {
     public class ServerSentEventsService
     {
-        private readonly ConcurrentDictionary<Guid, Channel<StudentDto>> subscribers = [];
+        private readonly ConcurrentDictionary<Guid, Channel<SseItem<StudentDto>>> subscribers = [];
 
-        // Zavolá se, když se vytvoří nový student
         public async Task WriteAsync(StudentDto student)
         {
             // Pošli zprávu všem připojeným klientům
-            foreach (var channel in subscribers.Values)
+            foreach (Channel<SseItem<StudentDto>> channel in subscribers.Values)
             {
-                await channel.Writer.WriteAsync(student);
+                SseItem<StudentDto> sseItem = new(student, "student");
+
+                await channel.Writer.WriteAsync(sseItem);
             }
         }
 
         // Zavolá se, když se klient připojí na GET /stream
-        public async IAsyncEnumerable<StudentDto> InitAndGetStream([EnumeratorCancellation] CancellationToken ct)
+        public IAsyncEnumerable<SseItem<StudentDto>> InitAndGetStream(CancellationToken ct)
         {
-            // Vytvoř kanál pro TOhoto konkrétního klienta
+            // Vytvoř kanál pro tohoto konkrétního klienta
             var clientId = Guid.NewGuid();
-            var clientChannel = Channel.CreateUnbounded<StudentDto>();
 
-            // Zaregistruj klienta do slovníku
+            var clientChannel = Channel.CreateBounded<SseItem<StudentDto>>(new BoundedChannelOptions(20) { FullMode = BoundedChannelFullMode.DropOldest});
+
+            SseItem<StudentDto> sseItem = new(new StudentDto(-1, "", false), "init");
+
+            clientChannel.Writer.TryWrite(sseItem);
+
+            ct.Register(() => subscribers.TryRemove(clientId, out _));
+            
             subscribers.TryAdd(clientId, clientChannel);
 
-            try
-            {
-                // Pak poslouchat zprávy pro TOHOTO klienta
-                await foreach (var item in clientChannel.Reader.ReadAllAsync(ct))
-                {
-                    yield return item;
-                }
-            }
-            finally
-            {
-                // Odstraň klienta když se odpojí
-                subscribers.TryRemove(clientId, out _);
-            }
+            return clientChannel.Reader.ReadAllAsync(ct);
         }
     }
 }

@@ -18,7 +18,6 @@ app.MapDefaultEndpoints();
 
 app.UseHttpsRedirection();
 
-
 app.MapPost("/dev/seed", Seed);
 app.MapGet("/stream", GetUpdates);
 app.MapGet("/students", GetStudents);
@@ -46,9 +45,9 @@ static async Task<NoContent> Seed(SchoolContext context)
     return TypedResults.NoContent();
 }
 
-static async Task<ServerSentEventsResult<StudentDto>> GetUpdates(ServerSentEventsService updates, CancellationToken cancellationToken)
+static async Task<ServerSentEventsResult<StudentDto>> GetUpdates(ServerSentEventsService eventsService, CancellationToken cancellationToken)
 {
-    ServerSentEventsResult<StudentDto> serverSentEventsResult = TypedResults.ServerSentEvents(updates.InitAndGetStream(cancellationToken));
+    ServerSentEventsResult<StudentDto> serverSentEventsResult = TypedResults.ServerSentEvents(eventsService.InitAndGetStream(cancellationToken));
 
     return serverSentEventsResult;
 }
