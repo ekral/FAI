@@ -35,11 +35,10 @@ else
 
 @code {
     private List<StudentDto> students = [];
-    private CancellationTokenSource? cts;
+    private CancellationTokenSource cts = new();
 
     protected override void OnInitialized()
     {
-        cts = new CancellationTokenSource();
         _ = ReadMessagesAsync(cts.Token);
     }
 
@@ -58,16 +57,11 @@ else
         {
             // Ignorovat při zavření komponenty
         }
-        catch (Exception ex)
-        {
-            students.Add(new StudentDto(0, $"Chyba: {ex.Message}", false));
-            await InvokeAsync(StateHasChanged);
-        }
     }
 
     async ValueTask IAsyncDisposable.DisposeAsync()
     {
-        cts?.Cancel();
-        cts?.Dispose();
+        cts.Cancel();
+        cts.Dispose();
     }
 }
