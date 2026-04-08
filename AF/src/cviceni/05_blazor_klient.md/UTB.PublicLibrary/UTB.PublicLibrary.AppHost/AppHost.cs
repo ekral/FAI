@@ -23,4 +23,9 @@ var webapi = builder.AddProject<Projects.UTB_PublicLibrary_WebApi>("webapi")
                     .WithReference(database)
                     .WaitFor(database);
 
+builder.AddProject<Projects.UTB_PublicLibrary_DatabaseManager>("databasemanager")
+                           .WithReference(database)
+                           .WithHttpCommand("/dev/seed", "Restart Database")
+                           .WaitFor(database);
+
 builder.Build().Run();

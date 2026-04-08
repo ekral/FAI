@@ -1,10 +1,5 @@
 @UTB.PublicLibrary.WebApi_HostAddress = https://localhost:7195
 
-
-POST {{UTB.PublicLibrary.WebApi_HostAddress}}/dev/seed
-
-###
-
 GET {{UTB.PublicLibrary.WebApi_HostAddress}}/books
 
 ###
