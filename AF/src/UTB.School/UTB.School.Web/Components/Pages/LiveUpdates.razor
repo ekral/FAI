@@ -50,6 +50,7 @@ else
             await foreach (var student in SchoolService.StreamSseMessagesAsync(ct))
             {
                 students.Add(student);
+
                 await InvokeAsync(StateHasChanged);
             }
         }
