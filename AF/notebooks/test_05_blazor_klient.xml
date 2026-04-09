@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+  <question type="cloze">
+    <name><text>Co je Blazor</text></name>
+    <questiontext format="html"><text>Blazor je framework pro tvorbu {1:MULTICHOICE_S:=webového uživatelského rozhraní v CSharp~desktopových WPF aplikací~SQL migrací~docker image}.</text></questiontext>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="cloze">
+    <name><text>Význam SSR</text></name>
+    <questiontext format="html"><text>SSR v Blazoru znamená, že HTML je primárně generováno {1:MULTICHOICE_S:=na serveru~v databázi~v JavaScript bundleru~jen v CSS preprocesoru}.</text></questiontext>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="cloze">
+    <name><text>Role render mode</text></name>
+    <questiontext format="html"><text>Render mode určuje {1:MULTICHOICE_S:=kde a jak se komponenta vykresluje a zda je interaktivní~jen barvu pozadí stránky~název databáze~počet seed záznamů}.</text></questiontext>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="cloze">
+    <name><text>Static SSR interaktivita</text></name>
+    <questiontext format="html"><text>V módu Static SSR je stránka po načtení typicky {1:MULTICHOICE_S:=neinteraktivní~vždy plně interaktivní přes SignalR~spuštěná ve WebAssembly~vázaná na mobilní aplikaci}.</text></questiontext>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="cloze">
+    <name><text>Interactive Server princip</text></name>
+    <questiontext format="html"><text>Interactive Server používá pro interaktivitu spojení {1:MULTICHOICE_S:=SignalR mezi klientem a serverem~FTP mezi klientem a serverem~SMTP server~jen lokální soubor bez sítě}.</text></questiontext>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="cloze">
+    <name><text>Šablona projektu</text></name>
+    <questiontext format="html"><text>Pro vytvoření klienta v tomto tématu použijeme šablonu projektu {1:MULTICHOICE_S:=ASP.NET Core Blazor Web App~Console App~Class Library~Worker Service}.</text></questiontext>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="cloze">
+    <name><text>Service discovery adresa</text></name>
+    <questiontext format="html"><text>Při konfiguraci HttpClient v Aspire je výhodné použít adresu {1:MULTICHOICE_S:=https://webapi~https://localhost:12345 napevno~http://127.0.0.1:5000 napevno~libovolný náhodný port}.</text></questiontext>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="cloze">
+    <name><text>Načtení dat v komponentě</text></name>
+    <questiontext format="html"><text>Data z API se v Blazor komponentě nejčastěji načítají v metodě {1:MULTICHOICE_S:=OnInitializedAsync~Dispose~OnAfterRenderSync~BuildRenderTreeOnly}.</text></questiontext>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="multichoice">
+    <name><text>Registrace HttpClient služby</text></name>
+    <questiontext format="html"><text>Který princip odpovídá správné registraci SchoolService nebo LibraryService?</text></questiontext>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="100"><text>Typovaný HttpClient registrovaný v Program.cs s BaseAddress na webapi</text></answer>
+    <answer fraction="0"><text>Ruční vytváření HttpClient nové instancí v každém kliknutí na tlačítko</text></answer>
+    <answer fraction="0"><text>Uložení URL do HTML komentáře bez registrace služby</text></answer>
+    <answer fraction="0"><text>Nahrazení HttpClient přímým SQL dotazem z komponenty</text></answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="multichoice">
+    <name><text>Proč ne pevný localhost port</text></name>
+    <questiontext format="html"><text>Proč se v Aspire preferuje název služby místo pevného localhost portu?</text></questiontext>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="100"><text>Porty se mohou měnit a service discovery adresu vyřeší stabilně</text></answer>
+    <answer fraction="0"><text>Protože localhost je v .NET zakázán</text></answer>
+    <answer fraction="0"><text>Aby nebylo možné používat HTTPS</text></answer>
+    <answer fraction="0"><text>Jde jen o vizuální preference bez technického důvodu</text></answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="multichoice">
+    <name><text>Mapování interaktivního SSR</text></name>
+    <questiontext format="html"><text>Co je potřeba v Program.cs pro interaktivní serverový render mode?</text></questiontext>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="100"><text>Registrovat interactive server komponenty a přidat interactive server render mode při mapování</text></answer>
+    <answer fraction="0"><text>Pouze přidat CSS framework, render mode se nastaví automaticky</text></answer>
+    <answer fraction="0"><text>Zapnout Swagger UI ve web klientu</text></answer>
+    <answer fraction="0"><text>Vytvořit SQL trigger v databázi</text></answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="multichoice">
+    <name><text>Načtení služby v Razor komponentě</text></name>
+    <questiontext format="html"><text>Jak se v Razor stránce standardně získá instance služby pro volání API?</text></questiontext>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="100"><text>Přes dependency injection pomocí direktivy inject</text></answer>
+    <answer fraction="0"><text>Pomocí static globální proměnné ve třídě Program</text></answer>
+    <answer fraction="0"><text>Přes SQL connection string v komponentě</text></answer>
+    <answer fraction="0"><text>Není to možné, služby v Razor stránce použít nejdou</text></answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+
+  <question type="multichoice">
+    <name><text>DELETE výsledek při úspěchu</text></name>
+    <questiontext format="html"><text>Jaký status kód typicky vrací endpoint DELETE při úspěšném smazání?</text></questiontext>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="100"><text>204 NoContent</text></answer>
+    <answer fraction="0"><text>201 Created</text></answer>
+    <answer fraction="0"><text>301 Moved Permanently</text></answer>
+    <answer fraction="0"><text>500 Internal Server Error vždy při smazání</text></answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="multichoice">
+    <name><text>DTO vs entity v klientovi</text></name>
+    <questiontext format="html"><text>Proč klient v architektuře používá DTO kontrakty místo databázových entit?</text></questiontext>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="100"><text>Klient je oddělený od persistence vrstvy a používá stabilní API kontrakt</text></answer>
+    <answer fraction="0"><text>Protože DTO jsou vždy rychlejší než jakýkoli jiný typ</text></answer>
+    <answer fraction="0"><text>Entity nelze serializovat přes HTTP vůbec</text></answer>
+    <answer fraction="0"><text>Je to potřeba jen kvůli tomu, aby fungoval Docker</text></answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="truefalse">
+    <name><text>OnInitializedAsync pro API načtení</text></name>
+    <questiontext format="html"><text>V ukázce je běžné načítat data z API v metodě OnInitializedAsync.</text></questiontext>
+    <answer fraction="100" format="moodle_auto_format"><text>true</text></answer>
+    <answer fraction="0" format="moodle_auto_format"><text>false</text></answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="truefalse">
+    <name><text>Service discovery a pevné porty</text></name>
+    <questiontext format="html"><text>Service discovery v Aspire umožňuje vyhnout se pevným localhost portům v konfiguraci klienta.</text></questiontext>
+    <answer fraction="100" format="moodle_auto_format"><text>true</text></answer>
+    <answer fraction="0" format="moodle_auto_format"><text>false</text></answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="truefalse">
+    <name><text>Static SSR a klikací logika</text></name>
+    <questiontext format="html"><text>V čistém Static SSR po načtení stránky nefunguje interaktivní logika typu onclick bez přepnutí na interaktivní mód.</text></questiontext>
+    <answer fraction="100" format="moodle_auto_format"><text>true</text></answer>
+    <answer fraction="0" format="moodle_auto_format"><text>false</text></answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="truefalse">
+    <name><text>Delete bez refresh</text></name>
+    <questiontext format="html"><text>Po úspěšném smazání záznamu není potřeba v klientovi obnovit seznam dat, protože UI se vždy automaticky aktualizuje bez dalšího načtení.</text></questiontext>
+    <answer fraction="0" format="moodle_auto_format"><text>true</text></answer>
+    <answer fraction="100" format="moodle_auto_format"><text>false</text></answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+
+  <question type="truefalse">
+    <name><text>Vykreslení seznamu v tabulce</text></name>
+    <questiontext format="html"><text>V ukázkových stránkách Students nebo Books je seznam vykreslen pomocí foreach do HTML tabulky.</text></questiontext>
+    <answer fraction="100" format="moodle_auto_format"><text>true</text></answer>
+    <answer fraction="0" format="moodle_auto_format"><text>false</text></answer>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+  </question>
+</quiz>

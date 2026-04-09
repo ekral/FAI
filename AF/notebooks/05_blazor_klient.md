@@ -34,6 +34,22 @@ Webové formuláře (Create/Edit) budeme řešit až v následujícím materiál
 
 ---
 
+## 0. Jak vytvořit nový Blazor Web App projekt
+
+Pro nový klientský projekt použijeme šablonu:
+
+- `ASP.NET Core Blazor Web App`
+
+Doporučené nastavení při vytváření projektu:
+
+1. interactivity: `Interactive Server`,
+2. authentication: `None` (pro toto cvičení),
+3. framework: aktuální `.NET` verze podle výuky.
+
+Pokud projekt zakládáte přes CLI, použijte šablonu Blazor Web App (`dotnet new blazor`) a následně v `Program.cs` zapněte interactive server komponenty.
+
+---
+
 ## 1. Přehled renderovacích módů v Blazoru
 
 Blazor Web App (od .NET 8+) podporuje více renderovacích módů:
