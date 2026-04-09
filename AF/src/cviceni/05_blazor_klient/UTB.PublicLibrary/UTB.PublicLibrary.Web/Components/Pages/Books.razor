@@ -1,9 +1,46 @@
 ﻿@page "/books"
+@using Microsoft.AspNetCore.Components.Authorization
+@using UTB.PublicLibrary.Contracts
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
 @inject LibraryService LibraryService
 
 <h3>Books</h3>
 
-@code {
+@if(books is null)
+{
+    <p>Loading ... </p>    
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Title</th>
+                <th scope="col">Archived</th>
+            </tr>
+        </thead>
+        <tbody>
 
+            @foreach(BookDto book in books)
+            {
+                <tr>
+                    <th scope="row">@book.Id</th>
+                    <td>@book.Title</td>
+                    <td>@(book.IsArchived ? "Yes" : "No")</td>
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+}
+
+@code {
+    private BookDto[]? books; 
+
+    protected override async Task OnInitializedAsync()
+    {
+        books = await LibraryService.GetBooksAsync();
+    }
 }
