@@ -31,7 +31,7 @@ V tomto materiálu navážeme na SSR klienta a Web API. Cíl je porozumět:
 3. **Serverová strana** - `ServerSentEventsService` se `ConcurrentDictionary` a broadcast logikou
 4. **Klientská strana** - `SchoolService` konzumující SSE stream
 5. **Komponenta** - `LiveUpdates.razor` zobrazující přijímané zprávy
-6. **Koncepty** - `IAsyncEnumerable`, `async foreach`, `CancellationToken`, cancellation patterns
+6. **Koncepty** - `IAsyncEnumerable`, `async foreach`, `CancellationToken`, cleanup přes `ct.Register`
 
 ---
 
@@ -157,7 +157,7 @@ To je přesně pattern, který používáme i v SSE: producer zapisuje do kanál
 ```
 Klient                     Server
   |                          |
-  |------- GET /stream ------>|
+  |------- GET /stream ----->|
   |                          |
   |<----- Zpráva 1 ----------|
   |<----- Zpráva 2 ----------|
@@ -227,47 +227,45 @@ using System.Net.ServerSentEvents;
 using System.Runtime.CompilerServices;
 using System.Threading.Channels;
 using UTB.School.Contracts;
+using UTB.School.Db;
 
 namespace UTB.School.WebApi
 {
     public class ServerSentEventsService
     {
         // Dictionary: Guid (klient) → Channel (jeho zprávy)
-        private readonly ConcurrentDictionary<Guid, Channel<StudentDto>> subscribers = [];
+        private readonly ConcurrentDictionary<Guid, Channel<SseItem<StudentDto>>> subscribers = [];
 
         // Zavolá se, když se vytvoří nový student (například z CreateStudent endpointu)
         public async Task WriteAsync(StudentDto student)
         {
             // Pošli zprávu všem připojeným klientům
-            foreach (var channel in subscribers.Values)
+            foreach (Channel<SseItem<StudentDto>> channel in subscribers.Values)
             {
-                await channel.Writer.WriteAsync(student);
+                SseItem<StudentDto> sseItem = new(student, "student");
+
+                await channel.Writer.WriteAsync(sseItem);
             }
         }
 
         // Zavolá se, když se klient připojí na GET /stream
-        public async IAsyncEnumerable<StudentDto> InitAndGetStream([EnumeratorCancellation] CancellationToken ct)
+        public IAsyncEnumerable<SseItem<StudentDto>> InitAndGetStream(CancellationToken ct)
         {
-            // Vytvoř kanál pro TOhoto konkrétního klienta
+            // Vytvoř kanál pro tohoto konkrétního klienta
             var clientId = Guid.NewGuid();
-            var clientChannel = Channel.CreateUnbounded<StudentDto>();
+
+            var clientChannel = Channel.CreateBounded<SseItem<StudentDto>>(new BoundedChannelOptions(20) { FullMode = BoundedChannelFullMode.DropOldest});
+
+            SseItem<StudentDto> sseItem = new(new StudentDto(-1, "", false), "init");
+
+            clientChannel.Writer.TryWrite(sseItem);
+
+            ct.Register(() => subscribers.TryRemove(clientId, out _));
 
             // Zaregistruj klienta do slovníku
             subscribers.TryAdd(clientId, clientChannel);
 
-            try
-            {
-                // Pak poslouchat zprávy pro TOHOTO klienta
-                await foreach (var item in clientChannel.Reader.ReadAllAsync(ct))
-                {
-                    yield return item;
-                }
-            }
-            finally
-            {
-                // Odstraň klienta když se odpojí
-                subscribers.TryRemove(clientId, out _);
-            }
+            return clientChannel.Reader.ReadAllAsync(ct);
         }
     }
 }
@@ -291,42 +289,42 @@ subscribers.TryRemove(clientId, out _); // Smaž přesně TOHOTO klienta
 **2. Channel<T> - bezpečný kanál pro async**
 
 ```csharp
-var clientChannel = Channel.CreateUnbounded<StudentDto>();
+var clientChannel = Channel.CreateBounded<SseItem<StudentDto>>(
+    new BoundedChannelOptions(20) { FullMode = BoundedChannelFullMode.DropOldest });
 ```
 
 `Channel` je thread-safe fronta zpráv:
 - `Writer` píše do kanálu
 - `Reader` čte z kanálu
 - Není potřeba `lock()`, Channel to má zabudované
+- Bounded varianta chrání před nekonečným růstem paměti
 
 **3. ConcurrentDictionary - thread-safe slovník**
 
 ```csharp
-private readonly ConcurrentDictionary<Guid, Channel<SseItem<int>>> subscribers = [];
+private readonly ConcurrentDictionary<Guid, Channel<SseItem<StudentDto>>> subscribers = [];
 ```
 
 Bez `ConcurrentDictionary` bychom potřebovali `lock()`. S ním je práce bezpečná:
 - více threadů může pracovat s slovníkem zároveň
 - `subscribers.Values` vrátí snapshot kanálů
 
-**4. [EnumeratorCancellation] - zrušení iterace**
+**4. Init event + filtrování na klientovi**
 
 ```csharp
-public async IAsyncEnumerable<SseItem<int>> InitAndGetStream([EnumeratorCancellation] CancellationToken ct)
+SseItem<StudentDto> sseItem = new(new StudentDto(-1, "", false), "init");
+clientChannel.Writer.TryWrite(sseItem);
 ```
 
-Atribut `[EnumeratorCancellation]` zajistí, že `CancellationToken` se automaticky předá do `ReadAllAsync(ct)`. Když klient zavře prohlížeč, token se zruší a cyklus skončí.
+Po připojení klient dostane inicializační SSE event typu `init`. Klientská strana ho ignoruje a zpracovává jen skutečné události `student`.
 
-**5. finally blok - cleanup**
+**5. Cleanup přes CancellationToken**
 
 ```csharp
-finally
-{
-    subscribers.TryRemove(clientId, out _);
-}
+ct.Register(() => subscribers.TryRemove(clientId, out _));
 ```
 
-Zaručuje, že když se klient odpojí (nebo dojde k výjimce), je jeho kanál ze slovníku odstraněn. Bez toho by **memory leak** - kanály by zůstaly v paměti.
+Když se klient odpojí, token se zruší a callback odebere klienta ze slovníku. Následné čtení probíhá jednoduše přes `return clientChannel.Reader.ReadAllAsync(ct);`.
 
 ---
 
@@ -378,6 +376,7 @@ Klient se připojuje na `/stream` a čte SSE zprávy. Přidali jsme metodu do `S
 using System.Net;
 using System.Net.ServerSentEvents;
 using System.Runtime.CompilerServices;
+using System.Text.Json;
 using UTB.School.Contracts;
 
 namespace UTB.School.Web
@@ -401,17 +400,21 @@ namespace UTB.School.Web
             SseParser<string> parser = SseParser.Create(stream);
 
             // Iteruj přes SSE items
-            await foreach (var sseEvent in parser.EnumerateAsync(ct))
+            await foreach (SseItem<string> sseEvent in parser.EnumerateAsync(ct))
             {
-                if (!string.IsNullOrEmpty(sseEvent.Data))
+                if(sseEvent.EventType == "init")
                 {
-                    // sseEvent.Data je JSON string: {"id":1,"name":"Jan","isActive":true}
-                    var student = System.Text.Json.JsonSerializer.Deserialize<StudentDto>(sseEvent.Data);
-                    if (student is not null)
-                    {
-                        yield return student;
-                    }
+                    continue;
                 }
+
+                StudentDto? student = JsonSerializer.Deserialize<StudentDto>(sseEvent.Data, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+
+                if (student is null)
+                {
+                    continue;
+                }
+
+                yield return student;
             }
         }
     }
@@ -432,28 +435,37 @@ Normálně `GetAsync` čeká až se **vše** stáhne. S `ResponseHeadersRead` vr
 
 ```csharp
 SseParser<string> parser = SseParser.Create(stream);
-await foreach (var sseEvent in parser.EnumerateAsync(ct))
+await foreach (SseItem<string> sseEvent in parser.EnumerateAsync(ct))
 {
-    if (!string.IsNullOrEmpty(sseEvent.Data))
+    if (sseEvent.EventType == "init")
     {
-        // sseEvent.Data je JSON string: {"id":1,"name":"Jan","isActive":true}
-        var student = System.Text.Json.JsonSerializer.Deserialize<StudentDto>(sseEvent.Data);
-        if (student is not null)
-        {
-            yield return student;
-        }
+        continue;
     }
+
+    StudentDto? student = JsonSerializer.Deserialize<StudentDto>(
+        sseEvent.Data,
+        new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+
+    if (student is null)
+    {
+        continue;
+    }
+
+    yield return student;
 }
 ```
 
 SSE formát vypadá takto:
 
 ```
+event: init
+data: {"id":-1,"name":"","isActive":false}
+
+event: student
 data: {"id":1,"name":"Jan","isActive":true}
-data: {"id":2,"name":"Eva","isActive":true}
 ```
 
-`SseParser` to parsuje a vrací `SseItem<string>` objekty. Obsah v `.Data` je JSON string, kterou deserializujeme na `StudentDto`.
+`SseParser` to parsuje na `SseItem<string>`. Klient ignoruje `init` event a z `student` eventu deserializuje `.Data` na `StudentDto`.
 
 ---
 
@@ -613,9 +625,9 @@ Bez tohoto by se SSE stream nechal běžet na pozadí a byla by **memory leak**.
    ↓
 10. CreateStudent endpoint zavolá eventService.WriteAsync(studentDto)
     ↓
-11. WriteAsync() poslal StudentDto VŠEM připojeným klientům
+11. WriteAsync() pošle SSE event typu "student" všem připojeným klientům
     ↓
-12. Klient si StudentDto vezme z kanálu
+12. Klient ignoruje "init" event, zpracuje jen "student" event
     ↓
 13. SchoolService parsuje JSON string na StudentDto
     ↓
@@ -658,16 +670,11 @@ Normální `foreach` je synchronní. `async foreach` se používá s `IAsyncEnum
 ### CancellationToken
 
 ```csharp
-public async IAsyncEnumerable<T> MyStream([EnumeratorCancellation] CancellationToken ct)
-{
-    await foreach (var item in source.ReadAllAsync(ct))
-    {
-        yield return item;
-    }
-}
+ct.Register(() => subscribers.TryRemove(clientId, out _));
+return clientChannel.Reader.ReadAllAsync(ct);
 ```
 
-Token slouží pro zrušení operace. Když zavoláme `cts.Cancel()`, `ReadAllAsync(ct)` skončí s `OperationCanceledException`.
+Token slouží pro zrušení operace i cleanup. Když zavoláme `cts.Cancel()`, `ReadAllAsync(ct)` skončí a callback z `ct.Register(...)` odhlásí klienta.
 
 ### Thread-safety bez lock
 
@@ -684,353 +691,22 @@ foreach (var ch in subscribers.Values) { }
 
 ---
 
-## 9. HTML a JavaScript - vanilla SSE konzumace (bez frameworků)
-
-SSE je univerzální technologie, která funguje **bez jakýchkoliv frameworků**. Zde je ukázka, jak konzumovat SSE stream v čistém HTML a JavaScriptu.
-
-### a) HTML stránka
-
-```html
-<!DOCTYPE html>
-<html lang="cs">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nově přidaní studenti - SSE</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-        }
-        
-        th {
-            background-color: #4CAF50;
-            color: white;
-        }
-        
-        tr:hover {
-            background-color: #f5f5f5;
-        }
-        
-        .status {
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 4px;
-        }
-        
-        .status.waiting {
-            background-color: #e3f2fd;
-            color: #1976d2;
-        }
-        
-        .status.connected {
-            background-color: #e8f5e9;
-            color: #388e3c;
-        }
-        
-        .status.error {
-            background-color: #ffebee;
-            color: #c62828;
-        }
-    </style>
-</head>
-<body>
-    <h1>Nově přidaní studenti - Real-time SSE</h1>
-    
-    <div id="status" class="status waiting">
-        ⏳ Čekám na připojení...
-    </div>
-    
-    <button onclick="startStream()">Spustit stream</button>
-    <button onclick="stopStream()" style="margin-left: 10px;">Zastavit stream</button>
-    
-    <table id="studentTable">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Jméno</th>
-                <th>Aktivní</th>
-                <th>Čas přijetí</th>
-            </tr>
-        </thead>
-        <tbody id="studentBody">
-            <tr>
-                <td colspan="4" style="text-align: center;">Žádní studenti zatím...</td>
-            </tr>
-        </tbody>
-    </table>
-    
-    <script src="sse-client.js"></script>
-</body>
-</html>
-```
-
-### b) JavaScript - SSE čtečka (sse-client.js)
-
-```javascript
-// Globální proměnné
-let eventSource = null;
-const API_URL = 'https://localhost:5001/stream'; // Změň port podle tvé konfigurace
-
-// Spustit stream
-function startStream() {
-    if (eventSource !== null) {
-        console.log('Stream již běží');
-        return;
-    }
-    
-    // Vyčisti tabulku
-    clearTable();
-    updateStatus('waiting', '⏳ Připojuji se...');
-    
-    try {
-        // Vytvoř EventSource pro SSE
-        eventSource = new EventSource(API_URL);
-        
-        // Naslouchej na 'message' event (výchozí)
-        eventSource.addEventListener('message', (event) => {
-            try {
-                // event.data je JSON string
-                const student = JSON.parse(event.data);
-                console.log('Nový student přijat:', student);
-                
-                addStudentToTable(student);
-                updateStatus('connected', '✅ Připojeno - čekám na zprávy...');
-            } catch (error) {
-                console.error('Chyba při parsování JSON:', error);
-                updateStatus('error', '❌ Chyba: ' + error.message);
-            }
-        });
-        
-        // Když se stream otevře
-        eventSource.addEventListener('open', () => {
-            console.log('EventSource otevřen');
-            updateStatus('connected', '✅ Připojeno - čekám na zprávy...');
-        });
-        
-        // Když dojde k chybě
-        eventSource.addEventListener('error', (event) => {
-            console.error('SSE error:', event);
-            
-            if (eventSource.readyState === EventSource.CLOSED) {
-                updateStatus('error', '❌ Spojení zavřeno');
-                eventSource = null;
-            } else if (eventSource.readyState === EventSource.CONNECTING) {
-                updateStatus('waiting', '⏳ Pokus o znovupřipojení...');
-            }
-        });
-        
-    } catch (error) {
-        console.error('Chyba při vytváření EventSource:', error);
-        updateStatus('error', '❌ Chyba: ' + error.message);
-        eventSource = null;
-    }
-}
-
-// Zastavit stream
-function stopStream() {
-    if (eventSource !== null) {
-        eventSource.close();
-        eventSource = null;
-        updateStatus('waiting', '⏹️ Stream zastaven');
-        console.log('Stream zastaven');
-    }
-}
-
-// Přidej studenta do tabulky
-function addStudentToTable(student) {
-    const tbody = document.getElementById('studentBody');
-    
-    // Odstraň "Žádní studenti" řádek, když přijde první student
-    if (tbody.querySelector('tr td[colspan="4"]')) {
-        tbody.innerHTML = '';
-    }
-    
-    // Vytvoř nový řádek
-    const row = document.createElement('tr');
-    const now = new Date().toLocaleTimeString('cs-CZ');
-    
-    row.innerHTML = `
-        <td>${student.id}</td>
-        <td>${escapeHtml(student.name)}</td>
-        <td>${student.isActive ? '✅ Ano' : '❌ Ne'}</td>
-        <td>${now}</td>
-    `;
-    
-    // Přidej na začátek tabulky (nejnovější nahoře)
-    tbody.insertBefore(row, tbody.firstChild);
-}
-
-// Vyčisti tabulku
-function clearTable() {
-    const tbody = document.getElementById('studentBody');
-    tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Žádní studenti zatím...</td></tr>';
-}
-
-// Aktualizuj status zprávu
-function updateStatus(className, message) {
-    const statusDiv = document.getElementById('status');
-    statusDiv.className = `status ${className}`;
-    statusDiv.textContent = message;
-}
-
-// Bezpečné zobrazení HTML (prevence XSS)
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-// Spusť stream automaticky při načtení stránky
-window.addEventListener('load', () => {
-    console.log('Stránka načtena, spouštím stream...');
-    startStream();
-});
-
-// Zastavit stream když se stránka zavře
-window.addEventListener('beforeunload', () => {
-    if (eventSource !== null) {
-        stopStream();
-    }
-});
-```
-
-### c) Vysvětlení
-
-**1. EventSource API**
-
-```javascript
-const eventSource = new EventSource(API_URL);
-```
-
-`EventSource` je nativní browser API pro SSE. Je to součást HTML5 standardu a funguje ve všech moderních browserech.
-
-**2. Message handler**
-
-```javascript
-eventSource.addEventListener('message', (event) => {
-    const student = JSON.parse(event.data);
-    addStudentToTable(student);
-});
-```
-
-Každou přijatou zprávu parsujeme z JSON a přidáme do tabulky.
-
-**3. Error handling**
-
-```javascript
-eventSource.addEventListener('error', (event) => {
-    if (eventSource.readyState === EventSource.CLOSED) {
-        // Spojení bylo zavřeno
-    }
-});
-```
-
-EventSource má vestavěné automatické znovupřipojování. Pokud server vrátí 5xx chybu, browser si automaticky zkusí znovupřipojit.
-
-**4. Bezpečnost - XSS prevention**
-
-```javascript
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-```
-
-Vždy escapuj data z API, protože klient nám poslal `name` a mohla by obsahovat malicious JavaScript.
-
-### d) Porovnání: Vanilla JS vs. .NET/Blazor
-
-| Aspekt | Vanilla JS | .NET/Blazor |
-|---|---|---|
-| **Složitost** | Jednodušší, 50 řádků JS | Složitější, `IAsyncEnumerable`, `StateHasChanged` |
-| **Performance** | Přímá DOM manipulace | Přes SignalR |
-| **Type-safety** | Bez type-checkingu | C# type-checking |
-| **Server-side rendering** | Ne | Ano (SSR) |
-| **Real-time UI refresh** | Manuální DOM update | Automatická |
-| **Vhodnost** | Jednoduché stránky | Komplexní interaktivní UI |
-
-### e) Co když chceš CSS animaci při přijetí nového studenta?
-
-```javascript
-function addStudentToTable(student) {
-    const tbody = document.getElementById('studentBody');
-    
-    // ... existující kód ...
-    
-    const row = document.createElement('tr');
-    row.style.animation = 'slideIn 0.5s ease-in';
-    
-    // ... zbytek kódu ...
-}
-```
-
-A CSS:
-
-```css
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateX(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-```
-
----
-
-## 10. Jak aplikaci spustit a testovat
-
-```powershell
-dotnet run --project .\UTB.School.AppHost
-```
-
 ### Testování Blazor verze:
 
 1. Otevřete `https://localhost:5173/updates` (nebo správný port)
 2. V jiné záložce vytvořte studenta přes formulář
 3. V `/updates` se student automaticky objeví
-
-### Testování vanilla JS verze:
-
-1. Změňte port v `sse-client.js` na správný port vaší API
-2. Otevřete `index.html` v prohlížeči
-3. Klikněte "Spustit stream"
-4. V jiné záložce vytvořte studenta přes API (např. curl nebo Postman)
-5. V vanilla JS stránce se student zobrazí
-
 ---
 
-## 11. Co jsme si procvičili
+## 9. Co jsme si procvičili
 
 - Princip SSE (Server Sent Events) pro jednosměrnou real-time komunikaci
 - Broadcast pattern s `ConcurrentDictionary` a `Channel` (.NET)
 - `IAsyncEnumerable<T>` a `async foreach` (.NET)
-- `[EnumeratorCancellation]` pro správné zrušení streamů
+- `init`/`student` SSE event typy a jejich zpracování na klientovi
 - `IAsyncDisposable` pro cleanup v Blazoru
 - `StateHasChanged()` pro refresh UI (Blazor)
 - `HttpCompletionOption.ResponseHeadersRead` pro streaming
-- **Nativní EventSource API v JavaScriptu**
-- **DOM manipulace v čistém JavaScriptu**
-- **XSS prevention v frontend kódu**
 
 ---
 
@@ -1038,8 +714,8 @@ dotnet run --project .\UTB.School.AppHost
 
 1. Jaký je rozdíl mezi SSE a WebSockets?
 2. Proč používáme `ConcurrentDictionary` místo normálního `Dictionary` s `lock()`?
-3. Co dělá `[EnumeratorCancellation]` a proč je potřebný?
-4. Proč je `finally` blok v `InitAndGetStream()` důležitý?
+3. Jaký je účel `init` eventu a proč ho klient ignoruje?
+4. Proč je v `InitAndGetStream()` použito `ct.Register(() => subscribers.TryRemove(...))`?
 5. Jak se liší `StateHasChanged()` v Interactive Server renderu od Static SSR?
 6. Proč musíme volat `HttpCompletionOption.ResponseHeadersRead` místo výchozího?
 7. Co by se stalo, pokud bychom zapoměli implementovat `IAsyncDisposable`?
