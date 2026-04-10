@@ -35,6 +35,121 @@ V tomto materiálu navážeme na SSR klienta a Web API. Cíl je porozumět:
 
 ---
 
+## 0. Úvod: `yield`, `await foreach` a `Channel`
+
+Než půjdeme na SSE, je dobré si ujasnit základní stavební bloky streamování dat v C#.
+
+### a) `yield` - generování posloupnosti postupně
+
+Pomocí `yield return` ve metodě, která vrací  `IEnumerable<T>`, můžeme generovat posloupnost prvků postupně a používat při tom různé algoritmy. 
+
+```csharp
+static IEnumerable<int> Cisla()
+{
+    Thread.Sleep(1000);
+    yield return 1;
+    Thread.Sleep(1000);
+    yield return 2;
+    Thread.Sleep(1000);
+    yield return 3;
+}
+```
+
+> Poznámka: `yield return break` ukončí generování před ukončením metody.
+
+Takovou posloupnost potom používáme třeba přes klasické `foreach`.
+
+```csharp
+foreach (var cislo in Cisla())
+{
+    Console.WriteLine(cislo);
+}
+```
+
+---
+
+### b) `yield` v asynchronní metodě
+
+Když mezi položkami potřebujeme asynchronní operace (např. I/O, síť, čekání na data), použijeme `async IAsyncEnumerable<T>`:
+
+```csharp
+static async IAsyncEnumerable<int> CislaAsync()
+{
+    await Task.Delay(1000);
+    yield return 1;
+    await Task.Delay(1000);
+    yield return 2;
+    await Task.Delay(1000);
+    yield return 3;
+}
+```
+
+Konzumace probíhá přes `await foreach`:
+
+```csharp
+await foreach (var cislo in CislaAsync())
+{
+    Console.WriteLine(cislo);
+}
+```
+
+Výhoda: vlákno se mezi prvky neblokuje, protože čekání probíhá asynchronně (`await`). Díky tomu aplikace mezitím zvládne dělat další práci.
+
+---
+
+### c) `IEnumerable<T>` vs `IAsyncEnumerable<T>`
+
+- `IEnumerable<T>` je synchronní: `foreach` interně zavolá `GetEnumerator()` a pak opakovaně `MoveNext()` pro načtení dalšího prvku (hodnota je v `Current`).
+- `IAsyncEnumerable<T>` je asynchronní: `await foreach` interně zavolá `GetAsyncEnumerator()` a pak opakovaně `await MoveNextAsync()` pro načtení dalšího prvku (hodnota je v `Current`).
+- `IEnumerable<T>` je vhodné pro data, která máme rychle v paměti.
+- `IAsyncEnumerable<T>` je vhodné pro streamy a data přicházející v čase (síť, databáze, SSE).
+
+---
+
+### d) `Channel<T>` pro předávání dat mezi vlákny
+
+`Channel<T>` umožňuje bezpečně přidávat (`Writer`) a odebírat (`Reader`) prvky i z různých vláken.
+
+Klíčové je, že `Reader` umí vrátit právě `IAsyncEnumerable<T>`:
+
+```csharp
+await foreach (var item in channel.Reader.ReadAllAsync(ct))
+{
+    yield return item;
+}
+```
+
+Krátká ukázka z `Program.cs`: zápis běží v jiném vlákně (`Task.Run`), čtení běží v `Main`:
+
+```csharp
+Channel<int> channel = Channel.CreateBounded<int>(
+    new BoundedChannelOptions(10) { FullMode = BoundedChannelFullMode.DropOldest });
+
+_ = Task.Run(() => RunWriter(channel.Writer)); // producer v jiném vlákně
+
+await foreach (int znak in channel.Reader.ReadAllAsync()) // consumer v Main
+{
+    Console.WriteLine($"Zadal jsi znak: {znak}");
+}
+
+static void RunWriter(ChannelWriter<int> chanelWriter)
+{
+    ConsoleKeyInfo keyInfo;
+
+    do
+    {
+        keyInfo = Console.ReadKey(true);
+        chanelWriter.TryWrite(keyInfo.KeyChar);
+    } while (keyInfo.Key != ConsoleKey.Escape);
+
+    chanelWriter.Complete();
+}
+```
+
+To je přesně pattern, který používáme i v SSE: producer zapisuje do kanálu, consumer čte přes `await foreach` a posílá data dál klientovi.
+
+---
+
 ## 1. Co je SSE a kdy ji používat
 
 ### a) Server Sent Events - princip
