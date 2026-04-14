@@ -11,6 +11,8 @@
     <div class="alert alert-danger" role="alert">@errorMessage</div>
 }
 
+<a class="btn btn-primary" href="create">Create</a>
+
 @if(books is null)
 {
     <p>Loading ... </p>    
@@ -23,7 +25,7 @@ else
                 <th scope="col">Id</th>
                 <th scope="col">Title</th>
                 <th scope="col">Archived</th>
-                <th></th>
+                <th scope="col">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -34,7 +36,10 @@ else
                     <th scope="row">@book.Id</th>
                     <td>@book.Title</td>
                     <td>@(book.IsArchived ? "Yes" : "No")</td>
-                    <td><button class="btn btn-danger" @onclick="@(() => DeleteBook(book.Id))">Delete</button></td>
+                    <td>
+                        <button class="btn btn-danger me-2" @onclick="@(() => DeleteBook(book.Id))">Delete</button>
+                        <a class="btn btn-warning" href="edit/@book.Id">Edit</a>
+                    </td>
                 </tr>
             }
 
