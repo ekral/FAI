@@ -6,6 +6,11 @@
 
 <h3>Books</h3>
 
+@if (!string.IsNullOrWhiteSpace(errorMessage))
+{
+    <div class="alert alert-danger" role="alert">@errorMessage</div>
+}
+
 @if(books is null)
 {
     <p>Loading ... </p>    
@@ -18,6 +23,7 @@ else
                 <th scope="col">Id</th>
                 <th scope="col">Title</th>
                 <th scope="col">Archived</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -28,6 +34,7 @@ else
                     <th scope="row">@book.Id</th>
                     <td>@book.Title</td>
                     <td>@(book.IsArchived ? "Yes" : "No")</td>
+                    <td><button class="btn btn-danger" @onclick="@(() => DeleteBook(book.Id))">Delete</button></td>
                 </tr>
             }
 
@@ -37,10 +44,42 @@ else
 }
 
 @code {
-    private BookDto[]? books; 
+    private BookDto[]? books;
+    private string? errorMessage;
 
     protected override async Task OnInitializedAsync()
     {
-        books = await LibraryService.GetBooksAsync();
+        errorMessage = null;
+
+        await LoadBooksAsync();
+    }
+
+    private async Task DeleteBook(int id)
+    {
+        errorMessage = null;
+
+        try
+        {
+            await LibraryService.DeleteBookAsync(id);
+        }
+        catch (HttpRequestException)
+        {
+            errorMessage = "Deleting the book failed. Please try again.";
+            return;
+        }
+
+        await LoadBooksAsync();
+    }
+
+    private async Task LoadBooksAsync()
+    {
+        try
+        {
+            books = await LibraryService.GetBooksAsync();
+        }
+        catch (HttpRequestException)
+        {
+            errorMessage = "Loading the list failed.";
+        }
     }
 }

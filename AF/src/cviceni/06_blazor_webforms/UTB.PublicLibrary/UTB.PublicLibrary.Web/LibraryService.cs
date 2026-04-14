@@ -10,5 +10,12 @@ namespace UTB.PublicLibrary.Web
 
             return books;
         }
+
+        public async Task DeleteBookAsync(int id)
+        {
+            var response = await httpClient.DeleteAsync($"/books/{id}");
+
+            response.EnsureSuccessStatusCode();
+        }
     }
 }
