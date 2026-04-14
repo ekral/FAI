@@ -47,6 +47,8 @@ else
 
     protected override async Task OnParametersSetAsync()
     {
+        // Metoda se volá i pøi zmìnì modelu, musím dát pozor aby znovu Model nepøepsal.
+
         if (Model is not null)
         {
             return;
