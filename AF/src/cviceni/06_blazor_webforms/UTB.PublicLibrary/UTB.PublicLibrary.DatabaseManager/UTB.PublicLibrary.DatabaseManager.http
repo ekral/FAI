@@ -1,0 +1,5 @@
+@UTB.PublicLibrary.DatabaseManager_HostAddress = https://localhost:7065
+
+POST {{UTB.PublicLibrary.DatabaseManager_HostAddress}}/dev/seed
+
+###
