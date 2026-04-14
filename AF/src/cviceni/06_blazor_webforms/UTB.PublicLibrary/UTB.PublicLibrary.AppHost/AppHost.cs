@@ -32,7 +32,7 @@ else
                         .WithReference(database)
                         .WaitFor(database);
 
-    builder.AddProject<Projects.UTB_PublicLibrary_Web>("web")
+    _ = builder.AddProject<Projects.UTB_PublicLibrary_Web>("web")
                                .WithReference(webapi)
                                .WaitFor(webapi);
 }
