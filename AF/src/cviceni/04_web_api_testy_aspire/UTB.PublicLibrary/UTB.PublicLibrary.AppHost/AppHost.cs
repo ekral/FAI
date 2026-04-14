@@ -11,7 +11,7 @@ if (builder.Environment.IsEnvironment("Testing"))
 
     var database = postgres.AddDatabase("database");
 
-    var webapi = builder.AddProject<Projects.UTB_PublicLibrary_WebApi>("webapi")
+    _ = builder.AddProject<Projects.UTB_PublicLibrary_WebApi>("webapi")
                     .WithReference(database)
                     .WaitFor(database);
 }
@@ -24,7 +24,7 @@ else
 
     var database = postgres.AddDatabase("database");
 
-    var webapi = builder.AddProject<Projects.UTB_PublicLibrary_WebApi>("webapi")
+    _ = builder.AddProject<Projects.UTB_PublicLibrary_WebApi>("webapi")
                     .WithReference(database)
                     .WaitFor(database);
 
