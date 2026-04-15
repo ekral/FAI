@@ -468,7 +468,7 @@ V této kapitole jsme doplnili Blazor klienta o formuláře:
 2. Proč je vhodné mít `StudentFormModel` odděleně od `StudentRequestDto`?
 3. K čemu slouží `[SupplyParameterFromForm]`?
 4. Jak funguje `EnsureSuccessStatusCode()`?
-5. Jaké vyjimky chytáme v komponente a proč je nehodíme do `SchoolService`?
+5. Jaké vyjimky chytáme v komponentě a proč je ošetřujeme ve `SchoolService`?
 6. Proč po vytvoření nebo úpravě záznamu navigujeme zpět na `/students`?
 7. Jaký je rozdíl mezi `HttpRequestException` a `Polly.Timeout.TimeoutRejectedException`?
 
