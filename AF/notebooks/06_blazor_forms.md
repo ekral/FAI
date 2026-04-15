@@ -66,12 +66,12 @@ Proč oddělovat form model od DTO:
 
 ---
 
-## 2. Jednoduchý SchoolService pro formuláře
+## 2. SchoolService s řádným zpracováním chyb
 
-Pro potřeby create/edit nám stačí tři metody:
+SchoolService používá `EnsureSuccessStatusCode()` pro automatické vyhodnocení HTTP statusů.
+Pokud API vrátí chybový status, vyhodí se vyjimka `HttpRequestException`.
 
 ```csharp
-using System.Net;
 using UTB.School.Contracts;
 
 namespace UTB.School.Web;
@@ -80,37 +80,41 @@ public class SchoolService(HttpClient httpClient)
 {
     public async Task<StudentDto?> GetStudentAsync(int studentId)
     {
-        var response = await httpClient.GetAsync($"/students/{studentId}");
-
-        if (response.StatusCode != HttpStatusCode.OK)
-        {
-            return null;
-        }
-
-        return await response.Content.ReadFromJsonAsync<StudentDto>();
+        StudentDto? student = await httpClient.GetFromJsonAsync<StudentDto>($"/students/{studentId}");
+        return student;   
     }
 
-    public async Task<bool> CreateStudentAsync(StudentRequestDto requestDto)
+    public async Task CreateStudentAsync(StudentRequestDto requestDto)
     {
         var response = await httpClient.PostAsJsonAsync("/students", requestDto);
-        return response.StatusCode == HttpStatusCode.Created;
+        response.EnsureSuccessStatusCode();      
     }
 
-    public async Task<bool> UpdateStudentAsync(int studentId, StudentRequestDto requestDto)
+    public async Task UpdateStudentAsync(int studentId, StudentRequestDto requestDto)
     {
         var response = await httpClient.PutAsJsonAsync($"/students/{studentId}", requestDto);
-        return response.StatusCode == HttpStatusCode.NoContent;
+        response.EnsureSuccessStatusCode();
+    }
+
+    public async Task DeleteStudentAsync(int studentId)
+    {
+        var response = await httpClient.DeleteAsync($"/students/{studentId}");
+        response.EnsureSuccessStatusCode();
     }
 }
 ```
 
-Kód je zjednodušený. V produkci budeme chtít lepší diagnostiku chyb, ale pro výuku formulářů je tento tvar přehlednější.
+**Důležité:**
+- `EnsureSuccessStatusCode()` vyhodí `HttpRequestException` při stavech 4xx, 5xx.
+- `GetFromJsonAsync()` sám deserializuje odpověď a vrací `null` při problémech.
+- Vyjimky se chytají v komponentě, nikoli zde.
 
 ---
 
-## 3. CreateStudent.razor
+## 3. CreateStudent.razor se zpracováním chyb
 
-Stránka používá `EditForm` s `OnValidSubmit`. Po úspěšném odeslání přesměruje uživatele na seznam studentů.
+Stránka používá `EditForm` s `OnValidSubmit` a má try-catch blok pro zachycení API chyb.
+Chybové zprávy se zobrazují uživateli v alert boxu.
 
 ```razor
 @page "/createstudent"
@@ -119,47 +123,88 @@ Stránka používá `EditForm` s `OnValidSubmit`. Po úspěšném odeslání př
 @inject NavigationManager NavigationManager
 @inject SchoolService SchoolService
 
+@if (errorMessage is not null)
+{
+    <div class="alert alert-danger">@errorMessage</div>
+}
+
 <h3>Create Student</h3>
 
-<EditForm Model="Model" OnValidSubmit="Submit" FormName="createStudent">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
+@if (Model is null)
+{
+    <p>Loading ... </p>
+}
+else
+{
+    <EditForm Model="Model" OnValidSubmit="Submit" FormName="createStudent">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
 
-    <div class="mb-3">
-        <label class="form-label" for="textName">Name</label>
-        <InputText class="form-control" @bind-Value="Model.Name" id="textName" />
-    </div>
+        <div class="mb-3">
+            <label class="form-label" for="textName">Name</label>
+            <InputText class="form-control" @bind-Value="Model.Name" id="textName"/>
+        </div>
 
-    <div class="mb-3 form-check">
-        <InputCheckbox class="form-check-input" @bind-Value="Model.IsActive" id="checkboxIsActive" />
-        <label class="form-check-label" for="checkboxIsActive">Is active</label>
-    </div>
-
-    <button class="btn btn-primary" type="submit">Submit</button>
-</EditForm>
+        <div class="mb-3 form-check">
+            <InputCheckbox class="form-check-input" @bind-Value="Model.IsActive" id="checkboxIsActive" />
+            <label class="form-check-label" for="checkboxIsActive">Is active</label>
+        </div>
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </EditForm>
+}
 
 @code {
     [SupplyParameterFromForm]
-    public StudentFormModel Model { get; set; } = new();
+    public StudentFormModel? Model { get; set; }
+
+    private string? errorMessage;
+
+    protected override void OnInitialized()
+    {
+        Model ??= new() { Name = string.Empty, IsActive = true };
+    }
 
     private async Task Submit()
     {
-        StudentRequestDto requestDto = new(Model.Name, Model.IsActive);
-        bool created = await SchoolService.CreateStudentAsync(requestDto);
-
-        if (created)
+        if (Model is not null && Model.Name is not null)
         {
-            NavigationManager.NavigateTo("/students");
+            try
+            {
+                errorMessage = null;
+
+                StudentRequestDto requestDto = new(Model.Name, Model.IsActive);
+
+                await SchoolService.CreateStudentAsync(requestDto);
+
+                NavigationManager.NavigateTo("/students");
+            }
+            catch (HttpRequestException)
+            {
+                errorMessage = "API is not available";
+            }
+            catch (Polly.Timeout.TimeoutRejectedException)
+            {
+                errorMessage = "Timeout";
+            }
         }
     }
 }
 ```
 
+**Klíčové body:**
+- `errorMessage` je zobrazen v alert boxu, pokud je nastavena.
+- Try-catch blok zachycuje `HttpRequestException` (API selhání) a timeout vyjimky.
+- `Model` se inicializuje v `OnInitialized()`, aby byl vždy dostupný.
+- `[SupplyParameterFromForm]` je nutný, aby se model správně naplnil z HTTP form postu v SSR/Interactive Server scénáři.
+- Po úspěšném vytvoření se naviguje na `/students`.
+
 ---
 
-## 4. EditStudent.razor
+## 4. EditStudent.razor se zpracováním chyb
 
-Edit stránka má route parametr `Id`, při načtení si stáhne detail studenta a předvyplní formulář.
+Edit stránka má route parametr `Id`, načítá detail studenta a má error handling v obou klíčových místech:
+- při načtení dat (`OnParametersSetAsync`)
+- při odeslání (`Submit`)
 
 ```razor
 @page "/students/{Id:int}"
@@ -168,11 +213,16 @@ Edit stránka má route parametr `Id`, při načtení si stáhne detail studenta
 @inject NavigationManager NavigationManager
 @inject SchoolService SchoolService
 
+@if (errorMessage is not null)
+{
+    <div class="alert alert-danger">@errorMessage</div>
+}
+
 <h3>Edit Student</h3>
 
 @if (Model is null)
 {
-    <p><em>Loading...</em></p>
+    <p>Loading ... </p>
 }
 else
 {
@@ -201,6 +251,8 @@ else
     [SupplyParameterFromForm]
     public StudentFormModel? Model { get; set; }
 
+    private string? errorMessage;
+
     protected override async Task OnParametersSetAsync()
     {
         if (Model is not null)
@@ -208,61 +260,127 @@ else
             return;
         }
 
-        StudentDto? student = await SchoolService.GetStudentAsync(Id);
-
-        if (student is not null)
+        try
         {
-            Model = new StudentFormModel
+            errorMessage = null;
+            
+            StudentDto? student = await SchoolService.GetStudentAsync(Id);
+
+            if (student is not null)
             {
-                Name = student.Name,
-                IsActive = student.IsActive
-            };
+                Model = new StudentFormModel
+                {
+                    Name = student.Name,
+                    IsActive = student.IsActive
+                };
+            }
+            else
+            {
+                errorMessage = "Student was not found.";
+                Model = new();
+            }
+        }
+        catch (HttpRequestException)
+        {
+            errorMessage = "API is not available.";
+        }
+        catch (Polly.Timeout.TimeoutRejectedException)
+        {
+            errorMessage = "Timeout";
         }
     }
 
     private async Task Submit()
     {
-        if (Model is null)
-        {
-            return;
-        }
+        errorMessage = null;
 
-        StudentRequestDto requestDto = new(Model.Name, Model.IsActive);
-        bool updated = await SchoolService.UpdateStudentAsync(Id, requestDto);
-
-        if (updated)
+        if (Model is not null && Model.Name is not null)
         {
-            NavigationManager.NavigateTo("/students");
+            StudentRequestDto requestDto = new(Model.Name, Model.IsActive);
+
+            try
+            {
+                errorMessage = null;
+                
+                await SchoolService.UpdateStudentAsync(Id, requestDto);
+
+                NavigationManager.NavigateTo("students");
+            }
+            catch (HttpRequestException)
+            {
+                errorMessage = "API is not available";
+            }
+            catch (Polly.Timeout.TimeoutRejectedException)
+            {
+                errorMessage = "Timeout";
+            }
         }
     }
 }
 ```
 
+**Klíčové body:**
+- `OnParametersSetAsync()` se volá při nastavení parametrů `Id` a `Model`. Aby se při nastavování Model tento model znovu nepřepisoval, je zde kontrola `if (Model is not null) return;`.
+- Pokud student neexistuje (vrátí `null`), zobrazí se uživateli chybová zpráva.
 ---
 
-## 5. Co dělá [SupplyParameterFromForm]
+## 5. Exception handling a uživatelské chyby
+
+V reálné aplikaci je důležité bezpečně zpracovat chyby bez úniku citlivých informací.
+
+### HttpRequestException
+
+Vyhodí se, když:
+- je chybný HTTP status (4xx, 5xx) kvůli `EnsureSuccessStatusCode()`,
+- dojde k network chybě.
+
+```csharp
+catch (HttpRequestException)
+{
+    errorMessage = "API is not available";
+}
+```
+
+### Polly Timeout
+
+Polly je knihovna pro resilience (retry, timeout, circuit breaker).
+Pokud `HttpClient` překročí timeout, vyhodí `Polly.Timeout.TimeoutRejectedException`.
+
+```csharp
+catch (Polly.Timeout.TimeoutRejectedException)
+{
+    errorMessage = "Timeout";
+}
+```
+
+Timeout se konfiguruje v `Program.cs` (obvykle 30 sekund):
+
+```csharp
+builder.Services.AddHttpClient<SchoolService>(c => c.BaseAddress = new Uri("https://webapi"))
+    .AddTransientHttpErrorPolicy()
+    .WaitAndRetryAsync(retryCount: 3, sleepDuration: TimeSpan.FromSeconds(1))
+    .WrapAsync(Policy.TimeoutAsync<HttpResponseMessage>(TimeSpan.FromSeconds(30)));
+```
+
+## 6. Co dělá [SupplyParameterFromForm]
 
 `[SupplyParameterFromForm]` říká Blazoru, že hodnoty modelu se mají naplnit z HTTP form postu.
 
-V SSR/Interactive Server scénáři je to užitečné, protože:
+V našem scénáři se Static Server Side rendering je to užitečné, protože:
 
 - model je správně navázán při submitu,
-- podporuje to hladké zpracování formuláře na serveru,
+- podporuje to zpracování formuláře na serveru,
 - funguje to přirozeně s `EditForm`.
+
+Příklad:
+```csharp
+[SupplyParameterFromForm]
+public StudentFormModel? Model { get; set; }
+```
 
 ---
 
-## 6. Validace
-
-Formulář je validní pouze pokud projde DataAnnotations pravidly.
-
-Kritické části:
-
-- `<DataAnnotationsValidator />` aktivuje validaci přes atributy modelu,
-- `<ValidationSummary />` vypíše seznam chyb,
-- `OnValidSubmit` volá metodu jen při validním modelu.
-
-Díky tomu se například neodešle prázdné jméno.
+## 7. Validace
 
 ### Co přesně dělá `<DataAnnotationsValidator />`
 
@@ -314,7 +432,7 @@ Co je výhoda:
 
 ---
 
-## 7. Jak si to vyzkoušet
+## 8. Jak si to vyzkoušet
 
 1. Spusťte AppHost:
 
@@ -327,9 +445,13 @@ dotnet run --project .\UTB.School.AppHost
 4. Vytvořte nového studenta.
 5. U záznamu klikněte na `Edit`, upravte data a uložte.
 
+Při testu error handlingu:
+- Vypněte API a zkuste vytvořit studenta — zobrazí se "Timeout".
+- Vytvořte studenta s prázdným jménem — formulář nebude odeslán kvůli validaci.
+
 ---
 
-## 8. Shrnutí
+## 9. Shrnutí
 
 V této kapitole jsme doplnili Blazor klienta o formuláře:
 
@@ -340,13 +462,15 @@ V této kapitole jsme doplnili Blazor klienta o formuláře:
 
 ---
 
-## ❓ Kontrolní otázky
+## 10. Kontrolní otázky
 
 1. Jaký je rozdíl mezi `OnSubmit` a `OnValidSubmit`?
 2. Proč je vhodné mít `StudentFormModel` odděleně od `StudentRequestDto`?
 3. K čemu slouží `[SupplyParameterFromForm]`?
-4. Jak poznáte ve službě, že `POST /students` proběhl úspěšně?
-5. Proč po vytvoření nebo úpravě záznamu navigujeme zpět na `/students`?
+4. Jak funguje `EnsureSuccessStatusCode()`?
+5. Jaké vyjimky chytáme v komponente a proč je nehodíme do `SchoolService`?
+6. Proč po vytvoření nebo úpravě záznamu navigujeme zpět na `/students`?
+7. Jaký je rozdíl mezi `HttpRequestException` a `Polly.Timeout.TimeoutRejectedException`?
 
 ---
 
