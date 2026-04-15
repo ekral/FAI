@@ -51,40 +51,60 @@ else
             return;
         }
 
-        var result = await SchoolService.GetStudentAsync(Id);
-
-        if (result.IsSuccess)
+        try
         {
-            var student = result.Value!;
-            Model = new StudentFormModel
-            {
-                Name = student.Name,
-                IsActive = student.IsActive
-            };
             errorMessage = null;
+            
+            StudentDto? student = await SchoolService.GetStudentAsync(Id);
+
+            if (student is not null)
+            {
+                Model = new StudentFormModel
+                {
+                    Name = student.Name,
+                    IsActive = student.IsActive
+                };
+            }
+            else
+            {
+                errorMessage = "Student was not found.";
+
+                Model = new();
+            }
         }
-        else
+        catch (HttpRequestException)
         {
-            errorMessage = result.Error;
+            errorMessage = "API is not available.";
+        }
+        catch (Polly.Timeout.TimeoutRejectedException)
+        {
+            errorMessage = "Timeout";
         }
     }
 
     private async Task Submit()
     {
+        errorMessage = null;
+
         if (Model is not null && Model.Name is not null)
         {
             StudentRequestDto requestDto = new(Model.Name, Model.IsActive);
-            errorMessage = null;
 
-            var result = await SchoolService.UpdateStudentAsync(Id, requestDto);
-
-            if (result.IsSuccess)
+            try
             {
-                NavigationManager.NavigateTo("/students");
+                errorMessage = null;
+                
+                await SchoolService.UpdateStudentAsync(Id, requestDto);
+
+                NavigationManager.NavigateTo("students");
             }
-            else
+            catch (HttpRequestException)
             {
-                errorMessage = result.Error;
+                errorMessage = "API is not available";
+            }
+            catch (Polly.Timeout.TimeoutRejectedException)
+            {
+                errorMessage = "Timeout";
             }
         }
     }

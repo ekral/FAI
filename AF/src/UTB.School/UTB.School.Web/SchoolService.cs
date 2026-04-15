@@ -1,150 +1,46 @@
-﻿using System.Net;
-using System.Net.ServerSentEvents;
+﻿using System.Net.ServerSentEvents;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using UTB.School.Contracts;
-using static System.Net.WebRequestMethods;
 
 namespace UTB.School.Web
 {
     public class SchoolService(HttpClient httpClient)
     {
-        public async Task<Result<StudentDto[]>> GetStudentsAsync()
+        public async Task<StudentDto[]?> GetStudentsAsync()
         {
-            try
-            {
-                var response = await httpClient.GetAsync("/students");
+            var students = await httpClient.GetFromJsonAsync<StudentDto[]>("/students");
 
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    StudentDto[]? students = await response.Content.ReadFromJsonAsync<StudentDto[]>();
-                    return Result<StudentDto[]>.Success(students ?? []);
-                }
-
-                return Result<StudentDto[]>.Failure($"Načtení studentů selhalo. Neočekávaný stav: {(int)response.StatusCode} ({response.StatusCode})");
-            }
-            catch (HttpRequestException)
-            {
-                return Result<StudentDto[]>.Failure("API není dostupné");
-            }
-            catch (TaskCanceledException)
-            {
-                return Result<StudentDto[]>.Failure("Timeout");
-            }
+            return students;
         }
 
-        public async Task<Result<StudentDto>> GetStudentAsync(int studentId)
+        public async Task<StudentDto?> GetStudentAsync(int studentId)
         {
-            try
-            {
-                var response = await httpClient.GetAsync($"/students/{studentId}");
+            StudentDto? student = await httpClient.GetFromJsonAsync<StudentDto>($"/students/{studentId}");
 
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    StudentDto? student = await response.Content.ReadFromJsonAsync<StudentDto>();
-
-                    if (student is null)
-                    {
-                        return Result<StudentDto>.Failure("Nepodařilo se načíst data studenta.");
-                    }
-
-                    return Result<StudentDto>.Success(student);
-                }
-
-                if (response.StatusCode == HttpStatusCode.NotFound)
-                {
-                    return Result<StudentDto>.Failure("Požadovaný záznam neexistuje.");
-                }
-
-                return Result<StudentDto>.Failure($"Načtení studenta selhalo. Neočekávaný stav: {(int)response.StatusCode} ({response.StatusCode})");
-            }
-            catch (HttpRequestException)
-            {
-                return Result<StudentDto>.Failure("API není dostupné");
-            }
-            catch (TaskCanceledException)
-            {
-                return Result<StudentDto>.Failure("Timeout");
-            }
+            return student;   
         }
 
-        public async Task<Result> CreateStudentAsync(StudentRequestDto requestDto)
+        public async Task CreateStudentAsync(StudentRequestDto requestDto)
         {
-            try
-            {
-                var response = await httpClient.PostAsJsonAsync("/students", requestDto);
+            var response = await httpClient.PostAsJsonAsync("/students", requestDto);
 
-                if (response.StatusCode == HttpStatusCode.Created)
-                {
-                    return Result.Success();
-                }
-
-                return Result.Failure($"Vytvoření studenta selhalo. Neočekávaný stav: {(int)response.StatusCode} ({response.StatusCode})");
-            }
-            catch (HttpRequestException)
-            {
-                return Result.Failure("API není dostupné");
-            }
-            catch (TaskCanceledException)
-            {
-                return Result.Failure("Timeout");
-            }
+            response.EnsureSuccessStatusCode();      
         }
 
-        public async Task<Result> UpdateStudentAsync(int studentId, StudentRequestDto requestDto)
+        public async Task UpdateStudentAsync(int studentId, StudentRequestDto requestDto)
         {
-            try
-            {
-                var response = await httpClient.PutAsJsonAsync($"/students/{studentId}", requestDto);
+            var response = await httpClient.PutAsJsonAsync($"/students/{studentId}", requestDto);
 
-                if (response.StatusCode == HttpStatusCode.NoContent)
-                {
-                    return Result.Success();
-                }
-
-                if (response.StatusCode == HttpStatusCode.NotFound)
-                {
-                    return Result.Failure("Požadovaný záznam neexistuje.");
-                }
-
-                return Result.Failure($"Uložení změn selhalo. Neočekávaný stav: {(int)response.StatusCode} ({response.StatusCode})");
-            }
-            catch (HttpRequestException)
-            {
-                return Result.Failure("API není dostupné");
-            }
-            catch (TaskCanceledException)
-            {
-                return Result.Failure("Timeout");
-            }
+            response.EnsureSuccessStatusCode();
+               
         }
 
-        public async Task<Result> DeleteStudentAsync(int studentId)
+        public async Task DeleteStudentAsync(int studentId)
         {
-            try
-            {
-                var response = await httpClient.DeleteAsync($"/students/{studentId}");
+            var response = await httpClient.DeleteAsync($"/students/{studentId}");
 
-                if (response.StatusCode == HttpStatusCode.NoContent)
-                {
-                    return Result.Success();
-                }
-
-                if (response.StatusCode == HttpStatusCode.NotFound)
-                {
-                    return Result.Failure("Požadovaný záznam neexistuje.");
-                }
-
-                return Result.Failure($"Smazání selhalo. Neočekávaný stav: {(int)response.StatusCode} ({response.StatusCode})");
-            }
-            catch (HttpRequestException)
-            {
-                return Result.Failure("API není dostupné");
-            }
-            catch (TaskCanceledException)
-            {
-                return Result.Failure("Timeout");
-            }
+            response.EnsureSuccessStatusCode();
         }
 
         public async IAsyncEnumerable<StudentDto> StreamSseMessagesAsync([EnumeratorCancellation] CancellationToken ct = default)

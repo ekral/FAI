@@ -3,19 +3,18 @@
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
 @inject SchoolService SchoolService
 
-<PageTitle>Students</PageTitle>
-
-<h1>Students</h1>
-
-<p>This component demonstrates showing students.</p>
-
-<a class="btn btn-primary" href="/createstudent">Create</a>
-
 @if (errorMessage is not null)
 {
     <div class="alert alert-danger">@errorMessage</div>
 }
-else if (students == null)
+
+<PageTitle>Students</PageTitle>
+
+<h1>Students</h1>
+
+<a class="btn btn-primary" href="/createstudent">Create</a>
+
+@if (students == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -27,8 +26,7 @@ else
                 <th>Id</th>
                 <th>Name</th>
                 <th>Active</th>
-                <th></th>
-                <th></th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -38,8 +36,10 @@ else
                     <td>@student.Id</td>
                     <td>@student.Name</td>
                     <td>@student.IsActive</td>
-                    <td><button class="btn btn-danger" @onclick="@(() => Delete(student.Id))">Delete</button></td>
-                    <td><a class="btn btn-success" href="students/@student.Id">Edit</a></td>
+                    <td>
+                        <button class="btn btn-danger me-3" @onclick="@(() => DeleteAsync(student.Id))">Delete</button>
+                        <a class="btn btn-success" href="students/@student.Id">Edit</a>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -52,36 +52,44 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        errorMessage = null;
+
         await LoadStudentsAsync();
     }
 
-    private async Task Delete(int studentId)
+    private async Task DeleteAsync(int studentId)
     {
-        var result = await SchoolService.DeleteStudentAsync(studentId);
+        errorMessage = null;
 
-        if (result.IsSuccess)
+        try
         {
+            await SchoolService.DeleteStudentAsync(studentId);
+
             await LoadStudentsAsync();
         }
-        else
+        catch(HttpRequestException)
         {
-            errorMessage = result.Error;
+            errorMessage = "API is not available";
+        }
+        catch (Polly.Timeout.TimeoutRejectedException)
+        {
+            errorMessage = "Timeout";
         }
     }
 
     protected async Task LoadStudentsAsync()
     {
-        var result = await SchoolService.GetStudentsAsync();
-
-        if (result.IsSuccess)
+        try
         {
-            students = result.Value;
-            errorMessage = null;
+            students = await SchoolService.GetStudentsAsync();
         }
-        else
+        catch (HttpRequestException)
         {
-            students = [];
-            errorMessage = result.Error;
+            errorMessage = "API is not available";
+        }
+        catch (Polly.Timeout.TimeoutRejectedException)
+        {
+            errorMessage = "Timeout";
         }
     }
 }
