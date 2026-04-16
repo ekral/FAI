@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\UTB.School.DatabaseManager\UTB.School.DatabaseManager.csproj" />
     <ProjectReference Include="..\UTB.School.WebApi\UTB.School.WebApi.csproj" />
+    <ProjectReference Include="..\UTB.School.WebSse\UTB.School.WebSse.csproj" />
     <ProjectReference Include="..\UTB.School.Web\UTB.School.Web.csproj" />
   </ItemGroup>
 

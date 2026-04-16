@@ -34,6 +34,11 @@ else
     _ = builder.AddProject<Projects.UTB_School_Web>("web")
                .WithReference(webapi)
                .WaitFor(webapi);
+
+    builder.AddProject<Projects.UTB_School_WebSse>("websse")
+           .WithReference(webapi)
+           .WaitFor(webapi); ;
 }
+
 
 builder.Build().Run();

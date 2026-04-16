@@ -7,4 +7,5 @@
   <Project Path="UTB.School.Tests/UTB.School.Tests.csproj" />
   <Project Path="UTB.School.Web/UTB.School.Web.csproj" />
   <Project Path="UTB.School.WebApi/UTB.School.WebApi.csproj" />
+  <Project Path="UTB.School.WebSse/UTB.School.WebSse.csproj" />
 </Solution>
