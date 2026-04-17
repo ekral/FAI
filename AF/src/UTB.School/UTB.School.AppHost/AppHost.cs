@@ -35,10 +35,17 @@ else
                .WithReference(webapi)
                .WaitFor(webapi);
 
-    builder.AddProject<Projects.UTB_School_WebSse>("websse")
+    _ = builder.AddProject<Projects.UTB_School_WebSse>("websse")
            .WithReference(webapi)
-           .WaitFor(webapi); ;
+           .WaitFor(webapi);
+
+    _ = builder.AddProject<Projects.UTB_School_WebSseJavascript>("webssejavascript")
+       .WithReference(webapi)
+       .WaitFor(webapi);
+
 }
+
+
 
 
 builder.Build().Run();

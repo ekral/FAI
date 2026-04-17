@@ -1,25 +1,25 @@
 ﻿@page "/"
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
 @using System.Net.ServerSentEvents
 @using System.Text.Json
 @using UTB.School.Contracts
 @implements IAsyncDisposable
 @inject IHttpClientFactory ClientFactory
 
-<PageTitle>Home</PageTitle>
+<PageTitle>SseDemo</PageTitle>
 
-<h1>Hello, world!</h1>
-
-@if(!string.IsNullOrWhiteSpace(errorMessage))
+@if (!string.IsNullOrWhiteSpace(errorMessage))
 {
     <div class="alert alert-danger">@errorMessage</div>
 }
-else if (!string.IsNullOrWhiteSpace(message))
+
+<h1>Last Added Student</h1>
+
+
+@if (!string.IsNullOrWhiteSpace(message))
 {
     <p>@message</p>
 }
-
-
-Welcome to your new app.
 
 @code {
 
@@ -27,21 +27,26 @@ Welcome to your new app.
     private string? errorMessage;
     private string? message;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
+    {
+        _ = StartSseAsync(cts.Token);
+    }
+
+    private async Task StartSseAsync(CancellationToken ct)
     {
         var client = ClientFactory.CreateClient("webapi");
 
         try
         {
-            using var response = await client.GetAsync("/stream", HttpCompletionOption.ResponseHeadersRead, cts.Token);
+            using var response = await client.GetAsync("/stream", HttpCompletionOption.ResponseHeadersRead, ct);
 
             response.EnsureSuccessStatusCode();
 
-            using var stream = await response.Content.ReadAsStreamAsync(cts.Token);
+            using var stream = await response.Content.ReadAsStreamAsync(ct);
 
             SseParser<string> parser = SseParser.Create(stream);
 
-            await foreach (SseItem<string> sseEvent in parser.EnumerateAsync(cts.Token))
+            await foreach (SseItem<string> sseEvent in parser.EnumerateAsync(ct))
             {
                 if (sseEvent.EventType == "init")
                 {
@@ -55,7 +60,7 @@ Welcome to your new app.
                     continue;
                 }
 
-                message = student.Name;
+                message = $"{student.Id}: {student.Name} Active: {student.IsActive}";
 
                 await InvokeAsync(StateHasChanged);
             }

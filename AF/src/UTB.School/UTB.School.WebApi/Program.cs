@@ -10,6 +10,17 @@ builder.AddServiceDefaults();
 
 builder.AddNpgsqlDbContext<SchoolContext>("database");
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("https://localhost:7106")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
+
 builder.Services.AddSingleton<ServerSentEventsService>();
 
 var app = builder.Build();
@@ -17,6 +28,7 @@ var app = builder.Build();
 app.MapDefaultEndpoints();
 
 app.UseHttpsRedirection();
+app.UseCors();
 
 app.MapPost("/dev/seed", Seed);
 app.MapGet("/stream", GetUpdates);

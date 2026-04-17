@@ -1,0 +1,6 @@
+@UTB.School.WebSseJavascript_HostAddress = http://localhost:5103
+
+GET {{UTB.School.WebSseJavascript_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
