@@ -1,0 +1,72 @@
+﻿@page "/books"
+@using Microsoft.AspNetCore.Components.Authorization
+@using UTB.PublicLibrary.Contracts
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@inject LibraryService LibraryService
+
+<h3>Books</h3>
+
+@if (!string.IsNullOrWhiteSpace(errorMessage))
+{
+    <div class="alert alert-danger" role="alert">@errorMessage</div>
+}
+
+<a class="btn btn-primary" href="create">Create</a>
+
+@if(books is null)
+{
+    <p>Loading ... </p>    
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Title</th>
+                <th scope="col">Archived</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach(BookDto book in books)
+            {
+                <tr>
+                    <th scope="row">@book.Id</th>
+                    <td>@book.Title</td>
+                    <td>@(book.IsArchived ? "Yes" : "No")</td>
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+}
+
+@code {
+    private BookDto[]? books;
+    private string? errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        errorMessage = null;
+
+        await LoadBooksAsync();
+    }
+
+    private async Task LoadBooksAsync()
+    {
+        try
+        {
+            books = await LibraryService.GetBooksAsync();
+        }
+        catch (HttpRequestException)
+        {
+            errorMessage = "Loading the list failed.";
+        }
+        catch (Polly.Timeout.TimeoutRejectedException)
+        {
+            errorMessage = "Timeout";
+        }
+    }
+}
