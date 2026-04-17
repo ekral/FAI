@@ -86,5 +86,9 @@ else
         {
             errorMessage = "Loading the list failed.";
         }
+        catch (Polly.Timeout.TimeoutRejectedException)
+        {
+            errorMessage = "Timeout";
+        }
     }
 }

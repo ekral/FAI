@@ -75,7 +75,14 @@ else
         }
         catch (HttpRequestException)
         {
-            errorMessage = "Loading book failed. Please refresh and try again.";
+            errorMessage = "Api Error";
+
+            Model ??= new();
+        }
+        catch (Polly.Timeout.TimeoutRejectedException)
+        {
+            errorMessage = "Timeout";
+
             Model ??= new();
         }
     }
@@ -96,7 +103,11 @@ else
             }
             catch (HttpRequestException)
             {
-                errorMessage = "Updating the book failed. Please try again.";
+                errorMessage = "Api error";
+            }
+            catch (Polly.Timeout.TimeoutRejectedException)
+            {
+                errorMessage = "Timeout";
             }
         }
     }

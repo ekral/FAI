@@ -55,7 +55,11 @@
             }
             catch (HttpRequestException)
             {
-                errorMessage = "Creating the book failed. Please try again.";
+                errorMessage = "Api Error";
+            }
+            catch (Polly.Timeout.TimeoutRejectedException)
+            {
+                errorMessage = "Timeout";
             }
         }
     }
