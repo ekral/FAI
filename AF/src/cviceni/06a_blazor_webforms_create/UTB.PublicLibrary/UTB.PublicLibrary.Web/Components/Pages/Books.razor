@@ -25,7 +25,6 @@ else
                 <th scope="col">Id</th>
                 <th scope="col">Title</th>
                 <th scope="col">Archived</th>
-                <th scope="col">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -36,10 +35,6 @@ else
                     <th scope="row">@book.Id</th>
                     <td>@book.Title</td>
                     <td>@(book.IsArchived ? "Yes" : "No")</td>
-                    <td>
-                        <button class="btn btn-danger me-2" @onclick="@(() => DeleteBook(book.Id))">Delete</button>
-                        <a class="btn btn-warning" href="edit/@book.Id">Edit</a>
-                    </td>
                 </tr>
             }
 
@@ -55,23 +50,6 @@ else
     protected override async Task OnInitializedAsync()
     {
         errorMessage = null;
-
-        await LoadBooksAsync();
-    }
-
-    private async Task DeleteBook(int id)
-    {
-        errorMessage = null;
-
-        try
-        {
-            await LibraryService.DeleteBookAsync(id);
-        }
-        catch (HttpRequestException)
-        {
-            errorMessage = "Deleting the book failed. Please try again.";
-            return;
-        }
 
         await LoadBooksAsync();
     }
