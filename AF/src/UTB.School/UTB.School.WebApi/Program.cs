@@ -102,16 +102,14 @@ static async Task<Created<StudentDto>> CreateStudent(StudentRequestDto request, 
 
     await context.SaveChangesAsync();
 
-    // Pošli SSE zprávu s novým studentem všem klientům
-    var students = await context.Students.Select(s => new StudentDto(s.Id, s.Name, s.IsActive)).ToArrayAsync();
-    await eventService.WriteAsync(students);
+    await SendSse(context, eventService);
 
     StudentDto studentDto = new(student.Id, student.Name, student.IsActive);
 
     return TypedResults.Created($"/students/{student.Id}", studentDto);
 }
 
-static async Task<Results<NoContent, NotFound>> UpdateStudent(int id, StudentRequestDto request, SchoolContext context)
+static async Task<Results<NoContent, NotFound>> UpdateStudent(int id, StudentRequestDto request, SchoolContext context, ServerSentEventsService eventService)
 {
     if (await context.Students.FindAsync(id) is Student student)
     {
@@ -120,6 +118,8 @@ static async Task<Results<NoContent, NotFound>> UpdateStudent(int id, StudentReq
 
         await context.SaveChangesAsync();
 
+        await SendSse(context, eventService);
+
         return TypedResults.NoContent();
     }
     else
@@ -128,7 +128,7 @@ static async Task<Results<NoContent, NotFound>> UpdateStudent(int id, StudentReq
     }
 }
 
-static async Task<Results<NoContent, NotFound>> DeleteStudent(int id, SchoolContext context)
+static async Task<Results<NoContent, NotFound>> DeleteStudent(int id, SchoolContext context, ServerSentEventsService eventService)
 {
     if (await context.Students.FindAsync(id) is Student student)
     {
@@ -136,6 +136,8 @@ static async Task<Results<NoContent, NotFound>> DeleteStudent(int id, SchoolCont
 
         await context.SaveChangesAsync();
 
+        await SendSse(context, eventService);
+
         return TypedResults.NoContent();
     }
     else
@@ -144,7 +146,7 @@ static async Task<Results<NoContent, NotFound>> DeleteStudent(int id, SchoolCont
     }
 }
 
-static async Task<Results<NoContent, NotFound>> PatchStudentActivity(int id, StudentPatchRequestDto request, SchoolContext context)
+static async Task<Results<NoContent, NotFound>> PatchStudentActivity(int id, StudentPatchRequestDto request, SchoolContext context, ServerSentEventsService eventService)
 {
     if (await context.Students.FindAsync(id) is Student student)
     {
@@ -152,10 +154,20 @@ static async Task<Results<NoContent, NotFound>> PatchStudentActivity(int id, Stu
 
         await context.SaveChangesAsync();
 
+        await SendSse(context, eventService);
+
         return TypedResults.NoContent();
     }
     else
     {
         return TypedResults.NotFound();
     }
+}
+
+static async Task SendSse(SchoolContext context, ServerSentEventsService eventService)
+{
+    // Pošli SSE zprávu s novým studentem všem klientům
+    var students = await context.Students.Select(s => new StudentDto(s.Id, s.Name, s.IsActive)).ToArrayAsync();
+   
+    await eventService.WriteAsync(students);
 }
