@@ -1,0 +1,66 @@
+﻿@page "/create"
+@using UTB.PublicLibrary.Contracts
+@using UTB.PublicLibrary.Web.FormModels
+@inject LibraryService LibraryService
+@inject NavigationManager NavigationManager
+
+<h3>Create Book</h3>
+
+@if (!string.IsNullOrWhiteSpace(errorMessage))
+{
+    <div class="alert alert-danger" role="alert">@errorMessage</div>
+}
+
+<EditForm Model="Model" OnValidSubmit="Submit" FormName="CreateBookForm">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <InputText id="title" class="form-control" @bind-Value="Model!.Title"/>
+    </div>
+    <div class="mb-3">
+        <InputCheckbox id="archived" class="form-check-input" @bind-Value="Model!.IsArchived" />
+        <label for="archived" class="form-check-label">Archived</label>
+    </div>
+    <div class="mb-3">
+        <button class="btn btn-primary">Submit</button>
+    </div>
+</EditForm>
+
+@code {
+    [SupplyParameterFromForm]
+    private BookFormModel? Model { get; set; }
+
+    private string? errorMessage;
+
+    protected override void OnInitialized()
+    {
+        Model ??= new();
+    }
+
+    private async Task Submit()
+    {
+        errorMessage = null;
+
+        if (Model is not null && Model.Title is not null)
+        {
+            BookRequestDto bookDto = new BookRequestDto(Model.Title, Model.IsArchived);
+
+            try
+            {
+                await LibraryService.CreateBookAsync(bookDto);
+
+                NavigationManager.NavigateTo("/books");
+            }
+            catch (HttpRequestException)
+            {
+                errorMessage = "Api Error";
+            }
+            catch (Polly.Timeout.TimeoutRejectedException)
+            {
+                errorMessage = "Timeout";
+            }
+        }
+    }
+}

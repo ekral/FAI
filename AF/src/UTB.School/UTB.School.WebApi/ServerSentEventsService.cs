@@ -9,34 +9,32 @@ namespace UTB.School.WebApi
 {
     public class ServerSentEventsService
     {
-        private readonly ConcurrentDictionary<Guid, Channel<SseItem<StudentDto>>> subscribers = [];
+        private readonly ConcurrentDictionary<Guid, Channel<SseItem<StudentDto[]>>> subscribers = [];
 
-        public async Task WriteAsync(StudentDto student)
+        public async Task WriteAsync(StudentDto[] students)
         {
             // Pošli zprávu všem připojeným klientům
-            foreach (Channel<SseItem<StudentDto>> channel in subscribers.Values)
+            foreach (Channel<SseItem<StudentDto[]>> channel in subscribers.Values)
             {
-                SseItem<StudentDto> sseItem = new(student, "student");
+                SseItem<StudentDto[]> sseItem = new(students);
 
                 await channel.Writer.WriteAsync(sseItem);
             }
         }
 
         // Zavolá se, když se klient připojí na GET /stream
-        public IAsyncEnumerable<SseItem<StudentDto>> InitAndGetStream(CancellationToken ct)
+        public IAsyncEnumerable<SseItem<StudentDto[]>> InitAndGetStream(StudentDto[] initData, CancellationToken ct)
         {
             // Vytvoř kanál pro tohoto konkrétního klienta
             var clientId = Guid.NewGuid();
 
-            var clientChannel = Channel.CreateBounded<SseItem<StudentDto>>(new BoundedChannelOptions(20) { FullMode = BoundedChannelFullMode.DropOldest});
-
-            SseItem<StudentDto> sseItem = new(new StudentDto(-1, "", false), "init");
-
-            clientChannel.Writer.TryWrite(sseItem);
+            var clientChannel = Channel.CreateBounded<SseItem<StudentDto[]>>(new BoundedChannelOptions(20) { FullMode = BoundedChannelFullMode.DropOldest});
 
             ct.Register(() => subscribers.TryRemove(clientId, out _));
             
             subscribers.TryAdd(clientId, clientChannel);
+
+            clientChannel.Writer.TryWrite(new SseItem<StudentDto[]>(initData));
 
             return clientChannel.Reader.ReadAllAsync(ct);
         }

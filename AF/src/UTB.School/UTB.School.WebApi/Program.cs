@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using System.Net.ServerSentEvents;
 using UTB.School.Contracts;
 using UTB.School.Db;
 using UTB.School.WebApi;
@@ -31,7 +32,7 @@ app.UseHttpsRedirection();
 app.UseCors();
 
 app.MapPost("/dev/seed", Seed);
-app.MapGet("/stream", GetUpdates);
+app.MapGet("/sse", GetUpdates);
 app.MapGet("/students", GetStudents);
 app.MapGet("/students/{id:int}", GetStudent);
 app.MapPost("/students", CreateStudent);
@@ -57,11 +58,13 @@ static async Task<NoContent> Seed(SchoolContext context)
     return TypedResults.NoContent();
 }
 
-static async Task<ServerSentEventsResult<StudentDto>> GetUpdates(ServerSentEventsService eventsService, CancellationToken cancellationToken)
+static async Task<ServerSentEventsResult<StudentDto[]>> GetUpdates(ServerSentEventsService eventsService, SchoolContext context, CancellationToken cancellationToken)
 {
-    ServerSentEventsResult<StudentDto> serverSentEventsResult = TypedResults.ServerSentEvents(eventsService.InitAndGetStream(cancellationToken));
+    var students = await context.Students.Select(s => new StudentDto(s.Id, s.Name, s.IsActive)).ToArrayAsync(cancellationToken);
 
-    return serverSentEventsResult;
+    var values = eventsService.InitAndGetStream(students, cancellationToken);
+
+    return TypedResults.ServerSentEvents(values);
 }
 
 static async Task<Ok<StudentDto[]>> GetStudents(bool? isActive, SchoolContext context)
@@ -99,10 +102,11 @@ static async Task<Created<StudentDto>> CreateStudent(StudentRequestDto request, 
 
     await context.SaveChangesAsync();
 
-    var studentDto = new StudentDto(student.Id, student.Name, student.IsActive);
-
     // Pošli SSE zprávu s novým studentem všem klientům
-    await eventService.WriteAsync(studentDto);
+    var students = await context.Students.Select(s => new StudentDto(s.Id, s.Name, s.IsActive)).ToArrayAsync();
+    await eventService.WriteAsync(students);
+
+    StudentDto studentDto = new(student.Id, student.Name, student.IsActive);
 
     return TypedResults.Created($"/students/{student.Id}", studentDto);
 }

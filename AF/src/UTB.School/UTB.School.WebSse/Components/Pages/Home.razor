@@ -13,19 +13,36 @@
     <div class="alert alert-danger">@errorMessage</div>
 }
 
-<h1>Last Added Student</h1>
+<h1>Actual Students</h1>
 
-
-@if (!string.IsNullOrWhiteSpace(message))
+@if (students is not null)
 {
-    <p>@message</p>
+    <table>
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Name</th>
+                <th scope="col">Active</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(StudentDto student in students)
+            {
+                <tr>
+                    <th scope="row">@student.Id</th>
+                    <th>@student.Name</th>
+                    <th>@student.IsActive</th>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 
 @code {
 
     private CancellationTokenSource cts = new();
+    StudentDto[]? students;
     private string? errorMessage;
-    private string? message;
 
     protected override void OnInitialized()
     {
@@ -38,29 +55,17 @@
 
         try
         {
-            using var response = await client.GetAsync("/stream", HttpCompletionOption.ResponseHeadersRead, ct);
+            using var response = await client.GetAsync("/sse", HttpCompletionOption.ResponseHeadersRead, ct);
 
             response.EnsureSuccessStatusCode();
 
-            using var stream = await response.Content.ReadAsStreamAsync(ct);
+            using Stream sseStream = await response.Content.ReadAsStreamAsync(ct);
 
-            SseParser<string> parser = SseParser.Create(stream);
+            SseParser<string> parser = SseParser.Create(sseStream);
 
             await foreach (SseItem<string> sseEvent in parser.EnumerateAsync(ct))
             {
-                if (sseEvent.EventType == "init")
-                {
-                    continue;
-                }
-
-                StudentDto? student = JsonSerializer.Deserialize<StudentDto>(sseEvent.Data, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
-
-                if (student is null)
-                {
-                    continue;
-                }
-
-                message = $"{student.Id}: {student.Name} Active: {student.IsActive}";
+                students = JsonSerializer.Deserialize<StudentDto[]>(sseEvent.Data, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
                 await InvokeAsync(StateHasChanged);
             }
@@ -68,6 +73,8 @@
         catch (HttpRequestException)
         {
             errorMessage = "API is not available.";
+
+            await InvokeAsync(StateHasChanged);
         }
         catch (OperationCanceledException)
         {

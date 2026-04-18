@@ -5,39 +5,40 @@
     <title>Ahoj</title>
 </head>
 <body>
+    <p id="status"></p>
     <ul id="list">
 
     </ul>
+    <div id="students"></div>
 
     <script>
-        const evtSource = new EventSource("https://localhost:7194/stream");
-        const eventList = document.getElementById("list");
+        const evtSource = new EventSource("https://localhost:7194/sse");
+        const statusElement = document.getElementById("status");
+        const studentsElement = document.getElementById("students");
 
         evtSource.onopen = () => {
-            const newElement = document.createElement("li");
-            newElement.textContent = "SSE connected";
-            eventList.appendChild(newElement);
+            statusElement.textContent = "SSE connected";
         };
 
         evtSource.onerror = () => {
-            const newElement = document.createElement("li");
-            newElement.textContent = "SSE error";
-            eventList.appendChild(newElement);
+            statusElement.textContent = "SSE error";
         };
 
-        evtSource.addEventListener("init", (event) => {
-            const newElement = document.createElement("li");
-            newElement.textContent = `init: ${event.data}`;
-            eventList.appendChild(newElement);
-        });
+        evtSource.onmessage = (event) => {
+            statusElement.textContent = "SSE message";
 
-        evtSource.addEventListener("student", (event) => {
-            const student = JSON.parse(event.data);
+            const students = JSON.parse(event.data);
 
-            const newElement = document.createElement("li");
-            newElement.textContent = `${student.id}: ${student.name} Active: ${student.isActive}`;
-            eventList.appendChild(newElement);
-        });
+            let html = "<table><tr><th>Id</th><th>Name</th><th>IsActive</th></tr>";
+
+            for (const student of students) {
+                html += `<tr><td>${student.id}</td><td>${student.name}</td><td>${student.isActive}</td></tr>`;
+            }
+
+            html += "</table>";
+
+            studentsElement.innerHTML = html;
+        };
     </script>
 </body>
 </html>
