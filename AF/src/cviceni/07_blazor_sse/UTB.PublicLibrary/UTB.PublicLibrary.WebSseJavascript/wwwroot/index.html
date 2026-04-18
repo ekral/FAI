@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>SseDemo Javascript</title>
+</head>
+<body>
+    <p id="status"></p>
+    <ul id="list">
+    </ul>
+    <div id="books"></div>
+
+    <script>
+        const evtSource = new EventSource("https://localhost:7195/sse");
+        const statusElement = document.getElementById("status");
+        const booksElement = document.getElementById("books");
+
+        evtSource.onopen = () => {
+            statusElement.textContent = "SSE connected";
+            booksElement.innerHTML = "";
+        };
+
+        evtSource.onerror = () => {
+            statusElement.textContent = "SSE error";
+            booksElement.innerHTML = "";
+        };
+
+        evtSource.onmessage = (event) => {
+            statusElement.textContent = "SSE message";
+
+            const books = JSON.parse(event.data);
+
+            let html = "<table><tr><th>Id</th><th>Title</th><th>IsArchived</th></tr>";
+
+            for (const book of books) {
+                html += `<tr><td>${book.id}</td><td>${book.title}</td><td>${book.isArchived}</td></tr>`;
+            }
+
+            html += "</table>";
+
+            booksElement.innerHTML = html;
+        };
+    </script>
+</body>
+</html>

@@ -7,4 +7,6 @@
   <Project Path="UTB.PublicLibrary.Tests/UTB.PublicLibrary.Tests.csproj" />
   <Project Path="UTB.PublicLibrary.Web/UTB.PublicLibrary.Web.csproj" />
   <Project Path="UTB.PublicLibrary.WebApi/UTB.PublicLibrary.WebApi.csproj" />
+  <Project Path="UTB.PublicLibrary.WebSse/UTB.PublicLibrary.WebSse.csproj" />
+  <Project Path="UTB.PublicLibrary.WebSseJavascript/UTB.PublicLibrary.WebSseJavascript.csproj" />
 </Solution>

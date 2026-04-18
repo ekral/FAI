@@ -33,8 +33,16 @@ else
                         .WaitFor(database);
 
     _ = builder.AddProject<Projects.UTB_PublicLibrary_Web>("web")
-                               .WithReference(webapi)
-                               .WaitFor(webapi);
+                                   .WithReference(webapi)
+                                   .WaitFor(webapi);
+
+    _ = builder.AddProject<Projects.UTB_PublicLibrary_WebSse>("websse")
+                                   .WithReference(webapi)
+                                   .WaitFor(webapi);
+
+    _ = builder.AddProject<Projects.UTB_PublicLibrary_WebSseJavascript>("webssejavascript")
+                                   .WithReference(webapi)
+                                   .WaitFor(webapi);
 }
 
 builder.Build().Run();

@@ -2,7 +2,7 @@
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
 @using System.Net.ServerSentEvents
 @using System.Text.Json
-@using UTB.School.Contracts
+@using UTB.PublicLibrary.Contracts
 @implements IAsyncDisposable
 @inject IHttpClientFactory ClientFactory
 
@@ -13,11 +13,11 @@
     <div class="alert alert-danger">@errorMessage</div>
 }
 
-<h1>Actual Students</h1>
+<h1>Actual Books</h1>
 
-@if (students is null)
+@if(books is null)
 {
-    <p><em>Waiting ...</em></p>
+    <p><em>Waiting ...</em></p>    
 }
 else
 {
@@ -25,17 +25,17 @@ else
         <thead>
             <tr>
                 <th scope="col">Id</th>
-                <th scope="col">Name</th>
-                <th scope="col">Active</th>
+                <th scope="col">Title</th>
+                <th scope="col">Archive</th>
             </tr>
         </thead>
         <tbody>
-            @foreach(StudentDto student in students)
+            @foreach (BookDto book in books)
             {
                 <tr>
-                    <th scope="row">@student.Id</th>
-                    <th>@student.Name</th>
-                    <th>@student.IsActive</th>
+                    <th scope="row">@book.Id</th>
+                    <th>@book.Title</th>
+                    <th>@book.IsArchived</th>
                 </tr>
             }
         </tbody>
@@ -45,7 +45,7 @@ else
 @code {
 
     private CancellationTokenSource cts = new();
-    StudentDto[]? students;
+    BookDto[]? books;
     private string? errorMessage;
 
     protected override void OnInitialized()
@@ -69,7 +69,7 @@ else
 
             await foreach (SseItem<string> sseEvent in parser.EnumerateAsync(ct))
             {
-                students = JsonSerializer.Deserialize<StudentDto[]>(sseEvent.Data, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                books = JsonSerializer.Deserialize<BookDto[]>(sseEvent.Data, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
                 await InvokeAsync(StateHasChanged);
             }
