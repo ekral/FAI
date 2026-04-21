@@ -6,7 +6,7 @@ S asistencí: GitHub Copilot
 
 ## 🎯 Definice
 
-U zabezpečení webových aplikací v .NET mám dvě možnosti. Buď použijeme **individual accounts" což znamená že uživatelské učty budou uloženy v databázi pomocí Entity Frameworku a Identity frameworku a projekt nám vytvoří webové stránky pro přihlášení. Nebo v případě Web Api nám vytvoří endpointy pro přihlášení a registrací.
+U zabezpečení webových aplikací v .NET mám dvě možnosti. Buď použijeme **individual accounts** což znamená že uživatelské učty budou uloženy v databázi pomocí Entity Frameworku a Identity frameworku a projekt nám vytvoří webové stránky pro přihlášení. Nebo v případě Web Api nám vytvoří endpointy pro přihlášení a registraci.
 
 Pokud chceme ale zabezpečit zároveň webového nebo mobilního klienta, to znamené že ve webovém klientu se přihlásíme a on bude přeposílat token do API, tak můžeme použít standard OpenId s protokolem OAuth2. V tomto případě se bude starat o správu uživatelů a přihlašování externí poskytovatel identity, například Auth0, Microsoft Entra, Identity Server, Keycloak a podobně podporující standard OpenId Connect. V tomto případě nám .NET poskytuje middleware pro ověřování JWT tokenů.
 
