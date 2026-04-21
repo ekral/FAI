@@ -8,7 +8,7 @@ S asistencí: GitHub Copilot
 
 U zabezpečení webových aplikací v .NET mám dvě možnosti. Buď použijeme **individual accounts** což znamená že uživatelské učty budou uloženy v databázi pomocí Entity Frameworku a Identity frameworku a projekt nám vytvoří webové stránky pro přihlášení. Nebo v případě Web Api nám vytvoří endpointy pro přihlášení a registraci.
 
-Pokud chceme ale zabezpečit zároveň webového nebo mobilního klienta, to znamené že ve webovém klientu se přihlásíme a on bude přeposílat token do API, tak musíme použít například standard OpenId Connect s protokolem OAuth2. V tomto případě se bude starat o správu uživatelů a přihlašování externí poskytovatel identity, například Auth0, Microsoft Entra, Identity Server, Keycloak a podobné podporující tyto standardy. Pro tento případ nám .NET poskytuje middleware pro ověřování JWT tokenů.
+Pokud chceme ale zabezpečit zároveň webového nebo mobilního klienta, to znamené že ve webovém klientu se přihlásíme a on bude přeposílat token do API, tak musíme použít například standard OpenId Connect s protokolem OAuth2. V tomto případě se bude starat o správu uživatelů a přihlašování externí poskytovatel identity, například Auth0, Microsoft Entra, Identity Server, Keycloak a podobné podporující tyto standardy. Pro tento případ nám .NET poskytuje middleware pro ověřování.
 
 ## Struktura projektu
 
@@ -59,11 +59,11 @@ sequenceDiagram
 		U->>K: 4) Přihlášení (jméno/heslo, MFA...)
 		K->>K: 5) Uloží code_challenge k vydanému authorization code
 		K->>C: 6) Redirect zpět s code (authorization code)
-		C->>K: 7) Pošle code + code_verifier
+		C->>K: 7) Pošle získaný code + code_verifier
 		K->>K: 8) Ověří, že hash(code_verifier) = uložený code_challenge
 		K->>C: 9) Vrátí token response (access_token (+ id_token, refresh_token))
 		C->>A: 10) Volání API s Authorization: Bearer access_token
-		A->>K: 11) (volitelně) validace přes JWKS/introspection
+		A->>K: 11) Validace tokenu (JWKS (JSON Web Key Set) pro JWT, introspection dle konfigurace)
 		A->>C: 12) API odpověď
 ```
 
@@ -107,9 +107,10 @@ Co je důležité:
 | `id_token` | JWT | Client (aplikace) | Identita přihlášeného uživatele |
 | `refresh_token` | neprůhledný řetězec | Authorization Server | Obnovení access tokenu bez nového loginu |
 
-- `id_token`: token identity uživatele pro klientskou aplikaci (kdo je přihlášený).
+- `id_token`: token identity uživatele pro klientskou aplikaci (kdo je přihlášený). Používá se pro přihlášení a práci s identitou v klientovi, běžně se neposílá do Web API. Je vždy ve formátu **JSON Web Token (JWT)**. Keycloak vrací `id_token` jen pokud scope obsahuje `openid`.
 - `access_token`: token pro API, nese oprávnění (scope/role/audience) pro autorizaci požadavků.
-- Keycloak vrací `id_token`, pokud scope obsahuje `openid`.
+ 	- Access_token může být **JWT** (ověřuje se přez JWKS (JSON Web Key Set) což je sada veřejných klíčů které získá od autorizačního serveru). 
+	- Nebo může být **opaque/reference token (nečitelný řetězec)**, který API ověřuje přes introspection endpoint.Web API autorizačho serveru.
 
 `Bearer` znamená „držitel“. V praxi to znamená, že kdo token drží, ten ho může použít pro přístup k API.
 Proto se token posílá v hlavičce `Authorization: Bearer <token>` a je nutné ho chránit před únikem (HTTPS, krátká expirace, bezpečné uložení).
