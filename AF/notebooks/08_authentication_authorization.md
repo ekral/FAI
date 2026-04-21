@@ -8,7 +8,7 @@ S asistencí: GitHub Copilot
 
 U zabezpečení webových aplikací v .NET mám dvě možnosti. Buď použijeme **individual accounts** což znamená že uživatelské učty budou uloženy v databázi pomocí Entity Frameworku a Identity frameworku a projekt nám vytvoří webové stránky pro přihlášení. Nebo v případě Web Api nám vytvoří endpointy pro přihlášení a registraci.
 
-Pokud chceme ale zabezpečit zároveň webového nebo mobilního klienta, to znamené že ve webovém klientu se přihlásíme a on bude přeposílat token do API, tak můžeme použít standard OpenId s protokolem OAuth2. V tomto případě se bude starat o správu uživatelů a přihlašování externí poskytovatel identity, například Auth0, Microsoft Entra, Identity Server, Keycloak a podobně podporující standard OpenId Connect. V tomto případě nám .NET poskytuje middleware pro ověřování JWT tokenů.
+Pokud chceme ale zabezpečit zároveň webového nebo mobilního klienta, to znamené že ve webovém klientu se přihlásíme a on bude přeposílat token do API, tak musíme použít například standard OpenId s protokolem OAuth2. V tomto případě se bude starat o správu uživatelů a přihlašování externí poskytovatel identity, například Auth0, Microsoft Entra, Identity Server, Keycloak a podobné podporující tyto standardy. Pro tento případ nám .NET poskytuje middleware pro ověřování JWT tokenů.
 
 ## Struktura projektu
 
@@ -59,7 +59,7 @@ sequenceDiagram
 		C->>K: 2) Redirect na login (authorization request)
 		U->>K: 3) Přihlášení (jméno/heslo, MFA...)
 		K->>C: 4) Redirect zpět s authorization code
-		C->>K: 5) Výmena code za tokeny
+		C->>K: 5) Výmena code + code_verifier za tokeny (PKCE)
 		K->>C: 6) access_token (+ id_token, refresh_token)
 		C->>A: 7) Volání API s Authorization: Bearer access_token
 		A->>K: 8) (volitelně) validace přes JWKS/introspection
@@ -69,6 +69,25 @@ sequenceDiagram
 Poznámka:
 - Ve SPA se dnes doporučuje Authorization Code flow s PKCE.
 - `access_token` je pro API, `id_token` je pro klienta (identita), `refresh_token` slouží k obnovení session bez nového loginu.
+
+#### Co znamená `ResponseType = Code`
+
+Nastavení `ResponseType = Code` znamená, že klient používá **Authorization Code flow**.
+
+Keycloak v prvním kroku nevrací tokeny přímo do prohlížeče, ale vrátí jen krátkodobý **autorizační kód** (`code`).
+Teprve backend aplikace tento kód vymění na token endpointu za tokeny.
+
+Průběh krok za krokem:
+- 1) Klient pošle uživatele na authorization endpoint s `response_type=code` + PKCE (`code_challenge`, `code_challenge_method=S256`).
+- 2) Uživatel se přihlásí v Keycloaku.
+- 3) Keycloak přesměruje prohlížeč zpět na `redirect_uri` s parametrem `code`.
+- 4) Aplikace na serveru pošle `POST` na token endpoint (`grant_type=authorization_code`, `code`, `redirect_uri`, `client_id`, `code_verifier`, případně i `client_secret`).
+- 5) Keycloak vrátí `access_token`, případně `id_token` a `refresh_token`.
+
+Co je důležité:
+- přes browser (query string) jde jen autorizační požadavek a návrat s kódem,
+- výměna kódu za tokeny je backchannel komunikace server <-> Keycloak,
+- to je bezpečnější než implicit flow, kde se tokeny vracely přímo do frontendu.
 
 #### Typy tokenů
 
@@ -83,6 +102,86 @@ Poznámka:
 **id_token** je JWT token definovaný standardem OpenID Connect. Na rozdíl od `access_token` není určen pro API, ale pro **klientskou aplikaci** — říká aplikaci, kdo se přihlásil.
 
 Keycloak vystaví `id_token` pokud scope obsahuje `openid`.
+
+##### Jak vypadá požadavek na Keycloak
+
+Klient při přesměrování uživatele na login posílá authorization request, například:
+
+```http
+GET /realms/utb-school/protocol/openid-connect/auth?
+	client_id=utb-school-web&
+	response_type=code&
+	redirect_uri=https%3A%2F%2Flocalhost%3A5001%2Fsignin-oidc&
+	scope=openid%20profile%20email&
+	code_challenge=Rk9vQmFyQmF6MTIzNDU2Nzg5X1NIRTI1Ng&
+	code_challenge_method=S256&
+	state=xyz123&
+	nonce=abc123 HTTP/1.1
+Host: auth.example.cz
+```
+
+Následně proběhne výměna `code` za tokeny přes backchannel `POST` na token endpoint:
+
+```http
+POST /realms/utb-school/protocol/openid-connect/token HTTP/1.1
+Host: auth.example.cz
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=authorization_code&
+code=SplxlOBeZQQYbYS6WxSbIA&
+redirect_uri=https%3A%2F%2Flocalhost%3A5001%2Fsignin-oidc&
+client_id=utb-school-web&
+code_verifier=QWxhZGRpbjpvcGVuIHNlc2FtZQ
+```
+
+Poznámka: u confidential klienta může být navíc poslán i `client_secret`.
+
+Nejdůležitější je parametr `scope`:
+- `scope=openid ...` -> požadujeme OpenID Connect, Keycloak vrátí i `id_token`.
+- bez `openid` -> běží jen OAuth2 autorizace a `id_token` se obvykle nevrací.
+
+Po výměně autorizačního kódu na token endpointu vrací Keycloak například:
+
+```json
+{
+	"access_token": "eyJ...",
+	"expires_in": 300,
+	"refresh_expires_in": 1800,
+	"refresh_token": "eyJ...",
+	"token_type": "Bearer",
+	"id_token": "eyJ...",
+	"scope": "openid profile email"
+}
+```
+
+Pole `id_token` je v odpovědi právě proto, že v požadavku byl scope `openid`.
+
+Příklad dekódovaného payloadu `access_token` (z téhož token response):
+
+```json
+{
+	"iss": "https://auth.example.cz/realms/utb-school",
+	"sub": "8f2d9a30-2e24-4f8b-9d27-67d3ff19f145",
+	"aud": ["account", "utb-school-api"],
+	"exp": 1776751200,
+	"iat": 1776747600,
+	"typ": "Bearer",
+	"azp": "utb-school-web",
+	"scope": "openid profile email",
+	"preferred_username": "novakj",
+	"email": "jan.novak@utb.cz",
+	"realm_access": {
+		"roles": ["student"]
+	},
+	"resource_access": {
+		"utb-school-api": {
+			"roles": ["read:marks", "write:homework"]
+		}
+	}
+}
+```
+
+`access_token` je určený pro API (Authorization: Bearer ...), proto obsahuje hlavně autorizační claimy jako `aud`, `scope` a role. `realm_access` jsou realm role a `resource_access` jsou client role.
 
 Příklad dekódovaného payloadu `id_token`:
 
