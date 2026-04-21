@@ -58,10 +58,10 @@ sequenceDiagram
 		C->>K: 3) Redirect na login (+ code_challenge)
 		U->>K: 4) Přihlášení (jméno/heslo, MFA...)
 		K->>K: 5) Uloží code_challenge k vydanému authorization code
-		K->>C: 6) Redirect zpět s authorization code
-		C->>K: 7) Výmena code + code_verifier za tokeny
+		K->>C: 6) Redirect zpět s code (authorization code)
+		C->>K: 7) Pošle code + code_verifier
 		K->>K: 8) Ověří, že hash(code_verifier) = uložený code_challenge
-		K->>C: 9) access_token (+ id_token, refresh_token)
+		K->>C: 9) Vrátí token response (access_token (+ id_token, refresh_token))
 		C->>A: 10) Volání API s Authorization: Bearer access_token
 		A->>K: 11) (volitelně) validace přes JWKS/introspection
 		A->>C: 12) API odpověď
