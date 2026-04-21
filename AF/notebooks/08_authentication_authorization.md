@@ -89,7 +89,8 @@ Co je důležité:
 - výměna kódu za tokeny je backchannel komunikace server <-> Keycloak,
 - to je bezpečnější než implicit flow, kde se tokeny vracely přímo do frontendu.
 
-#### Typy tokenů
+#### Tokeny v OIDC/OAuth2
+
 
 | Token | Formát | Pro koho | Účel |
 |---|---|---|---|
@@ -97,11 +98,12 @@ Co je důležité:
 | `id_token` | JWT | Client (aplikace) | Identita přihlášeného uživatele |
 | `refresh_token` | neprůhledný řetězec | Authorization Server | Obnovení access tokenu bez nového loginu |
 
-#### Co je id_token
+- `id_token`: token identity uživatele pro klientskou aplikaci (kdo je přihlášený).
+- `access_token`: token pro API, nese oprávnění (scope/role/audience) pro autorizaci požadavků.
+- Keycloak vrací `id_token`, pokud scope obsahuje `openid`.
 
-**id_token** je JWT token definovaný standardem OpenID Connect. Na rozdíl od `access_token` není určen pro API, ale pro **klientskou aplikaci** — říká aplikaci, kdo se přihlásil.
-
-Keycloak vystaví `id_token` pokud scope obsahuje `openid`.
+`Bearer` znamená „držitel“. V praxi to znamená, že kdo token drží, ten ho může použít pro přístup k API.
+Proto se token posílá v hlavičce `Authorization: Bearer <token>` a je nutné ho chránit před únikem (HTTPS, krátká expirace, bezpečné uložení).
 
 ##### Jak vypadá požadavek na Keycloak
 
@@ -120,6 +122,11 @@ GET /realms/utb-school/protocol/openid-connect/auth?
 Host: auth.example.cz
 ```
 
+Význam `scope=openid profile email`:
+- `openid`: aktivuje OpenID Connect a umožní vrátit `id_token`. Bez `openid` -> běží jen OAuth2 autorizace a `id_token` se obvykle nevrací.
+- `profile`: klient žádá základní profilové údaje uživatele (`name`, `preferred_username`, `given_name`, `family_name`).
+- `email`: klient žádá emailové claimy (`email`, případně `email_verified`).
+
 Následně proběhne výměna `code` za tokeny přes backchannel `POST` na token endpoint:
 
 ```http
@@ -135,10 +142,6 @@ code_verifier=QWxhZGRpbjpvcGVuIHNlc2FtZQ
 ```
 
 Poznámka: u confidential klienta může být navíc poslán i `client_secret`.
-
-Nejdůležitější je parametr `scope`:
-- `scope=openid ...` -> požadujeme OpenID Connect, Keycloak vrátí i `id_token`.
-- bez `openid` -> běží jen OAuth2 autorizace a `id_token` se obvykle nevrací.
 
 Po výměně autorizačního kódu na token endpointu vrací Keycloak například:
 
@@ -156,22 +159,58 @@ Po výměně autorizačního kódu na token endpointu vrací Keycloak napříkla
 
 Pole `id_token` je v odpovědi právě proto, že v požadavku byl scope `openid`.
 
-Příklad dekódovaného payloadu `access_token` (z téhož token response):
+Stručně:
+- `access_token` je pro API a nese autorizační data (`aud`, `scope`, role, ...).
+- `id_token` je pro klienta a nese identitu uživatele (`sub`, `email`, `name`, ...).
+
+### Ukázka JWT tokenu a mapování
+
+JWT má tvar:
+
+`header.payload.signature`
+
+- `header`: metadata (algoritmus, typ tokenu),
+- `payload`: claimy (data o uživateli a oprávněních),
+- `signature`: kryptografický podpis.
+
+#### Příklad access tokenu (zakódovaný JWT)
+
+Takto vypadá skutečný `access_token` — tři Base64URL části oddělené tečkou:
+
+```
+eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJhYjEyY2Q
+zNCJ9.eyJleHAiOjE3NzY3NTEyMDAsImlhdCI6MTc3Njc0NzYwMCwiaXNzIj
+oiaHR0cHM6Ly9hdXRoLmV4YW1wbGUuY3ovcmVhbG1zL3V0Yi1zY2hvb2wiLC
+JhdWQiOlsiYWNjb3VudCIsInV0Yi1zY2hvb2wtYXBpIl0sInN1YiI6IjhmMm
+Q5YTMwLTJlMjQtNGY4Yi05ZDI3LTY3ZDNmZjE5ZjE0NSIsInR5cCI6IkJlYX
+JlciIsImF6cCI6InV0Yi1zY2hvb2wtd2ViIiwic2NvcGUiOiJvcGVuaWQgcH
+JvZmlsZSBlbWFpbCByb2xlcyIsInByZWZlcnJlZF91c2VybmFtZSI6Im5vdm
+FraiIsImVtYWlsIjoiamFuLm5vdmFrQHV0Yi5jeiIsInJlYWxtX2FjY2Vzcy
+I6eyJyb2xlcyI6WyJzdHVkZW50Il19fQ.podpis_RS256
+```
+
+Každou část lze dekódovat (např. na [jwt.io](https://jwt.io)):
+
+- část 1 (header): `{"alg":"RS256","typ":"JWT","kid":"ab12cd34"}`
+- část 2 (payload): viz JSON níže
+- část 3 (signature): kryptografický podpis pomocí privátního klíče Keycloaku — nelze dekódovat, pouze ověřit
+
+#### Příklad dekódovaného payloadu access_token
 
 ```json
 {
-	"iss": "https://auth.example.cz/realms/utb-school",
-	"sub": "8f2d9a30-2e24-4f8b-9d27-67d3ff19f145",
-	"aud": ["account", "utb-school-api"],
 	"exp": 1776751200,
 	"iat": 1776747600,
+	"iss": "https://auth.example.cz/realms/utb-school",
+	"aud": ["account", "utb-school-api"],
+	"sub": "8f2d9a30-2e24-4f8b-9d27-67d3ff19f145",
 	"typ": "Bearer",
 	"azp": "utb-school-web",
-	"scope": "openid profile email",
+	"scope": "openid profile email roles",
 	"preferred_username": "novakj",
 	"email": "jan.novak@utb.cz",
 	"realm_access": {
-		"roles": ["student"]
+		"roles": ["student", "offline_access"]
 	},
 	"resource_access": {
 		"utb-school-api": {
@@ -181,30 +220,27 @@ Příklad dekódovaného payloadu `access_token` (z téhož token response):
 }
 ```
 
-`access_token` je určený pro API (Authorization: Bearer ...), proto obsahuje hlavně autorizační claimy jako `aud`, `scope` a role. `realm_access` jsou realm role a `resource_access` jsou client role.
+V tomto tokenu platí:
+- `realm_access` = **realm roles** v Keycloaku.
+- `resource_access` = **client roles** v Keycloaku (specifické role pro konkrétního klienta/API).
 
-Příklad dekódovaného payloadu `id_token`:
+
+#### Příklad dekódovaného payloadu id_token
 
 ```json
 {
-  "iss": "https://auth.example.cz/realms/utb-school",
-  "sub": "8f2d9a30-2e24-4f8b-9d27-67d3ff19f145",
-  "aud": "utb-school-web",
-  "exp": 1776751200,
-  "iat": 1776747600,
-  "nonce": "abc123",
-  "typ": "ID",
-  "preferred_username": "novakj",
-  "email": "jan.novak@utb.cz",
-  "given_name": "Jan",
-  "family_name": "Novák"
+    "exp": 1776751200,
+    "iat": 1776747600,
+    "iss": "https://auth.example.cz/realms/utb-school",
+    "aud": "utb-school-web",
+    "sub": "8f2d9a30-2e24-4f8b-9d27-67d3ff19f145",
+    "azp": "utb-school-web",
+    "name": "Jan Novák",
+    "preferred_username": "novakj",
+    "given_name": "Jan",
+    "family_name": "Novák",
+    "email": "jan.novak@utb.cz"
 }
-```
-
-Zdůraznění klíčových rozdílů od `access_token`:
-- `typ` má hodnotu `"ID"` (u access tokenu je `"Bearer"`).
-- `aud` je **id klienta** (aplikace), ne API.
-- Neobsahuje role a resource_access — ty patří do `access_token`.
 
 ### Co je Keycloak
 
@@ -302,63 +338,6 @@ Konkrétní obsah je vždy dán konfigurací v daném realm.
 **Realm users** jsou uživatelské účty uložené přímo v daném realm.
 
 Jejich data (username, email, role, skupiny, atributy) se mohou přes mapping propsat do tokenů.
-
-### Ukázka JWT tokenu a mapování
-
-JWT má tvar:
-
-`header.payload.signature`
-
-- `header`: metadata (algoritmus, typ tokenu),
-- `payload`: claimy (data o uživateli a oprávněních),
-- `signature`: kryptografický podpis.
-
-#### Příklad access tokenu (zakódovaný JWT)
-
-Takto vypadá skutečný `access_token` — tři Base64URL části oddělené tečkou:
-
-```
-eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJhYjEyY2Q
-zNCJ9.eyJleHAiOjE3NzY3NTEyMDAsImlhdCI6MTc3Njc0NzYwMCwiaXNzIj
-oiaHR0cHM6Ly9hdXRoLmV4YW1wbGUuY3ovcmVhbG1zL3V0Yi1zY2hvb2wiLC
-JhdWQiOlsiYWNjb3VudCIsInV0Yi1zY2hvb2wtYXBpIl0sInN1YiI6IjhmMm
-Q5YTMwLTJlMjQtNGY4Yi05ZDI3LTY3ZDNmZjE5ZjE0NSIsInR5cCI6IkJlYX
-JlciIsImF6cCI6InV0Yi1zY2hvb2wtd2ViIiwic2NvcGUiOiJvcGVuaWQgcH
-JvZmlsZSBlbWFpbCByb2xlcyIsInByZWZlcnJlZF91c2VybmFtZSI6Im5vdm
-FraiIsImVtYWlsIjoiamFuLm5vdmFrQHV0Yi5jeiIsInJlYWxtX2FjY2Vzcy
-I6eyJyb2xlcyI6WyJzdHVkZW50Il19fQ.podpis_RS256
-```
-
-Každou část lze dekódovat (např. na [jwt.io](https://jwt.io)):
-
-- část 1 (header): `{"alg":"RS256","typ":"JWT","kid":"ab12cd34"}`
-- část 2 (payload): viz JSON níže
-- část 3 (signature): kryptografický podpis pomocí privátního klíče Keycloaku — nelze dekódovat, pouze ověřit
-
-#### Příklad dekódovaného payloadu access tokenu
-
-```json
-{
-	"exp": 1776751200,
-	"iat": 1776747600,
-	"iss": "https://auth.example.cz/realms/utb-school",
-	"aud": ["account", "utb-school-api"],
-	"sub": "8f2d9a30-2e24-4f8b-9d27-67d3ff19f145",
-	"typ": "Bearer",
-	"azp": "utb-school-web",
-	"scope": "openid profile email roles",
-	"preferred_username": "novakj",
-	"email": "jan.novak@utb.cz",
-	"realm_access": {
-		"roles": ["student", "offline_access"]
-	},
-	"resource_access": {
-		"utb-school-api": {
-			"roles": ["read:marks", "write:homework"]
-		}
-	}
-}
-```
 
 #### Jak se claimy mapují z Keycloaku
 
