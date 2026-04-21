@@ -103,9 +103,9 @@ Co je důležité:
 
 | Token | Formát | Pro koho | Účel |
 |---|---|---|---|
-| `access_token` | JWT | Resource Server (API) | Autorizace přístupu k API |
+| `access_token` | JWT nebo nečitelný řetězec | Resource Server (API) | Autorizace přístupu k API |
 | `id_token` | JWT | Client (aplikace) | Identita přihlášeného uživatele |
-| `refresh_token` | neprůhledný řetězec | Authorization Server | Obnovení access tokenu bez nového loginu |
+| `refresh_token` | nečitelný řetězec | Authorization Server | Obnovení access tokenu bez nového loginu |
 
 - `id_token`: token identity uživatele pro klientskou aplikaci (kdo je přihlášený). Používá se pro přihlášení a práci s identitou v klientovi, běžně se neposílá do Web API. Je vždy ve formátu **JSON Web Token (JWT)**. Keycloak vrací `id_token` jen pokud scope obsahuje `openid`.
 - `access_token`: token pro API, nese oprávnění (scope/role/audience) pro autorizaci požadavků.
