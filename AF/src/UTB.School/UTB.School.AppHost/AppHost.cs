@@ -22,10 +22,15 @@ else
 
     var database = postgres.AddDatabase("database");
 
-    builder.AddProject<Projects.UTB_School_DatabaseManager>("dbmanager")
-           .WithReference(database)
-           .WithHttpCommand("/dev/seed", "Reset Database")
-           .WaitFor(database);
+    _ = builder.AddProject<Projects.UTB_School_DatabaseManager>("dbmanager")
+               .WithReference(database)
+               .WithHttpCommand("/dev/seed", "Reset Database")
+               .WaitFor(database);
+
+    _ = builder.AddKeycloak("keycloack", 8080)
+               .WithContainerName("keycloack-UTB.School")
+               .WithDataVolume()
+               .WithLifetime(ContainerLifetime.Persistent);
 
     var webapi = builder.AddProject<Projects.UTB_School_WebApi>("webapi")
                         .WithReference(database)
@@ -42,6 +47,8 @@ else
     _ = builder.AddProject<Projects.UTB_School_WebSseJavascript>("webssejavascript")
        .WithReference(webapi)
        .WaitFor(webapi);
+
+
 
 }
 
