@@ -260,8 +260,7 @@ Poskytuje:
 - přihlášení uživatelů (login),
 - správu uživatelů, rolí a skupin,
 - vystavování tokenů (JWT),
-- podporu standardů OAuth2 a OpenID Connect,
-- centralizované SSO pro více aplikací.
+- podporu standardů OAuth2 a OpenID Connect.
 
 ## Pojmy v Keycloaku
 
