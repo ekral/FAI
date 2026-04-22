@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using System.Net.ServerSentEvents;
 using UTB.School.Contracts;
 using UTB.School.Db;
 using UTB.School.WebApi;

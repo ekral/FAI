@@ -10,13 +10,6 @@ U zabezpečení webových aplikací v .NET mám dvě možnosti. Buď použijeme 
 
 Pokud chceme ale zabezpečit zároveň webového nebo mobilního klienta, to znamené že ve webovém klientu se přihlásíme a on bude přeposílat token do API, tak musíme použít například standard OpenId Connect s protokolem OAuth2. V tomto případě se bude starat o správu uživatelů a přihlašování externí poskytovatel identity, například Auth0, Microsoft Entra, Identity Server, Keycloak a podobné podporující tyto standardy. Pro tento případ nám .NET poskytuje middleware pro ověřování.
 
-## Struktura projektu
-
-Náš projekt bude mít následující strukturu:
-- **UTB.School.Web** - Blazor klient
-- **UTB.School.WebApi** - Web API
-- **UTB.School.WebSse** - Klient zobrazující SSE zprávy.
-
 ## Co je to OpenID Connect
 
 **OpenID Connect (OIDC)** je vrstva nad OAuth 2.0, která přidává **autentizaci uživatele**.
@@ -57,9 +50,9 @@ sequenceDiagram
 		C->>C: 2) Vygeneruje code_verifier a z něj code_challenge
 		C->>K: 3) Redirect na login (+ code_challenge)
 		U->>K: 4) Přihlášení (jméno/heslo, MFA...)
-		K->>K: 5) Uloží code_challenge k vydanému authorization code
-		K->>C: 6) Redirect zpět s code (authorization code)
-		C->>K: 7) Pošle získaný code + code_verifier
+		K->>K: 5) Vygeneruje authorization code a uloží si k němu code_challenge
+		K->>C: 6) Redirect zpět s authorization code
+		C->>K: 7) Pošle získaný authorization code + code_verifier
 		K->>K: 8) Ověří, že hash(code_verifier) = uložený code_challenge
 		K->>C: 9) Vrátí token response (access_token (+ id_token, refresh_token))
 		C->>A: 10) Volání API s Authorization: Bearer access_token
@@ -368,3 +361,40 @@ Praktický důsledek:
 - V API ověřujeme JWT `access_token`.
 - V Keycloaku pečlivě nastavíme realm, client, scopes a mappingy claimů.
 - V autorizaci v API kontrolujeme role/scope/audience podle obsahu tokenu.
+
+## Struktura projektu
+
+Náš projekt bude mít následující strukturu:
+- **UTB.School.Web** - Blazor klient
+- **UTB.School.WebApi** - Web API
+- **UTB.School.WebSse** - Klient zobrazující SSE zprávy.
+
+## Nastavení Keycloaku
+
+1. Vytvoříme realm `utb-school`.
+2. Vytvoříme client `utb-school-webapi` pro Web API:
+	- Client authentication: OFF
+	- Standard Flow Enabled: OFF
+	- Valid Redirect URIs: prázdné
+	- Web Origins: prázdné
+	- Root URL: prázdné
+	- Home URL: prázdné
+
+3. Vytvoříme Client Scope `utb-school-webapi-audience`:
+	- Type: Default (automaticky nám ho přidá do nového klienta)
+	- Mappers -> Configure new mapper -> Audience
+		- Name: `utb-school-webapi-audience`
+		- Included Client Audience: `utb-school-webapi`
+		- Add to access token: ON
+
+5. Vytvoříme client `utb-school-web` pro webovou aplikaci:
+	- Client authentication: ON
+	- Standard Flow Enabled: ON
+	- Valid Redirect URIs: `https://localhost:7197/signin-oidc`
+	- Web Origins: `https://localhost:7197`
+	- Post Logout Redirect URIs: `https://localhost:7197/signout-callback-oidc`
+	- Home URL: `https://localhost:7197`
+	- Client Scopes: zkontrolujeme, že máme přidaný `utb-school-webapi-audience` (aby se nám do tokenu přidala audience pro API)
+
+
+

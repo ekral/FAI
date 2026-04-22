@@ -47,12 +47,6 @@ else
     _ = builder.AddProject<Projects.UTB_School_WebSseJavascript>("webssejavascript")
        .WithReference(webapi)
        .WaitFor(webapi);
-
-
-
 }
-
-
-
 
 builder.Build().Run();
