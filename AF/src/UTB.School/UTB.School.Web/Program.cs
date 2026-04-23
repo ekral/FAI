@@ -45,6 +45,21 @@ var app = builder.Build();
 
 app.MapDefaultEndpoints();
 
+app.MapGet("/login", async (HttpContext ctx, string? returnUrl) =>
+{
+    string redirectUri = "/";
+
+    if (!string.IsNullOrWhiteSpace(returnUrl) && Uri.IsWellFormedUriString(returnUrl, UriKind.Relative))
+    {
+        redirectUri = returnUrl;
+    }
+
+    await ctx.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties
+    {
+        RedirectUri = redirectUri
+    });
+});
+
 app.MapGet("/logout", async (HttpContext ctx) =>
 {
     await ctx.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);

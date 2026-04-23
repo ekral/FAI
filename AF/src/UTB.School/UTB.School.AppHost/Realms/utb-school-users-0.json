@@ -3,6 +3,9 @@
   "users" : [ {
     "id" : "f7bbd309-443a-43f7-b3c9-57aa98612dc1",
     "username" : "karel",
+    "firstName" : "Karel",
+    "lastName" : "Novy",
+    "email" : "karel@utb.cz",
     "emailVerified" : true,
     "enabled" : true,
     "createdTimestamp" : 1776949421289,
