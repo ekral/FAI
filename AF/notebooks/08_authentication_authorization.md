@@ -372,6 +372,7 @@ Náš projekt bude mít následující strukturu:
 ## Nastavení Keycloaku
 
 1. Vytvoříme realm `utb-school`.
+
 2. Vytvoříme client `utb-school-webapi` pro Web API:
 	- Client authentication: OFF
 	- Standard Flow Enabled: OFF
@@ -395,6 +396,15 @@ Náš projekt bude mít následující strukturu:
 	- Post Logout Redirect URIs: `https://localhost:7197/signout-callback-oidc`
 	- Home URL: `https://localhost:7197`
 	- Client Scopes: zkontrolujeme, že máme přidaný `utb-school-webapi-audience` (aby se nám do tokenu přidala audience pro API)
+
+6. Vytvoříme realm role (role je platná pro všechny klienty v daném realmu) `librarian`:
+	- Role name: `librarian`
+	- Description: `Can create, read, update and delete books`
+
+7. Vytvoříme uživatele v Users (realm users, ne client users) `karel`:
+	- Email verified: ON
+	- Username: `karel`
+	- Credential -> Set Password: `karel` (Temporary: OFF)
 
 
 
