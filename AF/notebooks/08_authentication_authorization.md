@@ -480,7 +480,7 @@ app.MapGet("/students", GetStudents).RequireAuthorization();
 
 Exportovat můžeme pomocí následujících příkazů kde `volume-name` je název volume běžící instance Keycloaku.
 
-Nejdřív zastavíme kontainer `keycloak`, potom pustíme nový kontainer a namapujeme cestu `C:\temp\kc-export` na adresář v linuxu s exportem a připojíme existující data z původního kontajneru s názvem `volume-name` a exportujeme data do namapovaného adresáře.
+Nejdřív zastavíme kontainer s názvem `utb-school-keycloak`, potom pustíme nový kontainer a namapujeme cestu `C:\temp\kc-export` (zde najdeme exportovaná data v	našem operačním systému) na adresář v linuxu (adrešář v kontejneru kam budou exportovýny data) a připojíme existující data z původního kontajneru s názvem `utb-school-keycloak-data` a exportujeme data do namapovaného adresáře.
 
 ```powershell
 docker stop utb-school-keycloak
