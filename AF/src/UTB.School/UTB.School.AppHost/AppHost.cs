@@ -27,7 +27,7 @@ else
                .WithHttpCommand("/dev/seed", "Reset Database")
                .WaitFor(database);
 
-    _ = builder.AddKeycloak("keycloack", 8080)
+    _ = builder.AddKeycloak("keycloak", 8080)
                .WithContainerName("keycloack-UTB.School")
                .WithDataVolume()
                .WithLifetime(ContainerLifetime.Persistent);

@@ -406,5 +406,68 @@ Náš projekt bude mít následující strukturu:
 	- Username: `karel`
 	- Credential -> Set Password: `karel` (Temporary: OFF)
 
+## Implementace v Aspire
 
+### AppHost
+
+V projektu `UTB.School.AppHost` použijeme integrační balíček pro Keycloak (preview):
+
+```xml
+<PackageReference Include="Aspire.Hosting.Keycloak" Version="13.2.2-preview.1.26207.2" />
+```
+
+Pak v `AppHost.cs` přidáme Keycloak jako resource v Aspire orchestraci:
+
+```csharp
+var keycloak = builder.AddKeycloak("keycloak", 8080)
+					  .WithContainerName("keycloak-UTB.School")
+					  .WithDataVolume()
+					  .WithLifetime(ContainerLifetime.Persistent);
+```
+
+Poznámka:
+- Název resource (`"keycloak"`) musí odpovídat názvu, který později použijeme v `AddKeycloakJwtBearer(serviceName: ...)` ve WebApi.
+
+### WebApi
+
+V projektu `UTB.School.WebApi` použijeme balíček:
+
+```xml
+<PackageReference Include="Aspire.Keycloak.Authentication" Version="13.2.3-preview.1.26217.6" />
+```
+
+Do `Program.cs` přidáme autentizaci JWT přes Keycloak.:
+
+```csharp
+builder.Services.AddAuthentication()
+				.AddKeycloakJwtBearer(
+					serviceName: "keycloak",
+					realm: "utb-school",
+					options =>
+					{
+						options.RequireHttpsMetadata = false; // jen pro dev
+					}
+				);
+
+builder.Services.AddAuthorization();
+
+// Musím být v následujícím pořadí, protože autorizace závisí na autentizaci
+app.UseAuthentication(); // První middleware pro ověřování identity, ověří kdo je uživatel
+app.UseAuthorization();  // Potom middleware pro autorizaci, který rozhoduje, jestli má uživatel přístup k endpointu
+```
+
+A endpointy, které mají být chráněné, označíme autorizací:
+
+```csharp
+app.MapGet("/students", GetStudents).RequireAuthorization();
+```
+
+### Co zkontrolovat, když to nefunguje
+
+1. `serviceName` ve WebApi je stejný jako název Keycloak resource v AppHost.
+2. Realm v Keycloaku je `utb-school`.
+3. Access token obsahuje správnou `aud` (`utb-school-webapi`) přes audience mapper.
+4. Ve WebApi běží middleware v pořadí:
+   - `app.UseAuthentication()`
+   - `app.UseAuthorization()`
 

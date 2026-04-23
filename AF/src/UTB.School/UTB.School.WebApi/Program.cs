@@ -8,6 +8,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
+builder.Services.AddAuthentication()
+                .AddKeycloakJwtBearer(
+                    serviceName: "keycloak",
+                    realm: "utb-school",
+                    options =>
+                    {
+                        options.RequireHttpsMetadata = false; // jen pro dev
+                    }
+                );
+
+builder.Services.AddAuthorization();
+
 builder.AddNpgsqlDbContext<SchoolContext>("database");
 
 builder.Services.AddCors(options =>
@@ -29,10 +41,12 @@ app.MapDefaultEndpoints();
 
 app.UseHttpsRedirection();
 app.UseCors();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapPost("/dev/seed", Seed);
 app.MapGet("/sse", GetUpdates);
-app.MapGet("/students", GetStudents);
+app.MapGet("/students", GetStudents).RequireAuthorization();
 app.MapGet("/students/{id:int}", GetStudent);
 app.MapPost("/students", CreateStudent);
 app.MapPut("/students/{id:int}", UpdateStudent);
