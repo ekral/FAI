@@ -1,4 +1,4 @@
-<Project Sdk="Aspire.AppHost.Sdk/13.2.2">
+<Project Sdk="Aspire.AppHost.Sdk/13.2.3">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -9,8 +9,22 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspire.Hosting.Keycloak" Version="13.2.2-preview.1.26207.2" />
-    <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="13.2.2" />
+    <None Remove="Realms\utb-school-realm.json" />
+    <None Remove="Realms\utb-school-users-0.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Realms\utb-school-realm.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Realms\utb-school-users-0.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.Keycloak" Version="13.2.3-preview.1.26217.6" />
+    <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="13.2.3" />
   </ItemGroup>
 
   <ItemGroup>

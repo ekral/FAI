@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Aspire.Keycloak.Authentication" Version="13.2.3-preview.1.26217.6" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\UTB.School.Contracts\UTB.School.Contracts.csproj" />
     <ProjectReference Include="..\UTB.School.ServiceDefaults\UTB.School.ServiceDefaults.csproj" />
   </ItemGroup>

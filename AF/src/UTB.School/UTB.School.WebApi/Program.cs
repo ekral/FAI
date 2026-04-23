@@ -14,6 +14,7 @@ builder.Services.AddAuthentication()
                     realm: "utb-school",
                     options =>
                     {
+                        options.Audience = "utb-school-webapi";
                         options.RequireHttpsMetadata = false; // jen pro dev
                     }
                 );

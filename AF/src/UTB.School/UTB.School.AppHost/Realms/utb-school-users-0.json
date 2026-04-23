@@ -1,0 +1,24 @@
+{
+  "realm" : "utb-school",
+  "users" : [ {
+    "id" : "f7bbd309-443a-43f7-b3c9-57aa98612dc1",
+    "username" : "karel",
+    "emailVerified" : true,
+    "enabled" : true,
+    "createdTimestamp" : 1776949421289,
+    "totp" : false,
+    "credentials" : [ {
+      "id" : "064bc594-daa4-41c2-871f-3a2dc077966d",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1776949436262,
+      "secretData" : "{\"value\":\"jkqfkqtFz3QDM6jZqtTyd5CKYEoW4kIlByq27+XiMgw=\",\"salt\":\"TyHGh9Q2WxPessCMfzGMxQ==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":5,\"algorithm\":\"argon2\",\"additionalParameters\":{\"hashLength\":[\"32\"],\"memory\":[\"7168\"],\"type\":[\"id\"],\"version\":[\"1.3\"],\"parallelism\":[\"1\"]}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "student-admin", "default-roles-utb.school" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  } ]
+}
