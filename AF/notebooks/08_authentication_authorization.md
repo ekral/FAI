@@ -120,7 +120,7 @@ GET /realms/utb-school/protocol/openid-connect/auth?
 	scope=openid%20profile%20email&
 	code_challenge=Rk9vQmFyQmF6MTIzNDU2Nzg5X1NIRTI1Ng&
 	code_challenge_method=S256&
-	state=xyz123&
+ssssssssss	state=xyz123&
 	nonce=abc123 HTTP/1.1
 Host: auth.example.cz
 ```
@@ -151,8 +151,7 @@ Po výměně autorizačního kódu na token endpointu vrací Keycloak napříkla
 ```json
 {
 	"access_token": "eyJ...",
-	"expires_in": 300,
-	"refresh_expires_in": 1800,
+	"expires_in": 300,	"refresh_expires_in": 1800,
 	"refresh_token": "eyJ...",
 	"token_type": "Bearer",
 	"id_token": "eyJ...",
@@ -369,42 +368,7 @@ Náš projekt bude mít následující strukturu:
 - **UTB.School.WebApi** - Web API
 - **UTB.School.WebSse** - Klient zobrazující SSE zprávy.
 
-## Nastavení Keycloaku
-
-1. Vytvoříme realm `utb-school`.
-
-2. Vytvoříme client `utb-school-webapi` pro Web API:
-	- Client authentication: OFF
-	- Standard Flow Enabled: OFF
-	- Valid Redirect URIs: prázdné
-	- Web Origins: prázdné
-	- Root URL: prázdné
-	- Home URL: prázdné
-
-3. Vytvoříme Client Scope `utb-school-webapi-audience`:
-	- Type: Default (automaticky nám ho přidá do nového klienta)
-	- Mappers -> Configure new mapper -> Audience
-		- Name: `utb-school-webapi-audience`
-		- Included Client Audience: `utb-school-webapi`
-		- Add to access token: ON
-
-5. Vytvoříme client `utb-school-web` pro webovou aplikaci:
-	- Client authentication: ON
-	- Standard Flow Enabled: ON
-	- Valid Redirect URIs: `https://localhost:7197/signin-oidc`
-	- Web Origins: `https://localhost:7197`
-	- Post Logout Redirect URIs: `https://localhost:7197/signout-callback-oidc`
-	- Home URL: `https://localhost:7197`
-	- Client Scopes: zkontrolujeme, že máme přidaný `utb-school-webapi-audience` (aby se nám do tokenu přidala audience pro API)
-
-6. Vytvoříme realm role (role je platná pro všechny klienty v daném realmu) `librarian`:
-	- Role name: `librarian`
-	- Description: `Can create, read, update and delete books`
-
-7. Vytvoříme uživatele v Users (realm users, ne client users) `karel`:
-	- Email verified: ON
-	- Username: `karel`
-	- Credential -> Set Password: `karel` (Temporary: OFF)
+---
 
 ## Implementace v Aspire
 
@@ -419,10 +383,10 @@ V projektu `UTB.School.AppHost` použijeme integrační balíček pro Keycloak (
 Pak v `AppHost.cs` přidáme Keycloak jako resource v Aspire orchestraci:
 
 ```csharp
-var keycloak = builder.AddKeycloak("keycloak", 8080)
-					  .WithContainerName("keycloak-UTB.School")
-					  .WithDataVolume()
-					  .WithLifetime(ContainerLifetime.Persistent);
+    var keycloak = builder.AddKeycloak("keycloak", 8080)
+               			  .WithContainerName("utb-school-keycloak")
+               		      .WithDataVolume("utb-school-keycloak-data")
+               			  .WithLifetime(ContainerLifetime.Persistent);
 ```
 
 Poznámka:
@@ -471,3 +435,55 @@ app.MapGet("/students", GetStudents).RequireAuthorization();
    - `app.UseAuthentication()`
    - `app.UseAuthorization()`
 
+---
+
+## Nastavení Keycloaku
+
+1. Vytvoříme realm `utb-school`.
+
+2. Vytvoříme client `utb-school-webapi` pro Web API:
+	- Client authentication: OFF
+	- Standard Flow Enabled: OFF
+	- Valid Redirect URIs: prázdné
+	- Web Origins: prázdné
+	- Root URL: prázdné
+	- Home URL: prázdné
+
+3. Vytvoříme Client Scope `utb-school-webapi-audience`:
+	- Type: Default (automaticky nám ho přidá do nového klienta)
+	- Mappers -> Configure new mapper -> Audience
+		- Name: `utb-school-webapi-audience`
+		- Included Client Audience: `utb-school-webapi`
+		- Add to access token: ON
+
+5. Vytvoříme client `utb-school-web` pro webovou aplikaci:
+	- Client authentication: ON
+	- Standard Flow Enabled: ON
+	- Valid Redirect URIs: `https://localhost:7197/signin-oidc`
+	- Web Origins: `https://localhost:7197`
+	- Post Logout Redirect URIs: `https://localhost:7197/signout-callback-oidc`
+	- Home URL: `https://localhost:7197`
+	- Client Scopes: zkontrolujeme, že máme přidaný `utb-school-webapi-audience` (aby se nám do tokenu přidala audience pro API)
+
+6. Vytvoříme realm role (role je platná pro všechny klienty v daném realmu) `librarian`:
+	- Role name: `librarian`
+	- Description: `Can create, read, update and delete books`
+
+7. Vytvoříme uživatele v Users (realm users, ne client users) `karel`:
+	- Email verified: ON
+	- Username: `karel`
+	- Credential -> Set Password: `karel` (Temporary: OFF)
+
+8. Přiřadíme uživateli `karel` roli `librarian` (realm role).
+
+9. Exportujeme realm pro zálohu a případné obnovení.
+
+Exportovat můžeme pomocí následujících příkazů kde `volume-name` je název volume běžící instance Keycloaku.
+
+Nejdřív zastavíme kontainer `keycloak`, potom pustíme nový kontainer a namapujeme cestu `C:\temp\kc-export` na adresář v linuxu s exportem a připojíme existující data z původního kontajneru s názvem `volume-name` a exportujeme data do namapovaného adresáře.
+
+```powershell
+docker stop utb-school-keycloak
+
+docker run --rm -v C:\temp\kc-export:/opt/keycloak/data/export -v utb-school-keycloak-data:/opt/keycloak/data quay.io/keycloak/keycloak:26.5 export --dir /opt/keycloak/data/export
+```
