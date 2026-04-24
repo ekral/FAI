@@ -28,6 +28,7 @@ builder.Services.AddAuthentication(options =>
         options.SaveTokens = true;
         options.RequireHttpsMetadata = false; // jen dev
         options.TokenValidationParameters.NameClaimType = "preferred_username";
+        //options.TokenValidationParameters.RoleClaimType = "roles";
     });
 
 builder.Services.AddAuthorization();
@@ -60,6 +61,7 @@ app.MapGet("/login", async (HttpContext ctx, string? returnUrl) =>
     });
 });
 
+// Logout musím udělat přez form a post kvůli dvojitému načítání stránky
 app.MapPost("/logout", async (HttpContext ctx) =>
 {
     string? idToken = await ctx.GetTokenAsync("id_token");

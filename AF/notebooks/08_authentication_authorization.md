@@ -476,6 +476,15 @@ app.MapGet("/students", GetStudents).RequireAuthorization();
 
 8. Přiřadíme uživateli `karel` roli `librarian` (realm role).
 
+9. Přejmenování realm roles Token Claim Name:
+
+- V levém černém menu klikněte na Client scopes.
+- Najděte v seznamu ten s názvem roles a klikněte na něj.
+- Přejděte na záložku Mappers.
+- Uvidíte tam mapper s názvem realm roles. Klikněte na něj.
+- Zkontrolujte/změňte pole Token Claim Name. Pokud tam je `realm_access.roles`, přepište to na `roles`.
+- Uložte (Save).
+
 9. Exportujeme realm pro zálohu a případné obnovení.
 
 Exportovat můžeme pomocí následujících příkazů kde `volume-name` je název volume běžící instance Keycloaku.

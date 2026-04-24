@@ -11,10 +11,18 @@
 
 <PageTitle>Students</PageTitle>
 
-<AuthorizeView>
+<AuthorizeView Roles="student-admin">
     <Authorized>
         <!-- Zobrazí se pouze přihlášeným -->
         <p>Welcome back @context.User.Identity?.Name !</p>
+        <p>Roles: @string.Join(", ", context.User.Claims.Where(c => c.Type == "role").Select(c => c.Value))</p>
+        <ul>
+            @foreach (var claim in context.User.Claims)
+            {
+                <li>@claim.Type: @claim.Value</li>
+            }
+        </ul>
+
         <form action="logout" method="post">
             <AntiforgeryToken />
             <button type="submit" class="nav-link btn btn-link">
