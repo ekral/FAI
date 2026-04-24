@@ -28,7 +28,7 @@ else
                .WaitFor(database);
 
     var keycloak = builder.AddKeycloak("keycloak", 8080)
-               .WithRealmImport("Realms")
+               //.WithRealmImport("Realms")
                .WithContainerName("utb-school-keycloak")
                .WithDataVolume("utb-school-keycloak-data")
                .WithLifetime(ContainerLifetime.Persistent);

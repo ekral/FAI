@@ -1,4 +1,5 @@
 ﻿@page "/students"
+@using Microsoft.AspNetCore.Components.Authorization
 @using UTB.School.Contracts
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
 @inject SchoolService SchoolService
@@ -9,6 +10,23 @@
 }
 
 <PageTitle>Students</PageTitle>
+
+<AuthorizeView>
+    <Authorized>
+        <!-- Zobrazí se pouze přihlášeným -->
+        <p>Welcome back @context.User.Identity?.Name !</p>
+        <form action="logout" method="post">
+            <AntiforgeryToken />
+            <button type="submit" class="nav-link btn btn-link">
+                Logout
+            </button>
+        </form>
+    </Authorized>
+    <NotAuthorized>
+        <!-- Zobrazí se nepřihlášeným (hostům) -->
+        <p><a href="/login?returnUrl=students">Log in</a>  please.</p>
+    </NotAuthorized>
+</AuthorizeView>
 
 <h1>Students</h1>
 

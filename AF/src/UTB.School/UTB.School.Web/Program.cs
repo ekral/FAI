@@ -60,12 +60,15 @@ app.MapGet("/login", async (HttpContext ctx, string? returnUrl) =>
     });
 });
 
-app.MapGet("/logout", async (HttpContext ctx) =>
+app.MapPost("/logout", async (HttpContext ctx) =>
 {
+    string? idToken = await ctx.GetTokenAsync("id_token");
+
     await ctx.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
     await ctx.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties
     {
-        RedirectUri = "/"
+        RedirectUri = "/students",
+        Parameters = { { "id_token_hint", idToken ?? string.Empty } }
     });
 });
 
@@ -86,7 +89,7 @@ app.UseAntiforgery();
 
 app.MapStaticAssets();
 app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode()
-    .RequireAuthorization();
+    //.RequireAuthorization()
+    .AddInteractiveServerRenderMode();
 
 app.Run();
