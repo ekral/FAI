@@ -1,3 +1,4 @@
+using Duende.AccessTokenManagement.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -28,16 +29,18 @@ builder.Services.AddAuthentication(options =>
         options.SaveTokens = true;
         options.RequireHttpsMetadata = false; // jen dev
         options.TokenValidationParameters.NameClaimType = "preferred_username";
-        //options.TokenValidationParameters.RoleClaimType = "roles";
     });
 
 builder.Services.AddAuthorization();
 builder.Services.AddCascadingAuthenticationState();
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<TokenHandler>();
 
-builder.Services.AddHttpClient<SchoolService>(c => c.BaseAddress = new Uri("https://webapi"))
-                .AddHttpMessageHandler<TokenHandler>();
+builder.Services.AddOpenIdConnectAccessTokenManagement(options =>
+{
+    options.RefreshBeforeExpiration = TimeSpan.FromSeconds(30);
+});
+
+builder.Services.AddUserAccessTokenHttpClient<SchoolService>(
+    configureClient: (_, c) => c.BaseAddress = new Uri("https://webapi"));
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
@@ -61,10 +64,12 @@ app.MapGet("/login", async (HttpContext ctx, string? returnUrl) =>
     });
 });
 
-// Logout musím udělat přez form a post kvůli dvojitému načítání stránky
+// Logout dělám přes form a post kvůli dvojitému načítání stránky
 app.MapPost("/logout", async (HttpContext ctx) =>
 {
     string? idToken = await ctx.GetTokenAsync("id_token");
+
+    await ctx.RevokeRefreshTokenAsync();
 
     await ctx.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
     await ctx.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties
