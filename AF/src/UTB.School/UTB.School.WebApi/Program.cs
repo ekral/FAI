@@ -47,7 +47,7 @@ app.UseAuthorization();
 
 app.MapPost("/dev/seed", Seed);
 app.MapGet("/sse", GetUpdates);
-app.MapGet("/students", GetStudents).RequireAuthorization();
+app.MapGet("/students", GetStudents).RequireAuthorization(pb => pb.RequireRole("student-admin"));
 app.MapGet("/students/{id:int}", GetStudent);
 app.MapPost("/students", CreateStudent);
 app.MapPut("/students/{id:int}", UpdateStudent);
