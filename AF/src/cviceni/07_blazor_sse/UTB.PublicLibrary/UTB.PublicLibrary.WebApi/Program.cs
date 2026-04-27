@@ -139,7 +139,7 @@ static async Task<Results<NoContent, NotFound>> PatchBookArchiveState(int id, Bo
 static async Task SendSse(PublicLibraryContext context, ServerSentEventsService eventService)
 {
     // Pošli SSE zprávu s novým studentem všem klientům
-    var students = await context.Books.Select(s => new BookDto(s.Id, s.Title, s.IsArchived)).ToArrayAsync();
+    var books = await context.Books.Select(s => new BookDto(s.Id, s.Title, s.IsArchived)).ToArrayAsync();
 
-    await eventService.WriteAsync(students);
+    await eventService.WriteAsync(books);
 }
