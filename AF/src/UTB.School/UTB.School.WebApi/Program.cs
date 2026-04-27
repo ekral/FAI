@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using System.Net.ServerSentEvents;
 using UTB.School.Contracts;
 using UTB.School.Db;
 using UTB.School.WebApi;
@@ -8,6 +7,19 @@ using UTB.School.WebApi;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
+
+builder.Services.AddAuthentication()
+                .AddKeycloakJwtBearer(
+                    serviceName: "keycloak",
+                    realm: "utb-school",
+                    options =>
+                    {
+                        options.Audience = "utb-school-webapi";
+                        options.RequireHttpsMetadata = false; // jen pro dev
+                    }
+                );
+
+builder.Services.AddAuthorization();
 
 builder.AddNpgsqlDbContext<SchoolContext>("database");
 
@@ -30,10 +42,12 @@ app.MapDefaultEndpoints();
 
 app.UseHttpsRedirection();
 app.UseCors();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapPost("/dev/seed", Seed);
 app.MapGet("/sse", GetUpdates);
-app.MapGet("/students", GetStudents);
+app.MapGet("/students", GetStudents).RequireAuthorization(pb => pb.RequireRole("student-admin"));
 app.MapGet("/students/{id:int}", GetStudent);
 app.MapPost("/students", CreateStudent);
 app.MapPut("/students/{id:int}", UpdateStudent);
