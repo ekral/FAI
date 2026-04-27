@@ -483,6 +483,7 @@ app.MapGet("/students", GetStudents).RequireAuthorization();
 - Přejděte na záložku Mappers.
 - Uvidíte tam mapper s názvem realm roles. Klikněte na něj.
 - Zkontrolujte/změňte pole Token Claim Name. Pokud tam je `realm_access.roles`, přepište to na `roles`.
+- Nastavte Include in Identity Token a Include in Access Token na ON.
 - Uložte (Save).
 
 9. Exportujeme realm pro zálohu a případné obnovení.
