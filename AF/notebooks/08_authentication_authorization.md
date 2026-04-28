@@ -374,11 +374,7 @@ Náš projekt bude mít následující strukturu:
 
 ### AppHost
 
-V projektu `UTB.School.AppHost` použijeme integrační balíček pro Keycloak (preview):
-
-```xml
-<PackageReference Include="Aspire.Hosting.Keycloak" Version="13.2.2-preview.1.26207.2" />
-```
+V projektu `UTB.School.AppHost` použijeme integrační balíček pro Keycloak (jde o preview verzi) `Aspire.Hosting.Keycloak`:
 
 Pak v `AppHost.cs` přidáme Keycloak jako resource v Aspire orchestraci:
 
@@ -394,11 +390,7 @@ Poznámka:
 
 ### WebApi
 
-V projektu `UTB.School.WebApi` použijeme balíček:
-
-```xml
-<PackageReference Include="Aspire.Keycloak.Authentication" Version="13.2.3-preview.1.26217.6" />
-```
+V projektu `UTB.School.WebApi` použijeme balíček `Aspire.Keycloak.Authentication`, opět jde o preview verzi:
 
 Do `Program.cs` přidáme autentizaci JWT přes Keycloak.:
 
@@ -415,7 +407,9 @@ builder.Services.AddAuthentication()
 
 builder.Services.AddAuthorization();
 
-// Musím být v následujícím pořadí, protože autorizace závisí na autentizaci
+Dále přidáme middleware pro autentizaci a autorizaci:
+
+// Musí být v následujícím pořadí, protože autorizace závisí na autentizaci
 app.UseAuthentication(); // První middleware pro ověřování identity, ověří kdo je uživatel
 app.UseAuthorization();  // Potom middleware pro autorizaci, který rozhoduje, jestli má uživatel přístup k endpointu
 ```

@@ -602,7 +602,150 @@ Bez tohoto by se SSE stream nechal běžet na pozadí a byla by **memory leak**.
 
 ---
 
-## 7. Rekapitulace: Jak to celé funguje
+## 7. Klientská strana: Index.html a EventSource API
+
+Pro připojení na SSE stream bez framework jsme vytvořili jednoduchou HTML stránku s **nativním EventSource API**.
+
+### a) Vytvoření SSE spojení
+
+```javascript
+const evtSource = new EventSource("https://localhost:7195/sse");
+```
+
+`EventSource` je nativní WebAPI prohlížeče, která se automaticky stará o:
+- Připojení na daný endpoint
+- Čtení zpráv ze serveru
+- Automatické reconnection při ztrátě spojení
+
+### b) Event handlery
+
+**1. onopen - Úspěšné připojení**
+
+```javascript
+evtSource.onopen = () => {
+    statusElement.textContent = "SSE connected";
+    booksElement.innerHTML = "";
+};
+```
+
+Vyvolá se, jakmile je spojení navázáno. Ideální místo pro inicializaci UI.
+
+**2. onerror - Chyba nebo odpojení**
+
+```javascript
+evtSource.onerror = () => {
+    statusElement.textContent = "SSE error";
+    booksElement.innerHTML = "";
+};
+```
+
+Vyvolá se při chybě komunikace nebo když se klient odpojí. Browser se pak snaží automaticky znovupřipojit.
+
+**3. onmessage - Přijetí zprávy**
+
+```javascript
+evtSource.onmessage = (event) => {
+    statusElement.textContent = "SSE message";
+
+    // Parsuj JSON z event.data
+    const books = JSON.parse(event.data);
+
+    // Vykresluj tabulku
+    let html = "<table><tr><th>Id</th><th>Title</th><th>IsArchived</th></tr>";
+    for (const book of books) {
+        html += `<tr><td>${book.id}</td><td>${book.title}</td><td>${book.isArchived}</td></tr>`;
+    }
+    html += "</table>";
+
+    booksElement.innerHTML = html;
+};
+```
+
+Každá zpráva ze serveru má vlastnost `event.data`, která obsahuje JSON řetězec. Parsujeme ho a vykreslujeme tabulku.
+
+### c) SSE stream a CORS
+
+Server vrací `ServerSentEventsResult<BookDto[]>` s iniciálními daty a poté kontinuálně posílá aktualizace:
+
+```javascript
+// Zpráva 1 - iniciální data
+{"id":1,"title":"C# Guide","isArchived":false}, {...}
+
+// Zpráva 2 - po vytvoření nové knihy
+{"id":2,"title":"ASP.NET Core","isArchived":false}, {...}, ...
+```
+
+**CORS konfiguraci serveru** jsme nastavili v `Program.cs`:
+
+```csharp
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("https://localhost:7263")  // Klient
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
+
+app.UseCors();
+```
+
+**Proč je CORS důležitý:**
+- EventSource API normálně podléhá **same-origin policy** (prohlížeč blokuje cross-domain requesty)
+- S CORS říkáme serveru: "Povolte requests z `https://localhost:7263`"
+- `AllowCredentials()` povoluje cookies a autentifikaci přes SSE
+- `AllowAnyHeader()` a `AllowAnyMethod()` dávají maximální flexibilitu
+
+### d) Úplný HTML kód
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>SseDemo Javascript</title>
+</head>
+<body>
+    <p id="status"></p>
+    <div id="books"></div>
+
+    <script>
+        const evtSource = new EventSource("https://localhost:7195/sse");
+        const statusElement = document.getElementById("status");
+        const booksElement = document.getElementById("books");
+
+        evtSource.onopen = () => {
+            statusElement.textContent = "SSE connected";
+            booksElement.innerHTML = "";
+        };
+
+        evtSource.onerror = () => {
+            statusElement.textContent = "SSE error";
+            booksElement.innerHTML = "";
+        };
+
+        evtSource.onmessage = (event) => {
+            statusElement.textContent = "SSE message";
+            const books = JSON.parse(event.data);
+
+            let html = "<table><tr><th>Id</th><th>Title</th><th>IsArchived</th></tr>";
+            for (const book of books) {
+                html += `<tr><td>${book.id}</td><td>${book.title}</td><td>${book.isArchived}</td></tr>`;
+            }
+            html += "</table>";
+
+            booksElement.innerHTML = html;
+        };
+    </script>
+</body>
+</html>
+```
+
+---
+
+## 8. Rekapitulace: Jak to celé funguje
 
 ```
 1. Uživatel otevře /updates
