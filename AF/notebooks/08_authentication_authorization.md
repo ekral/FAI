@@ -410,13 +410,11 @@ Poznámka: Vždy platí pořadí middleware `UseAuthentication()` a pak `UseAuth
 
 ### Blazor Web (UTB.School + Duende.AccessTokenManagement.OpenIdConnect)
 
-Poznámka: Tato implementace je pro **Blazor Server Interactivity**
-(`AddInteractiveServerComponents`). V **Blazor WebAssembly** je autentizace
+Poznámka: Tato implementace je pro **Blazor Server Interactivity**. V **Blazor WebAssembly** je autentizace
 řešena jinak (běží v prohlížeči, token handling je client-side a konfigurace
 se dělá jinými extension metodami pro WASM hosta).
 
 V projektu `UTB.School.Web` použijeme opět balíček `Aspire.Keycloak.Authentication` (preview verze) a navíc `Duende.AccessTokenManagement.OpenIdConnect` pro správu access tokenů.
-
 
 Co se děje v `Program.cs`:
 
@@ -538,24 +536,6 @@ Co je důležité:
 - Nepřihlášený uživatel vidí odkaz na `GET /login`.
 - Logout jde přes `POST /logout` a obsahuje `<AntiforgeryToken />`.
 - API endpoint `/students` je navíc chráněn na serveru přes `.RequireAuthorization(pb => pb.RequireRole("student-admin"))`, takže je chráněné UI i API.
-
-
-
----
-
-### Troubleshooting (reálná verze v UTB.School)
-
-1. Ve `UTB.School.Web` je nainstalovaný balíček
-	`Duende.AccessTokenManagement.OpenIdConnect` a token management je aktivní
-	přes `AddOpenIdConnectAccessTokenManagement(...)`.
-2. API klient je registrován přes `AddUserAccessTokenHttpClient<SchoolService>(...)`,
-	ne přes vlastní `DelegatingHandler`.
-3. V `UTB.School.WebApi` je audience nastavena na `utb-school-webapi`.
-4. Ve WebApi běží middleware v pořadí `UseAuthentication()` -> `UseAuthorization()`.
-5. V AppHost existuje resource `keycloak` a oba projekty (`web`, `webapi`) na ni
-   maji `.WithReference(keycloak)`.
-6. V Keycloak klientovi `utb-school-web` je povolený Authorization Code flow,
-   validní redirect URI a scope `offline_access` (kvůli refresh tokenu).
 
 ---
 
