@@ -377,11 +377,11 @@ Pak v `AppHost.cs` přidáme Keycloak jako resource v Aspire orchestraci:
 ```
 
 Poznámka:
-- Název resource (`"keycloak"`) musí odpovídat názvu, který později použijeme v `AddKeycloakJwtBearer(serviceName: ...)` ve WebApi.
+- Název resource (`"keycloak"`) musí odpovídat názvu, který později použijeme v projektech.
 
 ### WebApi
 
-V projektu `UTB.School.WebApi` použijeme balíček `Aspire.Keycloak.Authentication`, opět jde o preview verzi:
+V projektu `UTB.School.WebApi` použijeme balíček `Aspire.Keycloak.Authentication`, opět jde o preview verzi.
 
 Do `Program.cs` přidáme autentizaci JWT přes Keycloak, autorizaci a ochranu endpointu rolí:
 
@@ -415,9 +415,8 @@ Poznámka: Tato implementace je pro **Blazor Server Interactivity**
 řešena jinak (běží v prohlížeči, token handling je client-side a konfigurace
 se dělá jinými extension metodami pro WASM hosta).
 
-V projektu `UTB.School.Web` je provider identity **Keycloak** a balíček
-`Duende.AccessTokenManagement.OpenIdConnect` slouží pro **správu user access tokenu**
-při volání Web API.
+V projektu `UTB.School.Web` použijeme opět balíček `Aspire.Keycloak.Authentication` (preview verze) a navíc `Duende.AccessTokenManagement.OpenIdConnect` pro správu access tokenů.
+
 
 Co se děje v `Program.cs`:
 
