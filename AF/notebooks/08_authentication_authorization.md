@@ -10,7 +10,7 @@ U zabezpečení webových aplikací v .NET máme dvě běžné možnosti.
 
 První možnost jsou **individual accounts** - uživatelské účty jsou uložené v databázi (typicky přes Entity Framework a ASP.NET Core Identity) a aplikace poskytuje vlastní přihlášení.
 
-Druhá možnost je použití externího poskytovatele identity přes **OpenID Connect/OAuth2**. To je vhodné ve chvíli, kdy chceme zabezpečit webového i mobilního klienta a předávat access token do API. Typickými providery jsou Auth0, Microsoft Entra, IdentityServer nebo Keycloak.
+Druhá možnost je použití externího poskytovatele identity přes **OpenID Connect/OAuth2**. To je vhodné ve chvíli, kdy chceme zabezpečit webového i mobilního klienta a předávat access token do API. Typickými providery jsou Auth0, Microsoft Entra, Duende IdentityServer nebo Keycloak.
 
 ## Co je to OpenID Connect
 
