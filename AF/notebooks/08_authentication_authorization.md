@@ -454,6 +454,15 @@ builder.Services.AddOpenIdConnectAccessTokenManagement(options =>
 
 builder.Services.AddUserAccessTokenHttpClient<SchoolService>(
   configureClient: (_, c) => c.BaseAddress = new Uri("https://webapi"));
+
+// dalsi kod
+
+// Opet pridáme middleware pro autentizaci a autorizaci
+app.UseAuthentication();
+app.UseAuthorization();
+
+// Pro ochranu proti CSRF u POST endpointů, které mění stav (např. logout)
+app.UseAntiforgery();
 ```
 
 Kromě toho jsou v aplikaci pomocné endpointy:
@@ -462,38 +471,111 @@ Kromě toho jsou v aplikaci pomocné endpointy:
 - `POST /logout` odhlásí lokální cookie session, provede revoke refresh tokenu
 	(`RevokeRefreshTokenAsync`) a odhlásí OIDC session.
 
-Ukázka endpointů z `Program.cs`:
+Ukázka komplentího kódu `Program.cs`:
 
 ```csharp
+using Duende.AccessTokenManagement.OpenIdConnect;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using UTB.School.Web;
+using UTB.School.Web.Components;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+})
+.AddCookie()
+.AddKeycloakOpenIdConnect(
+    serviceName: "keycloak",
+    realm: "utb-school",
+    options =>
+    {
+        options.ClientId = "utb-school-web";
+        options.ClientSecret = "i2bFdffttfCuXib5bJhAxeFLQUWw28sX"; // jen dev
+        options.ResponseType = OpenIdConnectResponseType.Code;
+        options.Scope.Add("openid");         // podkud chci id_token
+        options.Scope.Add("offline_access"); // pokud chci refresh_token
+        options.SaveTokens = true;
+        options.RequireHttpsMetadata = false; // jen dev
+        options.TokenValidationParameters.NameClaimType = "preferred_username";
+    });
+
+builder.Services.AddAuthorization();
+builder.Services.AddCascadingAuthenticationState();
+
+builder.Services.AddOpenIdConnectAccessTokenManagement(options =>
+{
+    options.RefreshBeforeExpiration = TimeSpan.FromSeconds(30);
+});
+
+builder.Services.AddUserAccessTokenHttpClient<SchoolService>(
+    configureClient: (_, c) => c.BaseAddress = new Uri("https://webapi"));
+
+builder.Services.AddRazorComponents()
+    .AddInteractiveServerComponents();
+
+var app = builder.Build();
+
+app.MapDefaultEndpoints();
+
 app.MapGet("/login", async (HttpContext ctx, string? returnUrl) =>
 {
-	string redirectUri = "/";
+    string redirectUri = "/";
 
-	if (!string.IsNullOrWhiteSpace(returnUrl) && Uri.IsWellFormedUriString(returnUrl, UriKind.Relative))
-	{
-		redirectUri = returnUrl;
-	}
+    if (!string.IsNullOrWhiteSpace(returnUrl) && Uri.IsWellFormedUriString(returnUrl, UriKind.Relative))
+    {
+        redirectUri = returnUrl;
+    }
 
-	await ctx.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties
-	{
-		RedirectUri = redirectUri
-	});
+    await ctx.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties
+    {
+        RedirectUri = redirectUri
+    });
 });
 
-// Logout dělám přes form a POST kvůli dvojitému načtení stránky
+// Logout dělám přes form a post kvůli dvojitému načítání stránky
 app.MapPost("/logout", async (HttpContext ctx) =>
 {
-	string? idToken = await ctx.GetTokenAsync("id_token");
+    string? idToken = await ctx.GetTokenAsync("id_token");
 
-	await ctx.RevokeRefreshTokenAsync();
+    await ctx.RevokeRefreshTokenAsync();
 
-	await ctx.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-	await ctx.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties
-	{
-		RedirectUri = "/students",
-		Parameters = { { "id_token_hint", idToken ?? string.Empty } }
-	});
+    await ctx.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+    await ctx.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties
+    {
+        RedirectUri = "/students",
+        Parameters = { { "id_token_hint", idToken ?? string.Empty } }
+    });
 });
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Error", createScopeForErrors: true);
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
+}
+app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
+app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseAntiforgery();
+
+app.MapStaticAssets();
+app.MapRazorComponents<App>()
+    //.RequireAuthorization()
+    .AddInteractiveServerRenderMode();
+
+app.Run();
 ```
 
 Ukázka zabezpečené stránky `Students.razor`:
