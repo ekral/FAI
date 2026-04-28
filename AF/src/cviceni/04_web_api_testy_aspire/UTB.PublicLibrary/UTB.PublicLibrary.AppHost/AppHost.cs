@@ -7,7 +7,7 @@ IResourceBuilder<PostgresServerResource> postgres;
 if (builder.Environment.IsEnvironment("Testing"))
 {
     postgres = builder.AddPostgres("postgres-testing")
-                      .WithContainerName("postgres-testing-UTB.PublicLibrary");
+                      .WithContainerName("utb-publiclibrary-postgres-testing");
 
     var database = postgres.AddDatabase("database");
 
@@ -18,7 +18,7 @@ if (builder.Environment.IsEnvironment("Testing"))
 else
 {
     postgres = builder.AddPostgres("postgres")
-                      .WithContainerName("postgres-UTB.PublicLibrary")
+                      .WithContainerName("utb-publiclibrary-postgres")
                       .WithDataVolume()
                       .WithLifetime(ContainerLifetime.Persistent);
 
