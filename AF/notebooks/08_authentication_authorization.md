@@ -361,7 +361,7 @@ Jejich data (username, email, role, skupiny, atributy) se mohou přes mapping pr
 Náš projekt bude mít následující strukturu:
 - **UTB.School.Web** - Blazor klient
 - **UTB.School.WebApi** - Web API
-- **UTB.School.WebSse** - Klient zobrazující SSE zprávy.
+- **UTB.School.Web** - Klient zobrazující seznam studentů.
 
 ### AppHost
 
