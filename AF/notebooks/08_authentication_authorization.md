@@ -350,18 +350,11 @@ Jejich data (username, email, role, skupiny, atributy) se mohou přes mapping pr
 - `aud`: doplní například Audience mapper.
 - `preferred_username`, `email`: mapování z profilu uživatele (často přes scope jako profile/email/users).
 - `realm_access.roles`: role přiřazené uživateli na úrovni realm.
-- `resource_access.<client>.roles`: role přiřazené uživateli pro konkrétní client.
+- `resource_access.<client>.roles`: role přiřazené uživateli pro konkrétní client. Toto výchozí nastavení změníme na `roles` pro jednodušší přístup v API.
 
-Praktický důsledek:
-- Když v Keycloaku změníme mapping v client scope, změní se obsah claimů v nově vydaných tokenech.
-- API autorizace pak musí očekávat stejné názvy claimů, jaké mapujeme.
+---
 
-## Shrnutí pro praxi v .NET
-
-- V klientu řešíme login přes OpenID Connect.
-- V API ověřujeme JWT `access_token`.
-- V Keycloaku pečlivě nastavíme realm, client, scopes a mappingy claimů.
-- V autorizaci v API kontrolujeme role/scope/audience podle obsahu tokenu.
+## Implementace v Aspire
 
 ## Struktura projektu
 
@@ -369,10 +362,6 @@ Náš projekt bude mít následující strukturu:
 - **UTB.School.Web** - Blazor klient
 - **UTB.School.WebApi** - Web API
 - **UTB.School.WebSse** - Klient zobrazující SSE zprávy.
-
----
-
-## Implementace v Aspire
 
 ### AppHost
 
