@@ -6,9 +6,11 @@ S asistencí: GitHub Copilot
 
 ## 🎯 Definice
 
-U zabezpečení webových aplikací v .NET mám dvě možnosti. Buď použijeme **individual accounts** což znamená že uživatelské učty budou uloženy v databázi pomocí Entity Frameworku a Identity frameworku a projekt nám vytvoří webové stránky pro přihlášení. Nebo v případě Web Api nám vytvoří endpointy pro přihlášení a registraci.
+U zabezpečení webových aplikací v .NET máme dvě běžné možnosti.
 
-Pokud chceme ale zabezpečit zároveň webového nebo mobilního klienta, to znamené že ve webovém klientu se přihlásíme a on bude přeposílat token do API, tak musíme použít například standard OpenId Connect s protokolem OAuth2. V tomto případě se bude starat o správu uživatelů a přihlašování externí poskytovatel identity, například Auth0, Microsoft Entra, Identity Server, Keycloak a podobné podporující tyto standardy. Pro tento případ nám .NET poskytuje middleware pro ověřování.
+První možnost jsou **individual accounts** - uživatelské účty jsou uložené v databázi (typicky přes Entity Framework a ASP.NET Core Identity) a aplikace poskytuje vlastní přihlášení.
+
+Druhá možnost je použití externího poskytovatele identity přes **OpenID Connect/OAuth2**. To je vhodné ve chvíli, kdy chceme zabezpečit webového i mobilního klienta a předávat access token do API. Typickými providery jsou Auth0, Microsoft Entra, IdentityServer nebo Keycloak.
 
 ## Co je to OpenID Connect
 
@@ -102,8 +104,8 @@ Co je důležité:
 
 - `id_token`: token identity uživatele pro klientskou aplikaci (kdo je přihlášený). Používá se pro přihlášení a práci s identitou v klientovi, běžně se neposílá do Web API. Je vždy ve formátu **JSON Web Token (JWT)**. Keycloak vrací `id_token` jen pokud scope obsahuje `openid`.
 - `access_token`: token pro API, nese oprávnění (scope/role/audience) pro autorizaci požadavků.
- 	- Access_token může být **JWT** (ověřuje se přez JWKS (JSON Web Key Set) což je sada veřejných klíčů které získá od autorizačního serveru). 
-	- Nebo může být **opaque/reference token (nečitelný řetězec)**, který API ověřuje přes introspection endpoint.Web API autorizačho serveru.
+	- `access_token` může být **JWT** (ověřuje se přes JWKS - JSON Web Key Set, tedy sadu veřejných klíčů od autorizačního serveru).
+	- Nebo může být **opaque/reference token** (nečitelný řetězec), který API ověřuje přes introspection endpoint autorizačního serveru.
 
 `Bearer` znamená „držitel“. V praxi to znamená, že kdo token drží, ten ho může použít pro přístup k API.
 Proto se token posílá v hlavičce `Authorization: Bearer <token>` a je nutné ho chránit před únikem (HTTPS, krátká expirace, bezpečné uložení).
@@ -120,7 +122,7 @@ GET /realms/utb-school/protocol/openid-connect/auth?
 	scope=openid%20profile%20email&
 	code_challenge=Rk9vQmFyQmF6MTIzNDU2Nzg5X1NIRTI1Ng&
 	code_challenge_method=S256&
-ssssssssss	state=xyz123&
+	state=xyz123&
 	nonce=abc123 HTTP/1.1
 Host: auth.example.cz
 ```
@@ -392,42 +394,180 @@ Poznámka:
 
 V projektu `UTB.School.WebApi` použijeme balíček `Aspire.Keycloak.Authentication`, opět jde o preview verzi:
 
-Do `Program.cs` přidáme autentizaci JWT přes Keycloak.:
+Do `Program.cs` přidáme autentizaci JWT přes Keycloak, autorizaci a ochranu endpointu rolí:
 
 ```csharp
 builder.Services.AddAuthentication()
-				.AddKeycloakJwtBearer(
-					serviceName: "keycloak",
-					realm: "utb-school",
-					options =>
-					{
-						options.RequireHttpsMetadata = false; // jen pro dev
-					}
-				);
+	.AddKeycloakJwtBearer(
+		serviceName: "keycloak",
+		realm: "utb-school",
+		options =>
+		{
+			options.Audience = "utb-school-webapi";
+			options.RequireHttpsMetadata = false; // jen pro dev
+		}
+	);
 
 builder.Services.AddAuthorization();
 
-Dále přidáme middleware pro autentizaci a autorizaci:
+app.UseAuthentication();
+app.UseAuthorization();
 
-// Musí být v následujícím pořadí, protože autorizace závisí na autentizaci
-app.UseAuthentication(); // První middleware pro ověřování identity, ověří kdo je uživatel
-app.UseAuthorization();  // Potom middleware pro autorizaci, který rozhoduje, jestli má uživatel přístup k endpointu
+app.MapGet("/students", GetStudents)
+   .RequireAuthorization(pb => pb.RequireRole("student-admin"));
 ```
 
-A endpointy, které mají být chráněné, označíme autorizací:
+Poznámka: Vždy platí pořadí middleware `UseAuthentication()` a pak `UseAuthorization()`.
+
+### Blazor Web (UTB.School + Duende.AccessTokenManagement.OpenIdConnect)
+
+Poznámka: Tato implementace je pro **Blazor Server Interactivity**
+(`AddInteractiveServerComponents`). V **Blazor WebAssembly** je autentizace
+řešena jinak (běží v prohlížeči, token handling je client-side a konfigurace
+se dělá jinými extension metodami pro WASM hosta).
+
+V projektu `UTB.School.Web` je provider identity **Keycloak** a balíček
+`Duende.AccessTokenManagement.OpenIdConnect` slouží pro **správu user access tokenu**
+při volání Web API.
+
+Co se děje v `Program.cs`:
+
+- Nastaví se autentizace přes cookie + OIDC challenge.
+- OIDC je napojené na Keycloak (`AddKeycloakOpenIdConnect`).
+- Uloží se tokeny (`SaveTokens = true`) a zapne se podpora refresh tokenu (`offline_access`).
+- Zapne se Duende token management (`AddOpenIdConnectAccessTokenManagement`).
+- `SchoolService` je registrovaná jako `AddUserAccessTokenHttpClient`, takže
+	Authorization header s bearer tokenem přidává Duende automaticky.
 
 ```csharp
-app.MapGet("/students", GetStudents).RequireAuthorization();
+builder.Services.AddAuthentication(options =>
+{
+  options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+  options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+})
+.AddCookie()
+.AddKeycloakOpenIdConnect(
+  serviceName: "keycloak",
+  realm: "utb-school",
+  options =>
+  {
+    options.ClientId = "utb-school-web";
+    options.ClientSecret = "..."; // jen dev
+    options.ResponseType = OpenIdConnectResponseType.Code;
+    options.Scope.Add("openid");
+    options.Scope.Add("offline_access");
+    options.SaveTokens = true;
+    options.RequireHttpsMetadata = false; // jen dev
+    options.TokenValidationParameters.NameClaimType = "preferred_username";
+  });
+
+builder.Services.AddOpenIdConnectAccessTokenManagement(options =>
+{
+  options.RefreshBeforeExpiration = TimeSpan.FromSeconds(30);
+});
+
+builder.Services.AddUserAccessTokenHttpClient<SchoolService>(
+  configureClient: (_, c) => c.BaseAddress = new Uri("https://webapi"));
 ```
 
-### Co zkontrolovat, když to nefunguje
+Kromě toho jsou v aplikaci pomocné endpointy:
 
-1. `serviceName` ve WebApi je stejný jako název Keycloak resource v AppHost.
-2. Realm v Keycloaku je `utb-school`.
-3. Access token obsahuje správnou `aud` (`utb-school-webapi`) přes audience mapper.
-4. Ve WebApi běží middleware v pořadí:
-   - `app.UseAuthentication()`
-   - `app.UseAuthorization()`
+- `GET /login` zavolá `ChallengeAsync(...)` a přesměruje uživatele na login do Keycloaku.
+- `POST /logout` odhlásí lokální cookie session, provede revoke refresh tokenu
+	(`RevokeRefreshTokenAsync`) a odhlásí OIDC session.
+
+Ukázka endpointů z `Program.cs`:
+
+```csharp
+app.MapGet("/login", async (HttpContext ctx, string? returnUrl) =>
+{
+	string redirectUri = "/";
+
+	if (!string.IsNullOrWhiteSpace(returnUrl) && Uri.IsWellFormedUriString(returnUrl, UriKind.Relative))
+	{
+		redirectUri = returnUrl;
+	}
+
+	await ctx.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties
+	{
+		RedirectUri = redirectUri
+	});
+});
+
+// Logout dělám přes form a POST kvůli dvojitému načtení stránky
+app.MapPost("/logout", async (HttpContext ctx) =>
+{
+	string? idToken = await ctx.GetTokenAsync("id_token");
+
+	await ctx.RevokeRefreshTokenAsync();
+
+	await ctx.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+	await ctx.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties
+	{
+		RedirectUri = "/students",
+		Parameters = { { "id_token_hint", idToken ?? string.Empty } }
+	});
+});
+```
+
+Ukázka zabezpečené stránky `Students.razor`:
+
+```razor
+@page "/students"
+@using Microsoft.AspNetCore.Components.Authorization
+@using UTB.School.Contracts
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@inject SchoolService SchoolService
+
+<AuthorizeView Roles="student-admin">
+	<Authorized>
+		<p>Welcome back @context.User.Identity?.Name !</p>
+
+		<form action="logout" method="post">
+			<AntiforgeryToken />
+			<button type="submit" class="nav-link btn btn-link">Logout</button>
+		</form>
+		
+	</Authorized>
+	<NotAuthorized>
+		<p><a href="/login?returnUrl=students">Log in</a> please.</p>
+	</NotAuthorized>
+</AuthorizeView>
+
+@code {
+	private StudentDto[]? students;
+
+	protected override async Task OnInitializedAsync()
+	{
+		students = await SchoolService.GetStudentsAsync();
+	}
+}
+```
+
+Co je důležité:
+
+- `AuthorizeView Roles="student-admin"` omezí viditelnou část UI podle role.
+- Nepřihlášený uživatel vidí odkaz na `GET /login`.
+- Logout jde přes `POST /logout` a obsahuje `<AntiforgeryToken />`.
+- API endpoint `/students` je navíc chráněn na serveru přes `.RequireAuthorization(pb => pb.RequireRole("student-admin"))`, takže je chráněné UI i API.
+
+
+
+---
+
+### Troubleshooting (reálná verze v UTB.School)
+
+1. Ve `UTB.School.Web` je nainstalovaný balíček
+	`Duende.AccessTokenManagement.OpenIdConnect` a token management je aktivní
+	přes `AddOpenIdConnectAccessTokenManagement(...)`.
+2. API klient je registrován přes `AddUserAccessTokenHttpClient<SchoolService>(...)`,
+	ne přes vlastní `DelegatingHandler`.
+3. V `UTB.School.WebApi` je audience nastavena na `utb-school-webapi`.
+4. Ve WebApi běží middleware v pořadí `UseAuthentication()` -> `UseAuthorization()`.
+5. V AppHost existuje resource `keycloak` a oba projekty (`web`, `webapi`) na ni
+   maji `.WithReference(keycloak)`.
+6. V Keycloak klientovi `utb-school-web` je povolený Authorization Code flow,
+   validní redirect URI a scope `offline_access` (kvůli refresh tokenu).
 
 ---
 
@@ -459,16 +599,16 @@ app.MapGet("/students", GetStudents).RequireAuthorization();
 	- Home URL: `https://localhost:7197`
 	- Client Scopes: zkontrolujeme, že máme přidaný `utb-school-webapi-audience` (aby se nám do tokenu přidala audience pro API)
 
-6. Vytvoříme realm role (role je platná pro všechny klienty v daném realmu) `librarian`:
-	- Role name: `librarian`
-	- Description: `Can create, read, update and delete books`
+6. Vytvoříme realm roli (platnou pro celý realm) `student-admin`:
+	- Role name: `student-admin`
+	- Description: `Can manage students`
 
 7. Vytvoříme uživatele v Users (realm users, ne client users) `karel`:
 	- Email verified: ON
 	- Username: `karel`
 	- Credential -> Set Password: `karel` (Temporary: OFF)
 
-8. Přiřadíme uživateli `karel` roli `librarian` (realm role).
+8. Přiřadíme uživateli `karel` roli `student-admin` (realm role).
 
 9. Přejmenování realm roles Token Claim Name:
 
@@ -480,11 +620,13 @@ app.MapGet("/students", GetStudents).RequireAuthorization();
 - Nastavte Include in Identity Token a Include in Access Token na ON.
 - Uložte (Save).
 
-9. Exportujeme realm pro zálohu a případné obnovení.
+10. Exportujeme realm pro zálohu a případné obnovení.
 
-Exportovat můžeme pomocí následujících příkazů kde `volume-name` je název volume běžící instance Keycloaku.
+Export můžeme provést následujícími příkazy, kde `volume-name` je název volume běžící instance Keycloaku.
 
-Nejdřív zastavíme kontainer s názvem `utb-school-keycloak`, potom pustíme nový kontainer a namapujeme cestu `C:\temp\kc-export` (zde najdeme exportovaná data v	našem operačním systému) na adresář v linuxu (adrešář v kontejneru kam budou exportovýny data) a připojíme existující data z původního kontajneru s názvem `utb-school-keycloak-data` a exportujeme data do namapovaného adresáře.
+Nejdřív zastavíme kontejner `utb-school-keycloak`, potom spustíme nový kontejner,
+namapujeme cestu `C:\temp\kc-export` na exportní adresář v kontejneru,
+připojíme existující volume `utb-school-keycloak-data` a provedeme export.
 
 ```powershell
 docker stop utb-school-keycloak
