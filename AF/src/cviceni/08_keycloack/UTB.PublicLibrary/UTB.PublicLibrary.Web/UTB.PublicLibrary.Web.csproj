@@ -8,6 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Aspire.Keycloak.Authentication" Version="13.2.4-preview.1.26224.4" />
+    <PackageReference Include="Duende.AccessTokenManagement.OpenIdConnect" Version="4.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\UTB.PublicLibrary.Contracts\UTB.PublicLibrary.Contracts.csproj" />
     <ProjectReference Include="..\UTB.PublicLibrary.ServiceDefaults\UTB.PublicLibrary.ServiceDefaults.csproj" />
   </ItemGroup>

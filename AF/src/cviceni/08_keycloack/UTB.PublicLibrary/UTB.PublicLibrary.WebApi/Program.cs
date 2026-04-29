@@ -23,11 +23,27 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddSingleton<ServerSentEventsService>();
 
+builder.Services.AddAuthentication()
+       .AddKeycloakJwtBearer(
+            serviceName: "keycloak",
+            realm: "utb-publiclibrary",
+            options =>
+            {
+                options.Audience = "utb-publiclibrary-webapi";
+                options.RequireHttpsMetadata = false; // jen dev
+            });
+
+builder.Services.AddAuthorization();
+
 var app = builder.Build();
 
 app.MapDefaultEndpoints();
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseCors();
 
 app.MapGet("/sse", GetUpdates);
