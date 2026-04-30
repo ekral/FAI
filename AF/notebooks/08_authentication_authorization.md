@@ -1,4 +1,4 @@
-# 06 Authentication and Authorization
+# 08 Authentication and Authorization
 
 **autor: Erik Král ekral@utb.cz**
 
@@ -654,7 +654,7 @@ Co je důležité:
 	- Role name: `student-admin`
 	- Description: `Can manage students`
 
-7. Vytvoříme uživatele v Users (realm users, ne client users) `karel`:
+7. Vytvoříme realm uživatele v Users (realm users, ne client users) `karel`:
 	- Email verified: ON
 	- Username: `karel`
 	- Credential -> Set Password: `karel` (Temporary: OFF)
