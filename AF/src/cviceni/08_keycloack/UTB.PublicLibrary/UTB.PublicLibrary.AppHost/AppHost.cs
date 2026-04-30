@@ -30,7 +30,7 @@ else
 
     var keycloak = builder.AddKeycloak("keycloak", 8080)
                           .WithContainerName("utb.publiclibrary-keycloak")
-                          .WithDataVolume("utb-school-keycloak-data")
+                          .WithDataVolume("utb-publiclibrary-keycloak-data")
                           .WithLifetime(ContainerLifetime.Persistent);
 
     var webapi = builder.AddProject<Projects.UTB_PublicLibrary_WebApi>("webapi")

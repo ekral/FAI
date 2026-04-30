@@ -635,8 +635,9 @@ Co je důležité:
 
 3. Vytvoříme Client Scope `utb-school-webapi-audience`:
 	- Type: Default (automaticky nám ho přidá do nového klienta)
+	- Description: `Add utb-school-webapi as audience to access token`
 	- Mappers -> Configure new mapper -> Audience
-		- Name: `utb-school-webapi-audience`
+		- Name: `Included Client Audience: utb-school-webapi`
 		- Included Client Audience: `utb-school-webapi`
 		- Add to access token: ON
 
