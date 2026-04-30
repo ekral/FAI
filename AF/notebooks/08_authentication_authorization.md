@@ -1,4 +1,4 @@
-# 08 Authentication and Authorization
+# 08 Authentication and Authorization (Keycloak)
 
 **autor: Erik Král ekral@utb.cz**
 
