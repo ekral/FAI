@@ -1,0 +1,94 @@
+﻿@page "/"
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@using System.Net.ServerSentEvents
+@using System.Text.Json
+@using UTB.PublicLibrary.Contracts
+@implements IAsyncDisposable
+@inject IHttpClientFactory ClientFactory
+
+<PageTitle>SseDemo Csharp</PageTitle>
+
+@if (!string.IsNullOrWhiteSpace(errorMessage))
+{
+    <div class="alert alert-danger">@errorMessage</div>
+}
+
+<h1>Actual Books</h1>
+
+@if(books is null)
+{
+    <p><em>Waiting ...</em></p>    
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Title</th>
+                <th scope="col">Archive</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (BookDto book in books)
+            {
+                <tr>
+                    <th scope="row">@book.Id</th>
+                    <th>@book.Title</th>
+                    <th>@book.IsArchived</th>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    private CancellationTokenSource cts = new();
+    BookDto[]? books;
+    private string? errorMessage;
+
+    protected override void OnInitialized()
+    {
+        _ = StartSseAsync(cts.Token);
+    }
+
+    private async Task StartSseAsync(CancellationToken ct)
+    {
+        var client = ClientFactory.CreateClient("webapi");
+
+        try
+        {
+            using var response = await client.GetAsync("/sse", HttpCompletionOption.ResponseHeadersRead, ct);
+
+            response.EnsureSuccessStatusCode();
+
+            using Stream sseStream = await response.Content.ReadAsStreamAsync(ct);
+
+            SseParser<string> parser = SseParser.Create(sseStream);
+
+            await foreach (SseItem<string> sseEvent in parser.EnumerateAsync(ct))
+            {
+                books = JsonSerializer.Deserialize<BookDto[]>(sseEvent.Data, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+        catch (HttpRequestException)
+        {
+            errorMessage = "API is not available.";
+
+            await InvokeAsync(StateHasChanged);
+        }
+        catch (OperationCanceledException)
+        {
+            // Ignorovat při zavření komponenty
+        }
+    }
+
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        cts.Cancel();
+        cts.Dispose();
+    }
+}
