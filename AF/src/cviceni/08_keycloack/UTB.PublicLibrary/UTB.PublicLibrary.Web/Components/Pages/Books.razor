@@ -13,7 +13,7 @@
     <div class="alert alert-danger" role="alert">@errorMessage</div>
 }
 
-<AuthorizeView>
+<AuthorizeView Roles="books-admin">
     <Authorized>
         <p>Welcome back @context.User.Identity?.Name !</p>
 
