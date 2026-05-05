@@ -644,24 +644,31 @@ Co je důležité:
 5. Vytvoříme client `utb-school-web` pro webovou aplikaci:
 	- Client authentication: ON
 	- Standard Flow Enabled: ON
-	- Valid Redirect URIs: `https://localhost:7197/signin-oidc`
-	- Web Origins: `https://localhost:7197`
-	- Post Logout Redirect URIs: `https://localhost:7197/signout-callback-oidc`
 	- Home URL: `https://localhost:7197`
+	- Valid Redirect URIs: `https://localhost:7197/signin-oidc`
+	- Valid post logout redirect URIs: `https://localhost:7197/signout-callback-oidc`
+	- Web Origins: `https://localhost:7197`
+	
 	- Client Scopes: zkontrolujeme, že máme přidaný `utb-school-webapi-audience` (aby se nám do tokenu přidala audience pro API)
 
-6. Vytvoříme realm roli (platnou pro celý realm) `student-admin`:
+6. Vytvoříme clien "utb-school-tests" pro testy:
+	- Client authentication: OFF
+	- Standard Flow Enabled: OFF
+	- Direct access grants: ON
+	- Client Scopes: zkontrolujeme, že máme přidaný `utb-school-webapi-audience` (aby se nám do tokenu přidala audience pro API)
+
+7. Vytvoříme realm roli (platnou pro celý realm) `student-admin`:
 	- Role name: `student-admin`
 	- Description: `Can manage students`
 
-7. Vytvoříme realm uživatele v Users (realm users, ne client users) `karel`:
+8. Vytvoříme realm uživatele v Users (realm users, ne client users) `karel`:
 	- Email verified: ON
 	- Username: `karel`
 	- Credential -> Set Password: `karel` (Temporary: OFF)
 
-8. Přiřadíme uživateli `karel` roli `student-admin` (realm role).
+9. Přiřadíme uživateli `karel` roli `student-admin` (realm role).
 
-9. Přejmenování realm roles Token Claim Name:
+10. Přejmenování realm roles Token Claim Name:
 
 - V levém černém menu klikněte na Client scopes.
 - Najděte v seznamu ten s názvem roles a klikněte na něj.
@@ -671,7 +678,7 @@ Co je důležité:
 - Nastavte Include in Identity Token a Include in Access Token na ON.
 - Uložte (Save).
 
-10. Exportujeme realm pro zálohu a případné obnovení.
+11. Exportujeme realm pro zálohu a případné obnovení.
 
 Export můžeme provést následujícími příkazy, kde `volume-name` je název volume běžící instance Keycloaku.
 
@@ -684,3 +691,7 @@ docker stop utb-school-keycloak
 
 docker run --rm -v C:\temp\kc-export:/opt/keycloak/data/export -v utb-school-keycloak-data:/opt/keycloak/data quay.io/keycloak/keycloak:26.5 export --dir /opt/keycloak/data/export
 ```
+
+Soubory si potom zkopírujeme z `C:\temp\kc-export` do nového adresáře `import`, kdy pro každý soubor v adresáří nastavíme:
+- Build Action: Content
+- Copy to Output Directory: Copy if newer
