@@ -447,6 +447,10 @@ builder.Services.AddAuthentication(options =>
     options.TokenValidationParameters.NameClaimType = "preferred_username";
   });
 
+builder.Services.AddAuthorization();
+
+builder.Services.AddCascadingAuthenticationState();
+
 builder.Services.AddOpenIdConnectAccessTokenManagement(options =>
 {
   options.RefreshBeforeExpiration = TimeSpan.FromSeconds(30);
@@ -471,7 +475,7 @@ Kromě toho jsou v aplikaci pomocné endpointy:
 - `POST /logout` odhlásí lokální cookie session, provede revoke refresh tokenu
 	(`RevokeRefreshTokenAsync`) a odhlásí OIDC session.
 
-Ukázka komplentího kódu `Program.cs`:
+Ukázka kompletího kódu `Program.cs`, nezapomeňte upravit `ClientSecret` a RedirectUri = "/students" na vaši stránku, kam chcete přesměrovat po loginu/logoutu:
 
 ```csharp
 using Duende.AccessTokenManagement.OpenIdConnect;
@@ -508,6 +512,7 @@ builder.Services.AddAuthentication(options =>
     });
 
 builder.Services.AddAuthorization();
+
 builder.Services.AddCascadingAuthenticationState();
 
 builder.Services.AddOpenIdConnectAccessTokenManagement(options =>
@@ -578,7 +583,29 @@ app.MapRazorComponents<App>()
 app.Run();
 ```
 
-Ukázka zabezpečené stránky `Students.razor`:
+Autorizovat můžeme celou aplikaci, stránku, route nebo komponentu. 
+
+Celou aplikaci autorizujeme přidáním `.RequireAuthorization()` při mapování root komponenty `App` v `Program.cs`:
+
+```csharp
+app.MapRazorComponents<App>()
+    .RequireAuthorization(pb => pb.RequireRole("student-admin"))
+    .AddInteractiveServerRenderMode();
+```
+
+Stránku nebo route autorizujeme přidáním `[Authorize]` atributu do komponenty, například:
+
+```razor
+@page "/authors"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using UTB.PublicLibrary.Contracts
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@attribute [Authorize(Roles = "student-admin")]
+@inject LibraryService LibraryService
+```
+
+Ukázka zabezpečené komponenty `Students.razor`, nezapomeňte změnit linky (returnUrl) a role podle vaší domény:
 
 ```razor
 @page "/students"

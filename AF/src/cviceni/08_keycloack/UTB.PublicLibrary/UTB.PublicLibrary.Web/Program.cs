@@ -30,7 +30,7 @@ builder.Services.AddAuthentication(options =>
         options.Scope.Add("openid"); // id_token
         options.Scope.Add("offline_access"); // refresh_token
         options.SaveTokens = true;
-        options.SaveTokens = false; // jen dev
+        options.RequireHttpsMetadata = false; // jen dev
         options.TokenValidationParameters.NameClaimType = "preferred_username";
     }
 );
@@ -64,7 +64,9 @@ app.UseHttpsRedirection();
 app.UseAntiforgery();
 
 app.MapStaticAssets();
+
 app.MapRazorComponents<App>()
+    //.RequireAuthorization(pb => pb.RequireRole("books-admin")) // autorizace cele aplikace
     .AddInteractiveServerRenderMode();
 
 app.MapGet("/login", async (HttpContext ctx, string? returnUrl) =>
@@ -92,7 +94,7 @@ app.MapPost("/logout", async (HttpContext ctx) =>
     await ctx.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
     await ctx.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties
     {
-        RedirectUri = "/students",
+        RedirectUri = "/books",
         Parameters = { { "id_token_hint", idToken ?? string.Empty } }
     });
 });

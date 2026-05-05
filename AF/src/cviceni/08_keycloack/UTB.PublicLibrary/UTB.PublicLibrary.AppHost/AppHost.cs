@@ -42,7 +42,9 @@ else
 
     _ = builder.AddProject<Projects.UTB_PublicLibrary_Web>("web")
                                    .WithReference(webapi)
-                                   .WaitFor(webapi);
+                                   .WithReference(keycloak)
+                                   .WaitFor(webapi)
+                                   .WaitFor(keycloak);
 
     _ = builder.AddProject<Projects.UTB_PublicLibrary_WebSse>("websse")
                                    .WithReference(webapi)

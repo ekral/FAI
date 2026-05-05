@@ -1,7 +1,9 @@
 ﻿@page "/books"
+@using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Authorization
 @using UTB.PublicLibrary.Contracts
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
+@* @attribute [Authorize(Roles = "books-admin")] *@
 @inject LibraryService LibraryService
 
 <h3>Books</h3>
@@ -10,6 +12,21 @@
 {
     <div class="alert alert-danger" role="alert">@errorMessage</div>
 }
+
+<AuthorizeView>
+    <Authorized>
+        <p>Welcome back @context.User.Identity?.Name !</p>
+
+        <form action="logout" method="post">
+            <AntiforgeryToken />
+            <button type="submit" class="nav-link btn btn-link">Logout</button>
+        </form>
+		
+    </Authorized>
+    <NotAuthorized>
+        <p><a href="/login?returnUrl=books">Log in</a> please.</p>
+    </NotAuthorized>
+</AuthorizeView>
 
 <a class="btn btn-primary" href="create">Create</a>
 
