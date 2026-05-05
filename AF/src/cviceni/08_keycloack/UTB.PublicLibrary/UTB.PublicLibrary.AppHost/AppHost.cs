@@ -6,7 +6,7 @@ var builder = DistributedApplication.CreateBuilder(args);
 if (builder.Environment.IsEnvironment("Testing"))
 {
     var postgres = builder.AddPostgres("postgres-testing")
-                      .WithContainerName("utb.publiclibrary-postgres-testing");
+                      .WithContainerName("utb-publiclibrary-postgres-testing");
 
     var database = postgres.AddDatabase("database");
 
@@ -17,8 +17,8 @@ if (builder.Environment.IsEnvironment("Testing"))
 else
 {
     var postgres = builder.AddPostgres("postgres")
-                      .WithContainerName("utb.publiclibrary-postgres")
-                      .WithDataVolume("utb.publiclibrary-postgres-data")
+                      .WithContainerName("utb-publiclibrary-postgres")
+                      .WithDataVolume("utb-publiclibrary-postgres-data")
                       .WithLifetime(ContainerLifetime.Persistent);
 
     var database = postgres.AddDatabase("database");
@@ -29,7 +29,8 @@ else
                                .WaitFor(database);
 
     var keycloak = builder.AddKeycloak("keycloak", 8080)
-                          .WithContainerName("utb.publiclibrary-keycloak")
+                          .WithRealmImport("import")
+                          .WithContainerName("utb-publiclibrary-keycloak")
                           .WithDataVolume("utb-publiclibrary-keycloak-data")
                           .WithLifetime(ContainerLifetime.Persistent);
 

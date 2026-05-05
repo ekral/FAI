@@ -47,7 +47,7 @@ app.UseAuthorization();
 app.UseCors();
 
 app.MapGet("/sse", GetUpdates);
-app.MapGet("/books", GetBooks);
+app.MapGet("/books", GetBooks).RequireAuthorization();
 app.MapGet("/books/{id:int}", GetBook);
 app.MapPost("/books", CreateBook);
 app.MapPut("/books/{id:int}", UpdateBook);

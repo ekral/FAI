@@ -9,6 +9,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="import\master-realm.json" />
+    <None Remove="import\master-users-0.json" />
+    <None Remove="import\utb-publiclibrary-realm.json" />
+    <None Remove="import\utb-publiclibrary-users-0.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="import\master-realm.json" />
+    <Content Include="import\master-users-0.json" />
+    <Content Include="import\utb-publiclibrary-realm.json" />
+    <Content Include="import\utb-publiclibrary-users-0.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Aspire.Hosting.Keycloak" Version="13.2.4-preview.1.26224.4" />
     <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="13.2.4" />
   </ItemGroup>

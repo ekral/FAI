@@ -648,8 +648,9 @@ Co je důležité:
 	- Valid Redirect URIs: `https://localhost:7197/signin-oidc`
 	- Valid post logout redirect URIs: `https://localhost:7197/signout-callback-oidc`
 	- Web Origins: `https://localhost:7197`
-	
+	- Zkopírujeme client secret pro tento client (Credentials -> Copy Secret) a vložíme ho do `Program.cs` v Blazor Web projektu. Například: `options.ClientSecret = "qDW7aoS5LVNmQNqA6oTHNyBRp5Ahsdge";`. Tohle je jen pro vývoj, jinak by se client secret neměl používat v kódu, ale načítat z bezpečného úložiště, například user secrets, environment variable nebo Azure Key Vault.
 	- Client Scopes: zkontrolujeme, že máme přidaný `utb-school-webapi-audience` (aby se nám do tokenu přidala audience pro API)
+	
 
 6. Vytvoříme clien "utb-school-tests" pro testy:
 	- Client authentication: OFF

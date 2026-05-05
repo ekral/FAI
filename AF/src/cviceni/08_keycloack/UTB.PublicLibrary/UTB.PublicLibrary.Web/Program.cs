@@ -10,11 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
-builder.Services.AddUserAccessTokenHttpClient<LibraryService>(
-    configureClient: (_, client) => client.BaseAddress = new Uri("https://webapi"));
-
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
+                .AddInteractiveServerComponents();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -28,7 +25,7 @@ builder.Services.AddAuthentication(options =>
     options =>
     {
         options.ClientId = "utb-publiclibrary-web";
-        options.ClientSecret = "...";
+        options.ClientSecret = "qDW7aoS5LVNmQNqA6oTHNyBRp5Ahsdge";
         options.ResponseType = OpenIdConnectResponseType.Code;
         options.Scope.Add("openid"); // id_token
         options.Scope.Add("offline_access"); // refresh_token
@@ -41,6 +38,11 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddOpenIdConnectAccessTokenManagement(options =>
     options.RefreshBeforeExpiration = TimeSpan.FromSeconds(30)
 );
+
+builder.Services.AddCascadingAuthenticationState();
+
+builder.Services.AddUserAccessTokenHttpClient<LibraryService>(
+    configureClient: (_, client) => client.BaseAddress = new Uri("https://webapi"));
 
 var app = builder.Build();
 
