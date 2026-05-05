@@ -692,6 +692,16 @@ docker stop utb-school-keycloak
 docker run --rm -v C:\temp\kc-export:/opt/keycloak/data/export -v utb-school-keycloak-data:/opt/keycloak/data quay.io/keycloak/keycloak:26.5 export --dir /opt/keycloak/data/export
 ```
 
-Soubory si potom zkopírujeme z `C:\temp\kc-export` do nového adresáře `import`, kdy pro každý soubor v adresáří nastavíme:
+Soubory si potom zkopírujeme z `C:\temp\kc-export` do nového adresáře `import` v AppHost projektu, kdy pro každý soubor v adresáří nastavíme:
 - Build Action: Content
 - Copy to Output Directory: Copy if newer
+
+V AppHostu pak můžeme nastavit import těchto souborů při startu `.WithRealmImport("import")`, což nám umožní mít přednastavenou konfiguraci Keycloaku pro vývoj i testování:
+
+```csharp
+    var keycloak = builder.AddKeycloak("keycloak", 8080)
+                          .WithRealmImport("import")
+                          .WithContainerName("utb-publiclibrary-keycloak")
+                          .WithDataVolume("utb-publiclibrary-keycloak-data")
+                          .WithLifetime(ContainerLifetime.Persistent);
+```
