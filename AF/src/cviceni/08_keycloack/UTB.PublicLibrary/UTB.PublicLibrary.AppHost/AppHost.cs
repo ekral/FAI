@@ -10,9 +10,15 @@ if (builder.Environment.IsEnvironment("Testing"))
 
     var database = postgres.AddDatabase("database");
 
+    var keycloak = builder.AddKeycloak("keycloak", 8080)
+                          .WithRealmImport("import")
+                          .WithContainerName("utb-publiclibrary-keycloak-testing");
+
     _ = builder.AddProject<Projects.UTB_PublicLibrary_WebApi>("webapi")
                                    .WithReference(database)
-                                   .WaitFor(database);
+                                   .WithReference(keycloak)
+                                   .WaitFor(database)
+                                   .WaitFor(keycloak);
 }
 else
 {

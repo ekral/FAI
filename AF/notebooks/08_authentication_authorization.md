@@ -718,7 +718,7 @@ připojíme existující volume `utb-school-keycloak-data` a provedeme export.
 ```powershell
 docker stop utb-school-keycloak
 
-docker run --rm -v C:\temp\kc-export:/opt/keycloak/data/export -v utb-school-keycloak-data:/opt/keycloak/data quay.io/keycloak/keycloak:26.5 export --dir /opt/keycloak/data/export
+docker run --rm -v C:\temp\kc-export:/opt/keycloak/data/export -v utb-school-keycloak-data:/opt/keycloak/data quay.io/keycloak/keycloak:26.5 export --dir /opt/keycloak/data/export --realm utb-school
 ```
 
 Soubory si potom zkopírujeme z `C:\temp\kc-export` do nového adresáře `import` v AppHost projektu, kdy pro každý soubor v adresáří nastavíme:

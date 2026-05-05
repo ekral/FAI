@@ -9,15 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="import\master-realm.json" />
-    <None Remove="import\master-users-0.json" />
     <None Remove="import\utb-publiclibrary-realm.json" />
     <None Remove="import\utb-publiclibrary-users-0.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="import\master-realm.json" />
-    <Content Include="import\master-users-0.json" />
     <Content Include="import\utb-publiclibrary-realm.json" />
     <Content Include="import\utb-publiclibrary-users-0.json" />
   </ItemGroup>
