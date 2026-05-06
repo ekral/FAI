@@ -8,7 +8,7 @@ namespace UTB.PublicLibrary.Tests.Tests
     public class TestFixture : IAsyncLifetime
     {
         private DistributedApplication app = null!;
-        HttpClient? keycloakClient;
+        private HttpClient? keycloakClient;
         private string? idToken;
         private string? connectionString;
 

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace UTB.PublicLibrary.Tests
+namespace UTB.School.Tests
 {
     public class TokenResponse
     {

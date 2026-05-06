@@ -60,7 +60,8 @@ app.MapGet("/login", async (HttpContext ctx, string? returnUrl) =>
 
     await ctx.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties
     {
-        RedirectUri = redirectUri
+        RedirectUri = redirectUri,
+        IsPersistent = false
     });
 });
 
