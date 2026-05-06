@@ -9,9 +9,15 @@ if (builder.Environment.IsEnvironment("Testing"))
 
     var database = postgres.AddDatabase("database");
 
+    var keycloak = builder.AddKeycloak("keycloak", 8080)
+           .WithRealmImport("./Realm")
+           .WithContainerName("utb-school-keycloak-testing");
+
     _ = builder.AddProject<Projects.UTB_School_WebApi>("webapi")
                .WithReference(database)
-               .WaitFor(database);
+               .WithReference(keycloak)
+               .WaitFor(database)
+               .WaitFor(keycloak);
 }
 else
 {
@@ -28,7 +34,7 @@ else
                .WaitFor(database);
 
     var keycloak = builder.AddKeycloak("keycloak", 8080)
-               .WithRealmImport("Realms")
+               //.WithRealmImport("./Realm")
                .WithContainerName("utb-school-keycloak")
                .WithDataVolume("utb-school-keycloak-data")
                .WithLifetime(ContainerLifetime.Persistent);

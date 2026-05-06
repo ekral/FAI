@@ -600,7 +600,7 @@ Stránku nebo route autorizujeme přidáním `[Authorize]` atributu do komponent
 @page "/authors"
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Authorization
-@using UTB.PublicLibrary.Contracts
+@using UTB.School.Contracts
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
 @attribute [Authorize(Roles = "student-admin")]
 @inject LibraryService LibraryService
@@ -730,7 +730,7 @@ V AppHostu pak můžeme nastavit import těchto souborů při startu `.WithRealm
 ```csharp
     var keycloak = builder.AddKeycloak("keycloak", 8080)
                           .WithRealmImport("import")
-                          .WithContainerName("utb-publiclibrary-keycloak")
-                          .WithDataVolume("utb-publiclibrary-keycloak-data")
+                          .WithContainerName("utb-school-keycloak")
+                          .WithDataVolume("utb-school-keycloak-data")
                           .WithLifetime(ContainerLifetime.Persistent);
 ```

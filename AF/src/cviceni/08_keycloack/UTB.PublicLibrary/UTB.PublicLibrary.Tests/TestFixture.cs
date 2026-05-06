@@ -2,7 +2,6 @@ using Aspire.Hosting;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Json;
 using UTB.PublicLibrary.Db;
-using YamlDotNet.Core.Tokens;
 
 namespace UTB.PublicLibrary.Tests.Tests
 {
