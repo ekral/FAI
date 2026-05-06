@@ -74,7 +74,7 @@ namespace UTB.PublicLibrary.Tests.Tests
             {
                 if (idToken is not null)
                 {
-                    var response = await keycloakClient.PostAsync("/realms/utb-publiclibrary/protocol/openid-connect/logout",
+                    _ = await keycloakClient.PostAsync("/realms/utb-publiclibrary/protocol/openid-connect/logout",
                         new FormUrlEncodedContent(new Dictionary<string, string>
                         {
                             { "id_token_hint", idToken }
