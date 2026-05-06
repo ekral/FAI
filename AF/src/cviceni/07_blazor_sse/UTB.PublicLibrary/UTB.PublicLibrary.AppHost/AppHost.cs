@@ -6,7 +6,7 @@ var builder = DistributedApplication.CreateBuilder(args);
 if (builder.Environment.IsEnvironment("Testing"))
 {
     var postgres = builder.AddPostgres("postgres-testing")
-                      .WithContainerName("utb.publiclibrary-postgres-testing");
+                      .WithContainerName("utb-publiclibrary-postgres-testing");
 
     var database = postgres.AddDatabase("database");
 
@@ -17,7 +17,7 @@ if (builder.Environment.IsEnvironment("Testing"))
 else
 {
     var postgres = builder.AddPostgres("postgres")
-                      .WithContainerName("utb.publiclibrary-postgres")
+                      .WithContainerName("utb-publiclibrary-postgres")
                       .WithDataVolume()
                       .WithLifetime(ContainerLifetime.Persistent);
 
@@ -25,7 +25,7 @@ else
 
     _ = builder.AddProject<Projects.UTB_PublicLibrary_DatabaseManager>("databasemanager")
                                .WithReference(database)
-                               .WithHttpCommand("/dev/seed", "Restart Database")
+                               .WithHttpCommand("/dev/seed", "Reset Database")
                                .WaitFor(database);
 
     var webapi = builder.AddProject<Projects.UTB_PublicLibrary_WebApi>("webapi")
