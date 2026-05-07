@@ -649,6 +649,10 @@ Co je důležité:
 
 ---
 
+###  Utb.School.Tests (Direct Access Grants)
+
+Testy budou používat **Direct Access Grants** (Resource Owner Password Credentials flow), což je vhodné pro testy, ale nedoporučuje se pro produkční scénáře. V tomto flow testy přímo posílají uživatelské jméno a heslo na token endpoint Keycloaku a získávají access token pro volání API.
+
 ## Nastavení Keycloaku
 
 1. Vytvoříme realm `utb-school`.
@@ -669,7 +673,7 @@ Co je důležité:
 		- Included Client Audience: `utb-school-webapi`
 		- Add to access token: ON
 
-5. Vytvoříme client `utb-school-web` pro webovou aplikaci:
+5. Vytvoříme Client `utb-school-web` pro webovou aplikaci:
 	- Client authentication: ON
 	- Standard Flow Enabled: ON
 	- Home URL: `https://localhost:7197`
@@ -679,8 +683,7 @@ Co je důležité:
 	- Zkopírujeme client secret pro tento client (Credentials -> Copy Secret) a vložíme ho do `Program.cs` v Blazor Web projektu. Například: `options.ClientSecret = "qDW7aoS5LVNmQNqA6oTHNyBRp5Ahsdge";`. Tohle je jen pro vývoj, jinak by se client secret neměl používat v kódu, ale načítat z bezpečného úložiště, například user secrets, environment variable nebo Azure Key Vault.
 	- Client Scopes: zkontrolujeme, že máme přidaný `utb-school-webapi-audience` (aby se nám do tokenu přidala audience pro API)
 	
-
-6. Vytvoříme clien "utb-school-tests" pro testy:
+6. Vytvoříme Client "utb-school-tests" pro testy:
 	- Client authentication: OFF
 	- Standard Flow Enabled: OFF
 	- Direct access grants: ON
