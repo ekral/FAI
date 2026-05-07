@@ -13,6 +13,12 @@ You must consolidate the PRIMARY EVALUATION (step 1) and the CRITICAL REVIEW (st
 Read the project description and rubric from:
 [project_description.md](../project_description.md)
 
+Read the primary evaluation from:
+`/ai-evaluation/primary/{project_id}_primary.json`
+
+Read the critique from:
+`/ai-evaluation/critique/{project_id}_critique.json`
+
 ---
 
 # 🎯 TASK

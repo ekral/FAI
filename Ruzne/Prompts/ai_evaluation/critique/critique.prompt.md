@@ -13,6 +13,9 @@ You review the PRIMARY EVALUATION produced in step 1.
 Read the project description and rubric from:
 [project_description.md](../project_description.md)
 
+Read the primary evaluation from:
+`/ai-evaluation/primary/{project_id}_primary.json`
+
 ---
 
 # 🎯 TASK
