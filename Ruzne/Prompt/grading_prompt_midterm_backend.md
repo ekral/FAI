@@ -1,215 +1,231 @@
-You are evaluating a university midterm software engineering project.
+You are evaluating a university semester project in Software Engineering.
 
-The project is a .NET 10 backend solution implementing a canteen ordering system using:
+# 📘 PROJECT CONTEXT
 
+## Canteen Ordering System (University Project)
+
+This is a semester project for Software Engineering.
+
+The system is a **canteen meal ordering platform**.
+
+---
+
+## 👥 Roles in the system
+
+### Students
+
+* browse daily menu
+* place meal orders
+* see order status in real time (SSE)
+
+### Kitchen staff
+
+* view active orders
+* update order states (preparing, ready, cancelled, completed)
+
+### Administration (canteen management)
+
+* manage meals (create, update, deactivate)
+* manage menu (schedule meals per day)
+
+---
+
+## 🍽️ Core business concept
+
+The system manages **meal ordering with limited portions**:
+
+* Each menu item has a limited number of available portions
+* Ordering a meal reduces available portions
+* Cancelled orders do NOT restore portions
+* System must handle concurrency (last portion problem)
+
+---
+
+## 📡 Real-time behavior (SSE)
+
+* Order state changes must be broadcast to clients
+* Students and kitchen staff receive updates instantly
+* No authentication required for SSE broadcast channel
+
+---
+
+## 🧠 Key domain rules
+
+* Meals are never deleted, only deactivated
+* Orders follow strict state transitions:
+
+  * Preparing → Ready → Completed
+  * Preparing → Cancelled
+* Invalid state transitions must be prevented
+* System must ensure consistency of available portions
+
+---
+
+## ⚙️ Technical stack
+
+* .NET 10
 * ASP.NET Core Minimal Web API
 * Entity Framework Core
-* Aspire
-* SQL database
+* .NET Aspire (infrastructure orchestration)
+* PostgreSQL
+* Keycloak authentication
+* Blazor clients (NOT evaluated in this task)
+
+---
+
+## System purpose
+
+Students order meals from a canteen system.
+Kitchen staff manage orders.
+Students receive real-time updates via SSE.
+
+---
+
+# ⚠️ IMPORTANT SCOPE
+
+This is MIDTERM evaluation.
+
+ONLY evaluate:
+
+* Backend (.NET solution)
+* WebAPI
+* Database layer
 * Integration tests
+* Aspire configuration
 
-IMPORTANT CONTEXT:
+IGNORE:
 
-* This is ONLY the midterm submission.
-* There are NO UI clients.
-* There is NO SSE.
-* Evaluate ONLY backend, WebAPI, tests, architecture and Aspire integration.
-
----
-
-# TASK
-
-Your task is NOT to rewrite or improve the code.
-Your task is to REVIEW and EVALUATE the project strictly according to the rubric below.
+* UI clients (Blazor apps)
+* UX design
+* frontend behavior
 
 ---
 
-# GENERAL RULES
+# 🎯 TASK
 
-* Be strict and evidence-based.
-* Do NOT assume functionality exists unless verified in code or tests.
-* If uncertain, explicitly state uncertainty.
-* Always reference actual files, projects, classes, endpoints or tests.
-* Detect architecture violations and missing requirements.
-* Detect if WebAPI returns EF entities directly instead of DTOs.
-* Detect missing integration tests.
-* Detect hardcoded URLs or ports instead of Aspire service discovery.
-* Detect build issues, warnings and runtime risks.
-* Prefer verified evidence over assumptions.
+Evaluate strictly according to rubric.
+
+Do NOT guess missing functionality.
+Use ONLY evidence from code/tests.
 
 ---
 
-# IMPORTANT SCORING RULE
+# 📊 SCORING RULE
 
-You MUST use POINT-BASED evaluation.
+Use POINT-BASED evaluation ONLY.
 
-For every rubric item provide:
+For each rubric item:
 
-1. Maximum points
-2. Suggested points
-3. Evidence (files/classes/tests)
-4. Explanation why points were reduced
-5. Confidence (High / Medium / Low)
-
----
-
-# OUTPUT STRUCTURE
-
-## 1. Detailed evaluation per rubric item
-
-Example:
-
-### DTO separation
-
-Maximum points: 1
-Suggested points: 0.5
-
-Evidence:
-
-* DTOs in UTB.Minute.Contracts
-* Some DTO-like classes in WebApi project
-
-Reason for reduction:
-
-* DTO leakage outside Contracts layer
-
-Confidence:
-High
+* Max points
+* Suggested points
+* Evidence (files/classes/tests)
+* Reason for deductions
+* Confidence (High/Medium/Low)
 
 ---
 
-## 2. Final summary
+# 🔍 STRICT RULES
 
-Provide:
+Detect and penalize:
 
-* Estimated total score (0–20)
-* Major issues (max 5 bullet points)
-* Suspicious areas requiring manual teacher validation
-* List of warnings/errors
-* Overall project quality (1–5)
-
----
-
-# RUBRIC
-
-## Automatic fail conditions
-
-If ANY are true → score = 0:
-
-* project does not build
-* project does not run
-* source code is not in English
-* project is not using .NET 10
+* DTO leakage outside Contracts project
+* Missing or weak integration tests
+* Missing Aspire service discovery usage
+* Hardcoded URLs or ports
+* Direct EF entities returned from API
+* Incorrect project structure
+* Build/runtime issues
+* Missing required features
 
 ---
 
-## Projects and structure (0–3)
+# 🧪 TEST REQUIREMENT
 
-### Required projects (2)
+Integration tests must:
 
-* UTB.Minute.Db
-* UTB.Minute.DbManager
-* UTB.Minute.Contracts
-* UTB.Minute.WebApi
-* UTB.Minute.WebApi.Tests
-
-### References (1)
-
-* correct project dependencies
+* verify real API behavior
+* use PostgreSQL (not InMemory)
+* validate state changes, not only endpoints
 
 ---
 
-## Data model and DTOs (0–5)
+# 📦 RUBRIC (SUMMARY)
 
-### Entities (1)
+## Fail conditions (0 points)
 
-* correct domain model
+* does not build
+* does not run
+* not .NET 10
+* not English source code
 
-### DbContext (1)
+## Structure (3)
 
-* correct EF Core setup
+* required projects exist
+* correct references
 
-### Enum state (1)
+## Data & DTO (5)
 
-* order state uses enum
+* EF model correct
+* DbContext correct
+* enum for state
+* DTOs only in Contracts
+* no entity exposure
 
-### DTO separation (1)
+## API + tests (6)
 
-* DTOs ONLY in Contracts project
+* Meals CRUD + tests
+* Menu CRUD + tests
+* Orders + state transitions + tests
 
-### No entity leakage (1)
+## Aspire (4)
 
-* WebAPI does not return EF entities
+* DB provisioning
+* reset/seed command
+* seed works
+* service discovery
 
----
+## Documentation (2)
 
-## WebAPI + integration tests (0–6)
-
-### Meals (0–2)
-
-* create/read + tests (1)
-* update/deactivate + tests (1)
-
-### Menu (0–2)
-
-* create/read + tests (1)
-* update/delete + tests (1)
-
-### Orders (0–2)
-
-* create/read + tests (1)
-* state change + tests (1)
-
----
-
-## Aspire integration (0–4)
-
-* DB via Aspire (1)
-* Http reset command (1)
-* seed data works (1)
-* service discovery (1)
-
----
-
-## Tests and documentation (0–2)
-
-* README quality (2)
-
----
+* README quality
 
 ## Penalties
 
-* -1 per bug/warning
-* -2 per architecture violation or nonfunctional requirement violation
+* -1 warning/bug
+* -2 architecture/non-functional violation
 
 ---
 
-# IMPORTANT INSPECTION PRIORITY
+# 📄 OUTPUT FORMAT
 
-Integration tests are critical.
-Verify they actually validate behavior, not only existence of endpoints.
+## Per rubric item:
+
+(max points, suggested points, evidence, reasoning, confidence)
 
 ---
 
-# FINAL OUTPUT FOR EXCEL (MANDATORY)
+## FINAL SUMMARY
 
-After evaluation, output ONE final CSV line:
+* Total score (0–20)
+* Top 5 issues
+* Manual review risks
+* Warnings/errors
+* Project quality (1–5)
 
-FORMAT (semicolon-separated):
+---
+
+# 📊 FINAL EXCEL OUTPUT (MANDATORY)
+
+ONE LINE ONLY:
 
 Project;TotalPoints;MaxPoints;Percentage;MainIssues;AIConfidence;ManualAdjustmentNeeded
 
-RULES:
+Rules:
 
 * MaxPoints = 20
 * Percentage = TotalPoints / 20 * 100
-* MainIssues = max 5 short keywords
-* AIConfidence = High / Medium / Low
+* MainIssues max 5 keywords
+* AIConfidence = High/Medium/Low
 * ManualAdjustmentNeeded = Yes/No
 
-EXAMPLE:
-
+Example:
 Team01;17.5;20;87.5;DTO violation, weak tests;High;Yes
-
-IMPORTANT:
-This CSV row is the ONLY output used for Excel grading import.
