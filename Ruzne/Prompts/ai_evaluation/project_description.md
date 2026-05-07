@@ -165,5 +165,5 @@ Integration tests must:
 
 ## Penalties
 
-* -1 warning/bug
+* -1 warning/bug (e.g. build warning, runtime error, bad code quality). Ignore warnings about nuget packages. Multiple same warnings or errors counts as 1. 
 * -2 architecture/non-functional violation

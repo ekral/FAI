@@ -14,7 +14,7 @@ Read the project description and rubric from:
 [project_description.md](../project_description.md)
 
 Read the primary evaluation from:
-`/ai-evaluation/primary/{project_id}_primary.json`
+`/ai-evaluation/primary/primary.json`
 
 ---
 
@@ -34,7 +34,7 @@ Cross-check every score in the primary evaluation against actual evidence in the
 
 Save your result to:
 
-`/ai-evaluation/critique/{project_id}_critique.json`
+`/ai-evaluation/critique/critique.json`
 
 ---
 
@@ -42,7 +42,6 @@ Save your result to:
 
 ```json
 {
-  "project_id": "string",
   "disagreements": [
     {
       "category": "string",

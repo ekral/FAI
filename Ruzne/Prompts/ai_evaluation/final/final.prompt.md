@@ -34,7 +34,7 @@ Read the critique from:
 
 Save your result to:
 
-`/ai-evaluation/final/{project_id}_final.json`
+`/ai-evaluation/final/final.json`
 
 ---
 
@@ -42,7 +42,6 @@ Save your result to:
 
 ```json
 {
-  "project_id": "string",
   "final_score": 0,
   "max_score": 20,
   "percentage": 0,

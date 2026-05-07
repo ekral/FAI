@@ -1,6 +1,7 @@
 ---
 agent: agent
-description: "STEP 1 – Primary evaluation of student backend project. Use GPT-5.4."
+description: "STEP 1 – Primary evaluation of student backend project. Use GPT-5.4.
+
 tools:
   - search/codebase
   - edit/editFiles
@@ -15,7 +16,7 @@ Read the project description and rubric from:
 
 # 🎯 TASK
 
-Evaluate the project strictly according to the rubric in project_description.md.
+Evaluate the project according to the rubric in [project_description.md](../project_description.md), using these rubric groups: structure, data_model_dto, webapi_tests, aspire, documentation, penalties (max_score is 20).
 
 Use ONLY evidence from:
 
@@ -24,7 +25,7 @@ Use ONLY evidence from:
 * project structure
 * configuration files
 
-Do NOT assume missing functionality exists.
+Do NOT assume missing functionality exists in source code or tests.
 
 ---
 
@@ -32,9 +33,7 @@ Do NOT assume missing functionality exists.
 
 Save the evaluation result as:
 
-`/ai-evaluation/primary/{project_id}_primary.json`
-
-Replace `{project_id}` with the detected project/team identifier from the code (e.g. folder name, namespace, or README).
+`/ai-evaluation/primary/primary.json`
 
 ---
 
@@ -42,8 +41,6 @@ Replace `{project_id}` with the detected project/team identifier from the code (
 
 ```json
 {
-  "project_id": "string",
-
   "total_score": 0,
   "max_score": 20,
   "percentage": 0,
@@ -89,11 +86,9 @@ Replace `{project_id}` with the detected project/team identifier from the code (
 
 # ⚠️ IMPORTANT OUTPUT RULES
 
-* Output MUST be valid JSON only
-* No markdown
-* No explanations outside JSON
-* No additional commentary
-* Scores must strictly follow rubric
-* All deductions must include evidence
-* Prefer conservative scoring if uncertain
-* The excel_row field must exactly match the calculated score
+1. Output MUST be valid JSON only.
+2. No markdown, explanations outside JSON, or additional commentary.
+3. Scores must strictly follow rubric.
+4. All deductions must include evidence.
+5. The excel_row field must exactly match the calculated score.
+6. Priority order: JSON validity first, rubric-based scoring second, evidence-backed deductions third.
