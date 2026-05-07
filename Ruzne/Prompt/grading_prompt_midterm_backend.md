@@ -146,14 +146,14 @@ Detect and penalize:
 Integration tests must:
 
 * verify real API behavior
-* use PostgreSQL (not InMemory)
+* use SQL database (not InMemory)
 * validate state changes, not only endpoints
 
 ---
 
 # 📦 RUBRIC (SUMMARY)
 
-## Fail conditions (0 points)
+## Fail conditions (whole project 0 points)
 
 * does not build
 * does not run
