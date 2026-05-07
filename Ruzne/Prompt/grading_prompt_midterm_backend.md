@@ -98,6 +98,8 @@ IGNORE:
 * UI clients (Blazor apps)
 * UX design
 * frontend behavior
+* SSE
+* Authentication/authorization (Keycloak)
 
 ---
 
