@@ -9,8 +9,9 @@ if (builder.Environment.IsEnvironment("Testing"))
 
     var database = postgres.AddDatabase("database");
 
-    var keycloak = builder.AddKeycloak("keycloak", 8080)
+    var keycloak = builder.AddKeycloak("keycloak")
            .WithRealmImport("./Realm")
+           .WithHttpsEndpoint(port: 8443, name: "https")
            .WithContainerName("utb-school-keycloak-testing");
 
     _ = builder.AddProject<Projects.UTB_School_WebApi>("webapi")
@@ -33,9 +34,10 @@ else
                .WithHttpCommand("/dev/seed", "Reset Database")
                .WaitFor(database);
 
-    var keycloak = builder.AddKeycloak("keycloak", 8080)
+    var keycloak = builder.AddKeycloak("keycloak")
                //.WithRealmImport("./Realm")
                .WithContainerName("utb-school-keycloak")
+               .WithHttpsEndpoint(port: 8443, name: "https")
                .WithDataVolume("utb-school-keycloak-data")
                .WithLifetime(ContainerLifetime.Persistent);
 
@@ -48,10 +50,10 @@ else
     _ = builder.AddProject<Projects.UTB_School_Web>("web")
                .WithReference(keycloak)
                .WithReference(webapi)
-               .WaitFor(webapi);
+               .WaitFor(webapi)
+               .WaitFor(keycloak);
 
     _ = builder.AddProject<Projects.UTB_School_WebSse>("websse")
-           .WithReference(keycloak)
            .WithReference(webapi)
            .WaitFor(webapi);
 
