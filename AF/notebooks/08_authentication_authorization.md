@@ -653,6 +653,149 @@ Co je důležité:
 
 Testy budou používat **Direct Access Grants** (Resource Owner Password Credentials flow), což je vhodné pro testy, ale nedoporučuje se pro produkční scénáře. V tomto flow testy přímo posílají uživatelské jméno a heslo na token endpoint Keycloaku a získávají access token pro volání API.
 
+Do projektu `Tests` si přidáme třídu `TokenResponse`, kterou použijeme pro deserializaci token response od Keycloaku.
+
+```csharp
+using System.Text.Json.Serialization;
+
+namespace UTB.School.Tests
+{
+    public class TokenResponse
+    {
+        [JsonPropertyName("access_token")]
+        public string? AccessToken { get; set; }
+
+        [JsonPropertyName("id_token")]
+        public string? IdToken { get; set; }
+
+        [JsonPropertyName("token_type")]
+        public string? TokenType { get; set; }
+
+        [JsonPropertyName("expires_in")]
+        public int ExpiresIn { get; set; }
+
+        [JsonPropertyName("refresh_token")]
+        public string? RefreshToken { get; set; }
+
+        [JsonPropertyName("scope")]
+        public string? Scope { get; set; }
+    }
+}
+```
+
+V `TestFixture` potom počkáme až bude resource keycloak dostupný, pomocí `HttpClient` uděláme post request a s uživatelským jménem a heslem, Keycloak nám vrátí token response a AccessToken response potom přidáme do hlavičky `HttpClienta` pro komunikaci s WebApi. 
+
+V metodě `DisposeAsync` se potom od Keycloaku po dokončení testu odhlásíme (k odhlášení budeme potřebovat id_token).
+
+```csharp
+public class TestFixture : IAsyncLifetime
+{
+    private DistributedApplication app = null!;
+    private HttpClient? keycloakClient;
+    private string? idToken;
+    private string? connectionString;
+
+    public HttpClient HttpClient { get; private set; } = null!;
+
+    public async ValueTask InitializeAsync()
+    {
+        var builder = await DistributedApplicationTestingBuilder.CreateAsync<Projects.UTB_School_AppHost>(["--environment=Testing"], TestContext.Current.CancellationToken);
+
+        app = await builder.BuildAsync(TestContext.Current.CancellationToken);
+
+        await app.StartAsync(TestContext.Current.CancellationToken);
+
+        await app.ResourceNotifications.WaitForResourceHealthyAsync("keycloak", TestContext.Current.CancellationToken);
+
+        // volání keycloaku
+
+        keycloakClient = app.CreateHttpClient("keycloak", "https");
+
+        var response = await keycloakClient.PostAsync("/realms/utb-school/protocol/openid-connect/token", new FormUrlEncodedContent(new Dictionary<string, string>
+        {
+            { "grant_type", "password" },
+            { "client_id", "utb-school-tests" },
+            { "username", "karel" },
+            { "password", "karel" },
+            { "scope", "openid" } // Důležité pro získání OIDC tokenu
+        }));
+
+        response.EnsureSuccessStatusCode();
+
+        // Parsování token response
+
+        TokenResponse tokenResponse = await response.Content.ReadFromJsonAsync<TokenResponse>() ?? throw new Xunit.Sdk.XunitException("Token endpoint returned null TokenResponse.");
+
+        if (string.IsNullOrWhiteSpace(tokenResponse.AccessToken))
+        {
+            throw new Xunit.Sdk.XunitException("TokenResponse does not contain AccessToken.");
+        }
+
+        idToken = tokenResponse.IdToken;
+
+        await app.ResourceNotifications.WaitForResourceHealthyAsync("webapi", TestContext.Current.CancellationToken);
+
+        HttpClient = app.CreateHttpClient("webapi", "https");
+
+        // Pridani AccesTokenu do hlavičky HttpClienta
+
+        HttpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
+
+        connectionString = await app.GetConnectionStringAsync("database", TestContext.Current.CancellationToken);
+
+        using var context = CreateContext();
+
+        await context.Database.EnsureDeletedAsync(TestContext.Current.CancellationToken);
+        await context.Database.EnsureCreatedAsync(TestContext.Current.CancellationToken);
+
+        Student jan = new() { Name = "Jan", IsActive = true };
+        Student eva = new() { Name = "Eva", IsActive = true };
+        Student petr = new() { Name = "Petr", IsActive = false };
+
+        context.Students.AddRange(jan, eva, petr);
+
+        await context.SaveChangesAsync(TestContext.Current.CancellationToken);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+		// Odhlášení od serveru
+
+        if (keycloakClient is not null)
+        {
+            if (idToken is not null)
+            {
+                _ = await keycloakClient.PostAsync("/realms/utb-publiclibrary/protocol/openid-connect/logout",
+                    new FormUrlEncodedContent(new Dictionary<string, string>
+                    {
+                        { "id_token_hint", idToken }
+                    }));
+            }
+
+            keycloakClient.Dispose();
+        }
+
+        HttpClient?.Dispose();
+
+        await app.DisposeAsync();
+
+        GC.SuppressFinalize(this);
+    }
+
+    public SchoolContext CreateContext()
+    {
+        var options = new DbContextOptionsBuilder<SchoolContext>()
+                .UseNpgsql(connectionString)
+                .Options;
+
+        var context = new SchoolContext(options);
+
+        return context;
+    }
+}
+```
+
+
 ## Nastavení Keycloaku
 
 1. Vytvoříme realm `utb-school`.
@@ -724,15 +867,19 @@ docker stop utb-school-keycloak
 docker run --rm -v C:\temp\kc-export:/opt/keycloak/data/export -v utb-school-keycloak-data:/opt/keycloak/data quay.io/keycloak/keycloak:26.5 export --dir /opt/keycloak/data/export --realm utb-school
 ```
 
-Soubory si potom zkopírujeme z `C:\temp\kc-export` do nového adresáře `import` v AppHost projektu, kdy pro každý soubor v adresáří nastavíme:
+Soubory si potom zkopírujeme z `C:\temp\kc-export` do nového adresáře `Realm` v AppHost projektu, kdy pro každý soubor v adresáří nastavíme:
 - Build Action: Content
 - Copy to Output Directory: Copy if newer
 
-V AppHostu pak můžeme nastavit import těchto souborů při startu `.WithRealmImport("import")`, což nám umožní mít přednastavenou konfiguraci Keycloaku pro vývoj i testování:
+V AppHostu pak můžeme nastavit import těchto souborů při startu `.WithRealmImport("Realm")`, což nám umožní mít přednastavenou konfiguraci Keycloaku pro vývoj i testování:
 
 ```csharp
+	var keycloak = builder.AddKeycloak("keycloak", 8080)
+       .WithRealmImport("./Realm")
+       .WithContainerName("utb-school-keycloak-testing");
+
     var keycloak = builder.AddKeycloak("keycloak", 8080)
-                          .WithRealmImport("import")
+                          .WithRealmImport("Realm")
                           .WithContainerName("utb-school-keycloak")
                           .WithDataVolume("utb-school-keycloak-data")
                           .WithLifetime(ContainerLifetime.Persistent);
