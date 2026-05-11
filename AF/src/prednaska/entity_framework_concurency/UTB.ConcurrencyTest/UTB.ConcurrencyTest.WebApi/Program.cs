@@ -47,6 +47,7 @@ static async Task<Results<NoContent, Conflict>> Test(IServiceScopeFactory scopeF
     if (menuA.Quantity > 0)
     {
         --menuA.Quantity;
+
         await contextA.SaveChangesAsync();
     }
 

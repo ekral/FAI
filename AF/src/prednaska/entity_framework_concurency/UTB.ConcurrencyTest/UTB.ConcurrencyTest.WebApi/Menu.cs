@@ -9,6 +9,6 @@ namespace UTB.ConcurrencyTest.WebApi
         public required int Quantity { get; set; }
 
         [Timestamp]
-        public byte[]? Version { get; set; }
+        public uint Version { get; set; }
     }
 }
