@@ -33,6 +33,32 @@ static async Task<NoContent> Seed(MenuContext context)
     return TypedResults.NoContent();
 }
 
+static async Task<Results<NoContent, NotFound, Conflict>> Order(MenuContext context)
+{
+    var menu = await context.Menus.FirstOrDefaultAsync();
+
+    if (menu is null)
+    {
+        return TypedResults.NotFound();
+    }
+
+    if (menu.Quantity <= 0)
+    {
+        return TypedResults.Conflict();
+    }
+
+    --menu.Quantity;
+
+    try
+    {
+        await context.SaveChangesAsync();
+        return TypedResults.NoContent();
+    }
+    catch (DbUpdateConcurrencyException)
+    {
+        return TypedResults.Conflict();
+    }
+}
 static async Task<Results<NoContent, Conflict>> Test(IServiceScopeFactory scopeFactory)
 {
     await using var scopeA = scopeFactory.CreateAsyncScope();

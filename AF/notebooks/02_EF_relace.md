@@ -1,4 +1,4 @@
-# 02 – Relace v Entity Framework Core
+# 02 – Relace v Entity Framework Core a Concurrency Conflicts
 
 **autor: Erik Král ekral@utb.cz**
 
@@ -531,6 +531,70 @@ Při práci s relacemi vždy přemýšlejte:
 - Kolik dat se skutečně načte?
 
 ---
+
+# Handling Concurrency Conflicts
+
+V případě, že více uživatelů současně upravuje stejnou entitu, může dojít ke konfliktu. Například dva uživatelé objednají poslední kus zboží. EF Core nabízí mechanismy pro detekci a řešení těchto konfliktů, například pomocí `RowVersion` sloupce.
+
+Tento zápis je specifický pro konkrétní SQL databázi.
+
+Například pro SQL Server můžeme přidat do modelu `Product` vlastnost `RowVersion`, ukážeme si příklad s využitím atributu `[Timestamp]`, ale můžeme použít i Fluent API:
+
+```csharp
+public class Product
+{
+    public int Id { get; set; }
+    public int Quantity { get; set; }
+    [Timestamp]
+    public byte[] RowVersion { get; set; }
+}
+```
+
+Pro PostgreSQL můžeme použít `xmin` sloupec, který je automaticky aktualizován při každé změně řádku:
+
+```csharp
+public class Product
+{
+    public int Id { get; set; }
+    public int Quantity { get; set; }
+    [Timestamp]
+    public uint Xmin { get; set; } // PostgreSQL systémový sloupec pro detekci konfliktů
+}
+```
+
+V kódu potom můžeme zachytit `DbUpdateConcurrencyException` a rozhodnout, jak konflikt vyřešit (např. znovu načíst data, informovat uživatele, apod.). Například z WebApi vrátit HTTP status 409 Conflict.
+
+```csharp   
+static async Task<Results<NoContent, NotFound, Conflict>> Order(int id, MenuContext context)
+{
+    var menu = await context.Menus.FindAsync(id);
+
+    if (menu is null)
+    {
+        return TypedResults.NotFound();
+    }
+
+    if (menu.Quantity <= 0)
+    {
+        return TypedResults.Conflict();
+    }
+
+    --menu.Quantity;
+
+    try
+    {
+        await context.SaveChangesAsync();
+
+        return TypedResults.NoContent();
+    }
+    catch (DbUpdateConcurrencyException)
+    {
+        return TypedResults.Conflict();
+    }
+}
+```
+
+Více se můžete o Concurrency Conflicts dozvědět v dokumentaci: [Handling Concurrency Conflicts](https://learn.microsoft.com/en-us/ef/core/saving/concurrency?tabs=data-annotations).
 
 # 🧩 4. Závěrečný komplexní úkol – Library Management System
 
