@@ -17,7 +17,6 @@ app.MapPost("/dev/test", Test);
 
 app.UseHttpsRedirection();
 
-
 app.Run();
 
 static async Task<NoContent> Seed(MenuContext context)
