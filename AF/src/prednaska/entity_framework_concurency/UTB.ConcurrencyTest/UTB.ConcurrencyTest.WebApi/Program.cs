@@ -33,9 +33,9 @@ static async Task<NoContent> Seed(MenuContext context)
     return TypedResults.NoContent();
 }
 
-static async Task<Results<NoContent, NotFound, Conflict>> Order(MenuContext context)
+static async Task<Results<NoContent, NotFound, Conflict>> Order(int id, MenuContext context)
 {
-    var menu = await context.Menus.FirstOrDefaultAsync();
+    var menu = await context.Menus.FindAsync(id);
 
     if (menu is null)
     {
@@ -52,6 +52,7 @@ static async Task<Results<NoContent, NotFound, Conflict>> Order(MenuContext cont
     try
     {
         await context.SaveChangesAsync();
+
         return TypedResults.NoContent();
     }
     catch (DbUpdateConcurrencyException)
