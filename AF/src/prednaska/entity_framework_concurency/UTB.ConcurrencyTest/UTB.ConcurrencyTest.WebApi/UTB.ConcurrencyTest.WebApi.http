@@ -1,6 +1,9 @@
-@UTB.ConcurrencyTest.WebApi_HostAddress = http://localhost:5078
+@UTB.ConcurrencyTest.WebApi_HostAddress = https://localhost:7210
 
-GET {{UTB.ConcurrencyTest.WebApi_HostAddress}}/weatherforecast/
-Accept: application/json
+POST {{UTB.ConcurrencyTest.WebApi_HostAddress}}/dev/seed
+
+###
+
+POST {{UTB.ConcurrencyTest.WebApi_HostAddress}}/dev/test
 
 ###

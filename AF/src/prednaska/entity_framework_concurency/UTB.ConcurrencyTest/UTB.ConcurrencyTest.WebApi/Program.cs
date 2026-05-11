@@ -34,7 +34,7 @@ static async Task<NoContent> Seed(MenuContext context)
     return TypedResults.NoContent();
 }
 
-static async Task Test(IServiceScopeFactory scopeFactory)
+static async Task<Results<NoContent, Conflict>> Test(IServiceScopeFactory scopeFactory)
 {
     await using var scopeA = scopeFactory.CreateAsyncScope();
     await using var scopeB = scopeFactory.CreateAsyncScope();
@@ -54,8 +54,18 @@ static async Task Test(IServiceScopeFactory scopeFactory)
     if (menuB.Quantity > 0)
     {
         --menuB.Quantity;
-        await contextB.SaveChangesAsync();
+
+        try
+        {
+            await contextB.SaveChangesAsync(); 
+        }
+        catch(DbUpdateConcurrencyException)
+        {
+            return TypedResults.Conflict();
+        }
     }
+
+    return TypedResults.NoContent();
 }
 
 
