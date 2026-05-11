@@ -1,0 +1,6 @@
+@UTB.ConcurrencyTest.WebApi_HostAddress = http://localhost:5078
+
+GET {{UTB.ConcurrencyTest.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

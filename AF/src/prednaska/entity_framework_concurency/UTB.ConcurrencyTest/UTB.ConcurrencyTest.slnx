@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="UTB.ConcurrencyTest.AppHost/UTB.ConcurrencyTest.AppHost.csproj" />
+  <Project Path="UTB.ConcurrencyTest.ServiceDefaults/UTB.ConcurrencyTest.ServiceDefaults.csproj" />
+  <Project Path="UTB.ConcurrencyTest.WebApi/UTB.ConcurrencyTest.WebApi.csproj" />
+</Solution>
