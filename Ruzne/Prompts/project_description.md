@@ -95,6 +95,7 @@ IGNORE:
 * frontend UX
 * SSE implementation
 * authentication/authorization
+* Concurrency protection for limited portions.
 
 ---
 
@@ -111,6 +112,13 @@ Detect and penalize:
 * Build/runtime issues
 * Missing required features
 
+Evaluation clarification:
+
+* Do NOT deduct test points for missing tests of functionality that is not implemented.
+* Evaluate tests only for functionality that actually exists in the source code/API.
+* If a feature or validation is missing, deduct only once for the missing functionality itself unless the assignment explicitly required tests for that missing behavior.
+* Do NOT stack a second deduction just because tests for the missing behavior are also absent.
+
 ---
 
 # 🧪 TEST REQUIREMENTS
@@ -120,8 +128,8 @@ Integration tests must:
 * verify real API behavior
 * use real SQL database
 * NOT use EF InMemory provider
-* validate business behavior and state transitions
-
+* cover implemented functionality only; they are not required to test behavior that is not implemented
+* validate business behavior (cover edge cases and error conditions for implemented features), not just "happy path" 
 ---
 
 # 📦 RUBRIC
@@ -166,4 +174,4 @@ Integration tests must:
 ## Penalties
 
 * -1 warning/bug (e.g. build warning, runtime error, bad code quality). Ignore warnings about nuget packages. Multiple same warnings or errors counts as 1. 
-* -2 architecture/non-functional violation
+* -2 architecture/non-functional violation (e.g. hardcoded URLs, direct EF exposure, DTO leakage, missing service discovery)

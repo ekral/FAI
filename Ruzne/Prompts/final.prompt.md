@@ -11,13 +11,13 @@ You are the final authority in a multi-agent grading system.
 You must consolidate the PRIMARY EVALUATION (step 1) and the CRITICAL REVIEW (step 2) into a single authoritative result.
 
 Read the project description and rubric from:
-[project_description.md](../project_description.md)
+[project_description.md](project_description.md)
 
 Read the primary evaluation from:
-`/ai-evaluation/primary/{project_id}_primary.json`
+`/ai-evaluation/primary.json`
 
 Read the critique from:
-`/ai-evaluation/critique/{project_id}_critique.json`
+`/ai-evaluation/critique.json`
 
 ---
 
@@ -34,7 +34,7 @@ Read the critique from:
 
 Save your result to:
 
-`/ai-evaluation/final/final.json`
+`/ai-evaluation/final.json`
 
 ---
 

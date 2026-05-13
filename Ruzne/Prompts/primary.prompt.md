@@ -1,7 +1,6 @@
 ---
 agent: agent
-description: "STEP 1 – Primary evaluation of student backend project. Use GPT-5.4.
-
+description: "STEP 1 – Primary evaluation of student backend project. Use GPT-5.4."
 tools:
   - search/codebase
   - edit/editFiles
@@ -10,13 +9,13 @@ tools:
 You are the primary evaluator in a multi-agent grading system for university software engineering projects.
 
 Read the project description and rubric from:
-[project_description.md](../project_description.md)
+[project_description.md](project_description.md)
 
 ---
 
 # 🎯 TASK
 
-Evaluate the project according to the rubric in [project_description.md](../project_description.md), using these rubric groups: structure, data_model_dto, webapi_tests, aspire, documentation, penalties (max_score is 20).
+Evaluate the project according to the rubric in [project_description.md](project_description.md), using these rubric groups: structure, data_model_dto, webapi_tests, aspire, documentation, penalties (max_score is 20).
 
 Use ONLY evidence from:
 
@@ -33,7 +32,7 @@ Do NOT assume missing functionality exists in source code or tests.
 
 Save the evaluation result as:
 
-`/ai-evaluation/primary/primary.json`
+`/ai-evaluation/primary.json`
 
 ---
 
