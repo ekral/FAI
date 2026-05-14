@@ -70,7 +70,7 @@ Save your result to:
   "ai_confidence": "High | Medium | Low",
   "manual_review_needed": true,
 
-  "students_summary_czech": "string"
+  "students_summary_czech": "string",
 
   "excel_row": "Project;TotalPoints;MaxPoints;Percentage;MainIssues;AIConfidence;ManualAdjustmentNeeded"
 }
