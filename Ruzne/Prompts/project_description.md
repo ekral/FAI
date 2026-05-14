@@ -167,9 +167,9 @@ Integration tests must:
 * seed works
 * service discovery
 
-## Documentation (0–2)
+## Documentation (0 or 2)
 
-* README quality
+* README is present and is not empty (2 points) or readme is missing (0 points). 
 
 ## Penalties
 

@@ -81,9 +81,9 @@ musí být vyučující schopen spustit celý projekt lokálně včetně databá
 
 ## 📂 Struktura řešení
 
-V solution budou následující projekty:
+V solution budou následující projekty (nejenom tyto, ale tyto musí být součástí řešení):
 
-- `UTB.Minute.AppHost` - Aspire Integrace.
+- `UTB.Minute.AppHost` a `UTB.Minute.ServiceDefaults` – Aspire Integrace .
 - `UTB.Minute.Db` – entity a `DbContext`.
 - `UTB.Minute.DbManager` – WebAPI pro Http Command, reset a seed databáze (reference na `UTB.Minute.Db`).
 - `UTB.Minute.Contracts` – DTO (Data Transfer Objects).
