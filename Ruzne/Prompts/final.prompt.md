@@ -64,7 +64,8 @@ Save your result to:
 
   "issues": {
     "main_issues": ["string"],
-    "warnings": ["string"]
+    "warnings": ["string"],
+    "main_issues_summary_czech_language": "string"
   },
 
   "ai_confidence": "High | Medium | Low",
