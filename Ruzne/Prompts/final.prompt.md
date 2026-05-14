@@ -70,7 +70,10 @@ Save your result to:
   "ai_confidence": "High | Medium | Low",
   "manual_review_needed": true,
 
-  "students_summary_czech": "string",
+  "students_evaluation_summary_cs": {
+    "type": "string",
+    "description": "Výsledný přehled hodnocení určený pro studenty, napsaný v českém jazyce."
+  }
 
   "excel_row": "Project;TotalPoints;MaxPoints;Percentage;MainIssues;AIConfidence;ManualAdjustmentNeeded"
 }
