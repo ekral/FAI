@@ -65,11 +65,12 @@ Save your result to:
   "issues": {
     "main_issues": ["string"],
     "warnings": ["string"],
-    "main_issues_summary_czech_language": "string"
   },
 
   "ai_confidence": "High | Medium | Low",
   "manual_review_needed": true,
+
+  "students_summary_czech": "string"
 
   "excel_row": "Project;TotalPoints;MaxPoints;Percentage;MainIssues;AIConfidence;ManualAdjustmentNeeded"
 }
