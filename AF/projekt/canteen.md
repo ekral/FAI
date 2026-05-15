@@ -67,7 +67,7 @@ musí být vyučující schopen spustit celý projekt lokálně včetně databá
 - Jazyk použitý ve zdrojovém kódu bude **angličtina**. Jazyk aplikace může být jiný.
 - Projekt využívá [**Aspire**](https://aspire.dev/get-started/what-is-aspire/):
   - Vytváří databázi (např. [**PostgreSQL**](https://aspire.dev/integrations/databases/efcore/postgres/postgresql-get-started/)).
-  - Používá Identity nástroj [**Keycloak**](https://aspire.dev/integrations/security/keycloak/) k zabezpečení aplikace.
+  - Používá Identity nástroj [**Keycloak**](https://aspire.dev/integrations/security/keycloak/) k zabezpečení aplikace (vedení menzy a kuchařka). Student se nepřihlašuje a přistupuje k veřejným stránkám.
   - Využívá **Service Discovery**, bez pevně zadaných IP adres.
   - Obsahuje **Http Command** pro reset databáze (smazání, vytvoření, seed testovacích dat).
 - Projekt používá **Entity framework pro práci s databází**.
