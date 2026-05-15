@@ -42,6 +42,8 @@ Student je o stavu objednávky informován v reálném čase.
 
 ### Student
 
+Student se nepřihlašuje, jen získá číslo objednávky.
+
 #### Objednávky
 - Zobrazuje menu pro aktuální den (vyprodaná jídla jsou vizuálně odlišena).
 - Objednává jídlo z aktuálního menu (sníží se počet dostupných porcí).
