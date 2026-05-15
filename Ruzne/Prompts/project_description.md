@@ -1,123 +1,171 @@
-# 📘 PROJECT CONTEXT
+# Canteen Ordering System
 
-## Canteen Ordering System (University Project)
+Semester project for the course **Application Frameworks**.
 
-This is a semester project for Software Engineering.
-
-The system is a canteen meal ordering platform.
-
----
-
-## 👥 Roles in the system
-
-### Students
-
-* browse daily menu
-* place meal orders
-* see order status in real time (SSE)
-
-### Kitchen staff
-
-* view active orders
-* update order states:
-
-  * preparing
-  * ready
-  * cancelled
-  * completed
-
-### Administration (canteen management)
-
-* manage meals (create, update, deactivate)
-* manage menu (schedule meals per day)
+The goal of the project is to design and implement an ordering system for a canteen
+using the tools and frameworks **.NET Aspire, Minimal WebAPI, Entity Framework Core and Blazor**.
 
 ---
 
-## 🍽️ Core business concept
+## 🧠 Project Assignment
 
-The system manages meal ordering with limited portions.
-
-Rules:
-
-* Each menu item has limited available portions
-* Ordering reduces available portions
-* Cancelled orders do NOT restore portions
-* System must correctly handle concurrency issues
+The canteen ordering system allows ordering made-to-order meals.
+The student orders a meal in a web application running on a touch panel.
+The kitchen staff then prepare the meal and change the order status in their web application.
+The student is informed about the order status in real time.
 
 ---
 
-## 📡 Real-time behavior (NOT evaluated in midterm)
+## Functional Requirements
 
-* SSE broadcasts order updates
-* Students and kitchen staff receive updates instantly
+### Canteen Management
 
----
+#### Meals
+- Displays a list of meals (description, price).
+- Creates new meals.
+- Edits meals. A meal is not deleted, it is only marked as inactive.
 
-## 🧠 Key domain rules
+#### Menu
+- Displays menu items (date, meal, number of available portions) for all days.
+- Creates new menu items.
+- Edits menu items.
+- Deletes menu items.
 
-* Meals are never deleted, only deactivated
-* Valid order transitions:
+### Kitchen Staff
 
-  * Preparing → Ready → Completed
-  * Preparing → Cancelled
-* Invalid transitions must be prevented
-* Available portions must remain consistent
+#### Orders
+- Displays a list of orders that are not completed.
+- Changes the order status to:
+  - ready,
+  - cancelled,
+  - completed (handed to the student or the student informed about the cancellation).
 
----
+### Student
 
-## ⚙️ Technical stack
+#### Orders
+- Displays the menu for the current day (sold-out meals are visually distinguished).
+- Orders a meal from the current menu (the number of available portions is reduced).
 
-* .NET 10
-* ASP.NET Core Minimal Web API
-* Entity Framework Core
-* .NET Aspire
-* PostgreSQL or other SQL database
-* Keycloak authentication
-* Blazor clients (NOT evaluated here)
-
----
-
-# ⚠️ IMPORTANT SCOPE
-
-This is MIDTERM evaluation.
-
-ONLY evaluate:
-
-* Backend (.NET solution)
-* WebAPI
-* Database layer
-* Integration tests
-* Aspire configuration
-
-IGNORE:
-
-* UI clients
-* frontend UX
-* SSE implementation
-* authentication/authorization
-* Concurrency protection for limited portions.
+### Order Statuses
+- Preparing (the number of portions is reduced)
+- Ready (prepared for pickup)
+- Cancelled (a cancelled order does not return the portion)
+- Completed
 
 ---
 
-# 🔍 STRICT RULES
+## Non-Functional Requirements
 
-Detect and penalize:
+Thanks to the use of [Aspire](https://aspire.dev/get-started/what-is-aspire/)
+the teacher must be able to run the entire project locally, including the database and Keycloak. The teacher will have Visual Studio 2026, .NET 10, and Docker installed and running on their computer.
 
-* DTO leakage outside Contracts project
-* Missing or weak integration tests
-* Missing Aspire service discovery
-* Hardcoded URLs or ports
-* Direct EF entity exposure from API
-* Incorrect project structure
-* Build/runtime issues
-* Missing required features
+### Solution Requirements
 
-Evaluation clarification:
+- .NET 10
+- The language used in the source code will be **English**. The application language may be different.
+- The project uses [**Aspire**](https://aspire.dev/get-started/what-is-aspire/):
+  - It creates a database (e.g. [**PostgreSQL**](https://aspire.dev/integrations/databases/efcore/postgres/postgresql-get-started/)).
+  - It uses the Identity tool [**Keycloak**](https://aspire.dev/integrations/security/keycloak/) to secure the application.
+  - It uses **Service Discovery**, without hardcoded IP addresses.
+  - It contains an **Http Command** for database reset (deletion, creation, seed of test data).
+- The project uses **Entity Framework for working with the database**.
+- The project uses **Minimal Web API** with TypedResults.
+- The project uses **DTO (Data Transfer Objects)** independent of entities.
+- The code is not duplicated (DTOs are defined in only one place).
+- The project uses **Server-Sent Events (SSE)** for server-initiated notifications
+  about changes in student orders and for the kitchen staff. SSE notifications about order changes are broadcast to everyone without security.
+- Client applications call the Minimal Web API using the HTTP protocol and do not access the database and entities directly.
+- Tests will use a "production" database, for example a PostgreSQL server, and not EF InMemory. Tests must run automatically without manual intervention (using a database started through Aspire).
 
-* Do NOT deduct test points for missing tests of functionality that is not implemented.
-* Evaluate tests only for functionality that actually exists in the source code/API.
-* If a feature or validation is missing, deduct only once for the missing functionality itself unless the assignment explicitly required tests for that missing behavior.
-* Do NOT stack a second deduction just because tests for the missing behavior are also absent.
+---
+
+## 📂 Solution Structure
+
+The solution will contain the following projects:
+
+- `UTB.Minute.AppHost` - Aspire Integration.
+- `UTB.Minute.Db` – entities and `DbContext`.
+- `UTB.Minute.DbManager` – WebAPI for Http Command, database reset and seed (reference to `UTB.Minute.Db`).
+- `UTB.Minute.Contracts` – DTO (Data Transfer Objects).
+- `UTB.Minute.WebApi` – shared WebAPI for all clients including Server-Sent Events (SSE) notifications (reference to `UTB.Minute.Db` and `UTB.Minute.Contracts`).
+- `UTB.Minute.WebApi.Tests` - WebAPI test project using the selected database, for example SQL Server (reference to `UTB.Minute.WebApi`).     
+
+---
+
+# 📝 Checklist and Evaluation
+
+This checklist serves:
+- for **students** as a checklist before submission
+- for **teachers** as unified evaluation criteria
+
+> [!WARNING]
+> **Important Rule** 
+> If the submitted project **cannot be built or run**,
+> the source code **is not in English** or **is not created in .NET 10**  
+> it will be graded with **0 points**
+> (regardless of the amount of implemented functionality).
+
+---
+
+## 📤 Midterm Submission (20 points)
+
+Students submit only the **backend and WebAPI**  
+*(without client applications, without Keycloak integration, and without SSE)*
+
+---
+
+### Projects and Solution Structure (0–3 points)
+- [ ] All required projects exist and are correctly named (2 points)  
+  (`UTB.Minute.Db`, `DbManager`, `Contracts`, `WebApi`, `WebApi.Tests`)
+- [ ] Correct references between projects (1 point)
+
+---
+
+### Data Model and DTO (0–5 points)
+- [ ] Entities and their relationships match the assignment (1 point)
+- [ ] Properly designed `DbContext` (1 point)
+- [ ] Order status handled by an enum (1 point)
+- [ ] DTOs are defined only in `UTB.Minute.Contracts` (1 point)
+- [ ] WebAPI does not return entities directly (1 point)
+
+---
+
+### WebAPI Functionality and Its Tests (0–6 points)
+
+#### Meals (0–2 points)
+- [ ] Creation and reading of meals and their tests (1 point)
+- [ ] Meal editing + deactivation and their tests (1 point)
+
+#### Menu (0–2 points)
+- [ ] Creation and reading of menu items and their tests (1 point)
+- [ ] Editing and deletion of menu items and their tests (1 point)
+
+#### Orders (0–2 points)
+- [ ] Creation and reading of orders and their tests (1 point)
+- [ ] Changing order status and its test (1 point)
+
+---
+
+### Aspire Integration (0–4 points)
+- [ ] Database created and configured through Aspire (1 point)
+- [ ] Http Command for database reset (1 point)
+- [ ] Test data seed works (1 point)
+- [ ] Service Discovery without hardcoded addresses (1 point)
+
+---
+
+### Documentation (0 (not present) or 2 points (brief README.md))
+- [ ] Brief project documentation (README.md) (2 points)
+
+---
+
+### Penalty Points (negative)
+- [ ] Bugs, warnings (-1 point for each). Ignore nuget related package warnings. Same issue in multiple issues is counted only once.
+- [ ] Failure to follow non-functional requirements, naming conventions (-2 points for each).
+
+---
+
+✅ **Total: 20 points**
 
 ---
 
@@ -131,47 +179,3 @@ Integration tests must:
 * cover implemented functionality only; they are not required to test behavior that is not implemented
 * validate business behavior (cover edge cases and error conditions for implemented features), not just "happy path" 
 ---
-
-# 📦 RUBRIC
-
-## Fail conditions (whole project = 0 points)
-
-* project does not build
-* project does not run
-* source code not in English
-* not using .NET 10
-
-## Structure (0–3)
-
-* required projects exist
-* correct project references
-
-## Data & DTO (0–5)
-
-* correct EF model
-* correct DbContext
-* enum for order state
-* DTOs only in Contracts
-* no entity exposure from API
-
-## API + tests (0–6)
-
-* Meals CRUD + tests
-* Menu CRUD + tests
-* Orders + state transitions + tests
-
-## Aspire (0–4)
-
-* database provisioning
-* reset/seed command
-* seed works
-* service discovery
-
-## Documentation (0 or 2)
-
-* README is present and is not empty (2 points) or readme is missing (0 points). 
-
-## Penalties
-
-* -1 warning/bug (e.g. build warning, runtime error, bad code quality). Ignore warnings about nuget packages. Multiple same warnings or errors counts as 1. 
-* -2 architecture/non-functional violation (e.g. hardcoded URLs, direct EF exposure, DTO leakage, missing service discovery)

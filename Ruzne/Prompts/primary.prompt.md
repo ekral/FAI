@@ -17,12 +17,16 @@ Read the project description and rubric from:
 
 Evaluate the project according to the rubric in [project_description.md](project_description.md), using these rubric groups: structure, data_model_dto, webapi_tests, aspire, documentation, penalties (max_score is 20).
 
+Build solution and run tests.
+
 Use ONLY evidence from:
 
 * source code
 * tests
 * project structure
 * configuration files
+* test results
+* warnings/errors from build and test runs
 
 Do NOT assume missing functionality exists in source code or tests.
 

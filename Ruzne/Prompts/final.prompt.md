@@ -70,19 +70,18 @@ Save your result to:
   "ai_confidence": "High | Medium | Low",
   "manual_review_needed": true,
 
-  "students_evaluation_summary_cs": {
-    "type": "string",
-    "description": "Výsledný přehled hodnocení určený pro studenty, napsaný v českém jazyce."
-  }
-
   "excel_row": "Project;TotalPoints;MaxPoints;Percentage;MainIssues;AIConfidence;ManualAdjustmentNeeded"
 }
 ```
 
----
-
-# ⚠️ RULES
+⚠️ RULES
 
 * Must be valid JSON
 * No markdown, no extra text
 * Excel row must be consistent with numeric score
+
+---
+
+# Result for manual review:
+
+Save also total points and main_issues as text to file `/ai-evaluation/result.md` for manual review.
