@@ -871,15 +871,21 @@ Soubory si potom zkopírujeme z `C:\temp\kc-export` do nového adresáře `Realm
 - Build Action: Content
 - Copy to Output Directory: Copy if newer
 
-V AppHostu pak můžeme nastavit import těchto souborů při startu `.WithRealmImport("Realm")`, což nám umožní mít přednastavenou konfiguraci Keycloaku pro vývoj i testování:
+V AppHostu pak můžeme nastavit import těchto souborů při startu `.WithRealmImport("Realm")`, což nám umožní mít přednastavenou konfiguraci Keycloaku pro vývoj i testování.
+
+Testováni:
 
 ```csharp
 	var keycloak = builder.AddKeycloak("keycloak", 8080)
        .WithRealmImport("./Realm")
        .WithContainerName("utb-school-keycloak-testing");
+```
 
-    var keycloak = builder.AddKeycloak("keycloak", 8080)
-                          .WithRealmImport("Realm")
+Vývoj:
+
+```csharp
+var keycloak = builder.AddKeycloak("keycloak", 8080)
+                          .WithRealmImport("./Realm")
                           .WithContainerName("utb-school-keycloak")
                           .WithDataVolume("utb-school-keycloak-data")
                           .WithLifetime(ContainerLifetime.Persistent);
