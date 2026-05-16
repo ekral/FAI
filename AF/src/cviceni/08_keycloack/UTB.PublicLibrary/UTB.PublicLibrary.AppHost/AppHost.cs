@@ -12,6 +12,7 @@ if (builder.Environment.IsEnvironment("Testing"))
 
     var keycloak = builder.AddKeycloak("keycloak", 8080)
                           .WithRealmImport("import")
+                          .WithHttpsEndpoint(port: 8443, name: "https")
                           .WithContainerName("utb-publiclibrary-keycloak-testing");
 
     _ = builder.AddProject<Projects.UTB_PublicLibrary_WebApi>("webapi")
@@ -36,6 +37,7 @@ else
 
     var keycloak = builder.AddKeycloak("keycloak", 8080)
                           .WithRealmImport("import")
+                          .WithHttpsEndpoint(port: 8443, name: "https")
                           .WithContainerName("utb-publiclibrary-keycloak")
                           .WithDataVolume("utb-publiclibrary-keycloak-data")
                           .WithLifetime(ContainerLifetime.Persistent);
