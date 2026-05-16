@@ -372,6 +372,7 @@ Pak v `AppHost.cs` přidáme Keycloak jako resource v Aspire orchestraci:
 ```csharp
     var keycloak = builder.AddKeycloak("keycloak", 8080)
                			  .WithContainerName("utb-school-keycloak")
+                          .WithHttpsEndpoint(8443)
                		      .WithDataVolume("utb-school-keycloak-data")
                			  .WithLifetime(ContainerLifetime.Persistent);
 ```
@@ -878,6 +879,7 @@ Testováni:
 ```csharp
 var keycloak = builder.AddKeycloak("keycloak", 8080)
                       .WithRealmImport("./Realm")
+                      .WithHttpsEndpoint(8443)
                       .WithContainerName("utb-school-keycloak-testing");
 ```
 
@@ -886,6 +888,7 @@ Vývoj:
 ```csharp
 var keycloak = builder.AddKeycloak("keycloak", 8080)
                       .WithRealmImport("./Realm")
+                      .WithHttpsEndpoint(8443)
                       .WithContainerName("utb-school-keycloak")
                       .WithDataVolume("utb-school-keycloak-data")
                       .WithLifetime(ContainerLifetime.Persistent);
