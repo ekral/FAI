@@ -2,11 +2,14 @@ using Duende.AccessTokenManagement.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using UTB.School.Web;
 using UTB.School.Web.Components;
 
 var builder = WebApplication.CreateBuilder(args);
+
+IdentityModelEventSource.ShowPII = true;
 
 builder.AddServiceDefaults();
 
@@ -29,7 +32,13 @@ builder.Services.AddAuthentication(options =>
         options.SaveTokens = true;
         options.RequireHttpsMetadata = false; // jen dev
         options.TokenValidationParameters.NameClaimType = "preferred_username";
+        //options.BackchannelHttpHandler = new HttpClientHandler
+        //{
+        //    ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+        //};
+
     });
+
 
 builder.Services.AddAuthorization();
 builder.Services.AddCascadingAuthenticationState();

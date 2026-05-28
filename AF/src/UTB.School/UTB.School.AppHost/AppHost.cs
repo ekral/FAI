@@ -11,7 +11,6 @@ if (builder.Environment.IsEnvironment("Testing"))
 
     var keycloak = builder.AddKeycloak("keycloak")
            .WithRealmImport("./Realm")
-           .WithHttpsEndpoint(port: 8443, name: "https")
            .WithContainerName("utb-school-keycloak-testing");
 
     _ = builder.AddProject<Projects.UTB_School_WebApi>("webapi")
@@ -35,9 +34,8 @@ else
                .WaitFor(database);
 
     var keycloak = builder.AddKeycloak("keycloak")
-               //.WithRealmImport("./Realm")
+               .WithRealmImport("./Realm")
                .WithContainerName("utb-school-keycloak")
-               .WithHttpsEndpoint(port: 8443, name: "https")
                .WithDataVolume("utb-school-keycloak-data")
                .WithLifetime(ContainerLifetime.Persistent);
 
