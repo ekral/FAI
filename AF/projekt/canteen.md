@@ -90,7 +90,7 @@ V solution budou následující projekty (nejenom tyto, ale tyto musí být sou�
 - `UTB.Minute.DbManager` – WebAPI pro Http Command, reset a seed databáze (reference na `UTB.Minute.Db`).
 - `UTB.Minute.Contracts` – DTO (Data Transfer Objects).
 - `UTB.Minute.WebApi` – společné WebAPI pro všechny klienty včetně Server-Sent Events (SSE) notifikací (reference na `UTB.Minute.Db` a `UTB.Minute.Contracts`).
-- `UTB.Minute.WebApi.Tests` - test WebAPI využívající použitou databázi, například SQL Server (reference na `UTB.Minute.WebApi`).     
+- `UTB.Minute.WebApi.Tests` - test WebAPI využívající použitou databázi, například SQL Server (reference na UTB.Minute.AppHost).     
 - `UTB.Minute.AdminClient` – Blazor Server aplikace pro vedení menzy (reference na `UTB.Minute.Contracts`). Volá WebAPI pomocí protokolu HTTP.
 - `UTB.Minute.CanteenClient` – Blazor Server aplikace pro zjednodušení pro studenty a kuchařky (nutno zabezpečit přístup). Pro kuchařky a studenty je možné i vytvořit nezávislé projekty (reference na `UTB.Minute.Contracts`). Volá WebAPI pomocí protokolu HTTP.
 
