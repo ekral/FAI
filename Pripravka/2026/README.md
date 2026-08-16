@@ -15,9 +15,9 @@ Poznámka: znak \ je vedle levé klávesy shift.
 
 ## Přihlašovací údaje k WIFI
 
-Název wifi sítě: **KurzProgramovani@FAI**
+Název wifi sítě: **LetniPripravka**
 
-heslo: **VyvojJeFAIn-26**
+heslo: **Programujeme!2026**
 
 ## Vývojová prostředí
 
