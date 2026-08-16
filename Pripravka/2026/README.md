@@ -19,10 +19,9 @@ Název wifi sítě: **LetniPripravka**
 
 heslo: **Programujeme!2026**
 
-## Vývojová prostředí
+## Vývojové prostředí
 
-- [Erik Král](https://fai.utb.cz/contacts/ing-et-ing-erik-kral-ph-d/) používá [Visual Studio Community](https://visualstudio.microsoft.com/vs/community/).
-- [Tomáš Dulík](https://fai.utb.cz/contacts/ing-tomas-dulik-ph-d/) používá [Clion](https://www.jetbrains.com/clion/).
+- [Clion](https://www.jetbrains.com/clion/).
 
 ## Organizace kurzu
 
