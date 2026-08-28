@@ -1,3 +1,28 @@
+// 1. DEFINICE STRÁŽCE (Studenti stačí, když pochopí, že destruktor ~ se spustí VŽDY na konci)
+template <typename F>
+class ErrDefer {
+private:
+    F cleanupFunc;      // Kód, který se má spustit při chybě
+    bool active = true; // Výchozí stav: strážce je aktivní a hlídá chybu
+
+public:
+    ErrDefer(F f) : cleanupFunc(f) {}
+
+    // Destruktor: Spustí se automaticky při opuštění bloku/funkce
+    ~ErrDefer() { 
+        if (active) {
+            cleanupFunc(); 
+        } 
+    }
+
+    // Metoda pro "potvrzení" úspěchu – zruší spuštění úklidu
+    void commit() { 
+        active = false; 
+    }
+};
+
+
+
 bool inicializujSenzor() {
     // KROK 1: Zapneme napájení senzoru
     digitalWrite(PIN_NAPAJENI, HIGH);
