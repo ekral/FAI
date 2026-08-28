@@ -22,6 +22,22 @@ public:
 };
 
 
+template <typename F>
+class Defer {
+private:
+    F cleanupFunc; // Uložená lambda funkce s kódem pro úklid
+
+public:
+    // Konstruktor: Přijme funkci a uloží si ji
+    Defer(F f) : cleanupFunc(f) {}
+
+    // Destruktor: Spustí se automaticky VŽDY při opuštění bloku/funkce
+    ~Defer() { 
+        cleanupFunc(); 
+    }
+};
+
+
 
 bool inicializujSenzor() {
     // KROK 1: Zapneme napájení senzoru
