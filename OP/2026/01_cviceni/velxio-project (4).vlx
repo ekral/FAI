@@ -1,0 +1,205 @@
+{
+  "format": "velxio-project",
+  "version": 1,
+  "exportedAt": "2026-09-11T09:52:19.348Z",
+  "boards": [
+    {
+      "id": "arduino-uno",
+      "boardKind": "arduino-uno",
+      "x": 125.44809818040912,
+      "y": 397.952103644145,
+      "activeFileGroupId": "group-arduino-uno",
+      "languageMode": "arduino",
+      "serialBaudRate": 9615
+    }
+  ],
+  "fileGroups": {
+    "group-arduino-uno": [
+      {
+        "name": "sketch.ino",
+        "content": "\nfloat tempC(int raw) \n{\n  constexpr float VCC         = 5.0;\n  constexpr float SERIES_R    = 10000.0;  // series resistor (10 kΩ)\n  constexpr float NOM_R       = 10000.0;  // nominal resistance at 25 °C\n  constexpr float B_COEFF     = 3950.0;   // Beta coefficient\n  constexpr float NOM_TEMP_K  = 298.15;   // 25 °C in Kelvin\n\n  float v    = raw * (VCC / 1023.0);\n  float r    = SERIES_R * v / (VCC - v);\n  float st   = log(r / NOM_R) / B_COEFF + 1.0 / NOM_TEMP_K;\n\n  return (1.0 / st) - 273.15;\n}\n\nenum class Stav\n{\n  Nizka,\n  Vysoka\n};\n\nvoid setOutputs(Stav stav);\n\nvoid setOutputs(Stav stav)\n{\n  switch(stav)\n  {\n    case Stav::Nizka:\n      digitalWrite(13, LOW);\n      break;\n\n    case Stav::Vysoka:\n      digitalWrite(13, HIGH);\n      break;\n  }\n}\n\nStav stav = Stav::Nizka;\n\nvoid setup() \n{\n  Serial.begin(9600);\n  pinMode(13, OUTPUT);\n  pinMode(A0, INPUT);\n}\n\nvoid loop() \n{\n  int raw = analogRead(A0);\n  float teplota = tempC(raw);\n\n  constexpr float limit = 25.0;\n\n  Stav novy = stav;\n\n  switch(stav)\n  {\n    case Stav::Nizka:\n      if(teplota > limit)\n      {\n        novy = Stav::Vysoka;\n      }\n      break;\n\n    case Stav::Vysoka:\n      if(teplota <= limit)\n      {\n        novy = Stav::Nizka;\n      }\n      break;\n  }\n\n  if(novy != stav)\n  {\n    stav = novy;\n    setOutputs(stav);\n  }\n}"
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "led_1789110568370_7azrlv3mf",
+      "metadataId": "led",
+      "x": 224.9704326107916,
+      "y": 242.24804849786278,
+      "properties": {
+        "value": false,
+        "brightness": 1,
+        "color": "red",
+        "lightColor": null,
+        "label": "",
+        "flip": false
+      }
+    },
+    {
+      "id": "resistor_220_1789110659323_4o82vjkw0",
+      "metadataId": "resistor-220",
+      "x": 217.84121024987826,
+      "y": 325.38260733486686,
+      "properties": {
+        "value": "220",
+        "rotation": 90
+      }
+    },
+    {
+      "id": "ntc_temperature_sensor_1789116643538_dnrc3mjqw",
+      "metadataId": "ntc-temperature-sensor",
+      "x": 132.61168336346734,
+      "y": 622.5012795759237,
+      "properties": {
+        "rotation": 0,
+        "temperature": 46
+      }
+    }
+  ],
+  "wires": [
+    {
+      "waypoints": [
+        {
+          "x": 242.2462904184503,
+          "y": 290.2480484978628
+        }
+      ],
+      "id": "wire-1789110587306",
+      "start": {
+        "componentId": "led_1789110568370_7azrlv3mf",
+        "pinName": "C",
+        "x": 245.9704326107916,
+        "y": 290.2480484978628
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "GND.1",
+        "x": 240.94809818040912,
+        "y": 406.952103644145
+      },
+      "color": "#000000",
+      "autoRouted": false
+    },
+    {
+      "waypoints": [
+        {
+          "x": 284.82015810998587,
+          "y": 290.2480484978628
+        }
+      ],
+      "id": "wire-1789110666299",
+      "start": {
+        "componentId": "led_1789110568370_7azrlv3mf",
+        "pinName": "A",
+        "x": 255.9704326107916,
+        "y": 290.2480484978628
+      },
+      "end": {
+        "componentId": "resistor_220_1789110659323_4o82vjkw0",
+        "pinName": "1",
+        "x": 283.6912102498783,
+        "y": 303.88260733486686
+      },
+      "color": "#22c55e",
+      "autoRouted": false
+    },
+    {
+      "waypoints": [
+        {
+          "x": 251.7462904184503,
+          "y": 392.147755279344
+        }
+      ],
+      "id": "wire-1789110671819",
+      "start": {
+        "componentId": "resistor_220_1789110659323_4o82vjkw0",
+        "pinName": "2",
+        "x": 283.6912102498783,
+        "y": 362.6826073348669
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "13",
+        "x": 250.44809818040912,
+        "y": 406.952103644145
+      },
+      "color": "#22c55e",
+      "autoRouted": false
+    },
+    {
+      "id": "wire-1789116690865",
+      "start": {
+        "componentId": "ntc_temperature_sensor_1789116643538_dnrc3mjqw",
+        "pinName": "GND",
+        "x": 273.61168336346736,
+        "y": 654.7012795759238
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "GND.2",
+        "x": 294.94809818040915,
+        "y": 589.4521036441449
+      },
+      "waypoints": [
+        {
+          "x": 294.5687240296856,
+          "y": 655.5751357477446
+        },
+        {
+          "x": 294.5687240296856,
+          "y": 589.4521036441449
+        }
+      ],
+      "color": "#000000",
+      "autoRouted": false
+    },
+    {
+      "id": "wire-1789116738708",
+      "start": {
+        "componentId": "ntc_temperature_sensor_1789116643538_dnrc3mjqw",
+        "pinName": "VCC",
+        "x": 273.61168336346736,
+        "y": 664.3012795759237
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "5V",
+        "x": 285.44809818040915,
+        "y": 589.4521036441449
+      },
+      "waypoints": [
+        {
+          "x": 285.44809818040915,
+          "y": 665.1751357477445
+        }
+      ],
+      "color": "#cc0000",
+      "autoRouted": false
+    },
+    {
+      "id": "wire-1789116770077",
+      "start": {
+        "componentId": "ntc_temperature_sensor_1789116643538_dnrc3mjqw",
+        "pinName": "OUT",
+        "x": 273.61168336346736,
+        "y": 674.0012795759237
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "A0",
+        "x": 333.44809818040915,
+        "y": 589.4521036441449
+      },
+      "waypoints": [
+        {
+          "x": 333.44809818040915,
+          "y": 674.0012795759237
+        }
+      ],
+      "color": "#22c55e",
+      "autoRouted": true
+    }
+  ],
+  "activeBoardId": "arduino-uno"
+}
