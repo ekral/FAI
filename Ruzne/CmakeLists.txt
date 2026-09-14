@@ -1,0 +1,26 @@
+cmake_minimum_required(VERSION 3.22)
+project(NaseVulkanAplikace LANGUAGES CXX)
+
+# Nastavení standardu C++ (moderní Vulkan tutoriály vyžadují alespoň C++20)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# 1. Vyhledání Vulkan SDK a komponenty volk
+# Na Windows se automaticky použije cesta ze systémové proměnné VULKAN_SDK
+find_package(Vulkan REQUIRED COMPONENTS volk)
+
+# 2. Definice vaší spustitelné aplikace (přidejte vaše zdrojové soubory)
+add_executable(muj_program 
+    main.cpp
+    # Sem můžete připisovat další .cpp soubory, např. engine.cpp, atd.
+)
+
+# 3. Nalinkování Volk a Vulkan hlaviček
+# Tímto krokem získá projekt přístup k #include <volk.h> a zkompilované knihovně volk
+target_link_libraries(muj_program PRIVATE Vulkan::volk)
+
+# 4. Nastavení preprocesorových maker pro Windows
+# Podmínka zajistí, že se makro aktivuje pouze při kompilaci na Windows
+if(WIN32)
+    target_compile_definitions(muj_program PRIVATE VK_USE_PLATFORM_WIN32_KHR)
+endif()
