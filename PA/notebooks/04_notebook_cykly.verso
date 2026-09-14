@@ -1,0 +1,451 @@
+{
+  "verso": "1.1",
+  "metadata": {
+    "defaultKernel": "csharp",
+    "activeLayout": {
+      "extensionId": "verso.layout.notebook",
+      "layoutId": "notebook"
+    }
+  },
+  "cells": [
+    {
+      "id": "276a9fb6-f277-4d3f-a7cb-b4e99345380c",
+      "type": "markdown",
+      "source": "# 04 Cykly\n**autor: Erik Kr\u00E1l ekral@utb.cz**\n\n---\n\nPro zvl\u00E1dnut\u00ED p\u0159edm\u011Btu pot\u0159ebujete zn\u00E1t p\u0159\u00EDkazy \u0060goto\u0060, \u0060while\u0060,  \u0060do-while\u0060 a \u0060for\u0060. A d\u00E1le ukon\u010Den\u00ED cyklu pomoc\u00ED \u0060break\u0060 a p\u0159esko\u010Den\u00ED zbytku cyklu pomoc\u00ED \u0060continue\u0060"
+    },
+    {
+      "id": "96f69b00-38e4-4598-8034-17f7ef8ee000",
+      "type": "markdown",
+      "source": "Na n\u00E1sleduj\u00EDc\u00EDch p\u0159\u00EDkladech si probereme jednotliv\u00E9 p\u0159\u00EDkazy. \n\nPozn\u00E1mka: N\u00E1sleduj\u00EDc\u00ED p\u0159\u00EDklady b\u011B\u017E\u00ED v prost\u0159ed\u00ED Polyglot notebook a proto m\u00EDsto p\u0159\u00EDkazu \u0060Console.ReadLine()\u0060 pou\u017E\u00EDvaj\u00ED p\u0159\u00EDkaz \u0060await Kernel.GetInputAsync()\u0060. V konzolov\u00E9 aplikaci tedy pou\u017Eije m\u00EDsto p\u0159\u00EDkazu \u0060await Kernel.GetInputAsync()\u0060 p\u0159\u00EDkaz \u0060Console.ReadLine()\u0060."
+    },
+    {
+      "id": "46d5a474-144e-410d-965c-8fa8a2c457d6",
+      "type": "markdown",
+      "source": "## goto\n\nS pomoc\u00ED p\u0159\u00EDkazu \u0060goto\u0060 m\u016F\u017Eeme p\u0159esko\u010Dit na libovoln\u00FD \u0159\u00E1dek. Tento p\u0159\u00EDkaz se pou\u017E\u00EDv\u00E1 sp\u00ED\u0161e vyj\u00EDme\u010Dn\u011B."
+    },
+    {
+      "id": "b1f712a7-7819-49cc-93f2-c9c7b3487587",
+      "type": "code",
+      "language": "csharp",
+      "source": "int i = 0;\n\nlabel:\n    Console.WriteLine(i);\n    \u002B\u002Bi;\n    if (i \u003C 10) goto label;",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 1
+      }
+    },
+    {
+      "id": "f4ca9f9a-1041-4ed9-8af3-1c21a0693c5e",
+      "type": "markdown",
+      "source": "\u0060\u0060\u0060mermaid\nflowchart TD\n    A([Start]) --\u003E B[Set i = 0]\n    B --\u003E C[Print i]\n    C --\u003E D[Increment i]\n    D --\u003E E{i \u003C 10?}\n    E -- Yes --\u003E C\n    E -- No --\u003E F([End])\n\u0060\u0060\u0060"
+    },
+    {
+      "id": "a9431de5-cef1-4285-8f0e-cdc1cdbb04e6",
+      "type": "markdown",
+      "source": "## while\n\nS pou\u017Eit\u00EDm p\u0159\u00EDkazu \u0060while\u0060 m\u016F\u017Eeme cyklus zp\u0159ehlednit. Cyklus while se pou\u017E\u00EDv\u00E1 v\u011Bt\u0161inou pokud nezn\u00E1me p\u0159edem po\u010Det opakov\u00E1n\u00ED. Kdy\u017E po\u010Det opakov\u00E1n\u00ED zn\u00E1me, tak pou\u017Eijeme sp\u00ED\u0161e p\u0159\u00EDkaz \u0060for\u0060."
+    },
+    {
+      "id": "7cb5032e-7f3a-43d8-a9db-b0c994837f6e",
+      "type": "code",
+      "language": "csharp",
+      "source": "int i = 0;\n\nwhile (i \u003C 10)\n{\n    Console.WriteLine(i);\n    \u002B\u002Bi;\n}",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 2
+      }
+    },
+    {
+      "id": "15a12f73-90a0-4596-85d7-6ac87582b63a",
+      "type": "markdown",
+      "source": "\u0060\u0060\u0060mermaid\nflowchart TD\n    Start([Start]) --\u003E A[Nastav i = 0]\n    A --\u003E B{Je i \u003C 10?}\n    B -- Ano --\u003E C[Vypi\u0161 i do konzole]\n    C --\u003E D[Zv\u011Bt\u0161i i o 1]\n    D --\u003E B\n    B -- Ne --\u003E End([Konec])\n\u0060\u0060\u0060"
+    },
+    {
+      "id": "4c803314-92fa-45ba-b40a-e89a58c7608a",
+      "type": "markdown",
+      "source": "## do-while\n\nP\u0159\u00EDkaz \u0060do-while\u0060 pou\u017E\u00EDv\u00E1me, pokud nev\u00EDme p\u0159edem po\u010Det opakov\u00E1n\u00ED a chceme aby se cyklus provedl alespo\u0148 jednou. P\u0159\u00EDkaz \u0060Console.ReadKey(true).Key\u0060 \u010Dek\u00E1 na stisk kl\u00E1vesy a nemus\u00EDme p\u0159itom zad\u00E1vate enter."
+    },
+    {
+      "id": "867828ca-8f61-427d-b04e-1e076fe96658",
+      "type": "code",
+      "language": "csharp",
+      "source": "using Microsoft.DotNet.Interactive;\n\nbool konec = false;\n\ndo\n{\n    string vstup = await Kernel.GetInputAsync();\n\n    if (vstup == \u0022konec\u0022)\n    {\n        konec = true;\n    }\n\n    Console.WriteLine($\u0022napsal jsi: {vstup}\u0022);\n\n\n} while (!konec);\n\nConsole.WriteLine(\u0022Konec programu\u0022);\n",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "napsal jsi: neco\nnapsal jsi: jak je\nnapsal jsi: bla bla\nnapsal jsi: konec\nKonec programu\n",
+          "channel": "stdout"
+        }
+      ]
+    },
+    {
+      "id": "fe6752c4-fab9-40ec-a33f-7fab1301a6e1",
+      "type": "markdown",
+      "source": "\u0060\u0060\u0060mermaid\nflowchart TD\n    Start([Start]) --\u003E A[Nastav konec = false]\n    A --\u003E B[Vstup od u\u017Eivatele]\n    B --\u003E C[Vypi\u0161 vstup]\n    C --\u003E D{Je vstup konec?}\n    D -- Ano --\u003E E[Nastav konec = true]\n    D -- Ne --\u003E F[Pokra\u010Duj]\n    E --\u003E G{Je konec == false?}\n    F --\u003E G\n    G -- Ano --\u003E B\n    G -- Ne --\u003E H[Vypi\u0161 Konec programu]\n    H --\u003E End([Konec])\n\u0060\u0060\u0060"
+    },
+    {
+      "id": "35fef301-a67a-4c3f-880e-79ac8155788d",
+      "type": "markdown",
+      "source": "N\u00E1sleduj\u00EDc\u00ED k\u00F3d je zjednodu\u0161en\u00E1 verze p\u0159edchoz\u00EDho k\u00F3du. Tentokr\u00E1t s vyu\u017Eit\u00EDm p\u0159\u00EDkazu \u0060while\u0060. Vyu\u017E\u00EDv\u00E1 toho \u017Ee v\u00FDsledkem operace p\u0159i\u0159azen\u00ED je hodnota toho p\u0159i\u0159azen\u00ED."
+    },
+    {
+      "id": "55e97ae5-d739-4124-91c2-72ea78be9a50",
+      "type": "code",
+      "language": "csharp",
+      "source": "using Microsoft.DotNet.Interactive;\n\nstring vstup;\n\nwhile((vstup = await Kernel.GetInputAsync()) != \u0022konec\u0022)\n{\n    Console.WriteLine($\u0022napsal jsi: {vstup}\u0022);\n}\n\nConsole.WriteLine(\u0022Konec programu\u0022);",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "Konec programu\r\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 7
+      }
+    },
+    {
+      "id": "6282065d-dbcd-4b2f-9a1e-99280d3a718a",
+      "type": "markdown",
+      "source": "## for\n\nP\u0159\u00EDkaz \u0060for\u0060 pou\u017E\u00EDv\u00E1me v\u011Bt\u0161inou, pokud p\u0159edem zn\u00E1me po\u010Det opakov\u00E1n\u00ED."
+    },
+    {
+      "id": "16ce8b15-5de7-437e-a0c5-8682aa6422e4",
+      "type": "code",
+      "language": "csharp",
+      "source": "for (int i = 0; i \u003C 10; i\u002B\u002B)\n{\n    Console.WriteLine(i);\n}",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 8
+      }
+    },
+    {
+      "id": "9405dca2-008e-4b3a-8f8c-436d40a82a1d",
+      "type": "markdown",
+      "source": "N\u00E1sleduj\u00EDc\u00ED diagram popisuje smy\u010Dku for."
+    },
+    {
+      "id": "6cba1630-2e93-4702-9a55-c6fd6fa17159",
+      "type": "markdown",
+      "source": "\u0060\u0060\u0060mermaid\ngraph TD;\n  Start(Start)--\u003EInit[Initialize]\n  Init--\u003ECondition{Condition Check}\n  Condition--Yes--\u003EBody[Loop Body]\n  Body--\u003EUpdate[Update Iteration]\n  Update--\u003ECondition\n  Condition--No--\u003EEnd(End)\n  \u0060\u0060\u0060"
+    },
+    {
+      "id": "a7212646-ce16-40a7-9e0b-af3e618471f1",
+      "type": "markdown",
+      "source": "V n\u00E1sleduj\u00EDm p\u0159\u00EDkladu pou\u017E\u00EDv\u00E1me cyklus for podobn\u011B jako cyklus \u0060while\u0060, ale z hlediska \u010Ditelnosti to nen\u00ED ide\u00E1ln\u00ED. Jde jen o p\u0159\u00EDklad, \u017Ee je to mo\u017En\u00E9. V\u011Bt\u0161inou pou\u017E\u00EDv\u00E1me cyklus for pro opakov\u00E1n\u00ED s dan\u00FDm po\u010Dtem opakov\u00E1n\u00ED."
+    },
+    {
+      "id": "7457ea40-1cd1-40b3-bd33-1fc49bdcf0fa",
+      "type": "code",
+      "language": "csharp",
+      "source": "for (string vstup = await Kernel.GetInputAsync(); vstup != \u0022konec\u0022; vstup = await Kernel.GetInputAsync()) \n{\n    Console.WriteLine($\u0022napsal jsi: {vstup}\u0022);\n}\n\nConsole.WriteLine(\u0022Konec programu\u0022);",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "napsal jsi: ahoj\nnapsal jsi: jak je\nnapsal jsi: bla bla\n",
+          "channel": "stdout"
+        }
+      ]
+    },
+    {
+      "id": "1043acd0-b525-4d76-a581-1045356d3850",
+      "type": "markdown",
+      "source": "## break\n\nProv\u00E1d\u011Bn\u00ED cyklu m\u016F\u017Eeme ukon\u010Dit pomoc\u00ED p\u0159\u00EDkazu \u0060break\u0060. V n\u00E1sleduj\u00EDc\u00EDm p\u0159\u00EDkazu v\u00FDpis ukon\u010D\u00EDme po zad\u00E1n\u00ED \u0159et\u011Bzce \u0022konec\u0022.\n\nV n\u00E1sleduj\u00EDc\u00EDm p\u0159\u00EDkladu m\u00E1m omezen\u00FD po\u010Det vstup\u016F na 10."
+    },
+    {
+      "id": "11c62bc1-1d13-4e7c-b205-ac1f2363ed2f",
+      "type": "code",
+      "language": "csharp",
+      "source": "Console.WriteLine(\u0022Zadej \u0159et\u011Bzec konec pro ukon\u010Den\u00ED programu.\u0022);\nConsole.WriteLine(\u0022Zadej jak\u00FDkoliv jin\u00FD \u0159et\u011Bzec pro nove cislo\u0022);\n\nfor (int i = 0; i \u003C 10; i\u002B\u002B)\n{\n    string vstup = await Kernel.GetInputAsync();\n\n    if(vstup == \u0022konec\u0022)\n    {\n        break;\n    }\n\n    Console.WriteLine(i);\n}\n\nConsole.WriteLine(\u0022konec vypisu\u0022);",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "Zadej \u0159et\u011Bzec konec pro ukon\u010Den\u00ED programu.\nZadej jak\u00FDkoliv jin\u00FD \u0159et\u011Bzec pro nove cislo\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9\nkonec vypisu\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 14
+      }
+    },
+    {
+      "id": "dec53942-930b-4fd3-a0b6-f04382f7543a",
+      "type": "markdown",
+      "source": "## continue\n\nN\u00E1sleduj\u00EDc\u00ED p\u0159\u00EDkazy ve slo\u017Een\u00E9m p\u0159\u00EDkazu cyklu m\u016F\u017Eeme p\u0159esko\u010Dit pomoc\u00ED p\u0159\u00EDkazu \u0060continue\u0060. V n\u00E1sleduj\u00EDc\u00EDm p\u0159\u00EDkazu v\u00FDpis p\u0159esko\u010D\u00EDme zad\u00E1n\u00EDm \u0159et\u011Bzce \u0022preskoc\u0022."
+    },
+    {
+      "id": "af8a1208-de95-46f5-a7c4-cd14730ea99b",
+      "type": "code",
+      "language": "csharp",
+      "source": "Console.WriteLine(\u0022Zadej \u0159et\u011Bzec preskoc pro presko\u010Den\u00ED v\u00FDpisu \u010D\u00EDsla.\u0022);\nConsole.WriteLine(\u0022Zadej jak\u00FDkoliv jin\u00FD \u0159et\u011Bzec pro nove cislo\u0022);\n\nfor (int i = 0; i \u003C 10; i\u002B\u002B)\n{\n    string vstup = await Kernel.GetInputAsync();\n\n    if(vstup == \u0022preskoc\u0022)\n    {\n        continue;\n    }\n\n    Console.WriteLine(i);\n}\n\nConsole.WriteLine(\u0022konec vypisu\u0022);",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "Zadej \u0159et\u011Bzec preskoc pro presko\u010Den\u00ED v\u00FDpisu \u010D\u00EDsla.\nZadej jak\u00FDkoliv jin\u00FD \u0159et\u011Bzec pro nove cislo\n0\n1\n2\n4\n5\n",
+          "channel": "stdout"
+        },
+        {
+          "mimeType": "text/plain",
+          "content": "Error: Input request cancelled\r\nInput request cancelled",
+          "isError": true,
+          "errorName": "Error",
+          "errorStackTrace": "Input request cancelled"
+        },
+        {
+          "mimeType": "text/plain",
+          "content": "Error: System.Exception: Input request cancelled\r\n   at Microsoft.DotNet.Interactive.Kernel.GetInputAsync(String prompt, Boolean isPassword, String typeHint) in D:\\a\\_work\\1\\s\\src\\Microsoft.DotNet.Interactive\\Kernel.Static.cs:line 93\r\n   at Microsoft.DotNet.Interactive.Kernel.GetInputAsync(String prompt, String typeHint) in D:\\a\\_work\\1\\s\\src\\Microsoft.DotNet.Interactive\\Kernel.Static.cs:line 46\r\n   at Submission#15.\u003C\u003CInitialize\u003E\u003Ed__0.MoveNext()\r\n--- End of stack trace from previous location ---\r\n   at Microsoft.CodeAnalysis.Scripting.ScriptExecutionState.RunSubmissionsAsync[TResult](ImmutableArray\u00601 precedingExecutors, Func\u00602 currentExecutor, StrongBox\u00601 exceptionHolderOpt, Func\u00602 catchExceptionOpt, CancellationToken cancellationToken)\r\nSystem.Exception: Input request cancelled\r\n\r\n   at Microsoft.DotNet.Interactive.Kernel.GetInputAsync(String prompt, Boolean isPassword, String typeHint) in D:\\a\\_work\\1\\s\\src\\Microsoft.DotNet.Interactive\\Kernel.Static.cs:line 93\r\n\r\n   at Microsoft.DotNet.Interactive.Kernel.GetInputAsync(String prompt, String typeHint) in D:\\a\\_work\\1\\s\\src\\Microsoft.DotNet.Interactive\\Kernel.Static.cs:line 46\r\n\r\n   at Submission#15.\u003C\u003CInitialize\u003E\u003Ed__0.MoveNext()\r\n\r\n--- End of stack trace from previous location ---\r\n\r\n   at Microsoft.CodeAnalysis.Scripting.ScriptExecutionState.RunSubmissionsAsync[TResult](ImmutableArray\u00601 precedingExecutors, Func\u00602 currentExecutor, StrongBox\u00601 exceptionHolderOpt, Func\u00602 catchExceptionOpt, CancellationToken cancellationToken)",
+          "isError": true,
+          "errorName": "Error",
+          "errorStackTrace": "System.Exception: Input request cancelled\r\n\r\n   at Microsoft.DotNet.Interactive.Kernel.GetInputAsync(String prompt, Boolean isPassword, String typeHint) in D:\\a\\_work\\1\\s\\src\\Microsoft.DotNet.Interactive\\Kernel.Static.cs:line 93\r\n\r\n   at Microsoft.DotNet.Interactive.Kernel.GetInputAsync(String prompt, String typeHint) in D:\\a\\_work\\1\\s\\src\\Microsoft.DotNet.Interactive\\Kernel.Static.cs:line 46\r\n\r\n   at Submission#15.\u003C\u003CInitialize\u003E\u003Ed__0.MoveNext()\r\n\r\n--- End of stack trace from previous location ---\r\n\r\n   at Microsoft.CodeAnalysis.Scripting.ScriptExecutionState.RunSubmissionsAsync[TResult](ImmutableArray\u00601 precedingExecutors, Func\u00602 currentExecutor, StrongBox\u00601 exceptionHolderOpt, Func\u00602 catchExceptionOpt, CancellationToken cancellationToken)"
+        }
+      ],
+      "metadata": {
+        "execution_count": 15
+      }
+    },
+    {
+      "id": "526ba252-6d25-4ef7-9985-91f4c108c4cd",
+      "type": "markdown",
+      "source": "## Ukon\u010Den\u00ED vno\u0159en\u00E9ho cyklu for\n\nVno\u0159en\u00FD cyklus m\u016F\u017Eeme ukon\u010Dit pomoc\u00ED p\u0159\u00EDkazu \u0060goto\u0060, p\u0159\u00EDkazu \u0060return\u0060 nebo pomoc\u00ED pomocn\u00E9 prom\u011Bnn\u00E9."
+    },
+    {
+      "id": "3bae07ab-e4e1-4888-bfb3-740ec6ab4ed2",
+      "type": "code",
+      "language": "csharp",
+      "source": "for (int i = 0; i \u003C 10; i\u002B\u002B)\n{\n    for(int j = 0; j \u003C 10; j\u002B\u002B)\n    {\n        if (i == 1 \u0026\u0026 j == 3)\n        {\n            goto label;\n        }\n\n        Console.WriteLine($\u0022i = {i}, j = {j}\u0022);\n    }\n}\n\nlabel:\nConsole.WriteLine(\u0022konec vno\u0159en\u00E9ho cyklu\u0022);",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "i = 0, j = 0\ni = 0, j = 1\ni = 0, j = 2\ni = 0, j = 3\ni = 0, j = 4\ni = 0, j = 5\ni = 0, j = 6\ni = 0, j = 7\ni = 0, j = 8\ni = 0, j = 9\ni = 1, j = 0\ni = 1, j = 1\ni = 1, j = 2\nkonec vno\u0159en\u00E9ho cyklu\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 7
+      }
+    },
+    {
+      "id": "a132571a-04cf-4864-9c1a-ca009da6e9b1",
+      "type": "code",
+      "language": "csharp",
+      "source": "for (int i = 0; i \u003C 10; i\u002B\u002B)\n{\n    for(int j = 0; j \u003C 10; j\u002B\u002B)\n    {\n        if (i == 1 \u0026\u0026 j == 3)\n        {\n            return; // ukonci metodu\n        }\n\n        Console.WriteLine($\u0022i = {i}, j = {j}\u0022);\n    }\n}",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "i = 0, j = 0\ni = 0, j = 1\ni = 0, j = 2\ni = 0, j = 3\ni = 0, j = 4\ni = 0, j = 5\ni = 0, j = 6\ni = 0, j = 7\ni = 0, j = 8\ni = 0, j = 9\ni = 1, j = 0\ni = 1, j = 1\ni = 1, j = 2\n",
+          "channel": "stdout"
+        },
+        {
+          "mimeType": "text/html",
+          "content": "\u003Cdiv class=\u0022dni-plaintext\u0022\u003E\u003Cpre\u003E\u0026lt;null\u0026gt;\u003C/pre\u003E\u003C/div\u003E\u003Cstyle\u003E\r\n.dni-code-hint {\r\n    font-style: italic;\r\n    overflow: hidden;\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview {\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview td {\r\n    vertical-align: top;\r\n    text-align: start;\r\n}\r\ndetails.dni-treeview {\r\n    padding-left: 1em;\r\n}\r\ntable td {\r\n    text-align: start;\r\n}\r\ntable tr { \r\n    vertical-align: top; \r\n    margin: 0em 0px;\r\n}\r\ntable tr td pre \r\n{ \r\n    vertical-align: top !important; \r\n    margin: 0em 0px !important;\r\n} \r\ntable th {\r\n    text-align: start;\r\n}\r\n\u003C/style\u003E"
+        }
+      ]
+    },
+    {
+      "id": "d4924b1b-6954-4807-ac34-7707e2370f3d",
+      "type": "code",
+      "language": "csharp",
+      "source": "bool konec = false;\n\nfor (int i = 0; i \u003C 10 \u0026\u0026 !konec; i\u002B\u002B)\n{\n    for(int j = 0; j \u003C 10; j\u002B\u002B)\n    {\n        if (i == 1 \u0026\u0026 j == 3)\n        {\n            konec = true;\n            break;\n        }\n\n        Console.WriteLine($\u0022i = {i}, j = {j}\u0022);\n    }\n}\n\nConsole.WriteLine(\u0022konec vno\u0159en\u00E9ho cyklu\u0022);",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "i = 0, j = 0\ni = 0, j = 1\ni = 0, j = 2\ni = 0, j = 3\ni = 0, j = 4\ni = 0, j = 5\ni = 0, j = 6\ni = 0, j = 7\ni = 0, j = 8\ni = 0, j = 9\ni = 1, j = 0\ni = 1, j = 1\ni = 1, j = 2\nkonec vno\u0159en\u00E9ho cyklu\n",
+          "channel": "stdout"
+        }
+      ]
+    },
+    {
+      "id": "3460f63c-2827-46f6-82e4-41390095d4aa",
+      "type": "markdown",
+      "source": "## Zbytek po celo\u010D\u00EDseln\u00E9m d\u011Blen\u00ED (modulo)\n\nZbytek po celo\u010D\u00EDseln\u00E9m d\u011Blen\u00ED z\u00EDsk\u00E1me pomoc\u00ED oper\u00E1toru modulo \u0060%\u0060.\n\n- 9 % 2 = 9 - (4 * 2) = 1\n- 8 % 2 = 8 - (4 * 2) = 0\n- 1 % 2 = 1 - (0 * 2) = 1\n- 0 % 2 = 0 - (0 * 2) = 0"
+    },
+    {
+      "id": "3a406f6b-5fc0-4d63-bb77-1f5ac4cd72ab",
+      "type": "code",
+      "language": "csharp",
+      "source": "for (int i = 0; i \u003C 10; i\u002B\u002B)\n{\n    if (i % 2 == 0)\n    {\n        Console.WriteLine(i);\n    }\n}",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "0\n2\n4\n6\n8\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 16
+      }
+    },
+    {
+      "id": "6f70a846-4fce-4ee6-b027-b47c4e96ec16",
+      "type": "markdown",
+      "source": "Sud\u00E1 \u010D\u00EDsla bych mohl vypsat i pomoc\u00ED n\u00E1sleduj\u00EDc\u00EDho p\u0159\u00EDkladu, kdy v\u00FDraz \u0060i \u002B= 2\u0060 p\u0159i\u010Dte k prom\u011Bnn\u00E9 \u0060i\u0060 hodnotu \u00602\u0060."
+    },
+    {
+      "id": "68069de6-9e16-484d-86ca-53eb9be444f9",
+      "type": "code",
+      "language": "csharp",
+      "source": "for (int i = 0; i \u003C 10; i \u002B= 2)\n{\n    Console.WriteLine(i);\n}",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "0\n2\n4\n6\n8\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 17
+      }
+    },
+    {
+      "id": "a9d0c8d3-5b90-457d-aede-d528b356a78c",
+      "type": "markdown",
+      "source": "---\n## P\u0159\u00EDklady k procvi\u010Dov\u00E1n\u00ED"
+    },
+    {
+      "id": "c90c800a-e39f-49c2-a55d-a402e18a8f7c",
+      "type": "markdown",
+      "source": "### Zad\u00E1n\u00ED: 1: P\u0159\u00EDkaz while"
+    },
+    {
+      "id": "3074054d-90a8-4002-ab8c-5bbea0763b00",
+      "type": "code",
+      "language": "csharp",
+      "source": "// s pomoci cyklu while vypiste na konzoli:\n\n// cisla 1,2,3,4,5,6,7,8,9\n\n// cisla 10,9,8,7,6,5,4,3,2,1\n\n// cisla 10,20,30,40,50,60,70,80,90,100\n\n// cisla 10,100,1000,10000,100000\n\n// cisla 256,128,64,32,16,8,4,2,1"
+    },
+    {
+      "id": "5fedea11-b1d5-4cb9-a8f2-428dc7eed00d",
+      "type": "markdown",
+      "source": "### Zad\u00E1n\u00ED: 2: P\u0159\u00EDkaz for"
+    },
+    {
+      "id": "f49aa58b-0c9b-414e-a1fa-13dbc1dc9f94",
+      "type": "code",
+      "language": "csharp",
+      "source": "// s pomoci cyklu forvypiste na konzoli:\n\n// cisla 1,2,3,4,5,6,7,8,9\n\n// cisla 10,9,8,7,6,5,4,3,2,1\n\n// cisla 10,20,30,40,50,60,70,80,90,100\n\n// cisla 10,100,1000,10000,100000\n\n// cisla 256,128,64,32,16,8,4,2,1"
+    },
+    {
+      "id": "36981eea-8b31-4a8a-938b-8cce85bf99f8",
+      "type": "markdown",
+      "source": "### Zad\u00E1n\u00ED: 3: Faktorial"
+    },
+    {
+      "id": "2ae1ffb2-99a0-4a63-8392-dba390d55ea2",
+      "type": "code",
+      "language": "csharp",
+      "source": "// Spocitejte faktorial cisla n\n// n!\nint n = 6;"
+    },
+    {
+      "id": "dc961723-1958-43d3-89b2-b8eb4680a929",
+      "type": "markdown",
+      "source": "### Zad\u00E1n\u00ED 4: Mocnina, kdy z\u00E1klad i exponent jsou kladn\u00E1 \u010D\u00EDsla."
+    },
+    {
+      "id": "e63bbe02-5e4f-4e18-95fb-3a2e52bb28ab",
+      "type": "markdown",
+      "source": "Vytvo\u0159te k\u00F3d, kter\u00FD spo\u010D\u00EDt mocninu \u010D\u00EDsla, kdy z\u00E1klad i exponent jsou kladn\u00E1 \u010D\u00EDsla bez vyu\u017Eit\u00ED metody \u0060Math.Pow\u0060. Pou\u017Eijte cyklus."
+    },
+    {
+      "id": "77540979-14c0-46c1-9dff-eded883c6103",
+      "type": "code",
+      "language": "csharp",
+      "source": "int x = 2;\nint n = 8;\n\nint vysledek = x;\n\n// x na ntou, x^n\n\nConsole.WriteLine(vysledek);",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "2\r\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 19
+      }
+    },
+    {
+      "id": "f2918a9e-5ed2-4772-8c74-5936b481facd",
+      "type": "markdown",
+      "source": "### Zad\u00E1n\u00ED: 5: Modulo"
+    },
+    {
+      "id": "9ff5c126-9535-42ed-9bab-eb68cacce9b2",
+      "type": "code",
+      "language": "csharp",
+      "source": "int x = 77;\n\nint zbytek = x % 5; // modulo, zbytek po celociselnem deleni\n\nif(zbytek == 0)\n{\n    Console.WriteLine(\u0022cislo je delitelne 5\u0022);\n}\n\n// S pomoc\u00ED oper\u00E1toru modulo vypiste cisla od 0 do 100 delitelna 5 nebo 3\n// 0, 3, 5, 6, 9, 10 .... 100\n\n"
+    },
+    {
+      "id": "c0c438e2-ba62-489c-90e6-a738ed83f06c",
+      "type": "markdown",
+      "source": "---\n## \u0158e\u0161en\u00ED p\u0159\u00EDklad\u016F k procvi\u010Dov\u00E1n\u00ED"
+    },
+    {
+      "id": "45e6c1d2-f507-4d6c-9683-2f689f31e640",
+      "type": "markdown",
+      "source": "### \u0158e\u0161en\u00ED: 1: P\u0159\u00EDkaz while"
+    },
+    {
+      "id": "6be755cd-70cc-4399-91d4-c02f15cbd279",
+      "type": "code",
+      "language": "csharp",
+      "source": "// s pomoci cyklu while vypiste na konzoli:\nint i;\n\n// cisla 1,2,3,4,5,6,7,8,9\n\ni = 1;\nwhile (i \u003C 10) \n{\n    Console.WriteLine(i);\n    i\u002B\u002B;\n}\n\n// cisla 10,9,8,7,6,5,4,3,2,1\n\ni = 10;\nwhile (i \u003E 0) \n{\n    Console.WriteLine(i);\n    i--;\n}\n\n// cisla 10,20,30,40,50,60,70,80,90,100\n\ni = 10;\nwhile (i \u003C= 100) \n{\n    Console.WriteLine(i);\n    i \u002B= 10;\n}\n\n// cisla 10,100,1000,10000,100000\n\ni = 10;\nwhile (i \u003C= 10000) \n{\n    Console.WriteLine(i);\n    i *= 10;\n}\n\n// cisla 256,128,64,32,16,8,4,2,1\n\ni = 256;\nwhile (i \u003E 0) \n{\n    Console.WriteLine(i);\n    i /= 2;\n}"
+    },
+    {
+      "id": "5200c709-7878-484d-9e9c-8decf65fb4c4",
+      "type": "markdown",
+      "source": "### \u0158e\u0161en\u00ED: 2: P\u0159\u00EDkaz for"
+    },
+    {
+      "id": "fa7591d2-eb6d-49a4-af8a-ac2b35d9fdec",
+      "type": "code",
+      "language": "csharp",
+      "source": "// s pomoci cyklu for vypiste na konzoli \n// cisla 1,2,3,4,5,6,7,8,9\nfor (int i = 1; i \u003C 10; i\u002B\u002B)\n{\n    Console.WriteLine(i);\n}\n\n// cisla 10,9,8,7,6,5,4,3,2,1\nfor (int i = 10; i \u003E 0; i--)\n{\n    Console.WriteLine(i);\n}\n\n// cisla 10,20,30,40,50,60,70,80,90,100\nfor (int i = 10; i \u003C= 100; i = i \u002B 10)\n{\n    Console.WriteLine(i);\n}\n\n// cisla 10,100,1000,10000,100000\nfor (int i = 10; i \u003C= 100000; i = i * 10)\n{\n    Console.WriteLine(i);\n}\n\n// cisla 256,128,64,32,16,8,4,2,1\nfor (int i = 256; i \u003E= 1; i = i / 2)\n{\n    Console.WriteLine(i);\n}\n"
+    },
+    {
+      "id": "1426b81a-a3f6-40dd-b2c2-d9161e3bcff8",
+      "type": "markdown",
+      "source": "### \u0158e\u0161en\u00ED 3: Faktorial"
+    },
+    {
+      "id": "d938fc5b-19e8-4504-abf3-3d9e76e89b78",
+      "type": "code",
+      "language": "csharp",
+      "source": "// Spocitejte faktorial cisla n\n// n!\nint n = 6;\n\n\nint f = n--;\nfor (; n \u003E 1; n--)\n{\n    f = f * n;\n}\n\nConsole.WriteLine(f);\n"
+    },
+    {
+      "id": "f6ee755b-2ac8-4426-8e19-4b4a9759249a",
+      "type": "markdown",
+      "source": "### \u0158e\u0161en\u00ED 4: Mocnina, kdy z\u00E1klad i exponent jsou kladn\u00E1 \u010D\u00EDsla."
+    },
+    {
+      "id": "8d880bea-53ab-4b88-b3a3-4521e81ac2ce",
+      "type": "code",
+      "language": "csharp",
+      "source": "int x = 2;\nint n = 8;\n\n// x na ntou, x^n\n\nint vysledek = x;\n\nwhile (n \u003E 1)\n{\n    vysledek *= x; // vysledek = vysledek * x\n    n--;\n}\n\nConsole.WriteLine(vysledek);"
+    },
+    {
+      "id": "64d6eab3-bc3c-46a8-9928-5e280f4e7028",
+      "type": "markdown",
+      "source": "### \u0158e\u0161en\u00ED 5: Modulo"
+    },
+    {
+      "id": "71d0721c-e138-4551-9d89-4068f653b941",
+      "type": "code",
+      "language": "csharp",
+      "source": "int x = 77;\n\nint zbytek = x % 5; // modulo, zbytek po celociselnem deleni\n\nif(zbytek == 0)\n{\n    Console.WriteLine(\u0022cislo je delitelne 5\u0022);\n}\n\n// S pomoc\u00ED oper\u00E1toru modulo vypiste cisla od 0 do 100 delitelna 5 nebo 3\n// 0, 3, 5, 6, 9, 10 .... 100\n\nfor (int i = 0; i \u003C 100; i\u002B\u002B)\n{\n    if((i % 5 == 0) || (i % 3 == 0))\n    {\n        Console.WriteLine(i);\n    }\n}"
+    }
+  ]
+}

@@ -1,0 +1,199 @@
+{
+  "verso": "1.1",
+  "metadata": {
+    "defaultKernel": "csharp",
+    "activeLayout": {
+      "extensionId": "verso.layout.notebook",
+      "layoutId": "notebook"
+    }
+  },
+  "cells": [
+    {
+      "id": "90c3ffd3-10b3-4926-a43e-a7d2a3c8373b",
+      "type": "markdown",
+      "source": "## 10 Property\n**autor: Erik Kr\u00E1l ekral@utb.cz**\n\n---\n\nPro zvl\u00E1dnut\u00ED p\u0159edm\u011Btu pot\u0159ebujete um\u011Bt definovat a pou\u017E\u00EDvat property a auto-implemented property.\n\nNa n\u00E1sleduj\u00EDc\u00EDch p\u0159\u00EDkladech si probereme jednotliv\u00E9 p\u0159\u00EDkazy. "
+    },
+    {
+      "id": "8da0e9ae-d562-4f9b-a624-b8ce9ca49e78",
+      "type": "markdown",
+      "source": "Nejprve si definujeme t\u0159\u00EDdu pro kruh, kter\u00E1 bude m\u00EDt \u0060private\u0060 field \u0060polomer\u0060 a \u0060public\u0060 metody \u0060VratPolomer\u0060 a \u0060NastavPolomer\u0060."
+    },
+    {
+      "id": "2be91d78-02da-4e94-9292-6cc29920a494",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Kruh\n{\n    private double polomer;\n\n    public double VratPolomer()\n    {\n        return polomer;\n    }\n\n    public void NastavPolomer(double polomer)\n    {\n        this.polomer = polomer;\n    }\n}"
+    },
+    {
+      "id": "1d4e30b2-0f63-498b-9f94-7f49fa62428c",
+      "type": "markdown",
+      "source": "V jazyku C# m\u016F\u017Eeme metody \u0060VratPolomer\u0060 a \u0060NastavPolomer\u0060nahradit speci\u00E1ln\u00EDm typem property. Z\u00E1pis je potom jednodu\u0161\u0161\u00ED. Znak \u0060_\u0060 v n\u00E1zvu backing fieldu \u0060_polomer\u0060 je jen jmenn\u00E1 konvence a nen\u00ED povinn\u00FD. Dal\u0161\u00ED jmennou konvenc\u00ED je, \u017Ee n\u00E1zev property za\u010D\u00EDn\u00E1 velk\u00FDm znakem."
+    },
+    {
+      "id": "ccf61a87-5172-4859-80e6-1e03da4ff2a5",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Kruh\n{\n    private double _polomer;\n\n    public double Polomer\n    {\n        get { return _polomer; }\n        set { _polomer = value; }\n    }\n}"
+    },
+    {
+      "id": "1b9db379-93e6-44d7-b748-8b2c33cdc7ef",
+      "type": "markdown",
+      "source": "Property se potom pou\u017E\u00EDv\u00E1 stejn\u011B jako field."
+    },
+    {
+      "id": "fe905c04-84b8-49bd-992d-979e57975b4f",
+      "type": "code",
+      "language": "csharp",
+      "source": "Kruh kruh = new Kruh();\nkruh.Polomer = 10;\nConsole.WriteLine(kruh.Polomer);"
+    },
+    {
+      "id": "6accb942-f971-4c6a-b151-2e5949a32bc2",
+      "type": "markdown",
+      "source": " Pokud t\u011Blo property neobsahuje \u017E\u00E1dn\u00FD k\u00F3d nav\u00EDc, tak m\u016F\u017Eeme z\u00E1pis property zjednodu\u0161it a pou\u017E\u00EDt auto-implemented property. A teprve a\u017E budeme cht\u00EDt do \u010D\u00E1sti get nebo set n\u011Bco p\u0159idat tak zm\u011Bn\u00EDme property na pln\u00FD z\u00E1pis."
+    },
+    {
+      "id": "d65c5326-dc30-45ed-beee-ce4ff699c465",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Kruh\n{\n    public double Polomer { get; set; }\n}"
+    },
+    {
+      "id": "6150165a-ab71-44f2-b3f4-3266f583f024",
+      "type": "markdown",
+      "source": "Nap\u0159\u00EDklad bychom mohli v propert\u011B vypsat na konzoli text v\u017Edy kdy\u017E property \u010Dteme nebo m\u011Bn\u00EDme jej\u00ED hodnotu."
+    },
+    {
+      "id": "2288e263-997f-4bbb-a96e-6a558ebb8950",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Kruh\n{\n    private double _polomer;\n\n    public double Polomer\n    {\n        get { Console.WriteLine(\u0022Cteni property\u0022); return _polomer; }\n        set { _polomer = value; Console.WriteLine(\u0022Zmena property\u0022); }\n    }\n}"
+    },
+    {
+      "id": "1b2a3c11-91d2-4dea-b927-05da7728c2bc",
+      "type": "markdown",
+      "source": "## Readonly property\n\nReadonly property nem\u00E1 setter a m\u016F\u017Eeme j\u00ED p\u0159i\u0159adit hodnotu jen v konstruktoru. "
+    },
+    {
+      "id": "8bd2f219-e14c-4b0f-92c3-a9d299a58d7b",
+      "type": "markdown",
+      "source": "N\u00E1sleduje uk\u00E1zka read-only autoimplemented property:"
+    },
+    {
+      "id": "9ad15613-7d58-47f2-9db0-dab288554a14",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Student\n{\n    public string Jmeno { get; }\n\n    public Student(string jmeno)\n    {\n        Jmeno = jmeno;\n    }\n}",
+      "metadata": {
+        "execution_count": 1
+      }
+    },
+    {
+      "id": "23d5be96-9790-49fd-8af3-5bc37c2d0610",
+      "type": "markdown",
+      "source": "Full property potom vypad\u00E1 n\u00E1sledovn\u011B. Oba z\u00E1pisy nemaj\u00ED setter."
+    },
+    {
+      "id": "d37bac70-c17e-4180-8cde-b9ad7d9bd447",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Student\n{\n    private readonly string jmeno;\n\n    public string Jmeno =\u003E jmeno;\n\n    public Student(string jmeno)\n    {\n        this.jmeno = jmeno;\n    }\n}"
+    },
+    {
+      "id": "677fff81-1fec-4703-aee0-2a5fef8da97c",
+      "type": "markdown",
+      "source": "Kde v\u00FDraz \u0060=\u003E\u0060 p\u0159edstavuje Expression Body syntaxi, tedy je zjednodu\u0161enou syntaxi pro jedno\u0159\u00E1dkovou metodu. K\u00F3d by se dal rozepsat n\u00E1sleduj\u00EDc\u00EDm zp\u016Fsobem:"
+    },
+    {
+      "id": "092cd99b-ac2e-4ff1-a56f-2b7b5458fd2a",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Student\n{\n    private readonly string jmeno;\n\n    public string Jmeno\n    {\n        get\n        {\n            return jmeno;\n        }\n    }\n\n    public Student(string jmeno)\n    {\n        this.jmeno = jmeno;\n    }\n}",
+      "metadata": {
+        "execution_count": 2
+      }
+    },
+    {
+      "id": "7836df0c-4659-42d8-b8e7-6ffe0831e555",
+      "type": "markdown",
+      "source": "# Init Only Setter"
+    },
+    {
+      "id": "bdf7bb3d-35db-4588-9029-b651ba7570b0",
+      "type": "markdown",
+      "source": "Init only setter pou\u017E\u00EDv\u00E1 kl\u00ED\u010Dov\u00E9 slovo \u0060init\u0060 m\u00EDsto \u0060set\u0060. Takovou property potom m\u016F\u017Eeme inicializovat krom\u011B konstruktoru tak\u00E9 v Object Initializeru. Po inicializaci m\u016F\u017Eeme takovou property u\u017E jen \u010D\u00EDst."
+    },
+    {
+      "id": "debb85fe-07f3-4b03-bebd-376b39939cfd",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Student\n{\n    public string? Jmeno { get; init; }\n}\n\nStudent student = new Student() { Jmeno = \u0022Jiri\u0022 };",
+      "metadata": {
+        "execution_count": 4
+      }
+    },
+    {
+      "id": "c7cda9f8-d450-47d4-ba95-50f0e94606fe",
+      "type": "markdown",
+      "source": "Full property s Init Only Setterem potom vypad\u00E1 n\u00E1sledovn\u011B:"
+    },
+    {
+      "id": "68382634-423d-4ea5-ade2-a231ae943b1a",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Student\n{\n    private string? jmeno;\n\n    public string? Jmeno { get =\u003E jmeno; init =\u003E jmeno = value; }\n}",
+      "metadata": {
+        "execution_count": 5
+      }
+    },
+    {
+      "id": "1fd6a9a1-a893-4064-88c7-d4e568d2aa5f",
+      "type": "markdown",
+      "source": "---\nKompletn\u00ED p\u0159\u00EDklady"
+    },
+    {
+      "id": "e2a3d4fb-4969-4ad3-9c88-c7bb23580479",
+      "type": "markdown",
+      "source": "Full property"
+    },
+    {
+      "id": "fb615a18-9ee7-4f4b-9fe4-be65e0aff903",
+      "type": "code",
+      "language": "csharp",
+      "source": "Kruh kruh = new Kruh();\nkruh.Polomer = 10;\nConsole.WriteLine(kruh.Polomer);\n\nclass Kruh\n{\n    private double _polomer;\n\n    public double Polomer\n    {\n        get { return _polomer; }\n        set { _polomer = value; }\n    }\n}\n"
+    },
+    {
+      "id": "dd7da652-f384-443d-adb3-e4a1e0099728",
+      "type": "markdown",
+      "source": "Autoimplemented property"
+    },
+    {
+      "id": "81ca6ff1-0197-4a4e-bf79-9df25ac1c0f2",
+      "type": "code",
+      "language": "csharp",
+      "source": "Kruh kruh = new Kruh();\nkruh.Polomer = 10;\nConsole.WriteLine(kruh.Polomer);\n\nclass Kruh\n{\n    public double Polomer { get; set; }\n}   \n"
+    },
+    {
+      "id": "eed046fd-17e8-490d-9e72-cdd4d0a2fdf4",
+      "type": "markdown",
+      "source": "Dodate\u010Dn\u00FD k\u00F3d v property"
+    },
+    {
+      "id": "b06fcb6a-a767-4b08-8c90-ce07ba7bc0b7",
+      "type": "code",
+      "language": "csharp",
+      "source": "Kruh kruh = new Kruh();\nkruh.Polomer = 10;\nConsole.WriteLine(kruh.Polomer);\n\nclass Kruh\n{\n    private double _polomer;\n\n    public double Polomer\n    {\n        get { Console.WriteLine(\u0022Cteni property\u0022); return _polomer; }\n        set { _polomer = value; Console.WriteLine(\u0022Zmena property\u0022); }\n    }\n}"
+    },
+    {
+      "id": "a9147779-829d-42ef-9264-b56f8bedd41b",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Kruh\n{\n    public required double Polomer { get; init; }\n\n    public Kruh()\n    {\n     \n    }\n}"
+    },
+    {
+      "id": "047c56ff-12ad-4651-a9c4-7ec88aced194",
+      "type": "code",
+      "language": "csharp",
+      "source": "Kruh kruh = new Kruh()\n{\n    \n};\n\n//kruh.Polomer = 3.0;"
+    }
+  ]
+}

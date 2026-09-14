@@ -1,0 +1,91 @@
+{
+  "verso": "1.1",
+  "metadata": {
+    "defaultKernel": "csharp",
+    "activeLayout": {
+      "extensionId": "verso.layout.notebook",
+      "layoutId": "notebook"
+    }
+  },
+  "cells": [
+    {
+      "id": "3918b8d1-52d6-4801-bc92-03e3620af7c1",
+      "type": "markdown",
+      "source": "# 11 Exceptions\n**autor: Erik Kr\u00E1l ekral@utb.cz**\n\n---\n\nV t\u00E9to prezentaci probereme **Exceptions** a **Dispose** pattern."
+    },
+    {
+      "id": "dda4bcd0-db01-4418-960b-d1083953758d",
+      "type": "markdown",
+      "source": "## Kontrola chyb programu\n\n- Compile-time errors (static)\n    - Statick\u00E1 typov\u00E1 kontrola\n- Run-time errors (dynamic)\n    - Dynamick\u00E1 typov\u00E1 kontrola\n    - N\u00E1vratov\u00E9 hodnoty funkc\u00ED\n    - Global Error Indicator\n    - Exceptions (v\u00FDjimky)\n"
+    },
+    {
+      "id": "15aa8551-5d58-4a0e-9e31-9325369ce167",
+      "type": "markdown",
+      "source": "Uk\u00E1zka v jazyce C"
+    },
+    {
+      "id": "798b42f5-33a6-4f91-a04d-edb443b579ee",
+      "type": "markdown",
+      "source": "\n\n\u0060\u0060\u0060cpp\n#define _CRT_SECURE_NO_WARNINGS\n\n#include \u003Cstdio.h\u003E\n#include \u003Cerrno.h\u003E\n\nint main()\n{\n    FILE* pf = fopen(\u0022neexistujici.txt\u0022, \u0022rb\u0022);\n\n    if (pf == NULL)\n    {\n        fprintf(stderr, \u0022error number: %d\\n\u0022, errno);\n    }\n    else\n    {\n        fclose(pf);\n    }\n}\n\u0060\u0060\u0060"
+    },
+    {
+      "id": "f95ccdd9-468d-405f-85cb-1827c212a09a",
+      "type": "markdown",
+      "source": "Uk\u00E1zka C#"
+    },
+    {
+      "id": "15fa9a98-1b54-46c5-8d44-e123d6e71b04",
+      "type": "code",
+      "language": "csharp",
+      "source": "using System.IO;\n\nstring path = \u0022text.txt\u0022;\n\nif(File.Exists(path))\n{\n    try\n    {\n        string text = File.ReadAllText(path);\n    }\n    catch (FileNotFoundException ex)\n    {\n        Console.WriteLine(ex.Message);\n        // pokracuji, napisi uzivateli at zkusi jiny soubor\n    }\n}\n"
+    },
+    {
+      "id": "088a6e56-322f-4a26-9382-280920bb931c",
+      "type": "markdown",
+      "source": "## Exceptions\n\nPomoc\u00ED exception komunikujeme v programu p\u0159edev\u0161\u00EDm chyby, kter\u00E9 vznikaj\u00ED za b\u011Bhu programu.\nPokud bychom p\u0159i vol\u00E1n\u00ED metod cht\u011Bli je\u0161t\u011B vracet, zda p\u0159i proveden\u00ED metody do\u0161lo k chyb\u011B, tak by zpracov\u00E1n\u00ED t\u011Bchto chyb by bylo nep\u0159ehledn\u00E9 a nebylo by odd\u011Blen\u00E9 od vlastn\u00ED logiky probl\u00E9mu.\nProto je zpracov\u00E1n\u00ED chyb v programu ve v\u011Bt\u0161in\u011B objektov\u011B orientovan\u00FDch jazyc\u00EDch odd\u011Blen\u00E9 od vlast\u00ED logiky probl\u00E9mu."
+    },
+    {
+      "id": "29f59f4b-58cf-424f-90a7-9d0ef40124fb",
+      "type": "markdown",
+      "source": "### P\u016Fvodci Exceptions (v\u00FDjimek) \n\nV\u00FDjimky v .NET mohou b\u00FDt zp\u016Fsobeny:\n\n1. V aplikaci pomoc\u00ED p\u0159\u00EDkazu throw\n\n    P\u0159\u00EDkaz throw okam\u017Eit\u011B vyvol\u00E1 v\u00FDjimku a dal\u0161\u00ED p\u0159\u00EDkazy za n\u00EDm se u\u017E neprovedou.\n\n2. Automaticky vygenerovan\u00E9 p\u0159eklada\u010Dem a vyvolan\u00E9 p\u0159i neplatn\u00E9m proveden\u00ED operace\n\n    Tyto v\u00FDjimky jsou mohou nastat p\u0159i proveden\u00ED ur\u010Dit\u00FDch operac\u00ED kdy operace nem\u016F\u017Ee b\u00FDt provedena nebo je neplatn\u00E1. P\u0159\u00EDkladem jsou:\n    \n    - DivideByZeroException, \n    - IndexOutOfRangeException,\n    - NullReferenceException,\n    - InvalidCastException,\n    - StackOverflowException a dal\u0161\u00ED.\n\n### Druhy chyb\n\n#### Usage errors\n\n- Pom\u00E1haj\u00ED odhalit chyby program\u00E1tora kter\u00E9 vedou k v\u00FDjimk\u00E1m. Typicky nap\u0159\u00EDklad p\u0159ed\u00E1n\u00ED neplatn\u00E9 hodnoty argumentu. \n- T\u011Bmto chyb\u00E1m jde zabr\u00E1nit opravou k\u00F3du a neo\u0161et\u0159ujeme je pomoc\u00ED bloku Try-Catch.\n\n#### Execution errors\n\n- T\u011Bmto chyb\u00E1m nelze zabr\u00E1nit opravou k\u00F3du.\n- P\u0159\u00EDkladem je nap\u0159\u00EDklad \u010Dten\u00ED po\u0161kozen\u00E9ho souboru nebo souboru, kter\u00FD u\u017Eivatel smazal t\u011Bsn\u011B ne\u017E jsme jej za\u010Dali \u010D\u00EDst.\n- **Program errors** - tyto druhy chyb m\u016F\u017Eeme o\u0161et\u0159it smyslupln\u011B programov\u011B pomoc\u00ED Try-Catch, nap\u0159\u00EDklad pokud se nepovede otev\u0159it soubor, tak u\u017Eivatele vyzveme aby zvolil jinou cestu k souboru.\n- **System failures** \u2013 tyto druhy chyb nelze o\u0161et\u0159it smyslupln\u011B programov\u011B, nap\u0159\u00EDklad pokud dojde k chyb\u011B JIT p\u0159eklada\u010De.\n\n### O\u0161et\u0159en\u00ED v\u00FDjimek\n\nV\u00FDjimky bychom m\u011Bli speci\u00E1ln\u011B o\u0161et\u0159ovat jen pokud na n\u011B m\u016F\u017Eeme n\u011Bjak\u00FDm smyslupln\u00FDm speci\u00E1ln\u00EDm zp\u016Fsobem zareagovat, nap\u0159\u00EDklad vyzvat u\u017Eivatele k zad\u00E1n\u00ED jin\u00E9 cesty k souboru. Ostatn\u00ED v\u00FDjimky m\u016F\u017Eeme o\u0161et\u0159it na nejvy\u0161\u0161\u00ED \u00FArovni aplikace.\nVe vl\u00E1knech bychom m\u011Bli ale o\u0161et\u0159ovat v\u0161echny v\u00FDjimky.\n"
+    },
+    {
+      "id": "249ecb4b-a676-4dad-a610-dada842f81ae",
+      "type": "markdown",
+      "source": "P\u0159\u00EDklad vyvol\u00E1n\u00ED v\u00FDjimky"
+    },
+    {
+      "id": "be4071cb-51cf-4ce1-bb8a-b25d02135a9a",
+      "type": "code",
+      "language": "csharp",
+      "source": "class BankovniUcet\n{\n    private decimal zustatek;\n\n    public void Vloz(decimal castka)\n    {\n        if(castka \u003C= 0)\n        {\n            throw new ArgumentOutOfRangeException(\u0022Zustatek musi byt kladny\u0022);\n        }\n\n        zustatek \u002B= castka;\n    }\n\n    public void Vyber(decimal castka)\n    {\n        if (castka \u003C= 0 ||  castka \u003E zustatek)\n        {\n            throw new ArgumentOutOfRangeException(\u0022Zustatek musi byt kladny a mensi nez zustatek\u0022);\n        }\n\n        zustatek -= castka;\n    }\n}\n"
+    },
+    {
+      "id": "973146d7-47e2-4b08-9dcb-29989c8e4e72",
+      "type": "markdown",
+      "source": "P\u0159\u00EDklad zachycen\u00ED v\u00FDjimky"
+    },
+    {
+      "id": "fb489925-f400-4242-bfc0-341df41645d7",
+      "type": "code",
+      "language": "csharp",
+      "source": "using System.Net.Http;\n\nstring url = \u0022https://geek-jokes.sameerkumar.website/api?format=json\u0022;\n\nHttpClient client = new HttpClient();\n\ntry\n{\n    string jsonString = await client.GetStringAsync(url);\n    Console.WriteLine(jsonString);\n}\ncatch(HttpRequestException ex)\n{\n    Console.WriteLine(ex.Message);\n}\nfinally\n{\n    client.Dispose();\n}\n"
+    },
+    {
+      "id": "5145615e-115a-4cce-bcac-046123226fe4",
+      "type": "markdown",
+      "source": "# Dispose Pattern\n\nSlou\u017E\u00ED k bezpe\u010Dn\u00E9mu uvoln\u011Bn\u00ED zdroj\u016F (pam\u011Bti, p\u0159ipojen\u00ED k serveru, k datab\u00E1zi atd.) i v p\u0159\u00EDpad\u011B v\u00FDjimky.\nV jazyce C\u002B\u002B ke stejn\u00E9mu \u00FA\u010Delu pou\u017E\u00EDv\u00E1me destruktor, kter\u00FD se zavol\u00E1 automaticky p\u0159edt\u00EDm, ne\u017E se uvoln\u00ED objekt z pam\u011Bti.\nV jazyce C# sice m\u00E1me destruktor tak\u00E9, ale nev\u00EDme kdy p\u0159esn\u011B se zavol\u00E1, proto\u017Ee nev\u00EDme kdy Garbage Collector uvoln\u00ED pam\u011B\u0165 objektu."
+    },
+    {
+      "id": "389a7de1-e504-45aa-af8c-ab6d9b9b6a6e",
+      "type": "markdown",
+      "source": "Pou\u017Eiti Dispose patternu"
+    },
+    {
+      "id": "79e5d831-7509-4686-a543-422723d17ac1",
+      "type": "code",
+      "language": "csharp",
+      "source": "using System.Net.Http;\n\nstring url = \u0022https://geek-jokes.sameerkumar.website/api?format=json\u0022;\n\nusing (HttpClient client = new HttpClient())\n{ \n    try\n    {\n        string jsonString = await client.GetStringAsync(url);\n        Console.WriteLine(jsonString);\n    }\n    catch (HttpRequestException ex)\n    {\n        Console.WriteLine(ex.Message);\n    }\n}\n"
+    }
+  ]
+}

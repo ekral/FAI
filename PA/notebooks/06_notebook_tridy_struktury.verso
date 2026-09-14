@@ -1,0 +1,445 @@
+{
+  "verso": "1.1",
+  "metadata": {
+    "defaultKernel": "csharp",
+    "activeLayout": {
+      "extensionId": "verso.layout.notebook",
+      "layoutId": "notebook"
+    }
+  },
+  "cells": [
+    {
+      "id": "e4c924bf-43e5-4b76-b92f-626b740c83a4",
+      "type": "markdown",
+      "source": "# 06 T\u0159\u00EDdy a struktury\n**autor: Erik Kr\u00E1l ekral@utb.cz**\n\n---\n\nPro zvl\u00E1dnut\u00ED p\u0159edm\u011Btu pot\u0159ebujete v\u011Bd\u011Bt jak deklarovat t\u0159\u00EDdy a struktury, definovat promenou typu struktura, inicializovat vychozi hodnoty a pracovat s prvky struktury (fields). "
+    },
+    {
+      "id": "a63e16a8-e653-4b6a-8aae-7cb756f3a8f2",
+      "type": "markdown",
+      "source": "Na n\u00E1sleduj\u00EDc\u00EDch p\u0159\u00EDkladech si probereme jednotliv\u00E9 p\u0159\u00EDkazy. "
+    },
+    {
+      "id": "99dc19e3-1dc6-421f-813a-d30548e4fdef",
+      "type": "markdown",
+      "source": "## Z\u00E1sobn\u00EDk a halda\n\nV n\u00E1sleduj\u00EDc\u00EDm textu budeme pou\u017E\u00EDvat pojmy z\u00E1sobn\u00EDk a halda.\n\n### Z\u00E1sobn\u00EDk\n\nKa\u017Ed\u00FD program si alokuje po spu\u0161t\u011Bn\u00ED \u0159\u00E1dov\u011B megabajty pam\u011Bti pro lok\u00E1ln\u00ED prom\u011Bnn\u00E9, n\u00E1vratov\u00E9 adresy funkc\u00ED a p\u0159\u00EDpadn\u011B dal\u0161\u00ED data.\nS touto pam\u011Bt\u00ED se potom pracuje jako se z\u00E1sobn\u00EDkem a tak\u00E9 se j\u00ED tak \u0159\u00EDk\u00E1.\n\n### Halda\n\nPokud program pot\u0159ebuje za b\u011Bhu v\u00EDce pam\u011Bti, tak m\u016F\u017Ee po\u017E\u00E1dat prost\u0159ednictv\u00EDm runtime jazyka o p\u0159id\u011Blen\u00ED v\u00EDce pam\u011Bti.\nProgram potom z\u00EDsk\u00E1 adresu (referenci) prvn\u00EDho bajtu takto alokovan\u00E9 pam\u011Bti.\n\n"
+    },
+    {
+      "id": "90a4682d-a7d4-4a3f-a203-7562be044fb2",
+      "type": "markdown",
+      "source": "## T\u0159\u00EDda\n\nT\u0159\u00EDdu deklarujeme pomoc\u00ED kl\u00ED\u010Dov\u00E9ho slova \u0060class\u0060. Pokud chceme p\u0159istupovat k field\u016Fm t\u0159\u00EDdy mimo t\u0159\u00EDdu v klientsk\u00E9m k\u00F3du, tak je mus\u00EDme deklarovat jako \u0060public\u0060. N\u00E1sleduj\u00EDc\u00ED p\u0159\u00EDklad definuje t\u0159\u00EDdu \u0060Student\u0060 s fieldy \u0060Jmeno\u0060 a \u0060Id\u0060. Typ \u0060string?\u0060 p\u0159edstavuje nullable \u0060string\u0060, kter\u00FD m\u016F\u017Ee m\u00EDt hodnotu \u0060null\u0060. V\u00EDce probereme v souvislosti s konstruktorem."
+    },
+    {
+      "id": "6639c3c9-cdfd-4a8c-976b-5e7678e79985",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Student\n{\n    public int Id;\n    public string? Jmeno;\n}"
+    },
+    {
+      "id": "d10d75b2-8f4e-4c21-abd3-09f079e42895",
+      "type": "markdown",
+      "source": "Instanci t\u0159\u00EDdy vytvo\u0159\u00EDme pomoc\u00ED kl\u00ED\u010Dov\u00E9ho slova \u0060new\u0060. Kl\u00ED\u010Dov\u00E9 slovo \u0060new\u0060 alokuje pam\u011B\u0165 na hald\u011B, co\u017E je voln\u00E1 pam\u011B\u0165, kterou opera\u010Dn\u00ED syst\u00E9m p\u0159i\u0159azuje proces\u016Fm. D\u00E1le oper\u00E1tor zavol\u00E1 konstruktor, co\u017E probereme pozd\u011Bji. A nakonec oper\u00E1tor \u0060new\u0060 vrac\u00ED referenci, zjednodu\u0161en\u011B adresu na alokovanou pam\u011B\u0165."
+    },
+    {
+      "id": "9dd09fa5-67e7-424e-b4fb-9dabebd878c6",
+      "type": "code",
+      "language": "csharp",
+      "source": "Student s1 = new Student();",
+      "metadata": {
+        "execution_count": 3
+      }
+    },
+    {
+      "id": "c95f7244-2176-46fa-8e18-e64281a162a3",
+      "type": "markdown",
+      "source": "K field\u016Fm instance t\u0159\u00EDdy potom p\u0159istupujeme pomoc\u00ED oper\u00E1toru p\u0159\u00EDm\u00E9ho p\u0159\u00EDstupu \u0060.\u0060."
+    },
+    {
+      "id": "88f59ed1-59c4-440f-a2e5-775b4756d6fb",
+      "type": "code",
+      "language": "csharp",
+      "source": "s1.Id = 1;\ns1.Jmeno = \u0022Petr\u0022;",
+      "metadata": {
+        "execution_count": 4
+      }
+    },
+    {
+      "id": "7a245ab3-61a4-4b94-b755-addcea9e7be0",
+      "type": "markdown",
+      "source": "P\u0159i p\u0159i\u0159azen\u00ED hodnoty se kop\u00EDruje reference (zjednodu\u0161en\u011B adresa) na instanci studenta (objekt) na hald\u011B. Ob\u011B reference \u0060s1\u0060 a \u0060s2\u0060 odkazuji na stejn\u00FD objekt na hald\u011B. Pokud zm\u011Bn\u00EDme jm\u00E9no \u0060s1.Jmeno\u0060, tak se zm\u011Bn\u00ED i \u0060s2.Jmeno\u0060."
+    },
+    {
+      "id": "8779bcd4-babc-4ce8-91c9-7f22b2f24efc",
+      "type": "code",
+      "language": "csharp",
+      "source": "Student s1 = new Student();\n\ns1.Id = 1;\ns1.Jmeno = \u0022Petr\u0022;\n\nStudent s2 = s1;\n\ns2.Jmeno = \u0022Alena\u0022;\n\nConsole.WriteLine($\u0022s1: {s1.Jmeno}\u0022);\nConsole.WriteLine($\u0022s2: {s2.Jmeno}\u0022);",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "s1: Alena\ns2: Alena\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 5
+      }
+    },
+    {
+      "id": "d0750721-b3f3-46a6-9aab-cc717eb4e7c3",
+      "type": "markdown",
+      "source": "Pokud je t\u0159\u00EDda parametrem metody, tak se vytvo\u0159\u00ED kopie reference a ob\u011B reference, jak argument tak parametr metody odkazuj\u00ED na stejn\u00FD objekt v pam\u011Bti."
+    },
+    {
+      "id": "2ed00846-9126-48ff-b20e-d2d99f2e1023",
+      "type": "code",
+      "language": "csharp",
+      "source": "void Metoda(Student student)\n{\n    student.Id = 0;\n    student.Jmeno = \u0022Alice\u0022;\n}\n\nStudent s3 = new Student();\n\ns3.Jmeno = \u0022Karel\u0022;\ns3.Id = 2;\n\nMetoda(s3);\n\nConsole.WriteLine($\u0022s3: {s3.Id}: {s3.Jmeno}\u0022);",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "s3: 0: Alice\r\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 6
+      }
+    },
+    {
+      "id": "da53b717-aa2e-42e3-aa64-193f3c906d9b",
+      "type": "markdown",
+      "source": "## Nullable referen\u010Dn\u00ED typy\n\nPomoc\u00ED znaku \u0060?\u0060 za referen\u010Dn\u00EDm typem zna\u010D\u00EDme, zda je pro prom\u011Bnnou platn\u00E1 null hodnota. Pokud je referen\u010Dn\u00ED typ bez otazn\u00EDku, tak mus\u00ED m\u00EDt v\u017Edy p\u0159i\u0159azenou nenulovou hodnotu."
+    },
+    {
+      "id": "9e2b8eda-2fba-4512-b72d-991564bdc637",
+      "type": "code",
+      "language": "csharp",
+      "source": "Student? student1 = null;\nStudent student2 = null; // Warning"
+    },
+    {
+      "id": "0fe5db5b-4317-46be-bd4a-273867e1cb2e",
+      "type": "markdown",
+      "source": "### Oper\u00E1tory \u0060??\u0060 a \u0060??=\u0060\n\nPomoc\u00ED oper\u00E1tor\u016F \u0060??\u0060 a \u0060??=\u0060 (the null-coalescing operators) p\u0159i\u0159ad\u00EDme novou hodnotu referenci, pokud m\u00E1 reference hodnotu \u0060null\u0060. Hodnotou \u0060null\u0060 ozna\u010Dujeme reference, kter\u00E9 nikam neukazuj\u00ED, nemaj\u00ED tedy p\u0159i\u0159azenou \u017E\u00E1dnou referenci."
+    },
+    {
+      "id": "bc0ca0b3-192e-4b95-a35c-56ec497cd75e",
+      "type": "code",
+      "language": "csharp",
+      "source": "Student? student = null;\n\nstudent = student ?? new Student();\n\n// zkracene\nstudent ??= new Student();\n"
+    },
+    {
+      "id": "fc3d7cc1-3ec5-4519-b56b-9bb0fa4bd11c",
+      "type": "markdown",
+      "source": "### Oper\u00E1tory \u0060?.\u0060 a \u0060?[]\u0060\n\nOper\u00E1tory provedou operac\u00ED p\u0159\u00EDstupu k prvk\u016Fm t\u0159\u00EDdy nebo struktury respektive k prvk\u016Fm kolekce pouze pokud reference nen\u00ED null. Pokud je \u0060null\u0060 tak se nic neprovede a v\u00FDsledkem operace je hodnota \u0060null\u0060. V n\u00E1sleduj\u00EDc\u00EDm p\u0159\u00EDkladu je pole \u0060null\u0060 reference a proto vr\u00E1t\u00ED v\u00FDraz \u0060pole?.Length\u0060 \u0060null\u0060 a pot\u00E9 pomoc\u00ED oper\u00E1toru \u0060??\u0060 nahrad\u00EDme \u0060null\u0060 hodnotou \u00600\u0060. \n"
+    },
+    {
+      "id": "0cc4ab00-2eef-42c1-b09a-c4928b3f569b",
+      "type": "code",
+      "language": "csharp",
+      "source": "int[]? pole = null;\n\nint delka = pole?.Length ?? 0;\n\ndelka",
+      "outputs": [
+        {
+          "mimeType": "text/html",
+          "content": "\u003Cdiv class=\u0022dni-plaintext\u0022\u003E\u003Cpre\u003E0\u003C/pre\u003E\u003C/div\u003E\u003Cstyle\u003E\r\n.dni-code-hint {\r\n    font-style: italic;\r\n    overflow: hidden;\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview {\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview td {\r\n    vertical-align: top;\r\n    text-align: start;\r\n}\r\ndetails.dni-treeview {\r\n    padding-left: 1em;\r\n}\r\ntable td {\r\n    text-align: start;\r\n}\r\ntable tr { \r\n    vertical-align: top; \r\n    margin: 0em 0px;\r\n}\r\ntable tr td pre \r\n{ \r\n    vertical-align: top !important; \r\n    margin: 0em 0px !important;\r\n} \r\ntable th {\r\n    text-align: start;\r\n}\r\n\u003C/style\u003E"
+        }
+      ],
+      "metadata": {
+        "execution_count": 1
+      }
+    },
+    {
+      "id": "ec8bfd2e-dd79-444b-a39d-4ecb2e487fa7",
+      "type": "markdown",
+      "source": "Pokud by pole nebylo \u0060null\u0060, tak v\u00FDraz vr\u00E1ti jeho d\u00E9lku."
+    },
+    {
+      "id": "f72afa10-5f93-49e4-b976-53ac662c3e92",
+      "type": "code",
+      "language": "csharp",
+      "source": "int[]? pole = [1, 2, 3];\n\nint delka = pole?.Length ?? 0;\n\ndelka",
+      "outputs": [
+        {
+          "mimeType": "text/html",
+          "content": "\u003Cdiv class=\u0022dni-plaintext\u0022\u003E\u003Cpre\u003E3\u003C/pre\u003E\u003C/div\u003E\u003Cstyle\u003E\r\n.dni-code-hint {\r\n    font-style: italic;\r\n    overflow: hidden;\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview {\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview td {\r\n    vertical-align: top;\r\n    text-align: start;\r\n}\r\ndetails.dni-treeview {\r\n    padding-left: 1em;\r\n}\r\ntable td {\r\n    text-align: start;\r\n}\r\ntable tr { \r\n    vertical-align: top; \r\n    margin: 0em 0px;\r\n}\r\ntable tr td pre \r\n{ \r\n    vertical-align: top !important; \r\n    margin: 0em 0px !important;\r\n} \r\ntable th {\r\n    text-align: start;\r\n}\r\n\u003C/style\u003E"
+        }
+      ],
+      "metadata": {
+        "execution_count": 10
+      }
+    },
+    {
+      "id": "54298bfb-34b8-46a2-a497-22ad266dafcd",
+      "type": "markdown",
+      "source": "Obdobn\u011B oper\u00E1tor \u0060?[]\u0060 vr\u00E1t\u00ED \u0060null\u0060 pokud je reference \u0060null\u0060:"
+    },
+    {
+      "id": "078ef4a2-f773-4e0b-a95e-f7197b67d7e5",
+      "type": "code",
+      "language": "csharp",
+      "source": "int[]? pole = null;\n\nint prvek = pole?[0] ?? 0;\n\nprvek",
+      "outputs": [
+        {
+          "mimeType": "text/html",
+          "content": "\u003Cdiv class=\u0022dni-plaintext\u0022\u003E\u003Cpre\u003E0\u003C/pre\u003E\u003C/div\u003E\u003Cstyle\u003E\r\n.dni-code-hint {\r\n    font-style: italic;\r\n    overflow: hidden;\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview {\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview td {\r\n    vertical-align: top;\r\n    text-align: start;\r\n}\r\ndetails.dni-treeview {\r\n    padding-left: 1em;\r\n}\r\ntable td {\r\n    text-align: start;\r\n}\r\ntable tr { \r\n    vertical-align: top; \r\n    margin: 0em 0px;\r\n}\r\ntable tr td pre \r\n{ \r\n    vertical-align: top !important; \r\n    margin: 0em 0px !important;\r\n} \r\ntable th {\r\n    text-align: start;\r\n}\r\n\u003C/style\u003E"
+        }
+      ]
+    },
+    {
+      "id": "27d9259e-dd61-4521-9d3a-6e53e5043110",
+      "type": "markdown",
+      "source": "Pokud pole nebude \u0060null\u0060, tak v\u00FDraz vr\u00E1t\u00ED hodnotu prvku s indexem \u00600\u0060."
+    },
+    {
+      "id": "ea243f30-c37e-446c-a91d-f01783ce71be",
+      "type": "code",
+      "language": "csharp",
+      "source": "int[]? pole = [1, 2, 3];\n\nint prvek = pole?[0] ?? 0;\n\nprvek",
+      "outputs": [
+        {
+          "mimeType": "text/html",
+          "content": "\u003Cdiv class=\u0022dni-plaintext\u0022\u003E\u003Cpre\u003E1\u003C/pre\u003E\u003C/div\u003E\u003Cstyle\u003E\r\n.dni-code-hint {\r\n    font-style: italic;\r\n    overflow: hidden;\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview {\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview td {\r\n    vertical-align: top;\r\n    text-align: start;\r\n}\r\ndetails.dni-treeview {\r\n    padding-left: 1em;\r\n}\r\ntable td {\r\n    text-align: start;\r\n}\r\ntable tr { \r\n    vertical-align: top; \r\n    margin: 0em 0px;\r\n}\r\ntable tr td pre \r\n{ \r\n    vertical-align: top !important; \r\n    margin: 0em 0px !important;\r\n} \r\ntable th {\r\n    text-align: start;\r\n}\r\n\u003C/style\u003E"
+        }
+      ],
+      "metadata": {
+        "execution_count": 12
+      }
+    },
+    {
+      "id": "c71afe88-5615-4e8e-a953-1cc7c76c8d03",
+      "type": "markdown",
+      "source": "## Struktura\n\nStruktura je velmi podobn\u00E1 na t\u0159\u00EDdu, jen jde o hodnotov\u00FD typ. Struktura tak\u00E9 narozd\u00EDl od t\u0159\u00EDdy nepodporuje d\u011Bdi\u010Dnost. Strukturu deklarujeme pomoc\u00ED kl\u00ED\u010Dov\u00E9ho slova \u0060struct\u0060. Pokud chceme p\u0159istupovat k field\u016Fm mimo strukturu, tak je mus\u00EDme deklarovat jako \u0060public\u0060. N\u00E1sleduj\u00EDc\u00ED p\u0159\u00EDklad definuje strukturu pro dvourozm\u011Brn\u00FD bod s public fieldy \u0060X\u0060 a \u0060Y\u0060."
+    },
+    {
+      "id": "d0961072-552b-43d4-adb9-8b37901ce35d",
+      "type": "code",
+      "language": "csharp",
+      "source": "struct Bod\n{\n    public double X;\n    public double Y;\n}",
+      "metadata": {
+        "execution_count": 14
+      }
+    },
+    {
+      "id": "b4d2d649-b71e-4a89-9e04-3e58c1a2d0e8",
+      "type": "markdown",
+      "source": "Prom\u011Bnnou typu struktura definujeme stejn\u00FDm zp\u016Fsobem jako zabudovan\u00E9 typy. V n\u00E1sleduj\u00EDc\u00EDm p\u0159\u00EDkladu definujeme prom\u011Bnnou \u0060b1\u0060 typu \u0060Bod\u0060. Nemus\u00EDme tedy pou\u017E\u00EDvat oper\u00E1tor \u0060new\u0060 jako u t\u0159\u00EDdy."
+    },
+    {
+      "id": "c1754f5e-7ed1-4e5b-a825-6d56d0993412",
+      "type": "code",
+      "language": "csharp",
+      "source": "Bod b1; \n\nConsole.WriteLine($\u0022Bod b1 ma souradnice {b1.X} a {b1.Y}\u0022);",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "Bod b1 ma souradnice 0 a 0\r\n",
+          "channel": "stdout"
+        }
+      ]
+    },
+    {
+      "id": "7c0ca3ef-fe38-4769-be0c-9774273327f8",
+      "type": "markdown",
+      "source": "K field\u016Fm stejn\u011B jako u t\u0159\u00EDdy p\u0159istupujeme pomoc\u00ED oper\u00E1toru p\u0159\u00EDm\u00E9ho p\u0159\u00EDstupu \u0060.\u0060. Ka\u017Ed\u00FD field mus\u00ED m\u00EDt p\u0159ed prvn\u00EDm pou\u017Eit\u00EDm p\u0159i\u0159azenou hodnotu."
+    },
+    {
+      "id": "72c68888-81c5-4299-b9ad-cb86ccf58bd9",
+      "type": "code",
+      "language": "csharp",
+      "source": "Bod b1;\n\nb1.X = 2;\nb1.Y = 3;\n\nConsole.WriteLine($\u0022Bod b1 ma souradnice {b1.X} a {b1.Y}\u0022);",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "Bod b1 ma souradnice 2 a 3\r\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 16
+      }
+    },
+    {
+      "id": "49110a03-a398-4a52-80ba-5f4c78a70d25",
+      "type": "markdown",
+      "source": "V\u00FDchoz\u00ED hodnoty struktury z\u00EDsk\u00E1me pomoc\u00ED z\u00E1pisu \u0060new Bod()\u0060. Pozor, u struktur nejde o alokaci pam\u011Bti na hald\u011B, jen o z\u00EDsk\u00E1n\u00ED objektu s inicializovan\u00FDmi v\u00FDchoz\u00EDmi hodnotami field\u016F. "
+    },
+    {
+      "id": "86a06d75-0b54-4bf1-988c-086d1da6ff6b",
+      "type": "code",
+      "language": "csharp",
+      "source": "Bod b1 = new Bod();\n\nConsole.WriteLine($\u0022Vychozi hodnoty jsou {b1.X} a {b1.Y}\u0022);",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "Vychozi hodnoty jsou 0 a 0\r\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 17
+      }
+    },
+    {
+      "id": "24c85bb2-7007-4832-a28e-ad7f9e65e5f2",
+      "type": "markdown",
+      "source": "Stejn\u011B jako u zabudovan\u00FDch typ\u016F se p\u0159i p\u0159i\u0159azen\u00ED hodnoty kop\u00EDruje hodnota v pam\u011Bti. Rela\u010Dn\u00ED, aritmetick\u00E9 a dal\u0161\u00ED oper\u00E1tory bychom ale museli sami definovat."
+    },
+    {
+      "id": "dfc84a7f-c2e6-430d-b5d8-129edbf182b6",
+      "type": "code",
+      "language": "csharp",
+      "source": "Bod b1;\n\nb1.X = 2;\nb1.Y = 3;\n\nBod b2 = b1;\n\nb2.X = 7;\n\nConsole.WriteLine($\u0022Bod b1 ma souradnice {b1.X} a {b1.Y}\u0022);\nConsole.WriteLine($\u0022Bod b2 ma souradnice {b2.X} a {b2.Y}\u0022);\n",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "Bod b1 ma souradnice 2 a 3\nBod b2 ma souradnice 7 a 3\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 18
+      }
+    },
+    {
+      "id": "81d56f29-c175-4757-af21-395ef2d131e0",
+      "type": "markdown",
+      "source": "Pokud je struktura parametrem metody, tak se vytvo\u0159\u00ED nez\u00E1visl\u00E1 kopie struktury."
+    },
+    {
+      "id": "7c407fec-b38c-4a1c-a2a3-5ceb8b687ba3",
+      "type": "code",
+      "language": "csharp",
+      "source": "void Metoda(Bod bod)\n{\n    bod.X = 0;\n    bod.Y = 0;\n}\n\nBod b3;\n\nb3.X = 5;\nb3.Y = 7;\n\nMetoda(b3);\n\nConsole.WriteLine($\u0022Bod b3 ma souradnice {b3.X} a {b3.Y}\u0022);",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "Bod b3 ma souradnice 5 a 7\r\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 19
+      }
+    },
+    {
+      "id": "3b794a4e-4e24-49e6-97c1-fed1d8f9dbd6",
+      "type": "markdown",
+      "source": "Struktura se ukl\u00E1d\u00E1 na z\u00E1sobn\u00EDk. Kdy z\u00E1sobn\u00EDk prob\u00EDr\u00E1me v t\u00E9matu [Zasobnik_halda_reference](../presentations/ZAP_11_zasobnik_halda_reference.pptx)."
+    },
+    {
+      "id": "d8273411-55fb-4f6b-ac64-19864b162b94",
+      "type": "markdown",
+      "source": "## Modifik\u00E1tor ref\n\nModifik\u00E1tor \u0060ref\u0060 zp\u016Fsob\u00ED, \u017Ee argument je p\u0159edan\u00FD jako reference a ne jako hodnota. Jak\u00E1koli zm\u011Bna parametru se projev\u00ED na p\u016Fvodn\u00EDm volan\u00E9m argumentu\nTento modifik\u00E1tor se pou\u017E\u00EDv\u00E1 p\u0159edev\u0161\u00EDm u hodnotov\u00FDch typ\u016F.\n"
+    },
+    {
+      "id": "55a1f96c-2668-4122-af85-ef33e734cc06",
+      "type": "markdown",
+      "source": "N\u00E1sleduj\u00EDc\u00ED p\u0159\u00EDklad je bez pou\u017Eit\u00ED modifik\u00E1toru \u0060ref\u0060. Metod\u011B p\u0159ed\u00E1me hodnotu argumentu. Zm\u011Bna v parametru \u0060x\u0060 se neprojev\u00ED na p\u0159ed\u00E1van\u00E9m argumentu."
+    },
+    {
+      "id": "2d44d514-3273-4ff8-9fb9-d7bdb2bde6e6",
+      "type": "code",
+      "language": "csharp",
+      "source": "void Zvys(int x)\n{\n    \u002B\u002Bx;\n}\n\n\nint x = 0;\n\nZvys(x);\n\nConsole.WriteLine(x); ",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "0\r\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 2
+      }
+    },
+    {
+      "id": "fc32db14-4a26-4a71-9a27-937a518b0d99",
+      "type": "markdown",
+      "source": "V n\u00E1sleduj\u00EDc\u00EDm p\u0159\u00EDklad\u011B potom p\u0159ed\u00E1v\u00E1me jako argument referenci (adresu) na prom\u011Bnnou \u0060x\u0060. Ty parametru je potom reference na \u0060int\u0060 a proto\u017Ee m\u00E1me referenci na argument, tak se zm\u011Bna v parametru \u0060x\u0060 projev\u00ED i v argumentu."
+    },
+    {
+      "id": "7ca22209-8b43-4fc5-a648-73b7ef7b8d8f",
+      "type": "code",
+      "language": "csharp",
+      "source": "void Zvys(ref int x)\n{\n    \u002B\u002Bx;\n}\n\n\nint x = 0;\n\nZvys(ref x);\n\nConsole.WriteLine(x); \n\n",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "1\r\n",
+          "channel": "stdout"
+        }
+      ]
+    },
+    {
+      "id": "3962140e-55bf-471a-a050-1a8d47edab03",
+      "type": "markdown",
+      "source": "Modifik\u00E1tor \u0060ref\u0060 se pou\u017E\u00EDv\u00E1 p\u0159edev\u0161\u00EDm u hodnotov\u00FDch typ\u016F, ale m\u016F\u017Eeme jej pou\u017E\u00EDt i u referen\u010Dn\u00EDho typu jako je t\u0159\u00EDda."
+    },
+    {
+      "id": "bc5768e9-c66d-4828-99a2-029d1d4ca8c3",
+      "type": "markdown",
+      "source": "Dejte si ale pozor, kdy\u017E m\u011Bn\u00EDte p\u0159imo referenci. Parametr je op\u011Bt kopie, jen kopie reference. V metod\u011B m\u011Bn\u00EDme referenci, co\u017E je kopie reference, zm\u011Bn\u00EDme tedy kopii na nov\u00FD objekt v pam\u011Bti, ale to nem\u00E1 vliv na origin\u00E1ln\u00ED referenci."
+    },
+    {
+      "id": "7edd7a48-97c0-44e1-91c7-4eb543af3179",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Trida\n{\n    public int Hodnota;\n}\n\nvoid Zvys(Trida t)\n{\n    t = new Trida();\n    t.Hodnota = 1;\n}\n\nTrida t = new Trida();\nt.Hodnota = 0;\n\nZvys(t);\n\nConsole.WriteLine(t.Hodnota);\n",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "0\r\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 6
+      }
+    },
+    {
+      "id": "97a92038-c799-4637-99ab-35b6da62b7e6",
+      "type": "markdown",
+      "source": "V n\u00E1sleduj\u00EDc\u00EDm p\u0159\u00EDkladu p\u0159ed\u00E1v\u00E1me referenci, ale v tomto p\u0159\u00EDpad\u011B referenci na prom\u011Bnnou \u0060t\u0060, kterou potom m\u016F\u017Eeme v metod\u011B zm\u011Bnit."
+    },
+    {
+      "id": "acad6523-b12a-4e0f-9517-15e8b01ce20b",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Trida\n{\n    public int Hodnota;\n}\n\nvoid Zvys(ref Trida t)\n{\n    t = new Trida();\n    t.Hodnota = 1;\n}\n\nTrida t = new Trida();\nt.Hodnota = 0;\n\nZvys(ref t);\n\nConsole.WriteLine(t.Hodnota);",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "1\r\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 7
+      }
+    },
+    {
+      "id": "abe6606c-fb9f-4f55-9b14-56c2a4fbd813",
+      "type": "markdown",
+      "source": "## Modifik\u00E1tor out\n\nModifik\u00E1tor \u0060out\u0060 je stejn\u00FD jako modifik\u00E1tor ref, ale nav\u00EDc p\u0159id\u00E1v\u00E1 povinnost p\u0159i\u0159adit parametru v metod\u011B hodnotu.\n"
+    },
+    {
+      "id": "4a131eea-b1a8-426e-a3dd-a5c0b18f702f",
+      "type": "code",
+      "language": "csharp",
+      "source": "void Zvys(out int x)\n{\n    x = 1;\n}\n\n\nint x = 0;\n\nZvys(out x);\n\nConsole.WriteLine(x); ",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "1\r\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 3
+      }
+    },
+    {
+      "id": "b98d0fde-ed8c-4ab0-a9d4-1ca6a240ac38",
+      "type": "markdown",
+      "source": "TODO:\n- P\u0159\u00EDklady k procvi\u010Dov\u00E1n\u00ED."
+    }
+  ]
+}

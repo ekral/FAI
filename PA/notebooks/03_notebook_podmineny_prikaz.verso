@@ -1,0 +1,353 @@
+{
+  "verso": "1.1",
+  "metadata": {
+    "defaultKernel": "csharp",
+    "activeLayout": {
+      "extensionId": "verso.layout.notebook",
+      "layoutId": "notebook"
+    }
+  },
+  "cells": [
+    {
+      "id": "a58ef8ab-79fc-4b59-a930-a7b36baeb45f",
+      "type": "markdown",
+      "source": "# 03 V\u00FDvojov\u00FD diagram a podm\u00EDn\u011Bn\u00FD p\u0159\u00EDkaz\n**autor: Erik Kr\u00E1l ekral@utb.cz**\n\n---\n\nPro zvl\u00E1dnut\u00ED p\u0159edm\u011Btu pot\u0159ebujete zn\u00E1t z\u00E1klady v\u00FDvojov\u00E9ho diagramu, podm\u00EDn\u011Bn\u00FD a p\u0159\u00EDkaz switch."
+    },
+    {
+      "id": "e1246daa-2733-4fa9-8c33-c4f2ee78c438",
+      "type": "markdown",
+      "source": "## V\u00FDvojov\u00FD diagram\n\nV\u00FDvojov\u00FD diagram je vizu\u00E1ln\u00ED jazyk pro popis proces\u016F. Obsahuje podm\u00EDn\u011Bn\u00FD blok, kdy na ot\u00E1zku je typicky odpov\u011B\u010F Ano/Ne. V p\u0159\u00EDkladech jsou pro n\u011Bkter\u00E9 bloky pou\u017Eit\u00E9 zaoblen\u00E9 rohy, ale jde sp\u00ED\u0161e o preferenci vzhledu. D\u016Fle\u017Eit\u00E9 je jak je pochopiteln\u00FD popisovan\u00FD proces."
+    },
+    {
+      "id": "2b08f4da-863f-45dd-be6f-0f5e7c56664a",
+      "type": "markdown",
+      "source": "\u0060\u0060\u0060mermaid\nflowchart LR\n    A([Start]) --\u003E|text| B[Process]\n    B --\u003E C{Decision}\n    C --\u003E|Yes| D([Result one])\n    C --\u003E|Now| E([Result two])\n\u0060\u0060\u0060"
+    },
+    {
+      "id": "d47b000c-ff2e-4a4b-8519-e6175988cf65",
+      "type": "markdown",
+      "source": "P\u0159\u00EDklad na p\u0159\u00EDpravu k\u00E1vy."
+    },
+    {
+      "id": "45e151db-4892-4455-9eba-3223179d2f19",
+      "type": "markdown",
+      "source": "\u0060\u0060\u0060mermaid\nflowchart TD\n    Start([Start]) --\u003E A[Uva\u0159te k\u00E1vu]\n    A --\u003E B[Testujte kvalitu k\u00E1vy]\n    B --\u003E C{K\u00E1va chutn\u00E1 dob\u0159e?}\n    C -- Ano --\u003E D[Pijte k\u00E1vu]\n    C -- Ne --\u003E E[A upravte mno\u017Estv\u00ED k\u00E1vy nebo vody]\n    E --\u003E A\n    D --\u003E Konec([Konec])\n    E --\u003E Konec\n\u0060\u0060\u0060"
+    },
+    {
+      "id": "831e5b4b-b3e4-412f-bc98-79bfce62f1c7",
+      "type": "markdown",
+      "source": "* Pozn\u00E1mka: pro zobrazen\u00ED v\u00FDvojov\u00FDch diagram\u016F mus\u00EDte m\u00EDt ve Visual Studio Code nainstalovan\u00E9 roz\u0161\u00ED\u0159en\u00ED pro podporu preview pro Mermaid diagram a flowchart Mermaid, nap\u0159\u00EDklad [Markdown Preview Mermaid Support](https://marketplace.visualstudio.com/items?itemName=bierner.markdown-mermaid)."
+    },
+    {
+      "id": "79c15823-b6f9-4868-b4d5-576a610f06f4",
+      "type": "markdown",
+      "source": "## Podm\u00EDm\u011Bn\u00FD p\u0159\u00EDkaz"
+    },
+    {
+      "id": "7eebc949-2574-4c9c-9eb3-3b74d5caf38a",
+      "type": "markdown",
+      "source": "Pro zvl\u00E1dnut\u00ED p\u0159edm\u011Btu pot\u0159ebujete zn\u00E1t podm\u00EDn\u011Bn\u00E9 p\u0159\u00EDkazy \u0060if\u0060,  \u0060if-else\u0060 a z\u0159et\u011Bzen\u00ED podm\u00EDnek pomoc\u00ED \u0060else if\u0060. D\u00E1le pot\u0159ebujete v\u011Bd\u011Bt jak podm\u00EDnit proveden\u00ED jednoho p\u0159\u00EDkazu nebo bloku p\u0159\u00EDkaz\u016F pomoc\u00ED slo\u017Een\u00FDch z\u00E1vorek \u0060{}\u0060."
+    },
+    {
+      "id": "aaf9f121-4975-4994-acbd-2d2af6150a63",
+      "type": "markdown",
+      "source": "Na n\u00E1sleduj\u00EDc\u00EDch p\u0159\u00EDkladech si probereme jednotliv\u00E9 p\u0159\u00EDkazy. \n\nNejprve si ale definujme jednu prom\u011Bnnou, \u010D\u00EDslo s desetinnou \u010D\u00E1rkou \u0060x\u0060:"
+    },
+    {
+      "id": "0432194f-6f04-4782-92fe-9ef12d2e7dcd",
+      "type": "code",
+      "language": "csharp",
+      "source": "double x = 9.0;",
+      "metadata": {
+        "execution_count": 10
+      }
+    },
+    {
+      "id": "e7406adc-cc30-4667-869a-41c52bfc8c40",
+      "type": "markdown",
+      "source": "S pomoc\u00ED p\u0159\u00EDkazu \u0060if\u0060 m\u016F\u017Eeme podm\u00EDnit proveden\u00ED jin\u00E9ho p\u0159\u00EDkazu t\u00EDm zda je praviv\u00FD v\u00FDraz v podm\u00EDnce. V\u00FDpis na konzoli se provede jen pokud v\u00FDraz \u0060x \u003E 0\u0060 vr\u00E1t\u00ED \u0060true\u0060:"
+    },
+    {
+      "id": "b1350d9a-a260-4a16-bf52-8f58decbf98e",
+      "type": "code",
+      "language": "csharp",
+      "source": "if(x \u003E 0.0)\n    Console.WriteLine(\u0022x je vetsi nez 0\u0022);",
+      "metadata": {
+        "execution_count": 5
+      }
+    },
+    {
+      "id": "21127b86-777e-450f-971b-04d8c0ca99ec",
+      "type": "markdown",
+      "source": "S pou\u017Eit\u00EDm p\u0159\u00EDkazu \u0060if-else\u0060 m\u016F\u017Eeme ve v\u011Btvi else uv\u00E9st p\u0159ikaz kter\u00FD se povede pokud je v\u00FDraz v pom\u00EDnce \u0060false\u0060."
+    },
+    {
+      "id": "7fc3f644-e8b9-4745-a9f3-0f0ecce4c468",
+      "type": "code",
+      "language": "csharp",
+      "source": "if(x \u003E 0.0) \n    Console.WriteLine(\u0022x je vetsi nez 0\u0022);\nelse\n    Console.WriteLine(\u0022x je mensi nebo rovno 0\u0022);",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "x je mensi nebo rovno 0\r\n",
+          "channel": "stdout"
+        }
+      ]
+    },
+    {
+      "id": "3a0ef7ef-9b08-4465-b100-8aa9511f544a",
+      "type": "markdown",
+      "source": "Pokud chceme podm\u00EDnit proveden\u00ED cel\u00E9ho bloku p\u0159\u00EDkazu, tak m\u00EDsto jednoho p\u0159\u00EDkazu m\u016F\u017Eeme pou\u017E\u00EDt cel\u00FD blok p\u0159\u00EDkazu ve slo\u017Een\u00FDch z\u00E1vork\u00E1ch \u0060{}\u0060. Narozd\u00EDl od Pythonu zde nez\u00E1le\u017E\u00ED na odsazen\u00ED p\u0159\u00EDkaz\u016F, kter\u00E9 je zde jen pro p\u0159ehlednost. V\u011Bt\u0161inou pou\u017E\u00EDv\u00E1me blok p\u0159\u00EDkaz\u016F i pro jeden p\u0159\u00EDkaz, proto\u017Ee pak m\u016F\u017Ee b\u00FDt k\u00F3d v n\u011Bkter\u00FDch p\u0159\u00EDpadech p\u0159ehledn\u011Bj\u0161\u00ED."
+    },
+    {
+      "id": "8333c21b-926a-462f-ae5c-6f01600fbcf1",
+      "type": "code",
+      "language": "csharp",
+      "source": "if (x \u003E= 0.0)\n{\n    double odmocnina = Math.Sqrt(x);\n    Console.WriteLine($\u0022Druha odmocnina x je {odmocnina}\u0022);\n}\nelse\n{\n    Console.WriteLine(\u0022x je mensi nez 0\u0022);\n}"
+    },
+    {
+      "id": "228f511f-6487-48ea-b314-dac94d53d6c1",
+      "type": "markdown",
+      "source": "Podm\u00EDnky m\u016F\u017Eeme d\u00E1le z\u0159et\u011Bzci pokud za p\u0159\u00EDkaz \u0060else\u0060 uvedeme dal\u0161\u00ED \u0060if\u0060. Posledn\u00ED else se potom vztahuje k posledn\u00EDm p\u0159\u00EDkazu \u0060if\u0060."
+    },
+    {
+      "id": "c6f0fd98-6e12-4024-bb31-c5d8926ee9cb",
+      "type": "code",
+      "language": "csharp",
+      "source": "if (x \u003E 0.0)\n{\n    Console.WriteLine(\u0022x je vetsi nez 0\u0022);\n}\nelse if(x == 0.0)\n{\n    Console.WriteLine(\u0022x je rovno 0\u0022);\n}\nelse\n{\n    Console.WriteLine(\u0022x je mensi nez 0\u0022);\n}\n",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "x je mensi nez 0\r\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 7
+      }
+    },
+    {
+      "id": "ccdd4909-067f-4121-8d3c-1410f3473de7",
+      "type": "markdown",
+      "source": "## P\u0159\u00EDkaz switch"
+    },
+    {
+      "id": "7c3ed2eb-bb2d-435c-acea-3c92d55b1907",
+      "type": "markdown",
+      "source": "P\u0159\u00EDkaz switch pou\u017E\u00EDv\u00E1me, kdy\u017E chceme prov\u00E9st r\u016Fzn\u00FD k\u00F3d na z\u00E1klad\u011B hodnoty prom\u011Bnn\u00E9."
+    },
+    {
+      "id": "ff34ca54-5652-40af-a083-d97d13cf409d",
+      "type": "code",
+      "language": "csharp",
+      "source": "string volba = \u0022pokracovat\u0022;\n\nswitch(volba)\n{\n    case \u0022start\u0022:\n        Console.WriteLine(\u0022Zacnu\u0022);\n    break;\n\n    case \u0022pokracovat\u0022:\n        Console.WriteLine(\u0022Budu pokracovat\u0022);\n    break;\n\n    case \u0022konec\u0022:\n        Console.WriteLine(\u0022Skoncim\u0022);\n    break;\n\n    default:\n        Console.WriteLine(\u0022Jakakoliv jina volba\u0022);\n    break;\n}",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "Jakakoliv jina volba\r\n",
+          "channel": "stdout"
+        }
+      ]
+    },
+    {
+      "id": "5915148e-0006-4b5f-920d-3783d96ea99e",
+      "type": "markdown",
+      "source": "P\u0159\u00EDkaz switch se \u010Dasto pou\u017E\u00EDv\u00E1 s typem enum, kter\u00FD umo\u017En\u00FD definovat r\u016Fzne stavy."
+    },
+    {
+      "id": "1e0e9402-b0f9-4255-917d-839a0acd20a8",
+      "type": "code",
+      "language": "csharp",
+      "source": "enum Volba\n{\n    Start,\n    Pokracovat,\n    Konec\n}\n\nVolba volba = Volba.Pokracovat;\n\nswitch(volba)\n{\n    case Volba.Start:\n        Console.WriteLine(\u0022Zacnu\u0022);\n    break;\n\n    case Volba.Pokracovat:\n        Console.WriteLine(\u0022Budu pokracovat\u0022);\n    break;\n\n    case Volba.Konec:\n        Console.WriteLine(\u0022Skoncim\u0022);\n    break;\n\n    default:\n        Console.WriteLine(\u0022Jakakoliv jina volba\u0022);\n    break;\n}\n\n",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "Budu pokracovat\r\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 12
+      }
+    },
+    {
+      "id": "63df7f31-59ad-41b9-97d1-b46bfe76c664",
+      "type": "markdown",
+      "source": "P\u0159\u00EDkaz switch m\u016F\u017Ee pou\u017E\u00EDvat i pattern matching."
+    },
+    {
+      "id": "2f0a9ae4-08f4-492b-8fc8-16f5913aa657",
+      "type": "code",
+      "language": "csharp",
+      "source": "double x = 10.0;\n\nswitch(x)\n{\n    case \u003C 0.0:\n        Console.WriteLine(\u0022x je moc nizke\u0022);\n    break;\n\n    case \u003E 15.0:\n        Console.WriteLine(\u0022x je moc vysoke\u0022);\n        break;\n\n    case double.NaN:\n        Console.WriteLine(\u0022x neni cislo\u0022);\n        break;\n    \n    default:\n        Console.WriteLine(\u0022x je v poradku\u0022);\n        break;    \n}\n",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "x je v poradku\r\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 7
+      }
+    },
+    {
+      "id": "5ac9d6e1-eddf-4de9-8c11-5b02e8eadb9c",
+      "type": "markdown",
+      "source": "## Podm\u00EDn\u011Bn\u00E9 p\u0159i\u0159azen\u00ED"
+    },
+    {
+      "id": "c26b2cfc-43d7-4769-9ff6-f5ff3f0fbb13",
+      "type": "markdown",
+      "source": "Podm\u00EDn\u011Bn\u00E9 p\u0159i\u0159azen\u00ED je tern\u00E1ln\u00ED oper\u00E1tor kter\u00FD umo\u017En\u00ED p\u0159i\u0159adit prom\u011Bnn\u00E9 hodnotu na z\u00E1klad\u011B podm\u00EDny."
+    },
+    {
+      "id": "f5a64bb6-eb4a-40e3-b0db-0647cffcf391",
+      "type": "code",
+      "language": "csharp",
+      "source": "int x = 5;\n\nstring text = (x \u003E 0) ? \u0022Je vetsi nez 0\u0022 : \u0022Je mensi nebo rovno 0\u0022;\n\ntext",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "Je vetsi nez 0"
+        }
+      ],
+      "metadata": {
+        "execution_count": 13
+      }
+    },
+    {
+      "id": "3fbc80ec-7643-41f9-a3ad-9bf3e40bc5d2",
+      "type": "markdown",
+      "source": "## Pattern matching\n\nNov\u011B m\u016F\u017Eu pou\u017E\u00EDt pattern matching, kter\u00FD si jazyk c# \u0022p\u016Fj\u010Dil\u0022 z funkcion\u00E1ln\u00EDho programov\u00E1n\u00ED. "
+    },
+    {
+      "id": "d4f17c43-424a-44a7-b41f-bd1eea19186f",
+      "type": "markdown",
+      "source": "Nap\u0159\u00EDklad n\u00E1sleduj\u00EDc\u00ED p\u0159\u00EDklady s pou\u017Eit\u00EDm podm\u00EDn\u011Bn\u00E9ho p\u0159\u00EDkazu a p\u0159\u00EDkazu pro v\u011Btven\u00ED \u0060switch\u0060 m\u016F\u017Eeme nahradit pattern matchingem."
+    },
+    {
+      "id": "6724e07f-7bf2-416e-be8b-1ac0e3f0bda0",
+      "type": "code",
+      "language": "csharp",
+      "source": "int x = 1;\nstring text;\n\nif(x == 1)\n    text = \u0022jedna\u0022;\nelse if(x == 2)\n    text = \u0022dva\u0022;   \nelse if(x == 3)\n    text = \u0022tri\u0022;\nelse\n    text = \u0022jine cislo\u0022;"
+    },
+    {
+      "id": "c8ca526d-7a6c-4798-a782-6ff63f82ecf2",
+      "type": "code",
+      "language": "csharp",
+      "source": "int x = 1;\n\nstring text;\n\nswitch(x)\n{\n    case 1:\n        text = \u0022jedna\u0022;\n    break;\n\n    case 2:\n        text = \u0022dva\u0022;\n    break;\n\n    case 3:\n        text = \u0022tri\u0022;\n    break;\n\n    default:\n        text = \u0022jine cislo\u0022;\n    break;\n}"
+    },
+    {
+      "id": "e25b6877-ba34-4b05-884f-78a2336e24cb",
+      "type": "markdown",
+      "source": "Zde jsou p\u0159edchoz\u00ED p\u0159\u00EDklady nahrazeny pou\u017Eit\u00EDm pattern matchingu:"
+    },
+    {
+      "id": "897788a5-fad2-4527-8c2b-be731ebba1ae",
+      "type": "code",
+      "language": "csharp",
+      "source": "int x = 1;\n\nstring text = x switch\n{\n    1 =\u003E \u0022jedna\u0022,\n    2 =\u003E \u0022dva\u0022,\n    3 =\u003E \u0022tri\u0022,\n    _ =\u003E \u0022jine cislo\u0022\n};\n\ntext",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "jedna"
+        }
+      ],
+      "metadata": {
+        "execution_count": 15
+      }
+    },
+    {
+      "id": "7deac7d7-f88a-4b1f-8773-f9ac072e4e2e",
+      "type": "code",
+      "language": "csharp",
+      "source": "int x = 3;\n\nstring vysledek = x switch\n{\n    (\u003E 5) and (\u003C 10) =\u003E \u0022V intervalu (5,10)\u0022,\n    3 =\u003E \u0022Je 3\u0022,\n    _ =\u003E \u0022cokoliv jineho\u0022\n};\n\nvysledek",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "Je 3"
+        }
+      ],
+      "metadata": {
+        "execution_count": 4
+      }
+    },
+    {
+      "id": "ebcb06ad-f8a9-4a73-998b-c80fe68d5cb2",
+      "type": "markdown",
+      "source": "---\n## P\u0159\u00EDklady k procvi\u010Dov\u00E1n\u00ED"
+    },
+    {
+      "id": "9bdbd14f-64fb-4016-9eb6-78626148b416",
+      "type": "markdown",
+      "source": "### Zad\u00E1n\u00ED: 1. Dv\u011B prom\u011Bnn\u00E9"
+    },
+    {
+      "id": "8eb67fe0-f4ec-480b-8704-f86a74b6eb7f",
+      "type": "code",
+      "language": "csharp",
+      "source": "// mame dve promenne\nint x = 2;\nint y = 5;\n\n// vypiste hodnotu vetsi z promennych\n\n\n// seradte hodnoty v promennych tak aby v promenne x bylo vetsi cislo nez v promenne y\n"
+    },
+    {
+      "id": "ec7d99f2-738b-4bb8-bf4f-1f6df96ad43e",
+      "type": "markdown",
+      "source": "### Zad\u00E1n\u00ED: 2. Kvadratick\u00E1 rovnice"
+    },
+    {
+      "id": "74b4293f-43d5-4533-8b1e-92e8600d161a",
+      "type": "code",
+      "language": "csharp",
+      "source": "// (x - 3)(x - 3) = 1x^2 -6x \u002B 9\n// (x - 2)(x - 3) = 1x^2 -5x \u002B 6\n// (x - x1)(x - x2) = (ax^2 \u002B bx \u002B c)\n\n// Spocitejte a vypiste reseni kvadraticke rovnice\ndouble a = 1.0;\ndouble b = -5.0;\ndouble c = 6.0;"
+    },
+    {
+      "id": "ec152b82-b324-4c59-8c34-333488c33bc5",
+      "type": "markdown",
+      "source": "### Zad\u00E1n\u00ED: 3. Maximum ze t\u0159\u00ED \u010D\u00EDsel"
+    },
+    {
+      "id": "028d3a57-6d65-4e8b-a8e5-a888c16fd50b",
+      "type": "code",
+      "language": "csharp",
+      "source": "// Mame tri promenne\nint a = 2;\nint b = 5;\nint c = 7;\n\n// Vypiste hodnotu nejvetsi promenne\n\n// seradte hodnoty v promennych tak aby v promenne a bylo nejvetsi cislo, v b druhe nejvetsi a v c nejmensi\n\n"
+    },
+    {
+      "id": "d925b4a3-d629-4163-a5c3-f3c84a63610c",
+      "type": "markdown",
+      "source": "---\n## \u0158e\u0161en\u00ED p\u0159\u00EDklad\u016F k procvi\u010Dov\u00E1n\u00ED"
+    },
+    {
+      "id": "971545f9-747d-4c9d-a852-855841e49172",
+      "type": "markdown",
+      "source": "### \u0158e\u0161en\u00ED: 1. Dv\u011B prom\u011Bnn\u00E9"
+    },
+    {
+      "id": "aa7ac047-2b84-418d-ba08-5521622addca",
+      "type": "code",
+      "language": "csharp",
+      "source": " // mame dve promenne\nint x = 2;\nint y = 5;\n\n// vypiste hodnotu vetsi z promennych\nif(x \u003E y)\n{\n    Console.WriteLine(x);\n}\nelse\n{\n    Console.WriteLine(y);\n}\n\n// seradte hodnoty v promennych tak aby v promenne x bylo vetsi cislo nez v promenne y\nif(x \u003C y)\n{\n    int tmp = x;\n    x = y;\n    y = tmp;\n}"
+    },
+    {
+      "id": "39e24a87-d994-4188-9c64-bf3fcbb1a266",
+      "type": "markdown",
+      "source": "### \u0158e\u0161en\u00ED: 2. Kvadratick\u00E1 rovnice"
+    },
+    {
+      "id": "8beecc83-a3dd-44a6-a8ad-6b805e8d2174",
+      "type": "code",
+      "language": "csharp",
+      "source": "// (x - 3)(x - 3) = 1x^2 -6x \u002B 9\n// (x - 2)(x - 3) = 1x^2 -5x \u002B 6\n// (x - x1)(x - x2) = (ax^2 \u002B bx \u002B c)\n\ndouble a = 1.0;\ndouble b = -5.0;\ndouble c = 6.0;\n\n// napiste podminku ze a neni 0\n// pokud neni, tak pokracujte ve vypoctu\n// jinak napiste ze rovnice neni kvadraticka\n\nif (a != 0.0)\n{\n    double D = (b * b) - (4 * a * c);\n\n    // napiste podminku, jestli je \n    // D vetsi nez 0, rovno 0 a nebo mensi nez 0 \n    if (D \u003E 0)\n    {\n        double v = Math.Sqrt(D);\n\n        double x1 = (-b \u002B v) / (2 * a);\n        double x2 = (-b - v) / (2 * a);\n\n        Console.WriteLine($\u0022x1 = {x1} x = {x2}\u0022);\n    }\n    else if (D == 0)\n    {\n        double x = (-b) / (2 * a);\n\n        Console.WriteLine($\u0022x1 = {x}\u0022);\n    }\n    else\n    {\n        Console.WriteLine(\u0022Nema reseni v oboru realnych cisel\u0022);\n    }\n}\nelse\n{\n    Console.WriteLine(\u0022rovnice neni kvadraticka\u0022);\n}"
+    },
+    {
+      "id": "66c9ad53-9569-42ca-8d69-945d96672a9b",
+      "type": "markdown",
+      "source": "### \u0158e\u0161en\u00ED: 3. Maximum ze t\u0159\u00ED \u010D\u00EDsel"
+    },
+    {
+      "id": "7ef2df17-91f6-4c3b-be6f-7e5216e25f83",
+      "type": "code",
+      "language": "csharp",
+      "source": "// Mame tri promenne\nint a = 2;\nint b = 5;\nint c = 7;\n\n// Vypiste hodnotu nejvetsi promenne\n\n// Reseni s logickym operatorem \u0026\u0026\nif ((a \u003E b) \u0026\u0026 (a \u003E c))\n{\n    Console.WriteLine(a);\n}\nelse if (b \u003E c)\n{\n    Console.WriteLine(b);\n}\nelse\n{\n    Console.WriteLine(c);\n}\n\n// reseni pouze s podminenym prikazem\nif (a \u003E b)\n{\n    if (a \u003E c)\n    {\n        Console.WriteLine(a);\n    }\n    else\n    {\n        Console.WriteLine(c);\n    }\n}\nelse\n{\n    if (b \u003E c)\n    {\n        Console.WriteLine(b);\n    }\n    else\n    {\n        Console.WriteLine(c);\n    }\n}\n\n// Bonus:\n// Seradte hodnoty trech promennych\n// Postupne prohazujeme hodnoty promennych\nif (a \u003C b)\n{\n    int tmp = a;\n    a = b;\n    b = tmp;\n}\n\nif (b \u003C c)\n{\n    int tmp = b;\n    b = c;\n    c = tmp;\n}\n\nif (a \u003C b)\n{\n    int tmp = a;\n    a = b;\n    b = tmp;\n}"
+    }
+  ]
+}

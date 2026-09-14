@@ -1,0 +1,499 @@
+{
+  "verso": "1.1",
+  "metadata": {
+    "defaultKernel": "csharp",
+    "activeLayout": {
+      "extensionId": "verso.layout.notebook",
+      "layoutId": "notebook"
+    }
+  },
+  "cells": [
+    {
+      "id": "72253ebb-fd06-48d8-ba7e-5c8971e51807",
+      "type": "markdown",
+      "source": "# 07 Metody\n**autor: Erik Kr\u00E1l ekral@utb.cz**\n\n---\n\nPro zvl\u00E1dnut\u00ED p\u0159edm\u011Btu pot\u0159ebujete v\u011Bd\u011Bt jak definovat metody ve t\u0159\u00EDd\u00E1ch a struktur\u00E1ch, jak definovat parametry metody a jak p\u0159ed\u00E1vat argumenty metod\u00E1m a nakonec jak vr\u00E1tit hodnotu z metody."
+    },
+    {
+      "id": "2e8b4a38-439f-4be0-a17a-e65c4423648f",
+      "type": "markdown",
+      "source": "Nejprve si definujeme strukturu pro ob\u00E9ln\u00EDk, kter\u00FD bude m\u00EDt definovan\u00E9 rozm\u011Bry \u0060a\u0060 a \u0060b\u0060."
+    },
+    {
+      "id": "59cf6444-23db-4bbc-b56c-472f032b2a4b",
+      "type": "code",
+      "language": "csharp",
+      "source": "struct Obdelnik\n{\n    public double a;\n    public double b;\n}",
+      "metadata": {
+        "execution_count": 2
+      }
+    },
+    {
+      "id": "2d627e7a-bf6e-4e74-a416-37d6bc6bb6c7",
+      "type": "markdown",
+      "source": "D\u00E1le nadefinujeme metodu, pomoc\u00ED kter\u00E9 m\u016F\u017Eeme zm\u011Bnit rozm\u011Bry obd\u00E9ln\u00EDku. Typ \u0060void\u0060 znamen\u00E1, \u017Ee metoda nevrac\u00ED \u017E\u00E1dn\u00FD typ a v kulat\u00FDch z\u00E1vork\u00E1ch uv\u00E1d\u00EDme seznam parametr\u016F odd\u011Blen\u00FD \u010D\u00E1rkou. Pomoc\u00ED kl\u00ED\u010Dov\u00E9ho slova \u0060this\u0060 m\u016F\u017Eeme odli\u0161it **field** od lok\u00E1ln\u00ED prom\u011Bnn\u00E9 nebo parametru."
+    },
+    {
+      "id": "887c807c-9631-453c-b628-bf55cf247aae",
+      "type": "code",
+      "language": "csharp",
+      "source": "struct Obdelnik\n{\n    public double a;\n    public double b;\n\n    public void ZmenRozmery(double a, double b)\n    {\n        this.a = a;\n        this.b = b;\n    }\n}",
+      "metadata": {
+        "execution_count": 9
+      }
+    },
+    {
+      "id": "dcda1091-df49-426c-83a6-6b645688e25c",
+      "type": "markdown",
+      "source": "Metodu potom zavol\u00E1me pomoc\u00ED oper\u00E1toru \u0060.\u0060 a jm\u00E9na metody, kter\u00E9mu \u0159\u00EDk\u00E1me tak\u00E9 identifik\u00E1tor metody. Metod\u011B potom p\u0159ed\u00E1v\u00E1me v kulat\u00FDch z\u00E1vork\u00E1ch argumenty pro jej\u00ED parametry. Argumenty se p\u0159ed\u00E1vaj\u00ED jako **kopie hodnoty** a parametry jsou na nich nez\u00E1visl\u00E9."
+    },
+    {
+      "id": "787467cf-0cf9-4421-b6e8-0e0bff02aaf9",
+      "type": "code",
+      "language": "csharp",
+      "source": "Obdelnik o1 = new Obdelnik(); // rozmery budou 0,0\no1.ZmenRozmery(2.0, 3.0);\n\nConsole.WriteLine($\u0022a={o1.a}, b={o1.b}\u0022); // a=2, b=3",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "a=2, b=3\r\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 11
+      }
+    },
+    {
+      "id": "1319b2de-b82e-4ed4-a961-f51e3cfca25b",
+      "type": "markdown",
+      "source": "Metody tak\u00E9 mohou vracet jednu hodnotu. V n\u00E1sleduj\u00EDc\u00EDm k\u00F3du definujeme metodu \u0060VratObvod\u0060, kter\u00E1 m\u00E1 n\u00E1vratov\u00FD typ \u0060double\u0060 a nem\u00E1 \u017E\u00E1dn\u00E9 parametry. Hodnotu vrac\u00EDme pomoc\u00ED kl\u00ED\u010Dov\u00E9ho slova \u0060return\u0060."
+    },
+    {
+      "id": "593aab42-1579-4859-a8e5-55380e379ad0",
+      "type": "code",
+      "language": "csharp",
+      "source": "struct Obdelnik\n{\n    public double a;\n    public double b;\n\n    public void ZmenRozmery(double a, double b)\n    {\n        this.a = a;\n        this.b = b;\n    }\n\n    public double VratObvod()\n    {\n        return 2 * (a \u002B b);\n    }\n}",
+      "metadata": {
+        "execution_count": 12
+      }
+    },
+    {
+      "id": "e64e9d94-79bf-4cac-a003-701bae8ec35f",
+      "type": "markdown",
+      "source": "U metody, kter\u00E1 m\u00E1 n\u00E1vratov\u00FD typ jin\u00FD ne\u017E \u0060void\u0060 a tedy vrac\u00ED hodnotu je v\u00FDsledk\u00E9m vol\u00E1n\u00ED metody hodnota, kterou vr\u00E1tila metoda. Tuto n\u00E1vratovou hodnotu v n\u00E1sleduj\u00EDc\u00EDm p\u0159\u00EDkladu p\u0159i\u0159azujeme pomoc\u00ED oper\u00E1toru \u0060=\u0060 prom\u011Bnn\u00E9 \u0060obvod\u0060."
+    },
+    {
+      "id": "7517ad33-f5c7-4e65-a059-4c8c6cffe8da",
+      "type": "code",
+      "language": "csharp",
+      "source": "Obdelnik o1 = new Obdelnik(); // rozmery budou 0,0\no1.ZmenRozmery(2.0, 3.0);\n\ndouble obvod = o1.VratObvod();\n\nobvod",
+      "outputs": [
+        {
+          "mimeType": "text/html",
+          "content": "\u003Cdiv class=\u0022dni-plaintext\u0022\u003E\u003Cpre\u003E10\u003C/pre\u003E\u003C/div\u003E\u003Cstyle\u003E\r\n.dni-code-hint {\r\n    font-style: italic;\r\n    overflow: hidden;\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview {\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview td {\r\n    vertical-align: top;\r\n    text-align: start;\r\n}\r\ndetails.dni-treeview {\r\n    padding-left: 1em;\r\n}\r\ntable td {\r\n    text-align: start;\r\n}\r\ntable tr { \r\n    vertical-align: top; \r\n    margin: 0em 0px;\r\n}\r\ntable tr td pre \r\n{ \r\n    vertical-align: top !important; \r\n    margin: 0em 0px !important;\r\n} \r\ntable th {\r\n    text-align: start;\r\n}\r\n\u003C/style\u003E"
+        }
+      ],
+      "metadata": {
+        "execution_count": 13
+      }
+    },
+    {
+      "id": "ac42b407-a124-4aa4-83f5-7c0ca1887346",
+      "type": "markdown",
+      "source": "Pozn\u00E1mka:\nKl\u00ED\u010Dov\u00E9 slovo return m\u016F\u017Eeme pou\u017E\u00EDt i bez n\u00E1vratov\u00E9 hodnoty a to pro p\u0159ed\u010Dasn\u00E9 ukon\u010Den\u00ED metody."
+    },
+    {
+      "id": "afe14a9f-a599-49fa-b203-7cb462fee2b9",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Trida\n{\n    public void Metoda()\n    {\n        for (int i = 0; i \u003C 10; i\u002B\u002B)\n        {\n            for (int j = 0; j \u003C 10; j\u002B\u002B)\n            {\n                if (i == 1 \u0026\u0026 j == 3)\n                {\n                    Console.WriteLine(\u0022P\u0159ed\u010Dasn\u00E9 ukon\u010Den\u00ED metody.\u0022);\n                    \n                    return; // p\u0159ed\u010Dasn\u00E9 ukon\u010Den\u00ED metody\n                }\n\n                Console.WriteLine($\u0022i: {i}, j: {j}\u0022);\n            }\n        }\n    }\n}\n\nTrida t = new Trida();\n\nt.Metoda();",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "i: 0, j: 0\ni: 0, j: 1\ni: 0, j: 2\ni: 0, j: 3\ni: 0, j: 4\ni: 0, j: 5\ni: 0, j: 6\ni: 0, j: 7\ni: 0, j: 8\ni: 0, j: 9\ni: 1, j: 0\ni: 1, j: 1\ni: 1, j: 2\nP\u0159ed\u010Dasn\u00E9 ukon\u010Den\u00ED metody.\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 14
+      }
+    },
+    {
+      "id": "baa64923-6026-4f6d-853d-ef181a646eae",
+      "type": "markdown",
+      "source": "Pomoc\u00ED \u0060Tuples\u0060 m\u016F\u017Eeme vracet jednu hodnotu, kter\u00E1 m\u00E1 v\u00EDce field\u016F. V n\u00E1sleduj\u00EDc\u00EDm p\u0159\u00EDkladu pou\u017E\u00EDv\u00E1me **dekompozici** \u0060(int x, int y) = trida.VratViceHodnot()\u0060."
+    },
+    {
+      "id": "45475223-2c97-40fb-8b3d-01c8e5dcb71c",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Trida\n{\n    public (int x, int y) VratViceHodnot()\n    {\n        return (1, 2);\n    }\n}\n\nTrida trida = new Trida();\n\n(int x, int y) = trida.VratViceHodnot();\n\nConsole.WriteLine($\u0022x: {x} y: {y}\u0022);\n",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "x: 1 y: 2\r\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 15
+      }
+    },
+    {
+      "id": "1e493193-4480-412d-8f48-8b45fce291c9",
+      "type": "markdown",
+      "source": "Nebo m\u016F\u017Eu pou\u017E\u00EDt p\u0159\u00EDmo strukturu \u0060Tuple\u0060 a pou\u017E\u00EDt jej\u00ED fieldy, nap\u0159\u00EDklad \u0060vysledek.x\u0060,\u0060vysledek.y\u0060."
+    },
+    {
+      "id": "38050afe-b0bc-432a-b553-de8c2b9bbe24",
+      "type": "code",
+      "language": "csharp",
+      "source": "\n(int x, int y) vysledek = trida.VratViceHodnot();\nConsole.WriteLine($\u0022x: {vysledek.x} y: {vysledek.y}\u0022);\n",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "x: 1 y: 2\r\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 16
+      }
+    },
+    {
+      "id": "30abfe01-2475-408d-804e-22ad4afb6321",
+      "type": "markdown",
+      "source": "Pozn\u00E1mka: Dekompozici m\u016F\u017Eeme pou\u017E\u00EDt i bez \u0060Tuples\u0060 nap\u0159\u00EDklad pro prohozen\u00ED hodnot."
+    },
+    {
+      "id": "02da5327-a0ca-4bd0-bd49-cae2c48e4e1f",
+      "type": "code",
+      "language": "csharp",
+      "source": "int a = 2;\nint b = 3;\n\n(a, b) = (b, a);\n\nConsole.WriteLine($\u0022a: {a} b: {b}\u0022);",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "a: 3 b: 2\r\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 17
+      }
+    },
+    {
+      "id": "38659591-b85d-4a2e-98b4-cae3b8a22314",
+      "type": "markdown",
+      "source": "V n\u00E1sleduj\u00EDc\u00EDch p\u0159\u00EDkladech jsou dal\u0161\u00ED uk\u00E1zky metod. \n\nV k\u00F3du pou\u017E\u00EDv\u00E1me top level statements a metody, kter\u00E9 vypad\u00E1j\u00ED \u017Ee nejsou ve t\u0159\u00EDd\u011B. Ve skute\u010Dnosti jsou ale ve t\u0159\u00EDd\u011B Main, jen tuto t\u0159\u00EDdu nemus\u00EDme uv\u00E1d\u011Bt."
+    },
+    {
+      "id": "91c818c2-82d0-4d1b-940f-f0937c3bfaa6",
+      "type": "markdown",
+      "source": "P\u0159\u00EDklad na metodu, kter\u00E1 nevrac\u00ED hodnotu a nem\u00E1 \u017E\u00E1dn\u00E9 parametry:"
+    },
+    {
+      "id": "31e2d564-6961-4206-8237-32305b33d7a7",
+      "type": "code",
+      "language": "csharp",
+      "source": "void Vypis()\n{\n    Console.WriteLine(\u0022Ahoj\u0022);\n}\n\nVypis();",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "Ahoj\r\n",
+          "channel": "stdout"
+        }
+      ]
+    },
+    {
+      "id": "da6193cd-4064-4903-a6b6-6531c9e43109",
+      "type": "markdown",
+      "source": "P\u0159\u00EDklad na metodu, kter\u00E1 nic nevrac\u00ED a m\u00E1 jeden parametr:"
+    },
+    {
+      "id": "1e6f498e-fa85-4bbb-b6e7-278e70aca7c0",
+      "type": "code",
+      "language": "csharp",
+      "source": "void Vypis(int x)\n{\n    Console.WriteLine($\u0022Zadane cislo je: {x}\u0022);\n}\n\nVypis(5);",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "Zadane cislo je: 5\r\n",
+          "channel": "stdout"
+        }
+      ]
+    },
+    {
+      "id": "3e586728-f8a6-4adf-b200-485ff9151d4d",
+      "type": "markdown",
+      "source": "P\u0159\u00EDklad na metodu, kter\u00E1 nevrac\u00ED hodnotu a m\u00E1 dva paramery:"
+    },
+    {
+      "id": "665ce27a-0d8e-46a1-86b0-c010a777a169",
+      "type": "code",
+      "language": "csharp",
+      "source": "void Vypis(int x, int y)\n{\n    Console.WriteLine($\u0022x: {x} y: {y}\u0022);\n}\n\nVypis(2, 3);",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "x: 2 y: 3\r\n",
+          "channel": "stdout"
+        }
+      ]
+    },
+    {
+      "id": "d29f4aba-ef3b-4626-a5be-782a3e8f3ca3",
+      "type": "markdown",
+      "source": "P\u0159\u00EDklad na metodu, kter\u00E1 m\u00E1 dva parametry a vrac\u00ED hodnotu."
+    },
+    {
+      "id": "729ab571-d54d-4b62-894c-02070827c32f",
+      "type": "code",
+      "language": "csharp",
+      "source": "int Secti(int a, int b)\n{\n    return a \u002B b;\n}\n\nint soucet = Secti(2, 3);\n\nsoucet",
+      "outputs": [
+        {
+          "mimeType": "text/html",
+          "content": "\u003Cdiv class=\u0022dni-plaintext\u0022\u003E\u003Cpre\u003E5\u003C/pre\u003E\u003C/div\u003E\u003Cstyle\u003E\r\n.dni-code-hint {\r\n    font-style: italic;\r\n    overflow: hidden;\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview {\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview td {\r\n    vertical-align: top;\r\n    text-align: start;\r\n}\r\ndetails.dni-treeview {\r\n    padding-left: 1em;\r\n}\r\ntable td {\r\n    text-align: start;\r\n}\r\ntable tr { \r\n    vertical-align: top; \r\n    margin: 0em 0px;\r\n}\r\ntable tr td pre \r\n{ \r\n    vertical-align: top !important; \r\n    margin: 0em 0px !important;\r\n} \r\ntable th {\r\n    text-align: start;\r\n}\r\n\u003C/style\u003E"
+        }
+      ],
+      "metadata": {
+        "execution_count": 18
+      }
+    },
+    {
+      "id": "705bfcf1-8fcf-4c71-b0fb-761cfa90d4b6",
+      "type": "markdown",
+      "source": "P\u0159\u00EDklad na metodu, kter\u00E1 nem\u00E1 parametry a vrac\u00ED jako hodnotu \u0060Tuple\u0060."
+    },
+    {
+      "id": "7b17abb8-3cc9-4441-9284-9b302c67c03b",
+      "type": "code",
+      "language": "csharp",
+      "source": "(int, int) VratDveHodnoty()\n{\n    return (5, 10);\n}\n\n(int x, int y) = VratDveHodnoty();\n\nConsole.WriteLine($\u0022x: {x} y: {y}\u0022);",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "x: 5 y: 10\r\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 19
+      }
+    },
+    {
+      "id": "3620b787-87e1-486e-9daa-9a618e4f90e8",
+      "type": "markdown",
+      "source": "## P\u0159et\u011B\u017Eov\u00E1n\u00ED metod\n\nP\u0159et\u011B\u017Eov\u00E1n\u00ED metod (method overloading) znamen\u00E1, \u017Ee m\u016F\u017Eeme m\u00EDt v\u00EDce metod se stejn\u00FDm n\u00E1zvem, pokud maj\u00ED jin\u00E9 parametry. V n\u00E1sleduj\u00EDc\u00EDm p\u0159\u00EDkladu m\u00E1me t\u0159i metody \u0060Vypis\u0060. Prvn\u00ED metoda m\u00E1 jeden parametr typu \u0060int\u0060, druh\u00E1 dva parametry typu \u0060int\u0060 a t\u0159et\u00ED m\u00E1 parametr typu \u0060double\u0060. P\u0159eklada\u010D potom podle typu argumentu zavol\u00E1 spr\u00E1vnou metodu \u0060Vypis\u0060.\n"
+    },
+    {
+      "id": "3099f1a9-228c-4bb2-8eac-4f245b9b7f1b",
+      "type": "code",
+      "language": "csharp",
+      "source": "void Vypis(int x)\n{\n    Console.WriteLine($\u0022int x: {x}\u0022);\n}\n\nvoid Vypis(int x, int y)\n{\n    Console.WriteLine($\u0022int x: {x} int y: {y} \u0022);\n}\n\nvoid Vypis(double x)\n{\n    Console.WriteLine($\u0022double x: {x}\u0022);\n}\n\n// nestaci aby se lisil jen navratovy typ\n/*\ndouble Vypis(double x)\n{\n    Console.WriteLine($\u0022double x: {x}\u0022);\n} \n*/\n\nVypis(3);\nVypis(3, 4);\nVypis(3.0);\n",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "int x: 3\nint x: 3 int y: 4 \ndouble x: 3\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 22
+      }
+    },
+    {
+      "id": "0ae2006f-acfa-420b-8bde-6c2bb5491edb",
+      "type": "markdown",
+      "source": "## Kl\u00ED\u010Dov\u00E1 slova ref a out"
+    },
+    {
+      "id": "a968b413-2b1f-45ec-af79-4ebdafdec5e6",
+      "type": "markdown",
+      "source": "Pomoc\u00ED kl\u00ED\u010Dov\u00FDch slov \u0060ref\u0060 a \u0060out\u0060 m\u016F\u017Eeme p\u0159ed\u00E1vat hodnotov\u00FD typ jako referenci nebo p\u0159ed\u00E1vat referenci na referenci u referen\u010Dn\u00EDho typu."
+    },
+    {
+      "id": "2d88d788-cb43-40d3-88fb-bbf1fb052938",
+      "type": "markdown",
+      "source": "V n\u00E1sleduj\u00EDc\u00EDm p\u0159\u00EDkladu p\u0159ed\u00E1v\u00E1me argument cislo jako referenci a d\u00EDky tomu mu m\u016F\u017Ee metoda \u0060TryParse\u0060 p\u0159i\u0159adit hodnotu."
+    },
+    {
+      "id": "1e464a5e-397e-4c02-b725-ddc402cdfc06",
+      "type": "code",
+      "language": "csharp",
+      "source": "bool ok = int.TryParse(\u00227\u0022, out int cislo);\n\nif(ok)\n{\n    Console.WriteLine(cislo);\n}",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "7\r\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 9
+      }
+    },
+    {
+      "id": "09eb5658-e0a8-4bfa-b98f-9695b8b660f9",
+      "type": "markdown",
+      "source": "Nyn\u00ED si detailn\u011B projdeme p\u0159\u00EDklad na pou\u017Eit\u00ED kl\u00ED\u010Dov\u00FDch slov \u0060ref\u0060 a \u0060out\u0060. Nejprve si nadefinujeme t\u0159\u00EDdu \u0060Trida\u0060 s metodou \u0060Zmen\u0060, kter\u00E1 m\u00E1 parametr \u0060int x\u0060 a metod\u011B m\u011Bn\u00ED tento parametr na hodnotu \u00600\u0060. Tento parametr je nez\u00E1visl\u00E1 kopie argumentu \u0060x\u0060 a pokud jej zm\u011Bn\u00EDme na hodnotu \u00600\u0060 tak to nem\u00E1 \u017E\u00E1dn\u00FD vliv na argument \u0060x\u0060."
+    },
+    {
+      "id": "50c1c5cb-f41b-4563-bad8-21798b7ef844",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Trida\n{\n    public void Zmen(int x)\n    {\n        x = 0;\n    }\n}\n\nTrida trida = new Trida();\n\nint x = 3;\n\ntrida.Zmen(x);\n\nx",
+      "outputs": [
+        {
+          "mimeType": "text/html",
+          "content": "\u003Cdiv class=\u0022dni-plaintext\u0022\u003E\u003Cpre\u003E3\u003C/pre\u003E\u003C/div\u003E\u003Cstyle\u003E\r\n.dni-code-hint {\r\n    font-style: italic;\r\n    overflow: hidden;\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview {\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview td {\r\n    vertical-align: top;\r\n    text-align: start;\r\n}\r\ndetails.dni-treeview {\r\n    padding-left: 1em;\r\n}\r\ntable td {\r\n    text-align: start;\r\n}\r\ntable tr { \r\n    vertical-align: top; \r\n    margin: 0em 0px;\r\n}\r\ntable tr td pre \r\n{ \r\n    vertical-align: top !important; \r\n    margin: 0em 0px !important;\r\n} \r\ntable th {\r\n    text-align: start;\r\n}\r\n\u003C/style\u003E"
+        }
+      ],
+      "metadata": {
+        "execution_count": 24
+      }
+    },
+    {
+      "id": "a7c8f9d6-e728-4177-a73e-950462f99d22",
+      "type": "markdown",
+      "source": "Pokud ale definujeme parametr typu \u0060ref int\u0060 a argument metody p\u0159ed\u00E1me jako \u0060ref x\u0060, tak p\u0159ed\u00E1v\u00E1me referenci na argument a zm\u011Bna prom\u011Bnn\u00E9 na hodnotu \u00600\u0060 zm\u011Bn\u00ED i p\u0159edan\u00FD argument."
+    },
+    {
+      "id": "906080c5-8188-4c40-a5f6-37551750c6a7",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Trida\n{\n    public void Zmen(ref int x)\n    {\n        x = 0;\n    }\n}\n\nTrida trida = new Trida();\n\nint x = 3;\n\ntrida.Zmen(ref x);\n\nx",
+      "outputs": [
+        {
+          "mimeType": "text/html",
+          "content": "\u003Cdiv class=\u0022dni-plaintext\u0022\u003E\u003Cpre\u003E0\u003C/pre\u003E\u003C/div\u003E\u003Cstyle\u003E\r\n.dni-code-hint {\r\n    font-style: italic;\r\n    overflow: hidden;\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview {\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview td {\r\n    vertical-align: top;\r\n    text-align: start;\r\n}\r\ndetails.dni-treeview {\r\n    padding-left: 1em;\r\n}\r\ntable td {\r\n    text-align: start;\r\n}\r\ntable tr { \r\n    vertical-align: top; \r\n    margin: 0em 0px;\r\n}\r\ntable tr td pre \r\n{ \r\n    vertical-align: top !important; \r\n    margin: 0em 0px !important;\r\n} \r\ntable th {\r\n    text-align: start;\r\n}\r\n\u003C/style\u003E"
+        }
+      ],
+      "metadata": {
+        "execution_count": 25
+      }
+    },
+    {
+      "id": "5a6768fb-61fd-4a71-b764-b898b2e632b3",
+      "type": "markdown",
+      "source": "S pomoc\u00ED kl\u00ED\u010Dov\u00E9ho slova \u0060ref\u0060 bychom si mohli napsat metodu, kter\u00E1 by prohodila hodnoty dvou prom\u011Bnn\u00FDch. Jde jen o uk\u00E1zkov\u00FD k\u00F3d, pro prohozen\u00ED m\u016F\u017Eeme pou\u017E\u00EDt z\u00E1pis \u0060(a, b) = (b, a)\u0060."
+    },
+    {
+      "id": "b652dd02-ff55-4ba1-96b0-f4446f74ba9e",
+      "type": "code",
+      "language": "csharp",
+      "source": "void Prohod(ref int a, ref int b)\n{\n    int temp = a;\n    a = b;\n    b = temp;\n}\n\nint a = 2;\nint b = 3;\n\nProhod(ref a, ref b); // (a, b) = (b, a);\n\nConsole.WriteLine($\u0022a: {a} b: {b}\u0022);",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "a: 3 b: 2\r\n",
+          "channel": "stdout"
+        }
+      ]
+    },
+    {
+      "id": "9538a21b-16fc-448f-baa0-2632b9934a78",
+      "type": "markdown",
+      "source": "Kl\u00ED\u010Dov\u00E9 slovo \u0060out\u0060 je stejn\u00E9 jako \u0060ref\u0060, jen se vy\u017Eaduje aby m\u011Bl parametr v metod\u011B p\u0159i\u0159azenou hodnotu."
+    },
+    {
+      "id": "c4c2d2e2-c3ab-4011-b8a2-998538dddf32",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Trida\n{\n    public void Zmen(out int x)\n    {\n        x = 0; // zkuste si zakomentovat tento radek a vyzkousejte kod s out int a ref int\n        \u002B\u002Bx; // samotny radek bez predchoziho prirazeni nepujde prelozit\n    }\n}\n\nTrida trida = new Trida();\n\n//int x = 3;\n\ntrida.Zmen(out int x);\n\nx",
+      "outputs": [
+        {
+          "mimeType": "text/html",
+          "content": "\u003Cdiv class=\u0022dni-plaintext\u0022\u003E\u003Cpre\u003E1\u003C/pre\u003E\u003C/div\u003E\u003Cstyle\u003E\r\n.dni-code-hint {\r\n    font-style: italic;\r\n    overflow: hidden;\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview {\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview td {\r\n    vertical-align: top;\r\n    text-align: start;\r\n}\r\ndetails.dni-treeview {\r\n    padding-left: 1em;\r\n}\r\ntable td {\r\n    text-align: start;\r\n}\r\ntable tr { \r\n    vertical-align: top; \r\n    margin: 0em 0px;\r\n}\r\ntable tr td pre \r\n{ \r\n    vertical-align: top !important; \r\n    margin: 0em 0px !important;\r\n} \r\ntable th {\r\n    text-align: start;\r\n}\r\n\u003C/style\u003E"
+        }
+      ],
+      "metadata": {
+        "execution_count": 31
+      }
+    },
+    {
+      "id": "72129990-0041-4c6c-8935-e551e0eefa76",
+      "type": "markdown",
+      "source": "### Referen\u010Dn\u00ED typ jako parametr metody\n\nPokud je parametrem referen\u010Dn\u00ED typ, na\u0159\u00EDklad t\u0159\u00EDda, tak se kop\u00EDruje reference, a ob\u011B reference, tedy parametr i argument odkazuj\u00ED na stejn\u00FD objekt v pam\u011Bti."
+    },
+    {
+      "id": "9f68e355-c2e3-490c-804d-69a704fea023",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Cislo\n{\n    public int x;\n}\n\nclass Trida\n{\n    public void Zmen(Cislo cislo)\n    {\n        cislo.x = 0;\n    }\n}\n\nCislo cislo = new Cislo();\ncislo.x = 3;\n\nTrida trida = new Trida();\n\ntrida.Zmen(cislo);\n\ncislo.x\n",
+      "outputs": [
+        {
+          "mimeType": "text/html",
+          "content": "\u003Cdiv class=\u0022dni-plaintext\u0022\u003E\u003Cpre\u003E0\u003C/pre\u003E\u003C/div\u003E\u003Cstyle\u003E\r\n.dni-code-hint {\r\n    font-style: italic;\r\n    overflow: hidden;\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview {\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview td {\r\n    vertical-align: top;\r\n    text-align: start;\r\n}\r\ndetails.dni-treeview {\r\n    padding-left: 1em;\r\n}\r\ntable td {\r\n    text-align: start;\r\n}\r\ntable tr { \r\n    vertical-align: top; \r\n    margin: 0em 0px;\r\n}\r\ntable tr td pre \r\n{ \r\n    vertical-align: top !important; \r\n    margin: 0em 0px !important;\r\n} \r\ntable th {\r\n    text-align: start;\r\n}\r\n\u003C/style\u003E"
+        }
+      ],
+      "metadata": {
+        "execution_count": 34
+      }
+    },
+    {
+      "id": "7f62b7a5-fa85-43ad-b27f-f8aae3a4434a",
+      "type": "markdown",
+      "source": "### Struktura (hodnotov\u00FD typ jako parametr metody)\n\nStruktura je hodnotov\u00FD typ a parametr je nez\u00E1vislou kopi\u00ED argumentu."
+    },
+    {
+      "id": "0c184b0d-2078-4635-89db-b268b6a3d9f0",
+      "type": "code",
+      "language": "csharp",
+      "source": "struct Cislo\n{\n    public int x;\n}\n\nclass Trida\n{\n    public void Zmen(Cislo cislo)\n    {\n        cislo.x = 0;\n    }\n}\n\nCislo cislo = new Cislo();\ncislo.x = 3;\n\nTrida trida = new Trida();\n\ntrida.Zmen(cislo);\n\ncislo.x",
+      "outputs": [
+        {
+          "mimeType": "text/html",
+          "content": "\u003Cdiv class=\u0022dni-plaintext\u0022\u003E\u003Cpre\u003E3\u003C/pre\u003E\u003C/div\u003E\u003Cstyle\u003E\r\n.dni-code-hint {\r\n    font-style: italic;\r\n    overflow: hidden;\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview {\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview td {\r\n    vertical-align: top;\r\n    text-align: start;\r\n}\r\ndetails.dni-treeview {\r\n    padding-left: 1em;\r\n}\r\ntable td {\r\n    text-align: start;\r\n}\r\ntable tr { \r\n    vertical-align: top; \r\n    margin: 0em 0px;\r\n}\r\ntable tr td pre \r\n{ \r\n    vertical-align: top !important; \r\n    margin: 0em 0px !important;\r\n} \r\ntable th {\r\n    text-align: start;\r\n}\r\n\u003C/style\u003E"
+        }
+      ],
+      "metadata": {
+        "execution_count": 35
+      }
+    },
+    {
+      "id": "811f26b1-685c-4136-b5f8-860949db1f55",
+      "type": "markdown",
+      "source": "D\u00E1vejte pozor, kdybych v metod\u011B m\u011Bnili parametr (kopii referenci), tak tato zm\u011Bna nem\u00E1 vliv na p\u016Fvodn\u00ED objekt."
+    },
+    {
+      "id": "43a49705-b22d-433f-876a-a7b6318176b0",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Cislo\n{\n    public int x;\n}\n\nclass Trida\n{\n    public void Zmen(Cislo cislo)\n    {\n        cislo = new Cislo() { x = 0 };\n    }\n}\n\nCislo cislo = new Cislo();\ncislo.x = 3;\n\nTrida trida = new Trida();\n\ntrida.Zmen(cislo);\n\ncislo.x\n",
+      "outputs": [
+        {
+          "mimeType": "text/html",
+          "content": "\u003Cdiv class=\u0022dni-plaintext\u0022\u003E\u003Cpre\u003E3\u003C/pre\u003E\u003C/div\u003E\u003Cstyle\u003E\r\n.dni-code-hint {\r\n    font-style: italic;\r\n    overflow: hidden;\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview {\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview td {\r\n    vertical-align: top;\r\n    text-align: start;\r\n}\r\ndetails.dni-treeview {\r\n    padding-left: 1em;\r\n}\r\ntable td {\r\n    text-align: start;\r\n}\r\ntable tr { \r\n    vertical-align: top; \r\n    margin: 0em 0px;\r\n}\r\ntable tr td pre \r\n{ \r\n    vertical-align: top !important; \r\n    margin: 0em 0px !important;\r\n} \r\ntable th {\r\n    text-align: start;\r\n}\r\n\u003C/style\u003E"
+        }
+      ],
+      "metadata": {
+        "execution_count": 36
+      }
+    },
+    {
+      "id": "43c806db-2499-410f-b468-a5ee8887d0bc",
+      "type": "markdown",
+      "source": "Stejn\u00FD p\u0159\u00EDpad je i n\u00E1sleduj\u00EDc\u00ED p\u0159\u00EDklad s polem, kde m\u011Bn\u00EDm pouze parametr (kopii reference)."
+    },
+    {
+      "id": "dfb1bed9-780b-404f-996d-b0c9588eed1c",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Trida\n{\n    public void Zmen(int[] pole)\n    {\n        pole = [ 0 ];\n    }\n}\n\nint[] pole = [1, 2, 3 ];\n\nTrida trida = new Trida();\n\ntrida.Zmen(pole);\n\npole",
+      "outputs": [
+        {
+          "mimeType": "text/html",
+          "content": "\u003Cdiv class=\u0022dni-plaintext\u0022\u003E\u003Cpre\u003E[ 1, 2, 3 ]\u003C/pre\u003E\u003C/div\u003E\u003Cstyle\u003E\r\n.dni-code-hint {\r\n    font-style: italic;\r\n    overflow: hidden;\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview {\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview td {\r\n    vertical-align: top;\r\n    text-align: start;\r\n}\r\ndetails.dni-treeview {\r\n    padding-left: 1em;\r\n}\r\ntable td {\r\n    text-align: start;\r\n}\r\ntable tr { \r\n    vertical-align: top; \r\n    margin: 0em 0px;\r\n}\r\ntable tr td pre \r\n{ \r\n    vertical-align: top !important; \r\n    margin: 0em 0px !important;\r\n} \r\ntable th {\r\n    text-align: start;\r\n}\r\n\u003C/style\u003E"
+        }
+      ],
+      "metadata": {
+        "execution_count": 38
+      }
+    },
+    {
+      "id": "05a77e9f-6384-44ba-9849-6e6d1309df6d",
+      "type": "markdown",
+      "source": "TODO: P\u0159\u00EDklady k procvi\u010Dov\u00E1n\u00ED"
+    }
+  ]
+}

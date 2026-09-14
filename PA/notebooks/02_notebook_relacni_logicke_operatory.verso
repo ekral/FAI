@@ -1,0 +1,345 @@
+{
+  "verso": "1.1",
+  "metadata": {
+    "defaultKernel": "csharp",
+    "activeLayout": {
+      "extensionId": "verso.layout.notebook",
+      "layoutId": "notebook"
+    }
+  },
+  "cells": [
+    {
+      "id": "768d4b8f-0a2b-4474-8f9c-eb3f879b7f65",
+      "type": "markdown",
+      "source": "# 02 Rela\u010Dn\u00ED a logick\u00E9 oper\u00E1tory\n**autor: Erik Kr\u00E1l ekral@utb.cz**\n\n---\n\nPro zvl\u00E1dnut\u00ED p\u0159edm\u011Btu mus\u00EDte zn\u00E1t typ \u0060bool\u0060 a zn\u00E1t rela\u010Dn\u00ED a logick\u00E9 oper\u00E1tory . Nezapome\u0148te, \u017Ee op\u011Bt z\u00E1le\u017E\u00ED na priorit\u011B oper\u00E1tor\u016F a pro jistotu pou\u017E\u00EDvejte kulat\u00E9 z\u00E1vorky \u0060()\u0060."
+    },
+    {
+      "id": "d7dedfb2-b51c-4071-b409-42b7e525ac54",
+      "type": "markdown",
+      "source": "Booleovsk\u00FD v\u00FDraz vrac\u00ED jako v\u00FDslednou hodnotu typ \u0060bool\u0060. Nej\u010Dast\u011Bji jej pou\u017E\u00EDv\u00E1me v podm\u00EDn\u011Bn\u00FDch p\u0159\u00EDkazech v\u00FDb\u011Bru (selection statements) a p\u0159\u00EDkazech pro tvorbu cyklu (iteration statements). P\u0159\u00EDklady booleanovsk\u00FDch v\u00FDraz\u016F jsou rela\u010Dn\u00ED a logick\u00E9 oper\u00E1tory.\n\nTyp bool reprezentuje hodnoty \u0060true\u0060 nebo false, tedy pravda nebo nepravda."
+    },
+    {
+      "id": "94f2df59-7fcf-4b7f-a782-9e36b9e41a9d",
+      "type": "markdown",
+      "source": "Na n\u00E1sleduj\u00EDc\u00EDch p\u0159\u00EDkladech si probereme rela\u010Dn\u00ED a logick\u00E9 oper\u00E1tory. \n\nNejprve si ale definujme t\u0159i prom\u011Bnn\u00E9, cel\u00E1 \u010D\u00EDsla \u0060x\u0060, \u0060y\u0060 a booleanovskou prom\u011Bnnou \u0060vysledek\u0060:"
+    },
+    {
+      "id": "93daed1e-08da-4a60-98f2-858c86af5a5b",
+      "type": "code",
+      "language": "csharp",
+      "source": "int x = 2;\nint y = 3;\nbool vysledek;"
+    },
+    {
+      "id": "307b1224-4d95-4aa8-b83c-222551997743",
+      "type": "markdown",
+      "source": "M\u011Bli byste zn\u00E1t n\u00E1sleduj\u00EDc\u00ED rela\u010Dn\u00ED oper\u00E1tory, kter\u00E9 vracej\u00ED jako v\u00FDsledek operace typ \u0060bool\u0060:"
+    },
+    {
+      "id": "58720738-4d60-40c6-bdd1-3e3c7b7c824d",
+      "type": "code",
+      "language": "csharp",
+      "source": "vysledek = x == y;  // rovnost\nvysledek = x != y;  // nerovnost\nvysledek = x \u003C y;   // mensi nez\nvysledek = x \u003E y;   // vetsi nez\nvysledek = x \u003C= y;  // nensi nebo rovno\nvysledek = x \u003E= y;  // vetsi nebo rovno"
+    },
+    {
+      "id": "234295d9-9a4c-4373-bb7c-d71cc29d4229",
+      "type": "markdown",
+      "source": "D\u00E1le byste m\u011Bli zn\u00E1t logick\u00E9 operace and \u0060\u0026\u0026\u0060 , or \u0060||\u0060 a negace \u0060!\u0060"
+    },
+    {
+      "id": "310795a4-66c6-4984-8b55-e00cc0c898c0",
+      "type": "code",
+      "language": "csharp",
+      "source": "vysledek = (x \u003C y) \u0026\u0026 (y == 3); // pravda pokud je x men\u0161\u00ED ne\u017E y a z\u00E1rov\u011B\u0148 y je rovno 3\nvysledek = (x \u003C y) || (y == 2); // pravda pokud je x men\u0161\u00ED ne\u017E y a nebo y je rovno 3\nvysledek = !(x \u003C y); // operator ! neguje vysledek predchozi operace, vyraz je pravda, pokud je x vetsi nebo rovno y"
+    },
+    {
+      "id": "c7565673-8d0f-4d2a-8524-3179a13f2c95",
+      "type": "markdown",
+      "source": "V n\u00E1sleduj\u00EDc\u00EDch k\u00F3dech je uveden\u00FD kompletn\u00ED p\u0159\u00EDklad a \u0159e\u0161en\u00ED p\u0159\u00EDklad\u016F ze cvi\u010Den\u00ED."
+    },
+    {
+      "id": "6b89b1cc-0a40-4f09-b3ef-fe4c25040922",
+      "type": "code",
+      "language": "csharp",
+      "source": "int x = 2;\nint y = 3;\n\nbool vysledek;\n\nvysledek = x == y;  // rovnost\nvysledek = x != y;  // nerovnost\nvysledek = x \u003C y;   // mensi nez\nvysledek = x \u003E y;   // vetsi nez\nvysledek = x \u003C= y;  // nensi nebo rovno\nvysledek = x \u003E= y;  // vetsi nebo rovno\n\nvysledek = (x \u003C y) \u0026\u0026 (y == 3); // pravda pokud je x men\u0161\u00ED ne\u017E y a z\u00E1rov\u011B\u0148 y je rovno 3\nvysledek = (x \u003C y) || (y == 2); // pravda pokud je x men\u0161\u00ED ne\u017E y a nebo y je rovno 3\nvysledek = !(x \u003C y); // operator !neguje vysledek predchozi operace, vyraz je pravda, pokud je x vetsi nebo rovno y"
+    },
+    {
+      "id": "e93a5c56-281c-4420-87f5-f9fdbc27f967",
+      "type": "markdown",
+      "source": "---\n## P\u0159\u00EDklady k procvi\u010Dov\u00E1n\u00ED"
+    },
+    {
+      "id": "6cf5b245-34dd-48c3-8451-c866c7c506db",
+      "type": "markdown",
+      "source": "### Zad\u00E1n\u00ED: 1. Troj\u00FAheln\u00EDk"
+    },
+    {
+      "id": "1d7e0bdb-2829-4362-94b7-bcd2b1fea152",
+      "type": "markdown",
+      "source": "M\u00E1me troj\u00FAheln\u00EDk zadan\u00FD d\u00E9lkami t\u0159ech stran. Prom\u011Bnn\u00E1 \u0060\u0060\u0060c\u0060\u0060\u0060 p\u0159edstavuje d\u00E9lku p\u0159epony."
+    },
+    {
+      "id": "3d895dc9-7714-4076-afc4-d4fc35298d9b",
+      "type": "code",
+      "language": "csharp",
+      "source": "double a = 3.0;\ndouble b = 4.0;\ndouble c = 5.0;\n\nConsole.WriteLine($\u0022odvesna a: {a} odvesna b: {b} p\u0159epona c: {c}\u0022);"
+    },
+    {
+      "id": "68f4c1fe-3c9d-4ce4-b60a-6fae0971dae0",
+      "type": "markdown",
+      "source": "- Napi\u0161te v\u00FDraz, kter\u00FD vr\u00E1t\u00ED \u0060\u0060\u0060true\u0060\u0060\u0060, pokud troj\u00FAhlen\u00EDk existuje, tedy sou\u010Det d\u00E9lek dvou libovoln\u00FDch stran je v\u017Edy v\u011Bt\u0161\u00ED ne\u017E d\u00E9lka t\u0159et\u00ED strany."
+    },
+    {
+      "id": "90fe34ea-ce0f-487d-9cbe-d00ca106f2ca",
+      "type": "code",
+      "language": "csharp",
+      "source": ""
+    },
+    {
+      "id": "5694192f-1e16-460b-9179-e594c884988d",
+      "type": "markdown",
+      "source": "- Napi\u0161te v\u00FDraz, kter\u00FD vr\u00E1t\u00ED \u0060\u0060\u0060true\u0060\u0060\u0060, pokud je troj\u00FAhlen\u00EDk pravo\u00FAhl\u00FD"
+    },
+    {
+      "id": "de13d484-348e-4d24-9d5a-a8fbb884265e",
+      "type": "code",
+      "language": "csharp",
+      "source": ""
+    },
+    {
+      "id": "23fe8efb-c7e0-4d11-a697-84084dc10ebd",
+      "type": "markdown",
+      "source": "### Zad\u00E1n\u00ED: 2. V\u00FDsledky dvou test\u016F\n\nM\u00E1me v\u00FDsledky dvou test\u016F \u0060\u0060\u0060t1\u0060\u0060\u0060 a \u0060\u0060\u0060t2\u0060\u0060\u0060."
+    },
+    {
+      "id": "351e23a0-43c9-4616-b8e1-23c3f5bfb5c5",
+      "type": "code",
+      "language": "csharp",
+      "source": "double t1 = 40.0;\ndouble t2 = 70.0;\n\nConsole.WriteLine($\u0022test 1: {t1} test 2: {t2}\u0022);"
+    },
+    {
+      "id": "7da3987a-5fdb-482a-a4d3-e728ca15a0f9",
+      "type": "markdown",
+      "source": "- Napi\u0161te v\u00FDraz, kter\u00FD vr\u00E1t\u00ED \u0060\u0060true\u0060\u0060, pokud student splnil **alespo\u0148 jeden** ze dvou test\u016F za v\u00EDce ne\u017E 45 bod\u016F"
+    },
+    {
+      "id": "9c5eea9b-9844-4c08-a719-210c8d59e545",
+      "type": "code",
+      "language": "csharp",
+      "source": ""
+    },
+    {
+      "id": "383645f4-8e1f-48fc-987a-602ac0b16738",
+      "type": "markdown",
+      "source": "- Napi\u0161te v\u00FDraz, kter\u00FD vr\u00E1t\u00ED \u0060\u0060\u0060true\u0060\u0060\u0060, pokud student **nesplnil \u017E\u00E1dn\u00FD** ze dvou test\u016F za v\u00EDce ne\u017E 45 bod\u016F."
+    },
+    {
+      "id": "115c164b-4093-4e3e-9748-7b7b696ee7ce",
+      "type": "code",
+      "language": "csharp",
+      "source": ""
+    },
+    {
+      "id": "91f71d40-0a58-4936-b56f-71674c4b446d",
+      "type": "markdown",
+      "source": "* Napi\u0161te v\u00FDraz, kter\u00FD vr\u00E1t\u00ED \u0060\u0060\u0060true\u0060\u0060\u0060, pokud student **splnil ka\u017Ed\u00FD** ze dvou test\u016F za v\u00EDce ne\u017E 45 bod\u016F"
+    },
+    {
+      "id": "56fb9c6d-58d4-48e1-aeda-c89b670c49b2",
+      "type": "code",
+      "language": "csharp",
+      "source": ""
+    },
+    {
+      "id": "2b997d19-a222-4ee2-8dc7-3ca926670e5a",
+      "type": "markdown",
+      "source": "- Napi\u0161te v\u00FDraz, kter\u00FD vr\u00E1t\u00ED \u0060\u0060\u0060true\u0060\u0060\u0060, pokud student splnil **alespo\u0148 jeden** ze dvou test\u016F za v\u00EDce ne\u017E 45 bod\u016F, ale tentokr\u00E1t pou\u017Eijte negaci a oper\u00E1tor \u0060\u0060\u0060\u0026\u0026\u0060\u0060\u0060."
+    },
+    {
+      "id": "75df0eb0-d5e1-4fc9-b5c4-8b281554297f",
+      "type": "code",
+      "language": "csharp",
+      "source": ""
+    },
+    {
+      "id": "160e44b5-d806-41f4-9af4-dac4f07b8ec4",
+      "type": "markdown",
+      "source": "### Zad\u00E1n\u00ED: 3. V\u00FDsledky t\u0159\u00ED test\u016F\n\nM\u00E1me v\u00FDsledky t\u0159\u00ED test\u016F \u0060\u0060\u0060t1\u0060\u0060\u0060, \u0060\u0060\u0060t2\u0060\u0060\u0060 a \u0060\u0060\u0060t3\u0060\u0060\u0060."
+    },
+    {
+      "id": "ef9111bc-cde0-4e1f-9e73-b5efeef99dd1",
+      "type": "code",
+      "language": "csharp",
+      "source": "double t1 = 30.0;\ndouble t2 = 40.0;\ndouble t3 = 70.0;\n\nConsole.WriteLine($\u0022test 1: {t1}, test 2: {t2}, test 3: {t3}\u0022);"
+    },
+    {
+      "id": "97c55b23-1dd4-4a09-a088-9ee5a82fc91b",
+      "type": "markdown",
+      "source": "- Napi\u0161te v\u00FDraz, kter\u00FD vr\u00E1t\u00ED \u0060\u0060\u0060true\u0060\u0060\u0060, pokud student splnil alespo\u0148 jeden z t\u0159\u00ED test\u016F za v\u00EDce ne\u017E 45 bod\u016F."
+    },
+    {
+      "id": "41d241b9-e887-4fd4-a64e-f82b11daf5e5",
+      "type": "code",
+      "language": "csharp",
+      "source": ""
+    },
+    {
+      "id": "4c7fdeae-d41e-4f8b-93d3-205b8203d138",
+      "type": "markdown",
+      "source": "- Napi\u0161te v\u00FDraz, kter\u00FD vr\u00E1t\u00ED \u0060\u0060\u0060true\u0060\u0060\u0060, pokud student splnil v\u0161echny t\u0159i testy, ka\u017Ed\u00FD za v\u00EDce ne\u017E 45 bod\u016F."
+    },
+    {
+      "id": "9ccc6ebc-9c19-4ace-b423-b9edf13d7237",
+      "type": "code",
+      "language": "csharp",
+      "source": ""
+    },
+    {
+      "id": "289e6cc1-60ed-4c32-ac45-69ba21b5e04a",
+      "type": "markdown",
+      "source": "- Napi\u0161te v\u00FDraz, kter\u00FD vr\u00E1t\u00ED \u0060\u0060\u0060true\u0060\u0060\u0060, pokud student splnil alespo\u0148 dva z t\u0159\u00ED test\u016F za v\u00EDce ne\u017E 45 bod\u016F."
+    },
+    {
+      "id": "e58cbfd4-e761-4972-8875-8ce53c998ff6",
+      "type": "code",
+      "language": "csharp",
+      "source": ""
+    },
+    {
+      "id": "c1473da6-634e-4620-9d47-141b2b4969a3",
+      "type": "markdown",
+      "source": "---\n## \u0158e\u0161en\u00ED p\u0159\u00EDklad\u016F k procvi\u010Dov\u00E1n\u00ED"
+    },
+    {
+      "id": "7d408a69-41a3-4b19-9071-5ca4470db1d9",
+      "type": "markdown",
+      "source": "M\u00E1me troj\u00FAheln\u00EDk zadan\u00FD d\u00E9lkami t\u0159ech stran. Prom\u011Bnn\u00E1 \u0060\u0060\u0060c\u0060\u0060\u0060 p\u0159edstavuje d\u00E9lku p\u0159epony."
+    },
+    {
+      "id": "ab4147df-ea74-4425-8a37-fc08439e629b",
+      "type": "code",
+      "language": "csharp",
+      "source": "double a = 3.0;\ndouble b = 4.0;\ndouble c = 5.0;\n\nConsole.WriteLine($\u0022odvesna a: {a} odvesna b: {b} p\u0159epona c: {c}\u0022);"
+    },
+    {
+      "id": "2ad1c481-5278-403c-b3bb-9191f8992ea7",
+      "type": "markdown",
+      "source": "- Napi\u0161te v\u00FDraz, kter\u00FD vr\u00E1t\u00ED \u0060\u0060\u0060true\u0060\u0060\u0060, pokud troj\u00FAhlen\u00EDk existuje, tedy sou\u010Det d\u00E9lek dvou libovoln\u00FDch stran je v\u017Edy v\u011Bt\u0161\u00ED ne\u017E d\u00E9lka t\u0159et\u00ED strany."
+    },
+    {
+      "id": "74a30338-5b6f-4b87-a024-b6f12f4003ab",
+      "type": "code",
+      "language": "csharp",
+      "source": "(a \u002B b \u003E c) \u0026\u0026 (a \u002B c \u003E b) \u0026\u0026 (b \u002B c \u003E a)"
+    },
+    {
+      "id": "aa9a337b-e39d-4c22-8317-0e90b8c1ec8e",
+      "type": "markdown",
+      "source": "- Napi\u0161te v\u00FDraz, kter\u00FD vr\u00E1t\u00ED \u0060\u0060\u0060true\u0060\u0060\u0060, pokud je troj\u00FAhlen\u00EDk pravo\u00FAhl\u00FD"
+    },
+    {
+      "id": "32a53d1f-c988-414e-8a80-118e0a0ad567",
+      "type": "code",
+      "language": "csharp",
+      "source": "a * a \u002B b * b == c * c // poznamka, diky chybam v zaukrouhlovanim nam v nekterych pripadech nemusi rovnost vychazet"
+    },
+    {
+      "id": "a23c6788-8e42-4966-850a-14fca2941684",
+      "type": "markdown",
+      "source": "### Zad\u00E1n\u00ED: 2. V\u00FDsledky dvou test\u016F\n\nM\u00E1me v\u00FDsledky dvou test\u016F \u0060\u0060\u0060t1\u0060\u0060\u0060 a \u0060\u0060\u0060t2\u0060\u0060\u0060."
+    },
+    {
+      "id": "ce16779e-95d9-4778-8cb5-e69224cff02c",
+      "type": "code",
+      "language": "csharp",
+      "source": "double t1 = 40.0;\ndouble t2 = 70.0;\n\nConsole.WriteLine($\u0022test 1: {t1} test 2: {t2}\u0022);"
+    },
+    {
+      "id": "004467aa-caa7-46c0-b4c9-31924d9570f5",
+      "type": "markdown",
+      "source": "- Napi\u0161te v\u00FDraz, kter\u00FD vr\u00E1t\u00ED \u0060\u0060true\u0060\u0060, pokud student splnil **alespo\u0148 jeden** ze dvou test\u016F za v\u00EDce ne\u017E 45 bod\u016F"
+    },
+    {
+      "id": "6f35825e-4296-4633-8ee0-7cfea96228a4",
+      "type": "code",
+      "language": "csharp",
+      "source": "t1 \u003E 45.0 || t2 \u003E 45.0"
+    },
+    {
+      "id": "de8fc315-48b7-4ccf-9b89-d113b40d1f75",
+      "type": "markdown",
+      "source": "- Napi\u0161te v\u00FDraz, kter\u00FD vr\u00E1t\u00ED \u0060\u0060\u0060true\u0060\u0060\u0060, pokud student **nesplnil \u017E\u00E1dn\u00FD** ze dvou test\u016F za v\u00EDce ne\u017E 45 bod\u016F."
+    },
+    {
+      "id": "a29e8dc8-71b9-4c05-aefb-7655433fa273",
+      "type": "code",
+      "language": "csharp",
+      "source": "t1 \u003C= 45.0 \u0026\u0026 t2 \u003C= 45.0"
+    },
+    {
+      "id": "87b6bd9f-2557-43c0-9dcb-a3acc484cb18",
+      "type": "markdown",
+      "source": "* Napi\u0161te v\u00FDraz, kter\u00FD vr\u00E1t\u00ED \u0060\u0060\u0060true\u0060\u0060\u0060, pokud student **splnil ka\u017Ed\u00FD** ze dvou test\u016F za v\u00EDce ne\u017E 45 bod\u016F"
+    },
+    {
+      "id": "431db324-b690-447b-8791-3ac4342e2b76",
+      "type": "code",
+      "language": "csharp",
+      "source": "t1 \u003E 45.0 \u0026\u0026 t2 \u003E 45.0"
+    },
+    {
+      "id": "8ef4711b-cf64-44b9-9f41-8e20f271726b",
+      "type": "markdown",
+      "source": "- Napi\u0161te v\u00FDraz, kter\u00FD vr\u00E1t\u00ED \u0060\u0060\u0060true\u0060\u0060\u0060, pokud student splnil **alespo\u0148 jeden** ze dvou test\u016F za v\u00EDce ne\u017E 45 bod\u016F, ale tentokr\u00E1t pou\u017Eijte negaci a oper\u00E1tor \u0060\u0060\u0060\u0026\u0026\u0060\u0060\u0060."
+    },
+    {
+      "id": "c4df804f-5e15-43a9-9f6f-4697fef48344",
+      "type": "code",
+      "language": "csharp",
+      "source": "!(t1 \u003C= 45.0 \u0026\u0026 t2 \u003C= 45.0)"
+    },
+    {
+      "id": "d1114308-1454-4f46-849a-44e627b764a4",
+      "type": "markdown",
+      "source": "### Zad\u00E1n\u00ED: 3. V\u00FDsledky t\u0159\u00ED test\u016F\n\nM\u00E1me v\u00FDsledky t\u0159\u00ED test\u016F \u0060\u0060\u0060t1\u0060\u0060\u0060, \u0060\u0060\u0060t2\u0060\u0060\u0060 a \u0060\u0060\u0060t3\u0060\u0060\u0060."
+    },
+    {
+      "id": "4ce6f454-9418-4635-a62a-e0d5427d071f",
+      "type": "code",
+      "language": "csharp",
+      "source": "double t1 = 30.0;\ndouble t2 = 40.0;\ndouble t3 = 70.0;\n\nConsole.WriteLine($\u0022test 1: {t1}, test 2: {t2}, test 3: {t3}\u0022);"
+    },
+    {
+      "id": "5a85aec0-2895-4210-82ca-e641cee04ea6",
+      "type": "markdown",
+      "source": "- Napi\u0161te v\u00FDraz, kter\u00FD vr\u00E1t\u00ED \u0060\u0060\u0060true\u0060\u0060\u0060, pokud student splnil alespo\u0148 jeden z t\u0159\u00ED test\u016F za v\u00EDce ne\u017E 45 bod\u016F."
+    },
+    {
+      "id": "04c23cae-580b-4ae4-b78e-9540ee1df040",
+      "type": "code",
+      "language": "csharp",
+      "source": "(t1 \u003E 45.0) || (t2 \u003E 45.0) || (t3 \u003E 45.0)"
+    },
+    {
+      "id": "b7befe54-e10a-4023-8513-cf4a1eef8698",
+      "type": "markdown",
+      "source": "- Napi\u0161te v\u00FDraz, kter\u00FD vr\u00E1t\u00ED \u0060\u0060\u0060true\u0060\u0060\u0060, pokud student splnil v\u0161echny t\u0159i testy, ka\u017Ed\u00FD za v\u00EDce ne\u017E 45 bod\u016F."
+    },
+    {
+      "id": "7b6b60b0-c022-4acb-b2da-f1ad97cce284",
+      "type": "code",
+      "language": "csharp",
+      "source": "(t1 \u003E 45.0) \u0026\u0026 (t2 \u003E 45.0) \u0026\u0026 (t3 \u003E 45.0)"
+    },
+    {
+      "id": "0ef42541-eed8-437f-b1e9-12550c1928ef",
+      "type": "markdown",
+      "source": "- Napi\u0161te v\u00FDraz, kter\u00FD vr\u00E1t\u00ED \u0060\u0060\u0060true\u0060\u0060\u0060, pokud student splnil alespo\u0148 dva z t\u0159\u00ED test\u016F za v\u00EDce ne\u017E 45 bod\u016F."
+    },
+    {
+      "id": "2ea7f37a-f0a3-4138-bdb9-e970683611f3",
+      "type": "code",
+      "language": "csharp",
+      "source": "((t1 \u003E 45.0) \u0026\u0026 (t2 \u003E 45.0)) || ((t1 \u003E 45.0) \u0026\u0026 (t3 \u003E 45.0)) || ((t2 \u003E 45.0) \u0026\u0026 (t3 \u003E 45.0))"
+    }
+  ]
+}
