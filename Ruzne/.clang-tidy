@@ -1,0 +1,11 @@
+# .clang-tidy
+Checks: >
+  -*,
+  bugprone-*,
+  cert-*,
+  cppcoreguidelines-pro-bounds-*,
+  cppcoreguidelines-pro-type-*,
+  cppcoreguidelines-init-variables,
+  cppcoreguidelines-owning-memory,
+  clang-analyzer-*
+WarningsAsErrors: 'bugprone-*,cert-*,cppcoreguidelines-*'
