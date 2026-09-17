@@ -1,26 +1,26 @@
 # Python vs. C11 a C++23: Quick Reference Sheet
 
-Tento prehled pomaha pri rychlem prepnuti z Pythonu do C a C++. Pro bezne proceduralni ukazky pouziva **C11**. Tam, kde je vhodne moderni objektove nebo kolekcni API, pouziva **C++23**.
+Tento přehled pomáhá při rychlém přepnutí z Pythonu do C a C++. Pro běžné procedurální ukázky používá **C11**. Tam, kde je vhodné moderní objektové nebo API pro práci s kolekcemi, používá **C++23**.
 
-Pozor na stredniky, slozene zavorky, rucni spravu pameti v C a nutnost prekladat C++ kod kompilatorem C++.
+Pozor na středníky, složené závorky, ruční správu paměti v C a nutnost překládat C++ kód kompilátorem C++.
 
 ---
 
-## 1. Zakladni syntaxe
+## 1. Základní syntaxe
 
 | Vlastnost | Python | C11 / C++23 |
 | :--- | :--- | :--- |
-| Ukonceni prikazu | novy radek | strednik `;` |
-| Bloky kodu | odsazeni | slozene zavorky `{ }` |
-| Logicke operatory | `and`, `or`, `not` | `&&`, `\|\|`, `!` |
-| Komentare | `# komentar` | `//` nebo `/* ... */` |
-| Vystup na konzoli | `print(x)` | C11: `printf("%d\n", x);`, C++23: `std::println("{}", x);` |
+| Ukončení příkazu | nový řádek | středník `;` |
+| Bloky kódu | odsazení | složené závorky `{ }` |
+| Logické operátory | `and`, `or`, `not` | `&&`, `\|\|`, `!` |
+| Komentáře | `# komentář` | `//` nebo `/* ... */` |
+| Výstup na konzoli | `print(x)` | C11: `printf("%d\n", x);`, C++23: `std::println("{}", x);` |
 
 ---
 
-## 2. Promenne a typy (C11)
+## 2. Proměnné a typy (C11)
 
-C i C++ jsou staticky typovane. C11 nema `string`: retezec je pole znaku ukoncene nulovym znakem, typicky `char *` nebo `char[]`.
+C i C++ jsou staticky typované. C11 nemá `string`: řetězec je pole znaků ukončené nulovým znakem, typicky `char *` nebo `char[]`.
 
 ```c
 #include <stdio.h>
@@ -39,11 +39,10 @@ printf("%s: %d\n", name, x);
 
 > `const char* name = "Alice"` ukazuje na nemenny literal. Pro upravitelny text pouzij `char name[] = "Alice";`.
 
----
 
-## 3. Podminky a cykly (C11)
+## 3. Podmínky a cykly (C11)
 
-Podminka je vzdy v kulatych zavorkach. Nula znamena nepravdu, nenulova hodnota pravdu.
+Podmínka je vždy v kulatých závorkách. Nula znamená nepravdu, nenulová hodnota pravdu.
 
 ### If-else
 
@@ -97,9 +96,9 @@ while (x > 0)
 
 ---
 
-## 4. Pole a dynamicka pamet (C11)
+## 4. Pole a dynamická paměť (C11)
 
-Pole v C ma pevnou velikost. Jeho delku je nutne si predat nebo spocitat v miste, kde je skutecne pole jeste dostupne.
+Pole v C má pevnou velikost. Jeho délku je nutné si předat nebo spočítat v místě, kde je skutečné pole ještě dostupné.
 
 ```c
 #include <stddef.h>
@@ -124,13 +123,13 @@ if (dynamic_values != NULL)
 free(dynamic_values);
 ```
 
-> Kazde uspesne `malloc` musi mit odpovidajici `free`. V C++ pro dynamicka data obvykle pouzij `std::vector`, ne `new[]`.
+> Každé úspěšné `malloc` musí mít odpovídající `free`. V C++ pro dynamická data obvykle použij `std::vector`, ne `new[]`.
 
 ---
 
 ## 5. Funkce (C11)
 
-Funkce musi mit navratovy typ. Pokud nic nevraci, pouzij `void`.
+Funkce musí mít návratový typ. Pokud nic nevrací, použij `void`.
 
 ```c
 #include <stdio.h>
@@ -154,9 +153,9 @@ int scitej(int a, int b)
 
 ---
 
-## 6. Tridy a instance (C++23)
+## 6. Třídy a instance (C++23)
 
-Tridy nejsou soucasti C11, proto zde pouzivame C++23. `std::string` vlastni svuj text a `this` odpovida Pythonimu `self`.
+Třídy nejsou součástí C11, proto zde používáme C++23. `std::string` vlastní svůj text a `this` odpovídá Pythonímu `self`.
 
 ```cpp
 #include <print>
@@ -181,7 +180,7 @@ public:
 };
 ```
 
-Instance trid:
+Instance tříd:
 
 ```cpp
 // Python: pavel = Student("Pavel")
@@ -196,9 +195,9 @@ karel.body = 40;
 
 ---
 
-## 7. Dynamicke pole a foreach (C++23)
+## 7. Dynamické pole a foreach (C++23)
 
-`std::vector` je bezna C++ nahrada Python listu. Range-based `for` je moderni podoba `foreach`.
+`std::vector` je běžná C++ náhrada Python listu. Range-based `for` je moderní podoba `foreach`.
 
 ```cpp
 #include <cstddef>
@@ -223,7 +222,7 @@ for (int value : values)
 }
 ```
 
-Pro zmenu prvku iteruj referenci:
+Pro změnu prvku iteruj referenci:
 
 ```cpp
 for (int& value : values)
@@ -236,7 +235,7 @@ for (int& value : values)
 
 ## 8. List comprehension a ranges (C++23)
 
-C++ nema vestavenou list comprehension, ale C++23 ranges umi podobne skladat filtry a transformace. Pro ulozeni vysledku do `std::vector` pouzij `std::ranges::to`.
+C++ nemá vestavěnou list comprehension, ale C++23 ranges umí podobně skládat filtry a transformace. Pro uložení výsledku do `std::vector` použij `std::ranges::to`.
 
 ```cpp
 #include <ranges>
@@ -257,9 +256,9 @@ auto squares = data
 
 ---
 
-## 9. None a vysledek s chybou (C++23)
+## 9. None a výsledek s chybou (C++23)
 
-Pro nulovy ukazatel pouzij `nullptr`. Kdyz operace muze vratit hodnotu nebo chybu, pouzij `std::expected<T, E>`.
+Pro nulový ukazatel použij `nullptr`. Když operace může vrátit hodnotu nebo chybu, použij `std::expected<T, E>`.
 
 ```cpp
 #include <expected>
@@ -285,12 +284,12 @@ if (!score.has_value())
 
 ---
 
-## Rychla pomoc pri chybach
+## Rychlá pomoc při chybách
 
-1. Chybi `;` na konci prikazu.
-2. C a C++ rozlisuji velka a mala pismena.
-3. V C je `'a'` jeden znak (`char`) a `"abc"` retezec ukonceny `\0`.
-4. C kod prekladej jako C11, C++ kod jako C++23. Nemichej `printf` a `std::println` bez duvodu.
+1. Chybí `;` na konci příkazu.
+2. C a C++ rozlišují velká a malá písmena.
+3. V C je `'a'` jeden znak (`char`) a `"abc"` řetězec ukončený `\0`.
+4. C kód překládej jako C11, C++ kód jako C++23. Nemíchej `printf` a `std::println` bez důvodu.
 
 ---
 
