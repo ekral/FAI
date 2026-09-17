@@ -2,7 +2,7 @@
 
 Tento přehled pomáhá při rychlém přepnutí z Pythonu do C a C++. Pro běžné procedurální ukázky používá **C11**. Tam, kde je vhodné moderní objektové nebo API pro práci s kolekcemi, používá **C++23**.
 
-Pozor na středníky, složené závorky, ruční správu paměti v C a nutnost překládat C++ kód kompilátorem C++.
+Pozor na středníky, složené závorky a ruční správu paměti v C.
 
 ---
 
