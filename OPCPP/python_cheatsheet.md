@@ -155,7 +155,7 @@ int scitej(int a, int b)
 
 ## 6. Třídy a instance (C++23)
 
-Třídy nejsou součástí C11, proto zde používáme C++23. `std::string` vlastní svůj text a `this` odpovídá Pythonímu `self`.
+Třídy nejsou součástí C11, proto zde používáme C++23. `std::string` alokuje a uvolňuje paměť pro řetězec a `this` odpovídá `self` v Pythonu.
 
 ```cpp
 #include <print>
