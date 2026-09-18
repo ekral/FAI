@@ -1,0 +1,27 @@
+find_package(Vulkan REQUIRED COMPONENTS glslc)
+
+set(SHADER_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/shaders")
+set(SHADER_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/shaders")
+
+file(MAKE_DIRECTORY "${SHADER_BINARY_DIR}")
+
+set(SHADERS
+    triangle.vert
+    triangle.frag
+)
+
+foreach(SHADER ${SHADERS})
+    set(INPUT  "${SHADER_SOURCE_DIR}/${SHADER}")
+    set(OUTPUT "${SHADER_BINARY_DIR}/${SHADER}.spv")
+
+    add_custom_command(
+        OUTPUT "${OUTPUT}"
+        COMMAND Vulkan::glslc "${INPUT}" -o "${OUTPUT}"
+        DEPENDS "${INPUT}"
+        COMMENT "Compiling ${SHADER}"
+    )
+
+    list(APPEND SPIRV_SHADERS "${OUTPUT}")
+endforeach()
+
+add_custom_target(shaders ALL DEPENDS ${SPIRV_SHADERS})
