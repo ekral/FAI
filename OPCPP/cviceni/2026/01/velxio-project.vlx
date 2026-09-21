@@ -1,0 +1,87 @@
+{
+  "format": "velxio-project",
+  "version": 1,
+  "exportedAt": "2026-09-21T12:53:02.309Z",
+  "boards": [
+    {
+      "id": "arduino-uno",
+      "boardKind": "arduino-uno",
+      "x": -113.09476188583129,
+      "y": 207.82600481015692,
+      "activeFileGroupId": "group-arduino-uno",
+      "languageMode": "arduino",
+      "serialBaudRate": 9615
+    }
+  ],
+  "fileGroups": {
+    "group-arduino-uno": [
+      {
+        "name": "sketch.ino",
+        "content": "// Blink LED Example\n// Toggles the built-in LED on pin 13\n\nvoid setup() {\n  Serial.begin(9600);\n  delay(1000);\n\n  pinMode(13, OUTPUT);\n  pinMode(12, INPUT_PULLUP);\n}\n\nbool lastButtonState = HIGH;\nbool candidateButtonState = HIGH;\nunsigned long candidateTimeChanged = 0;\nbool candidateLedState = LOW;\n\nvoid loop() {\n  int buttonState = digitalRead(12);\n\n  if(buttonState != candidateButtonState)\n  {\n    candidateButtonState = buttonState;\n    candidateTimeChanged = millis();\n  }\n\n  unsigned long candidateDuration = millis() - candidateTimeChanged;\n\n  if(candidateDuration > 30)\n  {\n    if(candidateButtonState != lastButtonState)\n    {\n      if(candidateButtonState == HIGH)\n      {\n        digitalWrite(13, candidateLedState);\n\n        candidateLedState = !candidateLedState;\n      }\n\n       lastButtonState = buttonState;\n    }\n  }\n}"
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "pushbutton_1789723991120_dsub7fol2",
+      "metadataId": "pushbutton",
+      "x": 24.82785613288175,
+      "y": 67.80005362692481,
+      "properties": {
+        "color": "red",
+        "pressed": false,
+        "label": "",
+        "xray": false
+      }
+    }
+  ],
+  "wires": [
+    {
+      "waypoints": [
+        {
+          "x": 2.4052381141687107,
+          "y": 86.80005362692481
+        }
+      ],
+      "id": "wire-1789723996112",
+      "start": {
+        "componentId": "arduino-uno",
+        "pinName": "GND.1",
+        "x": 2.4052381141687107,
+        "y": 216.82600481015692
+      },
+      "end": {
+        "componentId": "pushbutton_1789723991120_dsub7fol2",
+        "pinName": "1.l",
+        "x": 30.82785613288175,
+        "y": 86.80005362692481
+      },
+      "color": "#000000",
+      "autoRouted": true
+    },
+    {
+      "waypoints": [
+        {
+          "x": 21.40523811416871,
+          "y": 105.80005362692481
+        }
+      ],
+      "id": "wire-1789724512022",
+      "start": {
+        "componentId": "arduino-uno",
+        "pinName": "12",
+        "x": 21.40523811416871,
+        "y": 216.82600481015692
+      },
+      "end": {
+        "componentId": "pushbutton_1789723991120_dsub7fol2",
+        "pinName": "2.l",
+        "x": 30.82785613288175,
+        "y": 105.80005362692481
+      },
+      "color": "#22c55e",
+      "autoRouted": true
+    }
+  ],
+  "activeBoardId": "arduino-uno"
+}
