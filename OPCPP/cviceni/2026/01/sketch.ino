@@ -1,43 +1,42 @@
-// Blink LED Example
-// Toggles the built-in LED on pin 13
+bool ledState = LOW;
+bool candidateButtonState = HIGH;
+unsigned long candidateTimeChanged = 0; // Opraven datový typ
+bool lastStableButtonState = HIGH;
 
 void setup() {
+  delay(1000);
   pinMode(13, OUTPUT);
   pinMode(12, INPUT_PULLUP);
+
+  candidateButtonState = digitalRead(12);
+  lastStableButtonState = candidateButtonState;
+  candidateTimeChanged = millis();
 }
 
-bool ledState = LOW;
-bool lastButtonStableState = HIGH;
-bool candidateButtonState = HIGH;
-unsigned long int candidateTimeChanged = 0; 
-// unsigned jsou cisla bez znameka, 0, 1, .. long int zabere 4 byty (32 bitu), 2 ^ 32
-
 void loop() {
-
   bool buttonState = digitalRead(12);
-
-  if(buttonState != candidateButtonState)
+  
+  if(buttonState != candidateButtonState)   
   {
+    candidateTimeChanged = millis();
     candidateButtonState = buttonState;
-    candidateTimeChanged = millis(); // millis() vrati aktualni cas
   }
 
-  unsigned long int candidateDuration = millis() - candidateTimeChanged;
+  unsigned long candidateDuration = millis() - candidateTimeChanged;
 
-  if(candidateDuration > 30)
+  if(candidateDuration > 30)   
   {
-      int stableButtonState = candidateButtonState; // candidate bereme uz jako stable
+    bool stableButtonState = candidateButtonState;
 
-      if(stableButtonState != lastButtonStableState)
+    if(stableButtonState != lastStableButtonState)     
+    {
+      if(stableButtonState == HIGH)
       {
-        if(stableButtonState == HIGH)
-        {
-          ledState = !ledState;
-          digitalWrite(13, ledState);
-        }
+        ledState = !ledState;
+        digitalWrite(13, ledState);
       }
 
-      lastButtonStableState = stableButtonState;
+      lastStableButtonState = stableButtonState;
+    }
   }
-
 }
