@@ -1,6 +1,7 @@
 import os
 import subprocess
 import json
+from pathlib import Path
 
 def run_cmd(cmd, env, timeout=15):
     try:
@@ -45,7 +46,7 @@ def run_cmd(cmd, env, timeout=15):
 def print_error(message):
     error_result = {
         "fraction": 0.0,
-        "epiloguehtml": message
+        "epiloguehtml": f"<pre>{message}</pre>" 
     }
 
     print(json.dumps(error_result, ensure_ascii=False))
@@ -107,132 +108,108 @@ def main():
         # COMPILE DIRECTLY WITH CSC - NO RESTORE
         # ============================================================
 
-        try:
-            dotnet_info = subprocess.check_output(
-                ["dotnet", "--info"],
-                text=True,
-                env=env
-            )
-
-            base_path = next(
-                line.split(":", 1)[1].strip()
-                for line in dotnet_info.splitlines()
-                if "Base Path:" in line
-            )
-
-            csc_path = os.path.join(
-                base_path,
-                "Roslyn",
-                "bincore",
-                "csc.dll"
-            )
-
-            dotnet_root = os.path.abspath(
-                os.path.join(base_path, "..", "..")
-            )
-
-            ref_root = os.path.join(
-                dotnet_root,
-                "packs",
-                "Microsoft.NETCore.App.Ref"
-            )
-
-            ref_versions = [
-                d for d in os.listdir(ref_root)
-                if os.path.isdir(os.path.join(ref_root, d))
-            ]
-
-            if not ref_versions:
-                raise RuntimeError(
-                    f"No reference pack found: {ref_root}"
-                )
-
-            ref_version = sorted(ref_versions)[-1]
-
-            reference_path = os.path.join(
-                ref_root,
-                ref_version,
-                "ref",
-                f"net{ref_version.split('.')[0]}.0"
-            )
-
-            if not os.path.isdir(reference_path):
-                raise RuntimeError(
-                    f"Reference path not found: {reference_path}"
-                )
-
-            # Explicitně použijeme všechny reference assemblies.
-            references = sorted(
-                os.path.join(reference_path, filename)
-                for filename in os.listdir(reference_path)
-                if filename.endswith(".dll")
-            )
-
-            if not references:
-                raise RuntimeError(
-                    f"No reference assemblies in {reference_path}"
-                )
-
-            compile_cmd = [
+        success, report = run_cmd(
+            [
                 "dotnet",
-                "exec",
-                csc_path,
+                "--info"
+            ],
+            env
+        )
+        
+        if not success:
+            print_error(report)
+            return
+  
+        base_path_string = next(
+            line.split(":", 1)[1].strip()
+            for line in report.splitlines()
+            if "Base Path:" in line
+        )
 
-                "/nologo",
-                "/target:exe",
-                "/out:runner.dll",
+        base_path = Path(base_path_string)
 
-                "/nostdlib+",
+        version = base_path.name
 
-                "solution.cs",
-                "runner.cs",
-            ]
+        major_version = ".".join(version.split(".")[:2])
 
-            compile_cmd.extend(
-                f"/reference:{reference}"
-                for reference in references
+        csc_path = base_path / "Roslyn" / "bincore" / "csc.dll"
+
+        dotnet_root = base_path.resolve().parent.parent
+
+        ref_pack_root = dotnet_root / "packs" / "Microsoft.NETCore.App.Ref"
+
+        target_framework = f"net{major_version}"
+
+        get_target_path = lambda p: p / "ref" / target_framework
+
+        ref_directories = filter(lambda p: p.is_dir() and get_target_path(p).is_dir(), ref_pack_root.iterdir())
+        ref_directories_sorted = sorted(ref_directories, key=lambda p: [int(x) for x in p.name.split('.')], reverse=True)
+
+        if len(ref_directories_sorted) == 0:
+            print_error(
+                f"Reference assemblies for {target_framework} not found"
+            )
+            return
+        
+        ref_directory = ref_directories_sorted[0]
+
+        target_directory = get_target_path(ref_directory)
+   
+        references = [
+            target_directory / "System.Console.dll",
+            target_directory / "System.Runtime.dll",
+            target_directory / "System.Collections.dll",
+            target_directory / "System.Linq.dll"
+        ]
+
+        compile_cmd = [
+            "dotnet",
+            "exec",
+            csc_path,
+
+            "/nologo",
+            "/target:exe",
+            "/out:runner.dll",
+
+            "/nostdlib+",
+
+            "solution.cs",
+            "runner.cs",
+        ]
+
+        compile_cmd.extend(
+            f"/reference:{reference}"
+            for reference in references
+        )
+
+        compile_result = subprocess.run(
+            compile_cmd,
+            capture_output=True,
+            text=True,
+            env=env,
+            timeout=30
+        )
+
+        if compile_result.returncode != 0:
+            output = "\n".join(
+                x for x in [
+                    compile_result.stdout.strip(),
+                    compile_result.stderr.strip()
+                ]
+                if x
             )
 
-            compile_result = subprocess.run(
-                compile_cmd,
-                capture_output=True,
-                text=True,
-                env=env,
-                timeout=30
-            )
-
-            if compile_result.returncode != 0:
-                output = "\n".join(
-                    x for x in [
-                        compile_result.stdout.strip(),
-                        compile_result.stderr.strip()
-                    ]
-                    if x
-                )
-
-                error_result = {
-                    "fraction": 0.0,
-                    "epiloguehtml": (
-                        "Compilation error:\n<pre>"
-                        + output
-                        + "</pre>"
-                    )
-                }
-
-                print(json.dumps(error_result, ensure_ascii=False))
-                return
-
-        except Exception as e:
             error_result = {
                 "fraction": 0.0,
                 "epiloguehtml": (
-                    f"Compiler setup error: {e}"
+                    "Compilation error:\n<pre>"
+                    + output
+                    + "</pre>"
                 )
             }
 
             print(json.dumps(error_result, ensure_ascii=False))
             return
-
 
         # ========================================================
         # RUN
