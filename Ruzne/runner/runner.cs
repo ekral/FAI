@@ -6,11 +6,11 @@ var stdout = Console.Out;
 var dummyWritter = new StringWriter();
 Console.SetOut(dummyWritter);
 
-Solution solver = new();
+Solution solution = new();
 
-bool t1 = solver.VratDruhouMocninu(5) == 25;
-bool t2 = solver.VratDruhouMocninu(10) == 100;
-bool t3 = solver.VratDruhouMocninu(-3) == 9;
+bool t1 = solution.VratDruhouMocninu(5) == 25;
+bool t2 = solution.VratDruhouMocninu(10) == 100;
+bool t3 = solution.VratDruhouMocninu(-3) == 9;
 
 int celkoveBody = (t1 ? 3 : 0) + (t2 ? 3 : 0) + (t3 ? 4 : 0);
 double fraction = celkoveBody / 10.0;
@@ -34,8 +34,3 @@ string jsonOutput = $$"""
 """;
 
 Console.Write(jsonOutput);
-
-public partial class Solution
-{
-    public partial int VratDruhouMocninu(int x);
-}

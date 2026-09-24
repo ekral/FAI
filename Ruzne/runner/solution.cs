@@ -1,6 +1,6 @@
-public partial class Solution
+public class Solution
 {
-    public partial int VratDruhouMocninu(int x)
+    public int VratDruhouMocninu(int x)
     {
         return x * x;
     }
