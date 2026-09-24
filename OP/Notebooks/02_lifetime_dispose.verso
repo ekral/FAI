@@ -1,0 +1,278 @@
+{
+  "verso": "1.1",
+  "metadata": {
+    "defaultKernel": "csharp",
+    "activeLayout": {
+      "extensionId": "verso.layout.notebook",
+      "layoutId": "notebook"
+    }
+  },
+  "cells": [
+    {
+      "id": "50dd0422-8a1d-4749-a76a-3c9ec56f265d",
+      "type": "markdown",
+      "source": "# 02: Object lifetime a pou\u017Eit\u00ED dispose\n**autor: Erik Kr\u00E1l ekral@utb.cz**\n\n---\n\nObsah\n- \u017Divotn\u00ED cyklus objektu.\n- Statick\u00E9 prvky.\n- Pou\u017Eit\u00ED metody Dispose z rozhran\u00ED IDispose.\n\n"
+    },
+    {
+      "id": "5bd0120a-48aa-417f-9905-9f85185c9d07",
+      "type": "markdown",
+      "source": "## \u017Divotn\u00ED cyklus objektu\n\n\u017Divotn\u00ED cyklus objektu (lifetime) p\u0159edstavuje \u010Das mezi vytvo\u0159en\u00ED a zni\u010Den\u00EDm objektu. "
+    },
+    {
+      "id": "c36ea581-6c30-4486-990d-da9bd0c01776",
+      "type": "markdown",
+      "source": "### Lok\u00E1ln\u00ED prom\u011Bnn\u00E1\n\nLok\u00E1ln\u00ED prom\u011Bnnn\u00E1 je alokovan\u00E1 na z\u00E1sobn\u00EDku a existuje od sv\u00E9 definice do konce bloku definovan\u00E9ho slo\u017Een\u00FDmi z\u00E1vorkami.\n\nV n\u00E1sleduj\u00EDc\u00EDm p\u0159\u00EDkladu existuje prom\u011Bnn\u00E1 \u0060x\u0060 od sv\u00E9 definice do konce Metody \u0060Metoda\u0060."
+    },
+    {
+      "id": "f6a8fb1d-8f82-4c9b-96ac-1bb6bd4159d1",
+      "type": "code",
+      "language": "csharp",
+      "source": "void Metoda()\n{\n    int x = 1;\n\n    if (x \u003E 0)\n    {\n        Console.WriteLine(x);\n    }\n}\n\nMetoda();",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "1\r\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 1
+      }
+    },
+    {
+      "id": "00e8b4fd-baec-4821-84ca-8b30bce2876b",
+      "type": "markdown",
+      "source": "V dal\u0161\u00EDm p\u0159\u00EDkladu je prom\u011Bnn\u00E1 \u0060x\u0060 definovan\u00E1 uvnit\u0159 metody \u0060if\u0060 a proto p\u0159estane existovat a bude zni\u010Dena na konci bloku podm\u00EDn\u011Bn\u00E9ho p\u0159\u00EDkazu \u0060if\u0060."
+    },
+    {
+      "id": "73061408-c7cb-4894-9820-788dc3b2a092",
+      "type": "code",
+      "language": "csharp",
+      "source": "void Metoda()\n{\n    if (true)\n    {\n        int x = 1;\n        Console.WriteLine(x);\n    }\n\n}\n\nMetoda();",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "1\r\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 10
+      }
+    },
+    {
+      "id": "41f771ef-dcf2-4479-a1fd-cc8913781451",
+      "type": "markdown",
+      "source": "U referen\u010Dn\u00EDch typ\u016F p\u0159estane existovat reference na z\u00E1sobn\u00EDk\u016F. Ale vlastn\u00ED objekt na hald\u011B po\u0159\u00E1d existuje, dokud ho neuvoln\u00ED destruktor\r\n\r\nV n\u00E1sleduj\u00EDc\u00EDm p\u0159\u00EDkladu m\u016F\u017Eeme demonstrovat, \u017Ee finalizer, kter\u00FD tam m\u00E1me se nezavol\u00E1 pokud nepou\u017Eijeme p\u0159\u00EDkazy \u0060\u0060\u0060GC.Collect();\u0060\u0060\u0060 (\u0159ekne Garbage Collectoru aby uvolnil v\u0161echny objekty na kter\u00E9 nen\u00ED reference) a \u0060\u0060\u0060GC.WaitForPendingFinalizers();\u0060\u0060\u0060 (po\u010Dk\u00E1 na v\u0161echny finalizery a\u017E se dokon\u010D\u00ED).\r\n\r\nStandartn\u011B se to nepou\u017E\u00EDv\u00E1, program na konci prost\u011B uvoln\u00ED pam\u011B\u0165 na hald\u011B jako celek a u\u017E na finaliz\u00E9ry ne\u010Dek\u00E1."
+    },
+    {
+      "id": "ed16b0d6-0839-4c4b-bb7e-5030c8415d53",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Test\r\n{\r\n    ~Test()\r\n    {\r\n        Console.WriteLine(\u0022finalizer\u0022);\r\n    }\r\n}\r\n\r\nif(true)\r\n{\r\n    Test test = new Test();\r\n}\r\n\r\nGC.Collect();\r\nGC.WaitForPendingFinalizers();\r\n"
+    },
+    {
+      "id": "08b1ce07-8d8c-4a74-827f-2dc6ca8b2998",
+      "type": "markdown",
+      "source": "### Statick\u00E1 prom\u011Bnn\u00E1\n\nStatick\u00E1 prom\u011Bnn\u00E1 (field) existuje po celou dobu b\u011Bhu programu.\n\nV n\u00E1sleduj\u00EDc\u00EDm p\u0159\u00EDkladu je prom\u011Bnn\u00E1 \u0060x\u0060 definovan\u00E1 jako statick\u00E1, znamen\u00E1 to, \u017Ee bude existovat po celou dobu b\u011Bhu programu.\n"
+    },
+    {
+      "id": "9d7d3398-c584-43b9-83b4-523630436ebd",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Program\n{\n    private static int x = 1;\n\n    public static void Metoda()\n    {\n        Console.WriteLine(x);\n    }\n}\n\nProgram.Metoda();",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "1\r\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 2
+      }
+    },
+    {
+      "id": "d63d0bba-9104-4b96-8c62-86b79c5455a6",
+      "type": "markdown",
+      "source": "### Objekt alokovan\u00FD na hald\u011B\n\nObjekt na hald\u011B alokovan\u00FD pomoc\u00ED oper\u00E1toru \u0060new\u0060 existuje od sv\u00E9 alokace po uvoln\u011Bn\u00ED pam\u011Bti. V jazyce C# uvol\u0148uje tuto pam\u011B\u0165 automaticky Garbage Collector potom co zjist\u00ED, \u017Ee na objekt na hald\u011B u\u017E nen\u00ED \u017E\u00E1dn\u00E1 reference. Naproti tomu, nap\u0159\u00EDklad v jazyce C nebo C\u002B\u002B mus\u00EDme pam\u011B\u0165 uvol\u0148ovat manu\u00E1ln\u011B pomoc\u00ED p\u0159\u00EDkazu \u0060free\u0060 respektive \u0060delete\u0060.\n\nV n\u00E1sleduj\u00EDc\u00EDm p\u0159\u00EDkladu alokujeme dynamick\u00E9 pole \u010D\u00EDsel na hald\u011B pomoc\u00ED oper\u00E1toru \u0060new\u0060 a referenci si ulo\u017E\u00EDme do lok\u00E1ln\u00ED prom\u011Bnn\u00E9 \u0060list\u0060. Lok\u00E1ln\u00ED prom\u011Bnn\u00E1 \u0060list\u0060 sice p\u0159estane existovat na konci metody \u0060VratCisla\u0060, ale vr\u00E1t\u00ED svoji hodnotu, tedy referenci na pole \u010D\u00EDsel a p\u0159i\u0159ad\u00ED ji prom\u011Bnn\u00E9 \u0060cisla\u0060 v metod\u011B \u0060Main\u0060. Teprve a\u017E p\u0159estane existovat prom\u011Bnn\u00E1 \u0060cisla\u0060 v metod\u011B \u0060Main\u0060, tak u\u017E nebude existovat \u017E\u00E1dn\u00E1 reference na pole na hald\u011B a Garbage Collector automaticky uvoln\u00ED alokovanou pam\u011B\u0165."
+    },
+    {
+      "id": "8364a04d-d1cc-4137-a717-bd595f5e7a1e",
+      "type": "code",
+      "language": "csharp",
+      "source": "static int[] VratCisla()\n{\n    int[] cisla = [ 1, 2, 3, 4, 5, 6, 7 ];\n    return cisla;\n}\n\nint[] cisla = VratCisla();\n\ncisla",
+      "outputs": [
+        {
+          "mimeType": "text/html",
+          "content": "\u003Cdiv class=\u0022dni-plaintext\u0022\u003E\u003Cpre\u003E[ 1, 2, 3, 4, 5, 6, 7 ]\u003C/pre\u003E\u003C/div\u003E\u003Cstyle\u003E\r\n.dni-code-hint {\r\n    font-style: italic;\r\n    overflow: hidden;\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview {\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview td {\r\n    vertical-align: top;\r\n    text-align: start;\r\n}\r\ndetails.dni-treeview {\r\n    padding-left: 1em;\r\n}\r\ntable td {\r\n    text-align: start;\r\n}\r\ntable tr { \r\n    vertical-align: top; \r\n    margin: 0em 0px;\r\n}\r\ntable tr td pre \r\n{ \r\n    vertical-align: top !important; \r\n    margin: 0em 0px !important;\r\n} \r\ntable th {\r\n    text-align: start;\r\n}\r\n\u003C/style\u003E"
+        }
+      ]
+    },
+    {
+      "id": "21aba163-93ce-4d59-824b-5a7e32361450",
+      "type": "markdown",
+      "source": "Naproti tomu, v **jazyce C** bychom museli pam\u011B\u0165 uvolnit manu\u00E1ln\u011B pomoc\u00ED funkce \u0060free\u0060. V n\u00E1sleduj\u00EDc\u00EDm p\u0159\u00EDkladu alokujeme pole \u010D\u00EDsel na hald\u011B pomoc\u00ED funkce \u0060malloc\u0060 a potom jej uvol\u0148\u00EDme pomoc\u00ED funkce \u0060free\u0060.\n\n\u0060\u0060\u0060c\nstatic int* vrat_cisla()\n{\n    int* cisla = malloc(3 * sizeof(int));\n\n    cisla[0] = 1;\n    cisla[1] = 1;\n    cisla[2] = 1;\n\n    return cisla;\n}\n\nint main()\n{\n    int* cisla = vrat_cisla();\n\n    free(cisla);\n}\n\u0060\u0060\u0060"
+    },
+    {
+      "id": "f015eb8b-2edf-455b-8645-ee24a387c6bb",
+      "type": "markdown",
+      "source": "---\nV\u00EDce o problematice programovac\u00EDch jazyk\u016F se m\u016F\u017Eete dozv\u011Bd\u011Bt nap\u0159\u00EDlad v t\u00E9to knize:\n\n[Michael L. Scott. 2009. Programming Language Pragmatics](https://www.cs.rochester.edu/~scott/pragmatics/)\n\nV\u00EDce se o Garbage Collectoru v jazyce C# dozv\u00EDte zde:\n\n[Fundamentals of garbage collection, 2022](https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/fundamentals)\n"
+    },
+    {
+      "id": "b67ad5e7-04a7-4f74-b832-066d924dbd19",
+      "type": "markdown",
+      "source": "## Statick\u00E9 prvky\n\nKe statick\u00FDm prvk\u016Fm se p\u0159istupuje pomoc\u00ED jm\u00E9na t\u0159\u00EDdy a ne pomoc\u00ED instance t\u0159\u00EDdy. Statick\u00E9 metody a property mohou p\u0159istupovat jen ke statick\u00FDm prvk\u016Fm. V n\u00E1sleduj\u00EDc\u00EDch p\u0159\u00EDkladech si probereme p\u0159\u00EDklad na statickou metodu."
+    },
+    {
+      "id": "de8c216b-c18d-47a4-ab12-b187b34fb380",
+      "type": "markdown",
+      "source": "* Nejprve si definujeme t\u0159\u00EDdu \u0060Vypocet\u0060 a v n\u00ED statickou metodu \u0060Soucet\u0060:"
+    },
+    {
+      "id": "8aee117c-c8a9-4794-82f8-4c61f55d516e",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Vypocty\n{\n    public static int Soucet(int x, int y)\n    {\n        return x \u002B y;\n    }\n}\n\nVypocty.Soucet(2, 3);\n",
+      "outputs": [
+        {
+          "mimeType": "text/html",
+          "content": "\u003Cdiv class=\u0022dni-plaintext\u0022\u003E\u003Cpre\u003E4\u003C/pre\u003E\u003C/div\u003E\u003Cstyle\u003E\r\n.dni-code-hint {\r\n    font-style: italic;\r\n    overflow: hidden;\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview {\r\n    white-space: nowrap;\r\n}\r\n.dni-treeview td {\r\n    vertical-align: top;\r\n    text-align: start;\r\n}\r\ndetails.dni-treeview {\r\n    padding-left: 1em;\r\n}\r\ntable td {\r\n    text-align: start;\r\n}\r\ntable tr { \r\n    vertical-align: top; \r\n    margin: 0em 0px;\r\n}\r\ntable tr td pre \r\n{ \r\n    vertical-align: top !important; \r\n    margin: 0em 0px !important;\r\n} \r\ntable th {\r\n    text-align: start;\r\n}\r\n\u003C/style\u003E"
+        }
+      ]
+    },
+    {
+      "id": "66882376-220b-4b07-9409-c7b3f2ca7212",
+      "type": "markdown",
+      "source": "* Tuto metodu potom zavol\u00E1me pomoc\u00ED jm\u00E9na t\u0159\u00EDdy \u0060Vypocty.Soucet\u0060 a nevytv\u00E1\u0159\u00EDme instanci t\u0159\u00EDdy:"
+    },
+    {
+      "id": "56c98c5e-405b-47bf-aeda-4ff9b9dacc21",
+      "type": "code",
+      "language": "csharp",
+      "source": "int vysledek = Vypocty.Soucet(2, 3);"
+    },
+    {
+      "id": "94f6cd53-da7c-43cb-97d3-f56f0566ae6d",
+      "type": "markdown",
+      "source": "* Samotn\u00E1 t\u0159\u00EDda m\u016F\u017Ee b\u00FDt tak\u00E9 ozna\u010Den\u00E1 kl\u00ED\u010Dov\u00FDm slovem \u0060static\u0060, takov\u00E1 t\u0159\u00EDda potom m\u016F\u017Ee obsahovat pouze statick\u00E9 prvky. P\u0159\u00EDkladem takov\u00E9 t\u0159\u00EDdy ve frameworku .NET je t\u0159\u00EDda \u0060Math\u0060."
+    },
+    {
+      "id": "2065d4de-7265-4f76-aa1b-0ef4983daf3f",
+      "type": "code",
+      "language": "csharp",
+      "source": "static class Vypocty\n{\n    public static int Soucet(int x, int y)\n    {\n        return x \u002B y;\n    }\n}"
+    },
+    {
+      "id": "72be0395-4017-4bfd-a87f-80162a385bed",
+      "type": "markdown",
+      "source": "* Krom\u011B metod mohou b\u00FDt statick\u00E9 i property nebo fieldy. V n\u00E1sleduj\u00EDc\u00EDm p\u0159\u00EDkladu m\u00E1me t\u0159\u00EDdu \u0060Data\u0060 kter\u00E1 m\u00E1 statickou propertu \u0060Id\u0060, kterou zvy\u0161ujeme ve statick\u00E9 metod\u011B \u0060ZvysId\u0060. Statick\u00FD m\u016F\u017Ee b\u00FDt i konstruktor, ve kter\u00E9m m\u016F\u017Eeme inicializovat statick\u00E9 \u010Dlensk\u00E9 prvky, statick\u00FD konstruktor nem\u00E1 \u017E\u00E1dn\u00E9 parametry."
+    },
+    {
+      "id": "834c9148-33a9-4892-ba1c-0464bb98765b",
+      "type": "code",
+      "language": "csharp",
+      "source": "static class Data\n{\n    public static int Id { get; private set; }\n\n    static Data()\n    {\n        Id = 1;\n    }\n    \n    public static void ZvysId()\n    {\n        \u002B\u002BId;\n    }\n}",
+      "metadata": {
+        "execution_count": 4
+      }
+    },
+    {
+      "id": "6d420a88-ee62-47b1-993e-c76895c1b4fa",
+      "type": "markdown",
+      "source": "* Pou\u017Eit\u00ED t\u0159\u00EDdy \u0060Data\u0060 je potom n\u00E1sleduj\u00EDc\u00ED:"
+    },
+    {
+      "id": "8a5bae73-ac2c-4811-af8b-28472e61683d",
+      "type": "code",
+      "language": "csharp",
+      "source": "Console.WriteLine(Data.Id); // Vypise 1\nData.ZvysId(); \nConsole.WriteLine(Data.Id); // Vypise 2",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "1\n2\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 5
+      }
+    },
+    {
+      "id": "7935e6d4-fb23-4843-af37-150405233e9f",
+      "type": "markdown",
+      "source": "---\nV\u00EDce se o statick\u00FDch prvc\u00EDch v jazyce C# dozv\u00EDte zde:\n\n[Static Classes and Static Class Members - C# Programming Guide, 2022](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/static-classes-and-static-class-members)"
+    },
+    {
+      "id": "f0c912d1-b22b-481f-be34-9315e4b3add2",
+      "type": "markdown",
+      "source": "## Pou\u017Eit\u00ED metody Dispose\n\nDispose Pattern slou\u017E\u00ED k bezpe\u010Dn\u00E9mu uvoln\u011Bn\u00ED zdroj\u016F (pam\u011Bti, p\u0159ipojen\u00ED k serveru, k datab\u00E1zi atd.) i v p\u0159\u00EDpad\u011B v\u00FDjimky.\nV jazyce C\u002B\u002B ke stejn\u00E9mu \u00FA\u010Delu pou\u017E\u00EDv\u00E1me destruktor, kter\u00FD se zavol\u00E1 automaticky p\u0159edt\u00EDm, ne\u017E se uvoln\u00ED objekt z pam\u011Bti.\nV jazyce C# sice m\u00E1me destruktor tak\u00E9, ale nev\u00EDme kdy p\u0159esn\u011B se zavol\u00E1, proto\u017Ee nev\u00EDme kdy Garbage Collector uvoln\u00ED pam\u011B\u0165 objektu. \n\nUvoln\u011Bn\u00ED zdroj\u016F se prov\u00E1d\u00ED vol\u00E1n\u00EDm metody \u0060Dispose\u0060 z rozhran\u00ED \u0060IDisposable\u0060. A ke spr\u00E1vn\u00E9mu vol\u00E1n\u00ED t\u00E9to metody slou\u017E\u00ED p\u0159\u00EDkaz \u0060using\u0060."
+    },
+    {
+      "id": "a3c99faf-efdc-485a-9aeb-c61e6972d39c",
+      "type": "markdown",
+      "source": "Nejprve si uk\u00E1\u017Eeme p\u0159\u00EDklad vol\u00E1n\u00ED metody Dispose bez p\u0159\u00EDkazu \u0060using\u0060. V n\u00E1sleduj\u00EDc\u00EDm p\u0159\u00EDkazu pomoc\u00ED t\u0159\u00EDdy \u0060HttpClient\u0060 zavol\u00E1me webovou slu\u017Ebu a zobraz\u00EDme z\u00EDskan\u00FD \u0159et\u011Bzec. Blok finally se zavol\u00E1 v\u017Edy, i kdy\u017E dojde nebo nedojde k v\u00FDjimce p\u0159i vol\u00E1n\u00ED metody \u0060GetStringAsync\u0060. "
+    },
+    {
+      "id": "7d864eb5-8773-4c28-917b-3db07c0d5bd7",
+      "type": "code",
+      "language": "csharp",
+      "source": "using System.Net.Http;\n\nstring url = \u0022https://geek-jokes.sameerkumar.website/api?format=json\u0022;\n\nHttpClient client = new HttpClient();\n\ntry\n{\n    string jsonString = await client.GetStringAsync(url);\n    Console.WriteLine(jsonString);\n}\nfinally\n{\n    client.Dispose();\n}",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "{\u0022joke\u0022: \u0022Simply by pulling on both ends, Chuck Norris can stretch diamonds back into coal.\u0022}\n\r\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 1
+      }
+    },
+    {
+      "id": "9c2aeea9-6390-4980-9a6e-21cedab20ad9",
+      "type": "markdown",
+      "source": "A nyn\u00ED pou\u017Eijeme kl\u00ED\u010Dov\u00E9 slovo \u0060using\u0060, jeho\u017E syntaxe je jednodu\u0161\u00ED a zajist\u00ED, \u017Ee i v p\u0159\u00EDpad\u011B v\u00FDjimky bude zavolan\u00E1 metoda Dispose a bude \u0159\u00E1dn\u011B ukon\u010Deno p\u0159ipojen\u00ED k serveru. "
+    },
+    {
+      "id": "a02df4d5-73f3-4c7b-9329-fb90bededafa",
+      "type": "code",
+      "language": "csharp",
+      "source": "using System.Net.Http;\n\nstring url = \u0022https://geek-jokes.sameerkumar.website/api?format=json\u0022;\n\nusing (HttpClient client = new HttpClient())\n{\n    string jsonString = await client.GetStringAsync(url);\n    Console.WriteLine(jsonString);\n}",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "{\u0022joke\u0022: \u0022Chuck Norris is the only man who has, literally, beaten the odds. With his fists.\u0022}\n\r\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 25
+      }
+    },
+    {
+      "id": "4703cc4c-5a2f-448d-9829-91e2c17f3993",
+      "type": "markdown",
+      "source": "N\u00E1sleduj\u00EDc\u00ED k\u00F3d demonstruje pou\u017Eit\u00ED kl\u00ED\u010Dov\u00E9ho slova \u0060using\u0060 s t\u0159\u00EDdou \u0060StreamWritter\u0060, kter\u00E1 um\u00ED textov\u011B zapisovat do souboru."
+    },
+    {
+      "id": "09e4fb08-f853-4d86-959b-47612685b930",
+      "type": "code",
+      "language": "csharp",
+      "source": "using System.IO;\n\nusing(StreamWriter writer = new StreamWriter(\u0022data.txt\u0022))\n{\n    writer.WriteLine(\u0022Ahoj\u0022);\n}\n",
+      "metadata": {
+        "execution_count": 8
+      }
+    },
+    {
+      "id": "f092af8b-1b04-468e-94d6-67a7fef5ebae",
+      "type": "markdown",
+      "source": "P\u0159\u00EDklad s t\u0159\u00EDdou \u0060StreamWriter\u0060 si m\u016F\u017Eete vyzkou\u0161et na str\u00E1nk\u00E1ch [SharpLab.io](https://sharplab.io/#v2:CYLg1APgAgTAjAWAFBQAwAIpwHQEkDyA3MslAMyYzoDCyA3suk5hVACzoAqApgM4AuACgCUjZgyTMpmDIKx582AMr8ATtwCGAWwDqqgJb9uq9AHcDRkwF50AO26nMOAsrWbdF44IBERgB782PwB3gA06BoADpHctqDoagCu3MKiktJMEmIZUuaGxth6\u002BQAy\u002BvY\u002BAIIAFgD2AFbewsTpGQC\u002BJC3SAPQAVGjocs6KKuraRZZmntZ2Dk4KrqMe\u002Bao\u002B/oHB/GER0bHxSSlpOegSR1JqAJ7ZpyenGXmWhZ6l5d7V9Y3Nt0ztnUcAxhp\u002BH8qoICABRPx/biRfj6Gq2dDcPyHL43L7MeQAEX0GgA5rYagJ9H9eNhMdwAEaJXGPEplbiCJHYACyfF4eJSny\u002BPyOrR6XSuP1aQA==), kter\u00E9 zobrazuj\u00ED vygenerovan\u00FD k\u00F3d kompil\u00E1torem."
+    },
+    {
+      "id": "5a673c01-6b37-40fb-954c-0be85ed25aa1",
+      "type": "markdown",
+      "source": "---\nV\u00EDce o metod\u011B dispose najdete nap\u0159\u00EDklad zde:\n\n[IDisposable.Dispose Method, 2022](https://docs.microsoft.com/en-us/dotnet/api/system.idisposable.dispose?view=net-6.0)"
+    }
+  ]
+}
