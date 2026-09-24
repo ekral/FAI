@@ -1,8 +1,6 @@
 import os
 import subprocess
 import json
-import io
-import sys
 
 def run_cmd(cmd, env, timeout=15):
     try:
@@ -44,6 +42,14 @@ def run_cmd(cmd, env, timeout=15):
 
         return False, "\n".join(timeout_details)
 
+def print_error(message):
+    error_result = {
+        "fraction": 0.0,
+        "epiloguehtml": message
+    }
+
+    print(json.dumps(error_result, ensure_ascii=False))
+
 def main():
 
     try:
@@ -69,21 +75,13 @@ def main():
             runner_code = prvni_testcase.get("testcode", "")
 
             if not runner_code.strip():
-                error_result = {
-                    "fraction": 0.0,
-                    "prologuehtml": "The Test Case does not contain testcode."
-                }
-                print(json.dumps(error_result, ensure_ascii=False))
+                print_error("The Test Case does not contain testcode.");
                 return
 
             with open("runner.cs", "w", encoding="utf-8") as f:
                 f.write(runner_code)
         else:
-            error_result = {
-                "fraction": 0.0,
-                "prologuehtml": "Missing Test Case."
-            }
-            print(json.dumps(error_result, ensure_ascii=False))
+            print_error("No test cases provided.");
             return
 
         # ============================================================
@@ -104,144 +102,6 @@ def main():
             "/p:UseSharedCompilation=false"
         ]
 
-
-        # ============================================================
-        # 0. DEBUG INFO
-        # ============================================================
-
-        """  
-        debug_buffer = io.StringIO()
-        
-        print("=== DOTNET ===", file=debug_buffer)
-        success, report = run_cmd(["dotnet", "--version"], env)
-
-        if success:
-            print(report, file=debug_buffer)
-        else:
-            print("Failed to get dotnet version: " + report, file=debug_buffer)                                                                                             
-
-        print("=== WORKING DIRECTORY ===", file=debug_buffer)
-        print(os.getcwd(), file=debug_buffer)
-
-        print("=== FILES ===", file=debug_buffer)
-        for filename in sorted(os.listdir(".")):
-            print(filename, file=debug_buffer)
-
-        print("\n=== CONTENT OF solution.cs ===", file=debug_buffer)
-        try:
-            with open("solution.cs", "r", encoding="utf-8") as f:
-                print(f.read(), file=debug_buffer)
-        except Exception as e:
-            print(f"Nepodařilo se přečíst solution.cs: {e}", file=debug_buffer)
-
-        print("\n=== CONTENT OF runner.cs ===", file=debug_buffer)
-        try:
-            with open("runner.cs", "r", encoding="utf-8") as f:
-                print(f.read(), file=debug_buffer)
-        except Exception as e:
-            print(f"Nepodařilo se přečíst runner.cs: {e}", file=debug_buffer)
-
-        debug_result = {
-            "fraction": 0.0,
-            "epiloguehtml": debug_buffer.getvalue()
-        }
-
-        print(json.dumps(debug_result, ensure_ascii=False))
-
-        return 
-        """
-
-        # ============================================================
-        # 1. RESTORE
-        # ============================================================
-
-        """  
-        success, report = run_cmd(
-            [
-                "dotnet",
-                "restore",
-                "--ignore-failed-sources",
-                *common
-            ],
-            env
-        )
-
-        if not success:
-            error_result = {
-                "fraction": 0.0,
-                "epiloguehtml": f"<pre>{report}</pre>"
-            }
-            print(json.dumps(error_result, ensure_ascii=False))
-            return
-        """  
-        # ============================================================
-        # 2. BUILD
-        # ============================================================
-
-        """  
-        success, report = run_cmd(
-            [
-                "dotnet",
-                "build",
-                "--no-restore",
-                "-m:1",
-                *common
-            ],
-            env
-        )
-
-        if not success:
-            error_result = {
-                "fraction": 0.0,
-                "epiloguehtml": f"<pre>{report}</pre>"
-            }
-            print(json.dumps(error_result, ensure_ascii=False))
-            return
-        """  
-        # ============================================================
-        # 3. RUN
-        # ============================================================
-
-        """  
-        success, report = run_cmd(
-            [
-                "dotnet",
-                "run",
-                "--no-restore",
-                "--no-build",
-                "-c Debug",
-                *common
-            ],
-            env
-        )
-
-        if not success:
-            error_result = {
-                "fraction": 0.0,
-                "epiloguehtml": f"<pre>{report}</pre>"
-            }
-            print(json.dumps(error_result, ensure_ascii=False))
-            return
-
-        if not report.strip():
-            error_result = {
-                "fraction": 0.0,
-                "epiloguehtml": "The program started but returned no grading output."
-            }
-            print(json.dumps(error_result, ensure_ascii=False))
-            return
-
-        try:
-            parsed_json = json.loads(report)
-            print(json.dumps(parsed_json, ensure_ascii=False))
-        except json.JSONDecodeError:
-            error_result = {
-                "fraction": 0.0,
-                "epiloguehtml": f"The program started but returned no valid JSON format grading output. Raw output was:\n{report}"         
-            }
-            print(json.dumps(error_result, ensure_ascii=False))
-            return
-        """
 
         # ============================================================
         # COMPILE DIRECTLY WITH CSC - NO RESTORE
@@ -413,8 +273,7 @@ def main():
             error_result = {
                 "fraction": 0.0,
                 "epiloguehtml": (
-                    "The program started but returned "
-                    "no grading output."
+                    "The program started but returned no grading output."
                 )
             }
 
@@ -440,23 +299,11 @@ def main():
             return
 
         except Exception as e:
-            error_result = {
-                "fraction": 0.0,
-                "epiloguehtml": f"Compiler/runtime setup error: {e}"
-            }
-
-            print(json.dumps(error_result, ensure_ascii=False))
+            print_error(f"Unexpected error while parsing grading output: {str(e)}")
             return
 
     except Exception as e:
-        result = {
-            "fraction": 0.0,
-            "epiloguehtml": (
-                f"Internal test script error: {str(e)}"
-            )
-        }
-
-        print(json.dumps(result, ensure_ascii=False))
+        print_error(f"Internal test script error: {str(e)}")
         return
 
 
