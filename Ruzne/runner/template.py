@@ -142,7 +142,22 @@ def main():
             )
             return
         
-        target_directory = get_path(ref_directories_sorted[0])
+        ref_directory = ref_directories_sorted[0]
+
+        runtimeconfig = {
+            "runtimeOptions": {
+                "tfm": f"net{major_version}",
+                "framework": {
+                    "name": "Microsoft.NETCore.App",
+                    "version": ref_directory.name
+                }
+            }
+        }
+
+        target_directory = get_path(ref_directory)
+
+        with open("runner.runtimeconfig.json", "w", encoding="utf-8") as f:
+            json.dump(runtimeconfig, f, ensure_ascii=False, indent=2)
 
         get_option = lambda d: f"/reference:{target_directory / d}"
 
@@ -174,75 +189,34 @@ def main():
         # RUN
         # ========================================================
 
-        run_result = subprocess.run(
-            ["dotnet", "runner.dll"],
-            capture_output=True,
-            text=True,
-            env=env,
-            timeout=15
+        success, report = run_cmd(
+            [
+                "dotnet",
+                "runner.dll",
+            ],
+            env
         )
-
-        if run_result.returncode != 0:
-            errors = []
-
-            if run_result.stderr.strip():
-                errors.append(run_result.stderr.strip())
-
-            if run_result.stdout.strip():
-                errors.append(run_result.stdout.strip())
-
-            error_result = {
-                "fraction": 0.0,
-                "epiloguehtml": (
-                    "Runtime error:\n<pre>"
-                    + "\n".join(errors)
-                    + "</pre>"
-                )
-            }
-
-            print(json.dumps(error_result, ensure_ascii=False))
+        
+        if not success:
+            print_error(report)
             return
 
-        report = run_result.stdout.strip()
-
         if not report:
-            error_result = {
-                "fraction": 0.0,
-                "epiloguehtml": (
-                    "The program started but returned no grading output."
-                )
-            }
-
-            print(json.dumps(error_result, ensure_ascii=False))
+            print_error("The runner did not return any grading output.")
             return
 
         try:
             parsed_json = json.loads(report)
+            
             print(json.dumps(parsed_json, ensure_ascii=False))
 
         except json.JSONDecodeError:
-            error_result = {
-                "fraction": 0.0,
-                "epiloguehtml": (
-                    "The program returned invalid JSON "
-                    "grading output:\n<pre>"
-                    + report
-                    + "</pre>"
-                )
-            }
-
-            print(json.dumps(error_result, ensure_ascii=False))
-            return
-
-        except Exception as e:
-            print_error(f"Unexpected error while parsing grading output: {str(e)}")
+            print_error(f"The runner returned invalid JSON grading output: {report}")
             return
 
     except Exception as e:
         print_error(f"Internal test script error: {str(e)}")
         return
 
-
 if __name__ == "__main__":
     main()
-
