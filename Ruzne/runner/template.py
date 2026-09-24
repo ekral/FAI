@@ -97,13 +97,6 @@ def main():
         env["DOTNET_PRINT_TELEMETRY_MESSAGE"] = "false"
         env["MSBuildEnableWorkloadResolver"] = "false"
 
-        common = [
-            "/p:MSBuildEnableWorkloadResolver=false",
-            "/p:BuildInParallel=false",
-            "/p:UseSharedCompilation=false"
-        ]
-
-
         # ============================================================
         # COMPILE DIRECTLY WITH CSC - NO RESTORE
         # ============================================================
@@ -138,79 +131,45 @@ def main():
 
         ref_pack_root = dotnet_root / "packs" / "Microsoft.NETCore.App.Ref"
 
-        target_framework = f"net{major_version}"
+        get_path = lambda p: p / "ref" / f"net{major_version}"
 
-        get_target_path = lambda p: p / "ref" / target_framework
-
-        ref_directories = filter(lambda p: p.is_dir() and get_target_path(p).is_dir(), ref_pack_root.iterdir())
+        ref_directories = filter(lambda p: p.is_dir() and get_path(p).is_dir(), ref_pack_root.iterdir())
         ref_directories_sorted = sorted(ref_directories, key=lambda p: [int(x) for x in p.name.split('.')], reverse=True)
 
         if len(ref_directories_sorted) == 0:
             print_error(
-                f"Reference assemblies for {target_framework} not found"
+                f"Reference assemblies for net{major_version} not found"
             )
             return
         
-        ref_directory = ref_directories_sorted[0]
+        target_directory = get_path(ref_directories_sorted[0])
 
-        target_directory = get_target_path(ref_directory)
-   
-        references = [
-            target_directory / "System.Console.dll",
-            target_directory / "System.Runtime.dll",
-            target_directory / "System.Collections.dll",
-            target_directory / "System.Linq.dll"
-        ]
+        get_option = lambda d: f"/reference:{target_directory / d}"
 
-        compile_cmd = [
-            "dotnet",
-            "exec",
-            csc_path,
-
-            "/nologo",
-            "/target:exe",
-            "/out:runner.dll",
-
-            "/nostdlib+",
-
-            "solution.cs",
-            "runner.cs",
-        ]
-
-        compile_cmd.extend(
-            f"/reference:{reference}"
-            for reference in references
+        success, report = run_cmd(
+            [
+                "dotnet",
+                "exec",
+                csc_path,
+                "/nologo",
+                "/target:exe",
+                "/out:runner.dll",
+                "/nostdlib+",
+                "solution.cs",
+                "runner.cs",
+                get_option("System.Console.dll"),
+                get_option("System.Runtime.dll"),
+                get_option("System.Collections.dll"),
+                get_option("System.Linq.dll"),
+            ],
+            env,
+            30
         )
-
-        compile_result = subprocess.run(
-            compile_cmd,
-            capture_output=True,
-            text=True,
-            env=env,
-            timeout=30
-        )
-
-        if compile_result.returncode != 0:
-            output = "\n".join(
-                x for x in [
-                    compile_result.stdout.strip(),
-                    compile_result.stderr.strip()
-                ]
-                if x
-            )
-
-            error_result = {
-                "fraction": 0.0,
-                "epiloguehtml": (
-                    "Compilation error:\n<pre>"
-                    + output
-                    + "</pre>"
-                )
-            }
-
-            print(json.dumps(error_result, ensure_ascii=False))
+        
+        if not success:
+            print_error(report)
             return
-
+        
         # ========================================================
         # RUN
         # ========================================================
