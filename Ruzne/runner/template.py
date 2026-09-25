@@ -1,3 +1,5 @@
+# V Moodle uloze nastavit timeout na 15 sekund, memmory limit na 0 (neomezeno)
+
 import os
 import subprocess
 import json

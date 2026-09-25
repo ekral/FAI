@@ -1,3 +1,4 @@
 {
-    "dotnet.defaultSolution": "AF/cviceni/07_web_form/src/Studenti/Studenti.sln"
+    "dotnet.defaultSolution": "AF/cviceni/07_web_form/src/Studenti/Studenti.sln",
+    "cmake.sourceDirectory": "C:/Users/ekral/source/repos/FAI/Ruzne"
 }
