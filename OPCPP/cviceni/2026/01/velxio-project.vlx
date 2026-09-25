@@ -1,82 +1,82 @@
 {
   "format": "velxio-project",
   "version": 1,
-  "exportedAt": "2026-09-22T07:29:23.613Z",
+  "exportedAt": "2026-09-25T13:08:40.336Z",
   "boards": [
     {
       "id": "arduino-uno",
       "boardKind": "arduino-uno",
-      "x": 134.89142015857425,
-      "y": 319.86163224867244,
+      "x": 28,
+      "y": 161,
       "activeFileGroupId": "group-arduino-uno",
       "languageMode": "arduino",
-      "serialBaudRate": 9600
+      "serialBaudRate": 0
     }
   ],
   "fileGroups": {
     "group-arduino-uno": [
       {
         "name": "sketch.ino",
-        "content": "// Blink LED Example\n// Toggles the built-in LED on pin 13\n\nvoid setup() {\n  pinMode(13, OUTPUT);\n  pinMode(12, INPUT_PULLUP);\n}\n\nbool ledState = LOW;\nbool lastButtonStableState = HIGH;\nbool candidateButtonState = HIGH;\nunsigned long int candidateTimeChanged = 0; \n// unsigned jsou cisla bez znameka, 0, 1, .. long int zabere 4 byty (32 bitu), 2 ^ 32\n\nvoid loop() {\n\n  bool buttonState = digitalRead(12);\n\n  if(buttonState != candidateButtonState)\n  {\n    candidateButtonState = buttonState;\n    candidateTimeChanged = millis(); // millis() vrati aktualni cas\n  }\n\n  unsigned long int candidateDuration = millis() - candidateTimeChanged;\n\n  if(candidateDuration > 30)\n  {\n      int stableButtonState = candidateButtonState; // candidate bereme uz jako stable\n\n      if(stableButtonState != lastButtonStableState)\n      {\n        if(stableButtonState == HIGH)\n        {\n          ledState = !ledState;\n          digitalWrite(13, ledState);\n        }\n      }\n\n      lastButtonStableState = stableButtonState;\n  }\n\n}"
+        "content": "#define LED_PIN 13\n#define BUTTON_PIN 12\n\nbool ledState = LOW;\nbool buttonCandidateState;\nbool lastButtonStableState;\n\nunsigned long candidateTime;\n\nvoid setup() \n{\n  pinMode(LED_PIN, OUTPUT);\n  pinMode(BUTTON_PIN, INPUT_PULLUP);\n  digitalWrite(LED_PIN, ledState);\n\n  buttonCandidateState = digitalRead(BUTTON_PIN);\n  lastButtonStableState = buttonCandidateState;\n  candidateTime = millis();\n}\n\nvoid loop() \n{\n  bool buttonState = digitalRead(BUTTON_PIN);\n\n  if(buttonState != buttonCandidateState)\n  {\n    buttonCandidateState = buttonState;\n    candidateTime = millis();\n  }\n  else\n  {\n    unsigned long duration = millis() - candidateTime;\n\n    if(duration > 30)\n    {\n      bool buttonStableState = buttonCandidateState;\n\n      if(buttonStableState != lastButtonStableState)\n      {\n        lastButtonStableState = buttonStableState;\n\n        if(buttonStableState == HIGH)\n        {\n          ledState = !ledState;\n          digitalWrite(LED_PIN, ledState);\n        }\n      }\n    }\n  }\n}"
       }
     ]
   },
   "components": [
     {
-      "id": "pushbutton_1790058636036_6alt2up8v",
+      "id": "pushbutton_1790337728647_c46qyp2s1",
       "metadataId": "pushbutton",
-      "x": 277.93170285150796,
-      "y": 165.20535357812113,
+      "x": 190,
+      "y": 40,
       "properties": {
         "color": "red",
         "pressed": false,
         "label": "",
-        "xray": "true"
+        "xray": false
       }
     }
   ],
   "wires": [
     {
-      "id": "wire-1790058668076",
+      "id": "wire-1790338217956",
       "start": {
-        "componentId": "arduino-uno",
-        "pinName": "GND.1",
-        "x": 250.39142015857425,
-        "y": 328.86163224867244
+        "componentId": "pushbutton_1790337728647_c46qyp2s1",
+        "pinName": "1.l",
+        "x": 196,
+        "y": 59
       },
       "end": {
-        "componentId": "pushbutton_1790058636036_6alt2up8v",
-        "pinName": "1.l",
-        "x": 283.93170285150796,
-        "y": 184.20535357812113
+        "componentId": "arduino-uno",
+        "pinName": "GND.1",
+        "x": 143.5,
+        "y": 170
       },
       "waypoints": [
         {
-          "x": 250.39142015857425,
-          "y": 184.20535357812113
+          "x": 143.5,
+          "y": 60
         }
       ],
       "color": "#000000",
-      "autoRouted": true
+      "autoRouted": false
     },
     {
-      "id": "wire-1790058673084",
+      "id": "wire-1790338223731",
       "start": {
-        "componentId": "pushbutton_1790058636036_6alt2up8v",
+        "componentId": "pushbutton_1790337728647_c46qyp2s1",
         "pinName": "2.l",
-        "x": 283.93170285150796,
-        "y": 203.20535357812113
+        "x": 196,
+        "y": 78
       },
       "end": {
         "componentId": "arduino-uno",
         "pinName": "12",
-        "x": 269.39142015857425,
-        "y": 328.86163224867244
+        "x": 162.5,
+        "y": 170
       },
       "waypoints": [
         {
-          "x": 269.39142015857425,
-          "y": 203.20535357812113
+          "x": 162.5,
+          "y": 79
         }
       ],
       "color": "#22c55e",

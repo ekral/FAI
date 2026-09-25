@@ -1,42 +1,50 @@
+#define LED_PIN 13
+#define BUTTON_PIN 12
+
 bool ledState = LOW;
-bool candidateButtonState = HIGH;
-unsigned long candidateTimeChanged = 0; // Opraven datový typ
-bool lastStableButtonState = HIGH;
+bool buttonCandidateState;
+bool lastButtonStableState;
 
-void setup() {
-  delay(1000);
-  pinMode(13, OUTPUT);
-  pinMode(12, INPUT_PULLUP);
+unsigned long candidateTime;
 
-  candidateButtonState = digitalRead(12);
-  lastStableButtonState = candidateButtonState;
-  candidateTimeChanged = millis();
+void setup() 
+{
+  pinMode(LED_PIN, OUTPUT);
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+  digitalWrite(LED_PIN, ledState);
+
+  buttonCandidateState = digitalRead(BUTTON_PIN);
+  lastButtonStableState = buttonCandidateState;
+  candidateTime = millis();
 }
 
-void loop() {
-  bool buttonState = digitalRead(12);
-  
-  if(buttonState != candidateButtonState)   
+void loop() 
+{
+  bool buttonState = digitalRead(BUTTON_PIN);
+
+  if(buttonState != buttonCandidateState)
   {
-    candidateTimeChanged = millis();
-    candidateButtonState = buttonState;
+    buttonCandidateState = buttonState;
+    candidateTime = millis();
   }
-
-  unsigned long candidateDuration = millis() - candidateTimeChanged;
-
-  if(candidateDuration > 30)   
+  else
   {
-    bool stableButtonState = candidateButtonState;
+    unsigned long duration = millis() - candidateTime;
 
-    if(stableButtonState != lastStableButtonState)     
+    if(duration > 30)
     {
-      if(stableButtonState == HIGH)
-      {
-        ledState = !ledState;
-        digitalWrite(13, ledState);
-      }
+      bool buttonStableState = buttonCandidateState;
 
-      lastStableButtonState = stableButtonState;
+      if(buttonStableState != lastButtonStableState)
+      {
+        lastButtonStableState = buttonStableState;
+
+        if(buttonStableState == HIGH)
+        {
+          ledState = !ledState;
+          digitalWrite(LED_PIN, ledState);
+        }
+      }
     }
   }
 }
