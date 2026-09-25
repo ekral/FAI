@@ -96,6 +96,13 @@ def main():
         env["DOTNET_SKIP_FIRST_TIME_EXPERIENCE"] = "1"
         env["DOTNET_PRINT_TELEMETRY_MESSAGE"] = "false"
         env["MSBuildEnableWorkloadResolver"] = "false"
+        
+        env["DOTNET_gcServer"] = "0"
+        env["DOTNET_GCRegions"] = "0"
+        
+        env["DOTNET_GCHeapCount"] = "1"
+        env["DOTNET_GCLatencyMode"] = "1"
+        env["DOTNET_EnableWriteXorExecute"] = "0"
 
         # ============================================================
         # COMPILE DIRECTLY WITH CSC - NO RESTORE
