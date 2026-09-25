@@ -1,13 +1,13 @@
 {
   "format": "velxio-project",
   "version": 1,
-  "exportedAt": "2026-09-15T11:52:33.596Z",
+  "exportedAt": "2026-09-25T13:08:40.336Z",
   "boards": [
     {
       "id": "arduino-uno",
       "boardKind": "arduino-uno",
-      "x": 125.44809818040912,
-      "y": 397.952103644145,
+      "x": 28,
+      "y": 161,
       "activeFileGroupId": "group-arduino-uno",
       "languageMode": "arduino",
       "serialBaudRate": 0
@@ -17,188 +17,70 @@
     "group-arduino-uno": [
       {
         "name": "sketch.ino",
-        "content": "\n// Prepocet z celsiu na ADC (0-1023) pro NTC termistor\n// potrebuji jen pro konstantu limit\nconstexpr int thermistorCelsiusToAdc(float temp) \n{\n    constexpr float VCC = 5.0;\n    constexpr float SERIES_R = 10000.0;\n    constexpr float NOM_R = 10000.0;\n    constexpr float B_COEFF = 3950.0;\n    constexpr float NOM_TEMP_K = 298.15;\n    \n    float tempK = temp +\n     273.15;\n    float r = NOM_R * exp(B_COEFF * ((1.0 / tempK) - (1.0 / NOM_TEMP_K)));\n    float v = VCC * r / (SERIES_R + r);\n    return (v / VCC) * 1023.0;\n}\n\n// pouze pro pripadny vypis do logu\nfloat thermistorAdcToCelsius(int adc) \n{\n  constexpr float VCC         = 5.0;\n  constexpr float SERIES_R    = 10000.0;  // series resistor (10 kΩ)\n  constexpr float NOM_R       = 10000.0;  // nominal resistance at 25 °C\n  constexpr float B_COEFF     = 3950.0;   // Beta coefficient\n  constexpr float NOM_TEMP_K  = 298.15;   // 25 °C in Kelvin\n\n  float v    = adc * (VCC / 1023.0);\n  float r    = SERIES_R * v / (VCC - v);\n  float st   = log(r / NOM_R) / B_COEFF + 1.0 / NOM_TEMP_K;\n\n  return (1.0 / st) - 273.15;\n}\n\nenum class Stav\n{\n  Init,\n  Nizka,\n  Vysoka\n};\n\nvoid setOutputs(Stav stav);\n\nvoid setOutputs(Stav stav)\n{\n  switch(stav)\n  {\n    case Stav::Init:\n      digitalWrite(13, LOW);\n      break;\n\n    case Stav::Nizka:\n      digitalWrite(13, LOW);\n      break;\n\n    case Stav::Vysoka:\n      digitalWrite(13, HIGH);\n      break;\n  }\n}\n\n// Poznámka: U NTC termistoru s odporem k VCC platí, že s rostoucí teplotou ADC hodnota klesá!  \nconstexpr int LIMIT_ADC = thermistorCelsiusToAdc(25.0);\n\nconstexpr unsigned long DEBOUNCE_MS = 200;\n\nStav stav       = Stav::Init;\nStav kandidat   = Stav::Init;\nunsigned long kandidatOd = 0;\n\nvoid setup() \n{\n  Serial.begin(9600);\n  delay(1000); // Serial.begin muze zpusobit druhy reset hodnot, na starsim UNO nemuzu overit ze uz probehl\n  pinMode(13, OUTPUT);\n  pinMode(A0, INPUT);\n  setOutputs(Stav::Init);\n}\n\nvoid loop() \n{\n  int adc = analogRead(A0);\n \n  Stav novy_stav = stav;\n\n  switch(stav)\n  {\n    case Stav::Init:\n      if(adc < LIMIT_ADC)\n      {\n        novy_stav = Stav::Vysoka;\n      }\n      else\n      {\n        novy_stav = Stav::Nizka;\n      }\n      break;\n    case Stav::Nizka:\n      if(adc < LIMIT_ADC)\n      {\n        novy_stav = Stav::Vysoka;\n      }\n      break;\n\n    case Stav::Vysoka:\n      if(adc >= LIMIT_ADC)\n      {\n        novy_stav = Stav::Nizka;\n      }\n      break;\n  }\n\n  if (novy_stav != kandidat)      // kandidát se změnil -> restartuj odpočet\n  {\n    kandidat = novy_stav;\n    kandidatOd = millis();\n  }\n\n  if (kandidat != stav && (millis() - kandidatOd) >= DEBOUNCE_MS)\n  {\n    stav = kandidat;\n    setOutputs(stav);\n  }\n\n  delay(50);\n}"
+        "content": "#define LED_PIN 13\n#define BUTTON_PIN 12\n\nbool ledState = LOW;\nbool buttonCandidateState;\nbool lastButtonStableState;\n\nunsigned long candidateTime;\n\nvoid setup() \n{\n  pinMode(LED_PIN, OUTPUT);\n  pinMode(BUTTON_PIN, INPUT_PULLUP);\n  digitalWrite(LED_PIN, ledState);\n\n  buttonCandidateState = digitalRead(BUTTON_PIN);\n  lastButtonStableState = buttonCandidateState;\n  candidateTime = millis();\n}\n\nvoid loop() \n{\n  bool buttonState = digitalRead(BUTTON_PIN);\n\n  if(buttonState != buttonCandidateState)\n  {\n    buttonCandidateState = buttonState;\n    candidateTime = millis();\n  }\n  else\n  {\n    unsigned long duration = millis() - candidateTime;\n\n    if(duration > 30)\n    {\n      bool buttonStableState = buttonCandidateState;\n\n      if(buttonStableState != lastButtonStableState)\n      {\n        lastButtonStableState = buttonStableState;\n\n        if(buttonStableState == HIGH)\n        {\n          ledState = !ledState;\n          digitalWrite(LED_PIN, ledState);\n        }\n      }\n    }\n  }\n}"
       }
     ]
   },
   "components": [
     {
-      "id": "led_1789110568370_7azrlv3mf",
-      "metadataId": "led",
-      "x": 224.9704326107916,
-      "y": 242.24804849786278,
+      "id": "pushbutton_1790337728647_c46qyp2s1",
+      "metadataId": "pushbutton",
+      "x": 190,
+      "y": 40,
       "properties": {
-        "value": false,
-        "brightness": 1,
         "color": "red",
-        "lightColor": null,
+        "pressed": false,
         "label": "",
-        "flip": false
-      }
-    },
-    {
-      "id": "resistor_220_1789110659323_4o82vjkw0",
-      "metadataId": "resistor-220",
-      "x": 217.84121024987826,
-      "y": 325.38260733486686,
-      "properties": {
-        "value": "220",
-        "rotation": 90
-      }
-    },
-    {
-      "id": "ntc_temperature_sensor_1789116643538_dnrc3mjqw",
-      "metadataId": "ntc-temperature-sensor",
-      "x": 132.61168336346734,
-      "y": 622.5012795759237,
-      "properties": {
-        "rotation": 0,
-        "temperature": 46
+        "xray": false
       }
     }
   ],
   "wires": [
     {
-      "waypoints": [
-        {
-          "x": 242.2462904184503,
-          "y": 290.2480484978628
-        }
-      ],
-      "id": "wire-1789110587306",
+      "id": "wire-1790338217956",
       "start": {
-        "componentId": "led_1789110568370_7azrlv3mf",
-        "pinName": "C",
-        "x": 245.9704326107916,
-        "y": 290.2480484978628
+        "componentId": "pushbutton_1790337728647_c46qyp2s1",
+        "pinName": "1.l",
+        "x": 196,
+        "y": 59
       },
       "end": {
         "componentId": "arduino-uno",
         "pinName": "GND.1",
-        "x": 240.94809818040912,
-        "y": 406.952103644145
+        "x": 143.5,
+        "y": 170
       },
+      "waypoints": [
+        {
+          "x": 143.5,
+          "y": 60
+        }
+      ],
       "color": "#000000",
       "autoRouted": false
     },
     {
-      "waypoints": [
-        {
-          "x": 284.82015810998587,
-          "y": 290.2480484978628
-        }
-      ],
-      "id": "wire-1789110666299",
+      "id": "wire-1790338223731",
       "start": {
-        "componentId": "led_1789110568370_7azrlv3mf",
-        "pinName": "A",
-        "x": 255.9704326107916,
-        "y": 290.2480484978628
+        "componentId": "pushbutton_1790337728647_c46qyp2s1",
+        "pinName": "2.l",
+        "x": 196,
+        "y": 78
       },
       "end": {
-        "componentId": "resistor_220_1789110659323_4o82vjkw0",
-        "pinName": "1",
-        "x": 283.6912102498783,
-        "y": 303.88260733486686
+        "componentId": "arduino-uno",
+        "pinName": "12",
+        "x": 162.5,
+        "y": 170
       },
+      "waypoints": [
+        {
+          "x": 162.5,
+          "y": 79
+        }
+      ],
       "color": "#22c55e",
       "autoRouted": false
-    },
-    {
-      "waypoints": [
-        {
-          "x": 251.7462904184503,
-          "y": 392.147755279344
-        }
-      ],
-      "id": "wire-1789110671819",
-      "start": {
-        "componentId": "resistor_220_1789110659323_4o82vjkw0",
-        "pinName": "2",
-        "x": 283.6912102498783,
-        "y": 362.6826073348669
-      },
-      "end": {
-        "componentId": "arduino-uno",
-        "pinName": "13",
-        "x": 250.44809818040912,
-        "y": 406.952103644145
-      },
-      "color": "#22c55e",
-      "autoRouted": false
-    },
-    {
-      "waypoints": [
-        {
-          "x": 294.5687240296856,
-          "y": 655.5751357477446
-        },
-        {
-          "x": 294.5687240296856,
-          "y": 589.4521036441449
-        }
-      ],
-      "id": "wire-1789116690865",
-      "start": {
-        "componentId": "ntc_temperature_sensor_1789116643538_dnrc3mjqw",
-        "pinName": "GND",
-        "x": 273.61168336346736,
-        "y": 654.7012795759238
-      },
-      "end": {
-        "componentId": "arduino-uno",
-        "pinName": "GND.2",
-        "x": 294.94809818040915,
-        "y": 589.4521036441449
-      },
-      "color": "#000000",
-      "autoRouted": false
-    },
-    {
-      "waypoints": [
-        {
-          "x": 285.44809818040915,
-          "y": 665.1751357477445
-        }
-      ],
-      "id": "wire-1789116738708",
-      "start": {
-        "componentId": "ntc_temperature_sensor_1789116643538_dnrc3mjqw",
-        "pinName": "VCC",
-        "x": 273.61168336346736,
-        "y": 664.3012795759237
-      },
-      "end": {
-        "componentId": "arduino-uno",
-        "pinName": "5V",
-        "x": 285.44809818040915,
-        "y": 589.4521036441449
-      },
-      "color": "#cc0000",
-      "autoRouted": false
-    },
-    {
-      "waypoints": [
-        {
-          "x": 333.44809818040915,
-          "y": 674.0012795759237
-        }
-      ],
-      "id": "wire-1789116770077",
-      "start": {
-        "componentId": "ntc_temperature_sensor_1789116643538_dnrc3mjqw",
-        "pinName": "OUT",
-        "x": 273.61168336346736,
-        "y": 674.0012795759237
-      },
-      "end": {
-        "componentId": "arduino-uno",
-        "pinName": "A0",
-        "x": 333.44809818040915,
-        "y": 589.4521036441449
-      },
-      "color": "#22c55e",
-      "autoRouted": true
     }
   ],
   "activeBoardId": "arduino-uno"
