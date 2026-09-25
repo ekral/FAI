@@ -184,8 +184,7 @@ def main():
                 get_option("System.Collections.dll"),
                 get_option("System.Linq.dll"),
             ],
-            env,
-            30
+            env
         )
         
         if not success:
