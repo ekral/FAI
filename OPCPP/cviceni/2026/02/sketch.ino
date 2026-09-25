@@ -1,5 +1,6 @@
 #define LED_PIN 13
-#define BUTTON_PIN 12
+#define BUTTONL_PIN 12
+#define BUTTONR_PIN 8
 
 bool ledState = LOW;
 
@@ -47,22 +48,24 @@ struct Button
   }
 };
 
-Button button;
+Button buttonL;
 
 void setup() 
 {
   pinMode(LED_PIN, OUTPUT);
-  pinMode(BUTTON_PIN, INPUT_PULLUP);
   digitalWrite(LED_PIN, ledState);
 
-  button.setup(digitalRead(BUTTON_PIN), millis());
+  pinMode(BUTTONL_PIN, INPUT_PULLUP);
+  pinMode(BUTTONR_PIN, INPUT_PULLUP);
+
+  buttonL.setup(digitalRead(BUTTONL_PIN), millis());
 }
 
 void loop() 
 {
   unsigned long time = millis();
 
-  if(button.update(digitalRead(BUTTON_PIN), time))
+  if(buttonL.update(digitalRead(BUTTONL_PIN), time))
   {
     ledState = !ledState;
     digitalWrite(LED_PIN, ledState);
