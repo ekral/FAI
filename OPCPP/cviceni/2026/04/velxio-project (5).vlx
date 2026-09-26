@@ -1,0 +1,87 @@
+{
+  "format": "velxio-project",
+  "version": 1,
+  "exportedAt": "2026-09-26T13:16:15.336Z",
+  "boards": [
+    {
+      "id": "arduino-uno",
+      "boardKind": "arduino-uno",
+      "x": 38,
+      "y": 174,
+      "activeFileGroupId": "group-arduino-uno",
+      "languageMode": "arduino",
+      "serialBaudRate": 0
+    }
+  ],
+  "fileGroups": {
+    "group-arduino-uno": [
+      {
+        "name": "sketch.ino",
+        "content": "struct EdgeDetector\n{\n  bool candidateState;\n  unsigned long candidateSince;\n  bool lastStableState;\n\n  const bool targetState;\n  const unsigned long minStableDuration;\n\n  EdgeDetector(bool targetState, unsigned long minStableDuration)\n    : targetState(targetState), minStableDuration(minStableDuration)\n  {\n\n  }\n\n  void begin(bool state, unsigned long time)\n  {\n    candidateState = state;\n    candidateSince = time;\n    lastStableState = state;\n  }\n\n  bool detect(bool state, unsigned long time)\n  {\n    if(state != candidateState)\n    {\n      candidateState = state;\n      candidateSince = time;\n    }\n    else\n    {\n      unsigned long duration = time - candidateSince;\n\n      if(duration > minStableDuration)\n      {\n        if(candidateState != lastStableState)\n        {\n          lastStableState = candidateState;\n\n          if(candidateState == targetState)\n          {\n            return true;\n          }\n        }\n      }\n    }\n\n    return false;\n  }\n};\n\nstruct Led\n{\n  const int pin;\n  bool state;\n\n  Led(int pin) : pin(pin)\n  {\n  }\n\n  void writeState()\n  {\n    digitalWrite(pin, state);\n  }\n\n  void begin(bool state)\n  {\n    this->state = state;\n\n    writeState();\n  }\n\n  void toggle()\n  {\n    state = !state;\n\n    writeState();\n  }\n};\n\nEdgeDetector edge(HIGH, 30);\nLed led(13);\n\nvoid setup() \n{\n  pinMode(12, INPUT_PULLUP);\n  edge.begin(digitalRead(12), millis());\n  led.begin(LOW);\n}\n\nvoid loop() \n{\n  if(edge.detect(digitalRead(12), millis()))\n  {\n    led.toggle();\n  }\n}"
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "pushbutton_1790420991693_sh2xu6yor",
+      "metadataId": "pushbutton",
+      "x": 179,
+      "y": 36,
+      "properties": {
+        "color": "red",
+        "pressed": false,
+        "label": "",
+        "xray": false
+      }
+    }
+  ],
+  "wires": [
+    {
+      "id": "wire-1790420997901",
+      "start": {
+        "componentId": "pushbutton_1790420991693_sh2xu6yor",
+        "pinName": "1.l",
+        "x": 185,
+        "y": 55
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "GND.1",
+        "x": 153.5,
+        "y": 183
+      },
+      "waypoints": [
+        {
+          "x": 153.5,
+          "y": 56
+        }
+      ],
+      "color": "#000000",
+      "autoRouted": false
+    },
+    {
+      "id": "wire-1790421006573",
+      "start": {
+        "componentId": "pushbutton_1790420991693_sh2xu6yor",
+        "pinName": "2.l",
+        "x": 185,
+        "y": 74
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "12",
+        "x": 172.5,
+        "y": 183
+      },
+      "waypoints": [
+        {
+          "x": 172.5,
+          "y": 75
+        }
+      ],
+      "color": "#22c55e",
+      "autoRouted": false
+    }
+  ],
+  "activeBoardId": "arduino-uno"
+}
