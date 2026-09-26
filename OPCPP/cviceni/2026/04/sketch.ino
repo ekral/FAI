@@ -87,43 +87,35 @@ class DigitalPullupInput
 private:
   const int pin;
 public:
-  DigitalOutput(int pin) : pin(pin)
+  DigitalPullupInput(int pin) : pin(pin)
   {
   }
 
-  void writeState()
+  void begin()
   {
-    digitalWrite(pin, state);
+    pinMode(pin, INPUT_PULLUP);
   }
 
-  void begin(bool state)
+  bool read()
   {
-    this->state = state;
-
-    writeState();
-  }
-
-  void toggle()
-  {
-    state = !state;
-
-    writeState();
+    return digitalRead(pin);
   }
 };
 
 EdgeDetector edge(HIGH, 30);
 DigitalOutput led(13);
+DigitalPullupInput button(12);
 
 void setup() 
 {
-  pinMode(12, INPUT_PULLUP);
-  edge.begin(digitalRead(12), millis());
+  button.begin();
+  edge.begin(button.read(), millis());
   led.begin(LOW);
 }
 
 void loop() 
 {
-  if(edge.detect(digitalRead(12), millis()))
+  if(edge.detect(button.read(), millis()))
   {
     led.toggle();
   }
