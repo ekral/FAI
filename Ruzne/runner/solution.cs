@@ -1,7 +1,11 @@
-public partial class Solution
+using System.Linq;
+
+public class Solution
 {
-    public partial int VratDruhouMocninu(int x)
+    public int VratSumu(int[] pole)
     {
-        return x * x;
+        int pocet = pole.Length;
+        
+        return pole.Sum();
     }
 }

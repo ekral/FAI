@@ -1,0 +1,250 @@
+{
+  "format": "velxio-project",
+  "version": 1,
+  "exportedAt": "2026-09-26T09:58:06.734Z",
+  "boards": [
+    {
+      "id": "arduino-uno",
+      "boardKind": "arduino-uno",
+      "x": 99,
+      "y": 216,
+      "activeFileGroupId": "group-arduino-uno",
+      "languageMode": "arduino",
+      "serialBaudRate": 0
+    }
+  ],
+  "fileGroups": {
+    "group-arduino-uno": [
+      {
+        "name": "sketch.ino",
+        "content": "class EdgeDetector\n{\nprivate:\n  bool candidateState;\n  bool lastStableState;\n  unsigned long candidateSince;\n  bool targetState;\n\npublic:\n  EdgeDetector(bool targetState) : targetState(targetState)\n  {\n\n  }\n\n  void setup(bool state, unsigned long time)\n  {\n    candidateState = state;\n    lastStableState = state;\n    candidateSince = time;\n  }\n\n  bool detect(bool state, unsigned long time)\n  {\n    if(state != candidateState)\n    {\n      candidateState = state;\n      candidateSince = time;\n    }\n    else\n    {\n      unsigned long duration = time - candidateSince;\n\n      if(duration > 30)\n      {\n        if(candidateState != lastStableState)\n        {\n          lastStableState = candidateState;\n\n          if(candidateState == targetState)\n          {\n            return true;\n          }\n        }\n      }\n    }\n\n    return false;\n  }\n};\n\nclass InputPullupPin\n{\nprivate:\n  int pinNumber;\npublic:\n  InputPullupPin(int pinNumber) : pinNumber(pinNumber)\n  {\n  }\n\n  void setup()\n  {\n    pinMode(pinNumber, INPUT_PULLUP);\n  }\n\n  bool read()\n  {\n    bool state = digitalRead(pinNumber);\n\n    return state;\n  }\n};\n\nclass PwmOutputPin\n{\nprivate:\n  int pinNumber;\n  int pulseWidth;\n  int step;\npublic:\n  PwmOutputPin(int pinNumber, int pulseWidth, int step) \n    : pinNumber(pinNumber), pulseWidth(pulseWidth), step(step)\n  {\n  }\n\n  void setup()\n  {\n    pinMode(pinNumber, OUTPUT);\n  }\n\n  void setPulseWidth()\n  {\n    analogWrite(pinNumber, pulseWidth);\n  }\n\n  void increasePulseWidth()\n  {\n    if(pulseWidth < 255 - step)\n    {\n      pulseWidth += step;\n    }\n\n    setPulseWidth();\n  }\n\n  void decreasePulseWidth()\n  {\n    if(pulseWidth > step)\n    {\n      pulseWidth -= step;\n    }\n\n    setPulseWidth();  \n  }\n};\n\nInputPullupPin buttonL(12);\nInputPullupPin buttonR(8);\nPwmOutputPin led(9, 125, 5);\n\nEdgeDetector edgeL(HIGH);\nEdgeDetector edgeR(HIGH);\n\nvoid setup() \n{\n  led.setup();\n  led.setPulseWidth();\n\n  buttonL.setup();\n  buttonR.setup();\n\n  edgeL.setup(buttonL.read(), millis());\n  edgeR.setup(buttonR.read(), millis());\n}\n\nvoid loop() \n{\n  if(edgeL.detect(buttonL.read(), millis()))\n  {\n    led.decreasePulseWidth();\n  }\n\n  if(edgeR.detect(buttonR.read(), millis()))\n  {\n    led.increasePulseWidth();\n  }\n}"
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "pushbutton_1790337728647_c46qyp2s1",
+      "metadataId": "pushbutton",
+      "x": 17,
+      "y": 24,
+      "properties": {
+        "color": "red",
+        "pressed": false,
+        "label": "",
+        "xray": false
+      }
+    },
+    {
+      "id": "pushbutton_1790345991462_g5s5ybke7",
+      "metadataId": "pushbutton",
+      "x": 358.2820152414616,
+      "y": 24.41113433461031,
+      "properties": {
+        "color": "red",
+        "pressed": false,
+        "label": "",
+        "xray": false
+      }
+    },
+    {
+      "id": "led_1790346973753_l3ulohquz",
+      "metadataId": "led",
+      "x": 233.2053968518262,
+      "y": 53.18343899060383,
+      "properties": {
+        "value": false,
+        "brightness": 1,
+        "color": "red",
+        "lightColor": null,
+        "label": "",
+        "flip": false
+      }
+    },
+    {
+      "id": "resistor_220_1790347030711_uh9onnato",
+      "metadataId": "resistor-220",
+      "x": 197.46630936494404,
+      "y": 136.68702015514083,
+      "properties": {
+        "value": "220",
+        "rotation": 90
+      }
+    }
+  ],
+  "wires": [
+    {
+      "waypoints": [
+        {
+          "x": 143.5,
+          "y": 225
+        },
+        {
+          "x": 143.5,
+          "y": 43.41113433461031
+        },
+        {
+          "x": 90,
+          "y": 43.41113433461031
+        }
+      ],
+      "id": "wire-1790345961710",
+      "start": {
+        "componentId": "arduino-uno",
+        "pinName": "GND.1",
+        "x": 214.5,
+        "y": 225
+      },
+      "end": {
+        "componentId": "pushbutton_1790337728647_c46qyp2s1",
+        "pinName": "1.r",
+        "x": 90,
+        "y": 43
+      },
+      "color": "#000000",
+      "autoRouted": false
+    },
+    {
+      "waypoints": [
+        {
+          "x": 162.5,
+          "y": 225
+        },
+        {
+          "x": 162.5,
+          "y": 62
+        }
+      ],
+      "id": "wire-1790345983893",
+      "start": {
+        "componentId": "arduino-uno",
+        "pinName": "12",
+        "x": 233.5,
+        "y": 225
+      },
+      "end": {
+        "componentId": "pushbutton_1790337728647_c46qyp2s1",
+        "pinName": "2.r",
+        "x": 90,
+        "y": 62
+      },
+      "color": "#22c55e",
+      "autoRouted": false
+    },
+    {
+      "waypoints": [
+        {
+          "x": 214.5,
+          "y": 43.41113433461031
+        }
+      ],
+      "id": "wire-1790345999858",
+      "start": {
+        "componentId": "pushbutton_1790345991462_g5s5ybke7",
+        "pinName": "1.l",
+        "x": 364.2820152414616,
+        "y": 43.41113433461031
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "GND.1",
+        "x": 214.5,
+        "y": 225
+      },
+      "color": "#000000",
+      "autoRouted": false
+    },
+    {
+      "waypoints": [
+        {
+          "x": 364.2820152414616,
+          "y": 225
+        }
+      ],
+      "id": "wire-1790346004715",
+      "start": {
+        "componentId": "pushbutton_1790345991462_g5s5ybke7",
+        "pinName": "2.l",
+        "x": 364.2820152414616,
+        "y": 62.41113433461031
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "8",
+        "x": 272,
+        "y": 225
+      },
+      "color": "#22c55e",
+      "autoRouted": true
+    },
+    {
+      "waypoints": [
+        {
+          "x": 214.5,
+          "y": 101.18343899060383
+        }
+      ],
+      "id": "wire-1790346984409",
+      "start": {
+        "componentId": "led_1790346973753_l3ulohquz",
+        "pinName": "C",
+        "x": 254.2053968518262,
+        "y": 101.18343899060383
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "GND.1",
+        "x": 214.5,
+        "y": 225
+      },
+      "color": "#000000",
+      "autoRouted": false
+    },
+    {
+      "waypoints": [
+        {
+          "x": 263.316309364944,
+          "y": 101.18343899060383
+        }
+      ],
+      "id": "wire-1790347046881",
+      "start": {
+        "componentId": "resistor_220_1790347030711_uh9onnato",
+        "pinName": "1",
+        "x": 263.316309364944,
+        "y": 115.18702015514083
+      },
+      "end": {
+        "componentId": "led_1790346973753_l3ulohquz",
+        "pinName": "A",
+        "x": 264.2053968518262,
+        "y": 101.18343899060383
+      },
+      "color": "#22c55e",
+      "autoRouted": true
+    },
+    {
+      "waypoints": [
+        {
+          "x": 263.316309364944,
+          "y": 225
+        }
+      ],
+      "id": "wire-1790347103086",
+      "start": {
+        "componentId": "resistor_220_1790347030711_uh9onnato",
+        "pinName": "2",
+        "x": 263.316309364944,
+        "y": 173.98702015514084
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "9",
+        "x": 262,
+        "y": 225
+      },
+      "color": "#22c55e",
+      "autoRouted": true
+    }
+  ],
+  "activeBoardId": "arduino-uno"
+}
