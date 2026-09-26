@@ -1,5 +1,6 @@
-struct EdgeDetector
+class EdgeDetector
 {
+private:
   bool candidateState;
   unsigned long candidateSince;
   bool lastStableState;
@@ -7,6 +8,7 @@ struct EdgeDetector
   const bool targetState;
   const unsigned long minStableDuration;
 
+public:
   EdgeDetector(bool targetState, unsigned long minStableDuration)
     : targetState(targetState), minStableDuration(minStableDuration)
   {
@@ -49,12 +51,43 @@ struct EdgeDetector
   }
 };
 
-struct Led
+class DigitalOutput
 {
+private:
   const int pin;
   bool state;
+    
+  void writeState()
+  {
+    digitalWrite(pin, state);
+  }
 
-  Led(int pin) : pin(pin)
+public:
+  DigitalOutput(int pin) : pin(pin)
+  {
+  }
+
+  void begin(bool state)
+  {
+    this->state = state;
+
+    writeState();
+  }
+
+  void toggle()
+  {
+    state = !state;
+
+    writeState();
+  }
+};
+
+class DigitalPullupInput
+{
+private:
+  const int pin;
+public:
+  DigitalOutput(int pin) : pin(pin)
   {
   }
 
@@ -79,7 +112,7 @@ struct Led
 };
 
 EdgeDetector edge(HIGH, 30);
-Led led(13);
+DigitalOutput led(13);
 
 void setup() 
 {
