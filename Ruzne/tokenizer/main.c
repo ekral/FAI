@@ -1,4 +1,3 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <string.h>
 
@@ -28,7 +27,7 @@ int main() {
     // 3. Smyčka pro procházení tokenů
     while (stb_c_lexer_get_token(&lex)) {
 
-        // Kontrola: Pokud byl minulý token identifikátor s textem "int" 
+        // Kontrola: Pokud byl minulý token identifikátor s textem "int"
         // a aktuální token je identifikátor s textem "x"
         if (prev_type == CLEX_id && strcmp(prev_string, "int") == 0) {
             if (lex.token == CLEX_id && strcmp(lex.string, "x") == 0) {
@@ -36,7 +35,7 @@ int main() {
             }
         }
 
-        // Kontrola: Pokud byl minulý token identifikátor "float" 
+        // Kontrola: Pokud byl minulý token identifikátor "float"
         // a aktuální token je identifikátor "y"
         if (prev_type == CLEX_id && strcmp(prev_string, "float") == 0) {
             if (lex.token == CLEX_id && strcmp(lex.string, "y") == 0) {
