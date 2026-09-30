@@ -1,9 +1,11 @@
+using System;
+
 public class Solution
 {
-    public void Test(int delkaStrany)
+    public void Test(double a, double b, int c)
     {
-        int obvod = delkaStrany * 4;
+        double diskriminant = b * b - 4 * a * c;
 
-        TestConsole.WriteLine($"obvod: {obvod}");
+        TestConsole.WriteLine($"diskriminant: {diskriminant:F1}");
     }
 }
