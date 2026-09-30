@@ -8,13 +8,17 @@ Console.SetOut(dummyWritter);
 
 Solution solution = new();
 
-bool t1 = solution.VratSumu([ 0, 0, 0 ]) == 0;
-bool t2 = solution.VratSumu([ 1, 2, 3 ]) == 6;
-bool t3 = solution.VratSumu([ -7, -8]) == -15;
-bool t4 = solution.VratSumu([ 7]) == 7;
-bool t5 = solution.VratSumu([]) == 0;
+solution.Test(3);
+bool t1 = TestConsole.Message == "obvod: 12";
+solution.Test(4);
+bool t2 = TestConsole.Message == "obvod: 16";
+solution.Test(7);
+bool t3 = TestConsole.Message == "obvod: 28";
+solution.Test(9);
+bool t4 = TestConsole.Message == "obvod: 36";
 
-double fraction = t1 && t2 && t3 && t4 && t5 ? 1.0 : 0.0;
+
+double fraction = t1 && t2 && t3 && t4 ? 1.0 : 0.0;
 
 Console.SetOut(stdout);
 
@@ -26,14 +30,24 @@ string jsonOutput = $$"""
     "fraction": {{fraction.ToString("G", CultureInfo.InvariantCulture)}},
     "testresults":
     [
-    ["Nazev testu", "Ocekavana hodnota", "Vysledek", "iscorrect"],
-    ["Test 1: VratSumu([ 0, 0, 0 ])", "0", "{{message(t1)}}", {{jsonBool(t1)}}],
-    ["Test 2: VratSumu([ 1, 2, 3 ])", "6", "{{message(t2)}}", {{jsonBool(t2)}}],
-    ["Test 3: VratSumu([ -7, -8 ])", "-15", "{{message(t3)}}", {{jsonBool(t3)}}],
-    ["Test 4: VratSumu([ 7 ])", "7", "{{message(t4)}}", {{jsonBool(t4)}}],
-    ["Test 5: VratSumu([])", "0", "{{message(t5)}}", {{jsonBool(t5)}}]
+        ["Nazev testu", "Ocekavana hodnota", "Vysledek", "iscorrect"],
+        ["solution.Test(3)", "obvod: 12", "{{message(t1)}}", {{jsonBool(t1)}}],
+        ["solution.Test(4)", "obvod: 16", "{{message(t2)}}", {{jsonBool(t2)}}],
+        ["solution.Test(7)", "obvod: 28", "{{message(t3)}}", {{jsonBool(t3)}}],
+        ["solution.Test(9)", "obvod: 36", "{{message(t4)}}", {{jsonBool(t4)}}]
     ]
 }
 """;
 
 Console.Write(jsonOutput);
+
+
+class TestConsole
+{
+    public static string Message {get; private set;} = string.Empty;
+
+    public static void WriteLine(string message)
+    {
+        Message = message;
+    }
+}

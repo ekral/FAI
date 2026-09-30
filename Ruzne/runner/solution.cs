@@ -1,11 +1,9 @@
-using System.Linq;
-
 public class Solution
 {
-    public int VratSumu(int[] pole)
+    public void Test(int delkaStrany)
     {
-        int pocet = pole.Length;
-        
-        return pole.Sum();
+        int obvod = delkaStrany * 4;
+
+        TestConsole.WriteLine($"obvod: {obvod}");
     }
 }
