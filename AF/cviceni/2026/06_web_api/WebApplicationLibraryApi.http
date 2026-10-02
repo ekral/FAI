@@ -1,0 +1,35 @@
+@WebApplicationLibraryApi_HostAddress = https://localhost:7197
+
+GET {{WebApplicationLibraryApi_HostAddress}}/
+Accept: application/json
+
+###
+
+POST {{WebApplicationLibraryApi_HostAddress}}/dev/seed
+
+###
+
+GET {{WebApplicationLibraryApi_HostAddress}}/books
+
+###
+
+GET {{WebApplicationLibraryApi_HostAddress}}/books?isArchived=false
+
+###
+
+GET {{WebApplicationLibraryApi_HostAddress}}/books/1
+
+###
+
+POST {{WebApplicationLibraryApi_HostAddress}}/books
+Content-Type: application/json
+
+{
+  "title": "Valka s mloky"
+}
+
+###
+
+DELETE {{WebApplicationLibraryApi_HostAddress}}/books/5
+
+###

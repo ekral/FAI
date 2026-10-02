@@ -1,0 +1,114 @@
+@page "/edit/{Id:int}"
+@using UTB.PublicLibrary.Contracts
+@using UTB.PublicLibrary.Web.FormModels
+@attribute [StreamRendering]
+@inject LibraryService LibraryService
+@inject NavigationManager NavigationManager
+
+<h3>Edit Book</h3>
+
+@if (!string.IsNullOrWhiteSpace(errorMessage))
+{
+    <div class="alert alert-danger" role="alert">@errorMessage</div>
+}
+
+@if (Model is null)
+{
+    <p>Loading ... </p>
+}
+else
+{
+    <EditForm Model="Model" OnValidSubmit="Submit" FormName="EditBookForm">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <InputText id="title" class="form-control" @bind-Value="Model.Title" />
+        </div>
+        <div class="mb-3">
+            <InputCheckbox id="archived" class="form-check-input" @bind-Value="Model.IsArchived" />
+            <label for="archived" class="form-check-label">Archived</label>
+        </div>
+        <div class="mb-3">
+            <button class="btn btn-primary">Submit</button>
+        </div>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    private BookFormModel? Model { get; set; }
+
+    private string? errorMessage;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        // Metoda se volá i pøi zmìnì modelu, musím dát pozor aby znovu Model nepøepsal.
+
+        if (Model is not null)
+        {
+            return;
+        }
+
+        errorMessage = null;
+
+        try
+        {
+            BookDto? book = await LibraryService.GetBookAsync(Id);
+
+            if (book is null)
+            {
+                errorMessage = "Book was not found.";
+                Model = new();
+                return;
+            }
+
+            Model = new BookFormModel
+            {
+                Title = book.Title,
+                IsArchived = book.IsArchived
+            };
+        }
+        catch (HttpRequestException)
+        {
+            errorMessage = "Api Error";
+
+            Model ??= new();
+        }
+        catch (Polly.Timeout.TimeoutRejectedException)
+        {
+            errorMessage = "Timeout";
+
+            Model ??= new();
+        }
+    }
+
+    private async Task Submit()
+    {
+        errorMessage = null;
+
+        if (Model is not null && Model.Title is not null)
+        {
+            BookRequestDto bookDto = new BookRequestDto(Model.Title, Model.IsArchived);
+
+            try
+            {
+                await LibraryService.UpdateBookAsync(Id, bookDto);
+
+                NavigationManager.NavigateTo("/books");
+            }
+            catch (HttpRequestException)
+            {
+                errorMessage = "Api error";
+            }
+            catch (Polly.Timeout.TimeoutRejectedException)
+            {
+                errorMessage = "Timeout";
+            }
+        }
+    }
+}

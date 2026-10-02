@@ -1,14 +1,22 @@
-# 03 Minimal Web API
+# Minimal Web API – studijní materiál (bakalářské studium)
 
 **autor: Erik Král ekral@utb.cz**
 
+## 🎯 Definice
+
+- Web API (Web Application Programming Interface) je sada pravidel a protokolů umožňující komunikovat programům prostřednictvím internetu. 
+- REST (Representation State Transfer) je druh Web API a představuj architektonický styl použivající standartní HTTP metody (GET, POST, PUT, PATCH a DELETE) zpřístupňující endpoity identifikvané pomocí URI. Pro přenos dat využívá přitom především format JSON.
+- [Minimal Web API](https://learn.microsoft.com/en-us/aspnet/core/tutorials/min-web-api) je moderní framework, který umožňuje vytvářet REST služby bez controllerů.
+
+Používané HTTP metody:
+
+- `GET` – čtení dat  
+- `POST` – vytvoření dat  
+- `PUT` – úplná aktualizace  
+- `PATCH` – částečná aktualizace  
+- `DELETE` – odstranění dat  
+
 ---
-
-V tomto materiálu si probereme práci s webovými službami s pomocí Minimal Web API.
-
-Web API (Web Application Programming Interface) je sada pravidel a protokolů umožňující komunikovat programům prostřednictvím internetu. REST (Representation State Transfer) je druh Web API a představuj architektonický styl použivající standartní HTTP metody (GET, POST, PUT, PATCH a DELETE) zpřístupňující endpoity identifikvané pomocí URI. Pro přenos dat využívá přitom především format JSON.
-
-[Minimal Web API](https://learn.microsoft.com/en-us/aspnet/core/tutorials/min-web-api) je zjednodušený způsob tvorby HTTP API pomocí ASP.NET Core.
 
 Následující kód vrátí na metodu GET text "Hello World". Představuje nejjednodušší program v Minimal Web API.
 
@@ -22,316 +30,556 @@ app.MapGet("/", () => "Hello World.");
 app.Run();
 ```
 
-V dalším příkladu budeme mít web API, které bude představovat evidenci studentů. Pro práci s databází budeme používat Entity Framework a Sqlite databázi.
+---
 
-Nejprve si nadefinujeme třídu student:
+
+## Návratové typy pomocí TypedResults
+
+V Minimal API v ASP.NET Core lze pomocí třídy `TypedResults` vracet silně typované HTTP odpovědi. Na rozdíl od třídy `Results`, která vrací obecný typ `IResult`, `TypedResults` vrací konkrétní typ odpovědi (např. `Ok<T>`, `Created<T>` nebo `NotFound`). Díky tomu je návratový typ endpointu přesně definovaný a může být lépe využit například při generování dokumentace API.
+
+### Jeden status code
+
+Pokud endpoint vrací pouze jednu odpověď, může být návratový typ přímo konkrétní typ výsledku.
+
+```csharp
+app.MapDelete("/items/{id}", async Task<NoContent> (int id, ItemService service) =>
+{
+    await service.DeleteAsync(id);
+
+    return TypedResults.NoContent();
+});
+```
+
+Endpoint v tomto případě vrací pouze odpověď `204 No Content` bez payloadu.
+
+### Status code s payloadem
+
+Pokud endpoint vrací data, používají se generické typy, například `Ok<T>` nebo `Created<T>`.
+
+```csharp
+app.MapPost("/items", async Task<Created<ItemDto>> (ItemDto item, ItemService service) =>
+{
+    var created = await service.CreateAsync(item);
+
+    return TypedResults.Created($"/items/{created.Id}", created);
+});
+```
+
+Tento endpoint vrací odpověď `201 Created` spolu s vytvořeným objektem v těle odpovědi.
+
+### Více možných status kódů
+
+Pokud endpoint může vracet více různých odpovědí, používá se typ `Results<T1, T2, ...>`, který reprezentuje sjednocení možných výsledků.
+
+```csharp
+app.MapGet("/items/{id}",
+async Task<Results<Ok<ItemDto>, NotFound>> (int id, ItemService service) =>
+{
+    var item = await service.GetAsync(id);
+
+    if (item == null)
+        return TypedResults.NotFound();
+
+    return TypedResults.Ok(item);
+});
+```
+
+V tomto případě endpoint vrací buď `200 OK` s objektem `ItemDto`, nebo `404 NotFound`, pokud požadovaný záznam neexistuje.
+
+---
+
+## Příklad: Entity, DbContext, DTOs a .http soubor
+
+Ukázky jednotlivých HTTP metod si probereme na příkladu databáze studentů. Kdy zároveň použijeme `DbContext` pro práci s databází.
+
+### Entita
 
 ```csharp
 public class Student
 {
-    public int StudentId {get; set;}
-    public required string Jmeno {get; set;}
-    public required bool Studuje {get;set;}
+    public int Id { get; set; }
+    public required string Name { get; set; }
+    public required bool IsActive { get; set; }
 }
 ```
 
-Potom si nadefinuje DbContext:
+---
+
+### Databázový kontext
+
+Do projektu definující DbContext musíme přidat providera pro Entity Framework Core, například nuget balíček `Microsoft.EntityFrameworkCore.Sqlite`.
 
 ```csharp
 public class StudentContext(DbContextOptions<StudentContext> options) : DbContext(options)
 {
-    public DbSet<Student> Studenti { get; set; }
+    public DbSet<Student> Students { get; set; }
 }
 ```
 
-`DbContext` potom použijeme ve web API s pomocí následujícího příkazu, který zaregistruje `StudentContext` do Inversion of Control containeru s lifetimem `Scoped`. Což znamená, že pro každý web request se nám vytvoří nová instance třídy `StudentContext`.
+### Registrace databáze v Program.cs
 
 ```csharp
-builder.Services.AddDbContext<StudentContext>(opt => opt.UseSqlite("DataSource=studenti.db"));
+builder.Services.AddDbContext<StudentContext>(opt => opt.UseSqlite("Data Source=students.db"));
 ```
 
-Celý kód potom bude vypadat následovně:
+---
+
+### DTO – Data Transfer Object
+
+DTO (Data Transfer Object) odděluje databázovou entitu od dat, která jsou poskytována klientovi přes API, nebo která klient posílá serveru. Díky tomu lze přesněji kontrolovat, jaká data API přijímá a vrací.
+
+#### DTO pro čtení dat
+
+`StudentDto` obsahuje data, která vrátíme klientovi:
 
 ```csharp
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.EntityFrameworkCore;
-using Students.WebAPI.Data;
-using Students.WebAPI.Models;
-
-namespace Students.WebAPI
-{
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
-
-            builder.Services.AddDbContext<StudentContext>(opt => opt.UseSqlite("DataSource=studenti.db"));
-
-            var app = builder.Build();
-
-            app.MapPost("/seed", WebApiVersion1.Seed);
-            app.MapGet("/students/", WebApiVersion1.GetAllStudents);
-            app.MapGet("/students/active", WebApiVersion1.GetActiveStudents);
-            app.MapGet("/students/{id}", WebApiVersion1.GetStudent);
-            app.MapPost("/students/", WebApiVersion1.CreateStudent);
-            app.MapPut("/students/{id}", WebApiVersion1.UpdateStudent);
-            app.MapDelete("/students/{id}", WebApiVersion1.DeleteStudent);
-            app.MapPatch("/students/{id}", FinishStudies);
-
-            app.Run();
-        }
-    }
-
-    public static class WebApiVersion1
-    {
-        public static async Task<Created> Seed(StudentContext context)
-        {
-            await context.Database.EnsureDeletedAsync();
-
-            if (await context.Database.EnsureCreatedAsync())
-            {
-                await context.AddRangeAsync(
-                    new Student() { Jmeno = "Jiri", Studuje = true },
-                    new Student() { Jmeno = "Karel", Studuje = false },
-                    new Student() { Jmeno = "Alena", Studuje = true });
-
-                await context.SaveChangesAsync();
-            }
-
-            return TypedResults.Created();
-        }
-
-        public static async Task<Ok<Student[]>> GetAllStudents(StudentContext context)
-        {
-            return TypedResults.Ok(await context.Studenti.ToArrayAsync());
-        }
-
-        public static async Task<Ok<Student[]>> GetActiveStudents(StudentContext context)
-        {
-            return TypedResults.Ok(await context.Studenti.Where(s => s.Studuje).ToArrayAsync());
-        }
-
-        public static async Task<Results<Ok<Student>, NotFound>> GetStudent(int id, StudentContext context)
-        {
-            if (await context.Studenti.FindAsync(id) is Student student)
-            {
-                return TypedResults.Ok(student);
-            }
-            else
-            {
-                return TypedResults.NotFound();
-            }
-        }
-
-        public static async Task<Created<Student>> CreateStudent(Student student, StudentContext context)
-        {
-            context.Add(student);
-
-            await context.SaveChangesAsync();
-
-            return TypedResults.Created($"/Students/GetStudent/{student.StudentId}", student);
-        }
-        
-        public static async Task<Results<NoContent, NotFound>> UpdateStudent(int id, Student inputStudent, StudentContext context)
-        {
-            if (await context.Studenti.FindAsync(id) is Student student)
-            {
-                student.Jmeno = inputStudent.Jmeno;
-                student.Studuje = inputStudent.Studuje;
-
-                await context.SaveChangesAsync();
-
-                return TypedResults.NoContent();
-            }
-
-            return TypedResults.NotFound();
-        }
-
-        public static async Task<Results<NoContent, NotFound>> DeleteStudent(int id, StudentContext context)
-        {
-            if(await context.Studenti.FindAsync(id) is Student student)
-            {
-                context.Remove(student);
-
-                await context.SaveChangesAsync();
-
-                return TypedResults.NoContent();
-            }
-
-            return TypedResults.NotFound();
-        }
-
-        public static async Task<Results<NoContent, NotFound>> FinishStudies(int id, StudentContext context)
-        {
-            if (await context.Studenti.FindAsync(id) is Student student)
-            {
-                student.Studuje = false;
-
-                await context.SaveChangesAsync();
-
-                return TypedResults.NoContent();
-            }
-
-            return TypedResults.NotFound();
-        }
-    }
-}
+public record StudentDto(int Id, string Name, bool IsActive);
 ```
 
-Předcházející metody můžeme ve Visual Studiu zavolat pomocí souboru s příponou `.http`. V JetBrains Rideru můžeme použít [plugin HTTP Client﻿](https://www.jetbrains.com/help/rider/Http_client_in__product__code_editor.html).
+#### DTO pro zápis dat
 
-Obsah souboru vypadá následovně:
+`StudentRequestDto` obsahuje data, která přijímáme od klienta. Neobsahuje `Id`, protože to generuje databáze:
+
+```csharp
+public record StudentRequestDto(string Name, bool IsActive);
+```
+
+`StudentPatchRequest` obsahuje jen vlastnosti určené pro částečnou změnu:
+
+```csharp
+public record StudentPatchRequest(bool IsActive);
+```
+
+---
+
+### soubor .http
+
+HTTP metody můžeme ve Visual Studiu zavolat pomocí souboru s příponou `.http`.
+
+Soubor s příponou `.http` bude mít na začátku nadefinovanou adresu služby, například:
 
 ```json
 @Students.WebAPI_HostAddress = https://localhost:7042
+```
 
-POST {{Students.WebAPI_HostAddress}}/Seed
+---
+
+## 1. POST `/dev/seed`
+
+### Mapování
+
+```csharp
+app.MapPost("/dev/seed", Seed);
+```
+
+### Implementace
+
+Endpoint odstraní stávající databázi (pokud existuje), vytvoří novou podle aktuálního modelu, vloží testovací data a vrátí HTTP 204 No Content.
+
+```csharp
+static async Task<NoContent> Seed(StudentContext context)
+{
+    await context.Database.EnsureDeletedAsync();
+    await context.Database.EnsureCreatedAsync();
+
+    context.Students.AddRange(
+        new Student { Name = "Jan", IsActive = true },
+        new Student { Name = "Eva", IsActive = true },
+        new Student { Name = "Petr", IsActive = false }
+    );
+
+    await context.SaveChangesAsync();
+
+    return TypedResults.NoContent();
+}
+```
+
+### Volání
+
+```json
+POST {{Students.WebAPI_HostAddress}}/seed
 
 ###
+```
 
-GET {{Students.WebAPI_HostAddress}}/Students/
+---
+
+## 2. GET `/students`
+
+### Mapování
+
+```csharp
+app.MapGet("/students", GetAllStudents);
+```
+
+### Implementace
+
+Endpoint načte všechny studenty z databáze, namapuje je na `StudentDto` a vrátí HTTP 200 OK s JSON daty.
+
+```csharp
+static async Task<Ok<StudentDto[]>> GetAllStudents(StudentContext context)
+{
+    var students = await context.Students
+        .Select(s => new StudentDto(s.Id, s.Name, s.IsActive))
+        .ToArrayAsync();
+
+    return TypedResults.Ok(students);
+}
+```
+
+### Volání
+
+```json
+GET {{Students.WebAPI_HostAddress}}/students/
 
 ###
+```
 
-GET {{Students.WebAPI_HostAddress}}/Students/Active
+---
+
+## 3. GET `/students` s filtrem pro aktivní studenty
+
+### Mapování
+
+```csharp
+app.MapGet("/students", GetStudents);
+```
+
+### Implementace
+
+Endpoint přijme volitelný query string parametr `isActive`. Pokud je zadán, vyfiltruje studenty podle hodnoty `IsActive`; jinak vrátí všechny. Výsledek namapuje na `StudentDto[]` a vrátí HTTP 200 OK.
+
+```csharp
+static async Task<Ok<StudentDto[]>> GetStudents(bool? isActive, StudentContext context)
+{
+    var query = context.Students.AsQueryable();
+
+    if(isActive.HasValue)
+    {
+        query = query.Where(s => s.IsActive == isActive);           
+    }
+
+    StudentDto[] students = await query.Select(s => new StudentDto(s.Id, s.Name, s.IsActive)).ToArrayAsync();
+
+    return TypedResults.Ok(students);
+}
+```
+
+### Volání
+
+```json
+GET {{Students.WebAPI_HostAddress}}/students?isActive=true
 
 ###
+```
 
+---
+
+## 4. GET `/students/{id}`
+
+### Mapování
+
+```csharp
+app.MapGet("/students/{id:int}", GetStudent);
+```
+
+### Implementace
+
+Endpoint vyhledá studenta podle primárního klíče. Pokud existuje, namapuje ho na `StudentDto` a vrátí HTTP 200 OK; pokud neexistuje, vrátí HTTP 404 Not Found.
+
+```csharp
+static async Task<Results<Ok<StudentDto>, NotFound>> GetStudent(int id, StudentContext context)
+{
+    if (await context.Students.FindAsync(id) is Student student)
+    {
+        return TypedResults.Ok(new StudentDto(student.Id, student.Name, student.IsActive));
+    }
+    else
+    {
+        return TypedResults.NotFound();
+    }
+}
+```
+
+### Volání
+
+```json
 GET {{Students.WebAPI_HostAddress}}/students/1
 
 ###
+```
 
-POST {{Students.WebAPI_HostAddress}}/Students
+---
+
+## 5. POST `/students`
+
+### Mapování
+
+```csharp
+app.MapPost("/students", CreateStudent);
+```
+
+### Implementace
+
+Endpoint přijme JSON data z těla požadavku jako `StudentRequestDto`, uloží nového studenta do databáze a vrátí HTTP 201 Created spolu s URL a `StudentDto` nového záznamu.
+
+```csharp
+static async Task<Created<StudentDto>> CreateStudent(StudentRequestDto request, StudentContext context)
+{
+    var student = new Student { Name = request.Name, IsActive = request.IsActive };
+
+    context.Add(student);
+
+    await context.SaveChangesAsync();
+
+    return TypedResults.Created($"/students/{student.Id}", new StudentDto(student.Id, student.Name, student.IsActive));
+}
+```
+
+### Volání
+
+```json
+POST {{Students.WebAPI_HostAddress}}/students
 Content-Type: application/json
 
 {
-  "studentId": 0,
-  "jmeno": "Lenka",
-  "studuje": true
+  "name": "Lenka",
+  "isActive": true
 }
 
 ###
+```
 
+---
+
+## 6. PUT `/students/{id}`
+
+### Mapování
+
+```csharp
+app.MapPut("/students/{id:int}", UpdateStudent);
+```
+
+### Implementace
+
+Endpoint vyhledá studenta podle ID. Pokud existuje, přepíše všechny jeho vlastnosti hodnotami z `StudentRequestDto`, uloží změny a vrátí HTTP 204 No Content; pokud neexistuje, vrátí HTTP 404 Not Found.
+
+```csharp
+static async Task<Results<NoContent, NotFound>> UpdateStudent(int id, StudentRequestDto request, StudentContext context)
+{
+    if (await context.Students.FindAsync(id) is Student student)
+    {
+        student.Name = request.Name;
+        student.IsActive = request.IsActive;
+
+        await context.SaveChangesAsync();
+
+        return TypedResults.NoContent();
+    }
+    else
+    {
+        return TypedResults.NotFound();
+    }
+}
+```
+
+### Volání
+
+```json
 PUT {{Students.WebAPI_HostAddress}}/students/1
 Content-Type: application/json
 
 {
-  "studentId": 1,
-  "jmeno": "Novotna",
-  "studuje": true
+  "name": "Novotna",
+  "isActive": true
 }
-###
 
+###
+```
+
+---
+
+## 7. PATCH `/students/{id}`
+
+### Mapování
+
+```csharp
+app.MapPatch("/students/{id}", PatchStudentActivity);
+```
+
+### Implementace
+
+Endpoint vyhledá studenta. Pokud existuje, aktualizuje vlastnost `IsActive` podle `StudentPatchRequest`, uloží změny a vrátí HTTP 204 No Content; pokud neexistuje, vrátí HTTP 404 Not Found.
+
+```csharp
+static async Task<Results<NoContent, NotFound>> PatchStudentActivity(int id, StudentPatchRequest request, StudentContext context)
+{
+    if (await context.Students.FindAsync(id) is Student student)
+    {
+        student.IsActive = request.IsActive;
+
+        await context.SaveChangesAsync();
+
+        return TypedResults.NoContent();
+    }
+    else
+    {
+        return TypedResults.NotFound();
+    }
+}
+```
+
+### Volání
+
+```json
+PATCH {{Students.WebAPI_HostAddress}}/students/1
+Content-Type: application/json
+
+{
+    "isActive": false
+}
+
+###
+```
+
+---
+
+## 8. DELETE `/students/{id}`
+
+### Mapování
+
+```csharp
+app.MapDelete("/students/{id:int}", DeleteStudent);
+```
+
+### Implementace
+
+Endpoint vyhledá studenta. Pokud existuje, odstraní ho z databáze, uloží změny a vrátí HTTP 204 No Content; pokud neexistuje, vrátí HTTP 404 Not Found.
+
+```csharp
+static async Task<Results<NoContent, NotFound>> DeleteStudent(int id, StudentContext context)
+{
+    if(await context.Students.FindAsync(id) is Student student)
+    {
+        context.Students.Remove(student);
+
+        await context.SaveChangesAsync();
+
+        return TypedResults.NoContent();
+    }
+    else
+    {
+        return TypedResults.NotFound();
+    }
+}
+```
+
+### Volání
+
+```json
 DELETE {{Students.WebAPI_HostAddress}}/students/1
 
 ###
-
-PATCH {{Students.WebAPI_HostAddress}}/students/1
-
-###
 ```
 
-## Group
+---
 
-Předcházející kód můžeme vylepšit, všimněte si, že v mapování se opakuje cesta "students". Abychom ji nemuseli pořád opakovat, tak můžeme využít metodu `MapGroup`:
+## Úkol – Public Library API
 
-```csharp
-var studentItems = app.MapGroup("/students");
+Vytvořte Minimal Web API pro veřejnou knihovnu.
 
-studentItems.MapGet("/", WebApiVersion1.GetAllStudents);
-studentItems.MapGet("/active", WebApiVersion1.GetActiveStudents);
-studentItems.MapGet("/{id}", WebApiVersion1.GetStudent);
-studentItems.MapPost("/", WebApiVersion1.CreateStudent);
-studentItems.MapPut("/{id}", WebApiVersion1.UpdateStudent);
-studentItems.MapDelete("/{id}", WebApiVersion1.DeleteStudent);
-studentItems.MapPatch("/{id}", FinishStudies);
-```
-
-## Extension metoda
-
-Aby neměla metoda Main moc řádků a byla přehlednější, tak se často mapování endpointů přesouvá do [extension metody](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/extension-methods).
-
-Následující kód definuje extension metodu:
+### Výchozí kód
 
 ```csharp
-public static IEndpointRouteBuilder MapStudentsApi(this IEndpointRouteBuilder app)
+// Pridat nuget Microsoft.EntityFrameworkCore.Sqlite
+
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
+
+var builder = WebApplication.CreateBuilder();
+
+builder.Services.AddDbContext<LibraryContext>(opt => opt.UseSqlite("Data Source=library.db"));
+
+var app = builder.Build();
+
+app.MapPost("/dev/seed", Seed);
+
+app.Run();
+
+static async Task<NoContent> Seed(LibraryContext context)
 {
-    app.MapPost("/seed", Seed);
+    await context.Database.EnsureDeletedAsync();
+    await context.Database.EnsureCreatedAsync();
 
-    var studentItems = app.MapGroup("/students");
+    var babicka = new Book { Title = "Babicka", IsArchived = false };
+    var rur = new Book { Title = "R.U.R.", IsArchived = false };
+    var maj = new Book { Title = "Maj", IsArchived = true };
 
-    studentItems.MapGet("/", GetAllStudents);
-    studentItems.MapGet("/active", GetActiveStudents);
-    studentItems.MapGet("/{id}", GetStudent);
-    studentItems.MapPost("/", CreateStudent);
-    studentItems.MapPut("/{id}", UpdateStudent);
-    studentItems.MapDelete("/{id}", DeleteStudent);
-    studentItems.MapPatch("/{id}", FinishStudies);
+    var loanBabicka = new Loan { Book = babicka, LoanDate = new DateOnly(2026, 3, 18) };
+    var loanRur = new Loan { Book = rur, LoanDate = new DateOnly(2026, 3, 17) };
 
-    return app;
+    context.Books.AddRange(babicka, rur, maj);
+    context.Loans.AddRange(loanBabicka, loanRur);
+
+    await context.SaveChangesAsync();
+
+    return TypedResults.NoContent();
+}
+
+public class LibraryContext(DbContextOptions<LibraryContext> options) : DbContext(options)
+{
+    public DbSet<Book> Books { get; set; }
+    public DbSet<Loan> Loans { get; set; }
+}
+
+public class Book
+{
+    public int Id { get; set; }
+    public required string Title { get; set; }
+    public bool IsArchived { get; set; }
+    public List<Loan> Loans { get; set; } = [];
+}
+
+public class Loan
+{
+    public int Id { get; set; }
+    public required DateOnly LoanDate { get; set; }
+    public DateOnly? ReturnDate { get; set; }
+    public int BookId { get; set; }
+    public Book? Book { get; set; }
 }
 ```
 
-A metoda Main bude vypadat následovně:
+---
 
-```csharp
-public static void Main(string[] args)
-{
-    var builder = WebApplication.CreateBuilder(args);
+### Implementujte endpointy
 
-    builder.Services.AddDbContext<StudentContext>(opt => opt.UseSqlite("DataSource=studenti.db"));
-
-    WebApplication app = builder.Build();
-
-    app.MapStudentsApi();
-
-    app.Run();
-}
-```
-
-## OpenAPI
-
-[OpenApi](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/openapi/overview?view=aspnetcore-9.0) je standard pro dokumentaci HTTP aplikačních rozhraní nezávisle na programovacím jazyku.
-
-Projekt musí mít referenci na nuget balíček [Microsoft.AspNetCore.OpenApi](https://www.nuget.org/packages/Microsoft.AspNetCore.OpenApi). 
-
-V metodě main potom přidáme označené řádky 
-
-```csharp
-public static void Main(string[] args)
-{
-    var builder = WebApplication.CreateBuilder(args);
-
-    // Pridany radek
-    builder.Services.AddOpenApi(); // Document name is v1
-
-    builder.Services.AddDbContext<StudentContext>(opt => opt.UseSqlite("DataSource=studenti.db"));
-
-    WebApplication app = builder.Build();
-
-    // Pridany blok
-    if (app.Environment.IsDevelopment())
-    {
-        app.MapOpenApi();
-    }
-
-    app.MapStudentsApi();
-
-    app.Run();
-}
-```
-
-Na adrese endpointu `https://localhost:<port>/openapi/v1.json` potom najdeme vygenerovanou dokumentaci. Název v1 je výchozí, mohli bychom ho změnit předáním stringového argumentu metodě AddOpenApi. Adresa by potom byla `https://localhost:<port>/openapi/nazev.json`.
-
- ```csharp
- builder.Services.AddOpenApi("nazev");
- ```
-
- Také můžeme pomocí atributů, nebo pomocí fluent api zadávat další metadata pro dokumentaci. Například id Endpointu zadáme pomocí fuent api metody `WithName`:
-
- ```csharp
-studentItems.MapGet("/", GetAllStudents).WithName("GetAllStudents");
- ```
+- `POST /dev/seed` smaže a vytvoří databází a přidá do databáze tři knihy a dvě výpůjčky.
+- `GET /books` vrátí všechny knihy. Vytvořte také variantu s query string parametrem IsArchived, který bude volitelně definovat zda se mají vracet jen archivované nebo nearchivované knihy. 
+- `GET /books/{id}` vrátí knihu dle Id.    
+- `POST /books` vytvoří novou knihu.
+- `PUT /books/{id}` nahradí existující knihu jinou. 
+- `DELETE /books/{id}` odstraní knihu dle Id.
+- `PATCH /books/{id}` (v body pošle DTO zda `IsArchived = false` nebo `IsArchived = true`)
+- `GET /loans/` vrátí všechny výpůjčky (název knihy).
+- `POST /loans/` vytvoří novou výpůjčku pro knihu pokud je kniha dostupná k půjčování a není již vypůjčená.
 
 
+### Další požadavky
+
+1. Použijte SQLite databázi.  
+2. Použijte DTO a definujte je s využitím recordu. 
+3. Připravte `.http` soubor pro manuální testování (pouze ve Visual Studiu, jinde použijte například Postman).  
+
+---
+
+## ❓ Kontrolní otázky
+
+1. Jaký je rozdíl mezi PUT a PATCH?  
+2. Co vrátí metoda `GetStudent`, pokud záznam neexistuje?  
+3. Jak funguje metoda `Seed` s `EnsureDeletedAsync()` a `EnsureCreatedAsync()`?  
+4. Proč je vhodné používat DTO?  
+5. Jak funguje dependency injection v tomto příkladu?  
+6. Jaký je rozdíl mezi `FindAsync()` a `ToArrayAsync()`?
+
+---

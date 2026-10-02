@@ -1,0 +1,111 @@
+﻿@page "/books"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using UTB.PublicLibrary.Contracts
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@* @attribute [Authorize(Roles = "books-admin")] *@
+@inject LibraryService LibraryService
+
+<h3>Books</h3>
+
+@if (!string.IsNullOrWhiteSpace(errorMessage))
+{
+    <div class="alert alert-danger" role="alert">@errorMessage</div>
+}
+
+<AuthorizeView Roles="books-admin">
+    <Authorized>
+        <p>Welcome back @context.User.Identity?.Name !</p>
+
+        <form action="logout" method="post">
+            <AntiforgeryToken />
+            <button type="submit" class="nav-link btn btn-link">Logout</button>
+        </form>
+		
+    </Authorized>
+    <NotAuthorized>
+        <p><a href="/login?returnUrl=books">Log in</a> please.</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+<a class="btn btn-primary" href="create">Create</a>
+
+@if(books is null)
+{
+    <p>Loading ... </p>    
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Title</th>
+                <th scope="col">Archived</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach(BookDto book in books)
+            {
+                <tr>
+                    <th scope="row">@book.Id</th>
+                    <td>@book.Title</td>
+                    <td>@(book.IsArchived ? "Yes" : "No")</td>
+                    <td>
+                        <button class="btn btn-danger me-2" @onclick="@(() => DeleteBook(book.Id))">Delete</button>
+                        <a class="btn btn-warning" href="edit/@book.Id">Edit</a>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+}
+
+@code {
+    private BookDto[]? books;
+    private string? errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        errorMessage = null;
+
+        await LoadBooksAsync();
+    }
+
+    private async Task DeleteBook(int id)
+    {
+        errorMessage = null;
+
+        try
+        {
+            await LibraryService.DeleteBookAsync(id);
+        }
+        catch (HttpRequestException)
+        {
+            errorMessage = "Deleting the book failed. Please try again.";
+            return;
+        }
+
+        await LoadBooksAsync();
+    }
+
+    private async Task LoadBooksAsync()
+    {
+        try
+        {
+            books = await LibraryService.GetBooksAsync();
+        }
+        catch (HttpRequestException)
+        {
+            errorMessage = "Loading the list failed.";
+        }
+        catch (Polly.Timeout.TimeoutRejectedException)
+        {
+            errorMessage = "Timeout";
+        }
+    }
+}

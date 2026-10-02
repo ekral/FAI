@@ -1,0 +1,45 @@
+cmake_minimum_required(VERSION 4.2) # Vynutí nové chování a standardy řady 4.x
+project(VulkanProjekt LANGUAGES CXX)
+
+# Najdeme Vulkan SDK a explicitně vyžadujeme komponentu glslc
+find_package(Vulkan REQUIRED COMPONENTS glslc)
+
+# Ukázka nového standardu pro výpis verze (vždy odpovídá velikosti písmen find_package)
+message(STATUS "Používám Vulkan SDK verze: ${Vulkan_VERSION}")
+
+set(SHADER_SOURCES
+    shaders/shader.vert
+    shaders/shader.frag
+)
+
+set(SPIRV_BINARIES "")
+foreach(SHADER IN LISTS SHADER_SOURCES)
+    get_filename_component(SHADER_NAME ${SHADER} NAME)
+    set(OUTPUT_SPV "${CMAKE_CURRENT_BINARY_DIR}/shaders/${SHADER_NAME}.spv")
+    
+    # Elegantní vytvoření složky bez nutnosti volat externí příkazy
+    file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/shaders")
+
+    add_custom_command(
+        OUTPUT ${OUTPUT_SPV}
+        COMMAND Vulkan::glslc ${CMAKE_CURRENT_SOURCE_DIR}/${SHADER} -o ${OUTPUT_SPV}
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${SHADER}
+        COMMENT "Moderní CMake kompiluje shader: ${SHADER_NAME}"
+    )
+    list(APPEND SPIRV_BINARIES ${OUTPUT_SPV})
+endforeach()
+
+add_executable(MůjVulkanProjekt main.cpp)
+
+# Propojení s Vulkanem a registrace shaderů pro dependency graph
+target_link_libraries(MůjVulkanProjekt PRIVATE Vulkan::Vulkan)
+target_sources(MůjVulkanProjekt PRIVATE ${SHADER_SOURCES} ${SPIRV_BINARIES})
+
+# BONUS: Ukázka nového příkazu z verze 4.2 pro chytré kopírování textur
+# Spustí se po sestavení projektu a překopíruje pouze změněné soubory
+add_custom_command(TARGET MůjVulkanProjekt POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory_if_newer
+            ${CMAKE_CURRENT_SOURCE_DIR}/textures
+            ${CMAKE_CURRENT_BINARY_DIR}/textures
+    COMMENT "Kopíruji nové nebo změněné textury..."
+)

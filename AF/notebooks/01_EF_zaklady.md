@@ -220,7 +220,7 @@ public class StudentContext(DbContextOptions<StudentContext> options): DbContext
 
 ---
 
-## 5.1 Přetížené metody DbContext
+## 5.1 Překryté (override) metody DbContext
 
 ### OnConfiguring
 
@@ -306,7 +306,7 @@ context.Database.EnsureCreated();
 
 # 7. CRUD operace
 
-## CREATE
+## 7.1 CREATE
 
 Když necháme `Id` s hodnotou `0`, tak Entity Framework, po volání metody `SaveChange`, **přidělí `Id` vygenerovanou hodnotu primárního klíče**.
 
@@ -325,52 +325,40 @@ int key = student.Id;
 
 ---
 
-## READ
+## 7.2 READ
 
 ```csharp
-var students = context.Students.ToList();
+var students = context.Students.ToList(); // včetně materializace
 
-var older = context.Students
-                   .Where(s => s.Age > 20)
-                   .ToList();
+var older = context.Students.Where(s => s.Age > 20);
 
-var student = context.Students.Find(1); // Kód vyhledá studenta podle primárního klíče
-
-var jan = context.Students
-                 .FirstOrDefault(s => s.Name == "Jan");
-```
-
----
-
-## UPDATE
-
-```csharp
-Student? student = context.Students.Find(1);
-
-if(student is not null)
+// materializace proběhne až začneme číst kolekci
+foreach(var student in older)
 {
-    student.Age = 23;
-    context.SaveChanges();
+  Console.WriteLine($"{student.Id}: {student.Name}");
 }
-```
 
+var first = context.Students.Find(1); // Kód vyhledá studenta podle primárního klíče
+
+var jan = context.Students.FirstOrDefault(s => s.Name == "Jan");
+```
 ---
 
-## DELETE
+### Řazení
+
+Metody pro řazení vrací typ `IOrderedQueryable`.
 
 ```csharp
-Student? student = context.Students.Find(1);
-
-if(student is not null)
-{
-    context.Students.Remove(student);
-    context.SaveChanges();
-}
+var podleKliceVzestupne = context.Students.OrderBy(s => s.Id); // Jen pro ukázku, výchozí řazení bez OrderBy je podle klíče
+      
+var podleKliceSestupne = context.Students.OrderByDescending(s => s.Id);
+    
+var podlePrijmeniVzestupne = context.Students.OrderBy(s => s.Prijmeni);
 ```
 
 ---
 
-# 8 Projekce
+### Projekce
 
 Projekce představuje změnu typu než je originální typ entity v databázi. Například následující příkaz vrátí jen jména studentů. Místo typu `Student` tedy vrací `string`. Metoda opět vrací `IQueryable`, což znamená, že se dotaz do databáze se neprovede hned, ale teprve až provedeme například `foreach`.
 
@@ -385,21 +373,7 @@ foreach (string jmeno in jmena)
 
 ---
 
-# 9 Řazení
-
-Metody pro řazení vrací typ `IOrderedQueryable`.
-
-```csharp
-var podleKliceVzestupne = context.Students.OrderBy(s => s.Id);
-      
-var podleKliceSestupne = context.Students.OrderByDescending(s => s.Id);
-    
-var podlePrijmeniVzestupne = context.Students.OrderBy(s => s.Prijmeni);
-```
-
----
-
-# 10. Kombinace metod
+### Kombinace metod
 
 Metody můžeme kombinovat. Následující příkaz vrací jména studentů s příjmením `"Vesely"` (filtruje) seřazená sestupně. Dotaz se opět neprovede hned, ale až bychom provedli například příkaz `foreach` nebo `ToList`.
 
@@ -412,7 +386,35 @@ IOrderedQueryable<string> jmena = context.Students
 
 ---
 
-# 11. Asynchronní přístup
+## 7.3 UPDATE
+
+```csharp
+Student? student = context.Students.Find(1);
+
+if(student is not null)
+{
+    student.Age = 23;
+    context.SaveChanges();
+}
+```
+
+---
+
+## 7.4 DELETE
+
+```csharp
+Student? student = context.Students.Find(1);
+
+if(student is not null)
+{
+    context.Students.Remove(student);
+    context.SaveChanges();
+}
+```
+
+---
+
+# 8. Asynchronní přístup
 
 V reálném kódu používáme většinou asynchronní varianty, například:
 
@@ -423,7 +425,7 @@ await context.SaveChangesAsync();
 
 ---
 
-# 12. Překlad LINQ do SQL
+# 9. Překlad LINQ do SQL
 
 ```csharp
 context.Students

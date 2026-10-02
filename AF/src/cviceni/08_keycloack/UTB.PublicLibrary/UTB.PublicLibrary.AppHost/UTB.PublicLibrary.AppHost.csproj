@@ -1,0 +1,34 @@
+<Project Sdk="Aspire.AppHost.Sdk/13.3.0">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>4cb7cf93-c660-44e8-9426-427289f4a6b6</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="import\utb-publiclibrary-realm.json" />
+    <None Remove="import\utb-publiclibrary-users-0.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="import\utb-publiclibrary-realm.json" />
+    <Content Include="import\utb-publiclibrary-users-0.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.Keycloak" Version="13.3.0-preview.1.26256.5" />
+    <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="13.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\UTB.PublicLibrary.DatabaseManager\UTB.PublicLibrary.DatabaseManager.csproj" />
+    <ProjectReference Include="..\UTB.PublicLibrary.WebApi\UTB.PublicLibrary.WebApi.csproj" />
+    <ProjectReference Include="..\UTB.PublicLibrary.WebSseJavascript\UTB.PublicLibrary.WebSseJavascript.csproj" />
+    <ProjectReference Include="..\UTB.PublicLibrary.WebSse\UTB.PublicLibrary.WebSse.csproj" />
+    <ProjectReference Include="..\UTB.PublicLibrary.Web\UTB.PublicLibrary.Web.csproj" />
+  </ItemGroup>
+
+</Project>

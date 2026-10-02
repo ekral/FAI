@@ -42,6 +42,8 @@ Student je o stavu objednávky informován v reálném čase.
 
 ### Student
 
+Student se nepřihlašuje, jen získá číslo objednávky.
+
 #### Objednávky
 - Zobrazuje menu pro aktuální den (vyprodaná jídla jsou vizuálně odlišena).
 - Objednává jídlo z aktuálního menu (sníží se počet dostupných porcí).
@@ -65,7 +67,7 @@ musí být vyučující schopen spustit celý projekt lokálně včetně databá
 - Jazyk použitý ve zdrojovém kódu bude **angličtina**. Jazyk aplikace může být jiný.
 - Projekt využívá [**Aspire**](https://aspire.dev/get-started/what-is-aspire/):
   - Vytváří databázi (např. [**PostgreSQL**](https://aspire.dev/integrations/databases/efcore/postgres/postgresql-get-started/)).
-  - Používá Identity nástroj [**Keycloak**](https://aspire.dev/integrations/security/keycloak/) k zabezpečení aplikace.
+  - Používá Identity nástroj [**Keycloak**](https://aspire.dev/integrations/security/keycloak/) k zabezpečení aplikace (vedení menzy a kuchařka). Student se nepřihlašuje a přistupuje k veřejným stránkám.
   - Využívá **Service Discovery**, bez pevně zadaných IP adres.
   - Obsahuje **Http Command** pro reset databáze (smazání, vytvoření, seed testovacích dat).
 - Projekt používá **Entity framework pro práci s databází**.
@@ -81,14 +83,14 @@ musí být vyučující schopen spustit celý projekt lokálně včetně databá
 
 ## 📂 Struktura řešení
 
-V solution budou následující projekty:
+V solution budou následující projekty (nejenom tyto, ale tyto musí být součástí řešení):
 
-- `UTB.Minute.AppHost` - Aspire Integrace.
+- `UTB.Minute.AppHost` a `UTB.Minute.ServiceDefaults` – Aspire Integrace .
 - `UTB.Minute.Db` – entity a `DbContext`.
 - `UTB.Minute.DbManager` – WebAPI pro Http Command, reset a seed databáze (reference na `UTB.Minute.Db`).
 - `UTB.Minute.Contracts` – DTO (Data Transfer Objects).
 - `UTB.Minute.WebApi` – společné WebAPI pro všechny klienty včetně Server-Sent Events (SSE) notifikací (reference na `UTB.Minute.Db` a `UTB.Minute.Contracts`).
-- `UTB.Minute.WebApi.Tests` - test WebAPI využívající použitou databázi, například SQL Server (reference na `UTB.Minute.WebApi`).     
+- `UTB.Minute.WebApi.Tests` - test WebAPI využívající použitou databázi, například SQL Server (reference na UTB.Minute.AppHost).     
 - `UTB.Minute.AdminClient` – Blazor Server aplikace pro vedení menzy (reference na `UTB.Minute.Contracts`). Volá WebAPI pomocí protokolu HTTP.
 - `UTB.Minute.CanteenClient` – Blazor Server aplikace pro zjednodušení pro studenty a kuchařky (nutno zabezpečit přístup). Pro kuchařky a studenty je možné i vytvořit nezávislé projekty (reference na `UTB.Minute.Contracts`). Volá WebAPI pomocí protokolu HTTP.
 

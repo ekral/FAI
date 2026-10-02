@@ -1,0 +1,34 @@
+﻿@page "/studenti"
+@attribute [StreamRendering]
+
+<PageTitle>Studenti</PageTitle>
+
+<h1>Studenti</h1>
+
+<p>Tato komponenta demonstruje zobrazeni Listu studentu.</p>
+
+<table class="table table-striped table-hover">
+    <thead class="table-warning">
+        <tr>
+            <th scope="col">Jmeno</th>
+            <th scope="col">Rocnik</th>
+        </tr>
+    </thead>
+    @foreach (var student in studenti)
+    {
+        <tr>
+            <td>@student.Jmeno</td>
+            <td>@student.Rocnik</td>
+        </tr>
+    }
+</table>
+
+@code {
+    List<Student> studenti = [ new ("Karel vesely", 1), new ("Jitka Chytra", 2), new ("Jan Bohaty", 3) ];
+
+    class Student(string jmeno, int rocnik)
+    {
+        public string Jmeno { get; } = jmeno;
+        public int Rocnik { get; } = rocnik;
+    }
+}

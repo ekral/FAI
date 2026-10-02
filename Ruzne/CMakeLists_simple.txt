@@ -1,0 +1,57 @@
+find_package(Vulkan REQUIRED COMPONENTS glslc)
+
+set(SHADER_DIR "${CMAKE_CURRENT_SOURCE_DIR}/shaders")
+set(GENERATED_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated")
+
+file(MAKE_DIRECTORY "${GENERATED_DIR}")
+
+function(compile_shader SHADER)
+    get_filename_component(NAME "${SHADER}" NAME)
+    string(REPLACE "." "_" VARIABLE_NAME "${NAME}")
+
+    set(INPUT  "${SHADER_DIR}/${SHADER}")
+    set(SPV    "${GENERATED_DIR}/${NAME}.spv")
+    set(HEADER "${GENERATED_DIR}/${VARIABLE_NAME}.hpp")
+
+    add_custom_command(
+        OUTPUT "${SPV}"
+        COMMAND Vulkan::glslc
+                "${INPUT}"
+                -o "${SPV}"
+        DEPENDS "${INPUT}"
+        COMMENT "Compiling shader ${SHADER}"
+    )
+
+    add_custom_command(
+        OUTPUT "${HEADER}"
+        COMMAND xxd -i
+                "${SPV}"
+                "${HEADER}"
+        DEPENDS "${SPV}"
+        COMMENT "Embedding shader ${SHADER}"
+    )
+
+    set(SHADER_HEADERS
+        ${SHADER_HEADERS}
+        "${HEADER}"
+        PARENT_SCOPE
+    )
+endfunction()
+
+compile_shader(triangle.vert)
+compile_shader(triangle.frag)
+
+add_custom_target(shaders
+    DEPENDS ${SHADER_HEADERS}
+)
+
+add_executable(MyApp
+    src/main.cpp
+    ${SHADER_HEADERS}
+)
+
+add_dependencies(MyApp shaders)
+
+target_include_directories(MyApp PRIVATE
+    "${GENERATED_DIR}"
+)

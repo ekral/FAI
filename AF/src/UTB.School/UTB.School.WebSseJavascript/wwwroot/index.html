@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>SseDemo Javascript</title>
+</head>
+<body>
+    <p id="status"></p>
+    <div id="students"></div>
+
+    <script>
+        const evtSource = new EventSource("https://localhost:7194/sse");
+        const statusElement = document.getElementById("status");
+        const studentsElement = document.getElementById("students");
+
+        evtSource.onopen = () => {
+            statusElement.textContent = "SSE connected";
+            studentsElement.innerHTML = "";
+        };
+
+        evtSource.onerror = () => {
+            statusElement.textContent = "SSE error";
+            studentsElement.innerHTML = "";
+        };
+
+        evtSource.onmessage = (event) => {
+            statusElement.textContent = "SSE message";
+
+            const students = JSON.parse(event.data);
+
+            let html = "<table><tr><th>Id</th><th>Name</th><th>IsActive</th></tr>";
+
+            for (const student of students) {
+                html += `<tr><td>${student.id}</td><td>${student.name}</td><td>${student.isActive}</td></tr>`;
+            }
+
+            html += "</table>";
+
+            studentsElement.innerHTML = html;
+        };
+    </script>
+</body>
+</html>

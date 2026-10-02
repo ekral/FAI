@@ -1,4 +1,4 @@
-# 02 – Relace v Entity Framework Core
+# 02 – Relace v Entity Framework Core a Concurrency Conflicts
 
 **autor: Erik Král ekral@utb.cz**
 
@@ -51,7 +51,7 @@ public class Enrollment
     public int Id { get; set; }
 
     public int StudentId { get; set; }   // EF rozpozná jako FK
-    public Student? Student { get; set; } // navigační property
+    public Student? Student { get; set; } // navigační property, je nullable protože EF ji defaultně nenačítá
 }
 ```
 
@@ -122,8 +122,8 @@ Pro zadávání relací můžeme použít jak cizí klíč, ale také navigačn�
 
 ```csharp
 Skupina swi = new Skupina() { Tittle = "SWI1" };
-Student jiri = new Student() { Group = swi, Name = "Jiri" };
-Student alena = new Student() { Group = swi, Name = "Alena" };
+Student jiri = new Student() { Name = "Jiri", Group = swi };
+Student alena = new Student() { Name = "Alena", Group = swi };
 
 context.Skupiny.Add(swi);
 context.Studenti.AddRange(jiri, alena);
@@ -221,15 +221,15 @@ Tato tabulka nemá vlastní entitu v modelu – existuje pouze v databázi. Poku
     public class Student
     {
         public int StudentId { get; set; }
-        public string Name { get; set; } = "";
-        public List<Course> Courses { get; set; } = new(); // Collection navigační properta
+        public required string Name { get; set; }
+        public List<Course> Courses { get; set; } = []; // Collection navigační properta
     }
 
     public class Course
     {
         public int CourseId { get; set; }
-        public string Name { get; set; } = "";
-        public List<Student> Students { get; set; } = new(); // Collection navigační properta
+        public required string Name { get; set; }
+        public List<Student> Students { get; set; } = []; // Collection navigační properta
     }
 ```
 
@@ -261,11 +261,10 @@ class SchoolContext(DbContextOptions<SchoolContext> options) : DbContext(options
 #### CREATE
 
 ```csharp
-Student karel = new Student() { Name = "Karel" };
 Subject matematika = new Subject() { Name = "Matematika" };
 Subject fyzika = new Subject() { Name = "Fyzika" };
 
-karel.Subjects = [ matematika, fyzika ];
+Student karel = new Student() { Name = "Karel", Subjects =  [ matematika, fyzika ] };
 
 await context.AddAsync(karel);
 
@@ -324,7 +323,115 @@ class SchoolContext(DbContextOptions<SchoolContext> options) : DbContext(options
 
 ---
 
-# 3. Načítání souvisejících dat
+# 3. Práce s daty a tvorba dotazů nad relacemi
+
+## 3.1 Dotazy nad relacemi
+
+V relační databázi jsou data rozdělena do více tabulek a propojena pomocí relací (např. Student – Zápis – Předmět). Entity Framework umožňuje nad těmito relacemi vytvářet dotazy pomocí LINQ.
+
+Důležité je si uvědomit, že dotazy nad DbSet se překládají do SQL a provádějí přímo v databázi. Data tedy není nutné nejprve načíst do paměti a až poté filtrovat.
+
+Předpokládejme následující model:
+
+- `Student`
+- `Course`
+- `Enrollment` (zápis studenta na předmět)
+
+```csharp
+public class Enrollment
+{
+    public int Id { get; set; }
+
+    public int StudentId { get; set; } // cizí klíč na studenta
+    public Student Student { get; set; } // navigační vlastnost
+
+    public int CourseId { get; set; } // cizí klíč na předmět
+    public Course Course { get; set; } // navigační vlastnost
+
+    public DateOnly Date { get; set; }
+    public int? Grade { get; set; }
+}
+```
+
+Relace mezi entitami:
+
+`Student` 1 --- * `Enrollment` * --- 1 `Course`
+
+Student může být zapsán na více předmětů a každý předmět může mít více studentů.
+
+---
+
+### Filtrování podle toho zda existuje zápis na předmět
+
+Častým požadavkem je výběr entit podle dat v jiné tabulce.
+
+Například chceme získat všechny studenty, kteří jsou zapsáni alespoň na jeden předmět.
+
+Dotaz využívá relaci: 
+
+`Student` → `Enrollment`.
+
+```csharp
+var students = context.Students
+.Where(s => s.Enrollments.Any());
+```
+
+Metoda Any() testuje, zda existuje alespoň jeden související záznam.
+
+---
+
+### Filtrování podle cizího klíče
+
+Můžeme také filtrovat podle `Id` předmětu pomocí cizího klíče `Enrollment.CourseId`.
+
+Dotaz využívá relaci:
+
+`Student` → `Enrollment`.
+
+```csharp
+var students = context.Students
+.Where(s => s.Enrollments.Any(e => e.CourseId == 1));
+```
+
+Dotaz vrátí všechny studenty, kteří jsou zapsáni na předmět s daným identifikátorem.
+
+---
+
+### Filtrování podle zápisu na konkrétní předmět
+
+Chceme najít studenty zapsané na předmět s názvem „Databáze“. Tentokrát už probíhá dotaz nad třemi tabulkami, protože přistupujeme pomocí navigační property `Enrollement.Course` k názvu předmětu.
+
+Dotaz využívá relaci:
+
+`Student` → `Enrollment` → `Course`.
+
+```csharp
+var students = context.Students
+.Where(s => s.Enrollments.Any(e => e.Course.Name == "Databáze"));
+```
+
+Entity Framework tento LINQ dotaz přeloží na SQL dotaz s odpovídajícími JOIN.
+
+---
+
+### Projekce dat z více tabulek
+
+Pokud chceme vrátit kombinovaná data (např. jméno studenta a název předmětu), použijeme Select:
+
+```csharp
+var result = context.Enrollments
+    .Select(e => new 
+    {
+        Student = e.Student.LastName,
+        Course = e.Course.Name
+    })
+```
+
+Tento dotaz vrátí seznam dvojic student–předmět.
+
+---
+
+## 3.2 Načítání souvisejících dat
 
 Definice relace neznamená, že se související data načtou automaticky. Sami musíme určit způsob načítání.
 
@@ -347,23 +454,21 @@ EF Core nabízí tři přístupy jak načítat data:
 
 ---
 
-## 3.1 Eager Loading
+### 3.2.1 Eager Loading
 
 Používá metodu Include.
 
 ```csharp
-var groups = await context.Groups
-    .Include(g => g.Students)
-    .ToListAsync();
+var groups = context.Groups.Include(g => g.Students);
 ```
 
-### Výhody
+#### Výhody
 
 - Jeden SQL dotaz
 - Přehledné řešení
 - Vhodné, pokud víme, že data budeme potřebovat
 
-### Výkonové dopady
+#### Výkonové dopady
 
 - Více JOIN operací
 - Může dojít k přenosu velkého množství dat
@@ -371,7 +476,7 @@ var groups = await context.Groups
 
 ---
 
-## 3.2 Explicit Loading
+### 3.2.2 Explicit Loading
 
 Relace se načte až v případě potřeby.
 
@@ -383,25 +488,25 @@ context.Entry(group)
     .Load();
 ```
 
-### Výhody
+#### Výhody
 
 - Lepší kontrola nad načítáním
 - Načítáme pouze potřebná data
 
-### Výkonové dopady
+#### Výkonové dopady
 
 - Více SQL dotazů
 - Při použití v cyklu může vzniknout větší počet dotazů
 
 ---
 
-## 3.3 Lazy Loading
+### 3.2.3 Lazy Loading
 
 Lazy loading znamená, že související data nejsou načtena z databáze společně s hlavní entitou, ale až ve chvíli, kdy k nim aplikace skutečně přistoupí prostřednictvím navigační property.
 
 Například při načtení studenta se nenačtou jeho kurzy. Ty se načtou až ve chvíli, kdy k nim program poprvé přistoupí.
 
-### Jak funguje
+#### Jak funguje
 
 EF Core při zapnutém lazy loadingu vytvoří tzv. proxy objekty. Ty zachytí přístup k navigační vlastnosti a automaticky odešlou dodatečný SQL dotaz do databáze. 
 
@@ -410,7 +515,7 @@ Lazy loading není ve výchozím stavu zapnutý, pro správnou funkci je nutné 
 - aktivovat lazy loading v konfiguraci `DbContextu` pomocí `options.UseLazyLoadingProxies();`
 - označit navigační property jako `virtual`
 
-### Výkonové dopady
+#### Výkonové dopady
 
 - Riziko tzv. N+1 problému tedy 1 dotaz na hlavní entitu + N dotazů na relace (EF Core provede 1 SQL dotaz na načtení všech kurzů. Poté pro každý kurz zvlášť provede další SQL) dotaz na studenty.
 - Může výrazně zpomalit aplikaci
@@ -426,6 +531,70 @@ Při práci s relacemi vždy přemýšlejte:
 - Kolik dat se skutečně načte?
 
 ---
+
+# Handling Concurrency Conflicts
+
+V případě, že více uživatelů současně upravuje stejnou entitu, může dojít ke konfliktu. Například dva uživatelé objednají poslední kus zboží. EF Core nabízí mechanismy pro detekci a řešení těchto konfliktů, například pomocí `RowVersion` sloupce.
+
+Tento zápis je specifický pro konkrétní SQL databázi.
+
+Například pro SQL Server můžeme přidat do modelu `Product` vlastnost `RowVersion`, ukážeme si příklad s využitím atributu `[Timestamp]`, ale můžeme použít i Fluent API:
+
+```csharp
+public class Product
+{
+    public int Id { get; set; }
+    public int Quantity { get; set; }
+    [Timestamp]
+    public byte[] RowVersion { get; set; }
+}
+```
+
+Pro PostgreSQL můžeme použít `xmin` sloupec, který je automaticky aktualizován při každé změně řádku:
+
+```csharp
+public class Product
+{
+    public int Id { get; set; }
+    public int Quantity { get; set; }
+    [Timestamp]
+    public uint Xmin { get; set; } // PostgreSQL systémový sloupec pro detekci konfliktů
+}
+```
+
+V kódu potom můžeme zachytit `DbUpdateConcurrencyException` a rozhodnout, jak konflikt vyřešit (např. znovu načíst data, informovat uživatele, apod.). Například z WebApi vrátit HTTP status 409 Conflict.
+
+```csharp   
+static async Task<Results<NoContent, NotFound, Conflict>> Order(int id, MenuContext context)
+{
+    var menu = await context.Menus.FindAsync(id);
+
+    if (menu is null)
+    {
+        return TypedResults.NotFound();
+    }
+
+    if (menu.Quantity <= 0)
+    {
+        return TypedResults.Conflict();
+    }
+
+    --menu.Quantity;
+
+    try
+    {
+        await context.SaveChangesAsync();
+
+        return TypedResults.NoContent();
+    }
+    catch (DbUpdateConcurrencyException)
+    {
+        return TypedResults.Conflict();
+    }
+}
+```
+
+Více se můžete o Concurrency Conflicts dozvědět v dokumentaci: [Handling Concurrency Conflicts](https://learn.microsoft.com/en-us/ef/core/saving/concurrency?tabs=data-annotations).
 
 # 🧩 4. Závěrečný komplexní úkol – Library Management System
 
@@ -468,14 +637,17 @@ Vytvořte a uložte do databáze:
 - alespoň 2 čtenáře
 - alespoň 2 výpůjčky
 
+> Zamyslete se nad vztahem ReaderCard (čtenářský průkaz) a Reader a implementujte jej.
 ---
 
 ### 🔍 Implementujte LINQ dotazy
 
 1. Vypište všechny knihy včetně jejich autorů.  
-2. Vypište všechny výpůjčky konkrétního čtenáře.  
-3. Najděte čtenáře s více než jednou aktivní výpůjčkou (ReturnDate je null).  
-4. Vypište knihy, které nikdy nebyly půjčeny.  
+2. Najděte a vypište čtenáře aspoň s jednou výpůjčkou.
+3. Najděte a vypište čtenáře aspoň s jednou aktivní výpůjčkou (ReturnDate je null).
+4. Vypište knihy, které nikdy nebyly půjčeny
+5. Vypište názvy všech knih vypůjčených (vrácených i nevrácených) konkrétním čtenářem.  
+
 
 ### 🧪 Ověřte referenční integritu
 

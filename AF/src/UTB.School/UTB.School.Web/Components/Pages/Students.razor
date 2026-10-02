@@ -1,0 +1,121 @@
+﻿@page "/students"
+@using Microsoft.AspNetCore.Components.Authorization
+@using UTB.School.Contracts
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@inject SchoolService SchoolService
+
+@if (errorMessage is not null)
+{
+    <div class="alert alert-danger">@errorMessage</div>
+}
+
+<PageTitle>Students</PageTitle>
+
+<AuthorizeView Roles="student-admin">
+    <Authorized>
+        <!-- Zobrazí se pouze přihlášeným -->
+        <p>Welcome back @context.User.Identity?.Name !</p>
+        <p>Roles: @string.Join(", ", context.User.Claims.Where(c => c.Type == "role").Select(c => c.Value))</p>
+        <ul>
+            @foreach (var claim in context.User.Claims)
+            {
+                <li>@claim.Type: @claim.Value</li>
+            }
+        </ul>
+
+        <form action="logout" method="post">
+            <AntiforgeryToken />
+            <button type="submit" class="nav-link btn btn-link">
+                Logout
+            </button>
+        </form>
+    </Authorized>
+    <NotAuthorized>
+        <!-- Zobrazí se nepřihlášeným (hostům) -->
+        <p><a href="/login?returnUrl=students">Log in</a>  please.</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+<h1>Students</h1>
+
+<a class="btn btn-primary" href="/createstudent">Create</a>
+
+@if (students == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Active</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var student in students)
+            {
+                <tr>
+                    <td>@student.Id</td>
+                    <td>@student.Name</td>
+                    <td>@student.IsActive</td>
+                    <td>
+                        <button class="btn btn-danger me-3" @onclick="@(() => DeleteAsync(student.Id))">Delete</button>
+                        <a class="btn btn-success" href="students/@student.Id">Edit</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private StudentDto[]? students;
+    private string? errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        errorMessage = null;
+
+        await LoadStudentsAsync();
+    }
+
+    private async Task DeleteAsync(int studentId)
+    {
+        errorMessage = null;
+
+        try
+        {
+            await SchoolService.DeleteStudentAsync(studentId);
+
+            await LoadStudentsAsync();
+        }
+        catch(HttpRequestException)
+        {
+            errorMessage = "API is not available";
+        }
+        catch (Polly.Timeout.TimeoutRejectedException)
+        {
+            errorMessage = "Timeout";
+        }
+    }
+
+    protected async Task LoadStudentsAsync()
+    {
+        try
+        {
+            students = await SchoolService.GetStudentsAsync();
+        }
+        catch (HttpRequestException)
+        {
+            errorMessage = "API is not available";
+        }
+        catch (Polly.Timeout.TimeoutRejectedException)
+        {
+            errorMessage = "Timeout";
+        }
+    }
+}

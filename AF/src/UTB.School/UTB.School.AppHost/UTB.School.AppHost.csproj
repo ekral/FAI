@@ -1,0 +1,38 @@
+﻿<Project Sdk="Aspire.AppHost.Sdk/13.3.5">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>86346395-fd57-4d04-a9c8-e2e97c399d40</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Realm\utb-school-realm.json" />
+    <None Remove="Realm\utb-school-users-0.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Realm\utb-school-realm.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Realm\utb-school-users-0.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.Keycloak" Version="13.3.5-preview.1.26270.6" />
+    <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="13.3.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\UTB.School.DatabaseManager\UTB.School.DatabaseManager.csproj" />
+    <ProjectReference Include="..\UTB.School.WebApi\UTB.School.WebApi.csproj" />
+    <ProjectReference Include="..\UTB.School.WebSseJavascript\UTB.School.WebSseJavascript.csproj" />
+    <ProjectReference Include="..\UTB.School.WebSse\UTB.School.WebSse.csproj" />
+    <ProjectReference Include="..\UTB.School.Web\UTB.School.Web.csproj" />
+  </ItemGroup>
+
+</Project>

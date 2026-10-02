@@ -1,121 +1,480 @@
-# 06 Blazor Web Forms
+# 06 Blazor formuláře nad School API
 
 **autor: Erik Král ekral@utb.cz**
 
+S asistencí: GitHub Copilot (GPT-5.3-Codex)
+
+## 🎯 Definice
+
+- Blazor formulář je komponenta `EditForm`, která mapuje vstupy na C# model.
+- Validace v Blazoru často používá DataAnnotations (`[Required]`, `[StringLength]`, ...).
+- V tomto materiálu budeme řešit formuláře pro `Create` a `Edit` studenta.
+
+Použité technologie:
+
+- `Blazor Web App` (Interactive Server)
+- `EditForm`, `InputText`, `InputCheckbox`
+- `DataAnnotationsValidator`, `ValidationSummary`
+- `SchoolService` pro volání Web API
+
 ---
 
-Data zadáváme pomocí formulářů, kdy můžeme použít jak HTML prvky, tak Blazor componenty což je běžnější. 
+## Co navazuje na minulou kapitolu
 
-V následujícím příkladu je ukázka formuláře pro výpočet BMI indexu s využitím Blazor componentů. První komponentou je ```EditForm```, který má atributy ```FormName```tedy název formuláře, ```Model``` což je název property představující data formuláře a ```Submit``` jehož hodnotou je název metody, která se má zavolat na serveru pro obsluhu daného formuláře. Máme na vyýber, jestli zvolíme `OnValidSubmit`, `OnInvalidSubmit` nebo `Submit`. `Submit` se zavolá vždy a `OnValidSubmit` pouze pokud je formulář validní, viz validace níže.
+V minulé kapitole jsme měli stránku se seznamem studentů a mazání přes `DELETE`.
 
-Property představující data formuláře musí být označená atributem ```[SupplyParameterFromForm]```.
+Teď přidáme:
 
-```EditForm``` potom obsahuje komponenty pro jednotlivé pole formuláře. Konkrétně dvě komponenty ```InputNumber```, které mají atribut ```@bind-Value="Data.Height"``` respektive ```@bind-Value="Data.Mass"``` představující obousměrné bindování na property. Znamená to, že se data jak zobrazují tak i mění.
+1. stránku `/createstudent` pro založení záznamu,
+2. stránku `/students/{id}` pro editaci,
+3. validaci vstupu ve formuláři.
 
-Atribut ```Enhance``` zlepšuje uživatelský zážitek tak, že při odeslání formuláře nedojde k obnovení celé stránky ale pouze její části.
+Stejně jako v minulé kapitole zjednodušíme ukázky a nebudeme řešit předávání detailních chybových obálek.
 
-```razor
-<h3>Bmi Calculator</h3>
+---
 
-<EditForm FormName="BmiForm" Model="Data" Submit="Submit" Enhance>
-    <div>
-        <label>
-            Height:
-            <br/>
-            <InputNumber @bind-Value="Data.Height" />
-        </label>
-    </div>
-    <div>
-        <label>
-            Mass:
-            <br />
-            <InputNumber @bind-Value="Data.Mass" />
-        </label>
-    </div>
-    <div>
-        <button type="submit">Submit</button>
-    </div>
-</EditForm>
+## 1. DTO a form model
 
-Bmi: @bmi.ToString("F2")
+Ve Web API už máme kontrakt pro vytvoření/úpravu:
 
-@code {
-    [SupplyParameterFromForm]
-    public BmiInputData Data { get; set; } = new();
+```csharp
+public record StudentRequestDto(string Name, bool IsActive);
+```
 
-    public double bmi = 0.0;
+V Blazor klientovi je praktické mít vlastní form model s validačními atributy:
 
-    private void Submit()
+```csharp
+using System.ComponentModel.DataAnnotations;
+
+namespace UTB.School.Web.FormModels;
+
+public class StudentFormModel
+{
+    [Required(ErrorMessage = "Jméno je povinné.")]
+    [StringLength(100, ErrorMessage = "Jméno může mít maximálně 100 znaků.")]
+    public string Name { get; set; } = string.Empty;
+
+    public bool IsActive { get; set; } = true;
+}
+```
+
+Proč oddělovat form model od DTO:
+
+- UI může mít vlastní validační pravidla,
+- DTO zůstává jednoduchý přenosový objekt,
+- form model lze později rozšířit o UI-only vlastnosti.
+
+---
+
+## 2. SchoolService s řádným zpracováním chyb
+
+SchoolService používá `EnsureSuccessStatusCode()` pro automatické vyhodnocení HTTP statusů.
+Pokud API vrátí chybový status, vyhodí se vyjimka `HttpRequestException`.
+
+```csharp
+using UTB.School.Contracts;
+
+namespace UTB.School.Web;
+
+public class SchoolService(HttpClient httpClient)
+{
+    public async Task<StudentDto?> GetStudentAsync(int studentId)
     {
-        double heightMeters = Data.Height / 100.0;
-
-        bmi = Data.Mass / (heightMeters * heightMeters);
+        StudentDto? student = await httpClient.GetFromJsonAsync<StudentDto>($"/students/{studentId}");
+        return student;   
     }
-    public class BmiInputData
+
+    public async Task CreateStudentAsync(StudentRequestDto requestDto)
     {
-        public double Height { get; set; } = 180.0;
-        public double Mass { get; set; } = 75.0;
+        var response = await httpClient.PostAsJsonAsync("/students", requestDto);
+        response.EnsureSuccessStatusCode();      
+    }
+
+    public async Task UpdateStudentAsync(int studentId, StudentRequestDto requestDto)
+    {
+        var response = await httpClient.PutAsJsonAsync($"/students/{studentId}", requestDto);
+        response.EnsureSuccessStatusCode();
+    }
+
+    public async Task DeleteStudentAsync(int studentId)
+    {
+        var response = await httpClient.DeleteAsync($"/students/{studentId}");
+        response.EnsureSuccessStatusCode();
     }
 }
 ```
-## Validace dat
 
-Následující příklad představuje ukázku validace dat. Pro definování pravidel můžeme použít atributy, například atribut ```[Range(1.0, 300.0, ErrorMessage = "Height invalid (1-300).")]``` který definuje povolený rozsah hodnot pro property.
+**Důležité:**
+- `EnsureSuccessStatusCode()` vyhodí `HttpRequestException` při stavech 4xx, 5xx.
+- `GetFromJsonAsync()` sám deserializuje odpověď a vrací `null` při problémech.
+- Vyjimky se chytají v komponentě, nikoli zde.
 
-Do EditFormu potom přidáme komponentu  ```<DataAnnotationsValidator />``` a volitelně ```<ValidationSummary />``` představující seznam všech chyb při validaci. Také ale můžeme použít zápis ```<ValidationMessage For="() => Data.Height" />``` který vypíše chyby pro jednotlivé položky formuláře.
+---
+
+## 3. CreateStudent.razor se zpracováním chyb
+
+Stránka používá `EditForm` s `OnValidSubmit` a má try-catch blok pro zachycení API chyb.
+Chybové zprávy se zobrazují uživateli v alert boxu.
 
 ```razor
-@using System.ComponentModel.DataAnnotations
-<h3>Bmi Calculator</h3>
+@page "/createstudent"
+@using UTB.School.Contracts
+@using UTB.School.Web.FormModels
+@inject NavigationManager NavigationManager
+@inject SchoolService SchoolService
 
-<EditForm FormName="BmiForm" Model="Data" OnValidSubmit="Submit" Enhance>
+@if (errorMessage is not null)
+{
+    <div class="alert alert-danger">@errorMessage</div>
+}
+
+<h3>Create Student</h3>
+
+@if (Model is null)
+{
+    <p>Loading ... </p>
+}
+else
+{
+    <EditForm Model="Model" OnValidSubmit="Submit" FormName="createStudent">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-3">
+            <label class="form-label" for="textName">Name</label>
+            <InputText class="form-control" @bind-Value="Model.Name" id="textName"/>
+        </div>
+
+        <div class="mb-3 form-check">
+            <InputCheckbox class="form-check-input" @bind-Value="Model.IsActive" id="checkboxIsActive" />
+            <label class="form-check-label" for="checkboxIsActive">Is active</label>
+        </div>
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </EditForm>
+}
+
+@code {
+    [SupplyParameterFromForm]
+    public StudentFormModel? Model { get; set; }
+
+    private string? errorMessage;
+
+    protected override void OnInitialized()
+    {
+        Model ??= new() { Name = string.Empty, IsActive = true };
+    }
+
+    private async Task Submit()
+    {
+        if (Model is not null && Model.Name is not null)
+        {
+            try
+            {
+                errorMessage = null;
+
+                StudentRequestDto requestDto = new(Model.Name, Model.IsActive);
+
+                await SchoolService.CreateStudentAsync(requestDto);
+
+                NavigationManager.NavigateTo("/students");
+            }
+            catch (HttpRequestException)
+            {
+                errorMessage = "API is not available";
+            }
+            catch (Polly.Timeout.TimeoutRejectedException)
+            {
+                errorMessage = "Timeout";
+            }
+        }
+    }
+}
+```
+
+**Klíčové body:**
+- `errorMessage` je zobrazen v alert boxu, pokud je nastavena.
+- Try-catch blok zachycuje `HttpRequestException` (API selhání) a timeout vyjimky.
+- `Model` se inicializuje v `OnInitialized()`, aby byl vždy dostupný.
+- `[SupplyParameterFromForm]` je nutný, aby se model správně naplnil z HTTP form postu v SSR/Interactive Server scénáři.
+- Po úspěšném vytvoření se naviguje na `/students`.
+
+---
+
+## 4. EditStudent.razor se zpracováním chyb
+
+Edit stránka má route parametr `Id`, načítá detail studenta a má error handling v obou klíčových místech:
+- při načtení dat (`OnParametersSetAsync`)
+- při odeslání (`Submit`)
+
+```razor
+@page "/students/{Id:int}"
+@using UTB.School.Contracts
+@using UTB.School.Web.FormModels
+@inject NavigationManager NavigationManager
+@inject SchoolService SchoolService
+
+@if (errorMessage is not null)
+{
+    <div class="alert alert-danger">@errorMessage</div>
+}
+
+<h3>Edit Student</h3>
+
+@if (Model is null)
+{
+    <p>Loading ... </p>
+}
+else
+{
+    <EditForm Model="Model" OnValidSubmit="Submit" FormName="editStudent">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-3">
+            <label class="form-label" for="textName">Name</label>
+            <InputText class="form-control" @bind-Value="Model.Name" id="textName" />
+        </div>
+
+        <div class="mb-3 form-check">
+            <InputCheckbox class="form-check-input" @bind-Value="Model.IsActive" id="checkboxIsActive" />
+            <label class="form-check-label" for="checkboxIsActive">Is active</label>
+        </div>
+
+        <button class="btn btn-primary" type="submit">Save</button>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    public StudentFormModel? Model { get; set; }
+
+    private string? errorMessage;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Model is not null)
+        {
+            return;
+        }
+
+        try
+        {
+            errorMessage = null;
+            
+            StudentDto? student = await SchoolService.GetStudentAsync(Id);
+
+            if (student is not null)
+            {
+                Model = new StudentFormModel
+                {
+                    Name = student.Name,
+                    IsActive = student.IsActive
+                };
+            }
+            else
+            {
+                errorMessage = "Student was not found.";
+                Model = new();
+            }
+        }
+        catch (HttpRequestException)
+        {
+            errorMessage = "API is not available.";
+        }
+        catch (Polly.Timeout.TimeoutRejectedException)
+        {
+            errorMessage = "Timeout";
+        }
+    }
+
+    private async Task Submit()
+    {
+        errorMessage = null;
+
+        if (Model is not null && Model.Name is not null)
+        {
+            StudentRequestDto requestDto = new(Model.Name, Model.IsActive);
+
+            try
+            {
+                errorMessage = null;
+                
+                await SchoolService.UpdateStudentAsync(Id, requestDto);
+
+                NavigationManager.NavigateTo("students");
+            }
+            catch (HttpRequestException)
+            {
+                errorMessage = "API is not available";
+            }
+            catch (Polly.Timeout.TimeoutRejectedException)
+            {
+                errorMessage = "Timeout";
+            }
+        }
+    }
+}
+```
+
+**Klíčové body:**
+- `OnParametersSetAsync()` se volá při nastavení parametrů `Id` a `Model`. Aby se při nastavování Model tento model znovu nepřepisoval, je zde kontrola `if (Model is not null) return;`.
+- Pokud student neexistuje (vrátí `null`), zobrazí se uživateli chybová zpráva.
+---
+
+## 5. Exception handling a uživatelské chyby
+
+V reálné aplikaci je důležité bezpečně zpracovat chyby bez úniku citlivých informací.
+
+### HttpRequestException
+
+Vyhodí se, když:
+- je chybný HTTP status (4xx, 5xx) kvůli `EnsureSuccessStatusCode()`,
+- dojde k network chybě.
+
+```csharp
+catch (HttpRequestException)
+{
+    errorMessage = "API is not available";
+}
+```
+
+### Polly Timeout
+
+Polly je knihovna pro resilience (retry, timeout, circuit breaker).
+Pokud `HttpClient` překročí timeout, vyhodí `Polly.Timeout.TimeoutRejectedException`.
+
+```csharp
+catch (Polly.Timeout.TimeoutRejectedException)
+{
+    errorMessage = "Timeout";
+}
+```
+
+Timeout se konfiguruje v `Program.cs` (obvykle 30 sekund):
+
+```csharp
+builder.Services.AddHttpClient<SchoolService>(c => c.BaseAddress = new Uri("https://webapi"))
+    .AddTransientHttpErrorPolicy()
+    .WaitAndRetryAsync(retryCount: 3, sleepDuration: TimeSpan.FromSeconds(1))
+    .WrapAsync(Policy.TimeoutAsync<HttpResponseMessage>(TimeSpan.FromSeconds(30)));
+```
+
+## 6. Co dělá [SupplyParameterFromForm]
+
+`[SupplyParameterFromForm]` říká Blazoru, že hodnoty modelu se mají naplnit z HTTP form postu.
+
+V našem scénáři se Static Server Side rendering je to užitečné, protože:
+
+- model je správně navázán při submitu,
+- podporuje to zpracování formuláře na serveru,
+- funguje to přirozeně s `EditForm`.
+
+Příklad:
+```csharp
+[SupplyParameterFromForm]
+public StudentFormModel? Model { get; set; }
+```
+
+---
+
+## 7. Validace
+
+### Co přesně dělá `<DataAnnotationsValidator />`
+
+- Napojí `EditForm` na validační atributy z modelu (např. `[Required]`, `[StringLength]`).
+- Při změně hodnot i při odeslání formuláře vyhodnotí, zda model splňuje pravidla.
+- Bez této komponenty se DataAnnotations pravidla v `EditForm` neaplikují.
+
+### Co přesně dělá `<ValidationSummary />`
+
+- Zobrazí souhrnný seznam validačních chyb pro celý formulář.
+- Je vhodný zejména při výuce a debugování, protože student hned vidí všechny chyby na jednom místě.
+- V produkčním UI se často kombinuje s `ValidationMessage` u jednotlivých polí.
+
+Praktický příklad:
+
+- `Name` je prázdné a má `[Required]`.
+- `DataAnnotationsValidator` označí model jako nevalidní.
+- `ValidationSummary` vypíše chybovou zprávu.
+- `OnValidSubmit` se nespustí, takže se neodešle požadavek na API.
+
+### Mini-ukázka: `ValidationMessage` u konkrétního pole
+
+Kromě souhrnu lze chybu zobrazit přímo u konkrétního inputu:
+
+```razor
+<EditForm Model="Model" OnValidSubmit="Submit" FormName="createStudent">
     <DataAnnotationsValidator />
-    <ValidationSummary />
-    <div>
-        <label>
-            Height:
-            <br />
-            <ValidationMessage For="() => Data.Height" />
-            <InputNumber @bind-Value="Data.Height" />
-        </label>
+
+    <div class="mb-3">
+        <label class="form-label" for="textName">Name</label>
+        <InputText class="form-control" @bind-Value="Model.Name" id="textName" />
+        <ValidationMessage For="() => Model.Name" />
     </div>
-    <div>
-        <label>
-            Mass:
-            <br />
-            <ValidationMessage For="() => Data.Mass" />
-            <InputNumber @bind-Value="Data.Mass" />
-        </label>
+
+    <div class="mb-3 form-check">
+        <InputCheckbox class="form-check-input" @bind-Value="Model.IsActive" id="checkboxIsActive" />
+        <label class="form-check-label" for="checkboxIsActive">Is active</label>
     </div>
-    <div>
-        <button type="submit">Submit</button>
-    </div>
+
+    <button class="btn btn-primary" type="submit">Submit</button>
 </EditForm>
-
-Bmi: @bmi.ToString("F2")
-
-@code {
-    [SupplyParameterFromForm]
-    public BmiInputData Data { get; set; } = new();
-
-    public double bmi = 0.0;
-
-    private void Submit()
-    {
-        double heightMeters = Data.Height / 100.0;
-
-        bmi = Data.Mass / (heightMeters * heightMeters);
-    }
-    public class BmiInputData
-    {
-        [Range(1.0, 300.0, ErrorMessage = "Height invalid (1-300).")]
-        public double Height { get; set; } = 180.0;
-
-        [Range(1.0, 500.0, ErrorMessage = "Mass invalid (1-500).")]
-        public double Mass { get; set; } = 75.0;
-    }
-}
 ```
+
+Co je výhoda:
+
+- uživatel vidí chybu přesně u pole, které je neplatné,
+- UX je přehlednější než samotný souhrn nahoře,
+- dobře funguje v kombinaci `ValidationSummary + ValidationMessage`.
+
 ---
-1. [ASP.NET Core Blazor forms overview](https://learn.microsoft.com/en-us/aspnet/core/blazor/forms/?view=aspnetcore-8.0)
-2. [ASP.NET Core Blazor input components](https://learn.microsoft.com/en-us/aspnet/core/blazor/forms/input-components?view=aspnetcore-8.0)
+
+## 8. Jak si to vyzkoušet
+
+1. Spusťte AppHost:
+
+```powershell
+dotnet run --project .\UTB.School.AppHost
+```
+
+2. Otevřete Blazor web aplikaci.
+3. Na stránce `/students` klikněte na `Create`.
+4. Vytvořte nového studenta.
+5. U záznamu klikněte na `Edit`, upravte data a uložte.
+
+Při testu error handlingu:
+- Vypněte API a zkuste vytvořit studenta — zobrazí se "Timeout".
+- Vytvořte studenta s prázdným jménem — formulář nebude odeslán kvůli validaci.
+
+---
+
+## 9. Shrnutí
+
+V této kapitole jsme doplnili Blazor klienta o formuláře:
+
+- vytvoření studenta (`POST /students`),
+- editaci studenta (`PUT /students/{id}`),
+- validační pravidla na úrovni form modelu,
+- přesměrování po úspěšném uložení zpět na seznam.
+
+---
+
+## 10. Kontrolní otázky
+
+1. Jaký je rozdíl mezi `OnSubmit` a `OnValidSubmit`?
+2. Proč je vhodné mít `StudentFormModel` odděleně od `StudentRequestDto`?
+3. K čemu slouží `[SupplyParameterFromForm]`?
+4. Jak funguje `EnsureSuccessStatusCode()`?
+5. Jaké vyjimky chytáme v komponentě a proč je ošetřujeme ve `SchoolService`?
+6. Proč po vytvoření nebo úpravě záznamu navigujeme zpět na `/students`?
+7. Jaký je rozdíl mezi `HttpRequestException` a `Polly.Timeout.TimeoutRejectedException`?
+
+---
+
+## Zdroje
+
+1. [ASP.NET Core Blazor forms overview](https://learn.microsoft.com/en-us/aspnet/core/blazor/forms/?view=aspnetcore-9.0)
+2. [ASP.NET Core Blazor input components](https://learn.microsoft.com/en-us/aspnet/core/blazor/forms/input-components?view=aspnetcore-9.0)

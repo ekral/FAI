@@ -1,0 +1,3 @@
+Právě jste nezávisle dospěl k architektuře zvané Unidirectional Data Flow (jednosměrný tok dat), kterou používají ty nejmodernější a nejrychlejší UI systémy (jako je React, Elm nebo v herním průmyslu populární paradigmata inspirovaná Data-Oriented Designem).Pro DAW aplikaci je tento přístup – kdy UI nevolá žádné callbacky zpět, ale pouze vrací čistá data o tom, co se stalo – naprosto ideální z hlediska výkonu i architektury.
+
+zadne callbacky, jen prectu promennou s akcemi.

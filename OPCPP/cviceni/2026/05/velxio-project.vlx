@@ -1,0 +1,126 @@
+{
+  "format": "velxio-project",
+  "version": 1,
+  "exportedAt": "2026-09-29T09:13:12.521Z",
+  "boards": [
+    {
+      "id": "arduino-uno",
+      "boardKind": "arduino-uno",
+      "x": 153.84049290939657,
+      "y": 351.0048296291012,
+      "activeFileGroupId": "group-arduino-uno",
+      "languageMode": "arduino",
+      "serialBaudRate": 0
+    }
+  ],
+  "fileGroups": {
+    "group-arduino-uno": [
+      {
+        "name": "sketch.ino",
+        "content": "int pole[] = {0,6,24,53,88,128,167,202,231,249,255,249,231,202,167,128,88,53,24,6};\nint delka = sizeof(pole) / sizeof(int);\n\nint i = 0;\n\nvoid setup() \n{\n  pinMode(11, OUTPUT);\n  analogWrite(11, 0);\n}\n\nvoid loop() \n{\n  int intensity = pole[i];\n  analogWrite(11, intensity);\n\n  i = (i + 1) % delka;    \n\n  delay(50);\n}\n\n//  0 % 20 =  0 - 0 * 20 =  0\n// 19 % 20 = 19 - 0 * 20 = 19\n// 20 % 20 = 20 - 1 * 20 =  0"
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "led_1790670494054_jwg4v61tp",
+      "metadataId": "led",
+      "x": 254.62022089227804,
+      "y": 154.39294986201207,
+      "properties": {
+        "value": false,
+        "brightness": 1,
+        "color": "red",
+        "lightColor": null,
+        "label": "",
+        "flip": false
+      }
+    },
+    {
+      "id": "resistor_220_1790670513333_p43242dlv",
+      "metadataId": "resistor-220",
+      "x": 274.63003370056475,
+      "y": 246.92190786025665,
+      "properties": {
+        "value": "220",
+        "rotation": 90
+      }
+    }
+  ],
+  "wires": [
+    {
+      "id": "wire-1790670499740",
+      "start": {
+        "componentId": "arduino-uno",
+        "pinName": "GND.1",
+        "x": 269.3404929093966,
+        "y": 360.0048296291012
+      },
+      "end": {
+        "componentId": "led_1790670494054_jwg4v61tp",
+        "pinName": "C",
+        "x": 275.62022089227804,
+        "y": 202.39294986201207
+      },
+      "waypoints": [
+        {
+          "x": 266.63003370056475,
+          "y": 360.0048296291012
+        },
+        {
+          "x": 266.63003370056475,
+          "y": 202.39294986201207
+        }
+      ],
+      "color": "#000000",
+      "autoRouted": true
+    },
+    {
+      "id": "wire-1790670521958",
+      "start": {
+        "componentId": "led_1790670494054_jwg4v61tp",
+        "pinName": "A",
+        "x": 285.62022089227804,
+        "y": 202.39294986201207
+      },
+      "end": {
+        "componentId": "resistor_220_1790670513333_p43242dlv",
+        "pinName": "1",
+        "x": 339.4800337005647,
+        "y": 225.42190786025662
+      },
+      "waypoints": [
+        {
+          "x": 339.4800337005647,
+          "y": 202.39294986201207
+        }
+      ],
+      "color": "#22c55e",
+      "autoRouted": true
+    },
+    {
+      "id": "wire-1790670524494",
+      "start": {
+        "componentId": "resistor_220_1790670513333_p43242dlv",
+        "pinName": "2",
+        "x": 339.4800337005647,
+        "y": 284.22190786025664
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "11",
+        "x": 297.8404929093966,
+        "y": 360.0048296291012
+      },
+      "waypoints": [
+        {
+          "x": 297.8404929093966,
+          "y": 292.33591331600127
+        }
+      ],
+      "color": "#22c55e",
+      "autoRouted": false
+    }
+  ],
+  "activeBoardId": "arduino-uno"
+}

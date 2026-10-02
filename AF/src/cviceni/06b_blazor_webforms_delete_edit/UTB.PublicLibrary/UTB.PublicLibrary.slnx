@@ -1,0 +1,10 @@
+<Solution>
+  <Project Path="UTB.PublicLibrary.AppHost/UTB.PublicLibrary.AppHost.csproj" />
+  <Project Path="UTB.PublicLibrary.Contracts/UTB.PublicLibrary.Contracts.csproj" />
+  <Project Path="UTB.PublicLibrary.DatabaseManager/UTB.PublicLibrary.DatabaseManager.csproj" />
+  <Project Path="UTB.PublicLibrary.Db/UTB.PublicLibrary.Db.csproj" />
+  <Project Path="UTB.PublicLibrary.ServiceDefaults/UTB.PublicLibrary.ServiceDefaults.csproj" />
+  <Project Path="UTB.PublicLibrary.Tests/UTB.PublicLibrary.Tests.csproj" />
+  <Project Path="UTB.PublicLibrary.Web/UTB.PublicLibrary.Web.csproj" />
+  <Project Path="UTB.PublicLibrary.WebApi/UTB.PublicLibrary.WebApi.csproj" />
+</Solution>
