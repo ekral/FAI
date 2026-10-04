@@ -2,10 +2,10 @@ using System;
 
 public class Solution
 {
-    public void Test(double a, double b, int c)
-    {
-        double diskriminant = b * b - 4 * a * c;
+    public void Run()
+    { 
+        using MujStream stream = new MujStream();
 
-        TestConsole.WriteLine($"diskriminant: {diskriminant:F1}");
+        stream.WriteLine("Nejaky text");         
     }
 }

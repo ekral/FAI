@@ -1,21 +1,39 @@
 using System;
-using System.Globalization;
 using System.IO;
-
-Solution solution = new();
+using System.Linq;
+using System.Globalization;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 var stdout = Console.Out;
 var dummyWritter = new StringWriter();
 Console.SetOut(dummyWritter);
 
-solution.Test(2, -7, 3);
-bool t1 = TestConsole.Message == "diskriminant: 25.0";
-solution.Test(4, 12, 9);
-bool t2 = TestConsole.Message == "diskriminant: 0.0";
-solution.Test(1, 2, 5);
-bool t3 = TestConsole.Message == "diskriminant: -16.0";
+Solution solution = new();
 
-double fraction = t1 && t2 && t3 ? 1.0 : 0.0;
+bool exceptionThrown = false;
+
+try
+{
+    solution.Run();
+}
+catch (Exception)
+{
+    exceptionThrown = true;
+}
+
+bool t1 = MujStream.called;
+bool t2 = MujStream.disposed;
+
+var code = File.ReadAllText("solution.cs");
+
+bool t3 = !Regex.IsMatch(code, @"\bfinally\b");
+
+bool t4 = exceptionThrown;
+
+bool t5 = !Regex.IsMatch(code, @"\bstream\s*\.\s*Dispose\b");
+
+double fraction = t1 && t2 && t3 && t4 && t5 ? 1.0 : 0.0;
 
 Console.SetOut(stdout);
 
@@ -28,9 +46,11 @@ string jsonOutput = $$"""
     "testresults":
     [
         ["Nazev testu", "Ocekavana hodnota", "Vysledek", "iscorrect"],
-        ["solution.Test(2, -7, 3)", "diskriminant: 25.0", "{{message(t1)}}", {{jsonBool(t1)}}],
-        ["solution.Test(4, 12, 9)", "diskriminant: 0.0", "{{message(t2)}}", {{jsonBool(t2)}}],
-        ["solution.Test(1, 2, 5)", "diskriminant: -16.0", "{{message(t3)}}", {{jsonBool(t3)}}]
+        ["Vola se WriteLine", "ano", "{{message(t1)}}", {{jsonBool(t1)}}],
+        ["Vola se vzdy Dispose", "ano", "{{message(t2)}}", {{jsonBool(t2)}}],
+        ["Nepouziva se try finally", "ano", "{{message(t3)}}", {{jsonBool(t3)}}],
+        ["Nepouziva se try catch", "ano", "{{message(t4)}}", {{jsonBool(t4)}}],
+        ["Nepouziva se uvolneni v kodu", "ano", "{{message(t5)}}", {{jsonBool(t5)}}]
     ]
 }
 """;
@@ -44,5 +64,22 @@ class TestConsole
     public static void WriteLine(string message)
     {
         Message = message;
+    }
+}
+
+class MujStream : IDisposable
+{
+    public static bool disposed = false;
+    public static bool called = false;
+
+    public void WriteLine(string message)
+    {
+        called = true;
+        throw new Exception();
+    }
+
+    public void Dispose()
+    {
+        disposed = true;
     }
 }
