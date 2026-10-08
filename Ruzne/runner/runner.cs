@@ -3,37 +3,60 @@ using System.IO;
 using System.Linq;
 using System.Globalization;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
+using System.Reflection;
 
 var stdout = Console.Out;
 var dummyWritter = new StringWriter();
 Console.SetOut(dummyWritter);
 
-Solution solution = new();
+bool tVozidloProperty = typeof(Vozidlo).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly).Where(p => p.GetSetMethod() is null).Select(p => p.Name).SequenceEqual(["Znacka", "Model"]);
+bool tNakladniVozidloProperty = typeof(NakladniVozidlo).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly).Where(p => p.GetSetMethod() is null).Select(p => p.Name).SequenceEqual(["Nosnost"]);
 
-bool exceptionThrown = false;
+var vozidloKonstruktory = typeof(Vozidlo).GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+bool tVozidloKonstruktor = vozidloKonstruktory.Length == 1 && vozidloKonstruktory[0].GetParameters().Length > 0;
+
+var nakladniVozidloKonstruktory = typeof(NakladniVozidlo).GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+bool tNakladniVozidloKonstruktor = nakladniVozidloKonstruktory.Length == 1 && nakladniVozidloKonstruktory[0].GetParameters().Length > 0;
+
+bool tDedicnost = typeof(Vozidlo).IsAssignableFrom(typeof(NakladniVozidlo));
+
+bool t1;
 
 try
 {
-    solution.Run();
+    NakladniVozidlo vozidlo = new("Tatra", "Phoenix", 11000);
+
+    t1 = vozidlo.Znacka == "Tatra" && vozidlo.Model == "Phoenix" && vozidlo.Nosnost == 11000;
 }
-catch (Exception)
+catch
 {
-    exceptionThrown = true;
+    t1 = false;
 }
 
-bool t1 = MujStream.called;
-bool t2 = MujStream.disposed;
+bool t2;
 
-var code = File.ReadAllText("solution.cs");
+try
+{
+    NakladniVozidlo vozidlo = new("Citroen", "Jumper", 1500);
 
-bool t3 = !Regex.IsMatch(code, @"\bfinally\b");
+    t2 = vozidlo.Znacka == "Citroen" && vozidlo.Model == "Jumper" && vozidlo.Nosnost == 1500;
+}
+catch
+{
+    t2 = false;
+}
 
-bool t4 = exceptionThrown;
+int body = 0;
 
-bool t5 = !Regex.IsMatch(code, @"\bstream\s*\.\s*Dispose\b");
 
-double fraction = t1 && t2 && t3 && t4 && t5 ? 1.0 : 0.0;
+if (tNakladniVozidloProperty) body += 1;
+if (tNakladniVozidloKonstruktor) body += 1;
+if (t1) body += 1;
+if (t2) body += 1;
+
+if (!tVozidloProperty || !tVozidloKonstruktor || !tDedicnost) body = 0;
+
+double fraction = body / 4.0;
 
 Console.SetOut(stdout);
 
@@ -46,40 +69,25 @@ string jsonOutput = $$"""
     "testresults":
     [
         ["Nazev testu", "Ocekavana hodnota", "Vysledek", "iscorrect"],
-        ["Vola se WriteLine", "ano", "{{message(t1)}}", {{jsonBool(t1)}}],
-        ["Vola se vzdy Dispose", "ano", "{{message(t2)}}", {{jsonBool(t2)}}],
-        ["Nepouziva se try finally", "ano", "{{message(t3)}}", {{jsonBool(t3)}}],
-        ["Nepouziva se try catch", "ano", "{{message(t4)}}", {{jsonBool(t4)}}],
-        ["Nepouziva se uvolneni v kodu", "ano", "{{message(t5)}}", {{jsonBool(t5)}}]
+        ["property Znacka a Model", "OK", "{{message(tVozidloProperty)}}", {{jsonBool(tVozidloProperty)}}],
+        ["property Nosnost", "OK", "{{message(tNakladniVozidloProperty)}}", {{jsonBool(tNakladniVozidloProperty)}}],
+        ["konstruktor Vozidlo", "OK", "{{message(tVozidloKonstruktor)}}", {{jsonBool(tVozidloKonstruktor)}}],
+        ["konstruktor NakladniVozidlo", "OK", "{{message(tNakladniVozidloKonstruktor)}}", {{jsonBool(tNakladniVozidloKonstruktor)}}],
+        ["Dedicnost", "OK", "{{message(tDedicnost)}}", {{jsonBool(tDedicnost)}}],
+        ["new NakladniVozidlo(\"Tatra\", \"Phoenix\", 11000)", "OK", "{{message(t1)}}", {{jsonBool(t1)}}],
+        ["new NakladniVozidlo(\"Citroen\", \"Jumper\", 1500)", "OK", "{{message(t2)}}", {{jsonBool(t2)}}]
     ]
 }
 """;
 
 Console.Write(jsonOutput);
 
-class TestConsole
+public static class TestConsole
 {
     public static string Message {get; private set;} = string.Empty;
 
     public static void WriteLine(string message)
     {
         Message = message;
-    }
-}
-
-class MujStream : IDisposable
-{
-    public static bool disposed = false;
-    public static bool called = false;
-
-    public void WriteLine(string message)
-    {
-        called = true;
-        throw new Exception();
-    }
-
-    public void Dispose()
-    {
-        disposed = true;
     }
 }
