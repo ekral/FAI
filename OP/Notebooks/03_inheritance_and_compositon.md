@@ -381,7 +381,7 @@ Vytvořte třídu ```Jaguar```, která dědí z třídy ```Zviratko```:
 - Předejte potřebné parametry konstruktoru rodičovské třídy ```Zviratko```.
 
 ```csharp
-Jaguar leopard = new("Mayara", 0);
+Jaguar mlade = new("Mayara", 0);
 ```
 
 ### 4. Skládání objektů

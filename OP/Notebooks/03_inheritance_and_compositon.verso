@@ -269,7 +269,7 @@
       "id": "82dc7769-f740-46c2-b290-9b8616d87b20",
       "type": "code",
       "language": "csharp",
-      "source": "Jaguar leopard = new(\u0022Mayara\u0022, 0);"
+      "source": "Jaguar mlade = new(\u0022Mayara\u0022, 0);"
     },
     {
       "id": "ae78b55a-614b-47f2-aec2-c5dc339004cd",
