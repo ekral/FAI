@@ -1,0 +1,280 @@
+{
+  "verso": "1.1",
+  "metadata": {
+    "defaultKernel": "csharp",
+    "activeLayout": {
+      "extensionId": "verso.layout.notebook",
+      "layoutId": "notebook"
+    }
+  },
+  "cells": [
+    {
+      "id": "de27cea4-4500-4e61-b9ea-5c04898385a6",
+      "type": "markdown",
+      "source": "# 03: D\u011Bdi\u010Dnost a skl\u00E1d\u00E1n\u00ED\n**autor: Erik Kr\u00E1l ekral@utb.cz**\n\n---\n\n\nObsah\n- D\u011Bdi\u010Dnost k\u00F3du.\n- D\u011Bdi\u010Dnost a konstruktor.\n- Kl\u00ED\u010Dov\u00E9 slovo protected.\n- Kompozice.\n- D\u011Bdi\u010Dnost vs kompozice.\n"
+    },
+    {
+      "id": "d959b94b-eb34-489c-9387-4c0afa6317c9",
+      "type": "markdown",
+      "source": "## D\u011Bdi\u010Dnost k\u00F3du"
+    },
+    {
+      "id": "dccaf42d-1035-42cb-9b6c-3a4207960047",
+      "type": "markdown",
+      "source": "D\u011Bdi\u010Dnost k\u00F3du popisuje vztah specializace mezi t\u0159\u00EDdami, nap\u0159\u00EDklad po\u010D\u00EDta\u010Dov\u00E1 my\u0161 je (anglicky *IS A*) produkt, nebo tla\u010D\u00EDtko v aplikaci je ovl\u00E1dac\u00ED prvek. \n\nNa n\u00E1sleduj\u00EDm p\u0159\u00EDkladu probereme co je to d\u011Bdi\u010Dnost k\u00F3du a jak ji zapsat."
+    },
+    {
+      "id": "6e6e5f87-bcc9-4616-8253-a3f067b4644e",
+      "type": "markdown",
+      "source": "T\u0159\u00EDda \u0060Mys\u0060 a \u0060Monitor\u0060 maj\u00ED stejn\u00E9 property \u0060Cena\u0060 a \u0060Hodnoceni\u0060."
+    },
+    {
+      "id": "1595a229-9be4-4e52-843b-e8e754cabedf",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Mys\n{\n    public double Cena { get; set; }\n    public int Hodnoceni { get; set; }\n    public int Dpi { get; set; }\n}\n\nclass Monitor\n{\n    public double Cena { get; set; }\n    public int Hodnoceni { get; set; }\n    public int Uhlopricka { get; set; }\n}"
+    },
+    {
+      "id": "b0dadd46-f438-41f7-9a44-8853096a475f",
+      "type": "markdown",
+      "source": "- Prom\u011Bnn\u00E9 Cena a Hodnocen\u00ED vytkneme a vlo\u017E\u00EDme dobrodi\u010Dovsk\u00E9 t\u0159\u00EDdy \u0060Produkt\u0060:"
+    },
+    {
+      "id": "feb054f9-2f56-4a1d-ad1b-03b06d08b0ce",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Produkt\n{\n    public double Cena { get; set; }\n    public int Hodnoceni { get; set; }\n}",
+      "metadata": {
+        "execution_count": 1
+      }
+    },
+    {
+      "id": "f01fa440-9db0-41a9-995c-8acfef8c509a",
+      "type": "markdown",
+      "source": "- Jin\u00E1 t\u0159\u00EDda potom m\u016F\u017Ee zd\u011Bdit k\u00F3d t\u00E9to t\u0159\u00EDdy. V n\u00E1sleduj\u00EDc\u00EDm p\u0159\u00EDkladu m\u00E1me t\u0159\u00EDdu \u0060Mys\u0060 jej\u00ED\u017E sou\u010D\u00E1st\u00ED se d\u00EDky dedi\u010Dnosti stane k\u00F3d t\u0159\u00EDdy \u0060Produkt\u0060. \u0158\u00EDk\u00E1me, \u017Ee t\u0159\u00EDda \u0060Mys\u0060 je potomkem t\u0159\u00EDdy \u0060Produkt\u0060."
+    },
+    {
+      "id": "be241a6f-b659-492d-857e-4f3e9e56d64e",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Mys : Produkt\n{\n    public int Dpi { get; set; }\n}",
+      "metadata": {
+        "execution_count": 2
+      }
+    },
+    {
+      "id": "e57bf585-d2b9-492a-9d9f-42fdd3d85a87",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Monitor : Produkt\n{\n    public int Uhlopricka { get; set; }\n}",
+      "metadata": {
+        "execution_count": 3
+      }
+    },
+    {
+      "id": "ac70c940-e10f-4c3e-92f3-ee4f12a406de",
+      "type": "markdown",
+      "source": "Z\u00E1kladn\u00ED pojmy\n\n- T\u0159\u00EDda od kter\u00E9 d\u011Bd\u00EDme - synonyma\n  - Z\u00E1kladn\u00ED t\u0159\u00EDda (base class)\n  - Rodi\u010Dovsk\u00E1 t\u0159\u00EDda (parent class)\n  - Nadt\u0159\u00EDda (superclass)\n- T\u0159\u00EDda, kter\u00E1 d\u011Bd\u00ED - synonyma\n  -Odvozen\u00E1 t\u0159\u00EDda (derived class)\n  - Potomek t\u0159\u00EDdy (child class)\n  - Podt\u0159\u00EDda (subclass)\n- \u0158\u00EDk\u00E1me, \u017Ee odvozen\u00E1 t\u0159\u00EDda d\u011Bd\u00ED od z\u00E1kladn\u00ED t\u0159\u00EDdy. Ale tak\u00E9 m\u016F\u017Eeme \u0159\u00EDct:\n  - odvozen\u00E1 t\u0159\u00EDda je **specializac\u00ED**  (Specialization) z\u00E1kladn\u00ED t\u0159\u00EDdy\n  - z\u00E1kladn\u00ED t\u0159\u00EDda je **zobecn\u011Bn\u00EDm** (Generalization) odvozen\u00E9 t\u0159\u00EDdy.\n  - odvozen\u00E1 t\u0159\u00EDda **roz\u0161\u00ED\u0159uje** (Extends) z\u00E1kladn\u00ED t\u0159\u00EDdu\n"
+    },
+    {
+      "id": "b7eeae33-a84c-45b4-b8de-f67277989b41",
+      "type": "markdown",
+      "source": "## D\u011Bdi\u010Dnost a konstruktor\n\nPokud m\u00E1 rodi\u010Dovsk\u00E1 t\u0159\u00EDda **bezparametrick\u00FD konstruktor**, tak se u potomka zavol\u00E1 implicitn\u011B, nemus\u00EDme tedy nic ps\u00E1t.\n\nPokud m\u00E1 rodi\u010Dovsk\u00E1 t\u0159\u00EDda **parametrick\u00FD konstruktor**, tak jej mus\u00EDme u potomka explicitn\u011B zavolat pomoc\u00ED kl\u00ED\u010Dov\u00E9ho slova \u0060base\u0060.\n\nPozn\u00E1mka: v p\u0159\u00EDkladech pou\u017E\u00EDv\u00E1me readonly property, tedy takovou, kter\u00E1 m\u00E1 jen \u0060\u0060\u0060get;\u0060\u0060\u0060 a nem\u00E1 \u0060\u0060\u0060set;\u0060\u0060\u0060"
+    },
+    {
+      "id": "6838a55e-00dc-48ab-a341-7744b4d3bbd3",
+      "type": "markdown",
+      "source": "- Nyn\u00ED si p\u0159id\u00E1me do t\u0159\u00EDdy \u0060Produkt\u0060 parametrick\u00FD konstruktor:"
+    },
+    {
+      "id": "a391ee9c-dcad-4c77-ad5f-4a7fb088df68",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Produkt\n{\n    public decimal Cena { get; }\n    public int Hodnoceni { get; }\n\n    public Produkt(decimal cena, int hodnoceni)\n    {\n        Cena = cena;\n        Hodnoceni = hodnoceni;\n        Console.WriteLine(\u0022Produkt byl vytvo\u0159en.\u0022);\n    }\n}",
+      "metadata": {
+        "execution_count": 6
+      }
+    },
+    {
+      "id": "a4a036a6-7bf6-4fca-92de-df6f04bcf96a",
+      "type": "markdown",
+      "source": "- Pomoc\u00ED kl\u00ED\u010Dov\u00E9ho slova \u0060base\u0060 potom zavol\u00E1me parametrick\u00FD konstruktor rodi\u010De. Konr\u00E9tn\u011B z\u00E1pis \u0060base(cena, hodnoceni)\u0060 v n\u00E1sleduj\u00EDc\u00EDm k\u00F3du zavol\u00E1 parametrick\u00FD konstruktor t\u0159\u00EDdy \u0060Produkt\u0060. Pokud m\u00E1 rodi\u010Dovsk\u00E1 t\u0159\u00EDd konstruktor bez parametr\u016F nebo nem\u00E1 \u017E\u00E1dn\u00FD konstruktor, tak kl\u00ED\u010Dov\u00E9 slovo \u0060base\u0060 nemus\u00EDme pou\u017E\u00EDt."
+    },
+    {
+      "id": "07ec0002-943c-4da5-a4c1-1d7dd6800871",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Mys : Produkt\n{\n    public int Dpi { get; }\n\n    public Mys(decimal cena, int hodnoceni, int dpi) : base(cena, hodnoceni)\n    {\n        Dpi = dpi;\n    }\n}",
+      "metadata": {
+        "execution_count": 7
+      }
+    },
+    {
+      "id": "bbd68f6e-9633-4d4d-86ca-f4c6c3efc78a",
+      "type": "markdown",
+      "source": "- Nakonec vytvo\u0159\u00EDme instanci t\u0159\u00EDdy \u0060Mys\u0060. V\u0161imn\u011Bte si, \u017Ee prom\u011Bnn\u00E1 \u0060Mys\u0060 m\u00E1 property \u0060Cena\u0060 a \u0060Hodnocen\u00ED\u0060, kter\u00E9 zd\u011Bdila od t\u0159\u00EDdy \u0060Produkt\u0060."
+    },
+    {
+      "id": "53d98e3d-114e-4701-99a5-cb90c46a0500",
+      "type": "code",
+      "language": "csharp",
+      "source": "decimal cena = 600m;\nint hodnoceni = 8;\nint dpi = 2000;\n\nMys mys = new (cena, hodnoceni, dpi);\n\nConsole.WriteLine($\u0022Pocitacova mys cena: {mys.Cena} hodnoceni: {mys.Hodnoceni} dpi: {mys.Dpi}\u0022);",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "Pocitacova mys cena: 600 hodnoceni: 8 dpi: 2000\r\n"
+        }
+      ]
+    },
+    {
+      "id": "0bd22f85-8c4a-4a51-add2-5e2c2c4a4a59",
+      "type": "markdown",
+      "source": "### D\u011Bdi\u010Dnost a primary konstruktor\r\n\r\nU primary konstruktoru nepou\u017E\u00EDv\u00E1me kl\u00ED\u010Dov\u00E9 slovo \u0060\u0060\u0060base\u0060\u0060\u0060, ale n\u00E1zev rodi\u010Dovsk\u00E9 t\u0159\u00EDdy."
+    },
+    {
+      "id": "77bf388c-c09c-40c4-947a-e4f2ad0bbabb",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Produkt (decimal cena, int hodnoceni)\r\n{\r\n    public decimal Cena { get; } = cena;\r\n    public int Hodnoceni { get; } = hodnoceni;\r\n}\r\n\r\nclass Mys(decimal cena, int hodnoceni, int dpi) : Produkt(cena, hodnoceni)\r\n{\r\n    public int Dpi { get; } = dpi;\r\n}\r\n\r\nMys mys = new (600m, 8, 2000);\r\n\r\nConsole.WriteLine($\u0022Pocitacova mys cena: {mys.Cena} hodnoceni: {mys.Hodnoceni} dpi: {mys.Dpi}\u0022);",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "Pocitacova mys cena: 600 hodnoceni: 8 dpi: 2000\r\n"
+        }
+      ]
+    },
+    {
+      "id": "7a06c5e4-c6f8-4cbf-ae3b-8ce5c89005f9",
+      "type": "markdown",
+      "source": "- Pozn\u00E1mka: d\u011Bdi\u010Dnost k\u00F3du se samotn\u00E1 nepou\u017E\u00EDv\u00E1 tak \u010Dasto jak by se zd\u00E1lo, v\u011Bt\u0161inou se pou\u017E\u00EDv\u00E1 v kombinaci s polymorfismem."
+    },
+    {
+      "id": "06ff88a5-e836-413c-887c-9183acd161be",
+      "type": "markdown",
+      "source": "## Kl\u00ED\u010Dov\u00E9 slovo protected\n\nKl\u00ED\u010Dov\u00E9 slovo \u0060protected\u0060 p\u0159edstavuje modifik\u00E1tor p\u0159\u00EDstupu pou\u017E\u00EDvan\u00FD pouze v d\u011Bdi\u010Dnosti. T\u00EDmto modifik\u00E1torem ozna\u010Dujeme metody a atributy, kter\u00E9 o\u010Dek\u00E1v\u00E1me, \u017Ee vyu\u017Eije jeho potomek v r\u00E1mci d\u011Bd\u011Bn\u00ED, ale v klientsk\u00E9m kod\u016F maj\u00ED b\u00FDt skryt\u00E9. V n\u00E1sleduj\u00EDc\u00EDm p\u0159\u00EDkladu je prom\u011Bnn\u00E1 \u0060cisloUctu\u0060 p\u0159\u00EDstupn\u00E1 v rodi\u010Dovsk\u00E9 t\u0159\u00EDd\u011B \u0060Osoba\u0060 a v t\u0159\u00EDd\u011B potomka \u0060Student\u0060, ale nen\u00ED p\u0159\u00EDstupn\u00E1 v klientsk\u00E9m k\u00F3du v metod\u011B \u0060Main\u0060. Modifik\u00E1tor p\u0159\u00ED\u0161tupu \u0060protected\u0060 nen\u00ED b\u011B\u017En\u011B pou\u017E\u00EDvan\u00FD a d\u00E1v\u00E1me p\u0159ednost \u0060private\u0060 a \u0060public\u0060, pokud je to mo\u017En\u00E9.\n"
+    },
+    {
+      "id": "fbe4beb8-256d-4ea1-8cd6-ee29e491c254",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Osoba(int cisloUctu, string jmeno)\n{\n    protected int cisloUctu = cisloUctu;\n    public string Jmeno { get; } = jmeno;\n}\n\nclass Student(int cisloUctu, string jmeno, string skupina) : Osoba(cisloUctu, jmeno)\n{\n    public string Skupina { get; } = skupina;\n\n    public void Vypis()\n    {\n        Console.WriteLine($\u0022{cisloUctu} {Jmeno} {Skupina}\u0022); // jde prelozit\n    }\n}",
+      "metadata": {
+        "execution_count": 10
+      }
+    },
+    {
+      "id": "b52e011f-6589-42b6-b6af-ef957ee019dd",
+      "type": "markdown",
+      "source": "V klientsk\u00E9m k\u00F3du potom nem\u016F\u017Eeme p\u0159istupovat k \u0060protected\u0060 fieldu \u0060cisloUctu\u0060."
+    },
+    {
+      "id": "32c4dd6a-84cd-4c3b-9602-b9132d6564bc",
+      "type": "code",
+      "language": "csharp",
+      "source": "// Klientsky kod\nStudent student = new (123, \u0022Alena\u0022, \u0022AXP1\u0022);\nstudent.Vypis();\n// student.cisloUctu = 0; // nejde prelozit",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "123 Alena AXP1\r\n"
+        }
+      ],
+      "metadata": {
+        "execution_count": 17
+      }
+    },
+    {
+      "id": "124c9a62-ba22-4d3c-b2c9-9d555a28763d",
+      "type": "markdown",
+      "source": "## Kompozice\n\nPokud jeden objekt zahrnuje druh\u00FD objekt, tak m\u016F\u017Eeme mluvit o vztahu HAS-A, tedy \u017Ee jeden objekt m\u00E1 druh\u00FD objekt. V n\u00E1sleduj\u00EDc\u00EDm p\u0159\u00EDkladu bude m\u00EDt instance t\u0159\u00EDdy \u0060Motorka\u0060 reference na dv\u011B instance t\u0159\u00EDdy \u0060Kola\u0060. Proto\u017Ee objekt motorka objekty kola nesd\u00EDl\u00ED s jin\u00FDmi objekty jde o kompozici. V tomto p\u0159\u00EDpad\u011B mluv\u00EDme o vlastnictv\u00ED objektu, kdy vlastnictv\u00ED objektu (ownership) v tomto kontextu znamen\u00E1, \u017Ee kdy\u017E zanikne objekt, tak s n\u00EDm zaniknou i objekty, kter\u00E9 vlastn\u00ED."
+    },
+    {
+      "id": "2737e364-73e9-4bd3-998e-52e2779b8e7f",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Kolo(int prumer)\n{\n    public int Prumer { get; } = prumer;\n}\n\nclass Motorka\n{\n    private Kolo predni;\n    private Kolo zadni;\n\n    public Motorka()\n    {\n        predni = new Kolo(20);\n        zadni = new Kolo(19);\n    }\n}\n\nMotorka motorka = new();",
+      "metadata": {
+        "execution_count": 9
+      }
+    },
+    {
+      "id": "b34047e0-43f7-4907-8cb2-426eb4583f3c",
+      "type": "markdown",
+      "source": "Pokud by objekt sd\u00EDlel zahrnut\u00FD objekt s jin\u00FDmi objekty, tak by \u0161lo o **agregaci**. U agregace mluv\u00EDme o tom, \u017Ee objekt pou\u017E\u00EDv\u00E1 jin\u00FD objekt ale nevlastn\u00ED ho. V n\u00E1sleduj\u00EDc\u00EDm p\u0159\u00EDkladu sd\u00EDl\u00ED \u0060smsSender\u0060 v\u00EDce objedn\u00E1vek. Pojmy agregace a kompozice vych\u00E1zej\u00ED z jazyka UML."
+    },
+    {
+      "id": "3b28bcaa-eceb-4e80-9e69-1fa15f4225bb",
+      "type": "code",
+      "language": "csharp",
+      "source": "class SmsSender\n{\n    public void PosliSms(string text)\n    {\n        Console.WriteLine($\u0022Posilam sms: {text}\u0022);\n    }\n}\n\nclass Objednavka (int id, SmsSender sender)\n{\n    public int Id { get; } = id;\n    private SmsSender sender = sender;\n\n    public void Odeslat()\n    {\n        sender.PosliSms($\u0022Objednavka {Id} odeslana\u0022);\n    }\n}\n\n// klientsky kod\nSmsSender smsSender = new ();\n\nObjednavka objednavka1 = new (1, smsSender);\nObjednavka objednavka2 = new (2, smsSender);\n\nobjednavka1.Odeslat();\nobjednavka2.Odeslat();\n\nsmsSender.PosliSms(\u0022Nejsem zavisly na Objednavce\u0022);\n",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "Posilam sms: Objednavka 1 odeslana\r\nPosilam sms: Objednavka 2 odeslana\r\nPosilam sms: Nejsem zavisly na Objednavce\r\n"
+        }
+      ],
+      "metadata": {
+        "execution_count": 11
+      }
+    },
+    {
+      "id": "d47f34b5-0c11-4746-b374-50b42fb28f2f",
+      "type": "markdown",
+      "source": "## D\u011Bdi\u010Dnost vs kompozice\n\nD\u011Bdi\u010Dnost k\u00F3du m\u016F\u017Eeme nahradit do ur\u010Dit\u00E9 m\u00EDry kompozic\u00ED. V n\u00E1sleduj\u00EDc\u00EDm p\u0159\u00EDkladu nepou\u017E\u00EDv\u00E1me d\u011Bdi\u010Dnost, ale t\u0159\u00EDda \u0060Student\u0060 si vytv\u00E1\u0159\u00ED vlastn\u00ED instanci t\u0159\u00EDdy \u0060Osoba\u0060. V\u0161imn\u011Bte si, \u017Ee mezi t\u0159\u00EDdami Osoba a Student po\u0159\u00E1d plat\u00ED vztah, \u017Ee Student je Osoba, co\u017E je mo\u017En\u00E9 u kompozice kde tak\u00E9 plat\u00ED vztah HAS-A. Ale u d\u011Bdi\u010Dnsoti mus\u00ED j\u00EDt v\u017Edy jen o vztah IS-A."
+    },
+    {
+      "id": "6b50b241-8d62-4bdd-b047-64302f79dc7d",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Osoba (int cisloUctu, string jmeno)\n{\n    public int cisloUctu { get; set; } = cisloUctu;\n    public string Jmeno { get; set; } = jmeno;\n}\n\nclass Student (int cisloUctu, string jmeno, string skupina)\n{\n    public Osoba Osoba { get; } = new (cisloUctu, skupina);\n    public string Skupina { get; set; } = skupina;\n\n    public void Vypis()\n    {\n        Console.WriteLine($\u0022{Osoba.cisloUctu} {Osoba.Jmeno} {Skupina}\u0022); \n    }\n}\n\n// klientsky kod\nStudent student = new Student(123, \u0022Alena\u0022, \u0022AXP1\u0022);\nstudent.Osoba.Jmeno = \u0022Tereza\u0022;\nstudent.Vypis();",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "123 Tereza AXP1\r\n"
+        }
+      ]
+    },
+    {
+      "id": "39903368-3f81-4241-8a61-d188284372d6",
+      "type": "markdown",
+      "source": "## P\u0159\u00EDklady k procvi\u010Dov\u00E1n\u00ED"
+    },
+    {
+      "id": "6f4d02e3-154a-4204-92dd-b634544468e0",
+      "type": "markdown",
+      "source": "### 1. D\u011Bdi\u010Dnost\r\n\r\nVytv\u00E1\u0159\u00EDte softwarov\u00FD syst\u00E9m pro evidenci produkt\u016F v eshopu.\r\n\r\nVytvo\u0159te pro t\u0159\u00EDdy spole\u010Dn\u00E9ho p\u0159edka \u0060\u0060\u0060Control\u0060\u0060\u0060 a dejte do n\u011Bj vhodn\u00E9 property abychom nemuseli opakovat k\u00F3d.\r\n"
+    },
+    {
+      "id": "0e07519d-1c96-42ae-ae82-3946f2481326",
+      "type": "code",
+      "language": "csharp",
+      "source": "// Doplnte a upravte kod\r\n\r\nSluchatka s = new()\r\n{\r\n    Id = 1,\r\n    Cena = 3900m,\r\n    PocetSkladem = 20,\r\n    Protoly = [\u0022SBC\u0022, \u0022AAC\u0022, \u0022aptX\u0022, \u0022LDAC\u0022]\r\n};\r\n\r\nKniha d = new()\r\n{\r\n    Id = 1,\r\n    Cena = 3900m,\r\n    PocetSkladem = 700,\r\n    Nazev = \u0022Babicka\u0022\r\n};"
+    },
+    {
+      "id": "78db74ac-dc15-4404-917c-21b24f189c89",
+      "type": "markdown",
+      "source": "### 2. Kl\u00ED\u010Dov\u00E9 slovo protected\r\n\r\nVytv\u00E1\u0159\u00EDte software pro evidenci vyu\u010Duj\u00EDc\u00EDch ve Stagu.\r\n\r\nM\u00E1te t\u0159\u00EDdu \u0060\u0060\u0060Osoba\u0060\u0060\u0060 (rodi\u010Dovsk\u00E1 t\u0159\u00EDda) a \u0060\u0060\u0060Vyucujici\u0060\u0060\u0060 (potomek).\r\nZvolte spr\u00E1vnou \u00FArove\u0148 zabezpe\u010Den\u00ED dat. V re\u00E1ln\u00E9m softwaru nesm\u00ED b\u00FDt v\u0161echno public, aby nedo\u0161lo v k\u00F3du omylem k necht\u011Bn\u00E9mu p\u0159eps\u00E1n\u00ED \u00FAdaj\u016F a z toho plynouc\u00EDm chyb\u00E1m.\r\n\r\nT\u0159\u00EDda \u0060\u0060Osoba\u0060\u0060 bude obsahovat t\u0159i \u010Dleny, Zvolte pro ka\u017Ed\u00E9 pole spr\u00E1vn\u00E9 kl\u00ED\u010Dov\u00E9 slovo ze trojice: public, protected, private:\r\n\r\n- property *Jmeno* \u2013 ve\u0159ejn\u00FD \u00FAdaj, p\u0159\u00EDstupn\u00FD odkudkoliv z programu.\r\n- field *cisloUctu* (typ int) \u2013 citliv\u00FD \u00FAdaj, ke kter\u00E9mu sm\u00ED p\u0159istupovat pouze samotn\u00FD zam\u011Bstnanec a t\u0159\u00EDdy, kter\u00E9 z n\u011Bj d\u011Bd\u00ED (nap\u0159. mana\u017Eer). Zven\u010D\u00ED programu mus\u00ED b\u00FDt skryt\u00FD. Inicializujte na hodnotu 123.\r\n- field *heslo* (typ string) \u2013 nejp\u0159\u00EDsn\u011Bji st\u0159e\u017Een\u00FD \u00FAdaj. Sm\u00ED se k n\u011Bmu p\u0159istupovat v\u00FDhradn\u011B uvnit\u0159 t\u0159\u00EDdy Zamestnanec. \u017D\u00E1dn\u00E1 jin\u00E1 t\u0159\u00EDda (ani odvozen\u00E1) k n\u011Bmu nem\u00E1 p\u0159\u00EDstup. Inicializujte jej na hodnotu \u0022abc123\u0022.\r\n\r\nT\u0159\u00EDda \u0060\u0060\u0060Vyucujici\u0060\u0060\u0060 bude d\u011Bdit z t\u0159\u00EDdy \u0060\u0060\u0060Osoba\u0060\u0060\u0060 a\r\n\r\n- Uvnit\u0159 t\u0159\u00EDdy Manazer vytvo\u0159te metodu VypisUdaje(). V n\u00ED vypi\u0161te do konzole \u00FAdaje, kter\u00E9 jsou pro manazera p\u0159\u00EDstupn\u00E9.\r\n- Uvnit\u0159 t\u0159\u00EDdy Zamestnanec vytvo\u0159te metodu VypisUdaje(). V n\u00ED vypi\u0161te do konzole \u00FAdaje, kter\u00E9 jsou pro zam\u011Bstnance p\u0159\u00EDstupn\u00E9."
+    },
+    {
+      "id": "3d1e1e96-acc8-435b-a637-485c83da8216",
+      "type": "code",
+      "language": "csharp",
+      "source": "// Zde doplnte definice trid\r\n\r\nVyucujici v = new()\r\n{\r\n    Jmeno = \u0022Petr\u0022\r\n};\r\n\r\nv.VypisUdaje();\r\nv.VypisUdaje();"
+    },
+    {
+      "id": "a5f186c0-cfe0-47dc-b07d-4d78a23f26f1",
+      "type": "markdown",
+      "source": "### 3. D\u011Bdi\u010Dnost a konstruktory\r\n\r\nVyv\u00EDj\u00EDte softwarov\u00FD syst\u00E9m pro evidenci zv\u00ED\u0159\u00E1tek v ZOO.\r\n\r\nVytvo\u0159te t\u0159\u00EDdu \u0060\u0060\u0060Zviratko\u0060\u0060\u0060, kter\u00E1 bude reprezentovat obecn\u00E9 zv\u00ED\u0159\u00E1tko:\r\n- T\u0159\u00EDda bude m\u00EDt public readonly (bez setteru) property \u0060\u0060\u0060Druh\u0060\u0060\u0060 typu string.\r\n- Vytvo\u0159te pro tuto t\u0159\u00EDdu konstruktor, kter\u00FD bude p\u0159ij\u00EDmat parametr druh a nastav\u00ED hodnotu property.\r\nVytvo\u0159te t\u0159\u00EDdu \u0060\u0060\u0060Leopard\u0060\u0060\u0060, kter\u00E1 d\u011Bd\u00ED z t\u0159\u00EDdy \u0060\u0060\u0060Zviratko\u0060\u0060\u0060:\r\n- P\u0159idejte do n\u00ED jednu novou readonly (bez setteru) public property \u0060\u0060\u0060PocetSkvrn\u0060\u0060\u0060 typu cel\u00E9 \u010D\u00EDslo.\r\n- Vytvo\u0159te pro t\u0159\u00EDdu \u0060\u0060\u0060Leopard\u0060\u0060\u0060 konstruktor, kter\u00FD bude p\u0159ij\u00EDmat dva parametry: \u0060\u0060\u0060druh\u0060\u0060\u0060 a pocet \u0060\u0060\u0060skrvn\u0060\u0060\u0060.\r\n- P\u0159edejte pot\u0159ebn\u00E9 parametry konstruktoru rodi\u010Dovsk\u00E9 t\u0159\u00EDdy \u0060\u0060\u0060Zviratko\u0060\u0060\u0060."
+    },
+    {
+      "id": "82dc7769-f740-46c2-b290-9b8616d87b20",
+      "type": "code",
+      "language": "csharp",
+      "source": "NakladniVozidlo vozidlo = new(\u0022Tatra\u0022, \u0022Phoenix\u0022, 11000);"
+    },
+    {
+      "id": "ae78b55a-614b-47f2-aec2-c5dc339004cd",
+      "type": "markdown",
+      "source": "### 4. Skl\u00E1d\u00E1n\u00ED objekt\u016F\r\n\r\nUpravte p\u0159edchoz\u00ED p\u0159\u00EDklady tak, aby m\u00EDsto d\u011Bdi\u010Dnosti pou\u017E\u00EDvali skl\u00E1d\u00E1n\u00ED objekt\u016F."
+    }
+  ]
+}
