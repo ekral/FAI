@@ -263,13 +263,13 @@
     {
       "id": "a5f186c0-cfe0-47dc-b07d-4d78a23f26f1",
       "type": "markdown",
-      "source": "### 3. D\u011Bdi\u010Dnost a konstruktory\r\n\r\nVyv\u00EDj\u00EDte softwarov\u00FD syst\u00E9m pro evidenci zv\u00ED\u0159\u00E1tek v ZOO.\r\n\r\nVytvo\u0159te t\u0159\u00EDdu \u0060\u0060\u0060Zviratko\u0060\u0060\u0060, kter\u00E1 bude reprezentovat obecn\u00E9 zv\u00ED\u0159\u00E1tko:\r\n- T\u0159\u00EDda bude m\u00EDt public readonly (bez setteru) property \u0060\u0060\u0060Druh\u0060\u0060\u0060 typu string.\r\n- Vytvo\u0159te pro tuto t\u0159\u00EDdu konstruktor, kter\u00FD bude p\u0159ij\u00EDmat parametr druh a nastav\u00ED hodnotu property.\r\nVytvo\u0159te t\u0159\u00EDdu \u0060\u0060\u0060Leopard\u0060\u0060\u0060, kter\u00E1 d\u011Bd\u00ED z t\u0159\u00EDdy \u0060\u0060\u0060Zviratko\u0060\u0060\u0060:\r\n- P\u0159idejte do n\u00ED jednu novou readonly (bez setteru) public property \u0060\u0060\u0060PocetSkvrn\u0060\u0060\u0060 typu cel\u00E9 \u010D\u00EDslo.\r\n- Vytvo\u0159te pro t\u0159\u00EDdu \u0060\u0060\u0060Leopard\u0060\u0060\u0060 konstruktor, kter\u00FD bude p\u0159ij\u00EDmat dva parametry: \u0060\u0060\u0060druh\u0060\u0060\u0060 a pocet \u0060\u0060\u0060skrvn\u0060\u0060\u0060.\r\n- P\u0159edejte pot\u0159ebn\u00E9 parametry konstruktoru rodi\u010Dovsk\u00E9 t\u0159\u00EDdy \u0060\u0060\u0060Zviratko\u0060\u0060\u0060."
+      "source": "### 3. D\u011Bdi\u010Dnost a konstruktory\r\n\r\nVyv\u00EDj\u00EDte softwarov\u00FD syst\u00E9m pro evidenci zv\u00ED\u0159\u00E1tek v ZOO.\r\n\r\nVytvo\u0159te t\u0159\u00EDdu \u0060\u0060\u0060Zviratko\u0060\u0060\u0060, kter\u00E1 bude reprezentovat obecn\u00E9 zv\u00ED\u0159\u00E1tko:\r\n- T\u0159\u00EDda bude m\u00EDt public readonly (bez setteru) property \u0060\u0060\u0060Jmeno\u0060\u0060\u0060 typu string.\r\n- Vytvo\u0159te pro tuto t\u0159\u00EDdu konstruktor, kter\u00FD bude p\u0159ij\u00EDmat parametr \u0060\u0060\u0060jmeno\u0060\u0060\u0060 a nastav\u00ED hodnotu property.\r\nVytvo\u0159te t\u0159\u00EDdu \u0060\u0060\u0060Jaguar\u0060\u0060\u0060, kter\u00E1 d\u011Bd\u00ED z t\u0159\u00EDdy \u0060\u0060\u0060Zviratko\u0060\u0060\u0060:\r\n- P\u0159idejte do n\u00ED jednu novou readonly (bez setteru) public property \u0060\u0060\u0060PocetSkvrn\u0060\u0060\u0060 typu cel\u00E9 \u010D\u00EDslo.\r\n- Vytvo\u0159te pro t\u0159\u00EDdu \u0060\u0060\u0060Jaguar\u0060\u0060\u0060 konstruktor, kter\u00FD bude p\u0159ij\u00EDmat dva parametry: \u0060\u0060\u0060jmeno\u0060\u0060\u0060 a pocet \u0060\u0060\u0060skrvn\u0060\u0060\u0060.\r\n- P\u0159edejte pot\u0159ebn\u00E9 parametry konstruktoru rodi\u010Dovsk\u00E9 t\u0159\u00EDdy \u0060\u0060\u0060Zviratko\u0060\u0060\u0060."
     },
     {
       "id": "82dc7769-f740-46c2-b290-9b8616d87b20",
       "type": "code",
       "language": "csharp",
-      "source": "NakladniVozidlo vozidlo = new(\u0022Tatra\u0022, \u0022Phoenix\u0022, 11000);"
+      "source": "Jaguar leopard = new(\u0022Mayara\u0022, 0);"
     },
     {
       "id": "ae78b55a-614b-47f2-aec2-c5dc339004cd",

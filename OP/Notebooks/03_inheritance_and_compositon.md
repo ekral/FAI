@@ -373,15 +373,15 @@ v.VypisUdaje();
 Vyvíjíte softwarový systém pro evidenci zvířátek v ZOO.
 
 Vytvořte třídu ```Zviratko```, která bude reprezentovat obecné zvířátko:
-- Třída bude mít public readonly (bez setteru) property ```Druh``` typu string.
-- Vytvořte pro tuto třídu konstruktor, který bude přijímat parametr druh a nastaví hodnotu property.
-Vytvořte třídu ```Leopard```, která dědí z třídy ```Zviratko```:
+- Třída bude mít public readonly (bez setteru) property ```Jmeno``` typu string.
+- Vytvořte pro tuto třídu konstruktor, který bude přijímat parametr ```jmeno``` a nastaví hodnotu property.
+Vytvořte třídu ```Jaguar```, která dědí z třídy ```Zviratko```:
 - Přidejte do ní jednu novou readonly (bez setteru) public property ```PocetSkvrn``` typu celé číslo.
-- Vytvořte pro třídu ```Leopard``` konstruktor, který bude přijímat dva parametry: ```druh``` a pocet ```skrvn```.
+- Vytvořte pro třídu ```Jaguar``` konstruktor, který bude přijímat dva parametry: ```jmeno``` a pocet ```skrvn```.
 - Předejte potřebné parametry konstruktoru rodičovské třídy ```Zviratko```.
 
 ```csharp
-NakladniVozidlo vozidlo = new("Tatra", "Phoenix", 11000);
+Jaguar leopard = new("Mayara", 0);
 ```
 
 ### 4. Skládání objektů
