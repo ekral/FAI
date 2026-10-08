@@ -1,0 +1,32 @@
+﻿@page "/studenti"
+@attribute [StreamRendering]
+
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <img src="@vyucujici.ImgUrl" class="card-img-top" alt="fotka">
+        <h5 class="card-title">@vyucujici.Jmeno</h5>
+        <h6 class="card-subtitle mb-2 text-body-secondary">@vyucujici.Plat.ToString("C")</h6>
+        <p class="card-text">@string.Join(",", vyucujici.Predmety)</p>
+    </div>
+</div>
+
+@code {
+    Vyucujici vyucujici = new(
+        "Dulik", 
+        80000m, 
+        "https://fai.utb.cz/wp-content/uploads/2019/07/FAI-153-Web.jpg", 
+        [ "AP3OV", "AP3AL" ]);
+    
+    class Zamestnanec(string jmeno, decimal plat, string imgUrl)
+    {
+        public string ImgUrl { get; } = imgUrl;
+        public string Jmeno { get; } = jmeno;
+        public decimal Plat { get; } = plat;
+    }
+
+    class Vyucujici(string jmeno, decimal plat, string imgUrl, List<string> predmety) 
+        : Zamestnanec(jmeno, plat, imgUrl)
+    {
+        public List<string> Predmety { get; } = predmety;
+    }
+}
