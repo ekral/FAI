@@ -1,0 +1,247 @@
+{
+  "verso": "1.1",
+  "metadata": {
+    "defaultKernel": "csharp",
+    "activeLayout": {
+      "extensionId": "verso.layout.notebook",
+      "layoutId": "notebook"
+    }
+  },
+  "cells": [
+    {
+      "id": "5e240095-6daf-4d1a-9099-7c323c2c5b8c",
+      "type": "markdown",
+      "source": "# 04: Polymorfismus a virtu\u00E1ln\u00ED metody\n**autor: Erik Kr\u00E1l ekral@utb.cz**\n\n---\n\n\nObsah\n- Polymorfismus.\n- Polymorfismus a statick\u00E1 typov\u00E1 kontrola.\n- Upcasting.\n- Downcasting."
+    },
+    {
+      "id": "ea138dfe-737c-4550-aa49-030d5aa3827d",
+      "type": "markdown",
+      "source": "## Polymorfismus\n\nPolymorfismem (mnohotvarost) rozum\u00EDme statick\u00FD polymorfismus jako p\u0159et\u011B\u017Eov\u00E1n\u00ED metod, p\u0159et\u011B\u017Eov\u00E1n\u00ED oper\u00E1tor\u016F a dynamick\u00FD polyformismus, kdy chceme za b\u011Bhu programu nahrazazovat objekt jin\u00FDm kompatibiln\u00EDm objektem. Runtime \u010Dist\u011B objektov\u00E9ho jazyka smalltalk dokonce umo\u017Enoval pozastavit b\u011B\u017E\u00EDc\u00ED program u z\u00E1kazn\u00EDka, vym\u011Bnit aktu\u00E1ln\u00ED objekt za jin\u00FD, zaktualizovat reference a pokra\u010Dovat v programu ve stejn\u00E9m stavu v jak\u00E9m jsme ho p\u0159eru\u0161ili."
+    },
+    {
+      "id": "5a92d461-749a-4319-8f4c-734089564ad6",
+      "type": "markdown",
+      "source": "- V\u00EDce se o runtime jazyka smalltalk m\u016F\u017Eete dozv\u011Bd\u011Bt na str\u00E1nk\u00E1ch opensource implementace jazyka Smalltalk Pharo (nejde u\u017E ji\u017E o b\u011B\u017En\u011B pou\u017E\u00EDvan\u00FD jazyk):\n\n[The immersive programming experience. Pharo, 2022]( https://pharo.org/)\n"
+    },
+    {
+      "id": "d6c97bf7-fc41-4c7f-81d9-12359a7759d0",
+      "type": "code",
+      "language": "csharp",
+      "source": ""
+    },
+    {
+      "id": "79735936-e04f-4e67-9fae-3ea237a37c4f",
+      "type": "code",
+      "language": "csharp",
+      "source": ""
+    },
+    {
+      "id": "d763499d-683e-41a1-a542-b4014082f6c1",
+      "type": "code",
+      "language": "javascript",
+      "source": "class Kacenka \r\n{\r\n  constructor(jmeno) \r\n  {\r\n    this.jmeno = jmeno;\r\n  }\r\n\r\n  zvuk() \r\n  {\r\n    return \u0060${this.jmeno} dela quack\u0060;\r\n  }\r\n}\r\n\r\nclass Kocicka \r\n{\r\n  constructor(jmeno) \r\n  {\r\n    this.jmeno = jmeno;\r\n  }\r\n\r\n  zvuk() \r\n  {\r\n    return \u0060${this.jmeno} dela mnau\u0060;\r\n  }\r\n}\r\n\r\nfunction vypis(zviratko)\r\n{\r\n    console.log(zviratko.zvuk());\r\n}\r\n\r\nconst kacenka = new Kacenka(\u0022Donald\u0022);\r\nconst kocicka = new Kocicka(\u0022Mikes\u0022);\r\n\r\nvypis(kacenka);\r\nvypis(kocicka);",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "Donald dela quack\r\nMikes dela mnau\r\nMikes dela mnau",
+          "channel": "stdout"
+        }
+      ]
+    },
+    {
+      "id": "8ca436a0-fa33-45ac-b8df-144c24e0bbf5",
+      "type": "code",
+      "language": "csharp",
+      "source": "abstract class Zviratko(string jmeno)\r\n{\r\n    public string Jmeno {get;} = jmeno;\r\n\r\n    abstract public string Zvuk();\r\n}\r\n\r\nclass Pejsek(string jmeno) : Zviratko(jmeno)\r\n{\r\n    override public string Zvuk()\r\n    {\r\n        return $\u0022{Jmeno} dela haf haf\u0022;\r\n    }\r\n}\r\n\r\nclass Kocicka(string jmeno) : Zviratko(jmeno)\r\n{\r\n    override public string Zvuk()\r\n    {\r\n        return $\u0022{Jmeno} dela mnau\u0022;\r\n    }\r\n}\r\n\r\nvoid Vypis(Zviratko zviratko)\r\n{\r\n    Console.WriteLine(zviratko.Zvuk());\r\n}\r\n\r\nPejsek pejsek = new(\u0022Rex\u0022);\r\nKocicka kocicka = new(\u0022Mikes\u0022);\r\n\r\nVypis(pejsek);\r\nVypis(kocicka);",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "Rex dela haf haf\r\nMikes dela mnau\r\n"
+        }
+      ]
+    },
+    {
+      "id": "5bc62b3f-cea3-4643-a5c8-2987b0d3a915",
+      "type": "markdown",
+      "source": "### Polymorfismus a statick\u00E1 typov\u00E1 kontrola\n\nV\u011Bt\u0161inou se ale obecn\u011B polymorfismem v OOP mysl\u00ED dynamick\u00FD polyformismus a ten si nyn\u00ED probereme na p\u0159\u00EDkladu. Nejprve si definujeme t\u0159\u00EDdy \u0060Pejsek\u0060 a \u0060Kocicka\u0060. V p\u0159\u00EDkladech jsou vynech\u00E1ny konstruktory, aby byl k\u00F3d krat\u0161\u00ED."
+    },
+    {
+      "id": "bb4e6f8f-9bfc-4355-8852-e01b8edfcb14",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Pejsek\n{\n    public string Jmeno { get; set; }\n\n    public void Zvuk()\n    {\n        Console.WriteLine(\u0022Haf haf\u0022);\n    }\n}\n\nclass Kocicka\n{\n    public string Jmeno { get; set; }\n\n    public void Zvuk()\n    {\n        Console.WriteLine(\u0022Mnau\u0022);\n    }\n}",
+      "metadata": {
+        "execution_count": 1
+      }
+    },
+    {
+      "id": "66e0137c-62e0-4ed3-8857-7bb172ef579f",
+      "type": "markdown",
+      "source": "Nyn\u00ED bychom cht\u011Bli m\u00EDt t\u0159\u00EDdu Zoo, do kter\u00E9 bychom mohli d\u00E1vat jak pejsky tak ko\u010Di\u010Dky. N\u00E1sleduj\u00EDc\u00ED k\u00F3d ale nen\u00ED platn\u00FD, to znamen\u00E1, \u017Ee bychom do na\u0161eho Zoo mohli d\u00E1vat jen ko\u010Di\u010Dky, ale ne zv\u00ED\u0159\u00E1tka r\u016Fzn\u00E9ho typu do jedn\u00E9 zoo."
+    },
+    {
+      "id": "89453bd9-439e-4022-8f0a-aa0d5f9a91c8",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Zoo\n{\n    private List\u003CKocicka\u003E zviratka = new List\u003CKocicka\u003E();\n\n    public void Pridej(Kocicka kocicka)\n    {\n        zviratka.Add(kocicka);\n    }\n\n    public void VypisZvuky()\n    {\n        foreach (var zviratko in zviratka)\n        {\n            zviratko.Zvuk();\n        }\n    }\n}\n\nZoo zoo = new Zoo();\n\nPejsek rex = new Pejsek() { Jmeno = \u0022Rex\u0022 };\nKocicka micka = new Kocicka() { Jmeno = \u0022Micka\u0022 };\n\nzoo.Pridej(micka);\n//zoo.Pridej(rex); // nejde prelozit"
+    },
+    {
+      "id": "2632d3ee-0258-4485-bafd-477800418f57",
+      "type": "markdown",
+      "source": "Je to proto, \u017Ee v **jazyce C#**, ale i nap\u0159\u00EDklad jazyce C\u002B\u002B nebo Java **nen\u00ED mo\u017En\u00E9 zm\u011Bnit objekt typu \u0060Pejsek\u0060 na objekt typu \u0060Kocicka\u0060**. Je to proto, \u017Ee jazyk C# pou\u017E\u00EDv\u00E1 statickou typovou kontrolu (Static typing), tedy kompil\u00E1tor kontroluje typy v dob\u011B p\u0159ekladu a vy\u017Eaduje abychom explicitn\u011B v k\u00F3du vyj\u00E1d\u0159ili, \u017Ee jsou vz\u00E1jemn\u011B nahraditeln\u00E9. Tedy \u017Ee maj\u00ED nap\u0159\u00EDklad stejn\u00E9 metody, property nebo fieldy. Naproti tomu v jazyce JavaScript by to bylo mo\u017En\u00E9, proto\u017Ee v JavaScriptu nemaj\u00ED prom\u011Bnn\u00E9 pevn\u011B p\u0159i\u0159azen\u00FD typ a typov\u00E1 kontrola je dynamick\u00E1 (Dynamic typing). To znamen\u00E1, \u017Ee teprve a\u017E za b\u011Bhu programu se v jazyce JavaScript ov\u011B\u0159\u00ED, \u017Ee jak ko\u010Di\u010Dka, tak pejsek maj\u00ED metodu \u0060Zvuk\u0060, n\u011Bkdy se tomuto postupu \u0159\u00EDk\u00E1 **duck typing** - tedy pokud to kv\u00E1k\u00E1 a chod\u00ED jako kachna, tak je to kachna."
+    },
+    {
+      "id": "68d4ec1c-7d10-4c71-9c26-5ae1b066db37",
+      "type": "markdown",
+      "source": "- V\u00EDce se pojmech statically a dynamicaly typed m\u016F\u017Eete do\u010D\u00EDst nap\u0159\u00EDklad zde:\n\n[What is the difference between a strongly typed language and a statically typed language? StackOverlow, 2022](https://stackoverflow.com/a/2696369)"
+    },
+    {
+      "id": "820d6435-c8cd-495d-b584-6b1297505501",
+      "type": "markdown",
+      "source": "V jazyce C#, proto\u017Ee m\u00E1 statickou typovou kontrolu, vyj\u00E1d\u0159\u00EDme \u017Ee jsou objekty kompatibiln\u00ED bu\u010F pomoc\u00ED rodi\u010Dovsk\u00E9 t\u0159\u00EDdy nebo pomoc\u00ED rozhran\u00ED. V n\u00E1sleduj\u00EDc\u00EDm k\u00F3du si nadefinujeme rodi\u010Dovskou t\u0159\u00EDdu \u0060Zviratko\u0060 od ktere bude d\u011Bdit jak \u0060Pejsek\u0060, tak Kocicka:"
+    },
+    {
+      "id": "7b12175d-da1f-4cb5-b23d-4201c1ea6877",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Zviratko\n{\n    public string Jmeno { get; set; }\n\n    public void Zvuk()\n    {\n        Console.WriteLine(\u0022Jsem abstraktni zviratko a nedelam zadny konkretni zvuk\u0022);\n    }\n}\n\nclass Pejsek : Zviratko\n{\n    // Pozdeji vyresime lepe\n    public void Zvuk()\n    {\n        Console.WriteLine(\u0022Haf haf\u0022);\n    }\n}\n\nclass Kocicka : Zviratko\n{\n    // Pozdeji vyresime lepe\n    public void Zvuk()\n    {\n        Console.WriteLine(\u0022Mnau\u0022);\n    }\n}",
+      "metadata": {
+        "execution_count": 3
+      }
+    },
+    {
+      "id": "b5e5a55e-b273-4747-a1fc-9a7b0b033d95",
+      "type": "markdown",
+      "source": "### Upcasting\n\nNyn\u00ED m\u016F\u017Eeme prost\u0159ednictv\u00ED reference typu \u0060Zviratko\u0060 nahradit pejska ko\u010Di\u010Dkou a naopak. T\u00E9to operaci, kdy p\u0159ev\u00E1d\u00EDme potomka na rodi\u010De \u0159\u00EDk\u00E1me **upcasting**."
+    },
+    {
+      "id": "b2d586a0-b86e-47a9-a22a-a878e3dc7a60",
+      "type": "code",
+      "language": "csharp",
+      "source": "Zviratko z = new Pejsek() { Jmeno = \u0022Rex\u0022 };\nz = new Kocicka() { Jmeno = \u0022Micka\u0022 };",
+      "metadata": {
+        "execution_count": 4
+      }
+    },
+    {
+      "id": "88b9eb4b-353a-4eda-9278-8e9945d1ab7b",
+      "type": "markdown",
+      "source": "A v zoo m\u016F\u017Eeme m\u00EDt seznam zv\u00ED\u0159\u00E1tek, do kter\u00E9ho m\u016F\u017Eeme d\u00E1vat pejsky, ko\u010Di\u010Dky a v budoucnu i v\u0161echna nov\u00E1 zv\u00ED\u0159\u00E1tka, pokud budou potomkem t\u0159\u00EDdy \u0060Zviratko\u0060:"
+    },
+    {
+      "id": "dcef1242-837a-4182-9791-ccd7718cae34",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Zoo\n{\n    private List\u003CZviratko\u003E zviratka = new List\u003CZviratko\u003E();\n\n    public void Pridej(Zviratko zviratko)\n    {\n        zviratka.Add(zviratko);\n    }\n\n    public void VypisZvuky()\n    {\n        foreach (var zviratko in zviratka)\n        {\n            zviratko.Zvuk();\n        }\n    }\n}\n\nZoo zoo = new Zoo();\n\nPejsek rex = new Pejsek() { Jmeno = \u0022Rex\u0022 };\nKocicka micka = new Kocicka() { Jmeno = \u0022Micka\u0022 };\n\nzoo.Pridej(micka);\nzoo.Pridej(rex);\n\nzoo.VypisZvuky();",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "Mnau\nHaf haf\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 13
+      }
+    },
+    {
+      "id": "d7e52a57-b61b-41a2-b405-4a8364372064",
+      "type": "markdown",
+      "source": "### Polymorfismus, early a late binding v OOP\n\nV minul\u00E9m p\u0159\u00EDkladu jsme si vytvo\u0159ili seznam zv\u00ED\u0159\u00E1tek do kter\u00E9ho jsme p\u0159idali pejska a ko\u010Di\u010Dku. Pokud ale prost\u0159ednictv\u00EDm reference typu \u0060Zviratko\u0060 zavol\u00E1me metodu Zvuk, tak se n\u00E1m zavol\u00E1 metoda t\u0159\u00EDdy Zviratko a na termin\u00E1l se vyp\u00ED\u0161e dvakr\u00E1t text \u0022Jsem abstraktni zviratko a nedelam zadny konkretni zvuk\u0022. Je to op\u011Bt proto, \u017Ee v jazyk C# pou\u017E\u00EDv\u00E1 **static typing** a o tom, kter\u00E1 metoda se zavol\u00E1 se rozhodne *v dob\u011B p\u0159ekladu dle typu reference*. V kontextu OOP mluv\u00EDme o **early bindingu**. \n"
+    },
+    {
+      "id": "ffadf78b-6df4-4cfc-9035-4ce2a077f88d",
+      "type": "code",
+      "language": "csharp",
+      "source": "foreach (Zviratko zviratko in zviratka)\n{\n    zviratko.Zvuk();\n}",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "Jsem abstraktni zviratko a nedelam zadny konkretni zvuk\nJsem abstraktni zviratko a nedelam zadny konkretni zvuk\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 10
+      }
+    },
+    {
+      "id": "d11ab890-3825-4b9e-9b81-c5225a7513f3",
+      "type": "markdown",
+      "source": "V jazyce JavaScript, proto\u017Ee pou\u017E\u00EDv\u00E1 dynamic typing, se o tom, kter\u00E1 metoda se zavol\u00E1 rozhoduje a\u017E za b\u011Bhu programu. Proto by se zavolali spr\u00E1vn\u011B metody pejska a ko\u010Di\u010Dky. Co\u017E je to co chceme. V kontextu OOP tomu \u0159\u00EDk\u00E1me **late binding**. Pokud je late bindig o\u010Dek\u00E1v\u00E1n\u00E9 chov\u00E1n\u00ED, pro\u010D se v jazyce C# a nebo jazyce C\u002B\u002B nepou\u017E\u00EDv\u00E1 jako v\u00FDchoz\u00ED? Nepou\u017E\u00EDv\u00E1 se jako v\u00FDchoz\u00ED z d\u016Fvodu v\u00FDkonu, proto\u017Ee rozhodov\u00E1n\u00ED o tom, kter\u00E1 metoda se m\u00E1 zavolat a\u017E za b\u011Bhu programu je pomalej\u0161\u00ED, ne\u017E kdy\u017E se o tom rozhodne je jednou hned p\u0159i p\u0159ekladu programu.\n\nV jazyce C# a dal\u0161\u00EDch z d\u016Fvodu v\u00FDkonu explicitn\u011B \u0159\u00EDk\u00E1me aby pou\u017E\u00EDvali pomalej\u0161\u00ED late bindig jen ty metody u kter\u00FDch to pot\u0159ebujeme. V na\u0161em p\u0159\u00EDkladu ozna\u010D\u00EDme metodu \u0060Zvuk\u0060 v t\u0159\u00EDd\u011B \u0060Zviratko\u0060 jako \u0060virtual\u0060 a t\u0159\u00EDd\u00E1ch \u0060Pejsek\u0060 a \u0060Kocicka\u0060 ji ozna\u010D\u00EDme kl\u00ED\u010Dov\u00FDm slovem \u0060override\u0060. \u0158\u00EDk\u00E1me, \u017Ee p\u0159ekr\u00FDv\u00E1me virtu\u00E1ln\u00ED metodu. T\u00EDmto z\u00E1pisem potomu ur\u010D\u00EDme, \u017Ee se m\u00E1 pro metodu \u0060Zvuk\u0060 pou\u017E\u00EDt late binding, tedy o tom, kter\u00E1 metoda se zavol\u00E1 se rozhodne a\u017E **za b\u011Bhu programu dle typu objektu**."
+    },
+    {
+      "id": "0a204504-4568-4df1-aac6-347629e50316",
+      "type": "markdown",
+      "source": "V n\u00E1sleduj\u00EDc\u00EDm kompletn\u00EDm p\u0159\u00EDkladu m\u00E1me p\u0159ekrytou vritu\u00E1ln\u00ED metodu \u0060Zvuk\u0060 a zv\u00ED\u0159\u00E1tka v seznamu zv\u00ED\u0159\u00E1tek u\u017E spr\u00E1vn\u011B vypisuj\u00ED konkr\u00E9tn\u00ED zvuky, kter\u00E9 d\u011Blaj\u00ED:"
+    },
+    {
+      "id": "0dd75c66-0ade-4f22-a858-0169f48634aa",
+      "type": "code",
+      "language": "csharp",
+      "source": "class Zviratko\n{\n    public string Jmeno { get; set; }\n\n    virtual public void Zvuk()\n    {\n        Console.WriteLine(\u0022Jsem abstraktni zviratko a nedelam zadny konkretni zvuk\u0022);\n    }\n}\n\nclass Pejsek : Zviratko\n{\n    override public void Zvuk()\n    {\n        Console.WriteLine(\u0022Haf haf\u0022);\n    }\n}\n\nclass Kocicka : Zviratko\n{\n    override public void Zvuk()\n    {\n        Console.WriteLine(\u0022Mnau\u0022);\n    }\n}\n\nList\u003CZviratko\u003E zviratka = new List\u003CZviratko\u003E();\nzviratka.Add(new Pejsek() { Jmeno = \u0022Rex\u0022 });\nzviratka.Add(new Kocicka() { Jmeno = \u0022Micka\u0022 });\n\nforeach (Zviratko zviratko in zviratka)\n{\n    zviratko.Zvuk();\n}",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "Haf haf\nMnau\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 12
+      }
+    },
+    {
+      "id": "ab6d74c0-18d8-404b-af40-9eb77c91daee",
+      "type": "markdown",
+      "source": "- O pojmech early a late binding se m\u016F\u017Eete do\u010D\u00EDst v t\u00E9to knize na stran\u011B 66 a stran\u011B 103:\n\n[Booch, G., 2007. Object-oriented analysis and design with applications](https://www.amazon.com/Object-Oriented-Analysis-Design-Applications-3rd/dp/020189551X/ref=sr_1_1?crid=3J6T6XIHYPCP8\u0026keywords=Object-Oriented\u002BAnalysis\u002Band\u002BDesign\u002Bwith\u002BApplication\u0026qid=1646832764\u0026s=books\u0026sprefix=object-oriented\u002Banalysis\u002Band\u002Bdesign\u002Bwith\u002Bapplication%2Cstripbooks-intl-ship%2C128\u0026sr=1-1)"
+    },
+    {
+      "id": "59ea0caa-2f4e-4dd2-acd2-8d880af014a8",
+      "type": "markdown",
+      "source": "### Downcasting\n\nOperaci, kdy p\u0159etypujeme potomka na rodi\u010De \u0159\u00EDk\u00E1me upcasting. Vyj\u00EDme\u010Dn\u011B ale m\u016F\u017Eeme i v k\u00F3du prov\u00E9st downcasting, kdy ale mus\u00EDme b\u00FDt opatrn\u00ED, proto\u017Ee ne ka\u017Ed\u00E9 zv\u00ED\u0159\u00E1tko m\u016F\u017Ee b\u00FDt nap\u0159\u00EDklad ko\u010Di\u010Dka. Vyu\u017E\u00EDv\u00E1me p\u0159edev\u0161\u00EDm oper\u00E1tor \u0060is\u0060:"
+    },
+    {
+      "id": "ccc106c8-1ded-4962-8f00-dae84c4c8039",
+      "type": "code",
+      "language": "csharp",
+      "source": "foreach (Zviratko zviratko in zviratka)\n{\n    if(zviratko is Kocicka kocicka)\n    {\n        Console.WriteLine(kocicka.Jmeno);       \n    }\n}",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "Micka\r\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 14
+      }
+    },
+    {
+      "id": "a36e2c97-b389-4dd2-a022-0ff377de3393",
+      "type": "markdown",
+      "source": "M\u00E1me i oper\u00E1tor \u0060as\u0060, kter\u00FD se pou\u017E\u00EDval d\u0159\u00EDve. Ale z\u00E1pis je slo\u017Eit\u011Bj\u0161\u00ED ne\u017E s \u0060is\u0060."
+    },
+    {
+      "id": "adad8b2e-4911-48b3-abd0-f7b541f28372",
+      "type": "code",
+      "language": "csharp",
+      "source": "foreach (Zviratko zviratko in zviratka)\n{\n    Kocicka kocicka = zviratko as Kocicka;\n\n    if(kocicka != null)\n    {\n        Console.WriteLine(kocicka.Jmeno);       \n    }\n}",
+      "outputs": [
+        {
+          "mimeType": "text/plain",
+          "content": "Micka\r\n",
+          "channel": "stdout"
+        }
+      ],
+      "metadata": {
+        "execution_count": 17
+      }
+    },
+    {
+      "id": "cebada0f-0d4b-4843-9509-463516251c24",
+      "type": "markdown",
+      "source": "---\nD\u016Fle\u017Eit\u00E9 je si uv\u011Bdomit, \u017Ee v\u00FD\u0161e zm\u00EDn\u011Bn\u00E9 postupy se t\u00FDkaj\u00ED p\u0159edev\u0161\u00EDm statically typed jazyk\u016F se zam\u011B\u0159en\u00EDm na v\u00FDkon. Ve Smalltalku, kter\u00FD je dynamically typed, nebylo pot\u0159eba definovat virtu\u00E1ln\u00ED funkce, proto\u017Ee v\u0161echny funkce byly jako v\u00FDchoz\u00ED late bind a nebylo nutn\u00E9 definovat rozhran\u00ED nebo rodi\u010Dovskou t\u0159\u00EDdu kv\u016Fli kompatibilit\u011B objekt\u016F. D\u00E1 se \u0159\u00EDct, \u017Ee OOP bylo ve smalltalku mnohem jednodu\u0161\u0161\u00ED a v\u011Bt\u0161ina syntaxe kterou se te\u010F u\u010D\u00EDme poch\u00E1z\u00ED z implementace OOP ve statically typed jazyce C\u002B\u002B. "
+    }
+  ]
+}
