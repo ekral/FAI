@@ -375,6 +375,7 @@ Vyvíjíte softwarový systém pro evidenci zvířátek v ZOO.
 Vytvořte třídu ```Zviratko```, která bude reprezentovat obecné zvířátko:
 - Třída bude mít public readonly (bez setteru) property ```Jmeno``` typu string.
 - Vytvořte pro tuto třídu konstruktor, který bude přijímat parametr ```jmeno``` a nastaví hodnotu property.
+
 Vytvořte třídu ```Jaguar```, která dědí z třídy ```Zviratko```:
 - Přidejte do ní jednu novou readonly (bez setteru) public property ```PocetSkvrn``` typu celé číslo.
 - Vytvořte pro třídu ```Jaguar``` konstruktor, který bude přijímat dva parametry: ```jmeno``` a pocet ```skrvn```.
