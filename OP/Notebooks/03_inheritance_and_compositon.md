@@ -315,7 +315,7 @@ student.Vypis();
 
 Vytváříte softwarový systém pro evidenci produktů v eshopu.
 
-Vytvořte pro třídy společného předka ```Control``` a dejte do něj vhodné property abychom nemuseli opakovat kód.
+Vytvořte pro třídy společného předka ```Produkt``` a dejte do něj vhodné property abychom nemuseli opakovat kód.
 
 
 ```csharp
