@@ -24,16 +24,9 @@
       "source": "- V\u00EDce se o runtime jazyka smalltalk m\u016F\u017Eete dozv\u011Bd\u011Bt na str\u00E1nk\u00E1ch opensource implementace jazyka Smalltalk Pharo (nejde u\u017E ji\u017E o b\u011B\u017En\u011B pou\u017E\u00EDvan\u00FD jazyk):\n\n[The immersive programming experience. Pharo, 2022]( https://pharo.org/)\n"
     },
     {
-      "id": "d6c97bf7-fc41-4c7f-81d9-12359a7759d0",
-      "type": "code",
-      "language": "csharp",
-      "source": ""
-    },
-    {
-      "id": "79735936-e04f-4e67-9fae-3ea237a37c4f",
-      "type": "code",
-      "language": "csharp",
-      "source": ""
+      "id": "46be88e7-38d7-4676-b353-f8cd150a06ec",
+      "type": "markdown",
+      "source": "### Duck typing a statick\u00E1 typov\u00E1 kontrola\r\n\r\nNejprve si uk\u00E1\u017Eeme p\u0159\u00EDklad z javascriptu, funkci vypis m\u016F\u017Eeme p\u0159edat cokoliv, integer, string a program na chybu p\u0159\u00EDjde a\u017E za b\u011Bhu. Je to proto, \u017Ee v javascriptu nen\u00ED statick\u00E1 typov\u00E1 kontrola, tedy kontrola typ\u016F v dob\u011B p\u0159ekladu. Program prost\u011B zkus\u00ED za b\u011Bhu (pod\u00EDv\u00E1 se do dictionary objektu), jestli m\u00E1 zviratko funkci zvuk a prom\u011Bnou jm\u00E9no.\r\n\r\nV\u00FDhodou je, \u017Ee program je jednodu\u0161\u0161\u00ED, nev\u00FDhodou \u017Ee neodhal\u00EDme p\u0159\u00EDpadn\u00E9 chyby p\u0159edem a nev\u00EDme jak\u00E9 typy m\u00E1me p\u0159ed\u00E1vat a refraktorizace k\u00F3du jsou slo\u017Eit\u011Bj\u0161\u00ED (p\u0159i zm\u011Bn\u00E1m k\u00F3du nev\u00EDme co se pokazilo)."
     },
     {
       "id": "d763499d-683e-41a1-a542-b4014082f6c1",
@@ -47,6 +40,11 @@
           "channel": "stdout"
         }
       ]
+    },
+    {
+      "id": "09d0a12a-c6ea-4efa-afc4-9c81e24bbbda",
+      "type": "markdown",
+      "source": "N\u00ED\u017Ee je stejn\u00FD p\u0159\u00EDklad v jazyce C#, kter\u00FD statickou kontrolu m\u00E1. Museli jsme vytvo\u0159it spole\u010Dn\u00E9ho p\u0159edka Zviratko aby kompilator vedel ze Pejsek i Kocicka maj\u00ED property Jmeno a metodu Zvuk. A u metody Zvuk jsme museli ozna\u010Dit \u017Ee je virtualn\u00ED nebo abstraktn\u00ED, aby se rozhodovalo dle typu objektu (Pejsek nebo Kocicka) a ne typu reference (Zviratko)."
     },
     {
       "id": "8ca436a0-fa33-45ac-b8df-144c24e0bbf5",
@@ -63,7 +61,7 @@
     {
       "id": "5bc62b3f-cea3-4643-a5c8-2987b0d3a915",
       "type": "markdown",
-      "source": "### Polymorfismus a statick\u00E1 typov\u00E1 kontrola\n\nV\u011Bt\u0161inou se ale obecn\u011B polymorfismem v OOP mysl\u00ED dynamick\u00FD polyformismus a ten si nyn\u00ED probereme na p\u0159\u00EDkladu. Nejprve si definujeme t\u0159\u00EDdy \u0060Pejsek\u0060 a \u0060Kocicka\u0060. V p\u0159\u00EDkladech jsou vynech\u00E1ny konstruktory, aby byl k\u00F3d krat\u0161\u00ED."
+      "source": "### Polymorfismus a statick\u00E1 typov\u00E1 kontrola\n\nP\u0159\u00EDklad s pejskem a ko\u010Di\u010Dkou si te\u010F probereme podrobn\u011B. Nejprve si definujeme t\u0159\u00EDdy \u0060Pejsek\u0060 a \u0060Kocicka\u0060. V p\u0159\u00EDkladech jsou vynech\u00E1ny konstruktory, aby byl k\u00F3d krat\u0161\u00ED."
     },
     {
       "id": "bb4e6f8f-9bfc-4355-8852-e01b8edfcb14",
