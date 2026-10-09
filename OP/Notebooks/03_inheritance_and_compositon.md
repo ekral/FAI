@@ -315,7 +315,7 @@ student.Vypis();
 
 Vytváříte softwarový systém pro evidenci produktů v eshopu.
 
-Vytvořte pro třídy společného předka ```Control``` a dejte do něj vhodné property abychom nemuseli opakovat kód.
+Vytvořte pro třídy společného předka ```Produkt``` a dejte do něj vhodné property abychom nemuseli opakovat kód.
 
 
 ```csharp
@@ -375,6 +375,7 @@ Vyvíjíte softwarový systém pro evidenci zvířátek v ZOO.
 Vytvořte třídu ```Zviratko```, která bude reprezentovat obecné zvířátko:
 - Třída bude mít public readonly (bez setteru) property ```Jmeno``` typu string.
 - Vytvořte pro tuto třídu konstruktor, který bude přijímat parametr ```jmeno``` a nastaví hodnotu property.
+
 Vytvořte třídu ```Jaguar```, která dědí z třídy ```Zviratko```:
 - Přidejte do ní jednu novou readonly (bez setteru) public property ```PocetSkvrn``` typu celé číslo.
 - Vytvořte pro třídu ```Jaguar``` konstruktor, který bude přijímat dva parametry: ```jmeno``` a pocet ```skrvn```.
