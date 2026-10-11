@@ -4,89 +4,91 @@ using System.Linq;
 using System.Globalization;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Text.Json;
+using System.Text.RegularExpressions;
 
 var stdout = Console.Out;
 var dummyWritter = new StringWriter();
 Console.SetOut(dummyWritter);
 
-bool tZakaznikProperty = typeof(Zakaznik).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly).Where(p => p.GetSetMethod() is null).Select(p => p.Name).SequenceEqual(["Jmeno", "Email"]);
-bool tFakturaProperty = typeof(Faktura).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly).Where(p => p.GetSetMethod() is null).Select(p => p.Name).SequenceEqual(["PocetPolozek", "CenaCelkem", "Zakaznik"]);
+var t1 = new TestCase(2, 3);
+var t2 = new TestCase(2, 4);
+var t3 = new TestCase(2, 8);
+var t4 = new TestCase(Random.Shared.Next(3, 10), 2);
+string code = File.ReadAllText("../../../solution.cs");
 
-var zakaznikKonstruktory = typeof(Zakaznik).GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
-bool tZakaznikKonstruktor = zakaznikKonstruktory.Length == 1 && zakaznikKonstruktory.First().GetParameters().Select(p => p.Name).SequenceEqual(["jmeno", "email"]);
-var fakturaKonstruktory = typeof(Faktura).GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
-bool tFakturaKonstruktor = fakturaKonstruktory.Length == 1 && fakturaKonstruktory.First().GetParameters().Select(p => p.Name).SequenceEqual(["pocetPolozek", "cenaCelkem", "jmeno", "email"]);
+bool withoutMathPow = !Regex.IsMatch( code, @"\bMath\s*\.\s*Pow\b");
 
-bool tZadnaDedicnost = !typeof(Zakaznik).IsAssignableFrom(typeof(Faktura)) && !typeof(Faktura).IsAssignableFrom(typeof(Zakaznik));
-
-bool t1;
-
-try
-{
-    Faktura f1 = new(3, 1500.50m, "Petr", "petr@example.com");
-
-    t1 = f1.PocetPolozek == 3 && f1.CenaCelkem == 1500.50m && f1.Zakaznik?.Jmeno == "Petr" && f1.Zakaznik?.Email == "petr@example.com";
-}
-catch
-{
-    t1 = false;
-}
-
-bool t2;
-
-try
-{
-    Faktura f2 = new(5, 2500.00m, "Jana", "jana@example.com");
-
-    t2 = f2.PocetPolozek == 5 && f2.CenaCelkem == 2500.00m && f2.Zakaznik?.Jmeno == "Jana" && f2.Zakaznik?.Email == "jana@example.com";
-}
-catch
-{
-    t2 = false;
-}
-
-int body = 0;
-
-if (tZakaznikProperty) body += 1;
-if (tZakaznikKonstruktor) body += 1;
-if (tFakturaProperty) body += 1;
-if (tFakturaKonstruktor) body += 1;
-if (tZadnaDedicnost) body += 1;
-if (t1) body += 1;
-if (t2) body += 1;
-
-double fraction = body / 7.0;
+double fraction = (t1.IsCorrect && t2.IsCorrect && t3.IsCorrect && t4.IsCorrect && withoutMathPow) ? 1.0 : 0.0;
 
 Console.SetOut(stdout);
 
-string message(bool t) => t ? "prosel" : "chyba";
-string jsonBool(bool t) => t ? "true" : "false";
-
-string jsonOutput = $$"""
+var result = new
 {
-    "fraction": {{fraction.ToString("G", CultureInfo.InvariantCulture)}},
-    "testresults":
-    [
-        ["Nazev testu", "Ocekavana hodnota", "Vysledek", "iscorrect"],
-        ["property Jmeno a Email", "OK", "{{message(tZakaznikProperty)}}", {{jsonBool(tZakaznikProperty)}}],
-        ["property PocetPolozek a CenaCelkem", "OK", "{{message(tFakturaProperty)}}", {{jsonBool(tFakturaProperty)}}],
-        ["konstruktor Zakaznik", "OK", "{{message(tZakaznikKonstruktor)}}", {{jsonBool(tZakaznikKonstruktor)}}],
-        ["konstruktor Faktura", "OK", "{{message(tFakturaKonstruktor)}}", {{jsonBool(tFakturaKonstruktor)}}],
-        ["Dedicnost", "NE", "{{message(tZadnaDedicnost)}}", {{jsonBool(tZadnaDedicnost)}}],
-        ["new Faktura(3, 1500.50m, \"Petr\", \"petr@example.com\")", "OK", "{{message(t1)}}", {{jsonBool(t1)}}],
-        ["new Faktura(5, 2500.00m, \"Jana\", \"jana@example.com\")", "OK", "{{message(t2)}}", {{jsonBool(t2)}}]
-    ]
-}
-""";
+    fraction,
+    testresults = new object[]
+    {
+        new[] { "Test", "Ocekavana hodnota", "Vysledek", "iscorrect" },
+        new object[] { t1.Name, t1.Expected, t1.ActualDisplay, t1.IsCorrect },
+        new object[] { t2.Name, t2.Expected, t2.ActualDisplay, t2.IsCorrect },
+        new object[] { t3.Name, t3.Expected, t3.ActualDisplay, t3.IsCorrect },
+        new object[] { t4.Name, t4.Expected, t4.ActualDisplay, t4.IsCorrect },
+        new object[] { "Math.Pow", "bez pouziti Math.Pow", withoutMathPow ? "ano" : "ne", withoutMathPow }
+    }
+};
 
-Console.Write(jsonOutput);
+Console.WriteLine(JsonSerializer.Serialize(result));
 
 public static class TestConsole
 {
-    public static string Message {get; private set;} = string.Empty;
+    public static string Message {get; set;} = string.Empty;
 
     public static void WriteLine(string message)
     {
-        Message = message;
+        Message += message;
+    }
+}
+
+class TestCase
+{
+    private const int DisplayLimit = 32;
+
+    public string Name { get; }
+    public string Expected { get; }
+    public string ActualDisplay { get; }
+    public bool IsCorrect { get; }
+    public string Message { get => IsCorrect ? "prosel" : "chyba"; } 
+
+    public TestCase(int x, int y)
+    {
+        Name = $"{nameof(Test)}({x}, {y})";
+
+        TestConsole.Message = string.Empty;
+
+        Test(x, y   );
+
+        Expected = TestConsole.Message;
+
+        TestConsole.Message = string.Empty;
+
+        Submission.Test(x, y);
+
+        string actual = TestConsole.Message;
+ 
+        IsCorrect = Expected == actual;
+
+        ActualDisplay = actual.Length > DisplayLimit ? actual[..DisplayLimit] + "…" : actual;
+    }
+
+    public static void Test(int x, int y)
+    {
+        int mocnina = x;
+
+        for (int i = 0; i < y; i++)
+        {
+            mocnina *= x;
+        }
+
+        TestConsole.WriteLine($"mocnina: {mocnina}");
     }
 }
