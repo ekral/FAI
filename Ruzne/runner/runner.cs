@@ -40,11 +40,18 @@ Console.WriteLine(json.ToJsonString(new JsonSerializerOptions { WriteIndented = 
 
 static class TestConsole
 {
-    public static string Message {get; set;} = string.Empty;
+    private readonly static StringWriter writer = new();
+
+    public static string Message {get => writer.ToString();}
+
+    public static void Clear()
+    {
+        writer.GetStringBuilder().Clear();
+    }
 
     public static void WriteLine(string message)
     {
-        Message += message;
+        writer.Write(message);
     }
 }
 
@@ -56,13 +63,13 @@ static class TestCase
     {
         string description = $"{nameof(Run)}({cislo})";
 
-        TestConsole.Message = string.Empty;
+        TestConsole.Clear();
 
         Run(cislo);
 
         string expected = TestConsole.Message;
 
-        TestConsole.Message = string.Empty;
+        TestConsole.Clear();
 
         Submission.Run(cislo);
 
