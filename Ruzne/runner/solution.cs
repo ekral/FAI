@@ -1,14 +1,16 @@
-class Submission 
+class Submission
 {
-    public static void Test(int x, int y)
+    public static void Run(int cislo)
     {
-        int mocnina = x;
+        int pocetNasobeni = 0;
+        int mocnina = 1;
 
-        for (int i = 0; i < y; i++)
+        while (mocnina <= cislo)
         {
-            mocnina *= x;
+            pocetNasobeni++;
+            mocnina *= 2;
         }
 
-        TestConsole.WriteLine($"mocnina: {mocnina}");
+        TestConsole.WriteLine($"m: {mocnina}, pn: {pocetNasobeni}");
     }
 }

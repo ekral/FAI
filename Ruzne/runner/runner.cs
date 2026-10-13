@@ -6,40 +6,39 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Text.Json.Nodes;
 
 var stdout = Console.Out;
 var dummyWritter = new StringWriter();
 Console.SetOut(dummyWritter);
 
-var t1 = new TestCase(2, 3);
-var t2 = new TestCase(2, 4);
-var t3 = new TestCase(2, 8);
-var t4 = new TestCase(Random.Shared.Next(3, 10), 2);
-string code = File.ReadAllText("../../../solution.cs");
+var t1 = TestCase.Test(2);
+var t2 = TestCase.Test(20);
+var t3 = TestCase.Test(60);
+var t4 = TestCase.Test(Random.Shared.Next(100, 624));
 
+string code = File.ReadAllText("../../../solution.cs");
 bool withoutMathPow = !Regex.IsMatch( code, @"\bMath\s*\.\s*Pow\b");
 
-double fraction = (t1.IsCorrect && t2.IsCorrect && t3.IsCorrect && t4.IsCorrect && withoutMathPow) ? 1.0 : 0.0;
+var t5 = new TestResult("Math.Pow", "bez pouziti Math.Pow", withoutMathPow ? "ano" : "ne", withoutMathPow);
+
+TestResult[] testResults = [t1, t2, t3, t4, t5];
+double fraction = testResults.All(x => x.IsCorrect) ? 1.0 : 0.0;
 
 Console.SetOut(stdout);
 
-var result = new
+var header = new JsonArray("Test","Ocekavana hodnota","Vysledek","IsCorrect");
+var data = testResults.Select(x => new JsonArray(x.Description, x.Expected, x.ActualSafe, x.IsCorrect));
+
+var json = new JsonObject()
 {
-    fraction,
-    testresults = new object[]
-    {
-        new[] { "Test", "Ocekavana hodnota", "Vysledek", "iscorrect" },
-        new object[] { t1.Name, t1.Expected, t1.ActualDisplay, t1.IsCorrect },
-        new object[] { t2.Name, t2.Expected, t2.ActualDisplay, t2.IsCorrect },
-        new object[] { t3.Name, t3.Expected, t3.ActualDisplay, t3.IsCorrect },
-        new object[] { t4.Name, t4.Expected, t4.ActualDisplay, t4.IsCorrect },
-        new object[] { "Math.Pow", "bez pouziti Math.Pow", withoutMathPow ? "ano" : "ne", withoutMathPow }
-    }
+  ["fraction"] = fraction,
+  ["testresults"] = new JsonArray([header, ..data])
 };
 
-Console.WriteLine(JsonSerializer.Serialize(result));
+Console.WriteLine(json.ToJsonString(new JsonSerializerOptions { WriteIndented = true }));
 
-public static class TestConsole
+static class TestConsole
 {
     public static string Message {get; set;} = string.Empty;
 
@@ -49,46 +48,45 @@ public static class TestConsole
     }
 }
 
-class TestCase
+record TestResult(string Description, string Expected, string ActualSafe, bool IsCorrect);
+
+static class TestCase
 {
-    private const int DisplayLimit = 32;
-
-    public string Name { get; }
-    public string Expected { get; }
-    public string ActualDisplay { get; }
-    public bool IsCorrect { get; }
-    public string Message { get => IsCorrect ? "prosel" : "chyba"; } 
-
-    public TestCase(int x, int y)
+    public static TestResult Test(int cislo)
     {
-        Name = $"{nameof(Test)}({x}, {y})";
+        string description = $"{nameof(Run)}({cislo})";
 
         TestConsole.Message = string.Empty;
 
-        Test(x, y   );
+        Run(cislo);
 
-        Expected = TestConsole.Message;
+        string expected = TestConsole.Message;
 
         TestConsole.Message = string.Empty;
 
-        Submission.Test(x, y);
+        Submission.Run(cislo);
 
         string actual = TestConsole.Message;
- 
-        IsCorrect = Expected == actual;
 
-        ActualDisplay = actual.Length > DisplayLimit ? actual[..DisplayLimit] + "…" : actual;
+        const int limit = 48;
+        string actualSafe = System.Net.WebUtility.HtmlEncode(actual.Length > limit ? actual[..limit] + "…" : actual);
+        
+        bool isCorrect = expected == actual;
+
+        return new TestResult(description, expected, actualSafe, isCorrect);
     }
 
-    public static void Test(int x, int y)
+    public static void Run(int cislo)
     {
-        int mocnina = x;
+        int pocetNasobeni = 0;
+        int mocnina = 1;
 
-        for (int i = 0; i < y; i++)
+        while (mocnina <= cislo)
         {
-            mocnina *= x;
+            pocetNasobeni++;
+            mocnina *= 2;
         }
 
-        TestConsole.WriteLine($"mocnina: {mocnina}");
+        TestConsole.WriteLine($"m: {mocnina}, pn: {pocetNasobeni}");
     }
 }
