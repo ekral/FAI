@@ -4,32 +4,21 @@ class Solution
 {
     public static void KlientskyKod()
     {
-        Manazer m = new()
-        {
-            Jmeno = "Petr"
-        };
+        Faktura f1 = new(3, 1500.50m, "Petr", "petr@example.com");
 
-        m.VypisUdaje();
-        m.VypisHeslo();
+        TestConsole.WriteLine($"Pocet polozek: {f1.PocetPolozek} Cena celkem: {f1.CenaCelkem} {f1.Zakaznik?.Jmeno}, Email: {f1.Zakaznik?.Email}");
     }
 }
 
-class Zamestnanec
+class Zakaznik(string jmeno, string email)
 {
-    public string Jmeno {get; set;} = string.Empty;
-    protected decimal plat = 50000m;
-    private string heslo = "abc123";
-
-    public void VypisHeslo()
-    {
-        TestConsole.WriteLine($"Heslo: {heslo}");
-    }
+    public string Jmeno {get; } = jmeno;
+    public string Email {get; } = email;
 }
 
-class Manazer : Zamestnanec
+class Faktura(int pocetPolozek, decimal cenaCelkem, string jmeno, string email)
 {
-    public void VypisUdaje()
-    {
-        TestConsole.WriteLine($"Jmeno: {Jmeno}, Plat: {plat}");
-    }
+    public int PocetPolozek {get; } = pocetPolozek;
+    public decimal CenaCelkem {get; } = cenaCelkem;
+    public Zakaznik Zakaznik {get; } = new(jmeno, email);
 }
