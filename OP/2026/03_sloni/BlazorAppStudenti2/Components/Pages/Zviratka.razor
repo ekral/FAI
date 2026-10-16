@@ -1,0 +1,57 @@
+﻿@page "/zviratka"
+@using Microsoft.AspNetCore.Connections
+@attribute [StreamRendering]
+
+<div class="d-flex flex-wrap gap-3">
+    @foreach (Slon slon in sloni)
+    {
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <img src="@slon.ImgUrl" class="card-img-top" alt="fotka">
+                <h5 class="card-title">@slon.Jmeno</h5>
+                <h6 class="card-subtitle mb-2 text-body-secondary">@slon.Cena.ToString("C")</h6>
+                <p class="card-text">@slon.Popis. Chobot: @slon.DelkaChobotu cm</p>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    static Slon mumbo = new(
+        "Mumbo",
+        "Slon africky",
+        500m, 
+        "https://shop.zoozlin.eu/media/photos/products/586/med_8189ccde6ebeeb60534fca699a8a51bf.jpeg",
+        200);
+    
+    static Slon dumbo = new(
+        "Dumbo",
+        "Slon kresleny",
+        730m, 
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a0/African_Elephant_%28188286877%29.jpeg/1280px-African_Elephant_%28188286877%29.jpeg?utm_source=cs.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        80);
+    
+    static Slon karel = new(
+        "Karel",
+        "Slon asijsky",
+        730m, 
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a0/African_Elephant_%28188286877%29.jpeg/1280px-African_Elephant_%28188286877%29.jpeg?utm_source=cs.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        80);
+
+    Slon[] sloni = [mumbo, dumbo, karel];
+
+    
+    class Zviratko(string jmeno, string popis, decimal cena, string imgUrl)
+    {
+        public string Jmeno { get; } = jmeno;
+        public string Popis { get; } = popis;
+        public decimal Cena { get; } = cena;
+        public string ImgUrl { get; } = imgUrl;
+    }
+
+    class Slon(string jmeno, string popis, decimal cena, string imgUrl, int delkaChobotu) 
+        : Zviratko(jmeno, popis, cena, imgUrl)
+    {
+        public int DelkaChobotu { get; } = delkaChobotu;
+    }
+}
