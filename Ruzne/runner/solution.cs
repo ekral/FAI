@@ -4,21 +4,28 @@ class Solution
 {
     public static void KlientskyKod()
     {
-        Faktura f1 = new(3, 1500.50m, "Petr", "petr@example.com");
-
-        TestConsole.WriteLine($"Pocet polozek: {f1.PocetPolozek} Cena celkem: {f1.CenaCelkem} {f1.Zakaznik?.Jmeno}, Email: {f1.Zakaznik?.Email}");
+        NakladniVozidlo vozidlo = new NakladniVozidlo("Tatra", "Phoenix", 11000);
     }
 }
 
-class Zakaznik(string jmeno, string email)
+class Vozidlo
 {
-    public string Jmeno {get; } = jmeno;
-    public string Email {get; } = email;
+    public string Znacka {get; } = string.Empty;
+    public string Model {get; } = string.Empty;
+    
+    public Vozidlo(string znacka, string model)
+    {
+        Znacka = znacka;
+        Model = model;
+    }
 }
 
-class Faktura(int pocetPolozek, decimal cenaCelkem, string jmeno, string email)
+class NakladniVozidlo : Vozidlo
 {
-    public int PocetPolozek {get; } = pocetPolozek;
-    public decimal CenaCelkem {get; } = cenaCelkem;
-    public Zakaznik Zakaznik {get; } = new(jmeno, email);
+    public int Nosnost {get; }
+
+    public NakladniVozidlo(string znacka, string model, int nosnost) : base(znacka, model)
+    {
+        Nosnost = nosnost;
+    }
 }

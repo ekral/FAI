@@ -13,67 +13,72 @@ var stdout = Console.Out;
 var dummyWritter = new StringWriter();
 Console.SetOut(dummyWritter);
 
-IEnumerable<(string, string)> zakaznikExpectedProperties = GetProperties(typeof(Reference.Zakaznik));
-var zakaznikExpectedConstructors = GetConstructorsTypes(typeof(Reference.Zakaznik));
-var fakturaExpectedProperties = GetProperties(typeof(Reference.Faktura));
-var fakturaExpectedConstructors = GetConstructorsTypes(typeof(Reference.Faktura));
+var vozidloExpectedProperties = GetProperties(typeof(Reference.Vozidlo));
+var vozidloExpectedConstructors = GetConstructorsTypes(typeof(Reference.Vozidlo));
+var nakladniVozidloExpectedProperties = GetProperties(typeof(Reference.NakladniVozidlo));
+var nakladniVozidloAllExpectedProperties = GetAllProperties(typeof(Reference.NakladniVozidlo));
+var nakladniVozidloExpectedConstructors = GetConstructorsTypes(typeof(Reference.NakladniVozidlo));
 
-var t1 = new TestResult("Zakaznik definovan", true.ToString(), false.ToString(), false);
-var t2 = new TestResult("Zakaznik properties", string.Join(", ", zakaznikExpectedProperties), "can not evaluate", false);
-var t3 = new TestResult("Zakaznik constructor types", string.Join(", ", zakaznikExpectedConstructors), "can not evaluate", false);
-var t4 = new TestResult("Faktura properties", string.Join(", ", fakturaExpectedProperties), "can not evaluate", false);
-var t5 = new TestResult("Faktura definovana", true.ToString(), false.ToString(), false);
-var t6 = new TestResult("Faktura constructor types", string.Join(", ", fakturaExpectedConstructors), "can not evaluate", false);
-object[] parametersA = [3, 1500.50m, "Petr", "petr@example.com"];
-var t7 = new TestResult($"""new Faktura({string.Join(", ", parametersA)})""", TestRun(typeof(Reference.Faktura), typeof(Reference.Zakaznik), parametersA, fakturaExpectedProperties), "can not evaluate", false);
-object[] parametersB = [2, 300.50m, "Alena", "alena@example.com"];
-var t8 = new TestResult($"""new Faktura({string.Join(", ", parametersB)})""", TestRun(typeof(Reference.Faktura), typeof(Reference.Zakaznik), parametersB, fakturaExpectedProperties), "can not evaluate", false);
+var t1 = new TestResult("Vozidlo definovano", true.ToString(), false.ToString(), false);
+var t2 = new TestResult("Vozidlo properties", string.Join(", ", vozidloExpectedProperties), "can not evaluate", false);
+var t3 = new TestResult("Vozidlo constructor types", string.Join(", ", vozidloExpectedConstructors), "can not evaluate", false);
+var t4 = new TestResult("NakladniVozidlo definovano", true.ToString(), false.ToString(), false);
+var t5 = new TestResult("NakladniVozidlo properties", string.Join(", ", nakladniVozidloExpectedProperties), "can not evaluate", false);
+var t6 = new TestResult("NakladniVozidlo constructor types", string.Join(", ", nakladniVozidloExpectedConstructors), "can not evaluate", false);
+var t7 = new TestResult("NakladniVozidlo dedi od Vozidla", true.ToString(), "can not evaluate", false);
+object[] parametersA = ["Tatra", "Phoenix", 11000];
+var t8 = new TestResult($"""new NakladniVozidlo({string.Join(", ", parametersA)})""", TestRun(typeof(Reference.NakladniVozidlo), parametersA, nakladniVozidloAllExpectedProperties), "can not evaluate", false);
+object[] parametersB = ["Avia", "Avia A15", 1810];
+var t9 = new TestResult($"""new NakladniVozidlo({string.Join(", ", parametersB)})""", TestRun(typeof(Reference.NakladniVozidlo), parametersB, nakladniVozidloAllExpectedProperties), "can not evaluate", false);
 
 
-if(Type.GetType("Zakaznik") is Type zakaznikType)
+if(Type.GetType("Vozidlo") is Type vozidloType)
 {
     t1.SetCorrectAndActual(true);
 
-    var zakaznikActualProperties = GetProperties(zakaznikType);
+    var vozidloActualProperties = GetProperties(vozidloType);
 
-    t2.Actual = string.Join(", ", zakaznikActualProperties);
-    t2.IsCorrect = new HashSet<(string, string)>(zakaznikExpectedProperties).SetEquals(zakaznikActualProperties);
+    t2.Actual = string.Join(", ", vozidloExpectedProperties);
+    t2.IsCorrect = new HashSet<(string, string)>(vozidloExpectedProperties).SetEquals(vozidloActualProperties);
 
-    var zakaznikActualConstructors = GetConstructorsTypes(zakaznikType);
+    var vozidloActualConstructors = GetConstructorsTypes(vozidloType);
 
-    t3.Actual = string.Join(", ", zakaznikActualConstructors);
-    t3.IsCorrect = zakaznikExpectedConstructors.SequenceEqual(zakaznikActualConstructors);
+    t3.Actual = string.Join(", ", vozidloActualConstructors);
+    t3.IsCorrect = vozidloExpectedConstructors.SequenceEqual(vozidloActualConstructors);
+}
 
-    if(Type.GetType("Faktura") is Type fakturaType)
-    {    
-        string actualRunA = TestRun(fakturaType, zakaznikType, parametersA, fakturaExpectedProperties);
+if(Type.GetType("NakladniVozidlo") is Type nakladniVozidloType)
+{
+    t4.SetCorrectAndActual(true);
 
-        t7.Actual = actualRunA;
-        t7.IsCorrect = t7.Expected == actualRunA;
+    var nakladniVozidloActualProperties = GetProperties(nakladniVozidloType);
 
-        string actualRunB = TestRun(fakturaType, zakaznikType, parametersB, fakturaExpectedProperties);
+    t5.Actual = string.Join(", ", nakladniVozidloActualProperties);
+    t5.IsCorrect = new HashSet<(string, string)>(nakladniVozidloExpectedProperties).SetEquals(nakladniVozidloActualProperties);
 
-        t8.Actual = actualRunB;
-        t8.IsCorrect = t8.Expected == actualRunB;
+    var nakladniVozidloActualConstructors = GetConstructorsTypes(nakladniVozidloType);
+
+    t6.Actual = string.Join(", ", nakladniVozidloActualConstructors);
+    t6.IsCorrect = nakladniVozidloExpectedConstructors.SequenceEqual(nakladniVozidloActualConstructors);
+
+    if(Type.GetType("Vozidlo") is Type vozidloTypeIndividual)
+    {  
+        t7.SetCorrectAndActual(nakladniVozidloType.BaseType == vozidloTypeIndividual);
+
+        string actualRunA = TestRun(nakladniVozidloType, parametersA, nakladniVozidloAllExpectedProperties);
+
+        t8.Actual = actualRunA;
+        t8.IsCorrect = t8.Expected == actualRunA;
+
+        string actualRunB = TestRun(nakladniVozidloType, parametersB, nakladniVozidloAllExpectedProperties);
+
+        t9.Actual = actualRunB;
+        t9.IsCorrect = t9.Expected == actualRunB;
     }
 }
 
-if(Type.GetType("Faktura") is Type fakturaTypeIndividual)
-{
-    var fakturaActualProperties = GetProperties(fakturaTypeIndividual);
 
-    t4.Actual = string.Join(", ", fakturaActualProperties);
-    t4.IsCorrect = new HashSet<(string, string)>(fakturaExpectedProperties).SetEquals(fakturaActualProperties);
-
-    t5.SetCorrectAndActual(true);
-
-    var fakturaActualConstructors = GetConstructorsTypes(fakturaTypeIndividual);
-
-    t6.Actual = string.Join(", ", fakturaActualConstructors);
-    t6.IsCorrect = fakturaExpectedConstructors.SequenceEqual(fakturaActualConstructors);
-}
-
-TestResult[] testResults = [t1, t2, t3, t4, t5, t6, t7, t8];
+TestResult[] testResults = [t1, t2, t3, t4, t5, t6, t7, t8, t9];
 
 int body = 0;
 
@@ -85,8 +90,9 @@ if(t5.IsCorrect) body += 1;
 if(t6.IsCorrect) body += 1;
 if(t7.IsCorrect) body += 1;
 if(t8.IsCorrect) body += 1;
+if(t9.IsCorrect) body += 1;
 
-double fraction = body / 8.0;
+double fraction = body / 9.0;
 
 Console.SetOut(stdout);
 
@@ -107,6 +113,12 @@ IEnumerable<(string, string)> GetProperties(Type type)
     return properties;
 }
 
+IEnumerable<(string, string)> GetAllProperties(Type type)
+{
+    var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance ).Select(p => (p.Name, p.PropertyType.Name));
+    return properties;
+}
+
 IEnumerable<string> GetConstructorsTypes(Type type)
 {
     var types = type.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly).Select(c => string.Join(", ", c.GetParameters().Select(p => p.ParameterType.Name)));
@@ -114,22 +126,22 @@ IEnumerable<string> GetConstructorsTypes(Type type)
     return types;
 }
 
-string TestRun(Type fakturaType, Type zakaznikType, object[] parameters, IEnumerable<(string, string)> expectedZakaznikProperties)
+string TestRun(Type nakladniVozidloType, object[] parameters, IEnumerable<(string, string)> nakladniVozidloExpectedProperties)
 {
     StringBuilder sb = new();
 
     try
     {
-        object? expectedObject = Activator.CreateInstance(fakturaType, parameters);
+        object? instance = Activator.CreateInstance(nakladniVozidloType, parameters);
 
-        if(expectedObject is null)
+        if(instance is null)
         {
-            return $"Can not create instance of {fakturaType.Name}";
+            return $"Can not create instance of {nakladniVozidloType.Name}";
         }
 
-        foreach(var (name, typeName) in expectedZakaznikProperties)
+        foreach(var (name, typeName) in nakladniVozidloExpectedProperties)
         {
-            PropertyInfo? property = fakturaType.GetProperty(name);
+            PropertyInfo? property = nakladniVozidloType.GetProperty(name);
 
             if(property is null)
             {
@@ -138,33 +150,14 @@ string TestRun(Type fakturaType, Type zakaznikType, object[] parameters, IEnumer
 
             var propertyType = property.PropertyType;
 
-            if(propertyType == zakaznikType)
+            object? value = property.GetValue(instance);
+
+            if(value is null)
             {
-                var properties = propertyType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
-
-                foreach(var prop in properties)
-                {
-                    object? value = prop.GetValue(property.GetValue(expectedObject));
-
-                    if(value is null)
-                    {
-                        return $"Property {name}.{prop.Name} is null";
-                    }
-
-                    sb.Append($"{name}.{prop.Name}: {value} ");
-                }   
+                return $"Property {name} is null";
             }
-            else
-            {
-                object? value = property.GetValue(expectedObject);
 
-                if(value is null)
-                {
-                    return $"Property {name} is null";
-                }
-
-                sb.Append($"{name}: {value} ");
-            }
+            sb.Append($"{name}: {value} ");
         }
     }
     catch(Exception ex)
@@ -211,16 +204,25 @@ class TestResult(string description, string expected, string actual, bool isCorr
 
 namespace Reference
 {
-    class Zakaznik(string jmeno, string email)
+    class Vozidlo
     {
-        public string Jmeno {get; } = jmeno;
-        public string Email {get; } = email;
+        public string Znacka {get; } = string.Empty;
+        public string Model {get; } = string.Empty;
+        
+        public Vozidlo(string znacka, string model)
+        {
+            Znacka = znacka;
+            Model = model;
+        }
     }
 
-    class Faktura(int pocetPolozek, decimal cenaCelkem, string jmeno, string email)
+    class NakladniVozidlo : Vozidlo
     {
-        public int PocetPolozek {get; } = pocetPolozek;
-        public decimal CenaCelkem {get; } = cenaCelkem;
-        public Zakaznik Zakaznik {get; } = new(jmeno, email);
+        public int Nosnost {get; }
+
+        public NakladniVozidlo(string znacka, string model, int nosnost) : base(znacka, model)
+        {
+            Nosnost = nosnost;
+        }
     }
 }
