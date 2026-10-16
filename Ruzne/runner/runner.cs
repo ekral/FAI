@@ -12,23 +12,53 @@ var stdout = Console.Out;
 var dummyWritter = new StringWriter();
 Console.SetOut(dummyWritter);
 
+var t1 = new TestResult("Zamestnanec definovan", true.ToString(), false.ToString(), false);
+var t2 = new TestResult("Jmeno pristupne vsude", true.ToString(), false.ToString(), false);
+var t3 = new TestResult("plat pristupny u rodice a potomka", true.ToString(), false.ToString(), false);
+var t4 = new TestResult("heslo pristupne pouze uvnitr rodice", true.ToString(), false.ToString(), false);
+var t5 = new TestResult("Manazer je definovan", true.ToString(), false.ToString(), false);
+var t6 = new TestResult("Manazer je Zamestnanec", true.ToString(), false.ToString(), false);
+var t7 = new TestResult("zamestnanec.VypisHeslo()", TestRun(typeof(Reference.Zamestnanec), "VypisHeslo", "Petr"), "run error", false);
+var t8 = new TestResult("manazer.VypisUdaje()", TestRun(typeof(Reference.Manazer), "VypisUdaje", "Petr"), "run error", false);
 
-bool jmenoPublic = typeof(Zamestnanec).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly).Select(p => p.Name).SequenceEqual(["Jmeno"]);
-var t1 = new TestResult("Jmeno pristupne vsude", "True", jmenoPublic.ToString(), jmenoPublic);
+if(Type.GetType("Zamestnanec") is Type zamestnanecType)
+{
+    t1.SetCorrectAndActual(true);
+ 
+    if(zamestnanecType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly).FirstOrDefault(p => p.Name == "Jmeno") is PropertyInfo jmenoPrope)
+    {
+        t2.SetCorrectAndActual(true);
+    }
 
-bool platProtected = typeof(Zamestnanec).GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly).Where(f => f.IsFamily).Select(p => p.Name).Contains("plat");
-var t2 = new TestResult("plat pristupny u rodice a potomka", "True", platProtected.ToString(), platProtected);
+    if(zamestnanecType.GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly).FirstOrDefault(f => f.Name == "plat" && f.IsFamily) is FieldInfo platField)
+    {
+        t3.SetCorrectAndActual(true);
+    }
 
-bool hesloPrivate = typeof(Zamestnanec).GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly).Where(f => f.IsPrivate).Select(p => p.Name).Contains("heslo");
-var t3 = new TestResult("heslo pristupne pouze uvnitr rodice", "True", hesloPrivate.ToString(), hesloPrivate);
+    if(zamestnanecType.GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly).FirstOrDefault(f => f.Name == "heslo" && f.IsPrivate) is FieldInfo hesloField)
+    {
+        t4.SetCorrectAndActual(true);
+    }
 
-bool dedicnost = typeof(Zamestnanec).IsAssignableFrom(typeof(Manazer));
-var t4 = new TestResult("Manazer je Zamestnanec", "True", dedicnost.ToString(), dedicnost);
+    t7.Actual = TestRun(zamestnanecType, "VypisHeslo", "Petr");
+    t7.IsCorrect = t7.Actual == t7.Expected;
 
-var t5 = TestCase.TestZamestnanec("Petr");
-var t6 = TestCase.TestManazer("Jiri");
+    if(Type.GetType("Manazer") is Type manazerType)
+    {
+        t5.SetCorrectAndActual(true);
 
-TestResult[] testResults = [t1, t2, t3, t4, t5, t6];
+        if(manazerType.IsSubclassOf(zamestnanecType))
+        {
+            t6.SetCorrectAndActual(true);
+        }
+
+        t8.Actual = TestRun(manazerType, "VypisUdaje", "Petr");
+        t8.IsCorrect = t8.Actual == t8.Expected;
+    }
+}
+
+
+TestResult[] testResults = [t1, t2, t3, t4, t5, t6, t7, t8];
 
 int body = 0;
 
@@ -38,13 +68,15 @@ if(t3.IsCorrect) body += 1;
 if(t4.IsCorrect) body += 1;
 if(t5.IsCorrect) body += 1;
 if(t6.IsCorrect) body += 1;
+if(t7.IsCorrect) body += 1;
+if(t8.IsCorrect) body += 1;
 
-double fraction = body / 6.0;
+double fraction = body / 8.0;
 
 Console.SetOut(stdout);
 
 var header = new JsonArray("Test","Ocekavana hodnota","Vysledek","IsCorrect");
-var data = testResults.Select(x => new JsonArray(x.Description, x.Expected, x.ActualSafe, x.IsCorrect));
+var data = testResults.Select(x => new JsonArray(x.Description, x.Expected, x.Actual, x.IsCorrect));
 
 var json = new JsonObject()
 {
@@ -80,6 +112,34 @@ TestResult TestConstructors(Type expectedType, Type actualType)
     );
 }
 
+string TestRun(Type type, string method, string jmeno)
+{
+    TestConsole.Clear();
+
+    string result = "run exception";
+
+    try
+    {
+        object? expectedObject = Activator.CreateInstance(type);
+
+        PropertyInfo? property = type.GetProperty("Jmeno");
+        property?.SetValue(expectedObject, jmeno);
+
+        MethodInfo? metodaExpected = type.GetMethod(method);
+        metodaExpected?.Invoke(expectedObject, null);
+
+        result = TestConsole.Message;
+    }
+    catch(Exception ex)
+    {
+        result = $"run exception: {ex.Message}";
+    }
+
+    TestConsole.Clear();
+
+    return System.Net.WebUtility.HtmlEncode(result.Length > 128 ? result[..128] + ".." : result);;
+}
+
 static class TestConsole
 {
     private readonly static StringWriter writer = new();
@@ -97,95 +157,23 @@ static class TestConsole
     }
 }
 
-record TestResult(string Description, string Expected, string ActualSafe, bool IsCorrect);
-
-static class TestCase
+record TestResult(string description, string expected, string actual, bool isCorrect)
 {
-    public static TestResult TestZamestnanec(string jmeno)
+    public string Description {get; set;} = description;
+    public string Expected {get; set;} = expected;
+
+    public string Actual {get; set;} = actual;
+    public bool IsCorrect {get; set;} = isCorrect;
+
+    public void SetCorrectAndActual(bool isCorrect)
     {
-        string description = "Create Zamestnanec";
-
-        TestConsole.Clear();
-
-        Reference.Zamestnanec expectedObject = Reference.Solution.CreateZamestnanec(jmeno);
-
-        expectedObject.VypisHeslo();
-
-        string expected = TestConsole.Message;
-
-        TestConsole.Clear();
-
-        Zamestnanec actualObject = CreateZamestnanec(jmeno);
-        
-        actualObject.VypisHeslo();
-
-        string actual = TestConsole.Message;
-
-        TestConsole.Clear();
-
-        bool isCorrect = expected == actual;
-
-        string actualSafe = System.Net.WebUtility.HtmlEncode(actual.Length > 128 ? actual[..128] + ".." : actual);
-
-        return new TestResult(description, expected, actualSafe, isCorrect);
-    }
-
-    public static TestResult TestManazer(string jmeno)
-    {
-        string description = "Create Manazer";
-
-        TestConsole.Clear();
-
-        Reference.Manazer expectedObject = Reference.Solution.CreateManazer(jmeno);
-
-        expectedObject.VypisUdaje();
-
-        string expected = TestConsole.Message;
-
-        TestConsole.Clear();
-
-        Manazer actualObject = CreateManazer(jmeno);
-        
-        actualObject.VypisUdaje();
-
-        string actual = TestConsole.Message;
-
-        TestConsole.Clear();
-
-        bool isCorrect = expected == actual;
-
-        string actualSafe = System.Net.WebUtility.HtmlEncode(actual.Length > 128 ? actual[..128] + ".." : actual);
-
-        return new TestResult(description, expected, actualSafe, isCorrect);
-    }
-
-    public static Zamestnanec CreateZamestnanec(string jmeno)
-    {
-        return new Zamestnanec() { Jmeno = jmeno};
-    }
-
-    public static Manazer CreateManazer(string jmeno)
-    {
-        return new Manazer() { Jmeno = jmeno};
+        IsCorrect = isCorrect;
+        Actual = isCorrect.ToString();
     }
 }
 
-
 namespace Reference
 {
-    class Solution
-    {
-        public static Reference.Zamestnanec CreateZamestnanec(string jmeno)
-        {
-            return new Reference.Zamestnanec() { Jmeno = jmeno};
-        }
-
-        public static Reference.Manazer CreateManazer(string jmeno)
-        {
-            return new Reference.Manazer() { Jmeno = jmeno};
-        }
-    }
-
     class Zamestnanec
     {
         public string Jmeno {get; set;} = string.Empty;
