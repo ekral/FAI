@@ -13,91 +13,34 @@ var stdout = Console.Out;
 var dummyWritter = new StringWriter();
 Console.SetOut(dummyWritter);
 
-var vozidloExpectedProperties = GetProperties(typeof(Reference.Vozidlo));
-var vozidloExpectedConstructors = GetConstructorsTypes(typeof(Reference.Vozidlo));
-var nakladniVozidloExpectedProperties = GetProperties(typeof(Reference.NakladniVozidlo));
-var nakladniVozidloAllExpectedProperties = GetAllProperties(typeof(Reference.NakladniVozidlo));
-var nakladniVozidloExpectedConstructors = GetConstructorsTypes(typeof(Reference.NakladniVozidlo));
+var controlExpectedProperties = GetProperties(typeof(Reference.Control));
+var buttonExpectedProperties = GetProperties(typeof(Reference.Button));
+var dropDownExpectedProperties = GetProperties(typeof(Reference.DropDown));
 
-var t1 = new TestResult("Vozidlo definovano", true.ToString(), false.ToString(), false);
-var t2 = new TestResult("Vozidlo properties", string.Join(", ", vozidloExpectedProperties), "can not evaluate", false);
-var t3 = new TestResult("Vozidlo constructor types", string.Join(", ", vozidloExpectedConstructors), "can not evaluate", false);
-var t4 = new TestResult("NakladniVozidlo definovano", true.ToString(), false.ToString(), false);
-var t5 = new TestResult("NakladniVozidlo properties", string.Join(", ", nakladniVozidloExpectedProperties), "can not evaluate", false);
-var t6 = new TestResult("NakladniVozidlo constructor types", string.Join(", ", nakladniVozidloExpectedConstructors), "can not evaluate", false);
-var t7 = new TestResult("NakladniVozidlo dedi od Vozidla", true.ToString(), "can not evaluate", false);
-object[] parametersA = ["Tatra", "Phoenix", 11000];
-var t8 = new TestResult($"""new NakladniVozidlo({string.Join(", ", parametersA)})""", TestRun(typeof(Reference.NakladniVozidlo), parametersA, nakladniVozidloAllExpectedProperties), "can not evaluate", false);
-object[] parametersB = ["Avia", "Avia A15", 1810];
-var t9 = new TestResult($"""new NakladniVozidlo({string.Join(", ", parametersB)})""", TestRun(typeof(Reference.NakladniVozidlo), parametersB, nakladniVozidloAllExpectedProperties), "can not evaluate", false);
+TestCase t1 = ExistenceTestCase(1, [], "Control definován", "Control");
+TestCase t2 = PropertiesTestCase(1,[], "Control properties", "Control", controlExpectedProperties);
+TestCase t3 = ExistenceTestCase(1, [], "Button definován", "Button");
+TestCase t4 = PropertiesTestCase(1, [], "Button properties", "Button", buttonExpectedProperties);
+TestCase t5 = ExistenceTestCase(1, [], "DropDown definován", "DropDown");
+TestCase t6 = PropertiesTestCase(1, [], "DropDown properties", "DropDown", dropDownExpectedProperties);
+TestCase t7 = InheritanceTestCase(1, [], "Button dědí od Control", "Control", "Button");
+TestCase t8 = InheritanceTestCase(1, [], "DropDown dědí od Control", "Control", "DropDown");
+Reference.Button button = new() { Id = 1, X = 10, Y = 20, Text = "Click me!", Enabled = true};
+TestCase t9 = ComparePropertiesTestCase(1, [t7.Result], """new Button() { Id = 1, X = 10, Y = 20, Text = "Click me!", Enabled = true}""", "Button", [], button);
+Reference.DropDown dropDown = new() { Id = 2, X = 30, Y = 40, Items = ["Option 1", "Option 2", "Option 3"], SelectedIndex = 0};
+TestCase t10 = ComparePropertiesTestCase(1, [t8.Result], """new DropDown() { Id = 2, X = 30, Y = 40, Items = ["Option 1", "Option 2", "Option 3"], SelectedIndex = 0}""", "DropDown", [], dropDown);
 
+TestCase[] testCases = [t1, t2, t3, t4, t5, t6, t7, t8, t9, t10];
 
-if(Type.GetType("Vozidlo") is Type vozidloType)
-{
-    t1.SetCorrectAndActual(true);
+int body = testCases.Sum(tc => tc.Result.points);
+int maxBody = testCases.Sum(tc => tc.MaxPoints);
 
-    var vozidloActualProperties = GetProperties(vozidloType);
-
-    t2.Actual = string.Join(", ", vozidloExpectedProperties);
-    t2.IsCorrect = new HashSet<(string, string)>(vozidloExpectedProperties).SetEquals(vozidloActualProperties);
-
-    var vozidloActualConstructors = GetConstructorsTypes(vozidloType);
-
-    t3.Actual = string.Join(", ", vozidloActualConstructors);
-    t3.IsCorrect = vozidloExpectedConstructors.SequenceEqual(vozidloActualConstructors);
-}
-
-if(Type.GetType("NakladniVozidlo") is Type nakladniVozidloType)
-{
-    t4.SetCorrectAndActual(true);
-
-    var nakladniVozidloActualProperties = GetProperties(nakladniVozidloType);
-
-    t5.Actual = string.Join(", ", nakladniVozidloActualProperties);
-    t5.IsCorrect = new HashSet<(string, string)>(nakladniVozidloExpectedProperties).SetEquals(nakladniVozidloActualProperties);
-
-    var nakladniVozidloActualConstructors = GetConstructorsTypes(nakladniVozidloType);
-
-    t6.Actual = string.Join(", ", nakladniVozidloActualConstructors);
-    t6.IsCorrect = nakladniVozidloExpectedConstructors.SequenceEqual(nakladniVozidloActualConstructors);
-
-    if(Type.GetType("Vozidlo") is Type vozidloTypeIndividual)
-    {  
-        t7.SetCorrectAndActual(nakladniVozidloType.BaseType == vozidloTypeIndividual);
-
-        string actualRunA = TestRun(nakladniVozidloType, parametersA, nakladniVozidloAllExpectedProperties);
-
-        t8.Actual = actualRunA;
-        t8.IsCorrect = t8.Expected == actualRunA;
-
-        string actualRunB = TestRun(nakladniVozidloType, parametersB, nakladniVozidloAllExpectedProperties);
-
-        t9.Actual = actualRunB;
-        t9.IsCorrect = t9.Expected == actualRunB;
-    }
-}
-
-
-TestResult[] testResults = [t1, t2, t3, t4, t5, t6, t7, t8, t9];
-
-int body = 0;
-
-if(t1.IsCorrect) body += 1;
-if(t2.IsCorrect) body += 1;
-if(t3.IsCorrect) body += 1;
-if(t4.IsCorrect) body += 1;
-if(t5.IsCorrect) body += 1;
-if(t6.IsCorrect) body += 1;
-if(t7.IsCorrect) body += 1;
-if(t8.IsCorrect) body += 1;
-if(t9.IsCorrect) body += 1;
-
-double fraction = body / 9.0;
+double fraction = (double)body / (double)maxBody;
 
 Console.SetOut(stdout);
 
-var header = new JsonArray("Test","Ocekavana hodnota","Vysledek","IsCorrect");
-var data = testResults.Select(x => new JsonArray(x.Description, x.Expected, x.Actual, x.IsCorrect));
+var header = new JsonArray("Test", "Očekávaná hodnota", "Výsledek", "IsCorrect");
+var data = testCases.Select(x => new JsonArray(x.Result.Description, x.Result.Expected, x.Result.Actual, x.Result.IsCorrect));
 
 var json = new JsonObject()
 {
@@ -105,17 +48,34 @@ var json = new JsonObject()
   ["testresults"] = new JsonArray([header, ..data])
 };
 
-Console.WriteLine(json.ToJsonString(new JsonSerializerOptions { WriteIndented = true }));
+Console.WriteLine(json.ToJsonString(new JsonSerializerOptions { WriteIndented = false }));
 
-IEnumerable<(string, string)> GetProperties(Type type)
+if(false)
 {
-    var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly).Select(p => (p.Name, p.PropertyType.Name));
-    return properties;
+    Console.WriteLine($"Výsledné body se spočítají jako: (počet bodů za splněné kritéria / {maxBody}) x celkový počet bodů za úlohu.");
+
+    int i = 1;
+
+    foreach(var testCase in testCases)
+    {
+        Console.Write($"{i}. {testCase.Result.Description} (body: {testCase.MaxPoints}).");
+
+        if(testCase.Dependencies.Length > 0)
+        {
+            Console.Write(" (závislosti: ");
+            Console.Write(string.Join(", ", testCase.Dependencies.Select(d => d.Description)));
+            Console.Write(")");
+        }
+
+        Console.Write(Console.Out.NewLine);
+
+        i++;
+    }
 }
 
-IEnumerable<(string, string)> GetAllProperties(Type type)
+IEnumerable<string> GetProperties(Type type)
 {
-    var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance ).Select(p => (p.Name, p.PropertyType.Name));
+    var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly).Select(p => p.Name);
     return properties;
 }
 
@@ -126,48 +86,120 @@ IEnumerable<string> GetConstructorsTypes(Type type)
     return types;
 }
 
-string TestRun(Type nakladniVozidloType, object[] parameters, IEnumerable<(string, string)> nakladniVozidloExpectedProperties)
+TestCase ExistenceTestCase(int points, TestResult[] dependencies, string description, string typeName)
 {
-    StringBuilder sb = new();
-
-    try
+    return new TestCase(points, dependencies, dep =>
     {
-        object? instance = Activator.CreateInstance(nakladniVozidloType, parameters);
-
-        if(instance is null)
+        if(Type.GetType(typeName) is null)
         {
-            return $"Can not create instance of {nakladniVozidloType.Name}";
+            return new TestResult(description, true.ToString(), false.ToString(), false, 0);
+        }
+        else
+        {
+            return new TestResult(description, true.ToString(), true.ToString(), true, points);
+        }
+    });
+}
+
+TestCase PropertiesTestCase(int points, TestResult[] dependencies, string description, string typeName, IEnumerable<string> expectedProperties)
+{
+    return new TestCase(points, dependencies, dep =>
+    {
+        if(Type.GetType(typeName) is Type type)
+        {
+            var actualProperties = GetProperties(type);
+
+            bool isCorrect = new HashSet<string>(expectedProperties).SetEquals(actualProperties);
+
+            return new TestResult(description, string.Join(", ", expectedProperties), string.Join(", ", actualProperties), isCorrect, isCorrect ? points : 0);
+        }
+        else
+        {
+            return new TestResult(description, string.Join(", ", expectedProperties), "can not evaluate", false, 0);
+        }
+    });
+}
+
+TestCase InheritanceTestCase(int points, TestResult[] dependencies, string description, string parentTypeName, string childTypeName)
+{
+    return new TestCase(points, dependencies, dep =>
+    {
+        if(Type.GetType(parentTypeName) is Type parentType && Type.GetType(childTypeName) is Type childType)
+        {
+            bool isCorrect = childType.BaseType == parentType;
+
+            return new TestResult(description, true.ToString(), isCorrect.ToString(), isCorrect, isCorrect ? points : 0);
+        }
+        else
+        {
+            return new TestResult(description, true.ToString(), false.ToString(), false, 0);
+        }
+    });
+}
+
+// zkusim zapsat hodnoty do properties z reference instance jestli jsou pouzite spravne typy
+TestCase ComparePropertiesTestCase(int points, TestResult[] dependencies, string description, string typeName, object[] constructorParameters, object referenceInstance)
+{
+    return new TestCase(points, dependencies, dep =>
+    {
+        if(dep.Any(d => !d.IsCorrect))
+        {
+            return new TestResult(description, $"Podminky: {string.Join(", ", dep.Select(d => d.Description))}", $"Nesplnene: {string.Join(", ", dep.Where(d => !d.IsCorrect).Select(d => d.Description))}", false, 0);
         }
 
-        foreach(var (name, typeName) in nakladniVozidloExpectedProperties)
+        Type referenceType = referenceInstance.GetType();
+        var expectedProperties = referenceType.GetProperties(BindingFlags.Public | BindingFlags.Instance ).Select(p => p.Name);
+
+        if(Type.GetType(typeName) is Type type)
         {
-            PropertyInfo? property = nakladniVozidloType.GetProperty(name);
-
-            if(property is null)
+            try
             {
-                return $"Missing property {name}";
+                object? instance = Activator.CreateInstance(type, constructorParameters);
+
+                if(instance is null)
+                {
+                    return new TestResult(description, $"Muzu vytvorit instanci {type.Name}", $"Neslo vytvorit instanci {type.Name}", false, 0);
+                }
+
+                foreach(var propertyName in expectedProperties)
+                {
+                    PropertyInfo? property = type.GetProperty(propertyName);
+
+                    if(property is null)
+                    {
+                        return new TestResult(description, $"Property {propertyName} existuje", "Property {propertyName} not found", false, 0);
+                    }        
+
+                    object? expectedValue = referenceType.GetProperty(propertyName)?.GetValue(referenceInstance);
+
+                    property.SetValue(instance, expectedValue);
+
+                    object? value = property.GetValue(instance);
+
+                    if(value is null)
+                    {
+                        return new TestResult(description, $"Hodnota {propertyName} neni null", $"Hodnota {propertyName} je null", false, 0);
+                    }
+
+                    if(!value!.Equals(expectedValue))
+                    {
+                        return new TestResult(description, $"{propertyName}: {expectedValue}", $"{propertyName}: {value}", false, 0);
+                    }
+                }
             }
-
-            var propertyType = property.PropertyType;
-
-            object? value = property.GetValue(instance);
-
-            if(value is null)
+            catch(Exception ex)
             {
-                return $"Property {name} is null";
+                return new TestResult(description, "Property jsou nastavit na hodnoty", $"Exception: {ex.Message}", false, 0);
             }
-
-            sb.Append($"{name}: {value} ");
         }
-    }
-    catch(Exception ex)
-    {
-        return $"run exception: {ex.Message}";
-    }
+        else
+        {
+            return new TestResult(description, $"Existuje typ {typeName}", $"Existuje typ {typeName}", false, 0);
+        }
 
-    string result = sb.ToString();
-
-    return System.Net.WebUtility.HtmlEncode(result.Length > 128 ? result[..128] + ".." : result);
+        return new TestResult(description, "Jde nastavit hodnoty", "Jde nastavit hodnoty", true, points);
+        
+    });
 }
 
 static class TestConsole
@@ -187,42 +219,44 @@ static class TestConsole
     }
 }
 
-class TestResult(string description, string expected, string actual, bool isCorrect)
+record TestResult(string Description, string Expected, string Actual, bool IsCorrect, int points);
+
+class TestCase(int maxPoints, TestResult[] dependencies, Func<TestResult[], TestResult> testFunction)
 {
-    public string Description {get; set;} = description;
-    public string Expected {get; set;} = expected;
+    private TestResult? result = null;
+    private readonly Func<TestResult[], TestResult> testFunction = testFunction;
+    public int MaxPoints {get; } = maxPoints;
+    public TestResult[] Dependencies {get; } = dependencies;
 
-    public string Actual {get; set;} = actual;
-    public bool IsCorrect {get; set;} = isCorrect;
-
-    public void SetCorrectAndActual(bool isCorrect)
+    public TestResult Result
     {
-        IsCorrect = isCorrect;
-        Actual = isCorrect.ToString();
+        get 
+        {
+            result ??= testFunction(Dependencies);
+            
+            return result;
+        }
     }
 }
 
 namespace Reference
 {
-    class Vozidlo
-    {
-        public string Znacka {get; } = string.Empty;
-        public string Model {get; } = string.Empty;
-        
-        public Vozidlo(string znacka, string model)
+   class Control()
         {
-            Znacka = znacka;
-            Model = model;
-        }
+        public int Id {get; set;}
+        public int X {get; set;}
+        public int Y {get; set;}
     }
 
-    class NakladniVozidlo : Vozidlo
+    class Button : Control
     {
-        public int Nosnost {get; }
+        public string Text {get; set;} = string.Empty;
+        public bool Enabled {get; set;}
+    }
 
-        public NakladniVozidlo(string znacka, string model, int nosnost) : base(znacka, model)
-        {
-            Nosnost = nosnost;
-        }
+    class DropDown : Control
+    {
+        public string[] Items {get; set;} = [];
+        public int SelectedIndex {get; set;}
     }
 }

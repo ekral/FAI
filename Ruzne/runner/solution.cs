@@ -4,28 +4,41 @@ class Solution
 {
     public static void KlientskyKod()
     {
-        NakladniVozidlo vozidlo = new NakladniVozidlo("Tatra", "Phoenix", 11000);
+        Button b = new()
+        {
+            Id = 1,
+            X = 10,
+            Y = 20,
+            Text = "Click me!",
+            Enabled = true
+        };
+
+        DropDown d = new()
+        {
+            Id = 2,
+            X = 30,
+            Y = 40,
+            Items = ["Option 1", "Option 2", "Option 3"],
+            SelectedIndex = 0
+        };
     }
 }
 
-class Vozidlo
+class Control()
 {
-    public string Znacka {get; } = string.Empty;
-    public string Model {get; } = string.Empty;
-    
-    public Vozidlo(string znacka, string model)
-    {
-        Znacka = znacka;
-        Model = model;
-    }
+    public int Id {get; set;}
+    public int X {get; set;}
+    public int Y {get; set;}
 }
 
-class NakladniVozidlo : Vozidlo
+class Button : Control
 {
-    public int Nosnost {get; }
+    public string Text {get; set;} = string.Empty;
+    public bool Enabled {get; set;}
+}
 
-    public NakladniVozidlo(string znacka, string model, int nosnost) : base(znacka, model)
-    {
-        Nosnost = nosnost;
-    }
+class DropDown : Control
+{
+    public string[] Items {get; set;} = [];
+    public int SelectedIndex {get; set;}
 }
