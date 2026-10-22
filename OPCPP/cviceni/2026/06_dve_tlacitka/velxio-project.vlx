@@ -1,7 +1,7 @@
 {
   "format": "velxio-project",
   "version": 1,
-  "exportedAt": "2026-10-13T07:37:20.605Z",
+  "exportedAt": "2026-10-22T12:32:30.921Z",
   "boards": [
     {
       "id": "arduino-uno",
@@ -17,7 +17,7 @@
     "group-arduino-uno": [
       {
         "name": "sketch.ino",
-        "content": "struct EdgeDetector\n{\nprivate:\n  const int minDuration = 30;\n  const int targetState = HIGH;\n\n  int candidate;\n  int candidateSince;\n  int lastState;\n\npublic:\n  void begin(int state, int time)\n  {\n    candidate = state;\n    candidateSince = time;\n    lastState = state;\n  }\n\n  bool detect(int state, int time)\n  {\n    if(state != candidate)\n    {\n      candidate = state;\n      candidateSince = time;\n    }\n    else\n    {\n      int duration = time - candidateSince;\n\n      if(duration > minDuration)\n      {\n        if(candidate != lastState)\n        {\n          lastState = candidate;\n\n          if(candidate == targetState)\n          {\n            return true;\n          }\n        }\n      }\n    }\n\n    return false;\n\n  }\n};\n\n// pridejte druhe tlacitko, ktere bude jas snizovat\n// zamyslete jestli by sla udelat struktura i pro LED resp pro PWM vystup\nEdgeDetector edgeRight;\nEdgeDetector edgeLeft;\nint ledPulseWidth = 32;\n\nvoid setup() \n{\n  pinMode(11, OUTPUT);\n  pinMode(8, INPUT_PULLUP);\n  pinMode(12, INPUT_PULLUP);\n\n  analogWrite(11, ledPulseWidth);\n  edgeRight.begin(digitalRead(8), millis);\n  edgeLeft.begin(digitalRead(12), millis);\n}\n\nvoid loop() \n{\n  if(edgeRight.detect(digitalRead(8), millis()))\n  {\n    ledPulseWidth += 8;\n    analogWrite(11, ledPulseWidth);\n  }\n\n  if(edgeLeft.detect(digitalRead(12), millis()))\n  {\n    ledPulseWidth -= 8;\n    analogWrite(11, ledPulseWidth);\n  }\n}"
+        "content": "struct EdgeDetector\n{\nprivate:\n  const int minDuration;\n  const bool targetState;\n\n  int candidate;\n  int candidateSince;\n  int lastState;\n\npublic:\n  EdgeDetector(int minDuration, bool targetState)\n    : minDuration(minDuration), targetState(targetState)\n  {\n\n  }\n\n  void begin(int state, int time)\n  {\n    candidate = state;\n    candidateSince = time;\n    lastState = state;\n  }\n\n  bool detect(int state, int time)\n  {\n    if(state != candidate)\n    {\n      candidate = state;\n      candidateSince = time;\n    }\n    else\n    {\n      int duration = time - candidateSince;\n\n      if(duration > minDuration)\n      {\n        if(candidate != lastState)\n        {\n          lastState = candidate;\n\n          if(candidate == targetState)\n          {\n            return true;\n          }\n        }\n      }\n    }\n\n    return false;\n  }\n};\n\nstruct PwmOutput\n{\nprivate:\n  const int pin;\n  int pulseWidth;\n  const int step;\n\n  void write()\n  {\n    analogWrite(pin, pulseWidth);\n  }\n\npublic:\n  PwmOutput(int pin, int pulseWidth, int step)\n    : pin(pin), pulseWidth(pulseWidth), step(step)\n  {\n  }\n\n  void begin()\n  {\n    pinMode(pin, OUTPUT);\n    write();\n  }\n\n  void increase()\n  {\n    pulseWidth += step;\n    write();\n  }\n\n  void decrease()\n  {\n    pulseWidth -= step;\n    write();\n  }\n};\n\nstruct DigitalInputPullup\n{\nprivate:\n  int pin;\npublic:\n  DigitalInputPullup(int pin) : pin(pin)\n  {\n  }\n\n  void begin()\n  {\n    pinMode(pin, INPUT_PULLUP);\n  }\n\n  bool read()\n  {\n      return digitalRead(pin);\n  }\n};\n\nDigitalInputPullup buttonRight(8);\nDigitalInputPullup buttonLeft(12);\nEdgeDetector edgeRight(30, HIGH);\nEdgeDetector edgeLeft(30, HIGH);\nPwmOutput led(11, 64, 8);\n\nvoid setup() \n{\n  buttonRight.begin();\n  buttonLeft.begin();\n  edgeRight.begin(buttonRight.read(), millis());\n  edgeLeft.begin(buttonLeft.read(), millis());\n  led.begin();\n}\n\nvoid loop() \n{\n  if(edgeRight.detect(buttonRight.read(), millis()))\n  {\n    led.increase();\n  }\n\n  if(edgeLeft.detect(buttonLeft.read(), millis()))\n  {\n    led.decrease();\n  }\n}"
       }
     ]
   },
@@ -28,7 +28,7 @@
       "x": 269,
       "y": 66,
       "properties": {
-        "color": "red",
+        "color": "yellow",
         "pressed": false,
         "label": "",
         "xray": false
@@ -64,7 +64,7 @@
       "x": -105.59011066414443,
       "y": 37.15522464037089,
       "properties": {
-        "color": "blue",
+        "color": "gray",
         "pressed": false,
         "label": "",
         "xray": false
@@ -83,6 +83,16 @@
   ],
   "wires": [
     {
+      "waypoints": [
+        {
+          "x": 206.5,
+          "y": 102
+        },
+        {
+          "x": 241,
+          "y": 109
+        }
+      ],
       "id": "wire-1791874297297",
       "start": {
         "componentId": "pushbutton_1791874292338_7ons666vh",
@@ -96,20 +106,16 @@
         "x": 241,
         "y": 264
       },
-      "waypoints": [
-        {
-          "x": 206.5,
-          "y": 102
-        },
-        {
-          "x": 241,
-          "y": 109
-        }
-      ],
       "color": "#22c55e",
       "autoRouted": false
     },
     {
+      "waypoints": [
+        {
+          "x": 183.5,
+          "y": 85
+        }
+      ],
       "id": "wire-1791874311201",
       "start": {
         "componentId": "arduino-uno",
@@ -123,16 +129,16 @@
         "x": 275,
         "y": 85
       },
-      "waypoints": [
-        {
-          "x": 183.5,
-          "y": 85
-        }
-      ],
       "color": "#000000",
       "autoRouted": false
     },
     {
+      "waypoints": [
+        {
+          "x": 111.0224106495671,
+          "y": 138.2167907476757
+        }
+      ],
       "id": "wire-1791875156243",
       "start": {
         "componentId": "resistor_220_1791875142844_bnr1grcro",
@@ -146,16 +152,20 @@
         "x": 111.0224106495671,
         "y": 102.74723821608309
       },
-      "waypoints": [
-        {
-          "x": 111.0224106495671,
-          "y": 138.2167907476757
-        }
-      ],
       "color": "#22c55e",
       "autoRouted": true
     },
     {
+      "waypoints": [
+        {
+          "x": 101.0224106495671,
+          "y": 205.9033938615765
+        },
+        {
+          "x": 183.5,
+          "y": 205.9033938615765
+        }
+      ],
       "id": "wire-1791875159115",
       "start": {
         "componentId": "led_1791875135475_zvkkh3gb9",
@@ -169,20 +179,16 @@
         "x": 183.5,
         "y": 264
       },
-      "waypoints": [
-        {
-          "x": 101.0224106495671,
-          "y": 205.9033938615765
-        },
-        {
-          "x": 183.5,
-          "y": 205.9033938615765
-        }
-      ],
       "color": "#000000",
       "autoRouted": false
     },
     {
+      "waypoints": [
+        {
+          "x": 212,
+          "y": 197.0167907476757
+        }
+      ],
       "id": "wire-1791875761574",
       "start": {
         "componentId": "arduino-uno",
@@ -196,16 +202,16 @@
         "x": 203.2557660335044,
         "y": 197.0167907476757
       },
-      "waypoints": [
-        {
-          "x": 212,
-          "y": 197.0167907476757
-        }
-      ],
       "color": "#22c55e",
       "autoRouted": true
     },
     {
+      "waypoints": [
+        {
+          "x": -32.59011066414443,
+          "y": 142.7319283946089
+        }
+      ],
       "id": "wire-1791876614660",
       "start": {
         "componentId": "pushbutton_1791876584236_t0a1m08bb",
@@ -219,16 +225,20 @@
         "x": -23.855522694864693,
         "y": 142.7319283946089
       },
-      "waypoints": [
-        {
-          "x": -32.59011066414443,
-          "y": 142.7319283946089
-        }
-      ],
       "color": "#22c55e",
       "autoRouted": true
     },
     {
+      "waypoints": [
+        {
+          "x": -23.855522694864682,
+          "y": 227.77028027172784
+        },
+        {
+          "x": 202.5,
+          "y": 227.77028027172784
+        }
+      ],
       "id": "wire-1791876625020",
       "start": {
         "componentId": "resistor_220_1791876606603_0ledilomv",
@@ -242,20 +252,20 @@
         "x": 202.5,
         "y": 264
       },
-      "waypoints": [
-        {
-          "x": -23.855522694864682,
-          "y": 227.77028027172784
-        },
-        {
-          "x": 202.5,
-          "y": 227.77028027172784
-        }
-      ],
       "color": "#22c55e",
       "autoRouted": false
     },
     {
+      "waypoints": [
+        {
+          "x": 72.0224106495671,
+          "y": 56.15522464037089
+        },
+        {
+          "x": 72.0224106495671,
+          "y": 264
+        }
+      ],
       "id": "wire-1791876637996",
       "start": {
         "componentId": "pushbutton_1791876584236_t0a1m08bb",
@@ -269,16 +279,6 @@
         "x": 183.5,
         "y": 264
       },
-      "waypoints": [
-        {
-          "x": 72.0224106495671,
-          "y": 56.15522464037089
-        },
-        {
-          "x": 72.0224106495671,
-          "y": 264
-        }
-      ],
       "color": "#000000",
       "autoRouted": true
     }
