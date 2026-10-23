@@ -1,3 +1,5 @@
+#define ASSIGNMENT_REPORT
+
 using System;
 using System.IO;
 using System.Linq;
@@ -50,28 +52,27 @@ var json = new JsonObject()
 
 Console.WriteLine(json.ToJsonString(new JsonSerializerOptions { WriteIndented = false }));
 
-if(false)
+#if ASSIGNMENT_REPORT
+Console.WriteLine($"Výsledné body se spočítají jako: (počet bodů za splněné kritéria / {maxBody}) x celkový počet bodů za úlohu.");
+
+int i = 1;
+
+foreach(var testCase in testCases)
 {
-    Console.WriteLine($"Výsledné body se spočítají jako: (počet bodů za splněné kritéria / {maxBody}) x celkový počet bodů za úlohu.");
+    Console.Write($"{i}. {testCase.Result.Description} (body: {testCase.MaxPoints}).");
 
-    int i = 1;
-
-    foreach(var testCase in testCases)
+    if(testCase.Dependencies.Length > 0)
     {
-        Console.Write($"{i}. {testCase.Result.Description} (body: {testCase.MaxPoints}).");
-
-        if(testCase.Dependencies.Length > 0)
-        {
-            Console.Write(" (závislosti: ");
-            Console.Write(string.Join(", ", testCase.Dependencies.Select(d => d.Description)));
-            Console.Write(")");
-        }
-
-        Console.Write(Console.Out.NewLine);
-
-        i++;
+        Console.Write(" (závislosti: ");
+        Console.Write(string.Join(", ", testCase.Dependencies.Select(d => d.Description)));
+        Console.Write(")");
     }
+
+    Console.Write(Console.Out.NewLine);
+
+    i++;
 }
+#endif
 
 IEnumerable<string> GetProperties(Type type)
 {

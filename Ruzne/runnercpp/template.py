@@ -57,12 +57,33 @@ def main():
 
     try:
         # ============================================================
+        # ENVIRONMENT
+        # ============================================================
+
+        env = os.environ.copy()
+        
+        # ============================================================
+        # COMPILER VERSION PRETEST
+        # ============================================================
+
+        #success, report = run_cmd(
+        #    [
+        #        "g++",
+        #        "--version"
+        #    ],
+        #    env
+        #)
+        #
+        #print_error(report)
+        #return
+        
+        # ============================================================
         # STUDENT CODE
         # ============================================================
 
-        student_code = """{{"STUDENT_ANSWER" | e('py')}}"""
+        student_code = """{{ STUDENT_ANSWER | e('py') }}"""
 
-        with open("solution.cpp", "w", encoding="utf-8") as f:
+        with open("solution.h", "w", encoding="utf-8") as f:
             f.write(student_code)
 
         # ============================================================
@@ -73,7 +94,7 @@ def main():
         testcases = json.loads(testcases_raw)
 
         if testcases and len(testcases) > 0:
-            prvni_testcase = testcases[0]  # Získání prvního testcase (Test case 1)
+            prvni_testcase = testcases[0]
             runner_code = prvni_testcase.get("testcode", "")
 
             if not runner_code.strip():
@@ -87,12 +108,6 @@ def main():
             return
 
         # ============================================================
-        # ENVIRONMENT
-        # ============================================================
-
-        env = os.environ.copy()
-
-        # ============================================================
         # COMPILE DIRECTLY WITH GCC
         # ============================================================
 
@@ -102,7 +117,6 @@ def main():
                 "-std=c++23",
                 "-o",
                 "runner",
-                "solution.cpp",
                 "main.cpp"
             ],
             env
@@ -118,7 +132,7 @@ def main():
 
         success, report = run_cmd(
             [
-                "runner",
+                "./runner",
             ],
             env
         )
