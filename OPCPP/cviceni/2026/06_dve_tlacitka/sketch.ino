@@ -1,14 +1,20 @@
 struct EdgeDetector
 {
 private:
-  const int minDuration = 30;
-  const int targetState = HIGH;
+  const int minDuration;
+  const bool targetState;
 
   int candidate;
   int candidateSince;
   int lastState;
 
 public:
+  EdgeDetector(int minDuration, bool targetState)
+    : minDuration(minDuration), targetState(targetState)
+  {
+
+  }
+
   void begin(int state, int time)
   {
     candidate = state;
@@ -42,38 +48,90 @@ public:
     }
 
     return false;
-
   }
 };
 
-// pridejte druhe tlacitko, ktere bude jas snizovat
-// zamyslete jestli by sla udelat struktura i pro LED resp pro PWM vystup
-EdgeDetector edgeRight;
-EdgeDetector edgeLeft;
-int ledPulseWidth = 32;
+struct PwmOutput
+{
+private:
+  const int pin;
+  int pulseWidth;
+  const int step;
+
+  void write()
+  {
+    analogWrite(pin, pulseWidth);
+  }
+
+public:
+  PwmOutput(int pin, int pulseWidth, int step)
+    : pin(pin), pulseWidth(pulseWidth), step(step)
+  {
+  }
+
+  void begin()
+  {
+    pinMode(pin, OUTPUT);
+    write();
+  }
+
+  void increase()
+  {
+    pulseWidth += step;
+    write();
+  }
+
+  void decrease()
+  {
+    pulseWidth -= step;
+    write();
+  }
+};
+
+struct DigitalInputPullup
+{
+private:
+  int pin;
+public:
+  DigitalInputPullup(int pin) : pin(pin)
+  {
+  }
+
+  void begin()
+  {
+    pinMode(pin, INPUT_PULLUP);
+  }
+
+  bool read()
+  {
+      return digitalRead(pin);
+  }
+};
+
+DigitalInputPullup buttonRight(8);
+DigitalInputPullup buttonLeft(12);
+EdgeDetector edgeRight(30, HIGH);
+EdgeDetector edgeLeft(30, HIGH);
+PwmOutput led(11, 64, 8);
 
 void setup() 
 {
-  pinMode(11, OUTPUT);
-  pinMode(8, INPUT_PULLUP);
-  pinMode(12, INPUT_PULLUP);
-
-  analogWrite(11, ledPulseWidth);
-  edgeRight.begin(digitalRead(8), millis);
-  edgeLeft.begin(digitalRead(12), millis);
+  buttonRight.begin();
+  buttonLeft.begin();
+  edgeRight.begin(buttonRight.read(), millis());
+  edgeLeft.begin(buttonLeft.read(), millis());
+  led.begin();
 }
 
 void loop() 
 {
-  if(edgeRight.detect(digitalRead(8), millis()))
+  if(edgeRight.detect(buttonRight.read(), millis()))
   {
-    ledPulseWidth += 8;
-    analogWrite(11, ledPulseWidth);
+    led.increase();
   }
 
-  if(edgeLeft.detect(digitalRead(12), millis()))
+  if(edgeLeft.detect(buttonLeft.read(), millis()))
   {
-    ledPulseWidth -= 8;
-    analogWrite(11, ledPulseWidth);
+    led.decrease();
   }
 }
