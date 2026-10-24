@@ -1,5 +1,3 @@
-# V Moodle uloze nastavit timeout na 15 sekund, memmory limit na 0 (neomezeno)
-
 import os
 import subprocess
 import json
@@ -185,6 +183,9 @@ def main():
                 get_option("System.Runtime.dll"),
                 get_option("System.Collections.dll"),
                 get_option("System.Linq.dll"),
+                get_option("System.Reflection.dll"),
+                get_option("System.Text.RegularExpressions.dll"),
+                get_option("System.Text.Json.dll"),
             ],
             env
         )

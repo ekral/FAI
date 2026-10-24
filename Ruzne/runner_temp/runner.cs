@@ -16,9 +16,9 @@ var dummyWritter = new StringWriter();
 Console.SetOut(dummyWritter);
 
 TestCase t1 = TestRun(0);
-TestCase t2 = TestRun(1);
-TestCase t3 = TestRun(7);
-TestCase t4 = TestRun(Random.Shared.Next(8, 100));
+TestCase t2 = TestRun(12);
+TestCase t3 = TestRun(20);
+TestCase t4 = TestRun(Random.Shared.Next(21, 100));
 
 TestCase[][] testCases = [[t1],[t2], [t3,t4]];
 
@@ -132,17 +132,17 @@ TestCase TestRun(int n)
 
 class Reference
 {
-   public static void Test(int cislo)
+    public static void Test(int zustatek)
     {
-        int pocetDeleni = 0;
+        int i = 1;
 
-        while (cislo > 0)
+        while (zustatek > i )
         {
-            pocetDeleni++;
-            cislo /= 2;
+            zustatek -= i;
+            i++;
         }
 
-        TestConsole.WriteLine($"pocet deleni: {pocetDeleni}");
+        TestConsole.WriteLine($"pocet kroku: {i - 1}");
     }
 }
 

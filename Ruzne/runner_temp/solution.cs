@@ -1,17 +1,17 @@
 using System;
 
-public class Submission
+class Submission
 {
-    public static void Test(int cislo)
+    public static void Test(int zustatek)
     {
-        int pocetDeleni = 0;
+        int i = 1;
 
-        while (cislo > 0)
+        while (zustatek > i )
         {
-            pocetDeleni++;
-            cislo /= 2;
+            zustatek -= i;
+            i++;
         }
 
-        TestConsole.WriteLine($"pocet deleni: {pocetDeleni}");
+        TestConsole.WriteLine($"pocet kroku: {i - 1}");
     }
 }
