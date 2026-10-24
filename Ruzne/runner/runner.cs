@@ -32,46 +32,88 @@ TestCase t9 = ComparePropertiesTestCase(1, [t7.Result], """new Button() { Id = 1
 Reference.DropDown dropDown = new() { Id = 2, X = 30, Y = 40, Items = ["Option 1", "Option 2", "Option 3"], SelectedIndex = 0};
 TestCase t10 = ComparePropertiesTestCase(1, [t8.Result], """new DropDown() { Id = 2, X = 30, Y = 40, Items = ["Option 1", "Option 2", "Option 3"], SelectedIndex = 0}""", "DropDown", [], dropDown);
 
-TestCase[] testCases = [t1, t2, t3, t4, t5, t6, t7, t8, t9, t10];
-
-int body = testCases.Sum(tc => tc.Result.points);
-int maxBody = testCases.Sum(tc => tc.MaxPoints);
-
-double fraction = (double)body / (double)maxBody;
+TestCase[][] testCases = [[t1],[t2], [t3], [t4], [t5], [t6], [t7], [t8], [t9], [t10]];
 
 Console.SetOut(stdout);
 
 var header = new JsonArray("Test", "Očekávaná hodnota", "Výsledek", "IsCorrect");
-var data = testCases.Select(x => new JsonArray(x.Result.Description, x.Result.Expected, x.Result.Actual, x.Result.IsCorrect));
+
+JsonArray array = [header];
+
+int points = 0;
+int maxPoints = 0;
+
+foreach(var group in testCases)
+{
+    var missing = group.Where(tc => !tc.Result.IsCorrect);
+    bool groupAllCorrect = !missing.Any();
+
+    int groupMaxPoints = 0;
+
+    foreach(TestCase tc in group)
+    {
+        groupMaxPoints += tc.MaxPoints;
+
+        var jsonArray = groupAllCorrect switch
+        {
+            true => new JsonArray(tc.Result.Description, tc.Result.Expected, tc.Result.Actual, tc.Result.IsCorrect),
+            false => new JsonArray(tc.Result.Description, tc.Result.Expected, $"{tc.Result.Actual} správně, ale chybí související testy: [{string.Join(", ", missing.Select(m => m.Result.Description))}]", groupAllCorrect)
+        };
+
+        array.Add(jsonArray);
+    }
+
+    maxPoints += groupMaxPoints;
+
+    points += groupAllCorrect ? groupMaxPoints : 0;    
+}
+
+double fraction = (double)points / (double)maxPoints;
+
 
 var json = new JsonObject()
 {
   ["fraction"] = fraction,
-  ["testresults"] = new JsonArray([header, ..data])
+  ["testresults"] = array
 };
 
-Console.WriteLine(json.ToJsonString(new JsonSerializerOptions { WriteIndented = false }));
+Console.WriteLine(json.ToJsonString(new JsonSerializerOptions { WriteIndented = true }));
 
 #if ASSIGNMENT_REPORT
-Console.WriteLine($"Výsledné body se spočítají jako: (počet bodů za splněné kritéria / {maxBody}) x celkový počet bodů za úlohu.");
+
+Console.WriteLine($"Výsledné body se spočítají jako: (počet bodů za splněné kritéria / {maxPoints}) x celkový počet bodů za úlohu.");
 
 int i = 1;
 
-foreach(var testCase in testCases)
+foreach(var group in testCases)
 {
-    Console.Write($"{i}. {testCase.Result.Description} (body: {testCase.MaxPoints}).");
+    string indentation = string.Empty;
 
-    if(testCase.Dependencies.Length > 0)
+    if(group.Count() > 1)
     {
-        Console.Write(" (závislosti: ");
-        Console.Write(string.Join(", ", testCase.Dependencies.Select(d => d.Description)));
-        Console.Write(")");
+        int groupMaxPoints = group.Sum(g => g.MaxPoints);
+        Console.WriteLine($"Skupina úkolů, které musí být splněny současně (body: {groupMaxPoints}):");
+
+        indentation = "  - ";
     }
 
-    Console.Write(Console.Out.NewLine);
+    foreach(var testCase in group)
+    {
+        Console.Write($"{indentation}{i}. {testCase.Result.Description} (body: {testCase.MaxPoints}).");
 
-    i++;
+        if(testCase.Dependencies.Length > 0)
+        {
+            Console.Write(" (závislosti: ");
+            Console.Write(string.Join(", ", testCase.Dependencies.Select(d => d.Description)));
+            Console.Write(")");
+        }
+
+        Console.Write(Console.Out.NewLine);
+
+        i++;
+    }
 }
+
 #endif
 
 IEnumerable<string> GetProperties(Type type)
@@ -220,7 +262,7 @@ static class TestConsole
     }
 }
 
-record TestResult(string Description, string Expected, string Actual, bool IsCorrect, int points);
+record TestResult(string Description, string Expected, string Actual, bool IsCorrect, int Points);
 
 class TestCase(int maxPoints, TestResult[] dependencies, Func<TestResult[], TestResult> testFunction)
 {
