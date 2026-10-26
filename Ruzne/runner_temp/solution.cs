@@ -1,17 +1,31 @@
 using System;
 
-class Submission
+class Solution
 {
-    public static void Test(int zustatek)
+    public static void KlientskyKod()
     {
-        int i = 1;
+        Zviratko z1 = new Zviratko("Fik");
+        z1.Zvuk();
+        Zviratko z2 = new Pejsek("Rex");
+        z2.Zvuk();
+        Pejsek z3 = new Pejsek("Max");
+        z3.Zvuk();
+    }
+}
 
-        while (zustatek > i )
-        {
-            zustatek -= i;
-            i++;
-        }
+class Zviratko(string jmeno)
+{
+    public string Jmeno { get; set; } = jmeno;
+    public virtual void Zvuk()
+    {
+        TestConsole.WriteLine(Jmeno);
+    }
+}
 
-        TestConsole.WriteLine($"pocet kroku: {i - 1}");
+class Pejsek(string jmeno) : Zviratko(jmeno)
+{
+    public override void Zvuk()
+    {
+        TestConsole.WriteLine($"{Jmeno} dela haf haf!");
     }
 }

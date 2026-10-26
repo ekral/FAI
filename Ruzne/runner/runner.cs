@@ -15,24 +15,15 @@ var stdout = Console.Out;
 var dummyWritter = new StringWriter();
 Console.SetOut(dummyWritter);
 
-var controlExpectedProperties = GetProperties(typeof(Reference.Control));
-var buttonExpectedProperties = GetProperties(typeof(Reference.Button));
-var dropDownExpectedProperties = GetProperties(typeof(Reference.DropDown));
+TestCase tc1 = ExistenceTestCase(1, [], "Zviratko definováno", "Zviratko");
+TestCase tc2 = ExistenceTestCase(1, [], "Pejsek definován", "Pejsek");
+TestCase tc3 = InheritanceTestCase(1, [], "Správná dědičnost", "Zviratko", "Pejsek");
+TestCase tc4 = VirtualMethodTestCase(1, [], "Zviratko má správnou metodu", "Zviratko", "Zvuk", [], "Void");
+TestCase tc5 = OverridedMethodTestCase(1, [], "Pejsek má správnou metodu", "Pejsek", "Zvuk", [], "Void");
+TestCase tc6 = RunTestCase("Fik", "Rex", "Max", [tc1.Result, tc2.Result, tc3.Result]);
+TestCase tc7 = RunTestCase("Azor", "Alik", "Kira", [tc1.Result, tc2.Result, tc3.Result]);
 
-TestCase t1 = ExistenceTestCase(1, [], "Control definován", "Control");
-TestCase t2 = PropertiesTestCase(1,[], "Control properties", "Control", controlExpectedProperties);
-TestCase t3 = ExistenceTestCase(1, [], "Button definován", "Button");
-TestCase t4 = PropertiesTestCase(1, [], "Button properties", "Button", buttonExpectedProperties);
-TestCase t5 = ExistenceTestCase(1, [], "DropDown definován", "DropDown");
-TestCase t6 = PropertiesTestCase(1, [], "DropDown properties", "DropDown", dropDownExpectedProperties);
-TestCase t7 = InheritanceTestCase(1, [], "Button dědí od Control", "Control", "Button");
-TestCase t8 = InheritanceTestCase(1, [], "DropDown dědí od Control", "Control", "DropDown");
-Reference.Button button = new() { Id = 1, X = 10, Y = 20, Text = "Click me!", Enabled = true};
-TestCase t9 = ComparePropertiesTestCase(1, [t7.Result], """new Button() { Id = 1, X = 10, Y = 20, Text = "Click me!", Enabled = true}""", "Button", [], button);
-Reference.DropDown dropDown = new() { Id = 2, X = 30, Y = 40, Items = ["Option 1", "Option 2", "Option 3"], SelectedIndex = 0};
-TestCase t10 = ComparePropertiesTestCase(1, [t8.Result], """new DropDown() { Id = 2, X = 30, Y = 40, Items = ["Option 1", "Option 2", "Option 3"], SelectedIndex = 0}""", "DropDown", [], dropDown);
-
-TestCase[][] testCases = [[t1],[t2], [t3], [t4], [t5], [t6], [t7], [t8], [t9], [t10]];
+TestCase[][] testCases = [[tc1], [tc2], [tc3], [tc4], [tc5], [tc6, tc7]];
 
 Console.SetOut(stdout);
 
@@ -144,6 +135,82 @@ TestCase ExistenceTestCase(int points, TestResult[] dependencies, string descrip
     });
 }
 
+TestCase VirtualMethodTestCase(int points, TestResult[] dependencies, string description, string typeName, string methodName, string[] expectedParameters, string expectedReturnType)
+{
+    return new TestCase(points, dependencies, dep =>
+    {
+        if(Type.GetType(typeName) is not Type type)
+        {
+            return new TestResult(description, true.ToString(), $"Type {typeName} does not exist", false, 0);
+        }
+     
+        if(type.GetMethod(methodName) is not MethodInfo method)
+        {
+            return new TestResult(description, true.ToString(), $"Method {methodName} does not exist", false, 0);
+        }
+        
+        var actualParameters = method.GetParameters().Select(p => p.ParameterType.Name);
+
+        if(!actualParameters.SequenceEqual(expectedParameters))
+        {
+            return new TestResult(description, $"parametery: {string.Join(", ", expectedParameters)}", $"parametry: {string.Join(", ", actualParameters)}", false, 0);
+        }
+
+        string actualReturnType = method.ReturnType.Name;
+
+        if(actualReturnType != expectedReturnType)
+        {
+            return new TestResult(description, $"return type: {expectedReturnType}", $"return type: {actualReturnType}", false, 0);
+        }
+
+        if(!method.IsVirtual)
+        {
+            return new TestResult(description, "správný typ metody", "typ metody neni správný", false, 0);
+        }
+
+        return new TestResult(description, true.ToString(), true.ToString(), true, points);
+        
+    });
+}
+
+TestCase OverridedMethodTestCase(int points, TestResult[] dependencies, string description, string typeName, string methodName, string[] expectedParameters, string expectedReturnType)
+{
+    return new TestCase(points, dependencies, dep =>
+    {
+        if(Type.GetType(typeName) is not Type type)
+        {
+            return new TestResult(description, true.ToString(), $"Type {typeName} does not exist", false, 0);
+        }
+     
+        if(type.GetMethod(methodName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) is not MethodInfo method)
+        {
+            return new TestResult(description, true.ToString(), $"Method {methodName} does not exist", false, 0);
+        }
+        
+        var actualParameters = method.GetParameters().Select(p => p.ParameterType.Name);
+
+        if(!actualParameters.SequenceEqual(expectedParameters))
+        {
+            return new TestResult(description, $"parametery: {string.Join(", ", expectedParameters)}", $"parametry: {string.Join(", ", actualParameters)}", false, 0);
+        }
+
+        string actualReturnType = method.ReturnType.Name;
+
+        if(actualReturnType != expectedReturnType)
+        {
+            return new TestResult(description, $"return type: {expectedReturnType}", $"return type: {actualReturnType}", false, 0);
+        }
+
+        if(method.DeclaringType != type || method.GetBaseDefinition() == method || !method.IsVirtual)
+        {
+            return new TestResult(description, "správný typ metody", "typ metody neni správný", false, 0);
+        }
+
+        return new TestResult(description, true.ToString(), true.ToString(), true, points);
+        
+    });
+}
+
 TestCase PropertiesTestCase(int points, TestResult[] dependencies, string description, string typeName, IEnumerable<string> expectedProperties)
 {
     return new TestCase(points, dependencies, dep =>
@@ -183,11 +250,11 @@ TestCase InheritanceTestCase(int points, TestResult[] dependencies, string descr
 // zkusim zapsat hodnoty do properties z reference instance jestli jsou pouzite spravne typy
 TestCase ComparePropertiesTestCase(int points, TestResult[] dependencies, string description, string typeName, object[] constructorParameters, object referenceInstance)
 {
-    return new TestCase(points, dependencies, dep =>
+    return new TestCase(points, dependencies, deps =>
     {
-        if(dep.Any(d => !d.IsCorrect))
+        if(deps.Any(d => !d.IsCorrect))
         {
-            return new TestResult(description, $"Podminky: {string.Join(", ", dep.Select(d => d.Description))}", $"Nesplnene: {string.Join(", ", dep.Where(d => !d.IsCorrect).Select(d => d.Description))}", false, 0);
+            return new TestResult(description, $"Podminky: {string.Join(", ", deps.Select(d => d.Description))}", $"Nesplnene: {string.Join(", ", deps.Where(d => !d.IsCorrect).Select(d => d.Description))}", false, 0);
         }
 
         Type referenceType = referenceInstance.GetType();
@@ -245,6 +312,91 @@ TestCase ComparePropertiesTestCase(int points, TestResult[] dependencies, string
     });
 }
 
+TestCase RunTestCase(string name1, string name2, string name3, TestResult[] dependencies)
+{
+    TestCase testCase = new(1, dependencies, deps => 
+    {
+        string description = $"Test {name1}, {name2} a {name3}";
+
+        if(deps.Any(d => !d.IsCorrect))
+        {
+            return new TestResult(description, $"Podminky: {string.Join(", ", deps.Select(d => d.Description))}", $"Nesplnene: {string.Join(", ", deps.Where(d => !d.IsCorrect).Select(d => d.Description))}", false, 0);
+        }
+    
+        string expected1 = Run("Reference.Zviratko", "Reference.Zviratko", name1);
+        string actual1 = Run("Zviratko", "Zviratko", name1);
+
+        if(expected1 != actual1)
+        {
+            return new TestResult(description, expected1, actual1, false, 0);
+        }       
+
+        string expected2 = Run("Reference.Zviratko", "Reference.Pejsek", name2);
+        string actual2 = Run("Pejsek", "Zviratko", name2);
+
+        if(expected2 != actual2)
+        {
+            return new TestResult(description, expected2, actual2, false, 0);
+        }
+
+        string expected3 = Run("Reference.Pejsek", "Reference.Pejsek", name3);
+        string actual3 = Run("Pejsek", "Pejsek", name3);
+
+        if(expected3 != actual3)
+        {
+            return new TestResult(description, expected3, actual3, false, 0);
+        }
+
+        TestConsole.Clear();
+
+        return new TestResult(description, "OK", "OK", true, 1);
+    });
+
+    return testCase;
+}
+
+string Run(string targetTypeName, string typeName, string petName)
+{
+    TestConsole.Clear();
+
+    try
+    {
+        if(Type.GetType(typeName) is not Type type)
+        {
+            return $"Nemůžu najít typ {typeName}";
+        }
+
+        if(Type.GetType(targetTypeName) is not Type targetType)
+        {
+            return $"Nemůžu najít typ {targetTypeName}";
+        }
+
+        if(Activator.CreateInstance(type, [petName]) is not object instance)
+        {
+            return $"Nemůžu vytvořit instanci {typeName}";
+        }
+
+        if(instance.GetType().GetMethod("Zvuk") is not MethodInfo method)
+        {
+            return $"Nemůžu najít metodu Zvuk v {typeName}";
+        }
+
+
+        if(Convert.ChangeType(instance, targetType) is not object convertedInstance)
+        {
+            return $"Nemůžu převést instanci {typeName} na {targetTypeName}";
+        }
+
+        method.Invoke(convertedInstance, null);
+    }
+    catch(Exception ex)
+    {
+        return $"Exception: {ex.Message}";
+    }
+
+    return TestConsole.Message;
+}
+
 static class TestConsole
 {
     private readonly static StringWriter writer = new();
@@ -284,22 +436,20 @@ class TestCase(int maxPoints, TestResult[] dependencies, Func<TestResult[], Test
 
 namespace Reference
 {
-   class Control()
+    class Zviratko(string jmeno)
+    {
+        public string Jmeno { get; set; } = jmeno;
+        public virtual void Zvuk()
         {
-        public int Id {get; set;}
-        public int X {get; set;}
-        public int Y {get; set;}
+            TestConsole.WriteLine(Jmeno);
+        }
     }
 
-    class Button : Control
+    class Pejsek(string jmeno) : Zviratko(jmeno)
     {
-        public string Text {get; set;} = string.Empty;
-        public bool Enabled {get; set;}
-    }
-
-    class DropDown : Control
-    {
-        public string[] Items {get; set;} = [];
-        public int SelectedIndex {get; set;}
+        public override void Zvuk()
+        {
+            TestConsole.WriteLine($"{Jmeno} dela haf haf!");
+        }
     }
 }
