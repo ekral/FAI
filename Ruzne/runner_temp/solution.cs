@@ -4,28 +4,42 @@ class Solution
 {
     public static void KlientskyKod()
     {
-        Zviratko z1 = new Zviratko("Fik");
-        z1.Zvuk();
-        Zviratko z2 = new Pejsek("Rex");
-        z2.Zvuk();
-        Pejsek z3 = new Pejsek("Max");
-        z3.Zvuk();
+        int result = 0;
+
+        //Vypocet v0 = new Vypocet(); // nepujde prelozit
+        
+        Vypocet v1 = new Soucet();  
+        result = v1.Vypocitat(3, 4); // result bude 7
+
+        Vypocet v2 = new Soucin();
+        
+        result = v2.Vypocitat(3, 4); // result bude 12
+        Soucin v3 = new Soucin();
+
+        result = v3.Vypocitat(3, 4); // result bude 12
+        
+        Soucet v4 = new Soucet();
+        result = v4.Vypocitat(3, 4); // result bude 7
     }
 }
 
-class Zviratko(string jmeno)
+abstract class Vypocet
 {
-    public string Jmeno { get; set; } = jmeno;
-    public virtual void Zvuk()
+    public abstract int Vypocitat(int x, int y);
+}
+
+class Soucet() : Vypocet
+{
+    public override int Vypocitat(int x, int y)
     {
-        TestConsole.WriteLine(Jmeno);
+        return x + y;
     }
 }
 
-class Pejsek(string jmeno) : Zviratko(jmeno)
+class Soucin : Vypocet
 {
-    public override void Zvuk()
+    public override int Vypocitat(int x, int y)
     {
-        TestConsole.WriteLine($"{Jmeno} dela haf haf!");
+        return x * y;
     }
 }

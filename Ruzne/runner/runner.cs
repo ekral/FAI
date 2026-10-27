@@ -17,13 +17,15 @@ Console.SetOut(dummyWritter);
 
 TestCase tc1 = ExistenceTestCase(1, [], "Zviratko definováno", "Zviratko");
 TestCase tc2 = ExistenceTestCase(1, [], "Pejsek definován", "Pejsek");
-TestCase tc3 = InheritanceTestCase(1, [], "Správná dědičnost", "Zviratko", "Pejsek");
-TestCase tc4 = VirtualMethodTestCase(1, [], "Zviratko má správnou metodu", "Zviratko", "Zvuk", [], "Void");
-TestCase tc5 = OverridedMethodTestCase(1, [], "Pejsek má správnou metodu", "Pejsek", "Zvuk", [], "Void");
-TestCase tc6 = RunTestCase("Fik", "Rex", "Max", [tc1.Result, tc2.Result, tc3.Result]);
-TestCase tc7 = RunTestCase("Azor", "Alik", "Kira", [tc1.Result, tc2.Result, tc3.Result]);
+TestCase tc3 = ConstructorTestCase(1, [], "Zviratko má správný konstruktor", "Zviratko", ["String"]);
+TestCase tc4 = ConstructorTestCase(1, [], "Pejsek má správný konstruktor", "Pejsek", ["String"]);
+TestCase tc5 = VirtualMethodTestCase(2, [], "Zviratko má správnou metodu", "Zviratko", "Zvuk", [], "Void");
+TestCase tc6 = OverridedMethodTestCase(2, [], "Pejsek má správnou metodu", "Pejsek", "Zvuk", [], "Void");
+TestCase tc7 = InheritanceTestCase(1, [], "Správná dědičnost", "Zviratko", "Pejsek");
+TestCase tc8 = RunTestCase(1, "Fik", "Rex", "Max", [tc1.Result, tc2.Result, tc3.Result, tc4.Result]);
+TestCase tc9 = RunTestCase(1, "Azor", "Alik", "Kira", [tc1.Result, tc2.Result, tc3.Result, tc4.Result]);
 
-TestCase[][] testCases = [[tc1], [tc2], [tc3], [tc4], [tc5], [tc6, tc7]];
+TestCase[][] testCases = [[tc1], [tc2], [tc3], [tc4], [tc5], [tc6], [tc7], [tc8, tc9]];
 
 Console.SetOut(stdout);
 
@@ -47,8 +49,12 @@ foreach(var group in testCases)
 
         var jsonArray = groupAllCorrect switch
         {
-            true => new JsonArray(tc.Result.Description, tc.Result.Expected, tc.Result.Actual, tc.Result.IsCorrect),
-            false => new JsonArray(tc.Result.Description, tc.Result.Expected, $"{tc.Result.Actual} správně, ale chybí související testy: [{string.Join(", ", missing.Select(m => m.Result.Description))}]", groupAllCorrect)
+            true => new JsonArray(tc.Result.Description, tc.Result.Expected, tc.Result.Actual, true),
+            false => tc.Result.IsCorrect switch
+            {
+                true => new JsonArray(tc.Result.Description, tc.Result.Expected, $"{tc.Result.Actual} správně, ale chybí související testy: [{string.Join(", ", missing.Select(m => m.Result.Description))}]", true),
+                false => new JsonArray(tc.Result.Description, tc.Result.Expected, tc.Result.Actual, false)
+            }
         };
 
         array.Add(jsonArray);
@@ -107,17 +113,25 @@ foreach(var group in testCases)
 
 #endif
 
-IEnumerable<string> GetProperties(Type type)
+TestCase ConstructorTestCase(int points, TestResult[] dependencies, string description, string typeName, string[] expectedTypes)
 {
-    var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly).Select(p => p.Name);
-    return properties;
-}
+    return new TestCase(points, dependencies, dep =>
+    {
+        if(Type.GetType(typeName) is not Type type)
+        {
+            return new TestResult(description, string.Join(", ", expectedTypes), $"Typ {typeName} neexistuje", false, 0);
+        }
 
-IEnumerable<string> GetConstructorsTypes(Type type)
-{
-    var types = type.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly).Select(c => string.Join(", ", c.GetParameters().Select(p => p.ParameterType.Name)));
+        var types = type.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly).Select(c => string.Join(", ", c.GetParameters().Select(p => p.ParameterType.Name)));
 
-    return types;
+        if(!types.SequenceEqual(expectedTypes))
+        {
+            return new TestResult(description, string.Join(", ", expectedTypes), string.Join(", ", types), false, 0);
+        }
+
+        return new TestResult(description, true.ToString(), true.ToString(), true, points);
+        
+    });
 }
 
 TestCase ExistenceTestCase(int points, TestResult[] dependencies, string description, string typeName)
@@ -141,12 +155,12 @@ TestCase VirtualMethodTestCase(int points, TestResult[] dependencies, string des
     {
         if(Type.GetType(typeName) is not Type type)
         {
-            return new TestResult(description, true.ToString(), $"Type {typeName} does not exist", false, 0);
+            return new TestResult(description, true.ToString(), $"Typ {typeName} neexistuje", false, 0);
         }
      
         if(type.GetMethod(methodName) is not MethodInfo method)
         {
-            return new TestResult(description, true.ToString(), $"Method {methodName} does not exist", false, 0);
+            return new TestResult(description, true.ToString(), $"Metoda {methodName} neexistuje", false, 0);
         }
         
         var actualParameters = method.GetParameters().Select(p => p.ParameterType.Name);
@@ -179,12 +193,12 @@ TestCase OverridedMethodTestCase(int points, TestResult[] dependencies, string d
     {
         if(Type.GetType(typeName) is not Type type)
         {
-            return new TestResult(description, true.ToString(), $"Type {typeName} does not exist", false, 0);
+            return new TestResult(description, true.ToString(), $"Typ {typeName} neexistuje", false, 0);
         }
      
         if(type.GetMethod(methodName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) is not MethodInfo method)
         {
-            return new TestResult(description, true.ToString(), $"Method {methodName} does not exist", false, 0);
+            return new TestResult(description, true.ToString(), $"Metoda {methodName} neexistuje", false, 0);
         }
         
         var actualParameters = method.GetParameters().Select(p => p.ParameterType.Name);
@@ -211,24 +225,6 @@ TestCase OverridedMethodTestCase(int points, TestResult[] dependencies, string d
     });
 }
 
-TestCase PropertiesTestCase(int points, TestResult[] dependencies, string description, string typeName, IEnumerable<string> expectedProperties)
-{
-    return new TestCase(points, dependencies, dep =>
-    {
-        if(Type.GetType(typeName) is Type type)
-        {
-            var actualProperties = GetProperties(type);
-
-            bool isCorrect = new HashSet<string>(expectedProperties).SetEquals(actualProperties);
-
-            return new TestResult(description, string.Join(", ", expectedProperties), string.Join(", ", actualProperties), isCorrect, isCorrect ? points : 0);
-        }
-        else
-        {
-            return new TestResult(description, string.Join(", ", expectedProperties), "can not evaluate", false, 0);
-        }
-    });
-}
 
 TestCase InheritanceTestCase(int points, TestResult[] dependencies, string description, string parentTypeName, string childTypeName)
 {
@@ -247,80 +243,15 @@ TestCase InheritanceTestCase(int points, TestResult[] dependencies, string descr
     });
 }
 
-// zkusim zapsat hodnoty do properties z reference instance jestli jsou pouzite spravne typy
-TestCase ComparePropertiesTestCase(int points, TestResult[] dependencies, string description, string typeName, object[] constructorParameters, object referenceInstance)
+TestCase RunTestCase(int points, string name1, string name2, string name3, TestResult[] dependencies)
 {
-    return new TestCase(points, dependencies, deps =>
-    {
-        if(deps.Any(d => !d.IsCorrect))
-        {
-            return new TestResult(description, $"Podminky: {string.Join(", ", deps.Select(d => d.Description))}", $"Nesplnene: {string.Join(", ", deps.Where(d => !d.IsCorrect).Select(d => d.Description))}", false, 0);
-        }
-
-        Type referenceType = referenceInstance.GetType();
-        var expectedProperties = referenceType.GetProperties(BindingFlags.Public | BindingFlags.Instance ).Select(p => p.Name);
-
-        if(Type.GetType(typeName) is Type type)
-        {
-            try
-            {
-                object? instance = Activator.CreateInstance(type, constructorParameters);
-
-                if(instance is null)
-                {
-                    return new TestResult(description, $"Muzu vytvorit instanci {type.Name}", $"Neslo vytvorit instanci {type.Name}", false, 0);
-                }
-
-                foreach(var propertyName in expectedProperties)
-                {
-                    PropertyInfo? property = type.GetProperty(propertyName);
-
-                    if(property is null)
-                    {
-                        return new TestResult(description, $"Property {propertyName} existuje", "Property {propertyName} not found", false, 0);
-                    }        
-
-                    object? expectedValue = referenceType.GetProperty(propertyName)?.GetValue(referenceInstance);
-
-                    property.SetValue(instance, expectedValue);
-
-                    object? value = property.GetValue(instance);
-
-                    if(value is null)
-                    {
-                        return new TestResult(description, $"Hodnota {propertyName} neni null", $"Hodnota {propertyName} je null", false, 0);
-                    }
-
-                    if(!value!.Equals(expectedValue))
-                    {
-                        return new TestResult(description, $"{propertyName}: {expectedValue}", $"{propertyName}: {value}", false, 0);
-                    }
-                }
-            }
-            catch(Exception ex)
-            {
-                return new TestResult(description, "Property jsou nastavit na hodnoty", $"Exception: {ex.Message}", false, 0);
-            }
-        }
-        else
-        {
-            return new TestResult(description, $"Existuje typ {typeName}", $"Existuje typ {typeName}", false, 0);
-        }
-
-        return new TestResult(description, "Jde nastavit hodnoty", "Jde nastavit hodnoty", true, points);
-        
-    });
-}
-
-TestCase RunTestCase(string name1, string name2, string name3, TestResult[] dependencies)
-{
-    TestCase testCase = new(1, dependencies, deps => 
+    TestCase testCase = new(points, dependencies, deps => 
     {
         string description = $"Test {name1}, {name2} a {name3}";
 
         if(deps.Any(d => !d.IsCorrect))
         {
-            return new TestResult(description, $"Podminky: {string.Join(", ", deps.Select(d => d.Description))}", $"Nesplnene: {string.Join(", ", deps.Where(d => !d.IsCorrect).Select(d => d.Description))}", false, 0);
+            return new TestResult(description, $"Podmínky: {string.Join(", ", deps.Select(d => d.Description))}", $"Nesplněné: {string.Join(", ", deps.Where(d => !d.IsCorrect).Select(d => d.Description))}", false, 0);
         }
     
         string expected1 = Run("Reference.Zviratko", "Reference.Zviratko", name1);
@@ -349,7 +280,7 @@ TestCase RunTestCase(string name1, string name2, string name3, TestResult[] depe
 
         TestConsole.Clear();
 
-        return new TestResult(description, "OK", "OK", true, 1);
+        return new TestResult(description, "OK", "OK", true, points);
     });
 
     return testCase;
@@ -397,7 +328,7 @@ string Run(string targetTypeName, string typeName, string petName)
     return TestConsole.Message;
 }
 
-static class TestConsole
+public static class TestConsole
 {
     private readonly static StringWriter writer = new();
 
