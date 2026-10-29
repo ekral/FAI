@@ -1,0 +1,53 @@
+﻿@page "/counter"
+@rendermode InteractiveWebAssembly
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+
+<div class="mb-3">
+    <InputNumber class="form-control" @bind-Value="X"/>
+</div>
+<div class="mb-3">
+    <InputNumber class="form-control" @bind-Value="Y" />
+</div>
+
+@foreach (var vypocet in vypocty)
+{
+    <p>@($"konstanta: {vypocet.C} {vypocet.Popis}: {vypocet.VratVysledek(X, Y)}")</p>
+}
+
+@code {
+    private int X { get; set; } = 2;
+    private int Y { get; set; } = 3;
+    
+    Vypocet[] vypocty = [new Soucet(0), new Soucin(0), new Soucet(10)];
+    
+    class Vypocet(string popis, int c)
+    {
+        public string Popis { get; } = popis;
+
+        public int C { get; } = c;
+
+        public virtual int VratVysledek(int x, int y)
+        {
+            return C;
+        }
+    }
+
+    class Soucet(int c) : Vypocet("Součet", c)
+    {
+        public override int VratVysledek(int x, int y)
+        {
+            return x + y + C;
+        }
+    }
+    
+    class Soucin(int c) : Vypocet("Součin", c)
+    {
+        public override int VratVysledek(int x, int y)
+        {
+            return (x * y) + C;
+        }
+    }
+}

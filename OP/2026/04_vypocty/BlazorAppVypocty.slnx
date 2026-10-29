@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="BlazorAppVypocty/BlazorAppVypocty.Client/BlazorAppVypocty.Client.csproj" />
+  <Project Path="BlazorAppVypocty/BlazorAppVypocty/BlazorAppVypocty.csproj" />
+</Solution>
