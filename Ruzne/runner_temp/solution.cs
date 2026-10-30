@@ -1,5 +1,3 @@
-
-
 class Solution
 {
     public static void KlientskyKod()

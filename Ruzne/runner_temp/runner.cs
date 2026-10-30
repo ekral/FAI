@@ -339,15 +339,15 @@ string Run(string targetTypeName, string typeName, object[] constructorArgs)
             return $"Nemůžu převést instanci {typeName} na {targetTypeName}";
         }
 
-        if(targetType.GetMethod("Zvuk") is not MethodInfo method)
+        if(targetType.GetMethod("Metoda") is not MethodInfo method)
         {
-            return $"Nemůžu najít metodu Zvuk v {targetTypeName}";
+            return $"Nemůžu najít metodu Metoda v {targetTypeName}";
         }
 
         object? result2 = method.Invoke(instance, []);
         if(method.Invoke(instance, []) is not string result)
         {
-            return $"Metoda Zvuk v {typeName} nevrátila hodnotu typu string";
+            return $"Metoda Metoda v {typeName} nevrátila hodnotu typu string";
         }
 
         return result;
