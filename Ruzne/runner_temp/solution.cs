@@ -8,7 +8,7 @@ class Solution
         vysledek = t1.Metoda(); // Metoda by měla vrátit "Rodic"
 
         Rodic t2 = new Potomek();
-        vysledek = t2.Metoda(); // Metoda by měla vrátit "Rodic"
+        vysledek = t2.Metoda(); // Metoda by měla vrátit "Potomek"
         
         Potomek t3 = new Potomek();
         vysledek = t3.Metoda(); // Metoda by měla vrátit "Potomek"  
@@ -17,7 +17,7 @@ class Solution
 
 class Rodic
 {
-    public string Metoda()
+    public virtual string Metoda()
     {
         return "Rodic";
     }
@@ -25,7 +25,7 @@ class Rodic
 
 class Potomek : Rodic
 {
-    public new string Metoda()
+    public override string Metoda()
     {
         return "Potomek";     
     }

@@ -13,19 +13,17 @@ var dummyWritter = new StringWriter();
 Console.SetOut(dummyWritter);
 
 TestCase tc1 = ExistenceTestCase(1, [], nameof(Reference.Rodic));
-TestCase tc2 = ConstructorTestCase(1, [], nameof(Reference.Rodic), ["String"]);
-TestCase tc3 = MethodTestCase(1, [], nameof(Reference.Rodic), nameof(Reference.Rodic.Metoda), [], "String", (m, _) => !m.IsVirtual);
-TestCase tc4 = ExistenceTestCase(1, [], nameof(Reference.Potomek));
-TestCase tc5 = ConstructorTestCase(1, [], nameof(Reference.Potomek), ["String"]);
-TestCase tc6 = MethodTestCase(1, [], nameof(Reference.Potomek), nameof(Reference.Potomek.Metoda), [], "String", (m, _) => !m.IsVirtual);
-TestCase tc7 = InheritanceTestCase(1, [], nameof(Reference.Rodic), nameof(Reference.Potomek));
+TestCase tc2 = MethodTestCase(1, [], nameof(Reference.Rodic), nameof(Reference.Rodic.Metoda), [], "String", (m, _) => m.IsVirtual);
+TestCase tc3 = ExistenceTestCase(1, [], nameof(Reference.Potomek));
+TestCase tc4 = MethodTestCase(1, [], nameof(Reference.Potomek), nameof(Reference.Potomek.Metoda), [], "String", (m, t) => m.DeclaringType == t && m.GetBaseDefinition() != m && m.IsVirtual);
+TestCase tc5 = InheritanceTestCase(1, [], nameof(Reference.Rodic), nameof(Reference.Potomek));
 int x = Random.Shared.Next(1, 10);
 int y = Random.Shared.Next(1, 10);
-TestCase tc8 = RunTestCase(1, [tc1.Result], nameof(Reference.Rodic), nameof(Reference.Rodic), []);
-TestCase tc9 = RunTestCase(1, [tc1.Result, tc4.Result], nameof(Reference.Rodic), nameof(Reference.Potomek), []);
-TestCase tc10 = RunTestCase(1, [tc4.Result], nameof(Reference.Rodic), nameof(Reference.Potomek), []);
+TestCase tc6 = RunTestCase(1, [tc1.Result], nameof(Reference.Rodic), nameof(Reference.Rodic), []);
+TestCase tc7 = RunTestCase(1, [tc1.Result, tc4.Result], nameof(Reference.Rodic), nameof(Reference.Potomek), []);
+TestCase tc8 = RunTestCase(1, [tc4.Result], nameof(Reference.Potomek), nameof(Reference.Potomek), []);
 
-TestCase[][] testCases = [[tc1], [tc2], [tc3], [tc4], [tc5], [tc6], [tc7], [tc8, tc9, tc10]];
+TestCase[][] testCases = [[tc1], [tc2], [tc3], [tc4], [tc5], [tc6, tc7, tc8]];
 
     Console.SetOut(stdout);
 
@@ -154,6 +152,8 @@ TestCase ConstructorTestCase(int points, TestResult[] dependencies, string typeN
     });
 }
 
+// overrided: (m, t) => m.DeclaringType == t && m.GetBaseDefinition() != m && m.IsVirtual
+
 TestCase MethodTestCase(int points, TestResult[] dependencies, string typeName, string methodName, string[] expectedParameters, string expectedReturnType, Func<MethodInfo, Type, bool> additionalCheck)
 {
     return new TestCase(points, dependencies, dep =>
@@ -191,82 +191,6 @@ TestCase MethodTestCase(int points, TestResult[] dependencies, string typeName, 
 
         return new TestResult(description, true.ToString(), true.ToString(), true, points);
 
-    });
-}
-
-TestCase VirtualMethodTestCase(int points, TestResult[] dependencies, string description, string typeName, string methodName, string[] expectedParameters, string expectedReturnType)
-{
-    return new TestCase(points, dependencies, dep =>
-    {
-        if(Type.GetType(typeName) is not Type type)
-        {
-            return new TestResult(description, true.ToString(), $"Typ {typeName} neexistuje", false, 0);
-        }
-     
-        if(type.GetMethod(methodName) is not MethodInfo method)
-        {
-            return new TestResult(description, true.ToString(), $"Metoda {methodName} neexistuje", false, 0);
-        }
-        
-        var actualParameters = method.GetParameters().Select(p => p.ParameterType.Name);
-
-        if(!actualParameters.SequenceEqual(expectedParameters))
-        {
-            return new TestResult(description, $"parametery: {string.Join(", ", expectedParameters)}", $"parametry: {string.Join(", ", actualParameters)}", false, 0);
-        }
-
-        string actualReturnType = method.ReturnType.Name;
-
-        if(actualReturnType != expectedReturnType)
-        {
-            return new TestResult(description, $"return type: {expectedReturnType}", $"return type: {actualReturnType}", false, 0);
-        }
-
-        if(!method.IsVirtual)
-        {
-            return new TestResult(description, "správný typ metody", "typ metody neni správný", false, 0);
-        }
-
-        return new TestResult(description, true.ToString(), true.ToString(), true, points);
-
-    });
-}
-
-TestCase OverridedMethodTestCase(int points, TestResult[] dependencies, string description, string typeName, string methodName, string[] expectedParameters, string expectedReturnType)
-{
-    return new TestCase(points, dependencies, dep =>
-    {
-        if(Type.GetType(typeName) is not Type type)
-        {
-            return new TestResult(description, true.ToString(), $"Typ {typeName} neexistuje", false, 0);
-        }
-     
-        if(type.GetMethod(methodName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) is not MethodInfo method)
-        {
-            return new TestResult(description, true.ToString(), $"Metoda {methodName} neexistuje", false, 0);
-        }
-        
-        var actualParameters = method.GetParameters().Select(p => p.ParameterType.Name);
-
-        if(!actualParameters.SequenceEqual(expectedParameters))
-        {
-            return new TestResult(description, $"parametery: {string.Join(", ", expectedParameters)}", $"parametry: {string.Join(", ", actualParameters)}", false, 0);
-        }
-
-        string actualReturnType = method.ReturnType.Name;
-
-        if(actualReturnType != expectedReturnType)
-        {
-            return new TestResult(description, $"return type: {expectedReturnType}", $"return type: {actualReturnType}", false, 0);
-        }
-
-        if(method.DeclaringType != type || method.GetBaseDefinition() == method || !method.IsVirtual)
-        {
-            return new TestResult(description, "správný typ metody", "typ metody neni správný", false, 0);
-        }
-
-        return new TestResult(description, true.ToString(), true.ToString(), true, points);
-        
     });
 }
 
@@ -399,7 +323,7 @@ namespace Reference
 {
     class Rodic
     {
-        public string Metoda()
+        public virtual string Metoda()
         {
             return "Rodic";
         }
@@ -407,7 +331,7 @@ namespace Reference
 
     class Potomek : Rodic
     {
-        public new string Metoda()
+        public override string Metoda()
         {
             return "Potomek";     
         }
