@@ -4,32 +4,31 @@ class Solution
 {
     public static void KlientskyKod()
     {
-        string zvuk = string.Empty;
+        string vysledek = string.Empty;
 
-        Zviratko z1 = new Zviratko("Fik");
-        zvuk = z1.Zvuk(); // Metoda by měla vrátit jméno zvířátka, tedy "Fik"
+        Rodic t1 = new Rodic();
+        vysledek = t1.Metoda(); // Metoda by měla vrátit "Rodic"
 
-        Zviratko z2 = new Pejsek("Rex");
-        zvuk = z2.Zvuk(); // Metoda by měla vrátit jméno zvířátka, tedy "Rex"
+        Rodic t2 = new Potomek();
+        vysledek = t2.Metoda(); // Metoda by měla vrátit "Rodic"
         
-        Pejsek z3 = new Pejsek("Max");
-        zvuk = z3.Zvuk(); // Metoda by měla vrátit "Max dela haf haf!"  
+        Potomek t3 = new Potomek();
+        vysledek = t3.Metoda(); // Metoda by měla vrátit "Potomek"  
     }
 }
 
-class Zviratko(string jmeno)
+class Rodic
 {
-    public string Jmeno { get; set; } = jmeno;
-    public string Zvuk()
+    public string Metoda()
     {
-        return Jmeno;
+        return "Rodic";
     }
 }
 
-class Pejsek(string jmeno) : Zviratko(jmeno)
+class Potomek : Rodic
 {
-    public string Zvuk()
+    public new string Metoda()
     {
-        return $"{Jmeno} dela haf haf!";        
+        return "Potomek";     
     }
 }

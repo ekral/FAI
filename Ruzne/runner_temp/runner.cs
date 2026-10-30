@@ -12,18 +12,18 @@ var stdout = Console.Out;
 var dummyWritter = new StringWriter();
 Console.SetOut(dummyWritter);
 
-TestCase tc1 = ExistenceTestCase(1, [], "Zviratko definováno", nameof(Reference.Zviratko));
-TestCase tc2 = ConstructorTestCase(1, [], "Zviratko má správný konstruktor", nameof(Reference.Zviratko), ["String"]);
-TestCase tc3 = NormalMethodTestCase(1, [], "Zviratko má správnou metodu", nameof(Reference.Zviratko), nameof(Reference.Zviratko.Zvuk), [], "String");
-TestCase tc4 = ExistenceTestCase(1, [], "Pejsek definován", nameof(Reference.Pejsek));
-TestCase tc5 = ConstructorTestCase(1, [], "Pejsek má správný konstruktor", nameof(Reference.Pejsek), ["String"]);
-TestCase tc6 = NormalMethodTestCase(1, [], "Pejsek má správnou metodu", nameof(Reference.Pejsek), nameof(Reference.Pejsek.Zvuk), [], "String");
-TestCase tc7 = InheritanceTestCase(1, [], "Správná dědičnost Pejsek", nameof(Reference.Zviratko), nameof(Reference.Pejsek));
+TestCase tc1 = ExistenceTestCase(1, [], nameof(Reference.Rodic));
+TestCase tc2 = ConstructorTestCase(1, [], nameof(Reference.Rodic), ["String"]);
+TestCase tc3 = MethodTestCase(1, [], nameof(Reference.Rodic), nameof(Reference.Rodic.Metoda), [], "String", (m, _) => !m.IsVirtual);
+TestCase tc4 = ExistenceTestCase(1, [], nameof(Reference.Potomek));
+TestCase tc5 = ConstructorTestCase(1, [], nameof(Reference.Potomek), ["String"]);
+TestCase tc6 = MethodTestCase(1, [], nameof(Reference.Potomek), nameof(Reference.Potomek.Metoda), [], "String", (m, _) => !m.IsVirtual);
+TestCase tc7 = InheritanceTestCase(1, [], nameof(Reference.Rodic), nameof(Reference.Potomek));
 int x = Random.Shared.Next(1, 10);
 int y = Random.Shared.Next(1, 10);
-TestCase tc8 = RunTestCase(1, [tc1.Result], nameof(Reference.Zviratko), nameof(Reference.Zviratko), ["Fik"]);
-TestCase tc9 = RunTestCase(1, [tc1.Result, tc4.Result], nameof(Reference.Zviratko), nameof(Reference.Pejsek), ["Rex"]);
-TestCase tc10 = RunTestCase(1, [tc4.Result], nameof(Reference.Pejsek), nameof(Reference.Pejsek), ["Max"]);
+TestCase tc8 = RunTestCase(1, [tc1.Result], nameof(Reference.Rodic), nameof(Reference.Rodic), []);
+TestCase tc9 = RunTestCase(1, [tc1.Result, tc4.Result], nameof(Reference.Rodic), nameof(Reference.Potomek), []);
+TestCase tc10 = RunTestCase(1, [tc4.Result], nameof(Reference.Rodic), nameof(Reference.Potomek), []);
 
 TestCase[][] testCases = [[tc1], [tc2], [tc3], [tc4], [tc5], [tc6], [tc7], [tc8, tc9, tc10]];
 
@@ -113,8 +113,10 @@ foreach(var group in testCases)
 
 #endif
 
-TestCase ExistenceTestCase(int points, TestResult[] dependencies, string description, string typeName)
+TestCase ExistenceTestCase(int points, TestResult[] dependencies, string typeName)
 {
+    string description = $"Typ {typeName} definován";
+
     return new TestCase(points, dependencies, dep =>
     {
         if(Type.GetType(typeName) is null)
@@ -129,8 +131,10 @@ TestCase ExistenceTestCase(int points, TestResult[] dependencies, string descrip
 }
 
 
-TestCase ConstructorTestCase(int points, TestResult[] dependencies, string description, string typeName, string[] expectedTypes)
+TestCase ConstructorTestCase(int points, TestResult[] dependencies, string typeName, string[] expectedTypes)
 {
+    string description = $"Typ {typeName} má správný konstruktor";
+
     return new TestCase(points, dependencies, dep =>
     {
         if(Type.GetType(typeName) is not Type type)
@@ -150,10 +154,12 @@ TestCase ConstructorTestCase(int points, TestResult[] dependencies, string descr
     });
 }
 
-TestCase NormalMethodTestCase(int points, TestResult[] dependencies, string description, string typeName, string methodName, string[] expectedParameters, string expectedReturnType)
+TestCase MethodTestCase(int points, TestResult[] dependencies, string typeName, string methodName, string[] expectedParameters, string expectedReturnType, Func<MethodInfo, Type, bool> additionalCheck)
 {
     return new TestCase(points, dependencies, dep =>
     {
+        string description = $"Typ {typeName} má správnou metodu {methodName}";
+
         if(Type.GetType(typeName) is not Type type)
         {
             return new TestResult(description, true.ToString(), $"Typ {typeName} neexistuje", false, 0);
@@ -178,7 +184,7 @@ TestCase NormalMethodTestCase(int points, TestResult[] dependencies, string desc
             return new TestResult(description, $"return type: {expectedReturnType}", $"return type: {actualReturnType}", false, 0);
         }
 
-        if(method.IsVirtual)
+        if(!additionalCheck(method, type))
         {
             return new TestResult(description, "správný typ metody", "typ metody neni správný", false, 0);
         }
@@ -265,10 +271,12 @@ TestCase OverridedMethodTestCase(int points, TestResult[] dependencies, string d
 }
 
 
-TestCase InheritanceTestCase(int points, TestResult[] dependencies, string description, string parentTypeName, string childTypeName)
+TestCase InheritanceTestCase(int points, TestResult[] dependencies, string parentTypeName, string childTypeName)
 {
     return new TestCase(points, dependencies, dep =>
     {
+        string description = $"Typ {childTypeName} dědí z {parentTypeName}";
+
         if(Type.GetType(parentTypeName) is Type parentType && Type.GetType(childTypeName) is Type childType)
         {
             bool isCorrect = childType.BaseType == parentType;
@@ -389,20 +397,19 @@ public static class TestConsole
 
 namespace Reference
 {
-    class Zviratko(string jmeno)
+    class Rodic
     {
-        public string Jmeno { get; set; } = jmeno;
-        public string Zvuk()
+        public string Metoda()
         {
-            return Jmeno;
+            return "Rodic";
         }
     }
 
-    class Pejsek(string jmeno) : Zviratko(jmeno)
+    class Potomek : Rodic
     {
-        public string Zvuk()
+        public new string Metoda()
         {
-            return $"{Jmeno} dela haf haf!";        
+            return "Potomek";     
         }
     }
 }
