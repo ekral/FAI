@@ -1,4 +1,5 @@
 #define ASSIGNMENT_REPORT
+#nullable enable
 
 using System;
 using System.IO;
@@ -13,10 +14,10 @@ Console.SetOut(dummyWritter);
 
 TestCase tc1 = ExistenceTestCase(1, [], "Zviratko definováno", nameof(Reference.Zviratko));
 TestCase tc2 = ConstructorTestCase(1, [], "Zviratko má správný konstruktor", nameof(Reference.Zviratko), ["String"]);
-TestCase tc3 = VirtualMethodTestCase(1, [], "Zviratko má správnou metodu", nameof(Reference.Zviratko), nameof(Reference.Zviratko.Zvuk), [], "String");
+TestCase tc3 = NormalMethodTestCase(1, [], "Zviratko má správnou metodu", nameof(Reference.Zviratko), nameof(Reference.Zviratko.Zvuk), [], "String");
 TestCase tc4 = ExistenceTestCase(1, [], "Pejsek definován", nameof(Reference.Pejsek));
 TestCase tc5 = ConstructorTestCase(1, [], "Pejsek má správný konstruktor", nameof(Reference.Pejsek), ["String"]);
-TestCase tc6 = OverridedMethodTestCase(1, [], "Pejsek má správnou metodu", nameof(Reference.Pejsek), nameof(Reference.Pejsek.Zvuk), [], "String");
+TestCase tc6 = NormalMethodTestCase(1, [], "Pejsek má správnou metodu", nameof(Reference.Pejsek), nameof(Reference.Pejsek.Zvuk), [], "String");
 TestCase tc7 = InheritanceTestCase(1, [], "Správná dědičnost Pejsek", nameof(Reference.Zviratko), nameof(Reference.Pejsek));
 int x = Random.Shared.Next(1, 10);
 int y = Random.Shared.Next(1, 10);
@@ -146,6 +147,44 @@ TestCase ConstructorTestCase(int points, TestResult[] dependencies, string descr
 
         return new TestResult(description, true.ToString(), true.ToString(), true, points);
         
+    });
+}
+
+TestCase NormalMethodTestCase(int points, TestResult[] dependencies, string description, string typeName, string methodName, string[] expectedParameters, string expectedReturnType)
+{
+    return new TestCase(points, dependencies, dep =>
+    {
+        if(Type.GetType(typeName) is not Type type)
+        {
+            return new TestResult(description, true.ToString(), $"Typ {typeName} neexistuje", false, 0);
+        }
+     
+        if(type.GetMethod(methodName) is not MethodInfo method)
+        {
+            return new TestResult(description, true.ToString(), $"Metoda {methodName} neexistuje", false, 0);
+        }
+        
+        var actualParameters = method.GetParameters().Select(p => p.ParameterType.Name);
+
+        if(!actualParameters.SequenceEqual(expectedParameters))
+        {
+            return new TestResult(description, $"parametery: {string.Join(", ", expectedParameters)}", $"parametry: {string.Join(", ", actualParameters)}", false, 0);
+        }
+
+        string actualReturnType = method.ReturnType.Name;
+
+        if(actualReturnType != expectedReturnType)
+        {
+            return new TestResult(description, $"return type: {expectedReturnType}", $"return type: {actualReturnType}", false, 0);
+        }
+
+        if(method.IsVirtual)
+        {
+            return new TestResult(description, "správný typ metody", "typ metody neni správný", false, 0);
+        }
+
+        return new TestResult(description, true.ToString(), true.ToString(), true, points);
+
     });
 }
 
@@ -353,7 +392,7 @@ namespace Reference
     class Zviratko(string jmeno)
     {
         public string Jmeno { get; set; } = jmeno;
-        public virtual string Zvuk()
+        public string Zvuk()
         {
             return Jmeno;
         }
@@ -361,7 +400,7 @@ namespace Reference
 
     class Pejsek(string jmeno) : Zviratko(jmeno)
     {
-        public override string Zvuk()
+        public string Zvuk()
         {
             return $"{Jmeno} dela haf haf!";        
         }
