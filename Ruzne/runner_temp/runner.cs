@@ -3,34 +3,28 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Globalization;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Text.Json;
-using System.Text.RegularExpressions;
 using System.Text.Json.Nodes;
-using System.Text;
 
 var stdout = Console.Out;
 var dummyWritter = new StringWriter();
 Console.SetOut(dummyWritter);
 
-TestCase tc1 = ExistenceTestCase(1, [], "Vypocet definován", "Vypocet");
-TestCase tc2 = ExistenceTestCase(1, [], "Soucet definován", "Soucet");
-TestCase tc3 = ExistenceTestCase(1, [], "Soucin definován", "Soucin");
-TestCase tc4 = AbstractMethodTestCase(1, [], "Vypocet má správnou metodu", "Vypocet", "Vypocitat", ["Int32", "Int32"], "Int32");
-TestCase tc5 = OverridedMethodTestCase(1, [], "Soucet má správnou metodu", "Soucet", "Vypocitat", ["Int32", "Int32"], "Int32");
-TestCase tc6 = OverridedMethodTestCase(1, [], "Soucin má správnou metodu", "Soucin", "Vypocitat", ["Int32", "Int32"], "Int32");
-TestCase tc7 = InheritanceTestCase(1, [], "Správná dědičnost Soucet", "Vypocet", "Soucet");
-TestCase tc8 = InheritanceTestCase(1, [], "Správná dědičnost Soucin", "Vypocet", "Soucin");
+TestCase tc1 = ExistenceTestCase(1, [], "Zviratko definováno", nameof(Reference.Zviratko));
+TestCase tc2 = ConstructorTestCase(1, [], "Zviratko má správný konstruktor", nameof(Reference.Zviratko), ["String"]);
+TestCase tc3 = VirtualMethodTestCase(1, [], "Zviratko má správnou metodu", nameof(Reference.Zviratko), nameof(Reference.Zviratko.Zvuk), [], "String");
+TestCase tc4 = ExistenceTestCase(1, [], "Pejsek definován", nameof(Reference.Pejsek));
+TestCase tc5 = ConstructorTestCase(1, [], "Pejsek má správný konstruktor", nameof(Reference.Pejsek), ["String"]);
+TestCase tc6 = OverridedMethodTestCase(1, [], "Pejsek má správnou metodu", nameof(Reference.Pejsek), nameof(Reference.Pejsek.Zvuk), [], "String");
+TestCase tc7 = InheritanceTestCase(1, [], "Správná dědičnost Pejsek", nameof(Reference.Zviratko), nameof(Reference.Pejsek));
 int x = Random.Shared.Next(1, 10);
 int y = Random.Shared.Next(1, 10);
-TestCase tc9 = RunTestCase(1, [tc1.Result, tc2.Result, tc3.Result], "Vypocet", "Soucet", x, y);
-TestCase tc10 = RunTestCase(1, [tc1.Result, tc2.Result, tc3.Result], "Vypocet", "Soucin", x, y);
-TestCase tc11 = RunTestCase(1, [tc1.Result, tc2.Result, tc3.Result], "Soucet", "Soucet", x, y);
-TestCase tc12 = RunTestCase(1, [tc1.Result, tc2.Result, tc3.Result], "Soucin", "Soucin", x, y);
+TestCase tc8 = RunTestCase(1, [tc1.Result], nameof(Reference.Zviratko), nameof(Reference.Zviratko), ["Fik"]);
+TestCase tc9 = RunTestCase(1, [tc1.Result, tc4.Result], nameof(Reference.Zviratko), nameof(Reference.Pejsek), ["Rex"]);
+TestCase tc10 = RunTestCase(1, [tc4.Result], nameof(Reference.Pejsek), nameof(Reference.Pejsek), ["Max"]);
 
-TestCase[][] testCases = [[tc1], [tc2], [tc3], [tc4], [tc5], [tc6], [tc7], [tc8], [tc9, tc10, tc11, tc12]];
+TestCase[][] testCases = [[tc1], [tc2], [tc3], [tc4], [tc5], [tc6], [tc7], [tc8, tc9, tc10]];
 
     Console.SetOut(stdout);
 
@@ -133,7 +127,29 @@ TestCase ExistenceTestCase(int points, TestResult[] dependencies, string descrip
     });
 }
 
-TestCase AbstractMethodTestCase(int points, TestResult[] dependencies, string description, string typeName, string methodName, string[] expectedParameters, string expectedReturnType)
+
+TestCase ConstructorTestCase(int points, TestResult[] dependencies, string description, string typeName, string[] expectedTypes)
+{
+    return new TestCase(points, dependencies, dep =>
+    {
+        if(Type.GetType(typeName) is not Type type)
+        {
+            return new TestResult(description, string.Join(", ", expectedTypes), $"Typ {typeName} neexistuje", false, 0);
+        }
+
+        var types = type.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly).Select(c => string.Join(", ", c.GetParameters().Select(p => p.ParameterType.Name)));
+
+        if(!types.SequenceEqual(expectedTypes))
+        {
+            return new TestResult(description, string.Join(", ", expectedTypes), string.Join(", ", types), false, 0);
+        }
+
+        return new TestResult(description, true.ToString(), true.ToString(), true, points);
+        
+    });
+}
+
+TestCase VirtualMethodTestCase(int points, TestResult[] dependencies, string description, string typeName, string methodName, string[] expectedParameters, string expectedReturnType)
 {
     return new TestCase(points, dependencies, dep =>
     {
@@ -161,7 +177,7 @@ TestCase AbstractMethodTestCase(int points, TestResult[] dependencies, string de
             return new TestResult(description, $"return type: {expectedReturnType}", $"return type: {actualReturnType}", false, 0);
         }
 
-        if(!method.IsVirtual || !method.IsAbstract)
+        if(!method.IsVirtual)
         {
             return new TestResult(description, "správný typ metody", "typ metody neni správný", false, 0);
         }
@@ -227,19 +243,19 @@ TestCase InheritanceTestCase(int points, TestResult[] dependencies, string descr
     });
 }
 
-TestCase RunTestCase(int points, TestResult[] dependencies, string targetTypeName, string typeName, int x, int y)
+TestCase RunTestCase(int points, TestResult[] dependencies, string targetTypeName, string typeName, object[] constructorArgs)
 {
     TestCase testCase = new(points, dependencies, deps => 
     {
-        string description = $"objekt: {typeName} metoda: {targetTypeName}.Vypocitat({x}, {y})";
+        string description = $"objekt: {typeName} metoda: {targetTypeName}.Zvuk()";
 
         if(deps.Any(d => !d.IsCorrect))
         {
             return new TestResult(description, $"Podmínky: {string.Join(", ", deps.Select(d => d.Description))}", $"Nesplněné: {string.Join(", ", deps.Where(d => !d.IsCorrect).Select(d => d.Description))}", false, 0);
         }
     
-        string expected = Run($"Reference.{targetTypeName}", $"Reference.{typeName}", x, y);
-        string actual = Run(targetTypeName, typeName, x, y);
+        string expected = Run($"Reference.{targetTypeName}", $"Reference.{typeName}", constructorArgs);
+        string actual = Run(targetTypeName, typeName, constructorArgs);
 
         if(expected != actual)
         {
@@ -252,7 +268,7 @@ TestCase RunTestCase(int points, TestResult[] dependencies, string targetTypeNam
     return testCase;
 }
 
-string Run(string targetTypeName, string typeName, int x, int y)
+string Run(string targetTypeName, string typeName, object[] constructorArgs)
 {
     try
     {
@@ -266,7 +282,7 @@ string Run(string targetTypeName, string typeName, int x, int y)
             return $"Nemůžu najít typ {targetTypeName}";
         }
 
-        if(Activator.CreateInstance(type) is not object instance)
+        if(Activator.CreateInstance(type, constructorArgs) is not object instance)
         {
             return $"Nemůžu vytvořit instanci {typeName}";
         }
@@ -276,17 +292,18 @@ string Run(string targetTypeName, string typeName, int x, int y)
             return $"Nemůžu převést instanci {typeName} na {targetTypeName}";
         }
 
-        if(targetType.GetMethod("Vypocitat") is not MethodInfo method)
+        if(targetType.GetMethod("Zvuk") is not MethodInfo method)
         {
-            return $"Nemůžu najít metodu Vypocitat v {targetTypeName}";
+            return $"Nemůžu najít metodu Zvuk v {targetTypeName}";
         }
 
-        if(method.Invoke(instance, [x, y]) is not int result)
+        object? result2 = method.Invoke(instance, []);
+        if(method.Invoke(instance, []) is not string result)
         {
-            return $"Metoda Vypocitat v {typeName} nevrátila hodnotu typu int";
+            return $"Metoda Zvuk v {typeName} nevrátila hodnotu typu string";
         }
 
-        return $"Vysledek: {result}";
+        return result;
     }
     catch(Exception ex)
     {
@@ -314,26 +331,39 @@ class TestCase(int maxPoints, TestResult[] dependencies, Func<TestResult[], Test
     }
 }
 
-namespace Reference
+public static class TestConsole
 {
-    abstract class Vypocet
+    private readonly static StringWriter writer = new();
+
+    public static string Message {get => writer.ToString();}
+
+    public static void Clear()
     {
-        public abstract int Vypocitat(int x, int y);
+        writer.GetStringBuilder().Clear();
     }
 
-    class Soucet() : Vypocet
+    public static void WriteLine(string message)
     {
-        public override int Vypocitat(int x, int y)
+        writer.Write(message);
+    }
+}
+
+namespace Reference
+{
+    class Zviratko(string jmeno)
+    {
+        public string Jmeno { get; set; } = jmeno;
+        public virtual string Zvuk()
         {
-            return x + y;
+            return Jmeno;
         }
     }
 
-    class Soucin : Vypocet
+    class Pejsek(string jmeno) : Zviratko(jmeno)
     {
-        public override int Vypocitat(int x, int y)
+        public override string Zvuk()
         {
-            return x * y;
+            return $"{Jmeno} dela haf haf!";        
         }
     }
 }

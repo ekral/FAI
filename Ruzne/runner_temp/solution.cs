@@ -1,45 +1,33 @@
-using System;
-
 class Solution
 {
     public static void KlientskyKod()
     {
-        int result = 0;
+        string zvuk = string.Empty;
 
-        //Vypocet v0 = new Vypocet(); // nepujde prelozit
-        
-        Vypocet v1 = new Soucet();  
-        result = v1.Vypocitat(3, 4); // result bude 7
+        Zviratko z1 = new Zviratko("Fik");
+        zvuk = z1.Zvuk(); // Metoda by měla vrátit jméno zvířátka, tedy "Fik"
 
-        Vypocet v2 = new Soucin();
+        Zviratko z2 = new Pejsek("Rex");
+        zvuk = z2.Zvuk(); // Metoda by měla vrátit "Rex dela haf haf!"
         
-        result = v2.Vypocitat(3, 4); // result bude 12
-        Soucin v3 = new Soucin();
-
-        result = v3.Vypocitat(3, 4); // result bude 12
-        
-        Soucet v4 = new Soucet();
-        result = v4.Vypocitat(3, 4); // result bude 7
+        Pejsek z3 = new Pejsek("Max");
+        zvuk = z3.Zvuk(); // Metoda by měla vrátit "Max dela haf haf!"  
     }
 }
 
-abstract class Vypocet
+class Zviratko(string jmeno)
 {
-    public abstract int Vypocitat(int x, int y);
-}
-
-class Soucet() : Vypocet
-{
-    public override int Vypocitat(int x, int y)
+    public string Jmeno { get; set; } = jmeno;
+    public virtual string Zvuk()
     {
-        return x + y;
+        return Jmeno;
     }
 }
 
-class Soucin : Vypocet
+class Pejsek(string jmeno) : Zviratko(jmeno)
 {
-    public override int Vypocitat(int x, int y)
+    public override string Zvuk()
     {
-        return x * y;
+        return $"{Jmeno} dela haf haf!";        
     }
 }
