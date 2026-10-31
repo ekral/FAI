@@ -76,25 +76,28 @@ Console.WriteLine(json.ToJsonString(new JsonSerializerOptions { WriteIndented = 
 
 #if ASSIGNMENT_REPORT
 
-Console.WriteLine($"Výsledné body se spočítají jako: (počet bodů za splněné kritéria / {maxPoints}) x celkový počet bodů za úlohu.");
+Console.WriteLine($"<p>Výsledné body se spočítají jako: (počet bodů za splněné kritéria / {maxPoints}) x celkový počet bodů za úlohu.</p>");
 
 int i = 1;
+
+Console.WriteLine($"<ol>");
 
 foreach(var group in testCases)
 {
     string indentation = string.Empty;
 
-    if(group.Count() > 1)
+    bool isGroup = group.Count() > 1;
+
+    if(isGroup)
     {
         int groupMaxPoints = group.Sum(g => g.MaxPoints);
-        Console.WriteLine($"Skupina úkolů, které musí být splněny současně (body: {groupMaxPoints}):");
-
-        indentation = "  - ";
+        Console.WriteLine($"<li>Skupina úkolů, které musí být splněny současně (body: {groupMaxPoints}):");
+        Console.WriteLine($"<ul>");
     }
 
     foreach(var testCase in group)
     {
-        Console.Write($"{indentation}{i}. {testCase.Result.Description} (body: {testCase.MaxPoints}).");
+        Console.Write($"<li>{i}. {testCase.Result.Description} (body: {testCase.MaxPoints}).");
 
         if(testCase.Dependencies.Length > 0)
         {
@@ -103,11 +106,19 @@ foreach(var group in testCases)
             Console.Write(")");
         }
 
-        Console.Write(Console.Out.NewLine);
+        Console.WriteLine($"</li>");
 
         i++;
     }
+    
+    if(isGroup)
+    {
+        Console.WriteLine($"</ul>");
+        Console.WriteLine($"</li>");
+    }   
 }
+
+Console.WriteLine($"</ol>");
 
 #endif
 
