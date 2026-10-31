@@ -9,53 +9,36 @@ var stdout = Console.Out;
 var dummyWritter = new StringWriter();
 Console.SetOut(dummyWritter);
 
-bool tZakaznikProperty = typeof(Zakaznik).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly).Where(p => p.GetSetMethod() is null).Select(p => p.Name).SequenceEqual(["Jmeno", "Email"]);
-bool tFakturaProperty = typeof(Faktura).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly).Where(p => p.GetSetMethod() is null).Select(p => p.Name).SequenceEqual(["PocetPolozek", "CenaCelkem", "Zakaznik"]);
-
-var zakaznikKonstruktory = typeof(Zakaznik).GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
-bool tZakaznikKonstruktor = zakaznikKonstruktory.Length == 1 && zakaznikKonstruktory.First().GetParameters().Select(p => p.Name).SequenceEqual(["jmeno", "email"]);
-var fakturaKonstruktory = typeof(Faktura).GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
-bool tFakturaKonstruktor = fakturaKonstruktory.Length == 1 && fakturaKonstruktory.First().GetParameters().Select(p => p.Name).SequenceEqual(["pocetPolozek", "cenaCelkem", "jmeno", "email"]);
-
-bool tZadnaDedicnost = !typeof(Zakaznik).IsAssignableFrom(typeof(Faktura)) && !typeof(Faktura).IsAssignableFrom(typeof(Zakaznik));
-
-bool t1;
-
-try
+bool test(Func<bool> action)
 {
-    Faktura f1 = new(3, 1500.50m, "Petr", "petr@example.com");
+    bool result;
 
-    t1 = f1.PocetPolozek == 3 && f1.CenaCelkem == 1500.50m && f1.Zakaznik?.Jmeno == "Petr" && f1.Zakaznik?.Email == "petr@example.com";
-}
-catch
-{
-    t1 = false;
+    try
+    {
+        result = action.Invoke();
+    }
+    catch
+    {
+        result = false;
+    }
+
+    return result;
 }
 
-bool t2;
-
-try
-{
-    Faktura f2 = new(5, 2500.00m, "Jana", "jana@example.com");
-
-    t2 = f2.PocetPolozek == 5 && f2.CenaCelkem == 2500.00m && f2.Zakaznik?.Jmeno == "Jana" && f2.Zakaznik?.Email == "jana@example.com";
-}
-catch
-{
-    t2 = false;
-}
+bool t1 = test( () => { TestConsole.Message = string.Empty; Solution.Test(2, 1); return TestConsole.Message == "vetsi je a: 2"; });
+bool t2 = test( () => { TestConsole.Message = string.Empty; Solution.Test(1, 3); return TestConsole.Message == "vetsi je b: 3"; });
+bool t3 = test( () => { TestConsole.Message = string.Empty; Solution.Test(6, 5); return TestConsole.Message == "vetsi je a: 6"; });
+bool t4 = test( () => { TestConsole.Message = string.Empty; Solution.Test(7, 8); return TestConsole.Message == "vetsi je b: 8"; });
+bool t5 = test( () => { TestConsole.Message = string.Empty; Solution.Test(4, 4); return TestConsole.Message == "jsou stejne: a: 4 b: 4"; });
+bool t6 = test( () => { TestConsole.Message = string.Empty; Solution.Test(9, 9); return TestConsole.Message == "jsou stejne: a: 9 b: 9"; });
+bool t7 = test( () => { TestConsole.Message = string.Empty; Solution.Test(4, 9); return TestConsole.Message != "jsou stejne: a: 4 b: 9"; });
 
 int body = 0;
 
-if (tZakaznikProperty) body += 1;
-if (tZakaznikKonstruktor) body += 1;
-if (tFakturaProperty) body += 1;
-if (tFakturaKonstruktor) body += 1;
-if (tZadnaDedicnost) body += 1;
-if (t1) body += 1;
-if (t2) body += 1;
+if (t1 && t2 && t3 && t4) body += 1;
+if (t5 && t6 && t7) body += 1;
 
-double fraction = body / 7.0;
+double fraction = body / 2.0;
 
 Console.SetOut(stdout);
 
@@ -68,13 +51,13 @@ string jsonOutput = $$"""
     "testresults":
     [
         ["Nazev testu", "Ocekavana hodnota", "Vysledek", "iscorrect"],
-        ["property Jmeno a Email", "OK", "{{message(tZakaznikProperty)}}", {{jsonBool(tZakaznikProperty)}}],
-        ["property PocetPolozek a CenaCelkem", "OK", "{{message(tFakturaProperty)}}", {{jsonBool(tFakturaProperty)}}],
-        ["konstruktor Zakaznik", "OK", "{{message(tZakaznikKonstruktor)}}", {{jsonBool(tZakaznikKonstruktor)}}],
-        ["konstruktor Faktura", "OK", "{{message(tFakturaKonstruktor)}}", {{jsonBool(tFakturaKonstruktor)}}],
-        ["Dedicnost", "NE", "{{message(tZadnaDedicnost)}}", {{jsonBool(tZadnaDedicnost)}}],
-        ["new Faktura(3, 1500.50m, \"Petr\", \"petr@example.com\")", "OK", "{{message(t1)}}", {{jsonBool(t1)}}],
-        ["new Faktura(5, 2500.00m, \"Jana\", \"jana@example.com\")", "OK", "{{message(t2)}}", {{jsonBool(t2)}}]
+        ["Test(2, 1)", "vetsi je a: 2", "{{message(t1)}}", {{jsonBool(t1)}}],
+        ["Test(1, 2)", "vetsi je b: 2", "{{message(t2)}}", {{jsonBool(t2)}}],
+        ["Test(6, 5)", "vetsi je a: 6", "{{message(t3)}}", {{jsonBool(t3)}}],
+        ["Test(7, 8)", "vetsi je b: 8", "{{message(t4)}}", {{jsonBool(t4)}}],
+        ["Test(4, 4)", "jsou stejne: a: 4 b: 4", "{{message(t5)}}", {{jsonBool(t5)}}],
+        ["Test(9, 9)", "jsou stejne: a: 9 b: 9", "{{message(t6)}}", {{jsonBool(t6)}}],
+        ["Test(4, 9)", "nejsou stejne", "{{message(t7)}}", {{jsonBool(t7)}}]
     ]
 }
 """;
@@ -83,10 +66,10 @@ Console.Write(jsonOutput);
 
 public static class TestConsole
 {
-    public static string Message {get; private set;} = string.Empty;
+    public static string Message {get; set;} = string.Empty;
 
     public static void WriteLine(string message)
     {
-        Message = message;
+        Message += message;
     }
 }
