@@ -2,31 +2,31 @@ class Solution
 {
     public static void KlientskyKod()
     {
-        string vysledek = string.Empty;
+        PotomekA a = new PotomekA()
+        {
+            X = 1,
+            Y = 2
+        };
 
-        Rodic t1 = new Rodic();
-        vysledek = t1.Metoda(); // Metoda by měla vrátit "Rodic"
-
-        Rodic t2 = new Potomek();
-        vysledek = t2.Metoda(); // Metoda by měla vrátit "Potomek"
-        
-        Potomek t3 = new Potomek();
-        vysledek = t3.Metoda(); // Metoda by měla vrátit "Potomek"  
+        PotomekB b = new PotomekB()
+        {
+            X = 3,
+            Z = 4
+        };
     }
 }
 
 class Rodic
 {
-    public virtual string Metoda()
-    {
-        return "Rodic";
-    }
+    public int X {get; set;}
 }
 
-class Potomek : Rodic
+class PotomekA : Rodic
 {
-    public override string Metoda()
-    {
-        return "Potomek";     
-    }
+    public int Y {get; set;}
+}
+
+class PotomekB : Rodic
+{
+    public int Z {get; set;}
 }
