@@ -1,7 +1,9 @@
 #define ASSIGNMENT_REPORT
+#pragma warning disable CS8321
 #nullable enable
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -12,19 +14,34 @@ var stdout = Console.Out;
 var dummyWritter = new StringWriter();
 Console.SetOut(dummyWritter);
 
-TestCase tc1 = ExistenceTestCase(1, [], nameof(Reference.TridaA));
-TestCase tc2 = ConstructorTestCase(1, [], nameof(Reference.TridaA), [typeof(int).Name]);
-TestCase tc3 = PropertyTestCase(1, [], nameof(Reference.TridaA), nameof(Reference.TridaA.X), typeof(int).Name, (p, _) => p.GetMethod?.IsPublic ?? false);
-TestCase tc4 = ExistenceTestCase(1, [], nameof(Reference.TridaB));
-TestCase tc5 = ConstructorTestCase(1, [], nameof(Reference.TridaB), [typeof(int).Name]);
-TestCase tc6 = PropertyTestCase(1, [], nameof(Reference.TridaB), nameof(Reference.TridaB.A), nameof(Reference.TridaA), (p, _) => p.GetMethod?.IsPublic ?? false);
+TestCase tc1 = ExistenceTestCase(1, [], nameof(Reference.Rodic));
+TestCase tc2 = ConstructorTestCase(1, [], nameof(Reference.Rodic), [typeof(int).Name, typeof(int).Name]);
+TestCase tc3 = FieldTestCase(1, [], nameof(Reference.Rodic), "x", typeof(int).Name, (f, _) => f.IsPrivate);
+TestCase tc4 = FieldTestCase(1, [], nameof(Reference.Rodic), "y", typeof(int).Name, (f, _) => f.IsFamily);
+TestCase tc5 = MethodTestCase(1, [], nameof(Reference.Rodic), "VypisX", [], typeof(void).Name, (m, _) => m.IsPublic);
+TestCase tc6 = ExistenceTestCase(1, [], nameof(Reference.Potomek));
+TestCase tc7 = ConstructorTestCase(1, [], nameof(Reference.Potomek), [typeof(int).Name, typeof(int).Name]);
+TestCase tc8 = MethodTestCase(1, [], nameof(Reference.Potomek), "VypisY", [], typeof(void).Name, (m, _) => m.IsPublic);
+TestCase tc9 = InheritanceTestCase(1, [], nameof(Reference.Rodic), nameof(Reference.Potomek));
 
-string testFunction(object o, Type t) => GetPropertiesValues(o, t);
+string testFunctionX(object o, Type t)
+{
+    TestConsole.Clear();
+    RunMethod(o, t, "VypisX", []);
+    return TestConsole.Message;
+}
 
-TestCase tc7 = RunTestCase(1, [], nameof(Reference.TridaA), nameof(Reference.TridaA), [1], [], testFunction);
-TestCase tc8 = RunTestCase(1, [], nameof(Reference.TridaB), nameof(Reference.TridaB), [2], [], testFunction);
+string testFunctionY(object o, Type t)
+{
+    TestConsole.Clear();
+    RunMethod(o, t, "VypisY", []);
+    return TestConsole.Message;
+}
 
-TestCase[][] testCases = [[tc1], [tc2], [tc3], [tc4], [tc5], [tc6], [tc7, tc8]];
+TestCase tc10 = RunTestCase(1, [tc9.Result], nameof(Reference.Rodic), nameof(Reference.Rodic), [1, 2], [], testFunctionX);
+TestCase tc11 = RunTestCase(1, [tc9.Result], nameof(Reference.Potomek), nameof(Reference.Potomek), [3, 4], [], testFunctionY);
+
+TestCase[][] testCases = [[tc1], [tc2], [tc3], [tc4], [tc5], [tc6], [tc7], [tc8], [tc9], [tc10, tc11]];
 
 Console.SetOut(stdout);
 
@@ -168,6 +185,74 @@ TestCase ConstructorTestCase(int points, TestResult[] dependencies, string typeN
     });
 }
 
+TestCase FieldTestCase(int points, TestResult[] dependencies, string typeName, string fieldName, string expectedTypeName, Func<FieldInfo, Type, bool> additionalCheck)
+{
+    return new TestCase(points, dependencies, dep =>
+    {
+        string description = $"Typ {typeName} má správný field {fieldName}";
+
+        if(Type.GetType(typeName) is not Type type)
+        {
+            return new TestResult(description, true.ToString(), $"Typ {typeName} neexistuje", false, 0);
+        }
+     
+        if(type.GetField(fieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly) is not FieldInfo field)
+        {
+            return new TestResult(description, true.ToString(), $"Field {fieldName} neexistuje", false, 0);
+        }
+        
+
+        string actualTypeName = field.FieldType.Name;
+
+        if(expectedTypeName != actualTypeName)
+        {
+            return new TestResult(description, $"type: {expectedTypeName}", $"type: {actualTypeName}", false, 0);
+        }
+
+        if(!additionalCheck(field, type))
+        {
+            return new TestResult(description, "správný typ fieldu", "typ fieldu není správný", false, 0);
+        }
+
+        return new TestResult(description, true.ToString(), true.ToString(), true, points);
+
+    });
+}
+
+TestCase PropertyTestCase(int points, TestResult[] dependencies, string typeName, string propertyName, string expectedTypeName, Func<PropertyInfo, Type, bool> additionalCheck)
+{
+    return new TestCase(points, dependencies, dep =>
+    {
+        string description = $"Typ {typeName} má správnou property {propertyName}";
+
+        if(Type.GetType(typeName) is not Type type)
+        {
+            return new TestResult(description, true.ToString(), $"Typ {typeName} neexistuje", false, 0);
+        }
+     
+        if(type.GetProperty(propertyName) is not PropertyInfo property)
+        {
+            return new TestResult(description, true.ToString(), $"Property {propertyName} neexistuje", false, 0);
+        }
+        
+
+        string actualTypeName = property.PropertyType.Name;
+
+        if(expectedTypeName != actualTypeName)
+        {
+            return new TestResult(description, $"type: {expectedTypeName}", $"type: {actualTypeName}", false, 0);
+        }
+
+        if(!additionalCheck(property, type))
+        {
+            return new TestResult(description, "správný typ property", "typ property není správný", false, 0);
+        }
+
+        return new TestResult(description, true.ToString(), true.ToString(), true, points);
+
+    });
+}
+
 // overrided: (m, t) => m.DeclaringType == t && m.GetBaseDefinition() != m && m.IsVirtual
 
 TestCase MethodTestCase(int points, TestResult[] dependencies, string typeName, string methodName, string[] expectedParameters, string expectedReturnType, Func<MethodInfo, Type, bool> additionalCheck)
@@ -203,40 +288,6 @@ TestCase MethodTestCase(int points, TestResult[] dependencies, string typeName, 
         if(!additionalCheck(method, type))
         {
             return new TestResult(description, "správný typ metody", "typ metody neni správný", false, 0);
-        }
-
-        return new TestResult(description, true.ToString(), true.ToString(), true, points);
-
-    });
-}
-
-TestCase PropertyTestCase(int points, TestResult[] dependencies, string typeName, string propertyName, string expectedTypeName, Func<PropertyInfo, Type, bool> additionalCheck)
-{
-    return new TestCase(points, dependencies, dep =>
-    {
-        string description = $"Typ {typeName} má správnou property {propertyName}";
-
-        if(Type.GetType(typeName) is not Type type)
-        {
-            return new TestResult(description, true.ToString(), $"Typ {typeName} neexistuje", false, 0);
-        }
-     
-        if(type.GetProperty(propertyName) is not PropertyInfo property)
-        {
-            return new TestResult(description, true.ToString(), $"Property {propertyName} neexistuje", false, 0);
-        }
-        
-
-        string actualTypeName = property.PropertyType.Name;
-
-        if(expectedTypeName != actualTypeName)
-        {
-            return new TestResult(description, $"type: {expectedTypeName}", $"type: {actualTypeName}", false, 0);
-        }
-
-        if(!additionalCheck(property, type))
-        {
-            return new TestResult(description, "správný typ property", "typ property není správný", false, 0);
         }
 
         return new TestResult(description, true.ToString(), true.ToString(), true, points);
@@ -347,7 +398,7 @@ string RunMethod(object instance, Type type, string methodName, object[] paramet
         return "Void";
     }
 
-    return result.ToString();
+    return result?.ToString() ?? "null";
 }
 
 string GetPropertiesValues(object instance, Type type)
@@ -370,7 +421,7 @@ string GetPropertiesValues(object instance, Type type)
            return $"{{ {GetPropertiesValues(value, valueType)} }}"; 
         }
 
-        return value.ToString();
+        return value?.ToString() ?? "null";
     }
 
     var values = properties.OrderBy(p => p.Name).Select(p => $"{p.Name} ({p.DeclaringType?.Name ?? ""}): {GetPropertyValue(p)}");
@@ -413,19 +464,33 @@ public static class TestConsole
 
     public static void WriteLine(string message)
     {
+        message = message.Length > 256 ? message[..256] : message;
+
+        message = System.Net.WebUtility.HtmlEncode(message);
+
         writer.Write(message);
     }
 }
 
 namespace Reference
 {
-    class TridaA(int x)
+    class Rodic(int x, int y)
     {
-        public int X {get; set;} = x;
+        private int x = x;
+        protected int y = y;
+
+        public void VypisX()
+        {
+            TestConsole.WriteLine($"x: {x}, y: {y}");
+        }
+
     }
 
-    class TridaB(int x)
+    class Potomek(int x, int y) : Rodic(x, y)
     {
-        public TridaA A {get; set;} = new TridaA(x);
+        public void VypisY()
+        {
+            TestConsole.WriteLine($"y: {y}");
+        }
     }
 }

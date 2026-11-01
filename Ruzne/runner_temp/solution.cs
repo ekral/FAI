@@ -2,20 +2,30 @@ class Solution
 {
     public static void KlientskyKod()
     {
-        TridaA a = new TridaA(1);
-        System.Diagnostics.Debug.Assert(a.X == 1);
+        Rodic rodic = new Rodic(1, 2);
+        rodic.VypisX(); // vypíše "x: 1, y: 2"
 
-        TridaB b = new TridaB(1);
-        System.Diagnostics.Debug.Assert(b.A.X == 1);
+        Potomek potomek = new Potomek(3, 4);
+        potomek.VypisY(); // vypíše "y: 4"
     }
 }
 
-class TridaA(int x)
+class Rodic(int x, int y)
 {
-    public int X {get; set;} = x;
+    private int x = x;
+    protected int y = y;
+
+    public void VypisX()
+    {
+        TestConsole.WriteLine($"x: {x}, y: {y}");
+    }
+
 }
 
-class TridaB(int x)
+class Potomek(int x, int y) : Rodic(x, y)
 {
-    public TridaA A {get; set;} = new TridaA(x);
+    public void VypisY()
+    {
+        TestConsole.WriteLine($"y: {y}");
+    }
 }
