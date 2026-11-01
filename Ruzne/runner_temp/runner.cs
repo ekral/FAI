@@ -16,13 +16,13 @@ TestCase tc1 = ExistenceTestCase(1, [], nameof(Reference.TridaA));
 TestCase tc2 = ConstructorTestCase(1, [], nameof(Reference.TridaA), [typeof(int).Name]);
 TestCase tc3 = PropertyTestCase(1, [], nameof(Reference.TridaA), nameof(Reference.TridaA.X), typeof(int).Name, (p, _) => p.GetMethod?.IsPublic ?? false);
 TestCase tc4 = ExistenceTestCase(1, [], nameof(Reference.TridaB));
-TestCase tc5 = ConstructorTestCase(1, [], nameof(Reference.TridaB), [typeof(int).Name, typeof(int).Name]);
+TestCase tc5 = ConstructorTestCase(1, [], nameof(Reference.TridaB), [typeof(int).Name]);
 TestCase tc6 = PropertyTestCase(1, [], nameof(Reference.TridaB), nameof(Reference.TridaB.A), nameof(Reference.TridaA), (p, _) => p.GetMethod?.IsPublic ?? false);
 
 string testFunction(object o, Type t) => GetPropertiesValues(o, t);
 
 TestCase tc7 = RunTestCase(1, [], nameof(Reference.TridaA), nameof(Reference.TridaA), [1], [], testFunction);
-TestCase tc8 = RunTestCase(1, [], nameof(Reference.TridaB), nameof(Reference.TridaB), [2, 3], [], testFunction);
+TestCase tc8 = RunTestCase(1, [], nameof(Reference.TridaB), nameof(Reference.TridaB), [2], [], testFunction);
 
 TestCase[][] testCases = [[tc1], [tc2], [tc3], [tc4], [tc5], [tc6], [tc7, tc8]];
 
@@ -424,7 +424,7 @@ namespace Reference
         public int X {get; set;} = x;
     }
 
-    class TridaB(int x, int y)
+    class TridaB(int x)
     {
         public TridaA A {get; set;} = new TridaA(x);
     }
