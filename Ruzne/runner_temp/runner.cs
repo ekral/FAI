@@ -21,17 +21,12 @@ TestCase tc6 = ExistenceTestCase(1, [], nameof(Reference.PotomekB));
 TestCase tc7 = PropertyTestCase(1, [], nameof(Reference.PotomekB), nameof(Reference.PotomekB.Z), "Int32", (p, _) => p.GetMethod?.IsPublic ?? false);
 TestCase tc8 = InheritanceTestCase(1, [], nameof(Reference.Rodic), nameof(Reference.PotomekB));
 
-string testFunctionA(object o, Type t)
-{
+string testFunction(object o, Type t) => GetPropertiesValues(o, t);
 
+TestCase tc9 = RunTestCase(1, [tc5.Result], nameof(Reference.PotomekA), nameof(Reference.PotomekA), [], [(nameof(Reference.PotomekA.X), 2), (nameof(Reference.PotomekA.Y), 3)] ,testFunction);
+TestCase tc10 = RunTestCase(1, [tc8.Result], nameof(Reference.PotomekB), nameof(Reference.PotomekB), [], [(nameof(Reference.PotomekA.X), 4), (nameof(Reference.PotomekB.Z), 5)] ,testFunction);
 
-
-}
-
-TestCase tc9 = RunTestCase(1, [tc1.Result], nameof(Reference.Rodic), nameof(Reference.Rodic), [], testFunction);
-TestCase tc10 = RunTestCase(1, [tc1.Result, tc3.Result], nameof(Reference.Rodic), nameof(Reference.Potomek), [], testFunction);
-
-TestCase[][] testCases = [[tc1], [tc2], [tc3], [tc4], [tc5], [tc6, tc7, tc8]];
+TestCase[][] testCases = [[tc1], [tc2], [tc3], [tc4], [tc5], [tc6], [tc7], [tc8], [tc9, tc10]];
 
 Console.SetOut(stdout);
 
@@ -264,19 +259,19 @@ TestCase InheritanceTestCase(int points, TestResult[] dependencies, string paren
     });
 }
 
-TestCase RunTestCase(int points, TestResult[] dependencies, string targetTypeName, string typeName, object[] constructorArgs, Func<object, Type, string> testFunction)
+TestCase RunTestCase(int points, TestResult[] dependencies, string targetTypeName, string typeName, object[] constructorArgs, (string, object)[] propertyParameters, Func<object, Type, string> testFunction)
 {
     TestCase testCase = new(points, dependencies, deps => 
     {
-        string description = $"objekt: {typeName} metoda: {targetTypeName}.Zvuk()";
+        string description = $"reference: {targetTypeName} objekt: {targetTypeName}, args: [{string.Join(", ", constructorArgs)}], properties: [{string.Join(", ", propertyParameters.Select(p => $"{p.Item1}={p.Item2}"))}]";
 
         if(deps.Any(d => !d.IsCorrect))
         {
             return new TestResult(description, $"Podmínky: {string.Join(", ", deps.Select(d => d.Description))}", $"Nesplněné: {string.Join(", ", deps.Where(d => !d.IsCorrect).Select(d => d.Description))}", false, 0);
         }
     
-        string expected = Run($"Reference.{targetTypeName}", $"Reference.{typeName}", constructorArgs, testFunction);
-        string actual = Run(targetTypeName, typeName, constructorArgs, testFunction);
+        string expected = Run($"Reference.{targetTypeName}", $"Reference.{typeName}", constructorArgs, propertyParameters, testFunction);
+        string actual = Run(targetTypeName, typeName, constructorArgs, propertyParameters, testFunction);
 
         if(expected != actual)
         {
@@ -289,7 +284,7 @@ TestCase RunTestCase(int points, TestResult[] dependencies, string targetTypeNam
     return testCase;
 }
 
-string Run(string targetTypeName, string typeName, object[] constructorArgs, Func<object, Type, string> testFunction)
+string Run(string targetTypeName, string typeName, object[] constructorArgs, (string, object)[] propertyParameters, Func<object, Type, string> testFunction)
 {
     try
     {
@@ -313,6 +308,16 @@ string Run(string targetTypeName, string typeName, object[] constructorArgs, Fun
             return $"Nemůžu převést instanci {typeName} na {targetTypeName}";
         }
 
+        foreach(var (propertyName, value) in propertyParameters)
+        {
+            if(type.GetProperty(propertyName) is not PropertyInfo property)
+            {
+                return $"Nemůžu najít property {propertyName} v {typeName}";
+            }
+
+           property.SetValue(instance, value);
+        }
+
         return testFunction(instance, targetType);
 
     }
@@ -321,6 +326,7 @@ string Run(string targetTypeName, string typeName, object[] constructorArgs, Fun
         return $"Exception: {ex.Message}";
     }
 }
+
 
 string RunMethod(object instance, Type type, string methodName, object[] parameters )
 {
@@ -338,6 +344,17 @@ string RunMethod(object instance, Type type, string methodName, object[] paramet
 
     return result.ToString();
 }
+
+string GetPropertiesValues(object instance, Type type)
+{
+    var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+    var values = properties.OrderBy(p => p.Name).Select(p => $"{p.Name} ({p.DeclaringType?.Name ?? ""}): {p.GetValue(instance)}");
+
+    return string.Join(", ", values);
+}
+
+
 
 record TestResult(string Description, string Expected, string Actual, bool IsCorrect, int Points);
 
