@@ -13,17 +13,18 @@ var dummyWritter = new StringWriter();
 Console.SetOut(dummyWritter);
 
 TestCase tc1 = ExistenceTestCase(1, [], nameof(Reference.TridaA));
-TestCase tc2 = PropertyTestCase(1, [], nameof(Reference.TridaA), nameof(Reference.TridaA.X), "Int32", (p, _) => p.GetMethod?.IsPublic ?? false);
-TestCase tc3 = ExistenceTestCase(1, [], nameof(Reference.TridaB));
-TestCase tc4 = PropertyTestCase(1, [], nameof(Reference.TridaB), nameof(Reference.TridaB.A), nameof(Reference.TridaA), (p, _) => p.GetMethod?.IsPublic ?? false);
+TestCase tc2 = ConstructorTestCase(1, [], nameof(Reference.TridaA), [typeof(int).Name]);
+TestCase tc3 = PropertyTestCase(1, [], nameof(Reference.TridaA), nameof(Reference.TridaA.X), typeof(int).Name, (p, _) => p.GetMethod?.IsPublic ?? false);
+TestCase tc4 = ExistenceTestCase(1, [], nameof(Reference.TridaB));
+TestCase tc5 = ConstructorTestCase(1, [], nameof(Reference.TridaB), [typeof(int).Name, typeof(int).Name]);
+TestCase tc6 = PropertyTestCase(1, [], nameof(Reference.TridaB), nameof(Reference.TridaB.A), nameof(Reference.TridaA), (p, _) => p.GetMethod?.IsPublic ?? false);
 
 string testFunction(object o, Type t) => GetPropertiesValues(o, t);
 
-TestCase tc5 = RunTestCase(1, [], nameof(Reference.TridaA), nameof(Reference.TridaA), [1], [], testFunction);
-TestCase tc6 = RunTestCase(1, [], nameof(Reference.TridaB), nameof(Reference.TridaB), [2, 3], [], testFunction);
+TestCase tc7 = RunTestCase(1, [], nameof(Reference.TridaA), nameof(Reference.TridaA), [1], [], testFunction);
+TestCase tc8 = RunTestCase(1, [], nameof(Reference.TridaB), nameof(Reference.TridaB), [2, 3], [], testFunction);
 
-
-TestCase[][] testCases = [[tc1], [tc2], [tc3], [tc4], [tc5], [tc6]];
+TestCase[][] testCases = [[tc1], [tc2], [tc3], [tc4], [tc5], [tc6], [tc7, tc8]];
 
 Console.SetOut(stdout);
 
@@ -148,14 +149,21 @@ TestCase ConstructorTestCase(int points, TestResult[] dependencies, string typeN
             return new TestResult(description, string.Join(", ", expectedTypes), $"Typ {typeName} neexistuje", false, 0);
         }
 
-        var types = type.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly).Select(c => string.Join(", ", c.GetParameters().Select(p => p.ParameterType.Name)));
+        var constructor = type.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly).FirstOrDefault();
+
+        if(constructor is null)
+        {
+            return new TestResult(description, string.Join(", ", expectedTypes), $"Typ {typeName} nemá žádný konstruktor", false, 0);
+        }
+
+        var types = constructor.GetParameters().Select(p => p.ParameterType.Name);
 
         if(!types.SequenceEqual(expectedTypes))
         {
             return new TestResult(description, string.Join(", ", expectedTypes), string.Join(", ", types), false, 0);
         }
 
-        return new TestResult(description, true.ToString(), true.ToString(), true, points);
+        return new TestResult(description, string.Join(", ", expectedTypes), string.Join(", ", types), true, points);
         
     });
 }
