@@ -2,31 +2,20 @@ class Solution
 {
     public static void KlientskyKod()
     {
-        PotomekA a = new PotomekA()
-        {
-            X = 1,
-            Y = 2
-        };
+        TridaA a = new TridaA(1);
+        System.Diagnostics.Debug.Assert(a.X == 1);
 
-        PotomekB b = new PotomekB()
-        {
-            X = 3,
-            Z = 4
-        };
+        TridaB b = new TridaB(1, 2);
+        System.Diagnostics.Debug.Assert(b.A.X == 1);
     }
 }
 
-class Rodic
+class TridaA(int x)
 {
-    public int X {get; set;}
+    public int X {get; set;} = x;
 }
 
-class PotomekA : Rodic
+class TridaB(int x, int y)
 {
-    public int Y {get; set;}
-}
-
-class PotomekB : Rodic
-{
-    public int Z {get; set;}
+    public TridaA A {get; set;} = new TridaA(x);
 }

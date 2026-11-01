@@ -12,21 +12,18 @@ var stdout = Console.Out;
 var dummyWritter = new StringWriter();
 Console.SetOut(dummyWritter);
 
-TestCase tc1 = ExistenceTestCase(1, [], nameof(Reference.Rodic));
-TestCase tc2 = PropertyTestCase(1, [], nameof(Reference.Rodic), nameof(Reference.Rodic.X), "Int32", (p, _) => p.GetMethod?.IsPublic ?? false);
-TestCase tc3 = ExistenceTestCase(1, [], nameof(Reference.PotomekA));
-TestCase tc4 = PropertyTestCase(1, [], nameof(Reference.PotomekA), nameof(Reference.PotomekA.Y), "Int32", (p, _) => p.GetMethod?.IsPublic ?? false);
-TestCase tc5 = InheritanceTestCase(1, [], nameof(Reference.Rodic), nameof(Reference.PotomekA));
-TestCase tc6 = ExistenceTestCase(1, [], nameof(Reference.PotomekB));
-TestCase tc7 = PropertyTestCase(1, [], nameof(Reference.PotomekB), nameof(Reference.PotomekB.Z), "Int32", (p, _) => p.GetMethod?.IsPublic ?? false);
-TestCase tc8 = InheritanceTestCase(1, [], nameof(Reference.Rodic), nameof(Reference.PotomekB));
+TestCase tc1 = ExistenceTestCase(1, [], nameof(Reference.TridaA));
+TestCase tc2 = PropertyTestCase(1, [], nameof(Reference.TridaA), nameof(Reference.TridaA.X), "Int32", (p, _) => p.GetMethod?.IsPublic ?? false);
+TestCase tc3 = ExistenceTestCase(1, [], nameof(Reference.TridaB));
+TestCase tc4 = PropertyTestCase(1, [], nameof(Reference.TridaB), nameof(Reference.TridaB.A), nameof(Reference.TridaA), (p, _) => p.GetMethod?.IsPublic ?? false);
 
 string testFunction(object o, Type t) => GetPropertiesValues(o, t);
 
-TestCase tc9 = RunTestCase(1, [tc5.Result], nameof(Reference.PotomekA), nameof(Reference.PotomekA), [], [(nameof(Reference.PotomekA.X), 2), (nameof(Reference.PotomekA.Y), 3)] ,testFunction);
-TestCase tc10 = RunTestCase(1, [tc8.Result], nameof(Reference.PotomekB), nameof(Reference.PotomekB), [], [(nameof(Reference.PotomekA.X), 4), (nameof(Reference.PotomekB.Z), 5)] ,testFunction);
+TestCase tc5 = RunTestCase(1, [], nameof(Reference.TridaA), nameof(Reference.TridaA), [1], [], testFunction);
+TestCase tc6 = RunTestCase(1, [], nameof(Reference.TridaB), nameof(Reference.TridaB), [2, 3], [], testFunction);
 
-TestCase[][] testCases = [[tc1], [tc2], [tc3], [tc4], [tc5], [tc6], [tc7], [tc8], [tc9, tc10]];
+
+TestCase[][] testCases = [[tc1], [tc2], [tc3], [tc4], [tc5], [tc6]];
 
 Console.SetOut(stdout);
 
@@ -349,7 +346,26 @@ string GetPropertiesValues(object instance, Type type)
 {
     var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
-    var values = properties.OrderBy(p => p.Name).Select(p => $"{p.Name} ({p.DeclaringType?.Name ?? ""}): {p.GetValue(instance)}");
+    string GetPropertyValue(PropertyInfo property)
+    {
+        object? value = property.GetValue(instance);
+
+        if(value is null)
+        {
+            return "null";
+        }
+
+        Type valueType = value.GetType();
+
+        if (valueType.IsClass && valueType != typeof(string))
+        {
+           return $"{{ {GetPropertiesValues(value, valueType)} }}"; 
+        }
+
+        return value.ToString();
+    }
+
+    var values = properties.OrderBy(p => p.Name).Select(p => $"{p.Name} ({p.DeclaringType?.Name ?? ""}): {GetPropertyValue(p)}");
 
     return string.Join(", ", values);
 }
@@ -395,18 +411,13 @@ public static class TestConsole
 
 namespace Reference
 {
-    class Rodic
+    class TridaA(int x)
     {
-        public int X {get; set;}
+        public int X {get; set;} = x;
     }
 
-    class PotomekA : Rodic
+    class TridaB(int x, int y)
     {
-        public int Y {get; set;}
-    }
-
-    class PotomekB : Rodic
-    {
-        public int Z {get; set;}
+        public TridaA A {get; set;} = new TridaA(x);
     }
 }
