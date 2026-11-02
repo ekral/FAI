@@ -3,7 +3,6 @@
 #nullable enable
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -14,42 +13,11 @@ var stdout = Console.Out;
 var dummyWritter = new StringWriter();
 Console.SetOut(dummyWritter);
 
-int[] pole = [1,2,3];
-int[] kopie = [..pole];
+TestCase tc1 = RunTestCase(1, "Constructor exception: ne, Method exception: ne" , [], nameof(Reference.Solution), nameof(Reference.Solution), [], [], new TestFunction(false, false).Function);
+TestCase tc2 = RunTestCase(1, "Constructor exception: ano, Method exception: ne" , [], nameof(Reference.Solution), nameof(Reference.Solution), [], [], new TestFunction(true, false).Function);
+TestCase tc3 = RunTestCase(1, "Constructor exception: ne, Method exception: ano" , [], nameof(Reference.Solution), nameof(Reference.Solution), [], [], new TestFunction(false, true).Function);
 
-string Text(int count, bool called, bool exceptionThrown)
-{
-    return $"Počet volání Dispose: {count}, Metoda zavolána: {called}, Bez try-catch bloku: {exceptionThrown}";
-}
-
-TestCase tc1 = new (1, [], dep =>
-{
-    string description = "Použití using s výjimkou v konstruktoru";
-    string expected = Text(1, true, true);
-
-    Trida.ThrowConstructor = true;
-    Trida.ThrowWriteLine = false;
-
-    Trida.DisposedCount = 0;
-    Trida.MethodCalled = false;
-    bool exceptionThrown = false;  
-    
-    try
-    {
-        Solution.Run();
-    }
-    catch (Exception)
-    {
-        exceptionThrown = true;
-    }
-
-    string actual = Text(Trida.DisposedCount, Trida.MethodCalled, exceptionThrown);
-
-    return new TestResult(description, expected, actual, expected == actual, actual == expected ? 1 : 0);
-});
-
-
-TestCase[][] testCases = [[tc1]];
+TestCase[][] testCases = [[tc1], [tc2], [tc3]];
 
 Console.SetOut(stdout);
 
@@ -323,11 +291,11 @@ TestCase InheritanceTestCase(int points, TestResult[] dependencies, string paren
     });
 }
 
-TestCase RunTestCase(int points, TestResult[] dependencies, string targetTypeName, string typeName, object[] constructorArgs, (string, object)[] propertyParameters, Func<object, Type, string> testFunction)
+TestCase RunTestCase(int points, string info, TestResult[] dependencies, string targetTypeName, string typeName, object[] constructorArgs, (string, object)[] propertyParameters, Func<object, Type, string> testFunction)
 {
     TestCase testCase = new(points, dependencies, deps => 
     {
-        string description = $"reference: {targetTypeName} objekt: {targetTypeName}, args: [{string.Join(", ", constructorArgs)}], properties: [{string.Join(", ", propertyParameters.Select(p => $"{p.Item1}={p.Item2}"))}]";
+        string description = $"{info}, reference: {targetTypeName} objekt: {targetTypeName}, args: [{string.Join(", ", constructorArgs)}], properties: [{string.Join(", ", propertyParameters.Select(p => $"{p.Item1}: {p.Item2}"))}]";
 
         if(deps.Any(d => !d.IsCorrect))
         {
@@ -392,7 +360,7 @@ string Run(string targetTypeName, string typeName, object[] constructorArgs, (st
 }
 
 
-string RunMethod(object instance, Type type, string methodName, object[] parameters )
+object? RunMethod(object instance, Type type, string methodName, object[] parameters )
 {
     if(type.GetMethod(methodName) is not MethodInfo method)
     {
@@ -401,12 +369,7 @@ string RunMethod(object instance, Type type, string methodName, object[] paramet
 
     object? result = method.Invoke(instance, parameters);
 
-    if(result is null)
-    {
-        return "Void";
-    }
-
-    return result?.ToString() ?? "null";
+    return result;
 }
 
 string GetPropertiesValues(object instance, Type type)
@@ -480,13 +443,16 @@ public static class TestConsole
     }
 }
 
-class Reference
+namespace Reference
 {
-    public static void Run()
+    class Solution
     {
-        using Trida trida = new Trida();
-        
-        trida.Metoda();
+        public void Run()
+        {
+            using Trida trida = new Trida();
+            
+            trida.Metoda();
+        }
     }
 }
 
@@ -518,5 +484,35 @@ class Trida : IDisposable
     public void Dispose()
     {
         ++DisposedCount;
+    }
+}
+
+class TestFunction(bool throwConstructor, bool throwWriteLine)
+{
+    public string Function(object instance, Type type)
+    {
+        Trida.ThrowConstructor = throwConstructor;
+        Trida.ThrowWriteLine = throwWriteLine;
+
+        Trida.DisposedCount = 0;
+        Trida.MethodCalled = false;
+
+        bool exceptionThrown = false;
+
+        try
+        {
+            if(type.GetMethod("Run") is not MethodInfo method)
+            {
+                return $"Nemůžu najít metodu Run v {type.Name}";
+            }
+
+            method.Invoke(instance, null);
+        }
+        catch (Exception)
+        {
+            exceptionThrown = true;
+        }
+
+        return $"Počet volání Dispose: {Trida.DisposedCount}, Metoda zavolána: {Trida.MethodCalled}, Vyvolaná výjimka: {exceptionThrown}";
     }
 }

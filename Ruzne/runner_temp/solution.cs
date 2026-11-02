@@ -1,6 +1,6 @@
 class Solution
 {
-    public static void Run()
+    public void Run()
     {
         using Trida trida = new Trida();
         
