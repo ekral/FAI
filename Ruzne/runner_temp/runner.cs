@@ -13,11 +13,11 @@ var stdout = Console.Out;
 var dummyWritter = new StringWriter();
 Console.SetOut(dummyWritter);
 
-TestCase tc1 = RunTestCase(1, "Constructor exception: ne, Method exception: ne" , [], nameof(Reference.Solution), nameof(Reference.Solution), [], [], new TestFunction(false, false).Function);
-TestCase tc2 = RunTestCase(1, "Constructor exception: ano, Method exception: ne" , [], nameof(Reference.Solution), nameof(Reference.Solution), [], [], new TestFunction(true, false).Function);
-TestCase tc3 = RunTestCase(1, "Constructor exception: ne, Method exception: ano" , [], nameof(Reference.Solution), nameof(Reference.Solution), [], [], new TestFunction(false, true).Function);
+TestCase tc1 = RunTestCase(1, "Test 1" , [], nameof(Reference.Solution), nameof(Reference.Solution), [], [], new TestFunction(false, false).Function);
+TestCase tc2 = RunTestCase(1, "Test 2" , [], nameof(Reference.Solution), nameof(Reference.Solution), [], [], new TestFunction(true, false).Function);
+TestCase tc3 = RunTestCase(1, "Test 3" , [], nameof(Reference.Solution), nameof(Reference.Solution), [], [], new TestFunction(false, true).Function);
 
-TestCase[][] testCases = [[tc1], [tc2], [tc3]];
+TestCase[][] testCases = [[tc1, tc2,tc3]];
 
 Console.SetOut(stdout);
 
