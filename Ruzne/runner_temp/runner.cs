@@ -14,34 +14,42 @@ var stdout = Console.Out;
 var dummyWritter = new StringWriter();
 Console.SetOut(dummyWritter);
 
-TestCase tc1 = ExistenceTestCase(1, [], nameof(Reference.Rodic));
-TestCase tc2 = ConstructorTestCase(1, [], nameof(Reference.Rodic), [typeof(int).Name, typeof(int).Name]);
-TestCase tc3 = FieldTestCase(1, [], nameof(Reference.Rodic), "x", typeof(int).Name, (f, _) => f.IsPrivate);
-TestCase tc4 = FieldTestCase(1, [], nameof(Reference.Rodic), "y", typeof(int).Name, (f, _) => f.IsFamily);
-TestCase tc5 = MethodTestCase(1, [], nameof(Reference.Rodic), "VypisX", [], typeof(void).Name, (m, _) => m.IsPublic);
-TestCase tc6 = ExistenceTestCase(1, [], nameof(Reference.Potomek));
-TestCase tc7 = ConstructorTestCase(1, [], nameof(Reference.Potomek), [typeof(int).Name, typeof(int).Name]);
-TestCase tc8 = MethodTestCase(1, [], nameof(Reference.Potomek), "VypisY", [], typeof(void).Name, (m, _) => m.IsPublic);
-TestCase tc9 = InheritanceTestCase(1, [], nameof(Reference.Rodic), nameof(Reference.Potomek));
+int[] pole = [1,2,3];
+int[] kopie = [..pole];
 
-string testFunctionX(object o, Type t)
+string Text(int count, bool called, bool exceptionThrown)
 {
-    TestConsole.Clear();
-    RunMethod(o, t, "VypisX", []);
-    return TestConsole.Message;
+    return $"Počet volání Dispose: {count}, Metoda zavolána: {called}, Bez try-catch bloku: {exceptionThrown}";
 }
 
-string testFunctionY(object o, Type t)
+TestCase tc1 = new (1, [], dep =>
 {
-    TestConsole.Clear();
-    RunMethod(o, t, "VypisY", []);
-    return TestConsole.Message;
-}
+    string description = "Použití using s výjimkou v konstruktoru";
+    string expected = Text(1, true, true);
 
-TestCase tc10 = RunTestCase(1, [tc9.Result], nameof(Reference.Rodic), nameof(Reference.Rodic), [1, 2], [], testFunctionX);
-TestCase tc11 = RunTestCase(1, [tc9.Result], nameof(Reference.Potomek), nameof(Reference.Potomek), [3, 4], [], testFunctionY);
+    Trida.ThrowConstructor = true;
+    Trida.ThrowWriteLine = false;
 
-TestCase[][] testCases = [[tc1], [tc2], [tc3], [tc4], [tc5], [tc6], [tc7], [tc8], [tc9], [tc10, tc11]];
+    Trida.DisposedCount = 0;
+    Trida.MethodCalled = false;
+    bool exceptionThrown = false;  
+    
+    try
+    {
+        Solution.Run();
+    }
+    catch (Exception)
+    {
+        exceptionThrown = true;
+    }
+
+    string actual = Text(Trida.DisposedCount, Trida.MethodCalled, exceptionThrown);
+
+    return new TestResult(description, expected, actual, expected == actual, actual == expected ? 1 : 0);
+});
+
+
+TestCase[][] testCases = [[tc1]];
 
 Console.SetOut(stdout);
 
@@ -472,25 +480,43 @@ public static class TestConsole
     }
 }
 
-namespace Reference
+class Reference
 {
-    class Rodic(int x, int y)
+    public static void Run()
     {
-        private int x = x;
-        protected int y = y;
+        using Trida trida = new Trida();
+        
+        trida.Metoda();
+    }
+}
 
-        public void VypisX()
+class Trida : IDisposable
+{
+    public static bool ThrowConstructor {get; set;}
+    public static bool ThrowWriteLine {get; set;}
+    public static int DisposedCount {get; set;}
+    public static bool MethodCalled {get; set;}
+
+    public Trida()
+    {
+        if (ThrowConstructor)
         {
-            TestConsole.WriteLine($"x: {x}, y: {y}");
+            throw new Exception();
         }
-
     }
 
-    class Potomek(int x, int y) : Rodic(x, y)
+    public void Metoda()
     {
-        public void VypisY()
+        MethodCalled = true;
+
+        if (ThrowWriteLine)
         {
-            TestConsole.WriteLine($"y: {y}");
+            throw new Exception();
         }
+    }
+
+    public void Dispose()
+    {
+        ++DisposedCount;
     }
 }
