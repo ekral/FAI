@@ -1,31 +1,31 @@
-using System;
-
-static class Solution
+class Solution
 {
-    public static void Test(int a, int b)
+    public static void KlientskyKod()
     {
-        Zviratko z1 = new Zviratko("Fik");
-        z1.Zvuk();
-        Zviratko z2 = new Pejsek("Rex");
-        z2.Zvuk();
-        Pejsek z3 = new Pejsek("Max");
-        z3.Zvuk();
+        Rodic rodic = new Rodic(1, 2);
+        rodic.VypisX(); // vypíše "x: 1, y: 2"
+
+        Potomek potomek = new Potomek(3, 4);
+        potomek.VypisY(); // vypíše "y: 4"
     }
 }
 
-class Zviratko(string jmeno)
+class Rodic(int x, int y)
 {
-    public string Jmeno { get; set; } = jmeno;
-    public virtual void Zvuk()
+    private int x = x;
+    protected int y = y;
+
+    public void VypisX()
     {
-        TestConsole.WriteLine(Jmeno);
+        TestConsole.WriteLine($"x: {x}, y: {y}");
     }
+
 }
 
-class Pejsek(string jmeno) : Zviratko(jmeno)
+class Potomek(int x, int y) : Rodic(x, y)
 {
-    public override void Zvuk()
+    public void VypisY()
     {
-        TestConsole.WriteLine($"{Jmeno} dela haf haf!");
+        TestConsole.WriteLine($"y: {y}");
     }
 }
