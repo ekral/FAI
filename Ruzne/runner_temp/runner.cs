@@ -44,7 +44,7 @@ TestCase tc2 = ExistenceTestCase(1, [], nameof(Reference.MyClass), t => t.IsClas
 TestCase tc3 = InterfaceImplementationTestCase(1, [tc1.Result, tc2.Result], nameof(Reference.IMyInterface), nameof(Reference.MyClass));
 TestCase tc4 = MethodTestCase(1, [tc1.Result], nameof(Reference.IMyInterface), nameof(Reference.IMyInterface.Method), [], "String", (m, t) => true);
 TestCase tc5 = MethodInterfaceImplementationTestCase(1, [tc1.Result, tc2.Result], nameof(Reference.MyClass), nameof(Reference.IMyInterface), nameof(Reference.MyClass.Method), [], "String");
-TestCase tc6 = RunTestCase(1, "Test 1" , [tc2.Result], nameof(Reference.IMyInterface), nameof(Reference.MyClass), [], [], [0], ResultFunction);
+TestCase tc6 = RunTestCase(1, "Test 1" , [tc2.Result], nameof(Reference.IMyInterface), nameof(Reference.MyClass), [], [], [], ResultFunction);
 
 TestCase[][] testCases = [[tc1], [tc2], [tc3], [tc4], [tc5], [tc6]];
 
@@ -419,7 +419,7 @@ TestCase RunTestCase(int points, string info, TestResult[] dependencies, string 
         var constructorArgsDescription = constructorArgs.Select(a => a is System.Collections.IEnumerable result && a is not string ? string.Join(", ", result.Cast<object>()) : a?.ToString() ?? "null");
         var argsDescription = args.Select(a => a is System.Collections.IEnumerable result && a is not string ? string.Join(", ", result.Cast<object>()) : a?.ToString() ?? "null");
 
-        string description = $"{info} args: ({string.Join(", ", argsDescription)}), reference: {targetTypeName}, object: {targetTypeName}, constructor args: ({string.Join(", ", constructorArgsDescription)}), properties: [{string.Join(", ", propertyParameters.Select(p => $"{p.Item1}: {p.Item2}"))}]";
+        string description = $"{info} args: ({string.Join(", ", argsDescription)}), reference: {targetTypeName}, object: {typeName}, constructor args: ({string.Join(", ", constructorArgsDescription)}), properties: [{string.Join(", ", propertyParameters.Select(p => $"{p.Item1}: {p.Item2}"))}]";
 
         if(deps.Any(d => !d.IsCorrect))
         {
