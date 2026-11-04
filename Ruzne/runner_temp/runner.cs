@@ -394,13 +394,21 @@ TestCase MethodInterfaceImplementationTestCase(int points, TestResult[] dependen
             return new TestResult(description, $"return type: {expectedReturnType}", $"return type: {actualReturnType}", false, 0);
         }
 
-        if(!type.GetInterfaceMap(interfaceType).TargetMethods.Contains(method))
+        try
         {
-            return new TestResult(description, expected, "metoda rozhraní {interfaceTypeName}.{methodName} není implementována", false, 0);
+            var map = type.GetInterfaceMap(interfaceType);
+            
+            if(map.TargetMethods.Contains(method))
+            {
+                return new TestResult(description, expected, "metoda rozhraní {interfaceTypeName}.{methodName} není implementována", false, 0);
+            }
+
+            return new TestResult(description, expected, expected, true, points);
         }
-
-        return new TestResult(description, expected, expected, true, points);
-
+        catch (Exception ex)
+        {
+            return new TestResult(description, expected, $"Exception: {ex.Message}", false, 0);
+        }
     });
 }
 
