@@ -1,12 +1,14 @@
-using System.Collections.Generic;
-using System.Linq;
-
-class Solution
+class Solution 
 {
-    public List<int> Run(int[] pole)
+    public static void Run(int n)
     {
-        int delka = pole.Length;
-       
-        return [.. pole.Where(x => x > 0)];
+        int faktorial = 1;
+
+        for (int i = 2; i <= n; i++)
+        {
+            faktorial *= i;
+        }
+
+        TestConsole.WriteLine($"faktorial: {faktorial}");
     }
 }

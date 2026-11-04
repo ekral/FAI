@@ -25,12 +25,13 @@ string ResultFunction(object instance, Type type, object[] args)
             return $"Nemůžu najít metodu {methodName} v {type.Name}";
         }
 
-        if(method.Invoke(instance, args) is not List<int> result)
-        {
-            return $"Metoda {methodName} v {type.Name} nevrátila správný typ List<int>";
-        }
+        TestConsole.Clear();
 
-        return $"[{string.Join(", ", result)}]";
+        method.Invoke(instance, args);
+
+        string result = TestConsole.Message;
+
+        return result;
     }
     catch (Exception ex)
     {
@@ -38,13 +39,12 @@ string ResultFunction(object instance, Type type, object[] args)
     }
 }
 
-TestCase tc1 = RunTestCase(1, "Test 1" , [], nameof(Reference.Solution), nameof(Reference.Solution), [], [], [(int[])[]], ResultFunction);
-TestCase tc2 = RunTestCase(1, "Test 2" , [], nameof(Reference.Solution), nameof(Reference.Solution), [], [], [(int[])[ 0 ]], ResultFunction);
-TestCase tc3 = RunTestCase(1, "Test 3" , [], nameof(Reference.Solution), nameof(Reference.Solution), [], [], [(int[])[ 1 ]], ResultFunction);
-TestCase tc4 = RunTestCase(1, "Test 3" , [], nameof(Reference.Solution), nameof(Reference.Solution), [], [], [(int[])[ -1 ]], ResultFunction);
-TestCase tc5 = RunTestCase(1, "Test 4" , [], nameof(Reference.Solution), nameof(Reference.Solution), [], [], [(int[])[ -1,-2,-3,4,5,6,7,8,9,10 ]], ResultFunction);
+TestCase tc1 = RunTestCase(1, "Test 1" , [], nameof(Reference.Solution), nameof(Reference.Solution), [], [], [0], ResultFunction);
+TestCase tc2 = RunTestCase(1, "Test 2" , [], nameof(Reference.Solution), nameof(Reference.Solution), [], [], [1], ResultFunction);
+TestCase tc3 = RunTestCase(1, "Test 3" , [], nameof(Reference.Solution), nameof(Reference.Solution), [], [], [3], ResultFunction);
+TestCase tc4 = RunTestCase(2, "Test 4" , [], nameof(Reference.Solution), nameof(Reference.Solution), [], [], [Random.Shared.Next(4, 10)], ResultFunction);
 
-TestCase[][] testCases = [[tc1], [tc2], [tc3], [tc4], [tc5]];
+TestCase[][] testCases = [[tc1], [tc2], [tc3], [tc4]];
 
 Console.SetOut(stdout);
 
@@ -442,9 +442,22 @@ class TestCase(int maxPoints, TestResult[] dependencies, Func<TestResult[], Test
 
 public static class TestConsole
 {
+    private  readonly static int maxLength = 128;
     private readonly static StringWriter writer = new();
 
-    public static string Message {get => writer.ToString();}
+    public static string Message 
+    {
+        get
+        {
+            string message = writer.ToString();
+
+            message = message.Length > maxLength ? message[..maxLength] : message;
+            message = System.Net.WebUtility.HtmlEncode(message);
+
+            return message;
+        }
+    }
+
 
     public static void Clear()
     {
@@ -453,23 +466,24 @@ public static class TestConsole
 
     public static void WriteLine(string message)
     {
-        message = message.Length > 256 ? message[..256] : message;
-
-        message = System.Net.WebUtility.HtmlEncode(message);
-
         writer.Write(message);
     }
 }
 
 namespace Reference
 {
-    class Solution
+    class Solution 
     {
-        public List<int> Run(int[] pole)
+        public static void Run(int n)
         {
-            int delka = pole.Length;
-        
-            return [.. pole.Where(x => x > 0)];
+            int faktorial = 1;
+
+            for (int i = 2; i <= n; i++)
+            {
+                faktorial *= i;
+            }
+
+            TestConsole.WriteLine($"faktorial: {faktorial}");
         }
     }
 }
