@@ -3,6 +3,7 @@
 #nullable enable
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -13,11 +14,37 @@ var stdout = Console.Out;
 var dummyWritter = new StringWriter();
 Console.SetOut(dummyWritter);
 
-TestCase tc1 = RunTestCase(1, "Test 1" , [], nameof(Reference.Solution), nameof(Reference.Solution), [], [], new TestFunction(false, false).Function);
-TestCase tc2 = RunTestCase(1, "Test 2" , [], nameof(Reference.Solution), nameof(Reference.Solution), [], [], new TestFunction(true, false).Function);
-TestCase tc3 = RunTestCase(1, "Test 3" , [], nameof(Reference.Solution), nameof(Reference.Solution), [], [], new TestFunction(false, true).Function);
+string ResultFunction(object instance, Type type, object[] args)
+{
+    string methodName = "Run";
 
-TestCase[][] testCases = [[tc1, tc2,tc3]];
+    try
+    {
+        if(type.GetMethod(methodName) is not MethodInfo method)
+        {
+            return $"Nemůžu najít metodu {methodName} v {type.Name}";
+        }
+
+        if(method.Invoke(instance, args) is not List<int> result)
+        {
+            return $"Metoda {methodName} v {type.Name} nevrátila správný typ List<int>";
+        }
+
+        return $"[{string.Join(", ", result)}]";
+    }
+    catch (Exception ex)
+    {
+        return $"Exception: {ex.Message}";
+    }
+}
+
+TestCase tc1 = RunTestCase(1, "Test 1" , [], nameof(Reference.Solution), nameof(Reference.Solution), [], [], [(int[])[]], ResultFunction);
+TestCase tc2 = RunTestCase(1, "Test 2" , [], nameof(Reference.Solution), nameof(Reference.Solution), [], [], [(int[])[ 0 ]], ResultFunction);
+TestCase tc3 = RunTestCase(1, "Test 3" , [], nameof(Reference.Solution), nameof(Reference.Solution), [], [], [(int[])[ 1 ]], ResultFunction);
+TestCase tc4 = RunTestCase(1, "Test 3" , [], nameof(Reference.Solution), nameof(Reference.Solution), [], [], [(int[])[ -1 ]], ResultFunction);
+TestCase tc5 = RunTestCase(1, "Test 4" , [], nameof(Reference.Solution), nameof(Reference.Solution), [], [], [(int[])[ -1,-2,-3,4,5,6,7,8,9,10 ]], ResultFunction);
+
+TestCase[][] testCases = [[tc1], [tc2], [tc3], [tc4], [tc5]];
 
 Console.SetOut(stdout);
 
@@ -291,19 +318,23 @@ TestCase InheritanceTestCase(int points, TestResult[] dependencies, string paren
     });
 }
 
-TestCase RunTestCase(int points, string info, TestResult[] dependencies, string targetTypeName, string typeName, object[] constructorArgs, (string, object)[] propertyParameters, Func<object, Type, string> testFunction)
+TestCase RunTestCase(int points, string info, TestResult[] dependencies, string targetTypeName, string typeName, object[] constructorArgs, (string, object)[] propertyParameters, object[] args, Func<object, Type, object[], string> resultFunction)
 {
     TestCase testCase = new(points, dependencies, deps => 
     {
-        string description = $"{info}, reference: {targetTypeName} objekt: {targetTypeName}, args: [{string.Join(", ", constructorArgs)}], properties: [{string.Join(", ", propertyParameters.Select(p => $"{p.Item1}: {p.Item2}"))}]";
+        var constructorArgsDescription = constructorArgs.Select(a => a is System.Collections.IEnumerable result && a is not string ? string.Join(", ", result.Cast<object>()) : a?.ToString() ?? "null");
+        var argsDescription = args.Select(a => a is System.Collections.IEnumerable result && a is not string ? string.Join(", ", result.Cast<object>()) : a?.ToString() ?? "null");
+
+
+        string description = $"{info} args: ({string.Join(", ", argsDescription)}), reference: {targetTypeName}, object: {targetTypeName}, constructor args: ({string.Join(", ", constructorArgsDescription)}), properties: [{string.Join(", ", propertyParameters.Select(p => $"{p.Item1}: {p.Item2}"))}]";
 
         if(deps.Any(d => !d.IsCorrect))
         {
             return new TestResult(description, $"Podmínky: {string.Join(", ", deps.Select(d => d.Description))}", $"Nesplněné: {string.Join(", ", deps.Where(d => !d.IsCorrect).Select(d => d.Description))}", false, 0);
         }
     
-        string expected = Run($"Reference.{targetTypeName}", $"Reference.{typeName}", constructorArgs, propertyParameters, testFunction);
-        string actual = Run(targetTypeName, typeName, constructorArgs, propertyParameters, testFunction);
+        string expected = Run($"Reference.{targetTypeName}", $"Reference.{typeName}", constructorArgs, propertyParameters, args, resultFunction);
+        string actual = Run(targetTypeName, typeName, constructorArgs, propertyParameters, args, resultFunction);
 
         if(expected != actual)
         {
@@ -316,7 +347,7 @@ TestCase RunTestCase(int points, string info, TestResult[] dependencies, string 
     return testCase;
 }
 
-string Run(string targetTypeName, string typeName, object[] constructorArgs, (string, object)[] propertyParameters, Func<object, Type, string> testFunction)
+string Run(string targetTypeName, string typeName, object[] constructorArgs, (string, object)[] propertyParameters, object[] args, Func<object, Type, object[], string> resultFunction)
 {
     try
     {
@@ -350,26 +381,13 @@ string Run(string targetTypeName, string typeName, object[] constructorArgs, (st
            property.SetValue(instance, value);
         }
 
-        return testFunction(instance, targetType);
+        return resultFunction(instance, targetType, args);
 
     }
     catch(Exception ex)
     {
         return $"Exception: {ex.Message}";
     }
-}
-
-
-object? RunMethod(object instance, Type type, string methodName, object[] parameters )
-{
-    if(type.GetMethod(methodName) is not MethodInfo method)
-    {
-        return $"Nemůžu najít metodu {methodName} v {type.Name}";
-    }
-
-    object? result = method.Invoke(instance, parameters);
-
-    return result;
 }
 
 string GetPropertiesValues(object instance, Type type)
@@ -447,15 +465,17 @@ namespace Reference
 {
     class Solution
     {
-        public void Run()
+        public List<int> Run(int[] pole)
         {
-            using Trida trida = new Trida();
-            
-            trida.Metoda();
+            int delka = pole.Length;
+        
+            return [.. pole.Where(x => x > 0)];
         }
     }
 }
 
+/*
+// Example of class to test IDisposable implementation and method invocation
 class Trida : IDisposable
 {
     public static bool ThrowConstructor {get; set;}
@@ -487,7 +507,8 @@ class Trida : IDisposable
     }
 }
 
-class TestFunction(bool throwConstructor, bool throwWriteLine)
+// Example of result function
+class ResultFunction(bool throwConstructor, bool throwWriteLine)
 {
     public string Function(object instance, Type type)
     {
@@ -516,3 +537,4 @@ class TestFunction(bool throwConstructor, bool throwWriteLine)
         return $"Počet volání Dispose: {Trida.DisposedCount}, Metoda zavolána: {Trida.MethodCalled}, Vyvolaná výjimka: {exceptionThrown}";
     }
 }
+*/

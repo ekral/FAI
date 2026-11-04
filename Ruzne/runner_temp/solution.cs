@@ -1,9 +1,12 @@
+using System.Collections.Generic;
+using System.Linq;
+
 class Solution
 {
-    public void Run()
+    public List<int> Run(int[] pole)
     {
-        using Trida trida = new Trida();
-        
-        trida.Metoda();
+        int delka = pole.Length;
+       
+        return [.. pole.Where(x => x > 0)];
     }
 }
