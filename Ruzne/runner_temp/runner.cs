@@ -398,9 +398,9 @@ TestCase MethodInterfaceImplementationTestCase(int points, TestResult[] dependen
         {
             var map = type.GetInterfaceMap(interfaceType);
             
-            if(map.TargetMethods.Contains(method))
+            if(!map.TargetMethods.Contains(method))
             {
-                return new TestResult(description, expected, "metoda rozhraní {interfaceTypeName}.{methodName} není implementována", false, 0);
+                return new TestResult(description, expected, $"metoda rozhraní {interfaceTypeName}.{methodName} není implementována", false, 0);
             }
 
             return new TestResult(description, expected, expected, true, points);
