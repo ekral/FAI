@@ -16,22 +16,21 @@ Console.SetOut(dummyWritter);
 
 string ResultFunction(object instance, Type type, object[] args)
 {
-    string methodName = "Run";
-
     try
     {
+        string methodName = "Method";
+
         if(type.GetMethod(methodName) is not MethodInfo method)
         {
-            return $"Nemůžu najít metodu {methodName} v {type.Name}";
+            return $"Metoda {methodName} v {type.Name} neexistuje";
         }
 
-        TestConsole.Clear();
+        if(method.Invoke(instance, null) is not string message)
+        {
+            return $"Nepodařilo se zavolat metodu {methodName} objektu typu {type.Name}.";
+        }
 
-        method.Invoke(instance, args);
-
-        string result = TestConsole.Message;
-
-        return result;
+        return message;
     }
     catch (Exception ex)
     {
@@ -39,12 +38,15 @@ string ResultFunction(object instance, Type type, object[] args)
     }
 }
 
-TestCase tc1 = RunTestCase(1, "Test 1" , [], nameof(Reference.Solution), nameof(Reference.Solution), [], [], [0], ResultFunction);
-TestCase tc2 = RunTestCase(1, "Test 2" , [], nameof(Reference.Solution), nameof(Reference.Solution), [], [], [1], ResultFunction);
-TestCase tc3 = RunTestCase(1, "Test 3" , [], nameof(Reference.Solution), nameof(Reference.Solution), [], [], [3], ResultFunction);
-TestCase tc4 = RunTestCase(2, "Test 4" , [], nameof(Reference.Solution), nameof(Reference.Solution), [], [], [Random.Shared.Next(4, 10)], ResultFunction);
 
-TestCase[][] testCases = [[tc1], [tc2], [tc3], [tc4]];
+TestCase tc1 = ExistenceTestCase(1, [], nameof(Reference.IMyInterface), t => t.IsInterface);
+TestCase tc2 = ExistenceTestCase(1, [], nameof(Reference.MyClass), t => t.IsClass);
+TestCase tc3 = InterfaceImplementationTestCase(1, [tc1.Result, tc2.Result], nameof(Reference.IMyInterface), nameof(Reference.MyClass));
+TestCase tc4 = MethodTestCase(1, [tc1.Result], nameof(Reference.IMyInterface), nameof(Reference.IMyInterface.Method), [], "String", (m, t) => true);
+TestCase tc5 = MethodInterfaceImplementationTestCase(1, [tc1.Result, tc2.Result], nameof(Reference.MyClass), nameof(Reference.IMyInterface), nameof(Reference.MyClass.Method), [], "String");
+TestCase tc6 = RunTestCase(1, "Test 1" , [tc2.Result], nameof(Reference.IMyInterface), nameof(Reference.MyClass), [], [], [0], ResultFunction);
+
+TestCase[][] testCases = [[tc1], [tc2], [tc3], [tc4], [tc5], [tc6]];
 
 Console.SetOut(stdout);
 
@@ -140,20 +142,77 @@ Console.WriteLine($"</ol>");
 
 #endif
 
-TestCase ExistenceTestCase(int points, TestResult[] dependencies, string typeName)
+TestCase ExistenceTestCase(int points, TestResult[] dependencies, string typeName, Func<Type, bool> additionalCheck)
 {
-    string description = $"Typ {typeName} definován";
+    string description = $"Typ {typeName} správně definován";
+    string expected = "Ano";
 
     return new TestCase(points, dependencies, dep =>
     {
-        if(Type.GetType(typeName) is null)
+        if(Type.GetType(typeName) is not Type type)
         {
-            return new TestResult(description, true.ToString(), false.ToString(), false, 0);
+            return new TestResult(description, expected, $"Typ {typeName} neexistuje", false, 0);
         }
-        else
+     
+        if(!additionalCheck(type))
         {
-            return new TestResult(description, true.ToString(), true.ToString(), true, points);
+            return new TestResult(description, expected, "typ {typeName} není správný", false, 0);
         }
+            
+        return new TestResult(description, expected, expected, true, points);
+
+    });
+}
+
+TestCase InheritanceTestCase(int points, TestResult[] dependencies, string parentTypeName, string childTypeName)
+{
+    return new TestCase(points, dependencies, dep =>
+    {
+        string description = $"Typ {childTypeName} dědí {parentTypeName}";
+        string expected = "Ano";
+
+        if(Type.GetType(parentTypeName) is not Type parentType)
+        {
+            return new TestResult(description, expected, $"Nelze najít typ {parentTypeName}", false, 0);
+        }
+
+        if(Type.GetType(childTypeName) is not Type childType)
+        {
+            return new TestResult(description, expected, $"Nelze najít typ {childTypeName}", false, 0);
+        }
+
+        if(childType.BaseType != parentType)
+        {
+            return new TestResult(description, expected, $"Typ {childTypeName} nedědí {parentTypeName}", false, 0);
+        }
+
+        return new TestResult(description, expected, expected, true, points);
+    });
+}
+
+TestCase InterfaceImplementationTestCase(int points, TestResult[] dependencies, string parentTypeName, string childTypeName)
+{
+    return new TestCase(points, dependencies, dep =>
+    {
+        string description = $"Typ {childTypeName} implementuje {parentTypeName}";
+        string expected = "Ano";
+
+        if(Type.GetType(parentTypeName) is not Type parentType)
+        {
+            return new TestResult(description, expected, $"Typ {parentTypeName} neexistuje", false, 0);
+        }
+
+        if(Type.GetType(childTypeName) is not Type childType)
+        {
+            return new TestResult(description, expected, $"Typ {childTypeName} neexistuje", false, 0);
+        }
+
+        if(!parentType.IsAssignableFrom(childType) || !parentType.IsInterface)
+        {
+            return new TestResult(description, expected, $"Typ {childTypeName} neimplementuje interface {parentTypeName}", false, 0);
+        }
+
+        return new TestResult(description, expected, expected, true, points);
     });
 }
 
@@ -161,19 +220,20 @@ TestCase ExistenceTestCase(int points, TestResult[] dependencies, string typeNam
 TestCase ConstructorTestCase(int points, TestResult[] dependencies, string typeName, string[] expectedTypes)
 {
     string description = $"Typ {typeName} má správný konstruktor";
+    string expected = "Ano";
 
     return new TestCase(points, dependencies, dep =>
     {
         if(Type.GetType(typeName) is not Type type)
         {
-            return new TestResult(description, string.Join(", ", expectedTypes), $"Typ {typeName} neexistuje", false, 0);
+            return new TestResult(description, expected, $"Typ {typeName} neexistuje", false, 0);
         }
 
         var constructor = type.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly).FirstOrDefault();
 
         if(constructor is null)
         {
-            return new TestResult(description, string.Join(", ", expectedTypes), $"Typ {typeName} nemá žádný konstruktor", false, 0);
+            return new TestResult(description, expected, $"Typ {typeName} nemá žádný konstruktor", false, 0);
         }
 
         var types = constructor.GetParameters().Select(p => p.ParameterType.Name);
@@ -183,7 +243,7 @@ TestCase ConstructorTestCase(int points, TestResult[] dependencies, string typeN
             return new TestResult(description, string.Join(", ", expectedTypes), string.Join(", ", types), false, 0);
         }
 
-        return new TestResult(description, string.Join(", ", expectedTypes), string.Join(", ", types), true, points);
+        return new TestResult(description, expected, expected, true, points);
         
     });
 }
@@ -193,18 +253,18 @@ TestCase FieldTestCase(int points, TestResult[] dependencies, string typeName, s
     return new TestCase(points, dependencies, dep =>
     {
         string description = $"Typ {typeName} má správný field {fieldName}";
+        string expected = "Ano";
 
         if(Type.GetType(typeName) is not Type type)
         {
-            return new TestResult(description, true.ToString(), $"Typ {typeName} neexistuje", false, 0);
+            return new TestResult(description, expected, $"Typ {typeName} neexistuje", false, 0);
         }
      
         if(type.GetField(fieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly) is not FieldInfo field)
         {
-            return new TestResult(description, true.ToString(), $"Field {fieldName} neexistuje", false, 0);
+            return new TestResult(description, expected, $"Field {fieldName} neexistuje", false, 0);
         }
         
-
         string actualTypeName = field.FieldType.Name;
 
         if(expectedTypeName != actualTypeName)
@@ -214,10 +274,10 @@ TestCase FieldTestCase(int points, TestResult[] dependencies, string typeName, s
 
         if(!additionalCheck(field, type))
         {
-            return new TestResult(description, "správný typ fieldu", "typ fieldu není správný", false, 0);
+            return new TestResult(description, expected, "vlastnosti fieldu nejsou správné", false, 0);
         }
 
-        return new TestResult(description, true.ToString(), true.ToString(), true, points);
+        return new TestResult(description, expected, expected, true, points);
 
     });
 }
@@ -227,18 +287,18 @@ TestCase PropertyTestCase(int points, TestResult[] dependencies, string typeName
     return new TestCase(points, dependencies, dep =>
     {
         string description = $"Typ {typeName} má správnou property {propertyName}";
+        string expected = "Ano";
 
         if(Type.GetType(typeName) is not Type type)
         {
-            return new TestResult(description, true.ToString(), $"Typ {typeName} neexistuje", false, 0);
+            return new TestResult(description, expected, $"Typ {typeName} neexistuje", false, 0);
         }
      
         if(type.GetProperty(propertyName) is not PropertyInfo property)
         {
-            return new TestResult(description, true.ToString(), $"Property {propertyName} neexistuje", false, 0);
+            return new TestResult(description, expected, $"Property {propertyName} neexistuje", false, 0);
         }
         
-
         string actualTypeName = property.PropertyType.Name;
 
         if(expectedTypeName != actualTypeName)
@@ -248,11 +308,10 @@ TestCase PropertyTestCase(int points, TestResult[] dependencies, string typeName
 
         if(!additionalCheck(property, type))
         {
-            return new TestResult(description, "správný typ property", "typ property není správný", false, 0);
+            return new TestResult(description, expected, "vlastnosti property nejsou správné", false, 0);
         }
 
-        return new TestResult(description, true.ToString(), true.ToString(), true, points);
-
+        return new TestResult(description, expected, expected, true, points);
     });
 }
 
@@ -263,15 +322,16 @@ TestCase MethodTestCase(int points, TestResult[] dependencies, string typeName, 
     return new TestCase(points, dependencies, dep =>
     {
         string description = $"Typ {typeName} má správnou metodu {methodName}";
+        string expected = "Ano";
 
         if(Type.GetType(typeName) is not Type type)
         {
-            return new TestResult(description, true.ToString(), $"Typ {typeName} neexistuje", false, 0);
+            return new TestResult(description, expected, $"Typ {typeName} neexistuje", false, 0);
         }
      
         if(type.GetMethod(methodName) is not MethodInfo method)
         {
-            return new TestResult(description, true.ToString(), $"Metoda {methodName} neexistuje", false, 0);
+            return new TestResult(description, expected, $"Metoda {methodName} neexistuje", false, 0);
         }
         
         var actualParameters = method.GetParameters().Select(p => p.ParameterType.Name);
@@ -290,31 +350,57 @@ TestCase MethodTestCase(int points, TestResult[] dependencies, string typeName, 
 
         if(!additionalCheck(method, type))
         {
-            return new TestResult(description, "správný typ metody", "typ metody neni správný", false, 0);
+            return new TestResult(description, expected, "vlastnosti metody nejsou správné", false, 0);
         }
 
-        return new TestResult(description, true.ToString(), true.ToString(), true, points);
+        return new TestResult(description, expected, expected, true, points);
 
     });
 }
 
-
-TestCase InheritanceTestCase(int points, TestResult[] dependencies, string parentTypeName, string childTypeName)
+TestCase MethodInterfaceImplementationTestCase(int points, TestResult[] dependencies, string typeName, string interfaceTypeName, string methodName, string[] expectedParameters, string expectedReturnType)
 {
     return new TestCase(points, dependencies, dep =>
     {
-        string description = $"Typ {childTypeName} dědí z {parentTypeName}";
+        string description = $"Typ {typeName} implementuje metodu {methodName} z rozhraní {interfaceTypeName}";
+        string expected = "Ano";
 
-        if(Type.GetType(parentTypeName) is Type parentType && Type.GetType(childTypeName) is Type childType)
+        if(Type.GetType(typeName) is not Type type)
         {
-            bool isCorrect = childType.BaseType == parentType;
+            return new TestResult(description, expected, $"Typ {typeName} neexistuje", false, 0);
+        }
 
-            return new TestResult(description, true.ToString(), isCorrect.ToString(), isCorrect, isCorrect ? points : 0);
-        }
-        else
+        if(Type.GetType(interfaceTypeName) is not Type interfaceType)
         {
-            return new TestResult(description, true.ToString(), false.ToString(), false, 0);
+            return new TestResult(description, expected, $"Typ {interfaceTypeName} neexistuje", false, 0);
         }
+     
+        if(type.GetMethod(methodName) is not MethodInfo method)
+        {
+            return new TestResult(description, expected, $"Metoda {methodName} neexistuje", false, 0);
+        }
+ 
+        var actualParameters = method.GetParameters().Select(p => p.ParameterType.Name);
+
+        if(!actualParameters.SequenceEqual(expectedParameters))
+        {
+            return new TestResult(description, $"parametery: {string.Join(", ", expectedParameters)}", $"parametry: {string.Join(", ", actualParameters)}", false, 0);
+        }
+
+        string actualReturnType = method.ReturnType.Name;
+
+        if(actualReturnType != expectedReturnType)
+        {
+            return new TestResult(description, $"return type: {expectedReturnType}", $"return type: {actualReturnType}", false, 0);
+        }
+
+        if(!type.GetInterfaceMap(interfaceType).TargetMethods.Contains(method))
+        {
+            return new TestResult(description, expected, "metoda rozhraní {interfaceTypeName}.{methodName} není implementována", false, 0);
+        }
+
+        return new TestResult(description, expected, expected, true, points);
+
     });
 }
 
@@ -324,7 +410,6 @@ TestCase RunTestCase(int points, string info, TestResult[] dependencies, string 
     {
         var constructorArgsDescription = constructorArgs.Select(a => a is System.Collections.IEnumerable result && a is not string ? string.Join(", ", result.Cast<object>()) : a?.ToString() ?? "null");
         var argsDescription = args.Select(a => a is System.Collections.IEnumerable result && a is not string ? string.Join(", ", result.Cast<object>()) : a?.ToString() ?? "null");
-
 
         string description = $"{info} args: ({string.Join(", ", argsDescription)}), reference: {targetTypeName}, object: {targetTypeName}, constructor args: ({string.Join(", ", constructorArgsDescription)}), properties: [{string.Join(", ", propertyParameters.Select(p => $"{p.Item1}: {p.Item2}"))}]";
 
@@ -418,6 +503,7 @@ string GetPropertiesValues(object instance, Type type)
     return string.Join(", ", values);
 }
 
+    
 
 
 record TestResult(string Description, string Expected, string Actual, bool IsCorrect, int Points);
@@ -458,7 +544,6 @@ public static class TestConsole
         }
     }
 
-
     public static void Clear()
     {
         writer.GetStringBuilder().Clear();
@@ -472,18 +557,16 @@ public static class TestConsole
 
 namespace Reference
 {
-    class Solution 
+    interface IMyInterface
     {
-        public static void Run(int n)
+        string Method();
+    }
+
+    class MyClass : IMyInterface
+    {
+        public string Method()
         {
-            int faktorial = 1;
-
-            for (int i = 2; i <= n; i++)
-            {
-                faktorial *= i;
-            }
-
-            TestConsole.WriteLine($"faktorial: {faktorial}");
+            return "MyClass.Method";
         }
     }
 }

@@ -1,14 +1,34 @@
+// Klientsky kod
+static class Test
+{
+    public static void Print(IMyInterface obj)
+    {
+        string message = obj.Method();
+        TestConsole.WriteLine(message);
+    }
+}
+
+
 class Solution 
 {
     public static void Run(int n)
     {
-        int faktorial = 1;
+        MyClass mc = new MyClass();
 
-        for (int i = 2; i <= n; i++)
-        {
-            faktorial *= i;
-        }
+        Test.Print(mc); // Vypiše "MyClass.Method" - Print má typ parametru IMyInterface, viz ukázkový kód výše
+    }
+}
 
-        TestConsole.WriteLine($"faktorial: {faktorial}");
+
+interface IMyInterface
+{
+    string Method();
+}
+
+class MyClass : IMyInterface
+{
+    public string Method()
+    {
+        return "MyClass.Method";
     }
 }
