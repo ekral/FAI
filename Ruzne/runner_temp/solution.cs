@@ -1,34 +1,46 @@
 // Klientsky kod
 static class Test
 {
-    public static void Print(IMyInterface obj)
+    public static void SendAll(INotificationSender[] senders, string recipient, string message)
     {
-        string message = obj.Method();
-        TestConsole.WriteLine(message);
+        foreach(var sender in senders)
+        {
+            sender.Send(recipient, message);
+        }
     }
 }
-
 
 class Solution 
 {
     public static void Run(int n)
     {
-        MyClass mc = new MyClass();
+        EmailSender emailSender = new EmailSender();
+        SmsSender smsSender = new SmsSender();
 
-        Test.Print(mc); // Vypiše "MyClass.Method" - Print má typ parametru IMyInterface, viz ukázkový kód výše
+        Test.SendAll([emailSender, smsSender], "user@example.com", "Hello, World!");
     }
 }
 
+// TestConsole.WriteLine($"Sent email to {recipient}: {message}");
+// TestConsole.WriteLine($"Sent SMS to {recipient}: {message}");
 
-interface IMyInterface
+interface INotificationSender
 {
-    string Method();
+    void Send(string recipient, string message);
 }
 
-class MyClass : IMyInterface
+class EmailSender : INotificationSender
 {
-    public string Method()
+    public void Send(string recipient, string message)
     {
-        return "MyClass.Method";
+        TestConsole.WriteLine($"Sent email to {recipient}: {message}");
+    }
+}
+
+class SmsSender : INotificationSender
+{
+    public void Send(string recipient, string message)
+    {
+        TestConsole.WriteLine($"Sent SMS to {recipient}: {message}");
     }
 }

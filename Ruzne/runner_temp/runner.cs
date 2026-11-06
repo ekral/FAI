@@ -18,19 +18,21 @@ string ResultFunction(object instance, Type type, object[] args)
 {
     try
     {
-        string methodName = "Method";
+        string methodName = "Send";
 
         if(type.GetMethod(methodName) is not MethodInfo method)
         {
             return $"Metoda {methodName} v {type.Name} neexistuje";
         }
 
-        if(method.Invoke(instance, null) is not string message)
+        TestConsole.Clear();
+
+        if(method.Invoke(instance, args) is not null)
         {
             return $"Nepodařilo se zavolat metodu {methodName} objektu typu {type.Name}.";
         }
 
-        return message;
+        return TestConsole.Message;
     }
     catch (Exception ex)
     {
@@ -39,14 +41,18 @@ string ResultFunction(object instance, Type type, object[] args)
 }
 
 
-TestCase tc1 = ExistenceTestCase(1, [], nameof(Reference.IMyInterface), t => t.IsInterface);
-TestCase tc2 = ExistenceTestCase(1, [], nameof(Reference.MyClass), t => t.IsClass);
-TestCase tc3 = InterfaceImplementationTestCase(1, [tc1.Result, tc2.Result], nameof(Reference.IMyInterface), nameof(Reference.MyClass));
-TestCase tc4 = MethodTestCase(1, [tc1.Result], nameof(Reference.IMyInterface), nameof(Reference.IMyInterface.Method), [], "String", (m, t) => true);
-TestCase tc5 = MethodInterfaceImplementationTestCase(1, [tc1.Result, tc2.Result], nameof(Reference.MyClass), nameof(Reference.IMyInterface), nameof(Reference.MyClass.Method), [], "String");
-TestCase tc6 = RunTestCase(1, "Test 1" , [tc2.Result], nameof(Reference.IMyInterface), nameof(Reference.MyClass), [], [], [], ResultFunction);
+TestCase tc1 = ExistenceTestCase(1, [], nameof(Reference.INotificationSender), t => t.IsInterface);
+TestCase tc2 = ExistenceTestCase(1, [], nameof(Reference.EmailSender), t => t.IsClass);
+TestCase tc3 = ExistenceTestCase(1, [], nameof(Reference.SmsSender), t => t.IsClass);
+TestCase tc4 = InterfaceImplementationTestCase(1, [tc1.Result, tc2.Result], nameof(Reference.INotificationSender), nameof(Reference.EmailSender));
+TestCase tc5 = InterfaceImplementationTestCase(1, [tc1.Result, tc3.Result], nameof(Reference.INotificationSender), nameof(Reference.SmsSender));
+TestCase tc6 = MethodTestCase(1, [tc1.Result], nameof(Reference.INotificationSender), nameof(Reference.INotificationSender.Send), ["String", "String"], "Void", (m, t) => true);
+TestCase tc7 = MethodInterfaceImplementationTestCase(1, [tc1.Result, tc2.Result], nameof(Reference.EmailSender), nameof(Reference.INotificationSender), nameof(Reference.EmailSender.Send), ["String", "String"], "Void");
+TestCase tc8 = MethodInterfaceImplementationTestCase(1, [tc1.Result, tc3.Result], nameof(Reference.SmsSender), nameof(Reference.INotificationSender), nameof(Reference.SmsSender.Send), ["String", "String"], "Void");
+TestCase tc9 = RunTestCase(1, "Test 1" , [tc1.Result, tc2.Result], nameof(Reference.INotificationSender), nameof(Reference.EmailSender), [], [], [$"user{Random.Shared.Next(1, 10)}@example.com", "Hello, World!"], ResultFunction);
+TestCase tc10 = RunTestCase(1, "Test 2" , [tc1.Result, tc3.Result], nameof(Reference.INotificationSender), nameof(Reference.SmsSender), [], [], [$"user{Random.Shared.Next(11, 20)}@example.com", "Hello, Student!"], ResultFunction);
 
-TestCase[][] testCases = [[tc1], [tc2], [tc3], [tc4], [tc5], [tc6]];
+TestCase[][] testCases = [[tc1], [tc2], [tc3], [tc4], [tc5], [tc6], [tc7], [tc8], [tc9], [tc10]];
 
 Console.SetOut(stdout);
 
@@ -565,16 +571,24 @@ public static class TestConsole
 
 namespace Reference
 {
-    interface IMyInterface
+    interface INotificationSender
     {
-        string Method();
+        void Send(string recipient, string message);
     }
 
-    class MyClass : IMyInterface
+    class EmailSender : INotificationSender
     {
-        public string Method()
+        public void Send(string recipient, string message)
         {
-            return "MyClass.Method";
+            TestConsole.WriteLine($"Sent email to {recipient}: {message}");
+        }
+    }
+
+    class SmsSender : INotificationSender
+    {
+        public void Send(string recipient, string message)
+        {
+            TestConsole.WriteLine($"Sent SMS to {recipient}: {message}");
         }
     }
 }
