@@ -1,22 +1,26 @@
-struct AnalogInput
+struct Trida
 {
-private:
-    int pin;
 public:
-    AnalogInput(int pin) : pin(pin)
+    int x;
+
+    Trida(int x) : x(x)
     {
         
     }
-
-    int read()
-    {
-        return analogRead(pin);
-    }
 };
 
-void KlientskyKod()
+// nechat zapoznamkovane
+/*
+void print(const Trida* trida)
 {
-    AnalogInput analogInput(12);
+    Serial.print("X: ");
+    Serial.println(trida->x);
+}
+*/
 
-    int value = analogInput.read();
+void setup(int x)
+{
+    Trida* pt = new Trida(health);
+    print(pt);
+    delete pt;
 }

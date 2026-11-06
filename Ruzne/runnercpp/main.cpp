@@ -1,11 +1,12 @@
 // g++ -std=c++23 -o runner main.cpp
 // ./runner
 
-//#define ASSIGNMENT_REPORT
+#define ASSIGNMENT_REPORT
 
 #include <iostream>
 #include <streambuf>
 #include <string>
+#include <sstream>
 #include <cstdio>
 #include <unistd.h>     // dup, dup2, close
 #include <fcntl.h>      // open
@@ -18,47 +19,75 @@
 #include <ranges>
 #include <print>
 #include <algorithm>
+#include <format>
+#include <string_view>
 
 using namespace std;
 
-int actualAnalogWritePin = 0;
-int inputAnalogWriteValue = 0;
+bool watch = false;
+bool newCalled = false;
+bool deleteCalledAfterNew = false;
 
-int analogRead(int pin)
+void* operator new(std::size_t size)
 {
-    actualAnalogWritePin = pin;
-    return inputAnalogWriteValue;
+    if(watch)
+    {
+        newCalled = true;
+    }
+
+    void* ptr = std::malloc(size);
+    
+    if (!ptr) {
+        throw std::bad_alloc(); // C++ standard vyžaduje výjimku při selhání
+    }
+
+    return ptr;
+}
+
+void operator delete(void* ptr) noexcept
+{
+    if(watch && newCalled)
+    {
+        deleteCalledAfterNew = true;
+    }
+
+    std::free(ptr);
+}
+
+int result_score = 0;
+int result_health = 0;
+
+template<typename T>
+concept HasValidConstructor = requires(int health, int score) {
+    T(health, score); 
+};
+
+template<typename T>
+concept HasPublicHealth = requires(T& object) {
+    object.health;
+};
+
+template<typename T>
+concept HasPublicScore = requires(T& object) {
+    object.score;
+};
+
+template<typename T>
+void print(const T* player)
+{
+    if constexpr (HasPublicHealth<T> && HasPublicScore<T>) 
+    {
+        int score = player->score;
+        int health = player->health;
+
+        result_score = score;
+        result_health = health;
+    }
 }
 
 namespace Submission
 {
     #include "solution.h"
-}
-
-namespace Reference
-{
-    struct AnalogInput
-    {
-    private:
-        int pin;
-    public:
-        AnalogInput(int pin) : pin(pin)
-        {
-            
-        }
-
-        int read()
-        {
-            return analogRead(pin);
-        }
-    };
-
-    void KlientskyKod()
-    {
-        AnalogInput analogInput(12);
-
-        int value = analogInput.read();
-    }
 }
 
 struct TestResult
@@ -105,59 +134,42 @@ public:
     }
 };
 
-template<typename T>
-concept HasValidConstructor = requires(int pin) {
-    T(pin); 
-};
-
-template<typename T>
-concept HasRead = requires {
-    static_cast<int (T::*)()>(&T::read);
-};
-
-template<typename T>
-concept HasNotPublicPin = !requires(T& object) {
-    object.pin;
-};
-
-template<typename T>
-string testAnalogInput(int pin, int value) 
-{
-    if constexpr (HasValidConstructor<T> && HasRead<T>) {
-        T test(pin);
-
-        inputAnalogWriteValue = value;
-
-        int readValue = test.read();
-
-        return format("pin: {}, read: {}", actualAnalogWritePin, readValue);
-    }
-
-    return "Cannot test AnalogInput: missing required constructor or read() method.";
-}
-
-TestCase TestRun(const int pin, const int inputValue, const vector<reference_wrapper<const TestResult>>& dependenciesParametr) 
+TestCase TestRun(const int points, const int health, const int score, const vector<reference_wrapper<const TestResult>>& dependenciesParametr) 
 {
     auto testCase = TestCase(
-        1,
+        points,
         dependenciesParametr,
-        [pin, inputValue](const vector<reference_wrapper<const TestResult>>& dependencies) {
+        [points,health, score](const vector<reference_wrapper<const TestResult>>& dependencies) {
 
-            const string description = format("Test run, pin: {}, value: {}", pin, inputValue);
-            const string expected = testAnalogInput<Reference::AnalogInput>(pin, inputValue);
+            const string description = format("Test run, health: {}, score: {}", health, score);
+
+            static constexpr string_view formatString = "Health: {}, Score: {}, New: {}, Delete: {}"sv;
+
+            string expected = format(formatString, health, score, true, true); 
 
             bool allCorrect = ranges::all_of(dependencies, [](const auto& dep) { return dep.get().isCorrect; });
 
             if (!allCorrect)
             {
-                return TestResult(description, expected, "nebyly splněné všechny podmínky", false, 0);
+                return TestResult(description, "ano", "nebyly splněné všechny podmínky", false, 0);
             }
-
-            const string actual = testAnalogInput<Submission::AnalogInput>(pin, inputValue);
             
+            if constexpr (HasValidConstructor<Submission::Player> && HasPublicHealth<Submission::Player> && HasPublicScore<Submission::Player>) 
+            {
+                watch = true;
+                newCalled = false;
+                deleteCalledAfterNew = false;
+
+                Submission::setup(health, score);
+
+                watch = false;
+            }
+            
+            string actual = format(formatString, result_health, result_score, newCalled, deleteCalledAfterNew);  
+
             if(actual == expected)
             {
-                return TestResult(description, expected, actual, true, 1);
+                return TestResult(description, expected, actual, true, points);
             }
             else
             {
@@ -195,19 +207,17 @@ int main() {
         {},
         [](const vector<reference_wrapper<const TestResult>>& dependencies) {
             
-            string description = "Definovaná struktura AnalogInput";
+            string description = "Definovaná struktura Player";
             string expected = "ano";
 
-            constexpr bool valid = is_class_v<Submission::AnalogInput>;
+            constexpr bool valid = is_class_v<Submission::Player>;
             
-            if(valid)
-            {
-                return TestResult(description, expected, expected, true, 1);
-            }
-            else
+            if(!valid)
             {
                 return TestResult(description, expected, "ne", false, 0);
             }
+
+            return TestResult(description, expected, expected, true, 1);
         }
     );
 
@@ -215,20 +225,18 @@ int main() {
         1,
         {},
         [](const vector<reference_wrapper<const TestResult>>& dependencies) {
-            
-            string description = "Definovaná funkce read()";
-            string expected = "ano";
 
-            constexpr bool valid = HasRead<Submission::AnalogInput>;
+            const string description = "Spravný konstruktor";
+            const string expected = "ano";
+
+            const bool valid = HasValidConstructor<Submission::Player>;
             
-            if(valid)
-            {
-                return TestResult(description, expected, expected, true, 1);
-            }
-            else
+            if(!valid)
             {
                 return TestResult(description, expected, "ne", false, 0);
             }
+            
+            return TestResult(description, expected, expected, true, 1);
         }
     );
 
@@ -237,19 +245,17 @@ int main() {
         {},
         [](const vector<reference_wrapper<const TestResult>>& dependencies) {
 
-            const string description = "Spravný konstruktor AnalogInput";
+            const string description = "Nemá veřejný atribut health";
             const string expected = "ano";
 
-            const bool valid = HasValidConstructor<Submission::AnalogInput>;
+            const bool valid = HasPublicHealth<Submission::Player>;
             
-            if(valid)
-            {
-                return TestResult(description, expected, expected, true, 1);
-            }
-            else
+            if(!valid)
             {
                 return TestResult(description, expected, "ne", false, 0);
             }
+
+            return TestResult(description, expected, expected, true, 1);
         }
     );
 
@@ -258,26 +264,24 @@ int main() {
         {},
         [](const vector<reference_wrapper<const TestResult>>& dependencies) {
 
-            const string description = "Nemá veřejný atribut pin";
+            const string description = "Nemá veřejný atribut score";
             const string expected = "ano";
 
-            const bool valid = HasNotPublicPin<Submission::AnalogInput>;
+            const bool valid = HasPublicScore<Submission::Player>;
             
-            if(valid)
-            {
-                return TestResult(description, expected, expected, true, 1);
-            }
-            else
+            if(!valid)
             {
                 return TestResult(description, expected, "ne", false, 0);
             }
+
+            return TestResult(description, expected, expected, true, 1);
         }
     );
 
     const vector<reference_wrapper<const TestResult>>& dependencies = { cref(tc1.result()), cref(tc2.result()), cref(tc3.result()) };
 
-    TestCase tc5 = TestRun(1, 6, dependencies);
-    TestCase tc6 = TestRun(2, 128, dependencies);
+    TestCase tc5 = TestRun(2, 1, 6, dependencies);
+    TestCase tc6 = TestRun(2, 2, 128, dependencies);
 
     auto testCases = array{ ref(tc1), ref(tc2), ref(tc3), ref(tc4), ref(tc5), ref(tc6) };
 
@@ -344,8 +348,9 @@ int main() {
 
     #endif
     
-    print(R"({{ "fraction": {}, "testresults":  [)", fraction);
-    print(R"( ["Název testu", "Očekávaná hodnota", "Výsledek", "iscorrect"])");
+    print(R"({{ "fraction": {}, "testresults":  [ )", fraction);
+
+    puts(R"( ["Název testu", "Očekávaná hodnota", "Výsledek", "iscorrect"] )");
 
     for (const auto& testCaseReference : testCases)
     {
@@ -355,7 +360,7 @@ int main() {
         print(R"(, ["{}", "{}", "{}", {}])", result.description, result.expected, result.actual, result.isCorrect ? 1 : 0);
     }
 
-    print(R"( ]}})");
+    puts(R"( ]} )");
 
     return 0;
 }
