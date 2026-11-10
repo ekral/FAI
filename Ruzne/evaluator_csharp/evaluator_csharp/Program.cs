@@ -231,7 +231,7 @@ namespace Reference
     {
         public void Send(string recipient, string message)
         {
-            TestConsole.WriteLine($"Sent email to {recipient}: {message}");
+            Evaluator.TestConsole.WriteLine($"Sent email to {recipient}: {message}");
         }
     }
 
@@ -239,7 +239,7 @@ namespace Reference
     {
         public void Send(string recipient, string message)
         {
-            TestConsole.WriteLine($"Sent SMS to {recipient}: {message}");
+            Evaluator.TestConsole.WriteLine($"Sent SMS to {recipient}: {message}");
         }
     }
 }
