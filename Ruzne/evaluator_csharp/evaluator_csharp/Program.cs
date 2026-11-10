@@ -31,7 +31,7 @@ namespace evaluator_csharp
             SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(code);
             SyntaxNode root = syntaxTree.GetRoot();
 
-            TestCase tc1 = TypeTestCase(1, [], nameof(Reference.EmailSender), root);
+            TestResult tr1 = TestIfClassExists(1, nameof(Reference.EmailSender), root);
 
             var baseDir = AppContext.BaseDirectory;
 
@@ -67,7 +67,7 @@ namespace evaluator_csharp
 
             Console.SetOut(stdout);
 
-            TestCase[][] testCases = [[tc1]];
+            TestResult[][] testResults = [[tr1]];
 
             var header = new JsonArray("Test", "Očekávaná hodnota", "Výsledek", "IsCorrect");
 
@@ -76,24 +76,24 @@ namespace evaluator_csharp
             int points = 0;
             int maxPoints = 0;
 
-            foreach (var group in testCases)
+            foreach (TestResult[] group in testResults)
             {
-                var missing = group.Where(tc => !tc.Result.IsCorrect);
+                var missing = group.Where(tr => !tr.IsCorrect);
                 bool groupAllCorrect = !missing.Any();
 
                 int groupMaxPoints = 0;
 
-                foreach (TestCase tc in group)
+                foreach (TestResult testResult in group)
                 {
-                    groupMaxPoints += tc.MaxPoints;
+                    groupMaxPoints += testResult.MaxPoints;
 
                     var jsonArray = groupAllCorrect switch
                     {
-                        true => new JsonArray(tc.Result.Description, tc.Result.Expected, tc.Result.Actual, true),
-                        false => tc.Result.IsCorrect switch
+                        true => new JsonArray(testResult.Description, testResult.Expected, testResult.Actual, true),
+                        false => testResult.IsCorrect switch
                         {
-                            true => new JsonArray(tc.Result.Description, tc.Result.Expected, $"{tc.Result.Actual} správně, ale chybí související testy: [{string.Join(", ", missing.Select(m => m.Result.Description))}]", false),
-                            false => new JsonArray(tc.Result.Description, tc.Result.Expected, tc.Result.Actual, false)
+                            true => new JsonArray(testResult.Description, testResult.Expected, $"{testResult.Actual} správně, ale chybí související testy: [{string.Join(", ", missing.Select(m => m.Description))}]", false),
+                            false => new JsonArray(testResult.Description, testResult.Expected, testResult.Actual, false)
                         }
                     };
 
@@ -123,7 +123,7 @@ namespace evaluator_csharp
 
             Console.WriteLine($"<ol>");
 
-            foreach (var group in testCases)
+            foreach (TestResult[] group in testResults)
             {
                 string indentation = string.Empty;
 
@@ -136,18 +136,9 @@ namespace evaluator_csharp
                     Console.WriteLine($"<ul>");
                 }
 
-                foreach (var testCase in group)
+                foreach (TestResult testResult in group)
                 {
-                    Console.Write($"<li>{testCase.Result.Description} (body: {testCase.MaxPoints}).");
-
-                    if (testCase.Dependencies.Length > 0)
-                    {
-                        Console.Write(" (závislosti: ");
-                        Console.Write(string.Join(", ", testCase.Dependencies.Select(d => d.Description)));
-                        Console.Write(")");
-                    }
-
-                    Console.WriteLine($"</li>");
+                    Console.WriteLine($"<li>{testResult.Description} (body: {testResult.MaxPoints}).</li>");
                 }
 
                 if (isGroup)
@@ -158,64 +149,44 @@ namespace evaluator_csharp
             }
 
             Console.WriteLine($"</ol>");
-
 #endif
         }
 
-        private static TestCase TypeTestCase(int points, TestResult[] dependencies, string typeName, SyntaxNode root)
+        private static TestResult TestIfClassExists(int points, string className, SyntaxNode root)
         {
-            string description = $"Typ {typeName} správně definován";
-            string expected = "ANO";
+            string description = $"Třída {className}";
 
-            return new TestCase(points, dependencies, dep =>
+            if (TestClass(root, className, out string expected, out string actual) is not SyntaxNode node)
             {
-                if (TestClass(root, typeName, description, out TestResult? result) is not SyntaxNode node)
-                {
-                    return result!;
-                }
+                return new TestResult(description, expected, actual, false, points, 0);
+            }
 
-                return new TestResult(description, expected, expected, true, points);
-            });
+            return new TestResult(description, expected, actual, true, points, points);
         }
 
-        private static SyntaxNode? TestClass(SyntaxNode root, string className, string description, out TestResult? result)
+        private static SyntaxNode? TestClass(SyntaxNode root, string className, out string expected, out string actual)
         {
-            result = null;
-            string expected = "ANO";
+            expected = $"Třída {className} je definovaná";
 
             SyntaxNode? node = root
-            .DescendantNodes()
-            .OfType<ClassDeclarationSyntax>()
-            .FirstOrDefault(c => c.Identifier.ValueText == className);
+                .DescendantNodes()
+                .OfType<ClassDeclarationSyntax>()
+                .FirstOrDefault(c => c.Identifier.ValueText == className);
 
-            if(node is null)
+            if(node is not null)
             {
-                result = new TestResult(description, expected, $"Třída {className} není definovaná", false, 0);
+                actual = expected;
+            }
+            else
+            {
+                actual = $"Třída {className} není definovaná";
             }
 
             return node;
         }
     }
 
-    record TestResult(string Description, string Expected, string Actual, bool IsCorrect, int Points);
-
-    class TestCase(int maxPoints, TestResult[] dependencies, Func<TestResult[], TestResult> testFunction)
-    {
-        private TestResult? result = null;
-        private readonly Func<TestResult[], TestResult> testFunction = testFunction;
-        public int MaxPoints { get; } = maxPoints;
-        public TestResult[] Dependencies { get; } = dependencies;
-
-        public TestResult Result
-        {
-            get
-            {
-                result ??= testFunction(Dependencies);
-
-                return result;
-            }
-        }
-    }
+    record TestResult(string Description, string Expected, string Actual, bool IsCorrect, int MaxPoints, int Points);
 
     public static class TestConsole
     {
