@@ -36,8 +36,8 @@ namespace evaluator_csharp
             var baseDir = AppContext.BaseDirectory;
 
             Assembly asm = typeof(Program).Assembly;
-    
-            PortableExecutableReference[] references = 
+
+            PortableExecutableReference[] references =
             [
                 MetadataReference.CreateFromStream(asm.GetManifestResourceStream("refs/System.Collections.dll")!),
                 MetadataReference.CreateFromStream(asm.GetManifestResourceStream("refs/System.Linq.dll")!),
@@ -49,7 +49,7 @@ namespace evaluator_csharp
                 .AddSyntaxTrees(syntaxTree)
                 .AddReferences(references);
 
-            
+
             using var ms = new MemoryStream();
             var result = compilation.Emit(ms);
 
@@ -62,7 +62,7 @@ namespace evaluator_csharp
 
             var stdout = Console.Out;
             Console.SetOut(new StringWriter());
-            
+
             // Run student code
 
             Console.SetOut(stdout);
@@ -165,27 +165,38 @@ namespace evaluator_csharp
         private static TestCase TypeTestCase(int points, TestResult[] dependencies, string typeName, SyntaxNode root)
         {
             string description = $"Typ {typeName} správně definován";
-            string expected = "Ano";
+            string expected = "ANO";
 
             return new TestCase(points, dependencies, dep =>
             {
-                bool hasProgramClass = root
-                .DescendantNodes()
-                .OfType<ClassDeclarationSyntax>()
-                .Any(c => c.Identifier.ValueText == typeName);
-
-                if (!hasProgramClass)
+                if (TestClass(root, typeName, description, out TestResult? result) is not SyntaxNode node)
                 {
-                    return new TestResult(description, expected, $"Typ {typeName} neexistuje", false, 0);
+                    return result!;
                 }
 
                 return new TestResult(description, expected, expected, true, points);
-
             });
+        }
+
+        private static SyntaxNode? TestClass(SyntaxNode root, string className, string description, out TestResult? result)
+        {
+            result = null;
+            string expected = "ANO";
+
+            SyntaxNode? node = root
+            .DescendantNodes()
+            .OfType<ClassDeclarationSyntax>()
+            .FirstOrDefault(c => c.Identifier.ValueText == className);
+
+            if(node is null)
+            {
+                result = new TestResult(description, expected, $"Třída {className} není definovaná", false, 0);
+            }
+
+            return node;
         }
     }
 
-    
     record TestResult(string Description, string Expected, string Actual, bool IsCorrect, int Points);
 
     class TestCase(int maxPoints, TestResult[] dependencies, Func<TestResult[], TestResult> testFunction)
