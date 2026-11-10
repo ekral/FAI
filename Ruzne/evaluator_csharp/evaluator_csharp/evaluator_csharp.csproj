@@ -20,6 +20,16 @@
   <ItemGroup>
 	  <EmbeddedResource Include="refs\*.dll" LogicalName="refs/%(Filename)%(Extension)" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Submission.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Submission.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 	
 <PropertyGroup Condition="'$(Configuration)' == 'Release'">
 	<DebugSymbols>false</DebugSymbols>

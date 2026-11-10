@@ -1,6 +1,5 @@
 ﻿#define ASSIGNMENT_REPORT
 
-using evaluator_csharp;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -12,21 +11,13 @@ using System.Reflection.Metadata;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
-namespace evaluator_csharp
+namespace Evaluator
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            string code = """
-            public class EmailSender 
-            {
-                public static string MyMethod() 
-                {
-                    return "Hello Roslyn";
-                }
-            }
-            """;
+            string code = File.ReadAllText("Submission.cs");
 
             SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(code);
             SyntaxNode root = syntaxTree.GetRoot();
@@ -48,7 +39,6 @@ namespace evaluator_csharp
                 .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary))
                 .AddSyntaxTrees(syntaxTree)
                 .AddReferences(references);
-
 
             using var ms = new MemoryStream();
             var result = compilation.Emit(ms);
@@ -120,7 +110,6 @@ namespace evaluator_csharp
 
             Console.WriteLine($"<p>Výsledné body se spočítají jako: (počet bodů za splněné kritéria / {maxPoints}) x celkový počet bodů za úlohu.</p>");
 
-
             Console.WriteLine($"<ol>");
 
             foreach (TestResult[] group in testResults)
@@ -152,37 +141,50 @@ namespace evaluator_csharp
 #endif
         }
 
-        private static TestResult TestIfClassExists(int points, string className, SyntaxNode root)
+        private static TestResult TestIfClassExists(int maxPoints, string className, SyntaxNode root)
         {
             string description = $"Třída {className}";
 
-            if (TestClass(root, className, out string expected, out string actual) is not SyntaxNode node)
+            if (TestClass(root, className, out string expected, out string actual) is not ClassDeclarationSyntax cds)
             {
-                return new TestResult(description, expected, actual, false, points, 0);
+                return new TestResult(description, expected, actual, false, maxPoints, 0);
             }
 
-            return new TestResult(description, expected, actual, true, points, points);
+            return new TestResult(description, expected, actual, true, maxPoints, maxPoints);
         }
 
-        private static SyntaxNode? TestClass(SyntaxNode root, string className, out string expected, out string actual)
+        private static ClassDeclarationSyntax? TestClass(SyntaxNode root, string className, out string expected, out string actual)
         {
             expected = $"Třída {className} je definovaná";
 
-            SyntaxNode? node = root
+            ClassDeclarationSyntax? cds = root
                 .DescendantNodes()
                 .OfType<ClassDeclarationSyntax>()
                 .FirstOrDefault(c => c.Identifier.ValueText == className);
 
-            if(node is not null)
-            {
-                actual = expected;
-            }
-            else
+            if(cds is null)
             {
                 actual = $"Třída {className} není definovaná";
+                return null;
             }
 
-            return node;
+            if (cds.OpenBraceToken.IsMissing)
+            {
+                expected = $"Třída {className} má otevírací závorku";
+                actual = $"Třídě {className} chybí otevírací závorka";
+                return null;
+            }
+
+            if (cds.CloseBraceToken.IsMissing)
+            {
+                expected = $"Třída {className} má uzavírací závorku";
+                actual = $"Třídě {className} chybí uzavírací závorka";
+                return null;
+            }
+
+            actual = expected;
+
+            return cds;
         }
     }
 
