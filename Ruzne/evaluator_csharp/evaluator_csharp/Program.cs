@@ -18,8 +18,6 @@ namespace Evaluator
         {
             string code = File.ReadAllText("Submission.cs");
             
-            
-
             Evaluator evaluator = new(code);
 
             TestResult tr1 = evaluator.TestIfClassExists(1, nameof(Reference.EmailSender));
@@ -109,6 +107,11 @@ namespace Evaluator
             Console.WriteLine(json.ToJsonString(new JsonSerializerOptions { WriteIndented = true }));
 
 #if DEBUG
+            foreach (Diagnostic diagnostic in evaluator.Compilation.GetDiagnostics())
+            {
+                Console.WriteLine(diagnostic.ToString());
+            }
+
             Console.WriteLine($"<p>Výsledné body se spočítají jako: (počet bodů za splněné kritéria / {maxPoints}) x celkový počet bodů za úlohu.</p>");
 
             Console.WriteLine($"<ol>");
