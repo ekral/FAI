@@ -206,7 +206,7 @@ namespace Evaluator
             return new TestResult(description, expected, actual, true, maxPoints, maxPoints);
         }
 
-        public TestResult TestIfMethodExist(int maxPoints, string className, string methodName, Accessibility accessibility, string returnTypeName, string[] parametersNames)
+        public TestResult TestIfMethodExists(int maxPoints, string className, string methodName, Accessibility accessibility, string returnTypeName, string[] parametersNames)
         {
             string description = $"Třída {className} metoda: {methodName}";
 
@@ -223,7 +223,7 @@ namespace Evaluator
             return new TestResult(description, expectedMethod, actualMethod, true, maxPoints, maxPoints);
         }
 
-        public TestResult TestIfClassImplementInterface(int maxPoints, string interfaceName, string className)
+        public TestResult TestIfClassImplementsInterface(int maxPoints, string interfaceName, string className)
         {
             string description = $"Třída {className} a rozhraní {interfaceName}";
 
