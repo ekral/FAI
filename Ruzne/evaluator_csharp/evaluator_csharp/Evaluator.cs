@@ -90,7 +90,7 @@ namespace Evaluator
             return cds;
         }
 
-        private IMethodSymbol? MethodDeclaration(string methodName, TypeDeclarationSyntax typeDeclaration, Accessibility accessibility, string returnType, string[] parametersNames, out string expected, out string actual)
+        private IMethodSymbol? MethodDeclaration(string methodName, TypeDeclarationSyntax typeDeclaration, Accessibility accessibility, SpecialType returnType, SpecialType[] parametersTypes, out string expected, out string actual)
         {
             SemanticModel semanticModel = Compilation.GetSemanticModel(typeDeclaration.SyntaxTree);
 
@@ -118,8 +118,8 @@ namespace Evaluator
             {
                 bool match =
                 method.DeclaredAccessibility == accessibility &&
-                method.ReturnType.ToDisplayString() == returnType &&
-                method.Parameters.Select(p => p.Type.ToDisplayString()).SequenceEqual(parametersNames);
+                method.ReturnType.SpecialType == returnType &&
+                method.Parameters.Select(p => p.Type.SpecialType).SequenceEqual(parametersTypes);
 
                 if (match)
                 {
@@ -128,7 +128,7 @@ namespace Evaluator
                 }
             }
 
-            expected = $"Návratový typ: {returnType}, parametry: {string.Join(",", parametersNames)}";
+            expected = $"Návratový typ: {Compilation.GetSpecialType(returnType).ToDisplayString()}, parametry: {string.Join(",", parametersTypes.Select(p => Compilation.GetSpecialType(p).ToDisplayString()))}";
 
             if (resultMethod is null)
             {
@@ -206,7 +206,7 @@ namespace Evaluator
             return new TestResult(description, expected, actual, true, maxPoints, maxPoints);
         }
 
-        public TestResult TestIfMethodExists(int maxPoints, string className, string methodName, Accessibility accessibility, string returnTypeName, string[] parametersNames)
+        public TestResult TestIfMethodExists(int maxPoints, string className, string methodName, Accessibility accessibility, SpecialType returnType, SpecialType[] parametersTypes)
         {
             string description = $"Třída {className} metoda: {methodName}";
 
@@ -215,7 +215,7 @@ namespace Evaluator
                 return new TestResult(description, expectedClass, actualClass, false, maxPoints, 0);
             }
 
-            if (MethodDeclaration(methodName, typeDeclarationSyntax, accessibility, returnTypeName, parametersNames, out string expectedMethod, out string actualMethod) is not IMethodSymbol methodSymbol)
+            if (MethodDeclaration(methodName, typeDeclarationSyntax, accessibility, returnType, parametersTypes, out string expectedMethod, out string actualMethod) is not IMethodSymbol methodSymbol)
             {
                 return new TestResult(description, expectedMethod, actualMethod, false, maxPoints, 0);
             }

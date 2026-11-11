@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
-
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 public static class TestConsole
 {
