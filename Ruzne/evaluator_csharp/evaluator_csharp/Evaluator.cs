@@ -1,12 +1,15 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Emit;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Metadata;
-using System.Text;
+using System.Runtime.Loader;
 
 namespace Evaluator
 {
@@ -15,6 +18,8 @@ namespace Evaluator
         private readonly string code = code;
         private SyntaxTree? syntaxTree;
         private CSharpCompilation? compilation;
+        private ImmutableArray<Diagnostic>? diagnostics;
+        private Assembly? assembly;
 
         private readonly PortableExecutableReference[] references =
         [
@@ -41,6 +46,47 @@ namespace Evaluator
                     syntaxTrees: [SyntaxTree],
                     references: references
                 ).WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+            }
+        }
+
+        public ImmutableArray<Diagnostic> Diagnostics
+        {
+            get
+            {
+                if (!diagnostics.HasValue)
+                {
+                    Compile();
+                }
+
+                return diagnostics!.Value;
+            }
+        }
+
+        public Assembly? Assembly
+        {
+            get
+            {
+                if (!diagnostics.HasValue)
+                {
+                    Compile();
+                }
+
+                return assembly;
+            }
+        }
+
+        private void Compile()
+        {
+            using var ms = new MemoryStream();
+
+            EmitResult result = Compilation.Emit(ms);
+            diagnostics = result.Diagnostics;
+
+            if (result.Success)
+            {
+                ms.Position = 0;
+                var context = new AssemblyLoadContext("dynamic", isCollectible: true);
+                assembly = context.LoadFromStream(ms);
             }
         }
 

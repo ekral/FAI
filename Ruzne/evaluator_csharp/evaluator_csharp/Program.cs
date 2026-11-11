@@ -30,34 +30,17 @@ namespace Evaluator
             TestResult tr8 = evaluator.TestIfClassImplementsInterface(1, nameof(Reference.INotificationSender), nameof(Reference.SmsSender));
             TestResult tr9 = evaluator.TestIfConstructorExists(1, nameof(Reference.Application), Accessibility.Public, [nameof(Reference.INotificationSender)]);
 
-            //var baseDir = AppContext.BaseDirectory;
-
-            //Assembly asm = typeof(Program).Assembly;
-
-            //PortableExecutableReference[] references =
-            //[
-            //    MetadataReference.CreateFromStream(asm.GetManifestResourceStream("refs/System.Collections.dll")!),
-            //    MetadataReference.CreateFromStream(asm.GetManifestResourceStream("refs/System.Linq.dll")!),
-            //    MetadataReference.CreateFromStream(asm.GetManifestResourceStream("refs/System.Runtime.dll")!),
-            //];
-
-            //var compilation = CSharpCompilation.Create("DynamicAssembly")
-            //    .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary))
-            //    .AddSyntaxTrees(syntaxTree)
-            //    .AddReferences(references);
-
-            //using var ms = new MemoryStream();
-            //var result = compilation.Emit(ms);
-
-            //if (!result.Success)
-            //{
-            //    Console.WriteLine(result.Diagnostics);
-            //}
-
             var stdout = Console.Out;
             Console.SetOut(new StringWriter());
             
-            // run student code
+            if(evaluator.Assembly is Assembly assembly)
+            {
+                // TODO vytvorit metodu pro spusteni s nazvy typu v parametrech vracejici string jako vysledek, bez sloziteho overovani, jen vysledek
+                // Type? type = assembly.GetType(classSymbol.ToDisplayString());
+                // object? instance = Activator.CreateInstance(type, 42, "text"); // 42, "text" jsou parametry konstruktoru
+                // MethodInfo? method = type.GetMethod("MojeMetoda"); // type muze byt interface
+                // object? returnValue = method?.Invoke(instance, [arg1, arg2]);
+            }
 
             Console.SetOut(stdout);
 
