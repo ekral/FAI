@@ -1,9 +1,8 @@
-﻿#define ASSIGNMENT_REPORT
-
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -19,34 +18,37 @@ namespace Evaluator
         {
             string code = File.ReadAllText("Submission.cs");
 
-            SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(code);
-            SyntaxNode root = syntaxTree.GetRoot();
+            Evaluator evaluator = new(code);
 
-            TestResult tr1 = TestIfClassExists(1, nameof(Reference.EmailSender), root);
+            TestResult tr1 = evaluator.TestIfClassExists(1, nameof(Reference.EmailSender));
+            TestResult tr2 = evaluator.TestIfClassExists(1, nameof(Reference.SmsSender));
+            TestResult tr3 = evaluator.TestIfInterfaceExists(1, nameof(Reference.INotificationSender));
+            TestResult tr4 = evaluator.TestIfMethodExist(1, nameof(Reference.EmailSender), nameof(Reference.EmailSender.Send), "void", ["string", "string"]);
+            TestResult tr5 = evaluator.TestIfMethodExist(1, nameof(Reference.SmsSender), nameof(Reference.EmailSender.Send), "void", ["string", "string"]);
 
-            var baseDir = AppContext.BaseDirectory;
+            //var baseDir = AppContext.BaseDirectory;
 
-            Assembly asm = typeof(Program).Assembly;
+            //Assembly asm = typeof(Program).Assembly;
 
-            PortableExecutableReference[] references =
-            [
-                MetadataReference.CreateFromStream(asm.GetManifestResourceStream("refs/System.Collections.dll")!),
-                MetadataReference.CreateFromStream(asm.GetManifestResourceStream("refs/System.Linq.dll")!),
-                MetadataReference.CreateFromStream(asm.GetManifestResourceStream("refs/System.Runtime.dll")!),
-            ];
+            //PortableExecutableReference[] references =
+            //[
+            //    MetadataReference.CreateFromStream(asm.GetManifestResourceStream("refs/System.Collections.dll")!),
+            //    MetadataReference.CreateFromStream(asm.GetManifestResourceStream("refs/System.Linq.dll")!),
+            //    MetadataReference.CreateFromStream(asm.GetManifestResourceStream("refs/System.Runtime.dll")!),
+            //];
 
-            var compilation = CSharpCompilation.Create("DynamicAssembly")
-                .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary))
-                .AddSyntaxTrees(syntaxTree)
-                .AddReferences(references);
+            //var compilation = CSharpCompilation.Create("DynamicAssembly")
+            //    .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary))
+            //    .AddSyntaxTrees(syntaxTree)
+            //    .AddReferences(references);
 
-            using var ms = new MemoryStream();
-            var result = compilation.Emit(ms);
+            //using var ms = new MemoryStream();
+            //var result = compilation.Emit(ms);
 
-            if (!result.Success)
-            {
-                Console.WriteLine(result.Diagnostics);
-            }
+            //if (!result.Success)
+            //{
+            //    Console.WriteLine(result.Diagnostics);
+            //}
 
             Console.WriteLine("Succes");
 
@@ -57,7 +59,7 @@ namespace Evaluator
 
             Console.SetOut(stdout);
 
-            TestResult[][] testResults = [[tr1]];
+            TestResult[][] testResults = [[tr1], [tr2], [tr3], [tr4]];
 
             var header = new JsonArray("Test", "Očekávaná hodnota", "Výsledek", "IsCorrect");
 
@@ -97,7 +99,6 @@ namespace Evaluator
 
             double fraction = (double)points / (double)maxPoints;
 
-
             var json = new JsonObject()
             {
                 ["fraction"] = fraction,
@@ -106,7 +107,7 @@ namespace Evaluator
 
             Console.WriteLine(json.ToJsonString(new JsonSerializerOptions { WriteIndented = true }));
 
-#if ASSIGNMENT_REPORT
+#if DEBUG
 
             Console.WriteLine($"<p>Výsledné body se spočítají jako: (počet bodů za splněné kritéria / {maxPoints}) x celkový počet bodů za úlohu.</p>");
 
@@ -141,105 +142,7 @@ namespace Evaluator
 #endif
         }
 
-        private static TestResult TestIfClassExists(int maxPoints, string className, SyntaxNode root)
-        {
-            string description = $"Třída {className}";
-
-            if (TestClass(root, className, out string expected, out string actual) is not ClassDeclarationSyntax cds)
-            {
-                return new TestResult(description, expected, actual, false, maxPoints, 0);
-            }
-
-            return new TestResult(description, expected, actual, true, maxPoints, maxPoints);
-        }
-
-        private static ClassDeclarationSyntax? TestClass(SyntaxNode root, string className, out string expected, out string actual)
-        {
-            expected = $"Třída {className} je definovaná";
-
-            ClassDeclarationSyntax? cds = root
-                .DescendantNodes()
-                .OfType<ClassDeclarationSyntax>()
-                .FirstOrDefault(c => c.Identifier.ValueText == className);
-
-            if(cds is null)
-            {
-                actual = $"Třída {className} není definovaná";
-                return null;
-            }
-
-            if (cds.OpenBraceToken.IsMissing)
-            {
-                expected = $"Třída {className} má otevírací závorku";
-                actual = $"Třídě {className} chybí otevírací závorka";
-                return null;
-            }
-
-            if (cds.CloseBraceToken.IsMissing)
-            {
-                expected = $"Třída {className} má uzavírací závorku";
-                actual = $"Třídě {className} chybí uzavírací závorka";
-                return null;
-            }
-
-            actual = expected;
-
-            return cds;
-        }
-    }
-
-    record TestResult(string Description, string Expected, string Actual, bool IsCorrect, int MaxPoints, int Points);
-
-    public static class TestConsole
-    {
-        private readonly static int maxLength = 128;
-        private readonly static StringWriter writer = new();
-
-        public static string Message
-        {
-            get
-            {
-                string message = writer.ToString();
-
-                message = message.Length > maxLength ? message[..maxLength] : message;
-                message = System.Net.WebUtility.HtmlEncode(message);
-
-                return message;
-            }
-        }
-
-        public static void Clear()
-        {
-            writer.GetStringBuilder().Clear();
-        }
-
-        public static void WriteLine(string message)
-        {
-            writer.Write(message);
-        }
-    }   
-}
-
-namespace Reference
-{
-    interface INotificationSender
-    {
-        void Send(string recipient, string message);
-    }
-
-    class EmailSender : INotificationSender
-    {
-        public void Send(string recipient, string message)
-        {
-            Evaluator.TestConsole.WriteLine($"Sent email to {recipient}: {message}");
-        }
-    }
-
-    class SmsSender : INotificationSender
-    {
-        public void Send(string recipient, string message)
-        {
-            Evaluator.TestConsole.WriteLine($"Sent SMS to {recipient}: {message}");
-        }
     }
 }
+
+

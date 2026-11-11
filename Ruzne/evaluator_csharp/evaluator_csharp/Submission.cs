@@ -9,7 +9,7 @@
     {
         public void Send(string recipient, string message)
         {
-            Evaluator.TestConsole.WriteLine($"Sent email to {recipient}: {message}");
+            TestConsole.WriteLine($"Sent email to {recipient}: {message}");
         }
     }
 
@@ -17,7 +17,7 @@
     {
         public void Send(string recipient, string message)
         {
-            Evaluator.TestConsole.WriteLine($"Sent SMS to {recipient}: {message}");
+            TestConsole.WriteLine($"Sent SMS to {recipient}: {message}");
         }
     }
 }
