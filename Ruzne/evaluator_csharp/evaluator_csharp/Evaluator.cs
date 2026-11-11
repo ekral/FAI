@@ -90,7 +90,7 @@ namespace Evaluator
             return cds;
         }
 
-        private IMethodSymbol? MethodDeclaration(string methodName, TypeDeclarationSyntax typeDeclaration, Accessibility accessibility, SpecialType returnType, SpecialType[] parametersTypes, out string expected, out string actual)
+        private IMethodSymbol? MethodDeclaration(string methodName, TypeDeclarationSyntax typeDeclaration, Accessibility accessibility, string returnType, string[] parametersTypes, out string expected, out string actual)
         {
             SemanticModel semanticModel = Compilation.GetSemanticModel(typeDeclaration.SyntaxTree);
 
@@ -118,8 +118,8 @@ namespace Evaluator
             {
                 bool match =
                 method.DeclaredAccessibility == accessibility &&
-                method.ReturnType.SpecialType == returnType &&
-                method.Parameters.Select(p => p.Type.SpecialType).SequenceEqual(parametersTypes);
+                method.ReturnType.Name == returnType &&
+                method.Parameters.Select(p => p.Type.Name).SequenceEqual(parametersTypes);
 
                 if (match)
                 {
@@ -128,7 +128,7 @@ namespace Evaluator
                 }
             }
 
-            expected = $"Návratový typ: {Compilation.GetSpecialType(returnType).ToDisplayString()}, parametry: {string.Join(",", parametersTypes.Select(p => Compilation.GetSpecialType(p).ToDisplayString()))}";
+            expected = $"Návratový typ: {returnType}, parametry: {string.Join(",", parametersTypes)}";
 
             if (resultMethod is null)
             {
@@ -182,6 +182,35 @@ namespace Evaluator
             return true;
         }
 
+        private bool ClassHasConstructor(ClassDeclarationSyntax classDeclaration, string[] parametersTypes, out string expected, out string actual)
+        {
+            SemanticModel semanticModel = Compilation.GetSemanticModel(SyntaxTree);
+
+            if (semanticModel.GetDeclaredSymbol(classDeclaration) is not INamedTypeSymbol classSymbol)
+            {
+                expected = $"Přeložený kód obsahuje deklaraci třídy {classDeclaration.Identifier.ValueText}";
+                actual = $"Přeložený kód neobsahuje deklaraci třídy {classDeclaration.Identifier.ValueText}";
+                return false;
+            }
+
+            IMethodSymbol? constructor = classSymbol.InstanceConstructors
+               .FirstOrDefault(ms => ms.Parameters
+                    .Select(p => p.Type.Name)
+                    .SequenceEqual(parametersTypes));
+
+            expected = $"Třída {classDeclaration.Identifier.ValueText} má správný konstruktor";
+
+            if(constructor is null)
+            {
+                actual = $"Třída {classDeclaration.Identifier.ValueText} nemá správný konstruktor";
+                return false;
+            }
+
+            actual = expected;
+
+            return true;
+        }
+
         public TestResult TestIfClassExists(int maxPoints, string className)
         {
             string description = $"Třída {className}";
@@ -206,7 +235,24 @@ namespace Evaluator
             return new TestResult(description, expected, actual, true, maxPoints, maxPoints);
         }
 
-        public TestResult TestIfMethodExists(int maxPoints, string className, string methodName, Accessibility accessibility, SpecialType returnType, SpecialType[] parametersTypes)
+        public TestResult TestIfConstructorExists(int maxPoints, string className, Accessibility accessibility, string[] parametersTypes)
+        {
+            string description = $"Konstruktor třídy {className}";
+
+            if (TypeDeclaration<ClassDeclarationSyntax>(className, out string expectedClass, out string actualClass) is not ClassDeclarationSyntax classDeclarationSyntax)
+            {
+                return new TestResult(description, expectedClass, actualClass, false, maxPoints, 0);
+            }
+
+            if (!ClassHasConstructor(classDeclarationSyntax, parametersTypes, out string expectedConstructor, out string actualConstructor))
+            {
+                return new TestResult(description, expectedConstructor, actualConstructor, false, maxPoints, 0);
+            }
+
+            return new TestResult(description, expectedConstructor, actualConstructor, true, maxPoints, maxPoints);
+        }
+
+        public TestResult TestIfMethodExists(int maxPoints, string className, string methodName, Accessibility accessibility, string returnType, string[] parametersTypes)
         {
             string description = $"Třída {className} metoda: {methodName}";
 

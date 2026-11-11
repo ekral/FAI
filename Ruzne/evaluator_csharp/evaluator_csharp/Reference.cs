@@ -20,4 +20,14 @@
             TestConsole.WriteLine($"Sent SMS to {recipient}: {message}");
         }
     }
+
+    class Application(INotificationSender sender)
+    {
+        private INotificationSender sender = sender;
+
+        void Method(string recipient, string message)
+        {
+            sender.Send(recipient, message);
+        }
+    }
 }

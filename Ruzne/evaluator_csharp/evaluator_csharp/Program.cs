@@ -23,11 +23,12 @@ namespace Evaluator
             TestResult tr1 = evaluator.TestIfClassExists(1, nameof(Reference.EmailSender));
             TestResult tr2 = evaluator.TestIfClassExists(1, nameof(Reference.SmsSender));
             TestResult tr3 = evaluator.TestIfInterfaceExists(1, nameof(Reference.INotificationSender));
-            TestResult tr4 = evaluator.TestIfMethodExists(1, nameof(Reference.EmailSender), nameof(Reference.EmailSender.Send), Accessibility.Public, SpecialType.System_Void, [SpecialType.System_String, SpecialType.System_String]);
-            TestResult tr5 = evaluator.TestIfMethodExists(1, nameof(Reference.SmsSender), nameof(Reference.EmailSender.Send), Accessibility.Public, SpecialType.System_Void, [SpecialType.System_String, SpecialType.System_String]);
-            TestResult tr6 = evaluator.TestIfMethodExists(1, nameof(Reference.INotificationSender), nameof(Reference.EmailSender.Send), Accessibility.Public, SpecialType.System_Void, [SpecialType.System_String, SpecialType.System_String]);
+            TestResult tr4 = evaluator.TestIfMethodExists(1, nameof(Reference.EmailSender), nameof(Reference.EmailSender.Send), Accessibility.Public, "Void", ["String", "String"]);
+            TestResult tr5 = evaluator.TestIfMethodExists(1, nameof(Reference.SmsSender), nameof(Reference.EmailSender.Send), Accessibility.Public, "Void", ["String", "String"]);
+            TestResult tr6 = evaluator.TestIfMethodExists(1, nameof(Reference.INotificationSender), nameof(Reference.EmailSender.Send), Accessibility.Public, "Void", ["String", "String"]);
             TestResult tr7 = evaluator.TestIfClassImplementsInterface(1, nameof(Reference.INotificationSender), nameof(Reference.EmailSender));
             TestResult tr8 = evaluator.TestIfClassImplementsInterface(1, nameof(Reference.INotificationSender), nameof(Reference.SmsSender));
+            TestResult tr9 = evaluator.TestIfConstructorExists(1, nameof(Reference.Application), Accessibility.Public, [nameof(Reference.INotificationSender)]);
 
             //var baseDir = AppContext.BaseDirectory;
 
@@ -60,7 +61,7 @@ namespace Evaluator
 
             Console.SetOut(stdout);
 
-            TestResult[][] testResults = [[tr1], [tr2], [tr3], [tr4], [tr5], [tr6], [tr7], [tr8]];
+            TestResult[][] testResults = [[tr1], [tr2], [tr3], [tr4], [tr5], [tr6], [tr7], [tr8], [tr9]];
 
             var header = new JsonArray("Test", "Očekávaná hodnota", "Výsledek", "IsCorrect");
 
