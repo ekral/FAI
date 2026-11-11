@@ -1,10 +1,14 @@
-﻿using System.IO;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.IO;
 
+
+[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 public static class TestConsole
 {
     private readonly static int maxLength = 128;
     private readonly static StringWriter writer = new();
 
+    
     public static string Message
     {
         get

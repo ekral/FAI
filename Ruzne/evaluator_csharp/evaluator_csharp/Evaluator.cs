@@ -4,6 +4,8 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Reflection.Metadata;
 using System.Text;
 
 namespace Evaluator
@@ -12,13 +14,14 @@ namespace Evaluator
     {
         private readonly string code = code;
         private SyntaxTree? syntaxTree;
-        private readonly Dictionary<string, CSharpCompilation> compilations = [];
+        private CSharpCompilation? compilation;
 
-        private PortableExecutableReference[] references =
+        private readonly PortableExecutableReference[] references =
         [
             MetadataReference.CreateFromStream(typeof(Program).Assembly.GetManifestResourceStream("refs/System.Collections.dll")!),
             MetadataReference.CreateFromStream(typeof(Program).Assembly.GetManifestResourceStream("refs/System.Linq.dll")!),
             MetadataReference.CreateFromStream(typeof(Program).Assembly.GetManifestResourceStream("refs/System.Runtime.dll")!),
+            CreateSelfReference()
         ];
 
         public SyntaxTree SyntaxTree
@@ -29,22 +32,27 @@ namespace Evaluator
             }
         }
 
-        private CSharpCompilation GetCompilation(string assemblyName, SyntaxTree syntaxTree)
+        public CSharpCompilation Compilation
         {
-            if (compilations.TryGetValue(assemblyName, out CSharpCompilation? cachedCompilation))
+            get
             {
-                return cachedCompilation;
+                return compilation ??= CSharpCompilation.Create(
+                    assemblyName: "Submission",
+                    syntaxTrees: [SyntaxTree],
+                    references: references
+                ).WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
             }
+        }
 
-            CSharpCompilation compilation = CSharpCompilation.Create(
-                assemblyName: assemblyName,
-                syntaxTrees: [syntaxTree],
-                references: references
-            ).WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+        private static unsafe PortableExecutableReference CreateSelfReference()
+        {
+            Assembly assembly = typeof(Program).Assembly;
 
-            compilations[assemblyName] = compilation;
+            if (!assembly.TryGetRawMetadata(out byte* blob, out int length))
+                throw new InvalidOperationException("Nepodařilo se získat metadata assembly.");
 
-            return compilation;
+            var moduleMetadata = ModuleMetadata.CreateFromMetadata((IntPtr)blob, length);
+            return AssemblyMetadata.Create(moduleMetadata).GetReference();
         }
 
         private T? TypeDeclaration<T>(string className, out string expected, out string actual)
@@ -84,9 +92,7 @@ namespace Evaluator
 
         private IMethodSymbol? MethodDeclaration(string methodName, TypeDeclarationSyntax typeDeclaration, Accessibility accessibility, string returnType, string[] parametersNames, out string expected, out string actual)
         {
-            CSharpCompilation compilation = GetCompilation($"{typeDeclaration.Identifier.ValueText}.{methodName}", typeDeclaration.SyntaxTree);
-
-            SemanticModel semanticModel = compilation.GetSemanticModel(typeDeclaration.SyntaxTree);
+            SemanticModel semanticModel = Compilation.GetSemanticModel(typeDeclaration.SyntaxTree);
 
             var declaredSymbol = semanticModel.GetDeclaredSymbol(typeDeclaration);
 
@@ -127,6 +133,7 @@ namespace Evaluator
             if (resultMethod is null)
             {
                 actual = $"Žádná metoda nemá odpovidající typy";
+                return null;
             }
 
             actual = expected;
@@ -158,7 +165,7 @@ namespace Evaluator
             return new TestResult(description, expected, actual, true, maxPoints, maxPoints);
         }
 
-        public TestResult TestIfMethodExist(int maxPoints, string className, string methodName, string returnTypeName, string[] parametersNames)
+        public TestResult TestIfMethodExist(int maxPoints, string className, string methodName, Accessibility accessibility, string returnTypeName, string[] parametersNames)
         {
             string description = $"Třída {className} metoda: {methodName}";
 
@@ -167,7 +174,7 @@ namespace Evaluator
                 return new TestResult(description, expectedClass, actualClass, false, maxPoints, 0);
             }
 
-            if (MethodDeclaration(methodName, typeDeclarationSyntax, Accessibility.Public, returnTypeName, parametersNames, out string expectedMethod, out string actualMethod) is not IMethodSymbol methodSymbol)
+            if (MethodDeclaration(methodName, typeDeclarationSyntax, accessibility, returnTypeName, parametersNames, out string expectedMethod, out string actualMethod) is not IMethodSymbol methodSymbol)
             {
                 return new TestResult(description, expectedMethod, actualMethod, false, maxPoints, 0);
             }

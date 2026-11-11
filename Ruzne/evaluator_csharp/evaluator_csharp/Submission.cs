@@ -9,7 +9,7 @@
     {
         public void Send(string recipient, string message)
         {
-            TestConsole.WriteLine($"Sent email to {recipient}: {message}");
+            TestConsole.WriteLine($"Sent email to {recipient}: {message}")
         }
     }
 

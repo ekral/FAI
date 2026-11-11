@@ -17,14 +17,17 @@ namespace Evaluator
         static void Main(string[] args)
         {
             string code = File.ReadAllText("Submission.cs");
+            
+            
 
             Evaluator evaluator = new(code);
 
             TestResult tr1 = evaluator.TestIfClassExists(1, nameof(Reference.EmailSender));
             TestResult tr2 = evaluator.TestIfClassExists(1, nameof(Reference.SmsSender));
             TestResult tr3 = evaluator.TestIfInterfaceExists(1, nameof(Reference.INotificationSender));
-            TestResult tr4 = evaluator.TestIfMethodExist(1, nameof(Reference.EmailSender), nameof(Reference.EmailSender.Send), "void", ["string", "string"]);
-            TestResult tr5 = evaluator.TestIfMethodExist(1, nameof(Reference.SmsSender), nameof(Reference.EmailSender.Send), "void", ["string", "string"]);
+            TestResult tr4 = evaluator.TestIfMethodExist(1, nameof(Reference.EmailSender), nameof(Reference.EmailSender.Send), Accessibility.Public, "void", ["string", "string"]);
+            TestResult tr5 = evaluator.TestIfMethodExist(1, nameof(Reference.SmsSender), nameof(Reference.EmailSender.Send), Accessibility.Public, "void", ["string", "string"]);
+            TestResult tr6 = evaluator.TestIfMethodExist(1, nameof(Reference.INotificationSender), nameof(Reference.EmailSender.Send), Accessibility.Public, "void", ["string", "string"]);
 
             //var baseDir = AppContext.BaseDirectory;
 
@@ -50,16 +53,14 @@ namespace Evaluator
             //    Console.WriteLine(result.Diagnostics);
             //}
 
-            Console.WriteLine("Succes");
-
             var stdout = Console.Out;
             Console.SetOut(new StringWriter());
-
-            // Run student code
+            
+            // run student code
 
             Console.SetOut(stdout);
 
-            TestResult[][] testResults = [[tr1], [tr2], [tr3], [tr4]];
+            TestResult[][] testResults = [[tr1], [tr2], [tr3], [tr4], [tr5], [tr6]];
 
             var header = new JsonArray("Test", "Očekávaná hodnota", "Výsledek", "IsCorrect");
 
@@ -108,7 +109,6 @@ namespace Evaluator
             Console.WriteLine(json.ToJsonString(new JsonSerializerOptions { WriteIndented = true }));
 
 #if DEBUG
-
             Console.WriteLine($"<p>Výsledné body se spočítají jako: (počet bodů za splněné kritéria / {maxPoints}) x celkový počet bodů za úlohu.</p>");
 
             Console.WriteLine($"<ol>");
