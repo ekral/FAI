@@ -94,7 +94,7 @@ namespace Evaluator
         {
             SemanticModel semanticModel = Compilation.GetSemanticModel(typeDeclaration.SyntaxTree);
 
-            var declaredSymbol = semanticModel.GetDeclaredSymbol(typeDeclaration);
+            INamedTypeSymbol? declaredSymbol = semanticModel.GetDeclaredSymbol(typeDeclaration);
 
             if (declaredSymbol is null)
             {
@@ -141,6 +141,47 @@ namespace Evaluator
             return resultMethod;
         }
 
+        private bool ClassImplementsInterface(InterfaceDeclarationSyntax interfaceDeclaration, ClassDeclarationSyntax classDeclaration, out string expected, out string actual)
+        {
+            SemanticModel semanticModel = Compilation.GetSemanticModel(SyntaxTree);
+
+            if (semanticModel.GetDeclaredSymbol(classDeclaration) is not INamedTypeSymbol classSymbol)
+            {
+                expected = $"Přeložený kód obsahuje deklaraci třídy {classDeclaration.Identifier.ValueText}";
+                actual = $"Přeložený kód neobsahuje deklaraci třídy {classDeclaration.Identifier.ValueText}";
+                return false;
+            }
+
+            if (semanticModel.GetDeclaredSymbol(interfaceDeclaration) is not INamedTypeSymbol interfaceSymbol)
+            {
+                expected = $"Přeložený kód obsahuje deklaraci rozhraní {interfaceDeclaration.Identifier.ValueText}";
+                actual = $"Přeložený kód neobsahuje deklaraci rozhraní {interfaceDeclaration.Identifier.ValueText}";
+                return false;
+            }
+
+            if(!classSymbol.Interfaces.Contains(interfaceSymbol, SymbolEqualityComparer.Default))
+            {
+                expected = $"Třída {classDeclaration.Identifier.ValueText} dědí od {interfaceDeclaration.Identifier.ValueText}";
+                actual = $"Třída {classDeclaration.Identifier.ValueText} nedědí od {interfaceDeclaration.Identifier.ValueText}";
+                return false;
+            }
+
+            expected = $"Třída {classDeclaration.Identifier.ValueText} implementuje rozhraní {interfaceDeclaration.Identifier.ValueText}";
+
+            foreach (ISymbol symbol in interfaceSymbol.GetMembers())
+            {
+                if (classSymbol.FindImplementationForInterfaceMember(symbol) is null)
+                {
+                    actual = $"Třída {classDeclaration.Identifier.ValueText} neimplementuje rozhraní {interfaceDeclaration.Identifier.ValueText}";
+                    return false;
+                }
+            }
+
+            actual = expected;
+
+            return true;
+        }
+
         public TestResult TestIfClassExists(int maxPoints, string className)
         {
             string description = $"Třída {className}";
@@ -180,6 +221,28 @@ namespace Evaluator
             }
 
             return new TestResult(description, expectedMethod, actualMethod, true, maxPoints, maxPoints);
-        }      
+        }
+
+        public TestResult TestIfClassImplementInterface(int maxPoints, string interfaceName, string className)
+        {
+            string description = $"Třída {className} a rozhraní {interfaceName}";
+
+            if (TypeDeclaration<ClassDeclarationSyntax>(className, out string expectedClass, out string actualClass) is not ClassDeclarationSyntax classDeclarationSyntax)
+            {
+                return new TestResult(description, expectedClass, actualClass, false, maxPoints, 0);
+            }
+
+            if (TypeDeclaration<InterfaceDeclarationSyntax>(interfaceName, out string expectedInterface, out string actualInterface) is not InterfaceDeclarationSyntax interfaceDeclarationSyntax)
+            {
+                return new TestResult(description, expectedClass, actualClass, false, maxPoints, 0);
+            }
+
+            if(!ClassImplementsInterface(interfaceDeclarationSyntax, classDeclarationSyntax, out string expectedImplementation, out string actualImplementation))
+            {
+                return new TestResult(description, expectedImplementation, actualImplementation, false, maxPoints, 0);
+            }
+
+            return new TestResult(description, expectedImplementation, actualImplementation, true, maxPoints, maxPoints);
+        }
     }
 }

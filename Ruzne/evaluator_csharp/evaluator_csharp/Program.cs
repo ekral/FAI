@@ -26,6 +26,8 @@ namespace Evaluator
             TestResult tr4 = evaluator.TestIfMethodExist(1, nameof(Reference.EmailSender), nameof(Reference.EmailSender.Send), Accessibility.Public, "void", ["string", "string"]);
             TestResult tr5 = evaluator.TestIfMethodExist(1, nameof(Reference.SmsSender), nameof(Reference.EmailSender.Send), Accessibility.Public, "void", ["string", "string"]);
             TestResult tr6 = evaluator.TestIfMethodExist(1, nameof(Reference.INotificationSender), nameof(Reference.EmailSender.Send), Accessibility.Public, "void", ["string", "string"]);
+            TestResult tr7 = evaluator.TestIfClassImplementInterface(1, nameof(Reference.INotificationSender), nameof(Reference.EmailSender));
+            TestResult tr8 = evaluator.TestIfClassImplementInterface(1, nameof(Reference.INotificationSender), nameof(Reference.SmsSender));
 
             //var baseDir = AppContext.BaseDirectory;
 
@@ -58,7 +60,7 @@ namespace Evaluator
 
             Console.SetOut(stdout);
 
-            TestResult[][] testResults = [[tr1], [tr2], [tr3], [tr4], [tr5], [tr6]];
+            TestResult[][] testResults = [[tr1], [tr2], [tr3], [tr4], [tr5], [tr6], [tr7], [tr8]];
 
             var header = new JsonArray("Test", "Očekávaná hodnota", "Výsledek", "IsCorrect");
 
