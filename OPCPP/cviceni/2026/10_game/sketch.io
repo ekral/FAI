@@ -145,12 +145,17 @@ PwmOutput led(11, 64, 8);
 constexpr int led_length = 16;
 LiquidCrystal_I2C lcd(0x27, led_length, 2);
 
+// eFSM
+
 GameState state = LOTTERY_INIT;
 
 // LOTTERY
 constexpr int maxAttempts = 3;
 int attemptNumber = 0;
 int wins[] = { 0,3,0,0,0,0,0,7,0,0,0,0,0,1,0,0};
+int winIndex = 0;
+int lastLotteryTime = 0;
+int win = 0;
 
 // NAME_ENTRY
 Player player;
@@ -187,14 +192,16 @@ void ChangeState(GameState newState)
         }
         else
         {
-          lcd.print('$');
+          lcd.write(255);
         }
       }
 
       lcd.setCursor(0, 1);
-      lcd.print("count: ");
-      lcd.print(maxAttempts - attemptNumber); 
-      lcd.setCursor(0, 0);     
+      lcd.print("attempts: ");
+      lcd.print(attemptNumber); 
+      lcd.setCursor(0, 0);
+
+      lastLotteryTime = millis();    
       break;
     case NAME_ENTRY:
       for(int i = 0; i < name_length; i++)
@@ -253,6 +260,7 @@ void nameEntry(PressState pressStateYellow, PressState pressStateGray)
   }
 }
 
+
 void loop() 
 {
   PressState pressStateYellow = edgeYellow.detect(buttonYellow.read(), millis());
@@ -265,8 +273,21 @@ void loop()
       ChangeState(LOTTERY_RUNNING);
       break;
     case LOTTERY_RUNNING:
-      lcd.setCursor(0, 0);
+      int duration = (millis() - lastLotteryTime);
+
+      if(duration > 100)
+      {
+        lcd.setCursor(winIndex, 0);
+        ++winIndex;
+        if(winIndex > led_length - 1)
+        {
+          winIndex = 0;
+        }
+        lastLotteryTime = millis();
+      }
+
       break;
+
     case NAME_ENTRY:
       nameEntry(pressStateYellow, pressStateGray);
       break;
