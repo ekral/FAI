@@ -1,7 +1,7 @@
 {
   "format": "velxio-project",
   "version": 1,
-  "exportedAt": "2026-10-27T08:37:43.822Z",
+  "exportedAt": "2026-11-12T12:39:59.226Z",
   "boards": [
     {
       "id": "arduino-uno",
@@ -20,7 +20,7 @@
     "group-arduino-uno": [
       {
         "name": "sketch.ino",
-        "content": "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\n\nstruct EdgeDetector\n{\nprivate:\n  const int minDuration;\n  const bool targetState;\n\n  int candidate;\n  int candidateSince;\n  int lastState;\n\npublic:\n  EdgeDetector(int minDuration, bool targetState)\n    : minDuration(minDuration), targetState(targetState)\n  {\n\n  }\n\n  void begin(int state, int time)\n  {\n    candidate = state;\n    candidateSince = time;\n    lastState = state;\n  }\n\n  bool detect(int state, int time)\n  {\n    if(state != candidate)\n    {\n      candidate = state;\n      candidateSince = time;\n    }\n    else\n    {\n      int duration = time - candidateSince;\n\n      if(duration > minDuration)\n      {\n        if(candidate != lastState)\n        {\n          lastState = candidate;\n\n          if(candidate == targetState)\n          {\n            return true;\n          }\n        }\n      }\n    }\n\n    return false;\n  }\n};\n\nstruct PwmOutput\n{\nprivate:\n  const int pin;\n  int pulseWidth;\n  const int step;\n\n  void write()\n  {\n    analogWrite(pin, pulseWidth);\n  }\n\npublic:\n  PwmOutput(int pin, int pulseWidth, int step)\n    : pin(pin), pulseWidth(pulseWidth), step(step)\n  {\n  }\n\n  void begin()\n  {\n    pinMode(pin, OUTPUT);\n    write();\n  }\n\n  void increase()\n  {\n    pulseWidth += step;\n    write();\n  }\n\n  void decrease()\n  {\n    pulseWidth -= step;\n    write();\n  }\n};\n\nstruct DigitalInputPullup\n{\nprivate:\n  int pin;\npublic:\n  DigitalInputPullup(int pin) : pin(pin)\n  {\n  }\n\n  void begin()\n  {\n    pinMode(pin, INPUT_PULLUP);\n  }\n\n  bool read()\n  {\n     return digitalRead(pin);\n  }\n};\n\nDigitalInputPullup buttonRight(8);\nDigitalInputPullup buttonLeft(12);\nEdgeDetector edgeRight(30, HIGH);\nEdgeDetector edgeLeft(30, HIGH);\nPwmOutput led(11, 64, 8);\nLiquidCrystal_I2C lcd(0x27, 16, 2);\n\nchar jmeno[] = \"PTR\";\nint i = 0;\n\nvoid setup() \n{\n  lcd.init();\n  lcd.backlight();\n  lcd.setCursor(0,0);\n  lcd.cursor();\n  lcd.print(jmeno);\n\n  buttonRight.begin();\n  buttonLeft.begin();\n  edgeRight.begin(buttonRight.read(), millis());\n  edgeLeft.begin(buttonLeft.read(), millis());\n  led.begin();\n}\n\nvoid loop() \n{\n  if(edgeRight.detect(buttonRight.read(), millis()))\n  {\n    ++i;\n    \n    if(i > 2)\n    {\n      i = 0;\n    }\n\n    lcd.setCursor(i,0);\n  }\n\n  if(edgeLeft.detect(buttonLeft.read(), millis()))\n  {\n    ++jmeno[i];\n    \n    if(jmeno[i] > 'Z')\n    {\n      jmeno[i] = 'A';\n    }\n\n    lcd.setCursor(i,0);\n    lcd.print(jmeno[i]);\n  }\n}"
+        "content": "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\n\nstruct EdgeDetector\n{\nprivate:\n  const int minDuration;\n  const bool targetState;\n\n  int candidate;\n  int candidateSince;\n  int lastState;\n\npublic:\n  EdgeDetector(int minDuration, bool targetState)\n    : minDuration(minDuration), targetState(targetState)\n  {\n\n  }\n\n  void begin(int state, int time)\n  {\n    candidate = state;\n    candidateSince = time;\n    lastState = state;\n  }\n\n  bool detect(int state, int time)\n  {\n    if(state != candidate)\n    {\n      candidate = state;\n      candidateSince = time;\n    }\n    else\n    {\n      int duration = time - candidateSince;\n\n      if(duration > minDuration)\n      {\n        if(candidate != lastState)\n        {\n          lastState = candidate;\n\n          if(candidate == targetState)\n          {\n            return true;\n          }\n        }\n      }\n    }\n\n    return false;\n  }\n};\n\nstruct PwmOutput\n{\nprivate:\n  const int pin;\n  int pulseWidth;\n  const int step;\n\n  void write()\n  {\n    analogWrite(pin, pulseWidth);\n  }\n\npublic:\n  PwmOutput(int pin, int pulseWidth, int step)\n    : pin(pin), pulseWidth(pulseWidth), step(step)\n  {\n  }\n\n  void begin()\n  {\n    pinMode(pin, OUTPUT);\n    write();\n  }\n\n  void increase()\n  {\n    pulseWidth += step;\n    write();\n  }\n\n  void decrease()\n  {\n    pulseWidth -= step;\n    write();\n  }\n};\n\nstruct DigitalInputPullup\n{\nprivate:\n  int pin;\npublic:\n  DigitalInputPullup(int pin) : pin(pin)\n  {\n  }\n\n  void begin()\n  {\n    pinMode(pin, INPUT_PULLUP);\n  }\n\n  bool read()\n  {\n     return digitalRead(pin);\n  }\n};\n\nDigitalInputPullup buttonYellow(8);\nDigitalInputPullup buttonGray(12);\nEdgeDetector edgeYellow(30, HIGH);\nEdgeDetector edgeGray(30, HIGH);\nPwmOutput led(11, 64, 8);\nLiquidCrystal_I2C lcd(0x27, 16, 2);\n\nchar jmeno[] = \"PTR\";\nint i = 0;\n\nvoid setup() \n{\n  lcd.init();\n  lcd.backlight();\n  lcd.setCursor(0,0);\n  lcd.cursor();\n  lcd.print(jmeno);\n\n  buttonYellow.begin();\n  buttonGray.begin();\n  edgeYellow.begin(buttonYellow.read(), millis());\n  edgeGray.begin(buttonGray.read(), millis());\n  led.begin();\n}\n\nvoid loop() \n{\n  if(edgeYellow.detect(buttonYellow.read(), millis()))\n  {\n    ++i;\n    \n    if(i > 2)\n    {\n      i = 0;\n    }\n\n    lcd.setCursor(i,0);\n  }\n\n  if(edgeGray.detect(buttonGray.read(), millis()))\n  {\n    ++jmeno[i];\n    \n    if(jmeno[i] > 'Z')\n    {\n      jmeno[i] = 'A';\n    }\n\n    lcd.setCursor(i,0);\n    lcd.print(jmeno[i]);\n  }\n}"
       }
     ]
   },
@@ -307,6 +307,12 @@
       "autoRouted": true
     },
     {
+      "waypoints": [
+        {
+          "x": 247,
+          "y": 529.1829482768893
+        }
+      ],
       "id": "wire-1793086822182",
       "start": {
         "componentId": "lcd1602_i2c_1793086767526_kzt1lqvvg",
@@ -320,16 +326,16 @@
         "x": 247,
         "y": 446.5
       },
-      "waypoints": [
-        {
-          "x": 247,
-          "y": 529.1829482768893
-        }
-      ],
       "color": "#000000",
       "autoRouted": false
     },
     {
+      "waypoints": [
+        {
+          "x": 418.82908235865983,
+          "y": 446.5
+        }
+      ],
       "id": "wire-1793086825798",
       "start": {
         "componentId": "lcd1602_i2c_1793086767526_kzt1lqvvg",
@@ -343,16 +349,16 @@
         "x": 228,
         "y": 446.5
       },
-      "waypoints": [
-        {
-          "x": 418.82908235865983,
-          "y": 446.5
-        }
-      ],
       "color": "#cc0000",
       "autoRouted": true
     },
     {
+      "waypoints": [
+        {
+          "x": 314,
+          "y": 548.1829482768893
+        }
+      ],
       "id": "wire-1793086831886",
       "start": {
         "componentId": "lcd1602_i2c_1793086767526_kzt1lqvvg",
@@ -366,16 +372,16 @@
         "x": 314,
         "y": 446.5
       },
-      "waypoints": [
-        {
-          "x": 314,
-          "y": 548.1829482768893
-        }
-      ],
       "color": "#22c55e",
       "autoRouted": false
     },
     {
+      "waypoints": [
+        {
+          "x": 323.5,
+          "y": 556.2183562249878
+        }
+      ],
       "id": "wire-1793086836862",
       "start": {
         "componentId": "lcd1602_i2c_1793086767526_kzt1lqvvg",
@@ -389,12 +395,6 @@
         "x": 323.5,
         "y": 446.5
       },
-      "waypoints": [
-        {
-          "x": 323.5,
-          "y": 556.2183562249878
-        }
-      ],
       "color": "#22c55e",
       "autoRouted": false
     }

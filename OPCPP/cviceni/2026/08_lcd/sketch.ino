@@ -111,10 +111,10 @@ public:
   }
 };
 
-DigitalInputPullup buttonRight(8);
-DigitalInputPullup buttonLeft(12);
-EdgeDetector edgeRight(30, HIGH);
-EdgeDetector edgeLeft(30, HIGH);
+DigitalInputPullup buttonYellow(8);
+DigitalInputPullup buttonGray(12);
+EdgeDetector edgeYellow(30, HIGH);
+EdgeDetector edgeGray(30, HIGH);
 PwmOutput led(11, 64, 8);
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
@@ -129,16 +129,16 @@ void setup()
   lcd.cursor();
   lcd.print(jmeno);
 
-  buttonRight.begin();
-  buttonLeft.begin();
-  edgeRight.begin(buttonRight.read(), millis());
-  edgeLeft.begin(buttonLeft.read(), millis());
+  buttonYellow.begin();
+  buttonGray.begin();
+  edgeYellow.begin(buttonYellow.read(), millis());
+  edgeGray.begin(buttonGray.read(), millis());
   led.begin();
 }
 
 void loop() 
 {
-  if(edgeRight.detect(buttonRight.read(), millis()))
+  if(edgeYellow.detect(buttonYellow.read(), millis()))
   {
     ++i;
     
@@ -150,7 +150,7 @@ void loop()
     lcd.setCursor(i,0);
   }
 
-  if(edgeLeft.detect(buttonLeft.read(), millis()))
+  if(edgeGray.detect(buttonGray.read(), millis()))
   {
     ++jmeno[i];
     
