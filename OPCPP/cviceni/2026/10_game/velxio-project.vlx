@@ -1,18 +1,18 @@
 {
   "format": "velxio-project",
   "version": 1,
-  "exportedAt": "2026-11-19T13:43:20.527Z",
+  "exportedAt": "2026-11-24T08:43:42.733Z",
   "boards": [
     {
       "id": "arduino-uno",
       "boardKind": "arduino-uno",
-      "x": 162.55968153633228,
-      "y": 251.79458706656504,
+      "x": 68,
+      "y": 255,
       "activeFileGroupId": "group-arduino-uno",
       "languageMode": "arduino",
       "serialBaudRate": 0,
       "libraries": [
-        "LiquidCrystal_I2C"
+        "LiquidCrystal I2C"
       ]
     }
   ],
@@ -20,7 +20,7 @@
     "group-arduino-uno": [
       {
         "name": "sketch.ino",
-        "content": "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\n\nstruct Player\n{\n  char name[5] = {'A', 'A', 'A', 'A', '\\0'};\n  int score = 0;\n};\n\nenum PressState\n{\n  NONE,\n  SHORT,\n  LONG\n};\n\nenum GameState\n{\n  INIT,\n  GAME,\n  NAME_ENTRY,\n  TOP_PLAYERS\n};\n\nstruct EdgeDetector\n{\nprivate:\n  const int minDuration;\n  const bool targetState;\n\n  int candidate;\n  int candidateSince;\n  int lastState;\n  int lastStateTime;\n\npublic:\n  EdgeDetector(int minDuration, bool targetState)\n    : minDuration(minDuration), targetState(targetState)\n  {\n\n  }\n\n  void begin(int state, int time)\n  {\n    candidate = state;\n    candidateSince = time;\n    lastState = state;\n    lastStateTime = time;\n  }\n\n  PressState detect(int state, int time)\n  {\n    if(state != candidate)\n    {\n      candidate = state;\n      candidateSince = time;\n    }\n    else\n    {\n      int duration = time - candidateSince;\n\n      if(duration > minDuration)\n      {\n        if(candidate != lastState)\n        {\n          lastState = candidate;\n\n          if(candidate == targetState)\n          { \n            return (time - lastStateTime > 1500) ? LONG : SHORT;\n          }\n\n          lastStateTime = time;\n        }\n      }\n    }\n\n    return NONE;\n  }\n};\n\nstruct PwmOutput\n{\nprivate:\n  const int pin;\n  int pulseWidth;\n  const int step;\n\n  void write()\n  {\n    analogWrite(pin, pulseWidth);\n  }\n\npublic:\n  PwmOutput(int pin, int pulseWidth, int step)\n    : pin(pin), pulseWidth(pulseWidth), step(step)\n  {\n  }\n\n  void begin()\n  {\n    pinMode(pin, OUTPUT);\n    write();\n  }\n\n  void increase()\n  {\n    pulseWidth += step;\n    write();\n  }\n\n  void decrease()\n  {\n    pulseWidth -= step;\n    write();\n  }\n};\n\nstruct DigitalInputPullup\n{\nprivate:\n  int pin;\npublic:\n  DigitalInputPullup(int pin) : pin(pin)\n  {\n  }\n\n  void begin()\n  {\n    pinMode(pin, INPUT_PULLUP);\n  }\n\n  bool read()\n  {\n     return digitalRead(pin);\n  }\n};\n\nDigitalInputPullup buttonYellow(8);\nDigitalInputPullup buttonGray(12);\nEdgeDetector edgeYellow(30, HIGH);\nEdgeDetector edgeGray(30, HIGH);\nPwmOutput led(11, 64, 8);\nLiquidCrystal_I2C lcd(0x27, 16, 2);\n\nPlayer player;\nconst int name_length = (sizeof(Player::name) / sizeof(char)) - 1;\nint i = 0;\n\nint indexes[10];\nPlayer players[10];\n\nint loot[16] = { 0, 0, 100, 0, 0, 50, 0, 0, 20, 0, 0, 10, 0, 0, 30, 0}; \n\nGameState gameState = INIT;\nint game_index = 0;\nint game_period = 40;\nint game_last_time;\n\nvoid setup() \n{\n  lcd.init();\n  lcd.backlight();\n  lcd.cursor();\n\n  buttonYellow.begin();\n  buttonGray.begin();\n  edgeYellow.begin(buttonYellow.read(), millis());\n  edgeGray.begin(buttonGray.read(), millis());\n  led.begin();\n}\n\nGameState init_game()\n{\n  lcd.setCursor(0, 0);\n\n  for(int i = 0; i < 16; i++)\n  {\n    char c = loot[i] == 0 ?  ' ' : '$';\n    lcd.print(c);\n  }\n\n  return GAME;\n}\n\nvoid nameEntry()\n{\n  PressState pressState = edgeYellow.detect(buttonYellow.read(), millis());\n\n  switch(pressState)\n  {\n    case SHORT:\n      ++i;\n      \n      if(i > name_length - 1)\n      {\n        i = 0;\n      }\n\n      lcd.setCursor(i, 0);\n      break;\n    case LONG:\n      lcd.setCursor(0, 0);\n      lcd.print(\"Long press\");\n      break;\n    default:\n      break;\n  }\n\n  if(edgeGray.detect(buttonGray.read(), millis()) == SHORT)\n  {\n    ++player.name[i];\n    \n    if(player.name[i] > 'Z')\n    {\n      player.name[i] = 'A';\n    }\n\n    lcd.setCursor(i, 0);\n    lcd.print(player.name[i]);\n  }\n}\n\nGameState game()\n{\n  int duration = millis() - game_last_time;\n\n  if(duration > game_period)\n  {\n    ++game_index;\n    \n    if(game_index > 15)\n    {\n      game_index = 0;\n    }\n\n    game_last_time = millis();\n\n    lcd.setCursor(game_index, 0);\n  }\n\n  PressState pressState = edgeYellow.detect(buttonYellow.read(), millis());\n\n  if(pressState == SHORT)\n  {\n    int win = loot[game_index];\n\n    lcd.setCursor(0, 1);\n    lcd.print(win);\n    lcd.print(\"     \");\n    lcd.setCursor(game_index, 0);\n\n    return NAME_ENTRY;\n  }\n\n  return GAME;\n}\n\nvoid loop() \n{\n  GameState nextState;\n\n  switch(gameState)\n  {\n    case INIT:\n      nextState = init_game();\n      break;\n    case GAME:\n      nextState = game();\n      break;\n    case NAME_ENTRY:\n      break;\n    case TOP_PLAYERS:\n      break;\n  }\n\n  gameState = nextState;\n  \n}"
+        "content": "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\n\nenum GameState\n{\n  LOTTERY_INIT,\n  LOTTERY_RUNNING,\n  LOTTERY_DISPLAY_WIN,\n  LOTTERY_DISPLAY_TOTAL,\n  NAME_ENTRY\n};\n\nstruct Player\n{\n  char name[5] = {'A', 'A', 'A', 'A', '\\0'};\n  int score = 0;\n};\n\nenum PressState\n{\n  NONE,\n  SHORT,\n  LONG\n};\n\nstruct EdgeDetector\n{\nprivate:\n  const int minDuration;\n  const bool targetState;\n\n  int candidate;\n  int candidateSince;\n  int lastState;\n  int lastStateTime;\n\npublic:\n  EdgeDetector(int minDuration, bool targetState)\n    : minDuration(minDuration), targetState(targetState)\n  {\n\n  }\n\n  void begin(int state, int time)\n  {\n    candidate = state;\n    candidateSince = time;\n    lastState = state;\n    lastStateTime = time;\n  }\n\n  PressState detect(int state, int time)\n  {\n    if(state != candidate)\n    {\n      candidate = state;\n      candidateSince = time;\n    }\n    else\n    {\n      int duration = time - candidateSince;\n\n      if(duration > minDuration)\n      {\n        if(candidate != lastState)\n        {\n          lastState = candidate;\n\n          if(candidate == targetState)\n          { \n            return (time - lastStateTime > 1500) ? LONG : SHORT;\n          }\n\n          lastStateTime = time;\n        }\n      }\n    }\n\n    return NONE;\n  }\n};\n\nstruct PwmOutput\n{\nprivate:\n  const int pin;\n  int pulseWidth;\n  const int step;\n\n  void write()\n  {\n    analogWrite(pin, pulseWidth);\n  }\n\npublic:\n  PwmOutput(int pin, int pulseWidth, int step)\n    : pin(pin), pulseWidth(pulseWidth), step(step)\n  {\n  }\n\n  void begin()\n  {\n    pinMode(pin, OUTPUT);\n    write();\n  }\n\n  void increase()\n  {\n    pulseWidth += step;\n    write();\n  }\n\n  void decrease()\n  {\n    pulseWidth -= step;\n    write();\n  }\n};\n\nstruct DigitalInputPullup\n{\nprivate:\n  int pin;\npublic:\n  DigitalInputPullup(int pin) : pin(pin)\n  {\n  }\n\n  void begin()\n  {\n    pinMode(pin, INPUT_PULLUP);\n  }\n\n  bool read()\n  {\n     return digitalRead(pin);\n  }\n};\n\nDigitalInputPullup buttonYellow(8);\nDigitalInputPullup buttonGray(12);\nEdgeDetector edgeYellow(30, HIGH);\nEdgeDetector edgeGray(30, HIGH);\nPwmOutput led(11, 64, 8);\nconstexpr int led_length = 16;\nLiquidCrystal_I2C lcd(0x27, led_length, 2);\n\nGameState state = LOTTERY_INIT;\n\n// LOTTERY\nconstexpr int maxAttempts = 3;\nint attemptNumber = 0;\nint wins[] = { 0,3,0,0,0,0,0,7,0,0,0,0,0,1,0,0};\n\n// NAME_ENTRY\nPlayer player;\nconst int name_length = (sizeof(Player::name) / sizeof(char)) - 1;\nint i = 0;\n\nvoid setup() \n{\n  lcd.init();\n  lcd.backlight();\n  lcd.cursor();\n  \n  buttonYellow.begin();\n  buttonGray.begin();\n  edgeYellow.begin(buttonYellow.read(), millis());\n  edgeGray.begin(buttonGray.read(), millis());\n  led.begin();\n}\n\n// Tohle mne resi entry akci\nvoid ChangeState(GameState newState)\n{\n  switch(newState)\n  {\n    case LOTTERY_RUNNING:\n      lcd.setCursor(0, 0);\n      for(int i = 0; i < led_length; i++)\n      {\n        int win = wins[i];\n\n        if(win == 0)\n        {\n          lcd.print(' ');\n        }\n        else\n        {\n          lcd.print('$');\n        }\n      }\n\n      lcd.setCursor(0, 1);\n      lcd.print(\"count: \");\n      lcd.print(maxAttempts - attemptNumber); \n      lcd.setCursor(0, 0);     \n      break;\n    case NAME_ENTRY:\n      for(int i = 0; i < name_length; i++)\n      {\n        player.name[i] = 'A';\n      }\n\n      player.score = 0; // TODO nastavit na win\n\n      lcd.setCursor(0, 0);\n      lcd.print(player.name);\n      lcd.setCursor(0, 1);\n      lcd.print(player.score);\n      break;\n    default:\n      break;\n  }\n\n  state = newState;\n}\n\nvoid nameEntry(PressState pressStateYellow, PressState pressStateGray)\n{\n  switch(pressStateYellow)\n  {\n    case SHORT:\n      ++i;\n      \n      if(i > name_length - 1)\n      {\n        i = 0;\n      }\n\n      lcd.setCursor(i, 0);\n      break;\n    case LONG:\n      lcd.setCursor(0, 0);\n      ChangeState(LOTTERY_INIT);\n      return;\n      break;\n    default:\n      break;\n  }\n\n  if(pressStateGray == SHORT)\n  {\n    ++player.name[i];\n    \n    if(player.name[i] > 'Z')\n    {\n      player.name[i] = 'A';\n    }\n\n    lcd.setCursor(i, 0);\n    lcd.print(player.name[i]);\n  }\n}\n\nvoid loop() \n{\n  PressState pressStateYellow = edgeYellow.detect(buttonYellow.read(), millis());\n  PressState pressStateGray = edgeGray.detect(buttonGray.read(), millis());\n\n  switch(state)\n  {\n    case LOTTERY_INIT:\n      attemptNumber = maxAttempts;\n      ChangeState(LOTTERY_RUNNING);\n      break;\n    case LOTTERY_RUNNING:\n      lcd.setCursor(0, 0);\n      break;\n    case NAME_ENTRY:\n      nameEntry(pressStateYellow, pressStateGray);\n      break;\n  }\n}"
       }
     ]
   },
@@ -119,8 +119,8 @@
       "end": {
         "componentId": "arduino-uno",
         "pinName": "8",
-        "x": 335.5596815363323,
-        "y": 260.79458706656504
+        "x": 241,
+        "y": 264
       },
       "color": "#800080",
       "autoRouted": false
@@ -136,8 +136,8 @@
       "start": {
         "componentId": "arduino-uno",
         "pinName": "GND.1",
-        "x": 278.0596815363323,
-        "y": 260.79458706656504
+        "x": 183.5,
+        "y": 264
       },
       "end": {
         "componentId": "pushbutton_1791874292338_7ons666vh",
@@ -192,8 +192,8 @@
       "end": {
         "componentId": "arduino-uno",
         "pinName": "GND.1",
-        "x": 278.0596815363323,
-        "y": 260.79458706656504
+        "x": 183.5,
+        "y": 264
       },
       "color": "#000000",
       "autoRouted": false
@@ -201,16 +201,16 @@
     {
       "waypoints": [
         {
-          "x": 257.44804702048134,
-          "y": 260.79458706656504
+          "x": 212,
+          "y": 183.46872050093148
         }
       ],
       "id": "wire-1791875761574",
       "start": {
         "componentId": "arduino-uno",
         "pinName": "11",
-        "x": 306.5596815363323,
-        "y": 260.79458706656504
+        "x": 212,
+        "y": 264
       },
       "end": {
         "componentId": "resistor_220_1791875142844_bnr1grcro",
@@ -273,8 +273,8 @@
       "end": {
         "componentId": "arduino-uno",
         "pinName": "12",
-        "x": 297.0596815363323,
-        "y": 260.79458706656504
+        "x": 202.5,
+        "y": 264
       },
       "color": "#22c55e",
       "autoRouted": false
@@ -282,16 +282,8 @@
     {
       "waypoints": [
         {
-          "x": 343.5596815363323,
-          "y": 142.94586475305218
-        },
-        {
-          "x": 343.5596815363323,
-          "y": 268.79458706656504
-        },
-        {
-          "x": 278.0596815363323,
-          "y": 268.79458706656504
+          "x": 341.69452482179355,
+          "y": 264
         }
       ],
       "id": "wire-1791876637996",
@@ -304,8 +296,8 @@
       "end": {
         "componentId": "arduino-uno",
         "pinName": "GND.1",
-        "x": 278.0596815363323,
-        "y": 260.79458706656504
+        "x": 183.5,
+        "y": 264
       },
       "color": "#000000",
       "autoRouted": true
@@ -327,8 +319,8 @@
       "end": {
         "componentId": "arduino-uno",
         "pinName": "GND.3",
-        "x": 341.5596815363323,
-        "y": 443.29458706656504
+        "x": 247,
+        "y": 446.5
       },
       "color": "#000000",
       "autoRouted": false
@@ -336,8 +328,8 @@
     {
       "waypoints": [
         {
-          "x": 322.5596815363323,
-          "y": 537.2183562249878
+          "x": 418.82908235865983,
+          "y": 446.5
         }
       ],
       "id": "wire-1793086825798",
@@ -350,8 +342,8 @@
       "end": {
         "componentId": "arduino-uno",
         "pinName": "5V",
-        "x": 322.5596815363323,
-        "y": 443.29458706656504
+        "x": 228,
+        "y": 446.5
       },
       "color": "#cc0000",
       "autoRouted": true
@@ -373,8 +365,8 @@
       "end": {
         "componentId": "arduino-uno",
         "pinName": "A4",
-        "x": 408.5596815363323,
-        "y": 443.29458706656504
+        "x": 314,
+        "y": 446.5
       },
       "color": "#22c55e",
       "autoRouted": false
@@ -396,8 +388,8 @@
       "end": {
         "componentId": "arduino-uno",
         "pinName": "A5",
-        "x": 418.0596815363323,
-        "y": 443.29458706656504
+        "x": 323.5,
+        "y": 446.5
       },
       "color": "#22c55e",
       "autoRouted": false
