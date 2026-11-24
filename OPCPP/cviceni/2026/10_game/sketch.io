@@ -1,6 +1,15 @@
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 
+enum GameState
+{
+  LOTTERY_INIT,
+  LOTTERY_RUNNING,
+  LOTTERY_DISPLAY_WIN,
+  LOTTERY_DISPLAY_TOTAL,
+  NAME_ENTRY
+};
+
 struct Player
 {
   char name[5] = {'A', 'A', 'A', 'A', '\0'};
@@ -12,14 +21,6 @@ enum PressState
   NONE,
   SHORT,
   LONG
-};
-
-enum GameState
-{
-  INIT,
-  GAME,
-  NAME_ENTRY,
-  TOP_PLAYERS
 };
 
 struct EdgeDetector
@@ -141,28 +142,27 @@ DigitalInputPullup buttonGray(12);
 EdgeDetector edgeYellow(30, HIGH);
 EdgeDetector edgeGray(30, HIGH);
 PwmOutput led(11, 64, 8);
-LiquidCrystal_I2C lcd(0x27, 16, 2);
+constexpr int led_length = 16;
+LiquidCrystal_I2C lcd(0x27, led_length, 2);
 
+GameState state = LOTTERY_INIT;
+
+// LOTTERY
+constexpr int maxAttempts = 3;
+int attemptNumber = 0;
+int wins[] = { 0,3,0,0,0,0,0,7,0,0,0,0,0,1,0,0};
+
+// NAME_ENTRY
 Player player;
 const int name_length = (sizeof(Player::name) / sizeof(char)) - 1;
 int i = 0;
-
-int indexes[10];
-Player players[10];
-
-int loot[16] = { 0, 0, 100, 0, 0, 50, 0, 0, 20, 0, 0, 10, 0, 0, 30, 0}; 
-
-GameState gameState = INIT;
-int game_index = 0;
-int game_period = 40;
-int game_last_time;
 
 void setup() 
 {
   lcd.init();
   lcd.backlight();
   lcd.cursor();
-
+  
   buttonYellow.begin();
   buttonGray.begin();
   edgeYellow.begin(buttonYellow.read(), millis());
@@ -170,24 +170,55 @@ void setup()
   led.begin();
 }
 
-GameState init_game()
+// Tohle mne resi entry akci
+void ChangeState(GameState newState)
 {
-  lcd.setCursor(0, 0);
-
-  for(int i = 0; i < 16; i++)
+  switch(newState)
   {
-    char c = loot[i] == 0 ?  ' ' : '$';
-    lcd.print(c);
+    case LOTTERY_RUNNING:
+      lcd.setCursor(0, 0);
+      for(int i = 0; i < led_length; i++)
+      {
+        int win = wins[i];
+
+        if(win == 0)
+        {
+          lcd.print(' ');
+        }
+        else
+        {
+          lcd.print('$');
+        }
+      }
+
+      lcd.setCursor(0, 1);
+      lcd.print("count: ");
+      lcd.print(maxAttempts - attemptNumber); 
+      lcd.setCursor(0, 0);     
+      break;
+    case NAME_ENTRY:
+      for(int i = 0; i < name_length; i++)
+      {
+        player.name[i] = 'A';
+      }
+
+      player.score = 0; // TODO nastavit na win
+
+      lcd.setCursor(0, 0);
+      lcd.print(player.name);
+      lcd.setCursor(0, 1);
+      lcd.print(player.score);
+      break;
+    default:
+      break;
   }
 
-  return GAME;
+  state = newState;
 }
 
-void nameEntry()
+void nameEntry(PressState pressStateYellow, PressState pressStateGray)
 {
-  PressState pressState = edgeYellow.detect(buttonYellow.read(), millis());
-
-  switch(pressState)
+  switch(pressStateYellow)
   {
     case SHORT:
       ++i;
@@ -201,13 +232,14 @@ void nameEntry()
       break;
     case LONG:
       lcd.setCursor(0, 0);
-      lcd.print("Long press");
+      ChangeState(LOTTERY_INIT);
+      return;
       break;
     default:
       break;
   }
 
-  if(edgeGray.detect(buttonGray.read(), millis()) == SHORT)
+  if(pressStateGray == SHORT)
   {
     ++player.name[i];
     
@@ -221,59 +253,22 @@ void nameEntry()
   }
 }
 
-GameState game()
-{
-  int duration = millis() - game_last_time;
-
-  if(duration > game_period)
-  {
-    ++game_index;
-    
-    if(game_index > 15)
-    {
-      game_index = 0;
-    }
-
-    game_last_time = millis();
-
-    lcd.setCursor(game_index, 0);
-  }
-
-  PressState pressState = edgeYellow.detect(buttonYellow.read(), millis());
-
-  if(pressState == SHORT)
-  {
-    int win = loot[game_index];
-
-    lcd.setCursor(0, 1);
-    lcd.print(win);
-    lcd.print("     ");
-    lcd.setCursor(game_index, 0);
-
-    return NAME_ENTRY;
-  }
-
-  return GAME;
-}
-
 void loop() 
 {
-  GameState nextState;
+  PressState pressStateYellow = edgeYellow.detect(buttonYellow.read(), millis());
+  PressState pressStateGray = edgeGray.detect(buttonGray.read(), millis());
 
-  switch(gameState)
+  switch(state)
   {
-    case INIT:
-      nextState = init_game();
+    case LOTTERY_INIT:
+      attemptNumber = maxAttempts;
+      ChangeState(LOTTERY_RUNNING);
       break;
-    case GAME:
-      nextState = game();
+    case LOTTERY_RUNNING:
+      lcd.setCursor(0, 0);
       break;
     case NAME_ENTRY:
-      break;
-    case TOP_PLAYERS:
+      nameEntry(pressStateYellow, pressStateGray);
       break;
   }
-
-  gameState = nextState;
-  
 }
