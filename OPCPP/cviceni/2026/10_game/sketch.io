@@ -164,6 +164,8 @@ int i = 0;
 
 void setup() 
 {
+  Serial.begin(9600);
+  delay(1000);
   lcd.init();
   lcd.backlight();
   lcd.cursor();
@@ -203,6 +205,13 @@ void ChangeState(GameState newState)
 
       lastLotteryTime = millis();    
       break;
+    case LOTTERY_DISPLAY_WIN:
+      lcd.setCursor(0, 1);
+      lcd.print("attempts: ");
+      lcd.print(attemptNumber);
+      lcd.setCursor(winIndex, 0);
+      lcd.print(win); 
+      break;
     case NAME_ENTRY:
       for(int i = 0; i < name_length; i++)
       {
@@ -223,9 +232,9 @@ void ChangeState(GameState newState)
   state = newState;
 }
 
-void nameEntry(PressState pressStateYellow, PressState pressStateGray)
+void nameEntry(PressState clickYellow, PressState clickGray)
 {
-  switch(pressStateYellow)
+  switch(clickYellow)
   {
     case SHORT:
       ++i;
@@ -246,7 +255,7 @@ void nameEntry(PressState pressStateYellow, PressState pressStateGray)
       break;
   }
 
-  if(pressStateGray == SHORT)
+  if(clickGray == SHORT)
   {
     ++player.name[i];
     
@@ -263,8 +272,8 @@ void nameEntry(PressState pressStateYellow, PressState pressStateGray)
 
 void loop() 
 {
-  PressState pressStateYellow = edgeYellow.detect(buttonYellow.read(), millis());
-  PressState pressStateGray = edgeGray.detect(buttonGray.read(), millis());
+  PressState clickYellow = edgeYellow.detect(buttonYellow.read(), millis());
+  PressState clickGray = edgeGray.detect(buttonGray.read(), millis());
 
   switch(state)
   {
@@ -273,23 +282,41 @@ void loop()
       ChangeState(LOTTERY_RUNNING);
       break;
     case LOTTERY_RUNNING:
+
       int duration = (millis() - lastLotteryTime);
 
-      if(duration > 100)
+      if(duration > 500)
       {
-        lcd.setCursor(winIndex, 0);
         ++winIndex;
+
         if(winIndex > led_length - 1)
         {
           winIndex = 0;
         }
+
+        lcd.setCursor(winIndex, 0);
+
         lastLotteryTime = millis();
+      }
+
+      if(clickGray == SHORT)
+      {
+        --attemptNumber;
+        win = wins[winIndex];
+        ChangeState(LOTTERY_DISPLAY_WIN);
       }
 
       break;
 
+    case LOTTERY_DISPLAY_WIN:
+      if(clickGray == SHORT)
+      {
+        Serial.write("change state");
+        ChangeState(LOTTERY_RUNNING);
+      }
+      break;
     case NAME_ENTRY:
-      nameEntry(pressStateYellow, pressStateGray);
+      nameEntry(clickYellow, clickGray);
       break;
   }
 }
