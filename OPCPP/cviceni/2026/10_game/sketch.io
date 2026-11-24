@@ -156,6 +156,7 @@ int wins[] = { 0,3,0,0,0,0,0,7,0,0,0,0,0,1,0,0};
 int winIndex = 0;
 int lastLotteryTime = 0;
 int win = 0;
+int totalWin = 0;
 
 // NAME_ENTRY
 Player player;
@@ -164,8 +165,6 @@ int i = 0;
 
 void setup() 
 {
-  Serial.begin(9600);
-  delay(1000);
   lcd.init();
   lcd.backlight();
   lcd.cursor();
@@ -183,6 +182,7 @@ void ChangeState(GameState newState)
   switch(newState)
   {
     case LOTTERY_RUNNING:
+    {
       lcd.setCursor(0, 0);
       for(int i = 0; i < led_length; i++)
       {
@@ -194,25 +194,36 @@ void ChangeState(GameState newState)
         }
         else
         {
-          lcd.write(255);
+          lcd.print('+');
         }
       }
 
       lcd.setCursor(0, 1);
-      lcd.print("attempts: ");
-      lcd.print(attemptNumber); 
+      lcd.print("round: ");
+      lcd.print(maxAttempts - attemptNumber + 1); 
+      lcd.print("       ");
       lcd.setCursor(0, 0);
 
-      lastLotteryTime = millis();    
+      lastLotteryTime = millis();
+      winIndex = 0;
+
       break;
+    }
+
     case LOTTERY_DISPLAY_WIN:
+    { 
+      totalWin += win;
+
       lcd.setCursor(0, 1);
-      lcd.print("attempts: ");
-      lcd.print(attemptNumber);
+      lcd.print("total win: ");
+      lcd.print(totalWin);
       lcd.setCursor(winIndex, 0);
       lcd.print(win); 
       break;
+    }
+
     case NAME_ENTRY:
+    {
       for(int i = 0; i < name_length; i++)
       {
         player.name[i] = 'A';
@@ -225,6 +236,8 @@ void ChangeState(GameState newState)
       lcd.setCursor(0, 1);
       lcd.print(player.score);
       break;
+    }
+
     default:
       break;
   }
@@ -269,7 +282,6 @@ void nameEntry(PressState clickYellow, PressState clickGray)
   }
 }
 
-
 void loop() 
 {
   PressState clickYellow = edgeYellow.detect(buttonYellow.read(), millis());
@@ -278,11 +290,16 @@ void loop()
   switch(state)
   {
     case LOTTERY_INIT:
+    {
       attemptNumber = maxAttempts;
+      win = 0;
+      totalWin = 0;
       ChangeState(LOTTERY_RUNNING);
       break;
-    case LOTTERY_RUNNING:
+    }
 
+    case LOTTERY_RUNNING:
+    {
       int duration = (millis() - lastLotteryTime);
 
       if(duration > 500)
@@ -307,16 +324,21 @@ void loop()
       }
 
       break;
+    }
 
     case LOTTERY_DISPLAY_WIN:
+    {
       if(clickGray == SHORT)
       {
-        Serial.write("change state");
         ChangeState(LOTTERY_RUNNING);
       }
       break;
+    }
+
     case NAME_ENTRY:
+    {
       nameEntry(clickYellow, clickGray);
       break;
+    }
   }
 }
