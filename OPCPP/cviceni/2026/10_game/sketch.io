@@ -151,10 +151,13 @@ GameState state = LOTTERY_INIT;
 
 // LOTTERY
 constexpr int maxAttempts = 3;
-int attemptNumber = 0;
+constexpr int lotteryPeriod = 128;
+constexpr int winDisplayDuration = 2000;
+
+int roundCount = 1;
 int wins[] = { 0,3,0,0,0,0,0,7,0,0,0,0,0,1,0,0};
 int winIndex = 0;
-int lastLotteryTime = 0;
+int lastTime = 0;
 int win = 0;
 int totalWin = 0;
 
@@ -184,6 +187,7 @@ void ChangeState(GameState newState)
     case LOTTERY_RUNNING:
     {
       lcd.setCursor(0, 0);
+
       for(int i = 0; i < led_length; i++)
       {
         int win = wins[i];
@@ -200,11 +204,11 @@ void ChangeState(GameState newState)
 
       lcd.setCursor(0, 1);
       lcd.print("round: ");
-      lcd.print(maxAttempts - attemptNumber + 1); 
+      lcd.print(roundCount); 
       lcd.print("       ");
       lcd.setCursor(0, 0);
 
-      lastLotteryTime = millis();
+      lastTime = millis();
       winIndex = 0;
 
       break;
@@ -218,7 +222,10 @@ void ChangeState(GameState newState)
       lcd.print("total win: ");
       lcd.print(totalWin);
       lcd.setCursor(winIndex, 0);
-      lcd.print(win); 
+      lcd.print(win);
+
+      lastTime = millis();
+      
       break;
     }
 
@@ -291,18 +298,18 @@ void loop()
   {
     case LOTTERY_INIT:
     {
-      attemptNumber = maxAttempts;
-      win = 0;
+      roundCount = 1;
       totalWin = 0;
       ChangeState(LOTTERY_RUNNING);
+
       break;
     }
 
     case LOTTERY_RUNNING:
     {
-      int duration = (millis() - lastLotteryTime);
+      int duration = (millis() - lastTime);
 
-      if(duration > 500)
+      if(duration > lotteryPeriod)
       {
         ++winIndex;
 
@@ -313,13 +320,14 @@ void loop()
 
         lcd.setCursor(winIndex, 0);
 
-        lastLotteryTime = millis();
+        lastTime = millis();
       }
 
       if(clickGray == SHORT)
       {
-        --attemptNumber;
         win = wins[winIndex];
+        ++roundCount;
+
         ChangeState(LOTTERY_DISPLAY_WIN);
       }
 
@@ -328,10 +336,13 @@ void loop()
 
     case LOTTERY_DISPLAY_WIN:
     {
-      if(clickGray == SHORT)
+      int duration = (millis() - lastTime);
+
+      if(duration > winDisplayDuration)
       {
         ChangeState(LOTTERY_RUNNING);
-      }
+      } 
+
       break;
     }
 
