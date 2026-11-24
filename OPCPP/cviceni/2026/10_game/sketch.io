@@ -151,11 +151,11 @@ GameState state = LOTTERY_INIT;
 
 // LOTTERY
 constexpr int maxAttempts = 3;
-constexpr int lotteryPeriod = 128;
+constexpr int lotteryPeriod = 64;
 constexpr int winDisplayDuration = 2000;
 
 int roundCount = 1;
-int wins[] = { 0,3,0,0,0,0,0,7,0,0,0,0,0,1,0,0};
+int wins[] = { 0,3,3,0,0,0,0,7,0,0,0,0,1,1,1,0};
 int winIndex = 0;
 int lastTime = 0;
 int win = 0;
