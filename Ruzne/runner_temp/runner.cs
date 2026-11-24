@@ -155,6 +155,11 @@ TestCase ExistenceTestCase(int points, TestResult[] dependencies, string typeNam
 
     return new TestCase(points, dependencies, dep =>
     {
+        bool hasProgramClass = root
+    .DescendantNodes()
+    .OfType<ClassDeclarationSyntax>()
+    .Any(c => c.Identifier.ValueText == className);
+    
         if(Type.GetType(typeName) is not Type type)
         {
             return new TestResult(description, expected, $"Typ {typeName} neexistuje", false, 0);
